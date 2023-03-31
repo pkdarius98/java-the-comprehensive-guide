@@ -1,0 +1,1109 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    The Class Library" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    The Class Library" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    The Class Library</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h16.4">16.4    The Utility Classes System and Members</h2>
+        
+        <p class="standard">In the 
+            <samp class="listingcharacter listingcharacter">java.lang.System</samp> class, methods exist for requesting and changing system variables, for redirecting the standard data streams, for determining the current time, for terminating the application, and for several other tasks. All methods are exclusively static, and an instance of 
+            <samp class="listingcharacter listingcharacter">System</samp> can’t be created. In the 
+            <samp class="listingcharacter listingcharacter">java.lang.Runtime</samp> class, additional helper methods are available, such as for starting external programs or for requesting memory requirements. Unlike 
+            <samp class="listingcharacter listingcharacter">System</samp>, only one method is static in this class, namely, the singleton method 
+            <samp class="listingcharacter listingcharacter">getRuntime()</samp>, which returns the instance of 
+            <samp class="listingcharacter listingcharacter">Runtime</samp>
+        .</p>
+        
+        <div class="imagebox figure-type"><a href="img-f16.4.html" id="f16.4"><img alt="Members of the System and Runtime Classes" id="img-f16.4" src="bilderklein/klein16_004.png"/></a></div>
+        
+        <p class="caption "><b>Figure 16.4</b>    
+            Members of the System and Runtime Classes</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                <a id="p847"/>
+            Remark</h6>
+            
+            <p class="standard first">All in all, the 
+                <samp class="listingcharacter listingcharacter">System</samp> and 
+                <samp class="listingcharacter listingcharacter">Runtime</samp> classes don’t seem particularly orderly, as shown in 
+                <span class="crossreference "><a href="16_004.html#f16.4">Figure 16.4</a></span>
+            ; you may think everything that doesn’t fit elsewhere can be found in these two classes. Also, some methods of one class would be just as good in the other class.</p>
+            
+            <p class="standard last">The fact that the static method 
+                <samp class="listingcharacter listingcharacter">System.arraycopy(...)</samp> for copying arrays isn’t located in 
+                <samp class="listingcharacter listingcharacter">java.util.Arrays</samp> can only be explained historically. Furthermore, 
+                <samp class="listingcharacter listingcharacter">System.exit(int)</samp> redirects to 
+                <samp class="listingcharacter listingcharacter">Runtime.getRuntime().exit(int)</samp>. Some methods are obsolete and distributed differently: The 
+                <samp class="listingcharacter listingcharacter">exec(...)</samp> of 
+                <samp class="listingcharacter listingcharacter">Runtime</samp> to start external processes is handled by a new class (
+                <samp class="listingcharacter listingcharacter">ProcessBuilder</samp>), and the question about the memory state or the number of processors is answered by MBeans, such as 
+                <samp class="listingcharacter listingcharacter">ManagementFactory.getOperatingSystemMXBean().getAvailableProcessors()</samp>
+            . But API design is like gambling: One rash action, and you've lost the farm.</p>
+        
+        </div>
+        
+        
+            
+            <h3 class="t3" id="h16.4.1">16.4.1    Memory of the Java Virtual Machine</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Runtime</samp>
+             object includes the following three methods that provide information about the memory of the JVM:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">maxMemory()</samp> returns the maximum number of bytes available for the JVM. The value can be set when calling the JVM with 
+                        <samp class="listingcharacter listingcharacter">-Xmx</samp>
+                     in the command line.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">totalMemory()</samp> is what is currently used and can grow to 
+                        <samp class="listingcharacter listingcharacter">maxMemory()</samp>. Basically, this memory limit can also shrink again. The following applies: 
+                        <samp class="listingcharacter listingcharacter">maxMemory()</samp> &gt; 
+                        <samp class="listingcharacter listingcharacter">totalMemory()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">freeMemory()</samp> indicates the memory that is free for new objects and also provokes the automatic garbage collection process. The following applies: 
+                        <samp class="listingcharacter listingcharacter">totalMemory()</samp> &gt; 
+                        <samp class="listingcharacter listingcharacter">freeMemory()</samp>. However, 
+                        <samp class="listingcharacter listingcharacter">freeMemory()</samp> isn’t the entire freely available memory area because the “share” of 
+                        <samp class="listingcharacter listingcharacter">maxMemory()</samp>
+                     is still missing.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Two pieces of information are missing and therefore must be calculated:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Used memory:<br/></span>
+                        <samp class="listingcharacter listingcharacter">long usedMemory = Runtime.getRuntime().totalMemory() - <br/>Runtime.getRuntime().freeMemory();</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Free total memory:<br/></span>
+                        <samp class="listingcharacter listingcharacter">long totalFreeMemory = Runtime.getRuntime().maxMemory() - usedMemory;</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example outputs information about the memory on a computer:</p>
+                
+                <div class="listing " id="l_none_1653"><pre><span class="">long</span><span class=""> totalMemory     </span><span class="">=</span><span class=""> Runtime</span><span class="">.</span><span class="">getRuntime</span><span class="">().</span><span class="">totalMemory</span><span class="">();</span><span class=""><br/></span><span class="">long</span><span class=""> freeMemory      </span><span class="">=</span><span class=""> Runtime</span><span class="">.</span><span class="">getRuntime</span><span class="">().</span><span class="">freeMemory</span><span class="">();</span><span class=""><br/></span><span class="">long</span><span class=""> maxMemory       </span><span class="">=</span><span class=""> Runtime</span><span class="">.</span><span class="">getRuntime</span><span class="">().</span><span class="">maxMemory</span><span class="">();</span><span class=""><br/></span><span class="">long</span><span class=""> usedMemory      </span><span class="">=</span><span class=""> totalMemory </span><span class="">-</span><span class=""> freeMemory</span><span class="">;</span><span class=""><br/></span><span class="">
+                        <a id="p848"/>
+                    long</span><span class=""> totalFreeMemory </span><span class="">=</span><span class=""> maxMemory </span><span class="">-</span><span class=""> usedMemory</span><span class="">;</span><span class=""><br/></span><br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""><br/></span>  <span class="">"total=%d MiB, free=%d MiB, max=%d MiB, used=%d MiB, total free=%d MiB%n"</span><span class="">,</span><span class=""><br/></span>  totalMemory <span class="">&gt;&gt;</span><span class=""> </span><span class="">20</span><span class="">,</span><span class=""> freeMemory </span><span class="">&gt;&gt;</span><span class=""> </span><span class="">20</span><span class="">,</span><span class=""> maxMemory </span><span class="">&gt;&gt;</span><span class=""> </span><span class="">20</span><span class="">,</span><span class=""><br/></span>  usedMemory <span class="">&gt;&gt;</span><span class=""> </span><span class="">20</span><span class="">,</span><span class=""> totalFreeMemory </span><span class="">&gt;&gt;</span><span class=""> </span><span class="">20</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">The result is the following output:</p>
+                
+                <div class="listing  last_item" id="l_none_1655"><pre>total<span class="">=</span><span class="">126</span><span class=""> MiB</span><span class="">,</span><span class=""> free</span><span class="">=</span><span class="">124</span><span class=""> MiB</span><span class="">,</span><span class=""> max</span><span class="">=</span><span class="">2016</span><span class=""> MiB</span><span class="">,</span><span class=""> used</span><span class="">=</span><span class="">1</span><span class=""> MiB</span><span class="">,</span><span class=""> total free</span><span class="">=</span><span class="">2014</span><span class=""> MiB</span></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.4.2">16.4.2    Number of CPUs or Cores</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Runtime</samp> method 
+                <samp class="listingcharacter listingcharacter">availableProcessors()</samp>
+             returns the number of logical processors or cores.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Print the number of processors/cores:</p>
+                
+                <div class="listing  last_item" id="l_none_1665"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Runtime</span><span class="">.</span><span class="">getRuntime</span><span class="">().</span><span class="">availableProcessors</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 4</span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.4.3">16.4.3    System Properties
+                <a class="indexanchor" id="i16_23"/>
+             of the Java Environment</h3>
+            
+            <p class="standard">The Java environment manages system properties, such as path separators or virtual machine versions in the 
+                <samp class="listingcharacter listingcharacter">java.util.Properties</samp>
+                <a class="indexanchor" id="i16_24"/> object. The static method 
+                <samp class="listingcharacter listingcharacter">System.getProperties()</samp>
+                <a class="indexanchor" id="i16_25"/> queries these system properties and returns the filled 
+                <samp class="listingcharacter listingcharacter">Properties</samp> object. However, the 
+                <samp class="listingcharacter listingcharacter">Properties</samp> object isn’t absolutely necessary for querying individual properties: 
+                <samp class="listingcharacter listingcharacter">System.getProperty(...)</samp>
+             directly queries a property.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example outputs the name of the operating system:</p>
+                
+                <div class="listing " id="l_none_1682"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">getProperty</span><span class="">(</span><span class=""> </span><span class="">"os.name"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // e.g., Windows 10</span><span class=""/></pre></div>
+                
+                <p class="standard">The following example outputs all system properties on the screen:</p>
+                
+                <div class="listing " id="l_none_1685"><pre>System<span class="">.</span><span class="">getProperties</span><span class="">().</span><span class="">list</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">An excerpt of the result is shown in the following output:</p>
+                
+                <div class="listing  last_item" id="l_none_1698"><pre><span class="">--</span><span class=""> listing properties </span><span class="">--</span><span class=""><br/></span>sun<span class="">.</span><span class="">desktop</span><span class="">=</span><span class="">windows</span><br/>awt<span class="">.</span><span class="">toolkit</span><span class="">=</span><span class="">sun</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">windows</span><span class="">.</span><span class="">WToolkit</span><br/>java<span class="">.</span><span class="">specification</span><span class="">.</span><span class="">version</span><span class="">=</span><span class="">9</span><span class=""><br/></span>file<span class="">.</span><span class="">encoding</span><span class="">.</span><span class="">pkg</span><span class="">=</span><span class="">sun</span><span class="">.</span><span class="">io</span><br/>sun<span class="">.</span><span class="">cpu</span><span class="">.</span><span class="">isalist</span><span class="">=</span><span class="">amd64</span><br/>…</pre></div>
+            
+            </div>
+            
+            <p class="standard">
+                <span class="crossreference "><a href="16_004.html#t16.4">Table 16.4</a></span>
+                <a id="p849"/>
+             shows a list of the important standard system properties.</p>
+            
+            <table class="standardtable" id="t16.4">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Key</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Meaning</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">java.version</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Version of the Java Runtime Environment (JRE)</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">java.class.path</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">The current classpath</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">java.library.path</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Path for native libraries</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">java.io.tmpdir</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Path for temporary files</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">os.name</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Name of the operating system</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">file.separator</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Separator of the path segments, for example 
+                                <span class="italic">/</span> (Unix) or 
+                                <span class="italic">\</span>
+                             (Windows)</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">path.separator</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Separator for path specifications, such as : (Unix) or 
+                                <span class="italic">;</span>
+                             (Windows)</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">line.separator</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Newline character (string)</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">user.name</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Name of the logged-on user</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">user.home</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Home directory of the user</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">user.dir</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Current directory of the user</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 16.4</b>    
+            Standard System Properties</p>
+            
+            
+                
+                <h4 class="t4" id="h16.4.3.1">Application Programming Interface Documentation</h4>
+                
+                <p class="standard">A few more keys are listed in the API documentation at 
+                    <samp class="listingcharacter listingcharacter">System.getProperties()</samp>. Some variables are also accessible in other ways, such as through the 
+                    <samp class="listingcharacter listingcharacter">File</samp>
+                 class.</p>
+                
+                <div class="listing " id="l_none_16119"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">System</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String getProperty(String key)</samp><br/>Returns the assignment of a system property. If the key is 
+                            <samp class="listingcharacter listingcharacter">null</samp> or empty, a 
+                            <samp class="listingcharacter listingcharacter">NullPointerException</samp> or an 
+                            <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>
+                        , respectively, will occur.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String getProperty(String key, String def)</samp><br/>Returns the assignment of a system property. If the property isn’t present, the method returns the string 
+                            <samp class="listingcharacter listingcharacter">def</samp>, which is the default value. For the exceptions, the same applies as for 
+                            <samp class="listingcharacter listingcharacter">getProperty(String)</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String setProperty(String key, String value)</samp><br/>Reassigns a system property. The return is the previous assignment or 
+                            <samp class="listingcharacter listingcharacter">null</samp>
+                         if no previous assignment exists.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String clearProperty(String key)</samp><br/>Deletes a system property from the list. The return is the previous assignment or 
+                            <samp class="listingcharacter listingcharacter">null</samp>
+                         if no previous assignment exists.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p850"/>
+                            static Properties getProperties()</samp><br/>Returns a 
+                            <samp class="listingcharacter listingcharacter">Properties</samp>
+                         object filled with the current system assignments.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.4.4">16.4.4    Setting Custom Properties from the Console*</h3>
+            
+            <p class="standard">Properties can also be set from the console during the program startup. This approach is convenient for a configuration that controls, for example, the behavior of a program. On the command line, 
+                <samp class="listingcharacter listingcharacter">-D</samp>
+                <a class="indexanchor" id="i16_26"/>
+             specifies the name of the property and, after an equal sign (without whitespace), its value. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_16127"><pre>$ java 
+                <span class="bold">-DLOG –DUSER=Chris -DSIZE=100</span>
+             com.tutego.insel.lang.SetProperty </pre></div>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">LOG</samp> property is “simply exists” but with no assigned value. The next two properties, 
+                <samp class="listingcharacter listingcharacter">USER</samp> and 
+                <samp class="listingcharacter listingcharacter">SIZE</samp>, are associated with values that are first of type 
+                <samp class="listingcharacter listingcharacter">String</samp> and must be further processed by the program. This information doesn’t appear with the argument list in the static 
+                <samp class="listingcharacter listingcharacter">main(String[])</samp>
+             method because it precedes the name of the class and is already processed by the JRE.</p>
+            
+            <p class="standard">To read the properties, we’ll use the familiar 
+                <samp class="listingcharacter listingcharacter">System.getProperty(...)</samp>
+             method in the following example:</p>
+            
+            <div class="listing " id="l16.2"><pre>Optional<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> logProperty </span><span class="">=</span><span class=""> </span><span class="">ofNullable</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">getProperty</span><span class="">(</span><span class=""> </span><span class="">"LOG"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Optional<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> user nameProperty </span><span class="">=</span><span class=""> </span><span class="">ofNullable</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">getProperty</span><span class="">(</span><span class=""> </span><span class="">"USER"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Optional<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> sizeProperty </span><span class="">=</span><span class=""> </span><span class="">ofNullable</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">getProperty</span><span class="">(</span><span class=""> </span><span class="">"SIZE"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> logProperty</span><span class="">.</span><span class="">isPresent</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">                         </span><span class=""> // true</span><span class=""><br/></span>user nameProperty<span class="">.</span><span class="">ifPresent</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">);</span><span class="">                     </span><span class=""> // Chris</span><span class=""><br/></span>sizeProperty<span class="">.</span><span class="">map</span><span class="">(</span><span class=""> Integer</span><span class="">::</span><span class="">parseInt </span><span class="">).</span><span class="">ifPresent</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">);</span><span class=""> // 100</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">getProperty</span><span class="">(</span><span class=""> </span><span class="">"DEBUG"</span><span class="">,</span><span class=""> </span><span class="">"false"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">          </span><span class=""> // false</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 16.2</b>    
+            com/tutego/insel/lang/SetProperty.java, main()</p>
+            
+            <p class="standard">In return, you’ll receive a string indicating the value via 
+                <samp class="listingcharacter listingcharacter">getProperty(String)</samp>. If no property of that name exists at all, you’ll get 
+                <samp class="listingcharacter listingcharacter">null</samp> instead. In this way, we can know if this value was set at all. So, a simple 
+                <samp class="listingcharacter listingcharacter">null</samp> test tells us whether 
+                <samp class="listingcharacter listingcharacter">logProperty</samp> is present or not. Instead of 
+                <samp class="listingcharacter listingcharacter">-DLOG</samp>, 
+                <samp class="listingcharacter listingcharacter">-DLOG=</samp> also returns the same result because the associated value is the empty string. Since all properties are of type 
+                <samp class="listingcharacter listingcharacter">String</samp> to begin with, 
+                <samp class="listingcharacter listingcharacter">user nameProperty</samp> is easy to output, and you’ll get either 
+                <samp class="listingcharacter listingcharacter">null</samp> or the string specified after 
+                <samp class="listingcharacter listingcharacter">=</samp>. If the types aren’t strings, they must be processed further, for example, with 
+                <samp class="listingcharacter listingcharacter">Integer.parseInt()</samp>, 
+                <samp class="listingcharacter listingcharacter">Double.parseDouble()</samp>, and so on. The 
+                <samp class="listingcharacter listingcharacter">System.getProperty(String, String)</samp>
+             method, which is passed two arguments, is pretty useful in this case because the second argument represents a default value. Thus, a default value can always be assumed.</p>
+            
+            
+                
+                <h4 class="t4" id="h16.4.4.1">
+                    <a id="p851"/>
+                Boolean.getBoolean(String)</h4>
+                
+                <p class="standard">In the case of properties that are assigned truth values, the following statement can be written:</p>
+                
+                <div class="listing " id="l_none_16151"><pre><span class="">boolean</span><span class=""> b </span><span class="">=</span><span class=""> Boolean</span><span class="">.</span><span class="">parseBoolean</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">getProperty</span><span class="">(</span><span class=""> property </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // (*)</span><span class=""> </span></pre></div>
+                
+                <p class="standard">There’s another variant for the truth values. The static method 
+                    <samp class="listingcharacter listingcharacter">Boolean.getBoolean(String)</samp> searches for a property with the specified name in the system properties. Thus, the following is analogous to the line 
+                    <samp class="listingcharacter listingcharacter">(*)</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_16166"><pre><span class="">boolean</span><span class=""> b </span><span class="">=</span><span class=""> Boolean</span><span class="">.</span><span class="">getBoolean</span><span class="">(</span><span class=""> property </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">You might be surprised to find this static method in the wrapper class 
+                    <samp class="listingcharacter listingcharacter">Boolean</samp>
+                 because property access has nothing to do with wrapper objects and the class actually goes beyond its area of responsibility in this case.</p>
+                
+                <p class="standard">Compared to a separate, direct 
+                    <samp class="listingcharacter listingcharacter">System</samp> query, 
+                    <samp class="listingcharacter listingcharacter">getBoolean(String)</samp> also has a disadvantage in that, when it returns 
+                    <samp class="listingcharacter listingcharacter">false</samp>, you can’t distinguish whether the property simply doesn’t exist or whether the property is assigned the value 
+                    <samp class="listingcharacter listingcharacter">false</samp>. Also, incorrectly set values like 
+                    <samp class="listingcharacter listingcharacter">-DP=fa1se</samp> always result in 
+                    <samp class="listingcharacter listingcharacter">false</samp>.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn16_03" id="fn16_03">[ 209 ]</a></span>
+                </p>
+                
+                <div class="listing " id="l_none_16180"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Boolean</span><br/><span class="">implements</span><span class=""> Serializable, Comparable&lt;Boolean&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static boolean getBoolean(String name)</samp><br/>Reads a system property named 
+                            <samp class="listingcharacter listingcharacter">name</samp> and returns 
+                            <samp class="listingcharacter listingcharacter">true</samp> if the value of the property is equal to the string 
+                            <samp class="listingcharacter listingcharacter">"true"</samp>. The return value is 
+                            <samp class="listingcharacter listingcharacter">false</samp> if the value of the system property is
+                            <samp class="listingcharacter listingcharacter"> false</samp>, if the property doesn’t exist, or if the property is 
+                            <samp class="listingcharacter listingcharacter">null</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.4.5">16.4.5    Newline Characters
+                <a class="indexanchor" id="i16_27"/>
+             and line.separator</h3>
+            
+            <p class="standard">To move from the end of one line to the beginning of the next, a 
+                <span class="italic">newline</span>
+                <a class="indexanchor" id="i16_28"/>
+             is inserted. The character for a new line doesn’t have to be a single character; several characters may also be necessary. Unfortunately for programmers, the number of characters for a newline sequence depends on the architecture, for instance:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Unix, macOS: Line feed (LF for short), 
+                        <samp class="listingcharacter listingcharacter">\n</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Windows: Carriage return (CR for short) and line feed</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The control code for a carriage return is 13 (0x0D); the control code for a line feed is 10 (0x0A). Java also assigns its own escape sequences for these characters: 
+                <samp class="listingcharacter listingcharacter">\r</samp> for carriage returns and 
+                <samp class="listingcharacter listingcharacter">\n</samp> for line feeds. (The 
+                <samp class="listingcharacter listingcharacter">\f</samp>
+             sequence is for a form feed, also called a “page feed,” which doesn’t play any role in line breaks).</p>
+            
+            <p class="standard">
+                <a id="p852"/>
+            In Java, you can obtain a newline character or a newline string from the system in one of the following three ways:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">By calling 
+                        <samp class="listingcharacter listingcharacter">System.getProperty("line.separator")</samp>
+                        <a class="indexanchor" id="i16_29"/>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">By calling 
+                        <samp class="listingcharacter listingcharacter">System.lineSeparator()</samp>
+                        <a class="indexanchor" id="i16_30"/>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">You don’t always have to query the character (or, strictly speaking, a possible string of characters) individually. If the character is part of a formatted output at the 
+                        <samp class="listingcharacter listingcharacter">formatter</samp>, 
+                        <samp class="listingcharacter listingcharacter">String.format(...)</samp> or 
+                        <samp class="listingcharacter listingcharacter">printf(...)</samp>, the format specifier 
+                        <samp class="listingcharacter listingcharacter">%n</samp>
+                     stands for exactly the newline string stored in the system.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.4.6">16.4.6    Environment Variables of the Operating System</h3>
+            
+            <p class="standard">Almost every operating system uses the concept of 
+                <span class="italic">environment variables</span>
+                <a class="indexanchor" id="i16_31"/>; for example, 
+                <samp class="listingcharacter listingcharacter">PATH</samp>
+             is known for the search path for applications on Windows and Unix. Java enables access to these system environment variables. Two static methods are used for this purpose:</p>
+            
+            <div class="listing " id="l_none_16183"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">System</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static Map&lt;String, String&gt; getEnv()</samp><br/>Reads a set of 
+                        <samp class="listingcharacter listingcharacter">&lt;string, string&gt;</samp>
+                     pairs with all system properties.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String getEnv(String name)</samp><br/>Reads a system property named 
+                        <samp class="listingcharacter listingcharacter">name</samp>. If the property doesn’t exist, the return will be 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <table class="standardtable" id="t16.5">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Variable Name</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Description</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Example</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">COMPUTERNAME</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Name of the computer</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">MOE</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">HOMEDRIVE</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Drive of the user directory</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">C:</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">HOMEPATH</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Path of the user directory</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">\Users\Christian</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">OS</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Name of the operating system*</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">Windows_NT</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">PATH</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Search path</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">C:\windows\SYSTEM32;<br/>C:\windows …</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">PATHEXT</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">File extensions that represent executable programs</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">SYSTEMDRIVE</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Drive of the operating system</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">C:</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">TEMP</samp> and also 
+                                <samp class="listingcharacter listingcharacter">TMP</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Temporary directory</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">C:\Users\CHRIST~1\AppData\Local\Temp</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">USERDOMAIN</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Domain of the user</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">MOE</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">
+                                    <a id="p853"/>
+                                USERNAME</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Name of the user</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">Christian</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">USERPROFILE</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Profile directory</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">C:\Users\Christian</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">WINDIR</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Directory of the operating system</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">C:\windows</span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="3">
+                            
+                            <p class="standard first-item last-item">* The result differs from 
+                                <samp class="listingcharacter listingcharacter">System.getProperty("os.name")</samp>
+                            , which already returns “Windows 10” for Windows 10.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 16.5</b>    
+            Selection of Some Environment Variables Available in Windows</p>
+            
+            <p class="standard">Some variables are also accessible via the system properties, for instance, with 
+                <samp class="listingcharacter listingcharacter">System.getProperties()</samp>, 
+                <samp class="listingcharacter listingcharacter">System.getProperty(.</samp>
+            ..), and so on.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example outputs the environment variables of the system:</p>
+                
+                <div class="listing  last_item" id="l_none_16181"><pre>Map<span class="">&lt;</span><span class="">String</span><span class="">,</span><span class="">String</span><span class="">&gt;</span><span class=""> map </span><span class="">=</span><span class=""> System</span><span class="">.</span><span class="">getenv</span><span class="">();</span><span class=""><br/></span>map<span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">k</span><span class="">,</span><span class=""> v</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%s=%s%n"</span><span class="">,</span><span class=""> k</span><span class="">,</span><span class=""> v </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

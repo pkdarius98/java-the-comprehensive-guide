@@ -1,0 +1,1680 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Imperative Language Concepts" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Imperative Language Concepts" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Imperative Language Concepts</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h2.7">2.7    Methods
+            <a class="indexanchor" id="i02_258"/>
+         of a Class</h2>
+        
+        <p class="standard">In OOP, objects interact with each other at runtime and send messages to each other as requests to do something. These requests result in a method call containing statements that are then executed. In Java, the offer of an object with regard to what it “can do” is expressed by means of methods.</p>
+        
+        <p class="standard">You’ve already learned about several methods with the frequently used 
+            <samp class="listingcharacter listingcharacter">println(...)</samp> in our examples. This method is a method of the 
+            <samp class="listingcharacter listingcharacter">out</samp> object. Another program section now sends a message to the 
+            <samp class="listingcharacter listingcharacter">out</samp> object to execute the 
+            <samp class="listingcharacter listingcharacter">println(...)</samp>
+         method. In the following descriptions, we won’t look further into the active part of the message sending process; we’ll simply say that a method is “called.”</p>
+        
+        <p class="standard">Three reasons exist for declaring methods:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Recurring program parts shouldn’t be programmed again and again but instead provided in one place. Changes to functionality can then be made more easily if the code is grouped together locally.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Complex programs are broken down into small subprograms so that the complexity of the program is broken down as well. This organization makes it easier to see the control flow.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The operations of a class, that is, the offerings of an object, are the reasons for method declarations in an OOP language. However, other reasons also speak in favor of methods, which we’ll describe in this section.</p>
+            
+            </li>
+        
+        </ul>
+        
+        
+            
+            <h3 class="t3" id="h2.7.1">2.7.1    Components of a Method</h3>
+            
+            <p class="standard">A method is composed of several components: the 
+                <span class="italic">method head</span>
+                <a class="indexanchor" id="i02_259"/> (
+                <span class="italic">head </span>for short
+                <a class="indexanchor" id="i02_260"/>) and the 
+                <span class="italic">method body</span>
+                <a class="indexanchor" id="i02_261"/> (
+                <span class="italic">body </span>for short
+                <a class="indexanchor" id="i02_262"/>). The head consists of a 
+                <span class="italic">return type</span>
+                <a class="indexanchor" id="i02_263"/> (also called a 
+                <span class="italic">result type</span>
+                <a class="indexanchor" id="i02_264"/>), the 
+                <span class="italic">method name</span>, and an optional 
+                <span class="italic">parameter list</span>
+                <a class="indexanchor" id="i02_265"/>
+            .</p>
+            
+            <p class="standard">
+                <a id="p178"/>Let’s consider the well-known static 
+                <samp class="listingcharacter listingcharacter">main(String[])</samp>
+             method in the following example:</p>
+            
+            <div class="listing " id="l_none_21747"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"What happened to you? Did you run here?"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">This code has the following components:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The static method doesn’t return anything, so the “return type” is 
+                        <samp class="listingcharacter listingcharacter">void</samp>. At this point, note that 
+                        <samp class="listingcharacter listingcharacter">void</samp> is not a type in Java; 
+                        <samp class="listingcharacter listingcharacter">void</samp>
+                     simply means “free,” “the void,” or “cavity.”</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The method name is 
+                        <samp class="listingcharacter listingcharacter">main</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The parameter list is 
+                        <samp class="listingcharacter listingcharacter">String[] args</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The body consists only of the screen output.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Naming Conventions</h6>
+                
+                <p class="standard first last">Like variable names, method names start with lowercase letters and are written in mixed case. Identifiers should not be named like keywords.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_47" id="fn02_47">[ 79 ]</a></span>
+                </p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h2.7.1.1">The Signature of a Method</h4>
+                
+                <p class="standard">The method name and the parameter list determine the 
+                    <span class="italic">signature</span>
+                    <a class="indexanchor" id="i02_266"/> of a method; the return type and exceptions are not part of a method signature.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_48" id="fn02_48">[ 80 ]</a></span> The parameter list is described by the number, order, and types of parameters. Only one method of the same signature can exist in a class; otherwise, the compiler will report an error. Since the methods 
+                    <samp class="listingcharacter listingcharacter">void main(String[] args)</samp> and 
+                    <samp class="listingcharacter listingcharacter">String main(String[] arguments)</samp> have the same signature (
+                    <samp class="listingcharacter listingcharacter">main</samp>, 
+                    <samp class="listingcharacter listingcharacter">String[]</samp>
+                )—the names of the parameters don’t matter—they can’t be declared together in one class. (Later in this section, we’ll show you how subclasses do allow certain special cases.)</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Duck Typing</h6>
+                    
+                    <p class="standard first">Scripting languages in particular (such as JavaScript, Python, or Ruby) allow for method declarations without a parameter type, so methods can be called with different argument types, as in the following code:</p>
+                    
+                    <div class="listing " id="l_none_21764"><pre><span class="">printSum</span><span class="">(</span><span class=""> a</span><span class="">,</span><span class=""> b </span><span class="">)</span><span class=""> print a </span><span class="">+</span><span class=""> b</span></pre></div>
+                    
+                    <p class="standard last">
+                        <a id="p179"/>Due to the unspecified parameter type, the method can be called with integers, floats, or strings. The runtime environment is tasked with recognizing this dynamic type and with executing the addition on the concrete type. This approach isn’t possible in Java where the type must be known to the compiler. Programming languages that check the presence of methods or operators on the type only at runtime use what’s called 
+                        <span class="italic">duck typing</span>. The term comes from a poem by James Whitcomb Riley: “When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.” Applied to our case, if the parameters 
+                        <samp class="listingcharacter listingcharacter">a</samp> and 
+                        <samp class="listingcharacter listingcharacter">b</samp>
+                     support the operation “add,” then the values can be added.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.2">2.7.2    Signature Description in the Java Application Programming Interface Documentation</h3>
+            
+            <p class="standard">In the Java API documentation, all methods with their return values and parameters (including possible exceptions) are exactly defined. Let’s look at the documentation of the static method 
+                <samp class="listingcharacter listingcharacter">max(int, int)</samp> of the 
+                <samp class="listingcharacter listingcharacter">Math</samp>
+             class.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f2.10.html" id="f2.10"><img alt="The Online API Documentation for Math.max()" id="img-f2.10" src="bilderklein/klein02_010.png"/></a></div>
+            
+            <p class="caption "><b>Figure 2.10</b>    
+            The Online API Documentation for Math.max()</p>
+            
+            <p class="standard">The help information shown in 
+                <span class="crossreference "><a href="02_007.html#f2.10">Figure 2.10</a></span> provides details about the complete signature of the method. The return type is an 
+                <samp class="listingcharacter listingcharacter">int</samp>, the static method is called 
+                <samp class="listingcharacter listingcharacter">max</samp>, and it expects exactly two 
+                <samp class="listingcharacter listingcharacter">int</samp> numbers. We’ve concealed the keywords 
+                <samp class="listingcharacter listingcharacter">public</samp> and 
+                <samp class="listingcharacter listingcharacter">static</samp> (which are called 
+                <span class="italic">modifiers</span>
+                <a class="indexanchor" id="i02_267"/>). The keyword 
+                <samp class="listingcharacter listingcharacter">public</samp>
+             specifies the visibility and who can use this method. Let’s look a bit more closely at these keywords:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">In the case of 
+                        <samp class="listingcharacter listingcharacter">public</samp>, anyone can use this method. The opposite is 
+                        <samp class="listingcharacter listingcharacter">private</samp>
+                     in which only the object itself can use this method. This distinction is useful when methods are intended to reduce complexity and solve sub-problems. Private methods are usually not displayed in the help because they are an implementation detail.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">static</samp>
+                     keyword indicates that the method can be used with the class name, that is, no instance of an object is required.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h2.7.2.1">
+                    <a id="p180"/>
+                Other Modifiers and Exceptions*</h4>
+                
+                <p class="standard">Many methods that have other modifiers and an extended signature. Another example from the API documentation is shown in 
+                    <span class="crossreference "><a href="02_007.html#f2.11">Figure 2.11</a></span>. The visibility of this method is 
+                    <samp class="listingcharacter listingcharacter">protected</samp>, which means that only derived classes and classes in the same directory (the same package) can use this method. An additional modifier is 
+                    <samp class="listingcharacter listingcharacter">final</samp>, which in inheritance doesn’t allow the subclass to overwrite the method and give it new program code. Finally, the 
+                    <samp class="listingcharacter listingcharacter">throws</samp> keyword is followed by an exception. This exception tells you something about errors that might be caused by the method and what the programmer must take care of. In connection with inheritance, we’ll discuss 
+                    <samp class="listingcharacter listingcharacter">protected</samp> and 
+                    <samp class="listingcharacter listingcharacter">final</samp> later. 
+                    <span class="crossreference "><a href="09_001.html#h9">Chapter 9</a></span>
+                 is devoted to exceptions. Based on “Since: 1.1” in the documentation, we can note that the method has existed since Java 1.1. The information can also be bound to the class.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f2.11.html" id="f2.11"><img alt="Extract from the API Documentation for the java.net.ServerSocket Class" id="img-f2.11" src="bilderklein/klein02_011.png"/></a></div>
+                
+                <p class="caption "><b>Figure 2.11</b>    
+            Extract from the API Documentation for the java.net.ServerSocket Class</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.3">2.7.3    Calling a Method
+                <a class="indexanchor" id="i02_268"/>
+            </h3>
+            
+            <p class="standard">Since a method is always associated with a class or object, the owner of a method must be specified when the method is called. In the case of 
+                <samp class="listingcharacter listingcharacter">System.out.println()</samp>, 
+                <samp class="listingcharacter listingcharacter">println()</samp> is a method of the 
+                <samp class="listingcharacter listingcharacter">out</samp> object. If we form the maximum of two floats via the 
+                <samp class="listingcharacter listingcharacter">Math.max(a, b)</samp> call, then 
+                <samp class="listingcharacter listingcharacter">max(</samp>...
+                <samp class="listingcharacter listingcharacter">)</samp> is a (static) method of the 
+                <samp class="listingcharacter listingcharacter">Math</samp>
+             class. For the caller, who is offering this method, and who is also receiving this message, is apparent. What the caller does not see is how the method works. The method call branches to the program code, but the caller doesn’t know what happens since only the result is used.</p>
+            
+            <p class="standard">The called method is identified by its name. The parameter list
+                <a class="indexanchor" id="i02_269"/> is enclosed by a pair of parentheses
+                <a class="indexanchor" id="i02_270"/>. These parentheses must be included even if the method doesn’t contain any parameters at all. The number and types of the passed values must match the dec
+                <a id="p181"/>laration of the method. For instance, 
+                <samp class="listingcharacter listingcharacter">Math.max(...)</samp> requires exactly two parameters, and if the number is correct or the types are not correct, a compiler error will occur.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_49" id="fn02_49">[ 81 ]</a></span>
+            </p>
+            
+            
+                
+                <h4 class="t4" id="h2.7.3.1">Wanting Something versus Nothing, Giving Nothing versus Something</h4>
+                
+                <p class="standard">A method like 
+                    <samp class="listingcharacter listingcharacter">System.out.println()</samp> returns nothing as the result of a “calculation.” The static methods 
+                    <samp class="listingcharacter listingcharacter">Math.max(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">Math.random()</samp>
+                 are different since they do return results. In summary, four different types of methods exist.</p>
+                
+                <table class="standardtable" id="t2.16">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Method</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">Without Return Value</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">With Return Value</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Without parameter</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">System.out.println()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Math.random()</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">With parameter</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">System.out.println(4)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Math.max(12, 33)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 2.16</b>    
+            Methods with Return Values</p>
+                
+                <p class="standard">The following sections describe these four cases in the following order:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Methods without parameters and without returns</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Methods with parameters and without returns</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Methods without parameters and with returns</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Methods with parameters and with returns</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.4">2.7.4    Declaring Methods without Parameters</h3>
+            
+            <p class="standard">The simplest method has no return value and no parameters. The program code is enclosed in curly brackets behind the head and thus forms the body of the method. If the method returns nothing, then 
+                <samp class="listingcharacter listingcharacter">void</samp>
+                <a class="indexanchor" id="i02_271"/> is written before the method name. If the method returns something, the type of the return is written instead of 
+                <samp class="listingcharacter listingcharacter">void</samp>
+            .</p>
+            
+            <p class="standard">Let’s write a static method with no return and no parameters that outputs something to the screen next.</p>
+            
+            <div class="listing " id="l2.34"><pre><span class="">class</span><span class=""> FriendlyGreeter </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">static</span></span><span class=""> </span><span class="">void</span><span class=""> </span>
+                <span class="bold"><span class="">greet</span><span class="">()</span></span> {<br/>    System.out.<span class="">println</span><span class="">( "Good morning, and in case</span><span class=""> I don't see ya, </span><span class="">" </span><br/>                      + "<span class="">good afternoon, good evening, and good night!" );</span><br/>  }<br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    
+                <span class="bold"><span class="">greet</span><span class="">();</span></span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 2.34</b>    
+            src/main/java/FriendlyGreeter.java</p>
+            
+            <p class="standard">
+                <a id="p182"/>Custom methods can, of course, be named like library methods because they belong to different classes. So, instead of 
+                <samp class="listingcharacter listingcharacter">greet()</samp>, we could also have used the name 
+                <samp class="listingcharacter listingcharacter">println()</samp>
+            , but we probably shouldn’t do this to avoid confusion.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">Assigning a method name is not so easy. For example, let’s write a method that copies a file. Spontaneously, two words come to mind that want to be combined into a method name: “file” and “copy.” But in which combination? Should it be 
+                    <samp class="listingcharacter listingcharacter">copyFile(...)</samp> or 
+                    <samp class="listingcharacter listingcharacter">fileCopy(...)</samp>? When this conflict arises, the verb should lead the action, so we’d choose 
+                    <samp class="listingcharacter listingcharacter">copyFile(...)</samp>
+                . Method names should always begin with the activity word, followed by the “what,” the object.</p>
+            
+            </div>
+            
+            <p class="standard">Pressing 
+                <span class="keyboard">(Ctrl)</span>
+             while clicking on an identifier makes IntelliJ jump to the declaration; so, the custom code becomes a navigable web page.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.5">2.7.5    Static Methods
+                <a class="indexanchor" id="i02_272"/> (Class Methods
+                <a class="indexanchor" id="i02_273"/>
+            )</h3>
+            
+            <p class="standard">So far, we’ve only worked with static methods (also called 
+                <span class="italic">class methods</span>). The special thing about static methods is that they aren’t bound to an object and can therefore always be called without an explicitly created object. Thus, static methods belong to classes in themselves and aren’t associated with special objects. You can see this independence from the call of our static method 
+                <samp class="listingcharacter listingcharacter">greet()</samp>—no object is required to which the method is bound. This approach is possible because the method is declared as 
+                <samp class="listingcharacter listingcharacter">static</samp>
+            , and within the class, all methods can be called simply by their names without any qualifier.</p>
+            
+            <p class="standard">Static methods must be explicitly identified with the 
+                <samp class="listingcharacter listingcharacter">static</samp> keyword. If the 
+                <samp class="listingcharacter listingcharacter">static</samp>
+             modifier is missing, you can declare an object method with it, but you can only call the method if you’ve previously created an object. </p>
+            
+            <p class="standard">But we’ll save this topic for 
+                <span class="crossreference "><a href="03_001.html#h3">Chapter 3</a></span>. However, the error message should not scare you. If you omit 
+                <samp class="listingcharacter listingcharacter">static</samp> from the 
+                <samp class="listingcharacter listingcharacter">greet()</samp> declaration and call the static 
+                <samp class="listingcharacter listingcharacter">main(...)</samp> method now (without building an object), then the no-longer static method 
+                <samp class="listingcharacter listingcharacter">greet(</samp> ) returns the compiler error “Cannot make a static reference to the non-static method greet() from the type FriendlyGreeter.”
+                <a class="indexanchor" id="i02_274"/>
+            </p>
+            
+            <p class="standard">If the static method is declared in the same class as the caller—in our case, 
+                <samp class="listingcharacter listingcharacter">main(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">greet()</samp> in 
+                <samp class="listingcharacter listingcharacter">FriendlyGreeter</samp>—the call is unique with the name of the method alone. However, if the method declaration and method call are in different classes, the caller must name the class; you encountered this potential problem before, with calls like 
+                <samp class="listingcharacter listingcharacter">Math.random(...)</samp>
+            .</p>
+            
+            <table class="standardtable" id="t_none_02_17">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a id="p183"/>
+                            Declaration</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Usage</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">class </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">FriendlyGreeter</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter"> {</samp><br/> 
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">static</samp>
+                                </span> 
+                                <samp class="listingcharacter listingcharacter">void</samp> 
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">greet</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">() {<br/> System.out.println( "Hey!" );<br/> }<br/>}</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">class FriendlyGreeterCaller {<br/> public static void main( String[] args ) {<br/></samp> 
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">FriendlyGreeter.greet</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">();<br/> }<br/>}</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.6">2.7.6    Parameters, Arguments,
+                <a class="indexanchor" id="i02_275"/>
+             and Value Transfers</h3>
+            
+            <p class="standard">Values can be passed to 
+                <a class="indexanchor" id="i02_276"/>a method that are then included in the method’s operation. For example, the 
+                <samp class="listingcharacter listingcharacter">println(2001)</samp> method has been passed a value, thus becoming a 
+                <span class="italic">parameterized method</span>
+                <a class="indexanchor" id="i02_277"/>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Consider the following method declaration 
+                    <samp class="listingcharacter listingcharacter">printMax(double, double)</samp>
+                , which prints the larger of the two passed values on the screen:</p>
+                
+                <div class="listing  last_item" id="l_none_21775"><pre><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">printMax</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">double</span><span class=""> a, </span><span class="">double</span><span class=""> b</span></span> ) {<br/>  <span class="">if</span><span class=""> ( </span>
+                    <span class="bold">a</span> &gt; 
+                    <span class="bold">b</span> )<br/>    System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">a</span> );<br/>  <span class="">else</span><span class=""><br/></span>    System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">b</span> );<br/>}<span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">
+                <span class="italic">Formal parameters </span>are used to address the values passed to methods
+                <a class="indexanchor" id="i02_278"/>. From our static method 
+                <samp class="listingcharacter listingcharacter">printMax(double a, double b)</samp>, 
+                <samp class="listingcharacter listingcharacter">a</samp> and 
+                <samp class="listingcharacter listingcharacter">b</samp> are the formal parameters of the parameter list. Each parameter is listed separated by a comma, and the type must be specified for each parameter; a shortened form in the otherwise usual variable declaration (such as 
+                <samp class="listingcharacter listingcharacter">double a, b</samp>
+            ) is not possible. Each parameter variable of a method declaration must of course have a different name; otherwise, no restrictions exist.</p>
+            
+            
+                
+                <h4 class="t4" id="h2.7.6.1">Arguments (Current Parameters
+                    <a class="indexanchor" id="i02_279"/>
+                )</h4>
+                
+                <p class="standard">The caller of the method must specify an argument for each parameter. The parameters declared in the method head are ultimately local variables in the method body. When called, the runtime environment initializes the local variables with the arguments passed to the method. If we call our parameterized method with 
+                    <samp class="listingcharacter listingcharacter">printMax(10, 20)</samp>, for example, the literals 
+                    <samp class="listingcharacter listingcharacter">10</samp> and 
+                    <samp class="listingcharacter listingcharacter">20 </samp>are 
+                    <span class="italic">arguments</span>
+                    <a class="indexanchor" id="i02_280"/> (current parameters of the method). When the method is called, the runtime environment places the arguments in the local variables, thus copying the value 
+                    <samp class="listingcharacter listingcharacter">10</samp> to the parameter variable 
+                    <samp class="listingcharacter listingcharacter">a</samp> and copying 
+                    <samp class="listingcharacter listingcharacter">20</samp> to the parameter variable 
+                    <samp class="listingcharacter listingcharacter">b</samp>
+                . Within the method body, thus, access to the values passed from outside is available.</p>
+                
+                <p class="standard">
+                    <a id="p184"/>The end of the method block automatically means the end for the parameter variables. The caller also doesn’t know what the internal parameter variables are called. A type conversion from 
+                    <samp class="listingcharacter listingcharacter">int</samp> to 
+                    <samp class="listingcharacter listingcharacter">double</samp>
+                 is done automatically by the compiler in our case. The arguments must match in type, of course, and the known rules for typecasting apply.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f2.12.html" id="f2.12"><img alt="The Terms “Parameter” and “Argument”" id="img-f2.12" src="bilderklein/klein02_012.png"/></a></div>
+                
+                <p class="caption "><b>Figure 2.12</b>    
+            The Terms “Parameter” and “Argument”</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.6.2">Value Transfer via
+                    <a class="indexanchor" id="i02_281"/>
+                 Call by Value</h4>
+                
+                <p class="standard">When a method is called, Java has a specific procedure in which each argument is passed to a parameter variable. This technique is called a 
+                    <span class="italic">parameter passing mechanism</span>
+                    <a class="indexanchor" id="i02_282"/>. Many programming languages have a wide range of confusing options. Java knows only a simple mechanism of 
+                    <span class="italic">value passing</span> (
+                    <span class="italic">call by value</span>,
+                    <a class="indexanchor" id="i02_283"/> sometimes also called 
+                    <span class="italic">copy by value</span>
+                ). An example of method invocation makes this clear:</p>
+                
+                <div class="listing " id="l_none_21792"><pre><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">2</span><span class="">;</span><span class=""><br/></span>
+                    <span class="bold"><span class="">printMax</span><span class="">( </span><span class="">10</span><span class="">, i );</span></span>        <span class=""> // 10 goes in a and 2 goes in b</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">Our called method 
+                    <samp class="listingcharacter listingcharacter">printMax(double a, double b)</samp> first gets 
+                    <samp class="listingcharacter listingcharacter">10</samp> copied into the variable 
+                    <samp class="listingcharacter listingcharacter">a</samp> and then gets the contents of the variable 
+                    <samp class="listingcharacter listingcharacter">i</samp> (
+                    <samp class="listingcharacter listingcharacter">2</samp> in our example) copied into 
+                    <samp class="listingcharacter listingcharacter">b</samp>. In no case does the caller pass information about the memory area of 
+                    <samp class="listingcharacter listingcharacter">i</samp> to the method. The moment the method is called, the runtime environment queries the assignment of 
+                    <samp class="listingcharacter listingcharacter">i</samp> and uses it to initialize the parameter variable 
+                    <samp class="listingcharacter listingcharacter">b</samp>. If 
+                    <samp class="listingcharacter listingcharacter">printMax(...)</samp> changes its variable 
+                    <samp class="listingcharacter listingcharacter">b</samp> internally, only the local variable 
+                    <samp class="listingcharacter listingcharacter">b</samp> is changed (thus overwriting 
+                    <samp class="listingcharacter listingcharacter">2</samp>
+                ). </p>
+                
+                <p class="standard">However, the change in the method has no consequence for the external 
+                    <samp class="listingcharacter listingcharacter">i</samp>, which remains at 
+                    <samp class="listingcharacter listingcharacter">2</samp>. This type of call is also called 
+                    <span class="italic">copy by value</span>. Only the value is passed (copied), and no reference is made to the variable.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_50" id="fn02_50">[ 82 ]</a></span>
+                </p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.6.3">Evaluation of the Argument List from Left to Right*</h4>
+                
+                <p class="standard">In a method call, all arguments are evaluated first and then passed to the method. Thus, sub-methods can be evaluated, and assignments can be made. Errors then lead to an aborted method call. All expressions are evaluated up to the error.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p185"/>
+                    Question</h6>
+                    
+                    <p class="standard first">What is the output of the following lines?</p>
+                    
+                    <div class="listing  last_item" id="l_none_21798"><pre><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">max</span><span class="">(</span><span class=""> i</span><span class="">++,</span><span class=""> </span><span class="">--</span><span class="">i </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.7">2.7.7    Ending Methods Prematurely with return</h3>
+            
+            <p class="standard">If a method runs to the end, then the method is finished, and it goes back to the caller. However, depending on a condition, a method can be terminated before the end of the flow with a 
+                <samp class="listingcharacter listingcharacter">return</samp>
+                <a class="indexanchor" id="i02_284"/> statement. This approach is useful for methods that want to exit prematurely depending on parameters. Imagine that a hidden 
+                <samp class="listingcharacter listingcharacter">return</samp> automatically exists before the end of the method. An unnecessary 
+                <samp class="listingcharacter listingcharacter">return</samp>
+             at the end of the method body should thus not be written.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">A static method 
+                    <samp class="listingcharacter listingcharacter">printSqrt(double)</samp>
+                 is supposed to print the root of a number on the screen. For numbers less than zero, a message appears, and the method is exited. Otherwise, the root calculation is performed.</p>
+                
+                <div class="listing " id="l2.35"><pre><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">printSqrt</span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> d </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> d </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> “There is no </span><span class="">true</span><span class=""> square root of a negative number</span><span class="">!</span><span class="">" </span><span class="">);</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">return</span><span class="">;</span></span><br/>  }<br/>  System.out.<span class="">println</span><span class="">( Math.</span><span class="">sqrt</span><span class="">( d ) );</span><br/>}<span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 2.35</b>    
+            src/main/java/PrintSqrt.java, printSqrt()</p>
+                
+                <p class="standard last">Of course, the implementation would also have been possible with an 
+                    <samp class="listingcharacter listingcharacter">else</samp>
+                 statement.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.8">2.7.8    Unreachable
+                <a class="indexanchor" id="i02_285"/>
+                <a class="indexanchor" id="i02_286"/>
+             Source Code for Methods*</h3>
+            
+            <p class="standard">If source code follows directly after a 
+                <samp class="listingcharacter listingcharacter">return</samp> statement, the code is not reachable in the sense of not executable. 
+                <samp class="listingcharacter listingcharacter">return</samp> always terminates the method and returns to the caller. If source code still exists after the 
+                <samp class="listingcharacter listingcharacter">return</samp>
+            , the compiler will report an error, as in the following example:</p>
+            
+            <div class="listing " id="l_none_21809"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span>  
+                <span class="bold"><span class="">return</span><span class="">;</span><br/>
+                    <a id="p186"/>  i = <span class="">2</span><span class="">;</span></span>             <span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Unreachable code!</span><span class=""><br/></span>} <span class=""/></pre></div>
+            
+            <p class="standard">Attempting to reduce a statement to the only most necessary code (the semicolon) can sometimes lead to amusing results, as in the following example:</p>
+            
+            <div class="listing " id="l_none_21827"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">;</span><span class="">return</span><span class="">;;</span><span class="">          </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                </span><br/>}<span class=""> </span></pre></div>
+            
+            <p class="standard">This example contains two null statements: one before the 
+                <samp class="listingcharacter listingcharacter">return</samp> and one after it. But the second semicolon after the 
+                <samp class="listingcharacter listingcharacter">return</samp>
+             is not allowed because it represents an unreachable statement.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">In some cases, a 
+                    <samp class="listingcharacter listingcharacter">return</samp> in the middle of a method is desirable. For example, if a method should not be traversed entirely in the test phase, but instead should be terminated in the middle, you can use a statement such as 
+                    <samp class="listingcharacter listingcharacter">if ( true ) return;</samp>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.9">2.7.9    Methods with Returns</h3>
+            
+            <p class="standard">For methods to return values to the caller, two things must be true:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A method declaration gets a return type not equal to 
+                        <samp class="listingcharacter listingcharacter">void</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A 
+                        <samp class="listingcharacter listingcharacter">return</samp>
+                     statement returns a value.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Let’s look at a static method that returns random numbers from 0 to less than 100:</p>
+                
+                <div class="listing  last_item" id="l_none_21839"><pre><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">double</span></span><span class=""> </span><span class="">largerRandom</span><span class="">() {</span><br/>  
+                    <span class="bold"><span class="">return</span><span class=""> Math.</span><span class="">random</span><span class="">() * </span><span class="">100</span><span class="">;</span></span><br/>}<span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">If the expression is missing and only a simple 
+                <samp class="listingcharacter listingcharacter">return</samp>
+             is available, the compiler will report a program error that an expression is needed or the method should not return anything.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">Although some programmers like to parenthesize every expression, doing so isn’t necessary. Parentheses are only intended to make complex expressions more readable. Parenthesized expressions otherwise only remind you of a method call, and this possibility of confusion should not exist with return values.</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p187"/>
+                What Other Programming Languages Can Do*</h6>
+                
+                <p class="standard first last">Although multiple parameters can be declared, only one value at most can be returned to the caller. In the Python programming language, multiple values can also be returned via what’s called a 
+                    <span class="italic">tuple</span>
+                . In Java, a tuple can be replicated by using a returned collection.</p>
+            
+            </div>
+            
+            <div class="imagebox figure-type"><a href="img-f2.13.html" id="f2.13"><img alt="IntelliJ Detects If a Return Type Is Missing and Suggests a Suitable Type When Pressing Ctrl+Enter" id="img-f2.13" src="bilderklein/klein02_013.png"/></a></div>
+            
+            <p class="caption "><b>Figure 2.13</b>    
+            IntelliJ Detects If a Return Type Is Missing and Suggests a Suitable Type When Pressing Ctrl+Enter</p>
+            
+            
+                
+                <h4 class="t4" id="h2.7.9.1">Returns Depending on Input</h4>
+                
+                <p class="standard">Static methods like 
+                    <samp class="listingcharacter listingcharacter">Math.max(...)</samp>
+                 return a result depending on the arguments. For the caller, the implementation doesn’t matter; it just abstracts and uses the method instead of an expression.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">A static method can calculate the mean value and return it, as in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21851"><pre><span class="">static</span><span class=""> </span>
+                        <span class="bold"><span class="">double</span></span><span class=""> </span><span class="">avg</span><span class="">( </span><span class="">double</span><span class=""> x, </span><span class="">double</span><span class=""> y ) {</span><br/>  
+                        <span class="bold"><span class="">return</span><span class=""> (x + y) / </span><span class="">2</span><span class="">;</span></span><br/>}<span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.9.2">Using Returns*</h4>
+                
+                <p class="standard">The return value doesn’t need to be used at the call position. If your method calculates the average of two numbers, not using the return value is a programming error. This problem frequently arises with 
+                    <samp class="listingcharacter listingcharacter">String</samp> methods, which don’t modify 
+                    <samp class="listingcharacter listingcharacter">String</samp> objects, but instead return new 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 objects.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p188"/>
+                    Example</h6>
+                    
+                    <p class="standard first">Ignoring the return for a 
+                        <samp class="listingcharacter listingcharacter">String</samp>
+                     method is a semantic program error, not a syntactic compiler error. Consider the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21865"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"Ja"</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                        <span class="bold"><span class="">s.</span><span class="">concat</span><span class="">( </span><span class="">"va"</span><span class=""> )</span></span> );<span class=""> // Java</span><span class=""><br/></span>
+                        <span class="bold">s.<span class="">concat</span><span class="">( </span><span class="">"va"</span><span class=""> )</span></span>;                      <span class=""> // Return ignored, error!</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( s );               </span><span class=""> // Ja</span><span class=""/><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.9.3">Multiple Exit Points with Returns</h4>
+                
+                <p class="standard">For methods with a return value, as for 
+                    <samp class="listingcharacter listingcharacter">void</samp> methods, more than one 
+                    <samp class="listingcharacter listingcharacter">return</samp> can exist. But if any 
+                    <samp class="listingcharacter listingcharacter">return</samp>
+                 is “hit,” the method is finished, and it returns to the caller.</p>
+                
+                <p class="standard">For this purpose, let’s look at a method that determines the sign of a number and returns +1, 0, or –1 if the number is either positive, zero, or negative, respectively:</p>
+                
+                <div class="listing " id="l_none_21860"><pre><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">sign</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> value </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> value </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">-</span><span class="">1</span><span class="">;</span><span class=""><br/></span>  <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> value </span><span class="">&gt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">+</span><span class="">1</span><span class="">;</span><span class=""><br/></span>  <span class="">else</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">On closer inspection, notice how, in no case, can another test be performed when a 
+                    <samp class="listingcharacter listingcharacter">return</samp> terminates the method. The program code can be rewritten because, in 
+                    <samp class="listingcharacter listingcharacter">if</samp> statements with further 
+                    <samp class="listingcharacter listingcharacter">else</samp>-
+                    <samp class="listingcharacter listingcharacter">if</samp> alternatives and return, the semantics is the same as though 
+                    <samp class="listingcharacter listingcharacter">else</samp>-
+                    <samp class="listingcharacter listingcharacter">if</samp> is replaced by a simple 
+                    <samp class="listingcharacter listingcharacter">if</samp>. An equivalent 
+                    <samp class="listingcharacter listingcharacter">sign(int)</samp>
+                 method can be used in the following way:</p>
+                
+                <div class="listing " id="l_none_21873"><pre><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">sign</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> value </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> value </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">-</span><span class="">1</span><span class="">;</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> value </span><span class="">&gt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">+</span><span class="">1</span><span class="">;</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.9.4">Compact Bodies with Boolean Returns</h4>
+                
+                <p class="standard">If the return is a truth value, the implementation can often be truncated if an expression is evaluated beforehand that directly determines the return value. Certain constructs can be written more compactly.</p>
+                
+                <table class="standardtable" id="t2.17">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <a id="p189"/>
+                                Construct with Case Distinction</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Truncation</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">if ( condition )<br/> return true;<br/>else<br/> return false;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">return condition;</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">if ( condition )<br/> return false;<br/>else<br/> return true;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">return ! condition;</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">return condition ? true : false;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">return condition;</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">return condition ? false : true;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">return ! condition;</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 2.17</b>    
+            Code Optimizations</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.9.5">Cheating without Return Doesn’t Work</h4>
+                
+                <p class="standard">Every conceivable program flow of a method with a return must end with a 
+                    <samp class="listingcharacter listingcharacter">return value;</samp>. The compiler has a keen eye and notices when a program path doesn’t lead to a 
+                    <samp class="listingcharacter listingcharacter">return</samp>
+                 completion.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The static method 
+                        <samp class="listingcharacter listingcharacter">isLastBitSet(int)</samp>
+                     is supposed to return 0 if the last bit of an integer is not set. It should return 1 if the last bit is set. This bit test is performed using the AND operator, as in the following example:</p>
+                    
+                    <div class="listing " id="l_none_21892"><pre><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">isLastBitSet</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">)</span><span class=""> </span><span class="">{</span><span class="">     </span><span class=""> // 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                         Compiler error</span><span class=""><br/></span>  <span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> i </span><span class="">&amp;</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">case</span><span class=""> </span><span class="">0</span><span class="">:</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span>    <span class="">case</span><span class=""> </span><span class="">1</span><span class="">:</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>}</pre></div>
+                    
+                    <p class="standard last">Although a bit can only be set or not set—there’s no possible state in between—the method can’t be interpreted, and you’ll see an error like “This method must return a result of type int.”</p>
+                
+                </div>
+                
+                <p class="standard">Although something might be obvious to the user, a compiler might opt out when it doesn’t understand the meaning of some code. The same would be true for a week method that returns a day of the week as a string with an integer argument (0 to 6). With the cases 0 = Monday to 6 = Sunday, in our eyes then, a weekday cannot be 99. But the compiler doesn’t understand the method and also doesn’t know that the allowable value range. This problem can easily be fixed with a 
+                    <samp class="listingcharacter listingcharacter">default</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p190"/>
+                    Example</h6>
+                    
+                    <p class="standard first">The static method 
+                        <samp class="listingcharacter listingcharacter">posOrNeg(double)</samp>
+                     is supposed to return a string with the information whether the passed float is positive or negative, as in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21902"><pre><span class="">static</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">posOrNeg</span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> d </span><span class="">)</span><span class=""> </span><span class="">{</span><span class="">  </span><span class=""> // 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                         Compiler error</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> d </span><span class="">&gt;=</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">"pos"</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> d </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">"neg"</span><span class="">;</span><span class=""><br/></span>}</pre></div>
+                
+                </div>
+                
+                <p class="standard">Surprisingly, this program code is also buggy because, although it obviously returns the appropriate string for positive or negative numbers, one case is not covered by this method. Again, the compiler can’t recognize that the second expression should be a negation of the first. But additionally, in Java, some special values aren’t numbers; the number 
+                    <samp class="listingcharacter listingcharacter">d</samp> can also be a NaN
+                    <span class="italic">,</span> for instance, the square root of a negative number. This particular value isn’t checked by 
+                    <samp class="listingcharacter listingcharacter">posOrNeg(double)</samp>. As a solution for the simple case without NaN, you can simply make an 
+                    <samp class="listingcharacter listingcharacter">else</samp> out of the second 
+                    <samp class="listingcharacter listingcharacter">if</samp> and the query; omit the statement; or write it compactly with the condition operator in the method body: 
+                    <samp class="listingcharacter listingcharacter">return d &gt;= 0 ? "pos" : "neg";</samp>
+                .</p>
+                
+                <p class="standard">Methods that return an error value such as 1 are often implemented in such a way that the error value is always automatically returned at the end. Then, the method is exited in the middle if the end is suitable.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.9.6">Case Distinctions with the Exclusion Principle*</h4>
+                
+                <p class="standard">A method named 
+                    <samp class="listingcharacter listingcharacter">between(a, x, b)</samp> is supposed to test whether a value 
+                    <samp class="listingcharacter listingcharacter">x</samp> lies between 
+                    <samp class="listingcharacter listingcharacter">a</samp> (lower limit) and 
+                    <samp class="listingcharacter listingcharacter">b</samp> (upper limit). With methods of this type, you must pay attention to and document whether the test should be performed on genuinely less than (
+                    <samp class="listingcharacter listingcharacter">&lt;</samp>) or on less than or equal to (
+                    <samp class="listingcharacter listingcharacter">&lt;=</samp>
+                ). In this example, we also want to consider at equality between the two values.</p>
+                
+                <p class="standard">Two solutions for the implementation exist, with most programmers leaning towards the first solution. The first solution is to use a mathematical equation. We’d like to write 
+                    <samp class="listingcharacter listingcharacter">a &lt;= x &lt;= b</samp>, but this construction is not allowed in Java.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_51" id="fn02_51">[ 83 ]</a></span> Thus, we must make an AND comparison; for instance, if 
+                    <samp class="listingcharacter listingcharacter">a &lt;= x &amp;&amp; x &lt;= b</samp>, then return 
+                    <samp class="listingcharacter listingcharacter">true</samp>
+                . In terms of a complete method, you would write the following code:</p>
+                
+                <div class="listing " id="l_none_21913"><pre><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">between</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> a</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> x</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> b </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> a </span><span class="">&lt;=</span><span class=""> x </span><span class="">&amp;&amp;</span><span class=""> x </span><span class="">&lt;=</span><span class=""> b</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <a id="p191"/>
+                The second implementation shows that the problem can be solved by the exclusion principle even without an AND comparison, as in the following example:</p>
+                
+                <div class="listing " id="l_none_21918"><pre><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">between</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> a</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> x</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> b </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> x </span><span class="">&lt;</span><span class=""> a </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">false;</span><span class=""><br/></span><br/>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> x </span><span class="">&lt;=</span><span class=""> b </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">true;</span><span class=""><br/></span><br/>  <span class="">return</span><span class=""> </span><span class="">false;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">With nested queries, the code can be rewritten in the following way:</p>
+                
+                <div class="listing " id="l_none_21926"><pre><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">between</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> a</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> x</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> b </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> a </span><span class="">&lt;=</span><span class=""> x </span><span class="">)</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> x </span><span class="">&lt;=</span><span class=""> b </span><span class="">)</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">true;</span><span class=""><br/></span><br/>  <span class="">return</span><span class=""> </span><span class="">false;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Whether programmers use the variant with the AND operator or the nested 
+                    <samp class="listingcharacter listingcharacter">if</samp>
+                 is generally a matter of taste, but the most readable solution should win out, which in this case would be the one with the AND.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.10">2.7.10    Overloading Methods</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i02_287"/>
+                <a class="indexanchor" id="i02_288"/>A method is characterized by 
+                <span class="italic">return value</span>, 
+                <span class="italic">name</span>, 
+                <span class="italic">parameters</span>, and possibly the 
+                <span class="italic">exception errors</span> it may throw. Java allows you to keep the name of the method and to use other parameters. A method is called 
+                <span class="italic">overloaded</span>
+             if that method appears several times under the same name but with different parameter lists. This overloading is possible in two ways:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A method has the same name but differs in the 
+                        <span class="italic">number of parameters</span>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A method has the same name but has distinguishable 
+                        <span class="italic">parameter types</span>
+                     for the compiler.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The first case is widely used. The name of a method should describe its task but not specifically mention the types of parameters it uses. This approach is common in other languages, but not in Java. For example, let’s look at the static method 
+                <samp class="listingcharacter listingcharacter">max(...)</samp> provided in the 
+                <samp class="listingcharacter listingcharacter">Math</samp> class. This method is declared with the parameter types 
+                <samp class="listingcharacter listingcharacter">int</samp>, 
+                <samp class="listingcharacter listingcharacter">long</samp>, 
+                <samp class="listingcharacter listingcharacter">float</samp>, and 
+                <samp class="listingcharacter listingcharacter">double</samp>, which is much nicer than, say, the separate methods 
+                <samp class="listingcharacter listingcharacter">maxInt(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">maxDouble(</samp>
+            ...).</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p192"/>
+                Example</h6>
+                
+                <p class="standard first">You could declare the static method 
+                    <samp class="listingcharacter listingcharacter">avg(...)</samp>
+                 for two and three parameters in the following way:</p>
+                
+                <div class="listing  last_item" id="l_none_21943"><pre><span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">avg</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">int</span><span class=""> x, </span><span class="">int</span><span class=""> y</span></span> ) {<span class=""/><br/><span class="">  </span><span class="">return</span><span class=""> (x + y) / </span><span class="">2</span><span class="">.;</span><span class=""/><br/><span class="">}</span><span class=""/><br/><span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">avg</span><span class="">( </span>
+                    <span class="bold"><span class="">double</span><span class=""> x, </span><span class="">double</span><span class=""> y</span></span> ) {<span class=""/><br/><span class="">  </span><span class="">return</span><span class=""> (x + y) / </span><span class="">2</span><span class="">;</span><span class=""/><br/><span class="">}</span><span class=""/><br/><span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">avg</span><span class="">( </span>
+                    <span class="bold"><span class="">double</span><span class=""> x, </span><span class="">double</span><span class=""> y, </span><span class="">double</span><span class=""> z</span></span> ) {<span class=""/><br/><span class="">  </span><span class="">return</span><span class=""> (x + y + z) / </span><span class="">3</span><span class="">;</span><span class=""/><br/><span class="">}</span><span class=""/><br/><span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">avg</span><span class="">( </span>
+                    <span class="bold"><span class="">int</span><span class=""> x, </span><span class="">int</span><span class=""> y, </span><span class="">int</span><span class=""> z</span></span> ) {<span class=""/><br/><span class="">  </span><span class="">return</span><span class=""> (x + y + z) / </span><span class="">3</span><span class="">.;</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">You cannot declare two methods with the same method name and the same parameter list, but different return types, within a single class:</p>
+                
+                <div class="listing " id="l_none_21960"><pre><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">double</span></span><span class=""> </span><span class="">largerRandom</span><span class="">() { </span>
+                    <span class="bold"><span class="">return</span><span class=""> Math.</span><span class="">random</span><span class="">() * </span><span class="">100</span><span class="">;</span></span> }<br/><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">int</span></span><span class=""> </span><span class="">largerRandom</span><span class="">() { </span>
+                    <span class="bold"><span class="">return</span><span class=""> (</span><span class="">int</span><span class="">)(Math.</span><span class="">random</span><span class="">() * </span><span class="">100</span><span class="">);</span></span> } 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/><span class=""/></pre></div>
+                
+                <p class="standard last">The compiler cannot make any selection at all if the code said something like 
+                    <samp class="listingcharacter listingcharacter">System.out.println(largerRandom());</samp>
+                .</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h2.7.10.1">print(…) und println(…) Are Overloaded*</h4>
+                
+                <p class="standard">The well-known
+                    <a class="indexanchor" id="i02_289"/>
+                    <samp class="listingcharacter listingcharacter"> print(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">println(...)</samp>
+                 methods are overloaded methods, generally declared in the following way:</p>
+                
+                <div class="listing " id="l_none_21974"><pre><span class="">class</span><span class=""> PrintStream </span><span class="">{</span><span class=""><br/></span>  …<br/>  <span class="">void</span><span class=""> </span><span class="">print</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">int</span></span><span class="">    arg ) { … }</span><br/>  <span class="">void</span><span class=""> </span><span class="">print</span><span class="">( </span>
+                    <span class="bold"><span class="">String</span></span><span class=""> arg ) { … }</span><br/>  <span class="">void</span><span class=""> </span><span class="">print</span><span class="">( </span>
+                    <span class="bold"><span class="">double</span></span><span class=""> arg ) { … }</span><br/>  …<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">If now the 
+                    <samp class="listingcharacter listingcharacter">print(...)</samp> method is called with any object type, then the best fitting method is selected. This selection process works even for arbitrary objects, as described in 
+                    <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>, 
+                    <span class="crossreference "><a href="07_005.html#h7.5.2">Section 7.5.2</a></span>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.10.2">
+                    <a id="p193"/>
+                Negative Examples and Smart People*</h4>
+                
+                <p class="standard">Often, the Java library also follows the strategy of using identical names and different types, which is an extremely ugly and bad style. However, some exceptions exist. The following three methods can be found in the graphics library:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">draw</samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">String</samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">( </samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">String </samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">str, int x, int y )</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">draw</samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">Chars</samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">( </samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">char[] </samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">data, int offset, int length, int x, int y )</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">draw</samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">Bytes</samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">( </samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">byte[] </samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">data, int offset, int length, int x, int y )</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Another example can be found in the 
+                    <samp class="listingcharacter listingcharacter">DataOutputStream</samp> class. In this class, the methods are called 
+                    <samp class="listingcharacter listingcharacter">writeInt(...)</samp>, 
+                    <samp class="listingcharacter listingcharacter">writeChar(...)</samp>, and so on. Although we would decry these method names at first glance, this naming makes sense. An object of type 
+                    <samp class="listingcharacter listingcharacter">DataOutputStream</samp> writes primitive values to a data stream. If the overloaded methods 
+                    <samp class="listingcharacter listingcharacter">write(byte)</samp>, 
+                    <samp class="listingcharacter listingcharacter">write(short)</samp>, 
+                    <samp class="listingcharacter listingcharacter">write(int)</samp>, 
+                    <samp class="listingcharacter listingcharacter">write(long)</samp>, and 
+                    <samp class="listingcharacter listingcharacter">write(char)</samp> existed in 
+                    <samp class="listingcharacter listingcharacter">DataOutputStream</samp> and we feed them with 
+                    <samp class="listingcharacter listingcharacter">write(21)</samp>, we have a problem. Java’s typecasting would automatically adjust the data, and the data stream would contain more data than we want because 
+                    <samp class="listingcharacter listingcharacter">write(21)</samp> doesn’t call 
+                    <samp class="listingcharacter listingcharacter">write(short)</samp> to write 2 bytes. Instead, it calls 
+                    <samp class="listingcharacter listingcharacter">write(int)</samp>
+                 and thus writes 4 bytes. So, to keep track of the bytes written, explicit labeling of data types is worthwhile in some cases.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Language Comparison</h6>
+                    
+                    <p class="standard first last">Overloaded methods aren’t a given in other programming languages. For example, C# and C++ allow overloaded methods; however, JavaScript, PHP, and C do not. In languages without overloaded methods, an array of arguments is passed to the method or function. Thus, the typing of the individual elements can be a problem, as is the restriction to a certain number of parameters.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.11">2.7.11    Scope</h3>
+            
+            <p class="standard">Variables can be declared in any block and in any class.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_52" id="fn02_52">[ 84 ]</a></span>
+                <a class="indexanchor" id="i02_290"/> 
+                <a class="indexanchor" id="i02_291"/>
+                <a class="indexanchor" id="i02_292"/>Each variable has a 
+                <span class="italic">scope</span>
+                <a class="indexanchor" id="i02_293"/> (also referred to as a 
+                <span class="italic">validity range</span>
+                <a class="indexanchor" id="i02_294"/>). Only in its scope can the Java program access the variable; outside the scope, it can’t. In other words, the variable is valid in the block and in the deeper nested blocks. Read access is only allowed if the variable has also been initialized. The scope directly determines the 
+                <span class="italic">lifetime</span>
+                <a class="indexanchor" id="i02_295"/> of the variable
+                <a class="indexanchor" id="i02_296"/>
+            . A variable is “alive” only in the block in which it was declared. In this block, the variable is local.</p>
+            
+            <p class="standard">Let’s look at an example with two static methods:</p>
+            
+            <div class="listing " id="l2.36"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Scope </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>
+                <a id="p194"/>    <span class="">int</span><span class=""> </span>
+                <span class="bold"><span class="">foo</span></span> = <span class="">0</span><span class="">;</span><br/><br/>    {<br/>      <span class="">int</span><span class=""> </span>
+                <span class="bold">bar</span> = <span class="">0</span><span class="">;            </span><span class=""> // bar is valid only in this block</span><span class=""><br/></span>      System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">bar</span> );<br/>      System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">foo</span> );<br/>    }<br/><br/>    System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">foo</span> );<br/>    System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">bar</span> );<span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Error: bar cannot be resolved</span><span class=""><br/></span>  }<br/><br/>  <span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">qux</span><span class="">() {</span><br/>    <span class="">int</span><span class=""> </span>
+                <span class="bold">foo</span>, 
+                <span class="bold">baz</span>;             <span class=""> // foo has nothing in common with foo from main()</span><span class=""><br/></span><br/>    {<br/>      <span class="">int</span><span class=""> </span>
+                <span class="bold">baz</span>;                <span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Error: Duplicate local variable baz</span><span class=""><br/></span>    }<br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 2.36</b>    
+            src/main/java/Scope.java</p>
+            
+            <p class="standard">Blocks can be built at any time. Outside the block, declared variables are invalid. After completion of the inner block (which declares 
+                <samp class="listingcharacter listingcharacter">bar</samp>), access to 
+                <samp class="listingcharacter listingcharacter">bar</samp> is no longer possible. Access to 
+                <samp class="listingcharacter listingcharacter">foo</samp> is still allowed within the static method 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>. But this 
+                <samp class="listingcharacter listingcharacter">foo</samp> is a different 
+                <samp class="listingcharacter listingcharacter">foo</samp> than the one in the static method 
+                <samp class="listingcharacter listingcharacter">qux()</samp>
+            . A variable in the block is valid until the block is terminated by a closing curly bracket.</p>
+            
+            <p class="standard">Inside a block, variable names can’t be chosen in the same way as names of local variables of an outer block or as the names for the parameters of a method. You can see this limitation in the second static method using the 
+                <samp class="listingcharacter listingcharacter">baz</samp>
+             declaration in our example. Although other programming languages (C++, for example) provide a syntax to access an overwritten local variable of a higher block, the Java language development team decided against it. Identical names in the inner and outer blocks are not allowed, which is a good thing, too, and minimizes potential sources of error. The parameters declared in methods are also local variables and belong to the method block.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The scope is even more complex because inherited members from the superclasses, for example, are also included.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.12">2.7.12    
+                <a id="p195"/>
+            Default Values for Unlisted Arguments*</h3>
+            
+            <p class="standard">Overloaded methods can be used effectively if preinitialized values should be used, in case of non-existing arguments. So, if a parameter isn’t occupied, a default value must be inserted. To achieve this insertion, we simply overload the method and call the other method with the default value appropriately. (The C# and C++ languages enable optional arguments in the language’s grammar
+                <a class="indexanchor" id="i02_297"/>
+            , which is something not possible in Java.)</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Let’s use two overloaded static methods, 
+                    <samp class="listingcharacter listingcharacter">tax(double cost, double taxRate)</samp> and 
+                    <samp class="listingcharacter listingcharacter">tax(double cost)</samp>, to calculate taxes. In this example, the tax rate should automatically be 19%, the German VAT rate, when the static method tax 
+                    <samp class="listingcharacter listingcharacter">(double cost)</samp> is called but the tax rate isn’t explicitly given; in the other case, we can choose 
+                    <samp class="listingcharacter listingcharacter">taxRate</samp>
+                 arbitrarily.</p>
+                
+                <div class="listing  last_item" id="l_none_21987"><pre><span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">tax</span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> cost</span><span class="">,</span><span class=""> </span><span class="">double</span><span class=""> taxRate </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> cost </span><span class="">*</span><span class=""> taxRate</span><span class=""> / 100.0;</span><br/>}<br/>static double tax( double cost ) {<br/>  return tax( cost, 
+                    <span class="bold">19.0</span> );  <span class=""> // instead of cost * 19.0 / 100;</span><span class=""><br/></span>}<span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.13">2.7.13    Recursive Methods*
+                <a class="indexanchor" id="i02_298"/>
+                <a class="indexanchor" id="i02_299"/>
+            </h3>
+            
+            <p class="standard">Let’s start our introduction to recursion with a short example. On the way through the forest, you encounter a fairy
+                <a class="indexanchor" id="i02_300"/>
+            . She says, “You have three wishes.” Great situation. To end all unhappiness in the world, you avoid egocentric wish fulfillment, and aim for a socialist one: “I want peace for all, health, and prosperity for everyone.” And poof, that’s how it was, and everyone lived happily ever....</p>
+            
+            <p class="standard">Some readers may slap their foreheads and say, “Nonsense! Self-replicating flowers, Pokémon Deoxys, and a life partner who tolerates my crankiness in the morning.” Fortunately, we can solve this dilemma with recursion. The idea is simple—and already tested in our dreams—namely, formulating the last wish as “three more free wishes.”</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Consider the following small wish method:</p>
+                
+                <div class="listing  last_item" id="l_none_21995"><pre><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span>
+                    <span class="bold"><span class="">fairy</span><span class="">()</span></span> {<br/>  <span class="">wish</span><span class="">();</span><br/>  <span class="">wish</span><span class="">();</span><br/>  
+                    <span class="bold"><span class="">fairy</span><span class="">()</span></span>;<br/>}<span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">
+                <a id="p196"/>By calling the 
+                <samp class="listingcharacter listingcharacter">fairy()</samp> method all the time, we have an infinite number of free wishes. Thus, 
+                <span class="italic">recursion</span> is calling the own method we are in. Recursion can also work via a detour, at which point it’s no longer called 
+                <span class="italic">direct recursion</span>, but 
+                <span class="italic">indirect recursion</span>
+            . Recursion is an everyday phenomenon, which we also know from the microphone/speaker feedback or from looking into the mirror with a mirror.</p>
+            
+            
+                
+                <h4 class="t4" id="h2.7.13.1">Infinite Recursions</h4>
+                
+                <p class="standard">Let’s now replace our fantasy program (whose runtime and memory requirements are also difficult to calculate) with Java methods.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Consider the following example of endless recursion:</p>
+                    
+                    <div class="listing " id="l2.37"><pre><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span>
+                        <span class="bold"><span class="">down</span></span><span class="">( </span><span class="">int</span><span class=""> n ) {</span><br/>  System.out.<span class="">print</span><span class="">( n + </span><span class="">", "</span><span class=""> );</span><br/>  
+                        <span class="bold"><span class="">down</span></span><span class="">( n - </span><span class="">1</span><span class=""> );</span><br/>}<span class=""/></pre></div>
+                    
+                    <p class="caption last"><b>Listing 2.37</b>    
+            src/main/java/EndlessRecursion.java, down()</p>
+                
+                </div>
+                
+                <p class="standard">If we call 
+                    <samp class="listingcharacter listingcharacter">down(10)</samp>, the number 10 is printed on the screen and then 
+                    <samp class="listingcharacter listingcharacter">down(9)</samp> is called. If we continue the example, an endless output will eventually terminates with a 
+                    <samp class="listingcharacter listingcharacter">StackOverflowError</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_22025"><pre>10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, –1, –2, … </pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.13.2">Aborting the Recursion</h4>
+                
+                <p class="standard">At this point, we realize that recursion is basically something infinite. However, this infinite range is unfavorable for programs. Therefore, you must formulate a termination condition similar to loops and then no longer start a recursion call. The termination condition is written as a case distinction that checks the argument and terminates processing with 
+                    <samp class="listingcharacter listingcharacter">return</samp>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l2.38"><pre><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">down1</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> n </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">if</span><span class=""> ( n &lt;= </span><span class="">0</span></span><span class=""> )             </span><span class=""> // End of recursion</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">return</span><span class="">;</span><br/></span><br/>  System.out.<span class="">print</span><span class="">( n + </span><span class="">", "</span><span class=""> );</span><br/>  <span class="">down1</span><span class="">( n - </span><span class="">1</span><span class=""> );</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 2.38</b>    
+            src/main/java/Recursion.java, down1()</p>
+                
+                <p class="standard">The static 
+                    <samp class="listingcharacter listingcharacter">down1(int)</samp> method now calls 
+                    <samp class="listingcharacter listingcharacter">down1(n</samp> - 
+                    <samp class="listingcharacter listingcharacter">1)</samp> only as long as 
+                    <samp class="listingcharacter listingcharacter">n</samp> is greater than zero. This condition is called the 
+                    <span class="italic">termination condition</span>
+                 of a recursion.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.13.3">
+                    <a id="p197"/>
+                Different Types of Recursion</h4>
+                
+                <p class="standard">
+                    <a class="indexanchor" id="i02_301"/>A characteristic of our previous programs was no statement existed after the call of the recursion, but the method was terminated with the call. This type of recursion, called 
+                    <span class="italic">final recursion</span>
+                    <a class="indexanchor" id="i02_302"/>, is
+                    <span class="italic"> </span>relatively simple to understand. Recursions where instructions exist after the method call are a bit more complex. Let’s consider two methods, the first of which is known and the second is new. Pay close attention to the position of 
+                    <samp class="listingcharacter listingcharacter">print(…)</samp>
+                .</p>
+                
+                <div class="listing " id="l2.39"><pre><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span>
+                    <span class="bold"><span class="">down1</span></span><span class="">( </span><span class="">int</span><span class=""> n ) {</span><br/>  <span class="">if</span><span class=""> ( n &lt;= </span><span class="">0</span><span class=""> )  </span><span class=""> // End of recursion</span><span class=""><br/></span>    <span class="">return</span><span class="">;</span><br/><br/>  System.out.<span class="">print</span><span class="">( n + </span><span class="">", "</span><span class=""> );</span><br/><br/>  
+                    <span class="bold"><span class="">down1</span></span><span class="">( n - </span><span class="">1</span><span class=""> );</span><br/>}<br/><br/><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span>
+                    <span class="bold"><span class="">down2</span></span><span class="">( </span><span class="">int</span><span class=""> n ) {</span><br/>  <span class="">if</span><span class=""> ( n &lt;= </span><span class="">0</span><span class=""> )  </span><span class=""> // End of recursion</span><span class=""><br/></span>    <span class="">return</span><span class="">;</span><br/><br/>  
+                    <span class="bold"><span class="">down2</span></span><span class="">( n - </span><span class="">1</span><span class=""> );</span><br/>  System.out.<span class="">print</span><span class="">( n + </span><span class="">", "</span><span class=""> );</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 2.39</b>    
+            src/main/java/Recursion.java, down1() und down2()</p>
+                
+                <p class="standard">The difference is that 
+                    <samp class="listingcharacter listingcharacter">down1(int)</samp> first outputs the number 
+                    <samp class="listingcharacter listingcharacter">n</samp> and then recursively calls 
+                    <samp class="listingcharacter listingcharacter">down1(int)</samp> so that a call to 
+                    <samp class="listingcharacter listingcharacter">down1(10)</samp>
+                 outputs:</p>
+                
+                <div class="listing " id="l_none_22051"><pre>10, 9, 8, 7, 6, 5, 4, 3, 2, 1, </pre></div>
+                
+                <p class="standard">However, the method 
+                    <samp class="listingcharacter listingcharacter">down2(int)</samp> first descends lower and lower, and the recursion must be finished until the first 
+                    <samp class="listingcharacter listingcharacter">print(...)</samp> occurs. Therefore, unlike 
+                    <samp class="listingcharacter listingcharacter">down1(...)</samp>, the static method 
+                    <samp class="listingcharacter listingcharacter">down2(10)</samp>
+                 outputs the numbers in ascending order:</p>
+                
+                <div class="listing " id="l_none_22069"><pre>1, 2, 3, 4, 5, 6, 7, 8, 9, 10, </pre></div>
+                
+                <p class="standard">This process is obvious if we look at the sequence of events. When calling 
+                    <samp class="listingcharacter listingcharacter">down2(10)</samp>, the comparison of 
+                    <samp class="listingcharacter listingcharacter">n</samp> with zero is wrong, so 
+                    <samp class="listingcharacter listingcharacter">down2(9)</samp> is called again without output—without output because 
+                    <samp class="listingcharacter listingcharacter">print(...)</samp> is placed after the method call. The program goes recursively deeper until 
+                    <samp class="listingcharacter listingcharacter">n</samp> equals zero. Then, the last method ends with 
+                    <samp class="listingcharacter listingcharacter">return</samp>, and the output continues after the 
+                    <samp class="listingcharacter listingcharacter">down2(int)</samp>, the caller. The 
+                    <samp class="listingcharacter listingcharacter">print(...)</samp> is the next instruction. Since we are now still deeply nested, 
+                    <samp class="listingcharacter listingcharacter">print(n)</samp> outputs the number 1. Then, the method 
+                    <samp class="listingcharacter listingcharacter">down2(int) </samp>is terminated again (an invisible 
+                    <samp class="listingcharacter listingcharacter">return</samp> not written directly), which jumps back to the caller. This caller is again the method 
+                    <samp class="listingcharacter listingcharacter">down2(int)</samp>, but with the assignment 
+                    <samp class="listingcharacter listingcharacter">n 
+                        <a id="p198"/>
+                    = 2</samp>. This process continues until the program returns to the caller that called 
+                    <samp class="listingcharacter listingcharacter">down(10)</samp>, for example, the static 
+                    <samp class="listingcharacter listingcharacter">main(...)</samp>
+                 method. Now, the trick is that each method has its own local variable.</p>
+                
+                <p class="standard">The key combination 
+                    <span class="keyboard">(Ctrl)</span>+
+                    <span class="keyboard">(Alt)</span>+
+                    <span class="keyboard">(H)</span> displays the call hierarchy so you can see what is calling a method. So, in the calls of 
+                    <samp class="listingcharacter listingcharacter">down2(int)</samp>, 
+                    <samp class="listingcharacter listingcharacter">down2(int)</samp> as well as 
+                    <samp class="listingcharacter listingcharacter">main(...)</samp>
+                 appear again because of the recursive call.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.13.4">Recursion and the Stack and the Danger of a StackOverflowError*</h4>
+                
+                <p class="standard">From the example, you’ve seen how the call of 
+                    <samp class="listingcharacter listingcharacter">down2(10)</samp> leads to the call of 
+                    <samp class="listingcharacter listingcharacter">down2(9)</samp>. And 
+                    <samp class="listingcharacter listingcharacter">down2(10)</samp> can only be terminated when 
+                    <samp class="listingcharacter listingcharacter">down2(9)</samp> has been completely processed. 
+                    <samp class="listingcharacter listingcharacter">down2(10)</samp> is “open,” so to speak, until the tail of child calls is finished. Now, of course, when a method call is made, the runtime environment must remember where to continue after the method call. For this task, the environment uses a 
+                    <span class="italic">call stack</span> (or simply 
+                    <span class="italic">stack</span>
+                    <a class="indexanchor" id="i02_303"/>
+                    <a class="indexanchor" id="i02_304"/>
+                    <a class="indexanchor" id="i02_305"/>). For example, when 
+                    <samp class="listingcharacter listingcharacter">down2(9)</samp> is called, the stack is filled with the return address that leads back to the context of 
+                    <samp class="listingcharacter listingcharacter">down2(10)</samp>
+                . In each context, the old local variables are available again.</p>
+                
+                <p class="standard">If no termination condition exists for a recursion, more and more return addresses will be added to the stack until the stack runs out of space. Then, the JVM generates a 
+                    <samp class="listingcharacter listingcharacter">java.lang.StackOverflowError</samp> at runtime, and the program (thread) terminates. Usually, the 
+                    <samp class="listingcharacter listingcharacter">StackOverflowError</samp>
+                    <a class="indexanchor" id="i02_306"/>
+                 indicates a programming error, but some programs may need a really big stack and the usual stack size might just be too small.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.7.13.5">Changing Stack Sizes*</h4>
+                
+                <p class="standard">The Oracle JVM uses different stack sizes for different operating systems. The stack size can be changed via a JVM switch
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_53" id="fn02_53">[ 85 ]</a></span> called 
+                    <samp class="listingcharacter listingcharacter">-Xss:n</samp>
+                    <a class="indexanchor" id="i02_307"/> (or in a slightly longer notation 
+                    <samp class="listingcharacter listingcharacter">-XX:ThreadStackSize=n</samp>
+                    <a class="indexanchor" id="i02_308"/>
+                ). To set the stack size to 2 MiB (2,048 KiB), you must write the following command:</p>
+                
+                <div class="listing " id="l_none_22066"><pre>$ java <span class="">-</span>
+                    <span class="bold">Xss:<span class="">2048</span></span><span class=""> MyApplication </span><span class=""/></pre></div>
+                
+                <p class="standard">The stack size thus applies to all threads in the JVM, which of course can lead to memory problems with large stacks and many threads. Conversely, memory can also be saved if the system uses very many threads, and the stack size is reduced.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.7.14">2.7.14    
+                <span class="italic"/>Towers of Hanoi*
+                <a class="indexanchor" id="i02_309"/>
+            </h3>
+            
+            <p class="standard">The legend of the Towers of Hanoi is said to have been first published by Ed Lucas in the French magazine 
+                <span class="italic">Cosmo</span> in 1890.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_54" id="fn02_54">[ 86 ]</a></span> According to legend, long ago, three pillars stood in 
+                <a id="p199"/>the temple of Hanoi. The first was made of copper; the second, of silver; and the third, of gold. One hundred discs were stacked on the copper column. Each disc had a hole in the middle and were made of porphyry.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_55" id="fn02_55">[ 87 ]</a></span>
+             The disc with the largest circumference was on the bottom, and all the smaller discs were on top. An old monk set himself the task of moving the tower of discs from the copper column to the gold column. However, only one disc could be moved in a single step and, moreover, under the condition that a larger disc could never be moved onto a smaller one. The monk quickly realized that he had to use the silver pillar; so, he sat down at a table, made a plan, thought it over, and came to a decision. He could solve his problem in three steps. The next day, the monk tacked the solution on the temple door:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If the tower consists of more than one disc, ask your oldest disciple to move a tower of (
+                        <span class="italic">N</span>
+                     – 1) discs from the first to the third column using the second column.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Carry the first disc yourself from one column to another.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If the tower consists of more than one disc, ask your oldest disciple to move a tower of (
+                        <span class="italic">N</span>
+                     - 1) discs from the third to the other column using the first column.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">And so, the old monk called his oldest disciple and told him to shift the tower of 99 discs from the copper pillar to the gold pillar using the silver pillar and to report the completion to him. According to legend, the end of the world occurs when the monk finishes his work. Well, so much for the story. Let’s say you want to program an algorithm for rearranging these discs in Java; a recursive solution is quite simple. The following program carries out these movements across the three pegs:</p>
+            
+            <div class="listing " id="l2.40"><pre><span class="">class</span><span class=""> TowerOfHanoi </span><span class="">{</span><span class=""><br/></span><br/> <span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span>
+                <span class="bold"><span class="">move</span><span class="">( </span><span class="">int</span><span class=""> n, </span><span class="">String</span><span class=""> fromPeg, </span><span class="">String</span><span class=""> toPeg, </span><span class="">String</span><span class=""> usingPeg )</span></span> {<br/><br/>  <span class="">if</span><span class=""> ( n &gt; </span><span class="">1</span><span class=""> ) {</span><br/>   
+                <span class="bold"><span class="">move</span><span class="">( n - </span><span class="">1</span><span class="">, fromPeg, usingPeg, toPeg );</span></span><br/>   System.out.<span class="">printf</span><span class="">( </span><span class="">"Move disc %d from %s to %s.%n"</span><span class="">, n, fromPeg, toPeg );</span><br/>   
+                <span class="bold"><span class="">move</span><span class="">( n - </span><span class="">1</span><span class="">, usingPeg, toPeg, fromPeg );</span></span><br/>  }<br/>  <span class="">else</span><span class=""><br/></span>   System.out.<span class="">printf</span><span class="">( </span><span class="">"Move disc %d from %s to %s.%n"</span><span class="">, n, fromPeg, toPeg );</span><br/> }<br/><br/> <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>   
+                <span class="bold"><span class="">move</span><span class="">( </span><span class="">4</span><span class="">, </span><span class="">"copper peg"</span><span class="">, </span><span class="">"gold peg"</span><span class="">, </span><span class="">"silver peg"</span><span class=""> );</span></span><br/> }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 2.40</b>    
+            src/main/java/TowerOfHanoi.java</p>
+            
+            <p class="standard">
+                <a id="p200"/>
+            If we start the program with four discs, we’ll get the following output: </p>
+            
+            <div class="listing " id="l_none_22086"><pre>Move disc 1 from copper peg to silver peg.<br/>Move disc 2 from copper peg to gold peg.<br/>Move disc 1 from silver peg to gold peg.<br/>Move disc 3 from copper peg to silver peg.<br/>Move disc 1 from gold peg to copper peg.<br/>Move disc 2 from gold peg to silver peg.<br/>Move disc 1 from copper peg to silver peg.<br/>Move disc 4 from copper peg to gold peg.<br/>Move disc 1 from silver peg to gold peg.<br/>Move disc 2 from silver peg to copper peg.<br/>Move disc 1 from gold peg to copper peg.<br/>Move disc 3 from silver peg to gold peg.<br/>Move disc 1 from copper peg to silver peg.<br/>Move disc 2 from copper peg to gold peg.<br/>Move disc 1 from silver peg to gold peg. </pre></div>
+            
+            <p class="standard">Already with four slices, we have 15 movements. Even if our processor worked with many millions of operations per second, a computer would need thousands of geological ages to process 100 discs. This example makes one thing clear: Many things can be calculated in principle, but such an algorithm may not always be practical.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

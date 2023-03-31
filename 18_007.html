@@ -1,0 +1,594 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Introduction to Data Structures and Algorithms" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Introduction to Data Structures and Algorithms" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Introduction to Data Structures and Algorithms</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h18.7">18.7    Intermediary Operations
+            <a class="indexanchor" id="i18_53"/>
+            <a class="indexanchor" id="i18_54"/>
+        </h2>
+        
+        <p class="standard">Not all terminal operations result in a new modified stream but instead may simply terminate the current stream. The situation is different for intermediary operations, which modify the stream, for example, by removing elements, mapping them to other values and types, or sorting elements. Each intermediary method returns a new stream object, as seen in 
+            <span class="crossreference "><a href="18_007.html#t18.4">Table 18.4</a></span>
+        .</p>
+        
+        <table class="standardtable" id="t18.4">
+            
+            <thead>
+                
+                <tr>
+                    
+                    <th class="tablehead tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">Full Notation</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">Cascaded Notation</p>
+                    
+                    </th>
+                
+                </tr>
+            
+            </thead>
+            
+            <tbody>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first top_border_cell">
+                        
+                        <div class="listing " id="l_none_18984"><pre>Stream&lt;Object&gt; a =<br/> Stream.of(" ",'3',null,"2",1,"");<br/>Stream&lt;Object&gt; b = a.filter(Objects::nonNull);<br/>Stream&lt;String&gt; c = b.map(Objects::toString );<br/>Stream&lt;String&gt; d = c.map(String::trim);<br/>Stream&lt;String&gt; e = d.filter(s -&gt; !s.isEmpty());<br/>Stream&lt;Integer&gt; f = e.map(Integer::parseInt);<br/>Stream&lt;Integer&gt; g = f.sorted();<br/>g.forEach(System.out::println);</pre></div>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last top_border_cell">
+                        
+                        <div class="listing " id="l_none_18989"><pre>Stream<br/> .of(" ",'3',null,"2",1,"")<br/> .filter(Objects::nonNull)<br/> .map(Objects::toString)<br/> .map(String::trim)<br/> .filter(s -&gt; ! s.isEmpty())<br/> .map(Integer::parseInt)<br/> .sorted()<br/> .forEach(System.out::println);</pre></div>
+                    
+                    </td>
+                
+                </tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <p class="caption "><b>Table 18.4</b>    
+            Detailed and Compact Writing in Comparison</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+            
+            <p class="standard first last">No current method may modify the current source; otherwise, the result is indeterminate. Changes occur only along the chain from one stream to the next, as discussed earlier in 
+                <span class="crossreference "><a href="18_006.html#h18.6.8">Section 18.6.8</a></span>
+            .</p>
+        
+        </div>
+        
+        
+            
+            <h3 class="t3" id="h18.7.1">18.7.1    
+                <a id="p963"/>
+            Element Previews</h3>
+            
+            <p class="standard">A simple intermediary operation is 
+                <samp class="listingcharacter listingcharacter">peek(...)</samp>
+            , which may view the current element during a pass.</p>
+            
+            <div class="listing " id="l_none_181003"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T,Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Stream&lt;T&gt; peek(Consumer&lt;? super T&gt; action)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example looks in a stream before and after a sort:</p>
+                
+                <div class="listing  last_item" id="l_none_181016"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">4</span><span class="">,</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">)</span><span class=""><br/></span>                          <span class="">.</span>
+                    <span class="bold"><span class="">peek</span><span class="">( System.out::println )</span></span><span class=""> // 9 4 3</span><span class=""><br/></span>                          .<span class="">sorted</span><span class="">()</span><br/>                          
+                    <span class="bold">.<span class="">peek</span><span class="">( System.out::println )</span></span><span class=""> // 3 4 9</span><span class=""><br/></span>                          .<span class="">collect</span><span class="">( Collectors.</span><span class="">toList</span><span class="">() ) );</span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.7.2">18.7.2    Filtering Elements</h3>
+            
+            <p class="standard">One of the most important stream methods is 
+                <samp class="listingcharacter listingcharacter">filter(...)</samp>
+            , which returns all elements in the stream that satisfy a criterion and ignores all others that don’t satisfy that criterion.</p>
+            
+            <div class="listing " id="l_none_181019"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T,Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Stream&lt;T&gt; filter(Predicate&lt;? super T&gt; predicate)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example outputs all the words that have any two vowels in a row:</p>
+                
+                <div class="listing  last_item" id="l_none_181045"><pre>Stream<span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"boot"</span><span class="">,</span><span class=""> </span><span class="">"aha"</span><span class="">,</span><span class=""> </span><span class="">"mouse"</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">filter</span><span class="">(</span><span class=""> Pattern</span><span class="">.</span><span class="">compile</span><span class="">(</span><span class=""> </span><span class="">"[aeiou]{2}"</span><span class=""> </span><span class="">).</span><span class="">asPredicate</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">);</span><span class="">     </span><span class=""> // boot mouse</span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.7.3">18.7.3    Stateful Intermediary Operations</h3>
+            
+            <p class="standard">The vast majority of intermediary operations
+                <a class="indexanchor" id="i18_55"/>
+             can evaluate and modify elements directly on the fly, eliminating the need for memory-intensive intermediate storage. However, some intermediary operations have a state, such as the following operations:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p964"/>
+                        limit(long)</samp>
+                    : Limits the stream to a certain number of maximum elements</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">skip(long)</samp>
+                    : Skips a number of elements</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">distinct()</samp>
+                    : Deletes all duplicate elements</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">sorted(...)</samp>
+                    : Sorts the stream</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="listing " id="l_none_181061"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T,Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Stream&lt;T&gt; limit(long maxSize)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Stream&lt;T&gt; skip(long n)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Stream&lt;T&gt; distinct()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Stream&lt;T&gt; sorted()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Stream&lt;T&gt; sorted(Comparator&lt;? super T&gt; comparator)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example 1</h6>
+                
+                <p class="standard first">The following example determines which word is the longest word in the list:</p>
+                
+                <div class="listing " id="l_none_181057"><pre>Stream<span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"Blessed"</span><span class="">,</span><span class=""> </span><span class="">"are"</span><span class="">,</span><span class=""> </span><span class="">"the"</span><span class="">,</span><span class=""> </span><span class="">"cheesemakers"</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">sorted</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">Comparator.</span><span class="">comparing</span><span class="">( </span><span class="">String</span><span class="">::length ).</span><span class="">reversed</span><span class="">()</span></span> )<br/>    .<span class="">findFirst</span><span class="">().</span><span class="">ifPresent</span><span class="">( System.out::println );</span><span class=""> // cheesemakers</span><span class=""/><span class=""/></pre></div>
+                
+                <p class="standard">Alternatively, with 
+                    <samp class="listingcharacter listingcharacter">max(...)</samp>
+                , you could write the following code:</p>
+                
+                <div class="listing  last_item" id="l_none_181078"><pre>
+                    <span class="bold"><span class="">    .</span><span class="">max</span><span class="">( Comparator.</span><span class="">comparing</span><span class="">( </span><span class="">String</span><span class="">::length ) )</span></span><span class=""/></pre></div>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example 2</h6>
+                
+                <p class="standard first">The following example splits a string into substrings, maps each substring to the first character, and deletes duplicate elements from the stream:</p>
+                
+                <div class="listing " id="l_none_181085"><pre>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> Pattern</span><span class="">.</span><span class="">compile</span><span class="">(</span><span class=""> </span><span class="">" "</span><span class=""> </span><span class="">).</span><span class="">splitAsStream</span><span class="">(</span><span class=""> </span><span class="">"Pu Po Aha La"</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> s </span><span class="">-&gt;</span><span class=""> s</span><span class="">.</span><span class="">substring</span><span class="">(</span><span class="">0</span><span class="">,</span><span class=""> </span><span class="">1</span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">peek</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">)</span><span class=""> // P P A L</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">.</span><span class="">distinct</span><span class="">()</span></span>                 <span class=""> // \/\/\/</span><span class=""><br/></span>    .peek( System.out::println )<span class=""> //  P A L</span><span class=""><br/></span>    .collect( Collectors.toList() );<br/>System.out.print( list );                      <span class=""> // [P, A, L]</span><span class=""/><span class=""/></pre></div>
+                
+                <p class="standard last">
+                    <samp class="listingcharacter listingcharacter">peek(...)</samp> makes it clear what the elements look like before and after applying 
+                    <samp class="listingcharacter listingcharacter">distinct()</samp>
+                .</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p965"/>
+                Note</h6>
+                
+                <p class="standard first last">A method like 
+                    <samp class="listingcharacter listingcharacter">skip(...)</samp> looks innocent at first glance, but its use can be quite heavy on memory usage and performance when parallel streams with order (such as sorting) come into play. With 
+                    <samp class="listingcharacter listingcharacter">stream.parallel().sorted().skip(10000)</samp>, all elements must still be sorted first so that the first 10,000 can be skipped. Sequential streams or streams without order (which are provided by the 
+                    <samp class="listingcharacter listingcharacter">Stream</samp> method 
+                    <samp class="listingcharacter listingcharacter">unordered()</samp>
+                ) are incomparably faster, but of course not possible in every case.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.7.4">18.7.4    Prefix Operations
+                <a class="indexanchor" id="i18_56"/>
+            </h3>
+            
+            <p class="standard">By a 
+                <span class="italic">prefix</span>, we mean a subsequence of a stream that starts at the first element. You can use 
+                <samp class="listingcharacter listingcharacter">limit(long)</samp> to generate a prefix yourself, but in general, the idea is to have a condition that all elements of a prefix stream must satisfy and to terminate the stream when the condition no longer applies to an element. Java declares the two methods 
+                <samp class="listingcharacter listingcharacter">takeWhile(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">dropWhile(</samp>
+            ...) for this purpose, used in the following ways:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">default Stream&lt;T&gt; takeWhile(Predicate&lt;? super T&gt; predicate)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">default Stream&lt;T&gt; dropWhile(Predicate&lt;? super T&gt; predicate)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">takeWhile(...)</samp> could be paraphrased as “take as long as 
+                <samp class="listingcharacter listingcharacter">predicate</samp> applies,” while 
+                <samp class="listingcharacter listingcharacter">dropWhile(...)</samp> means “drop as long as 
+                <samp class="listingcharacter listingcharacter">predicate</samp>
+             applies.”</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following example, the stream should end immediately upon arriving at the word “Tesla”:</p>
+                
+                <div class="listing  last_item" id="l_none_181103"><pre><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""> </span><span class="">"Am considering taking Tesla private at $420. Funding secured."</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">useDelimiter</span><span class="">(</span><span class=""> </span><span class="">"\\P{Alpha}+"</span><span class=""> </span><span class="">).</span><span class="">tokens</span><span class="">()</span><span class=""><br/></span>    <span class="">.</span><span class="">takeWhile</span><span class="">(</span><span class=""> s </span><span class="">-&gt;</span><span class=""> </span><span class="">!</span><span class=""> s</span><span class="">.</span><span class="">equalsIgnoreCase</span><span class="">(</span><span class=""> </span><span class="">"tesla"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">);</span><span class=""> </span><span class=""> // Am considering taking</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following example, all empty strings or strings with whitespace should be skipped at the beginning:</p>
+                
+                <div class="listing  last_item" id="l_none_181112"><pre>Stream<span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">" "</span><span class="">,</span><span class=""> </span><span class="">""</span><span class="">,</span><span class=""> </span><span class="">"a"</span><span class="">,</span><span class=""> </span><span class="">""</span><span class="">,</span><span class=""> </span><span class="">"b"</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">dropWhile</span><span class="">(</span><span class=""> s </span><span class="">-&gt;</span><span class=""> s</span><span class="">.</span><span class="">trim</span><span class="">().</span><span class="">isEmpty</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">);</span><span class=""> // "a", "", "b"</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">
+                    <a id="p966"/>
+                takeWhile(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">dropWhile(...)</samp> can be used together: Thus, 
+                <samp class="listingcharacter listingcharacter">Stream.of( 1, 2, -1, 3, 4, -1, 5, 6 ).dropWhile( i -&gt; i &gt; 0 ).skip( 1 ).takeWhile( i -&gt; i &gt; 0 ).forEach( System.out::println );</samp> returns the output 
+                <samp class="listingcharacter listingcharacter">3 4</samp>. The element that satisfies the predicate is itself the first element in the new stream. We can skip this element using 
+                <samp class="listingcharacter listingcharacter">skip(1)</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Prefixes are only useful for ordered streams. If streams are parallel, they must be put back in the right order for the prefix calculation, which can be a rather expensive operation.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.7.5">18.7.5    Images</h3>
+            
+            <p class="standard">The ability to map elements in a stream to new elements is one of the most powerful tools of the Stream API. Three types of mapping methods can be distinguished in this context:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The simplest variant is 
+                        <samp class="listingcharacter listingcharacter">map(Function)</samp>
+                    . The function gets the stream element as an argument and returns a result, which then goes into the stream. In this case, the type may change if the function doesn’t give the same type as it takes. The function is applied to each element one by one, and the order of results follows the order of the stream.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The three methods 
+                        <samp class="listingcharacter listingcharacter">mapTo[Int|Long|Double]([int|long|double]Function)</samp> work like 
+                        <samp class="listingcharacter listingcharacter">map(Function)</samp>
+                    , except that the functions return a primitive value, and the result is a primitive stream.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">flatMap*(*Function)</samp> methods also replace elements in the stream, with the difference that the functions all return 
+                        <samp class="listingcharacter listingcharacter">Stream</samp> objects themselves whose elements are then placed in the result stream. The term 
+                        <span class="italic">flat</span> comes from the fact that the “inner” streams do not themselves all come as elements in the source stream (so to speak, a 
+                        <samp class="listingcharacter listingcharacter">Stream&lt;Stream&gt;</samp>) but are “knocked flat.” Application examples are usually scenarios like “
+                        <span class="italic">n</span> players associate 
+                        <span class="italic">m</span> items; we search a stream of all items of all players.” The function can return 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                     if nothing is to be placed in the stream.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="listing " id="l_none_181120"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T,Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;R&gt; Stream&lt;R&gt; map(Function&lt;? super T,? extends R&gt; mapper)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">IntStream mapToInt(ToIntFunction&lt;? super T&gt; mapper)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">LongStream mapToLong(ToLongFunction&lt;? super T&gt; mapper)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">DoubleStream mapToDouble(ToDoubleFunction&lt;? super T&gt; mapper)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;R&gt; Stream&lt;R&gt; flatMap(Function&lt;? super T,? extends Stream&lt;? extends R&gt;&gt; mapper)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p967"/>
+                        IntStream flatMapToInt(Function&lt;? super T,? extends IntStream&gt; mapper)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">LongStream flatMapToLong(Function&lt;? super T,? extends LongStream&gt; mapper)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">DoubleStream flatMapToDouble(Function&lt;? super T,? extends DoubleStream&gt; mapper)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example converts a string array with numbers into a 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                 array:</p>
+                
+                <div class="listing  last_item" id="l_none_181129"><pre><span class="">String</span><span class="">[]</span><span class=""> numbers </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"1"</span><span class="">,</span><span class=""> </span><span class="">"2"</span><span class="">,</span><span class=""> </span><span class="">"3"</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">long</span><span class="">[]</span><span class=""> parseInts </span><span class="">=</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> numbers </span><span class="">)</span>
+                    <span class="bold">.<span class="">mapToLong</span><span class="">( Long::parseLong )</span></span>.<span class="">toArray</span><span class="">();</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The 
+                    <samp class="listingcharacter listingcharacter">Locale.getAvailableLocales()</samp> method returns an array of 
+                    <samp class="listingcharacter listingcharacter">Locale</samp>
+                 objects supported by a system. In the following example, we’re interested in all country codes:</p>
+                
+                <div class="listing " id="l_none_181126"><pre>Stream<span class="">.</span><span class="">of</span><span class="">(</span><span class=""> Locale</span><span class="">.</span><span class="">getAvailableLocales</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> Locale</span><span class="">::</span><span class="">getCountry </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">distinct</span><span class="">()</span><span class=""><br/></span>      <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">Via a 
+                    <samp class="listingcharacter listingcharacter">Locale</samp> object, 
+                    <samp class="listingcharacter listingcharacter">DateFormatSymbols.getInstance(locale).getWeekdays()</samp>
+                 retrieves the names of the weekdays. In the following example, we want all the days of the week of all installed areas as the result:</p>
+                
+                <div class="listing  last_item" id="l_none_181140"><pre>Stream<span class="">.</span><span class="">of</span><span class="">(</span><span class=""> Locale</span><span class="">.</span><span class="">getAvailableLocales</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">flatMap</span><span class="">(</span><span class=""> l </span><span class="">-&gt;</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> DateFormatSymbols</span><span class="">.</span><span class="">getInstance</span><span class="">(</span><span class=""> l </span><span class="">).</span><span class="">getWeekdays</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">filter</span><span class="">(</span><span class=""> s </span><span class="">-&gt;</span><span class=""> </span><span class="">!</span><span class=""> s</span><span class="">.</span><span class="">isEmpty</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">distinct</span><span class="">()</span><span class=""><br/></span>      <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first">The function passed to 
+                    <samp class="listingcharacter listingcharacter">flatMap(...)</samp> must return a stream as a result or 
+                    <samp class="listingcharacter listingcharacter">null</samp> if nothing should happen. Always supplying a stream is never wrong, and thus instead of 
+                    <samp class="listingcharacter listingcharacter">null</samp>, you would have the function return an empty stream with 
+                    <samp class="listingcharacter listingcharacter">Stream.empty()</samp>. Applications for these empty streams can be seen in the following scenario: In the API, let’s say some methods return only 
+                    <samp class="listingcharacter listingcharacter">null</samp> instead of arrays or collections, and we assume 
+                    <samp class="listingcharacter listingcharacter">result</samp> is such a return (which can be 
+                    <samp class="listingcharacter listingcharacter">null</samp> or an array). Then, you would use the 
+                    <samp class="listingcharacter listingcharacter">Stream</samp>
+                 in the following way:</p>
+                
+                <div class="listing " id="l_none_181156"><pre>Stream<span class="">&lt;</span><span class="">…</span><span class="">&gt;</span><span class=""> flatStream </span><span class="">=</span><span class=""> Optional</span><span class="">.</span><span class="">ofNullable</span><span class="">(</span><span class=""> result </span><span class="">)</span><span class=""><br/></span>                               <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> Stream</span><span class="">::</span><span class="">of </span><span class="">).</span><span class="">orElse</span><span class="">(</span><span class=""> Stream</span><span class="">.</span><span class="">empty</span><span class="">()</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">
+                    <a id="p968"/>The case distinction is whether the collection is 
+                    <samp class="listingcharacter listingcharacter">null</samp> should be solved here functionally with 
+                    <samp class="listingcharacter listingcharacter">Optional</samp> or with 
+                    <samp class="listingcharacter listingcharacter">result != null ? result</samp>:
+                    <samp class="listingcharacter listingcharacter"> Stream.empty()</samp>. The static 
+                    <samp class="listingcharacter listingcharacter">Stream.of(...)</samp> is used in this case via a method reference and works for an array; for a stream from a collection, you must use 
+                    <samp class="listingcharacter listingcharacter">result.stream()</samp>
+                . </p>
+                
+                <p class="standard">Let’s summarize with an example. The 
+                    <samp class="listingcharacter listingcharacter">Class</samp> method 
+                    <samp class="listingcharacter listingcharacter">getEnumConstants()</samp> returns an array of constants if the 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object represents an enumeration—otherwise, the array isn’t empty, but 
+                    <samp class="listingcharacter listingcharacter">null</samp>. (In this way, you can distinguish between whether 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object has no elements or isn’t an enumeration type at all.) In the following example, we’ll collect and output all constants from three 
+                    <samp class="listingcharacter listingcharacter">Class</samp>
+                 objects:</p>
+                
+                <div class="listing " id="l_none_181174"><pre>Stream<span class="">.</span><span class="">of</span><span class="">(</span><span class=""> Object</span><span class="">.</span><span class="">class</span><span class="">,</span><span class=""> Thread</span><span class="">.</span><span class="">State</span><span class="">.</span><span class="">class</span><span class="">,</span><span class=""> DayOfWeek</span><span class="">.</span><span class="">class</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">flatMap</span><span class="">(</span><span class=""> clazz </span><span class="">-&gt;</span><span class=""> Optional</span><span class="">.</span><span class="">ofNullable</span><span class="">(</span><span class=""> clazz</span><span class="">.</span><span class="">getEnumConstants</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>                                 <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> Stream</span><span class="">::</span><span class="">of </span><span class="">).</span><span class="">orElse</span><span class="">(</span><span class=""> Stream</span><span class="">.</span><span class="">empty</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">null</samp> is often an uninvited guest, and the stream method 
+                    <samp class="listingcharacter listingcharacter">ofNullable(...)</samp>
+                 can help you avoid errors. The following code gets all the coordinates into one stream:</p>
+                
+                <div class="listing " id="l_none_181171"><pre>Stream<span class="">.</span><span class="">of</span><span class="">(</span><span class=""> null</span><span class="">,</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">),</span><span class=""> null</span><span class="">,</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">flatMap</span><span class="">(</span><span class=""> q </span><span class="">-&gt;</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> q</span><span class="">.</span><span class="">x</span><span class="">,</span><span class=""> q</span><span class="">.</span><span class="">y </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">With 
+                    <samp class="listingcharacter listingcharacter">flatMap(...)</samp>, a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> will be thrown. With 
+                    <samp class="listingcharacter listingcharacter">filter(...)</samp>, you could hide any 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 in advance, but another solution would be to write the following code:</p>
+                
+                <div class="listing  last_item" id="l_none_181183"><pre>Stream<span class="">.</span><span class="">of</span><span class="">(</span><span class=""> null</span><span class="">,</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">),</span><span class=""> null</span><span class="">,</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">flatMap</span><span class="">(</span><span class=""> p </span><span class="">-&gt;</span><span class=""> Stream</span><span class="">.</span><span class="">ofNullable</span><span class="">(</span><span class=""> p </span><span class="">).</span><span class="">flatMap</span><span class="">(</span><span class=""> q </span><span class="">-&gt;</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> q</span><span class="">.</span><span class="">x</span><span class="">,</span><span class=""> q</span><span class="">.</span><span class="">y </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

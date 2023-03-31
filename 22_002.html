@@ -1,0 +1,1054 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Testing with JUnit" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Testing with JUnit" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Testing with JUnit</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h22.2">22.2    The JUnit Testing Framework</h2>
+        
+        <p class="standard">Oracle doesn’t define a general standard framework for defining unit test cases, nor does it provide a runtime environment for test cases. Testing frameworks fill this gap; 
+            <a id="p1069"/>the most popular in the Java area is the free open-source 
+            <span class="italic">JUnit</span>
+            <a class="indexanchor" id="i22_04"/> (<span class="url"><a href="https://junit.org/junit5/">https://junit.org/junit5/</a></span>). More than 60% of all open-source projects on GitHub reference this library.</p>
+        
+        
+            
+            <h3 class="t3" id="h22.2.1">22.2.1    JUnit Versions
+                <a class="indexanchor" id="i22_05"/>
+            </h3>
+            
+            <p class="standard">Kent Beck and Erich Gamma started developing the JUnit framework in 2000. Its current state is the result of contributions from various developers. The original JUnit 3 branch doesn’t use any annotations. This lack of annotations changed in 2006 with the release of JUnit 4, which currently has the largest user base. Because JUnit 4 is a monolithic library, JUnit 5 was written, and modularization was implemented. JUnit 5 consists of three parts: 
+                <span class="italic">JUnit Platform</span>, 
+                <span class="italic">JUnit Jupiter</span>, and 
+                <span class="italic">JUnit Vintage</span>
+            . For the remainder of our discussion about JUnit, we’re always referring JUnit 5.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.2">22.2.2    Integrating JUnit</h3>
+            
+            <p class="standard">Since JUnit isn’t part of Java Platform, Standard Edition (Java SE), you’ll need to integrate libraries in the classpath. You can, of course, download the JAR files manually and include them in the classpath, but an easier and faster approach uses Maven and an integrated development environment (IDE). First, we’ll add the following dependency to the Project Object Model (POM) file:</p>
+            
+            <div class="listing " id="l22.1"><pre><span class="">&lt;dependency&gt;</span><span class=""/><br/>  <span class="">&lt;groupId&gt;</span><span class="">org.junit.jupiter</span><span class="">&lt;/groupId&gt;</span><span class=""/><br/>  <span class="">&lt;artifactId&gt;</span><span class="">junit-jupiter-engine</span><span class="">&lt;/artifactId&gt;</span><span class=""/><br/>  <span class="">&lt;version&gt;</span><span class="">5.8.2</span><span class="">&lt;/version&gt;</span><span class=""/><br/>  <span class="">&lt;scope&gt;</span><span class="">test</span><span class="">&lt;/scope&gt;</span><span class=""/><br/><span class="">&lt;/dependency&gt;</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>numbering_unknown </b>    
+            pom.xml (Supplement)</p>
+            
+            <p class="standard">Most standard IDEs provide wizards that you can use to easily create test cases from existing classes. Test cases can be processed at the touch of a button, and a colored bar instantly shows whether or not our job has been done well.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.3">22.2.3    Test-Driven Development and the Test-First Approach</h3>
+            
+            <p class="standard">Let’s develop our JUnit example using a specific approach called the 
+                <span class="italic">test-first approach</span>
+                <a class="indexanchor" id="i22_06"/>
+            . In this case, the test case is written before the actual implementation. The sequence with the test-first approach (somewhat extended) can be described in the following way:</p>
+            
+            <ol>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Consider which class and method to write. Create source code for the class and for the variables, methods, or constructors so that the compilation unit can be compiled. The code blocks are empty, but sometimes contain a 
+                        <samp class="listingcharacter listingcharacter">return</samp>
+                     statement with return, so the types and methods or constructors are “there” but have no functionality.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <a id="p1070"/>
+                    Write the API documentation and document the function and meaning of parameters, returns, and exceptions.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Test the API on an example that shows whether the class feels “natural” with its members. If necessary, go back to step 1 and adjust the properties.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Implement a test class.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Implement the logic of the actual program.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Determine if the implementation introduces new things that a test case should test. If yes, extend the test case.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Run the tests and repeat from step 5 until everything runs error free.</p>
+                
+                </li>
+            
+            </ol>
+            
+            <p class="standard">The test-first approach has a great advantage of forcing overly hasty developers to start thinking again. These developers, without thinking much, may grab the keyboard and implement and change everything again in 20 minutes. Major changes cost time and therefore money, and the test-first approach reduces the need for later changes. Because when developers invest time in API documentation and write test cases, they already have a clear idea of how the class works, and major changes are less likely.</p>
+            
+            <p class="standard">The test-first approach is an application of 
+                <span class="italic">test-driven development (TDD)</span>
+                <a class="indexanchor" id="i22_07"/>
+                <a class="indexanchor" id="i22_08"/>, which is a matter of defining testability right away as a goal in software development. This omission of testing was a problem with earlier development models, such as the well-known 
+                <span class="italic">waterfall model</span>
+            , which placed testing at the end (i.e., after analysis, design, and implementation). A consequence of this old sequence was often a large chunk of program code that was impossible to test, which with TDD should no longer happen. Today, for every architecture, design, and class, developers should think about how to test the result right from the start. Research has shown that, with TDD, designs are significantly better.</p>
+            
+            <p class="standard">On the question of when to test, only one thing can be said: as often as possible. This recommendation is sound because, the sooner a test fails due to an incorrect program change, the sooner the error can be corrected. Therefore, the best times for testing are before and after major design changes and definitely before committing to version control. In the modern development process, a computer may run 
+                <span class="italic">continuous integration</span> software. These systems integrate a build server that automatically checks out sources from a version control system, compiles them, and then runs test cases and other metrics. This software then carries out an 
+                <span class="italic">integration test</span>
+                <a class="indexanchor" id="i22_09"/>
+            , which is where all the modules of the software are assembled into a whole, highlighting problems that may not show up in isolated tests on the developer machines.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.4">22.2.4    Test, Implement, Test, Implement, Test, Rejoice</h3>
+            
+            <p class="standard">So far, Java doesn’t provide a simple function that reverses strings. Our first JUnit example is therefore wrapped around a new 
+                <samp class="listingcharacter listingcharacter">Strings</samp> class with a static 
+                <samp class="listingcharacter listingcharacter">reverse(String)</samp>
+             method.</p>
+            
+            
+                
+                <h4 class="t4" id="h22.2.4.1">
+                    <a id="p1071"/>
+                Writing a Class to Be Tested</h4>
+                
+                <p class="standard">Based on the TDD approach, you can implement a class with a method so that a correct interpretation is possible, but everything is initially without functionality. (The example doesn’t include the complete API documentation.)</p>
+                
+                <div class="listing  listing_no_margin_bottom" id="l_ohne_2220"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Strings </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">/**</span><span class=""> </span></pre></div>
+                
+                <div class="listing  listing_no_margin_bottom" id="l_ohne_2226"><pre>   <span class="">*</span><span class=""> </span><span class="">@param</span><span class=""> string input</span><span class="">.</span><span class=""> </span></pre></div>
+                
+                <div class="listing  listing_no_margin_bottom" id="l_ohne_2238"><pre>   <span class="">*</span><span class=""> </span><span class="">@return</span><span class=""> reversed string </span></pre></div>
+                
+                <div class="listing  listing_no_margin_bottom" id="l_ohne_2252"><pre>   <span class="">*/</span><span class=""> </span></pre></div>
+                
+                <div class="listing " id="l22.2"><pre>
+                    <span class="bold"><span class="">  </span><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">reverse</span><span class="">( </span><span class="">String</span><span class=""> string ) {</span><br/>    <span class="">return</span><span class=""> null;</span><br/>  }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 22.2</b>    
+            src/main/java/com/tutego/insel/junit/util/Strings.java, Strings</p>
+                
+                <p class="standard">The name and parameter type “feel” right, and against this custom API, a test case can now be written.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h22.2.4.2">Writing a JUnit Test Case</h4>
+                
+                <p class="standard">Now, you may think that an empty reversed string also results in an empty string and that the string “abc” therefore results in “cba.” Our goal is to get the best possible 
+                    <span class="italic">coverage</span>
+                    <a class="indexanchor" id="i22_10"/>
+                 of all cases. If you suspect case distinctions in the program code, you should try to find enough test cases that all these case distinctions are covered. Special cases or limits in value ranges are always interesting to test. (Our method doesn’t offer much in this context, but for a substring functionality, for instance, you can quickly find many tests that could be interesting.)</p>
+                
+                <div class="listing " id="l22.3"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">junit</span><span class="">.</span><span class="">util</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> org</span><span class="">.</span><span class="">junit</span><span class="">.</span><span class="">jupiter</span><span class="">.</span><span class="">api</span><span class="">.</span><span class="">Test</span><span class="">;</span><span class=""><br/></span>
+                    <span class="bold"><span class="">import</span><span class=""> </span><span class="">static</span><span class=""> org.junit.</span></span>jupiter.api.Assertions.*;<br/><br/><span class="">class</span><span class=""> StringsTest {</span><br/><br/>  
+                    <span class="bold"><span class="">@Test</span></span><span class=""><br/></span>  <span class="">void</span><span class=""> </span>
+                    <span class="bold"><span class="">reverse_non_null_string</span><span class="">()</span></span> {<br/>   <span class=""> // given</span><span class=""><br/></span>    <span class="">String</span><span class=""> emptyString = </span>
+                    <span class="bold"><span class="">""</span><span class="">;</span><br/> </span><br/>
+                    <a id="p1072"/>   <span class=""> // when</span><span class=""><br/></span>    <span class="">String</span><span class=""> reversed = </span>
+                    <span class="bold">Strings.<span class="">reverse</span><span class="">( emptyString );</span><br/> </span><br/>   <span class=""> // then</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">assertEquals</span><span class="">( </span><span class="">""</span><span class="">, reversed ); </span><br/>    <span class="">assertEquals</span><span class="">( </span><span class="">"cba"</span><span class="">, Strings.</span><span class="">reverse</span><span class="">( </span><span class="">"abc"</span><span class=""> ) );</span></span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 22.3</b>    
+            src/test/java/com/tutego/insel/junit/util/StringsTest.java</p>
+                
+                <p class="standard">The class reveals five code patterns:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The test class ends with the suffix 
+                            <samp class="listingcharacter listingcharacter">Test</samp>
+                        , but this rule is only a convention and is not mandatory. Usually, the classes are package-visible.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The methods that take on individual scenarios and test the classes or methods have the annotation 
+                            <samp class="listingcharacter listingcharacter">@Test</samp>
+                            <a class="indexanchor" id="i22_11"/>
+                        . Usually, the test methods are package-visible.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Different authors use different naming practices for test methods, and no mandatory naming convention exists. In our case, we chose a notation where the prefix names the method to be tested, followed by what the test actually checks, which is the reversal of non-empty strings. To improve readability, an underscore separates the segments, thus leading to the method name 
+                            <samp class="listingcharacter listingcharacter">reverse_non_null_string()</samp>. A traditional naming convention is that the method containing the test begins with the prefix 
+                            <samp class="listingcharacter listingcharacter">test</samp> and ends with the name of the method it tests. Following this blueprint, our method could be called 
+                            <samp class="listingcharacter listingcharacter">testReverse()</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">JUnit provides a set of 
+                            <samp class="listingcharacter listingcharacter">assert*(...)</samp> methods that compare the expected state with the actual state. If discrepancies are found, an exception will be thrown. 
+                            <samp class="listingcharacter listingcharacter">assertEquals(...)</samp> internally performs an 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp> comparison of two objects. Accordingly, if 
+                            <samp class="listingcharacter listingcharacter">Strings.reverse("")</samp> returns the empty string 
+                            <samp class="listingcharacter listingcharacter">""</samp>
+                        , all is well, and the test continues.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The static import of all static members of the class 
+                            <samp class="listingcharacter listingcharacter">org.junit.jupiter.api.Assertions</samp> shortens the notation, so that instead of 
+                            <samp class="listingcharacter listingcharacter">Assertions.assertEquals(...)</samp>, only 
+                            <samp class="listingcharacter listingcharacter">assertEquals(...)</samp>
+                         can be written in the program.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.5">22.2.5    Running JUnit Tests
+                <a class="indexanchor" id="i22_12"/>
+            </h3>
+            
+            <p class="standard">You can execute test cases in several different ways, including the following:</p>
+            
+            <ol>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">In a development environment, the tests can be easily executed. Eclipse or IntelliJ, for example, displays the results in a JUnit view and provides direct visual feedback through a green or red bar.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">JUnit can run the tests from the command line via the 
+                        <span class="italic">Console Launcher</span>.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn22_01" id="fn22_01">[ 240 ]</a></span>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <a id="p1073"/>
+                    A test run in the IDE is useful in development. However, in a professional build infrastructure, tests are triggered using Maven or Gradle. In Maven, the test run is part of a phase in the lifecycle.</p>
+                
+                </li>
+            
+            </ol>
+            
+            
+                
+                <h4 class="t4" id="h22.2.5.1">Revising a Custom Implementation</h4>
+                
+                <p class="standard">In our example, the test run will fail because we lack a working implementation of the 
+                    <samp class="listingcharacter listingcharacter">reverse(...)</samp>
+                 method. So far, the body reads:</p>
+                
+                <div class="listing " id="l_none_2289"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">reverse</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> string </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">return</span><span class=""> null;</span></span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">Let’s change this method body with the following code:</p>
+                
+                <div class="listing " id="l_none_22101"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">reverse</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> string </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">( string ).</span><span class="">reverse</span><span class="">().</span><span class="">toString</span><span class="">();</span></span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">No error will occur in the next test run.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.6">22.2.6    assert*(...) Methods of the Assertions Class</h3>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">Assertions</samp>
+                <a class="indexanchor" id="i22_13"/> is a class with various 
+                <samp class="listingcharacter listingcharacter">assert*(...)</samp>
+                <a class="indexanchor" id="i22_14"/> methods that raise an 
+                <samp class="listingcharacter listingcharacter">AssertionFailedError</samp> whenever a current value doesn’t meet expectations. The JUnit Runner catches all 
+                <samp class="listingcharacter listingcharacter">AssertionFailedError</samp>s and stores them for statistics. With three exceptions, all methods of the 
+                <samp class="listingcharacter listingcharacter">Assertions</samp> class start with the prefix 
+                <samp class="listingcharacter listingcharacter">assert</samp>: two are called 
+                <samp class="listingcharacter listingcharacter">fail(...)</samp>, and one is called 
+                <samp class="listingcharacter listingcharacter">isArray(...)</samp>. The 
+                <samp class="listingcharacter listingcharacter">assert*(...)</samp> methods are available either with a test message, which appears when JUnit is to specify an extra message, or without, when no extra message is requested. The messages can also be supplied via a 
+                <samp class="listingcharacter listingcharacter">Supplier&lt;String&gt;</samp>
+            , but this string isn’t included in the following documentation.</p>
+            
+            
+                
+                <h4 class="t4" id="h22.2.6.1">Is Something True or False?</h4>
+                
+                <p class="standard">Actually, the 
+                    <samp class="listingcharacter listingcharacter">assertTrue(boolean condition)</samp> method should be sufficient for testing. If the condition is true, then everything is fine. If not, an internal 
+                    <samp class="listingcharacter listingcharacter">AssertionFailedError</samp> will occur, which is a subclass of 
+                    <samp class="listingcharacter listingcharacter">java.lang.AssertionError</samp>, which is itself a subclass of 
+                    <samp class="listingcharacter listingcharacter">java.lang.Error</samp>
+                .</p>
+                
+                <div class="listing " id="l_none_2297"><pre><span class="">class</span><span class=""> org</span><span class="">.</span><span class="">junit</span><span class="">.</span><span class="">jupiter</span><span class="">.</span><span class="">api</span><span class="">.</span>
+                    <span class="bold">Assertions</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertTrue(boolean condition)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertTrue(String message, boolean condition)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertFalse(boolean condition)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p1074"/>
+                            static void assertFalse(String message, boolean condition)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">assert[True|False](BooleanSupplier booleanSupplier</samp>
+                        )</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h22.2.6.2">Is Anything Null?</h4>
+                
+                <p class="standard">To make testing a bit more convenient for developers, JUnit provides six categories of helper methods. First, 
+                    <samp class="listingcharacter listingcharacter">assertNull(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">assertNotNull(...)</samp> can test whether the argument is 
+                    <samp class="listingcharacter listingcharacter">null</samp> or not 
+                    <samp class="listingcharacter listingcharacter">null</samp>, respectively. Calling 
+                    <samp class="listingcharacter listingcharacter">assertNull(Object object)</samp> is then nothing more than 
+                    <samp class="listingcharacter listingcharacter">assertTrue(object == null)</samp>
+                :</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotNull(Object object)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotNull(String message, Object object)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNull(Object object)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNull(String message, Object object)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h22.2.6.3">Are Objects Identical?</h4>
+                
+                <p class="standard">The next category tests whether an object is identical to another object, and not just equal:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotSame(Object unexpected, Object actual)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotSame(String message, Object unexpected, Object actual)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertSame(Object expected, Object actual)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertSame(String message, Object expected, Object actual)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h22.2.6.4">Are Objects Equals?</h4>
+                
+                <p class="standard">Instead of a reference test, the following methods perform an 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 comparison:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertEquals(Object expected, Object actual)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertEquals(String message, Object expected, Object actual)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h22.2.6.5">Are Primitive Values Equal?</h4>
+                
+                <p class="standard">Basically, only three methods can test primitive data types: one for the data type 
+                    <samp class="listingcharacter listingcharacter">long</samp> (everything “small” is automatically type-matched), one for 
+                    <samp class="listingcharacter listingcharacter">float</samp>, and one for 
+                    <samp class="listingcharacter listingcharacter">double</samp>
+                :</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertEquals(long expected, long actual)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertEquals(float|double expected, float|double actual, <br/>float|double delta)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertEquals(String message, long expected, long actual)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertEquals(String message, float|double expected, <br/>float|double actual, float|double delta)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">When comparing floats, 
+                    <samp class="listingcharacter listingcharacter">assertEquals(...)</samp> must be supplied with a delta value within which the result must range. This delta value takes into account the fact that perhaps 
+                    <a id="p1075"/>two numbers look the same in the screen output but aren’t equal bitwise, for example, if small calculation errors have accumulated. However, if the floats are wrapped in a wrapper, such as a 
+                    <samp class="listingcharacter listingcharacter">double</samp>, 
+                    <samp class="listingcharacter listingcharacter">assertEquals(...)</samp> passes the test only to the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 method of the wrapper class, which of course doesn’t consider a delta.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h22.2.6.6">Are Arrays Equal?</h4>
+                
+                <p class="standard">Other methods compare array contents (
+                    <samp class="listingcharacter listingcharacter">BCSIL</samp> stands for 
+                    <samp class="listingcharacter listingcharacter">byte</samp>, 
+                    <samp class="listingcharacter listingcharacter">char</samp>, 
+                    <samp class="listingcharacter listingcharacter">short</samp>, 
+                    <samp class="listingcharacter listingcharacter">int</samp>, and 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                ):</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertArrayEquals(BCSIL[] expecteds, byte[] actuals)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertArrayEquals(String message, byte[] expecteds, BCSIL[] actuals)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertArrayEquals(String message, long[] expecteds, long[] actuals)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertArrayEquals(String message, Object[] expecteds, Object[] actuals)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">In addition to the 
+                    <samp class="listingcharacter listingcharacter">assertEquals(...)</samp>
+                 methods, negations for some variants exist, such as the following:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotEquals(long unexpected, long actual)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotEquals(float unexpected, float actual, float delta)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotEquals(double unexpected, double actual, double delta)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotEquals(Object unexpected, Object actual)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotEquals(String message, long unexpected, long actual)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotEquals(String message, float unexpected, float actual, float delta)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotEquals(String message, double unexpected, double actual, <br/>double delta)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertNotEquals(String message, Object unexpected, Object actual)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h22.2.6.7">Is All This True or False?</h4>
+                
+                <p class="standard">JUnit declares the 
+                    <samp class="listingcharacter listingcharacter">org.junit.jupiter.api.function.Executable</samp> type, which can be used to express any block of code. 
+                    <samp class="listingcharacter listingcharacter">Assertions</samp>
+                 takes on this type via the following methods:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertAll(Executable… executables)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertAll(Stream&lt;Executable&gt; executables)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertAll(String heading, Executable… executables)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void assertAll(String heading, Stream&lt;Executable&gt; executables)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">An 
+                    <samp class="listingcharacter listingcharacter">executable</samp> is a functional interface with a 
+                    <samp class="listingcharacter listingcharacter">void execute() throws Throwable</samp> method. The useful thing about 
+                    <samp class="listingcharacter listingcharacter">assertAll(...)</samp> is that it executes all blocks even an error on only one block occurs. A 
+                    <samp class="listingcharacter listingcharacter">@Test</samp> method will typically abort in that case. An exception 
+                    <a id="p1076"/>only terminates the current 
+                    <samp class="listingcharacter listingcharacter">execute()</samp>, and 
+                    <samp class="listingcharacter listingcharacter">Assertions.assertAll(...)</samp>
+                 catches this exception and reports the error while processing the test code, but otherwise continues.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.7">22.2.7    Testing Exceptions
+                <a class="indexanchor" id="i22_15"/>
+            </h3>
+            
+            <p class="standard">During implementation, things often stand out that the actual implementation doesn’t yet take into account. Then, immediately, this newfound knowledge should be incorporated into the test case. In our example, we haven’t so far clarified what should happen in the case of a 
+                <samp class="listingcharacter listingcharacter">null</samp> argument. So far, a 
+                <samp class="listingcharacter listingcharacter">NullPointerException</samp> is perfectly fine, but in a test case, a 
+                <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+             may not actually follow. This question puts the focus on a testing aspect that’s often forgotten because test writers must not only concentrate on what the implementation is supposed to do correctly—the test must also check whether, in the event of an error, this error is also reported correctly. If not in the specification, incorrect values must not be corrected under any circumstances: Incorrect values must always result in an exception or result in another well-defined behavior.</p>
+            
+            <p class="standard">Let’s extend our example so that 
+                <samp class="listingcharacter listingcharacter">reverse(null)</samp> throws an 
+                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>. Two ways to test whether the expected 
+                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>
+             really occurs are available.</p>
+            
+            
+                
+                <h4 class="t4" id="h22.2.7.1">Try and fail(...)</h4>
+                
+                <p class="standard">Let’s look at the first variant of testing 
+                    <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l22.4"><pre><span class="">@Test</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">reverse_null_string_1</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    Strings<span class="">.</span><span class="">reverse</span><span class="">(</span><span class=""> null </span><span class="">);</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">fail</span><span class="">( </span><span class="">"reverse(null) should throw IllegalArgumentException"</span><span class=""> );</span></span><br/>  }<br/>  <span class="">catch</span><span class=""> ( IllegalArgumentException e ) {</span><span class=""> /* Ignore */</span><span class=""> }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 22.4</b>    
+            com/tutego/insel/junit/utils/StringsTest.java, reverse_null_string_1()</p>
+                
+                <p class="standard">If 
+                    <samp class="listingcharacter listingcharacter">reverse(null)</samp> leads to the exception, as intended, then the 
+                    <samp class="listingcharacter listingcharacter">catch</samp> block will simply catch and ignore the 
+                    <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>. Then, the test function will move on to other things. If no exception follows, the code after the 
+                    <samp class="listingcharacter listingcharacter">reverse(...)</samp> call gets executed, and that’s 
+                    <samp class="listingcharacter listingcharacter">fail(...)</samp>
+                . This method triggers a JUnit exception with a message, signaling that something was wrong in the test.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h22.2.7.2">
+                    <a id="p1077"/>
+                assertThrows(...)</h4>
+                
+                <p class="standard">A second option provided by JUnit is to use 
+                    <samp class="listingcharacter listingcharacter">assertThrows(...)</samp>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l22.5"><pre><span class="">@Test</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">reverse_null_string_2</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">assertThrows</span><span class="">( IllegalArgumentException.</span><span class="">class</span><span class="">, () -&gt; {</span><br/>    Strings.<span class="">reverse</span><span class="">( null );</span><br/>  } );</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 22.5</b>    
+            com/tutego/insel/junit/util/StringsTest.java, reverse_null_string_2()</p>
+                
+                <p class="standard">In total, the 
+                    <samp class="listingcharacter listingcharacter">Assertions</samp>
+                 class has the following methods for testing exceptions:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T extends Throwable&gt; T assertThrows(Class&lt;T&gt; expectedType, <br/>Executable executable)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T extends Throwable&gt; T assertThrows(Class&lt;T&gt; expectedType, <br/>Executable executable, String message)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T extends Throwable&gt; T assertThrows(Class&lt;T&gt; expectedType, <br/>Executable executable, Supplier&lt;String&gt; messageSupplier)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.8">22.2.8    Setting Limits for Execution Times
+                <a class="indexanchor" id="i22_16"/>
+            </h3>
+            
+            <p class="standard">After major refactoring, software may functionally pass its tests but also become slower. Then, the question arises whether the software is still correct in the sense of the requirements catalog. A previously performant program can run like a snail after a change.</p>
+            
+            <p class="standard">To introduce runtime changes as a validity criterion, the test can be set in an 
+                <samp class="listingcharacter listingcharacter">assertTimeout(...)</samp> or 
+                <samp class="listingcharacter listingcharacter">assertTimeoutPreemptively(.</samp>..). Both methods expect an 
+                <samp class="listingcharacter listingcharacter">Executable</samp> or 
+                <samp class="listingcharacter listingcharacter">ThrowingSupplier</samp> after a given 
+                <samp class="listingcharacter listingcharacter">Duration</samp>
+            .</p>
+            
+            <div class="listing " id="l22.6"><pre><span class="">@Test</span><span class=""><br/></span><span class="">void</span><span class=""> </span><span class="">reverse_execution_time_below_1ms</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">assertTimeout</span><span class="">( Duration.</span><span class="">ofMillis</span><span class="">(</span><span class="">1</span><span class="">), () -&gt; {</span><br/>    Strings.<span class="">reverse</span><span class="">( </span><span class="">"abc"</span><span class=""> );</span><br/>  } );</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 22.6</b>    
+            com/tutego/insel/junit/util/StringsTest.java, reverse_execution_time_below_1ms()</p>
+            
+            <p class="standard">If the test method is then not executed within the limit, the test is considered a failed test, and JUnit will report an error.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.9">22.2.9    
+                <a id="p1078"/>Labels with @DisplayName
+                <a class="indexanchor" id="i22_17"/>
+            </h3>
+            
+            <p class="standard">Earlier, we used the method name 
+                <samp class="listingcharacter listingcharacter">reverse_non_null_string</samp>, for example, to make it easier to read later when running the test. However, tests can get their own labels for output via 
+                <samp class="listingcharacter listingcharacter">@DisplayName</samp>
+            . Consider the following example:</p>
+            
+            <div class="listing " id="l_none_22143"><pre><span class="">@Test</span><span class=""><br/></span>
+                <span class="bold"><span class="">@DisplayName</span><span class="">( </span><span class="">"reverse a non null string"</span><span class=""> )</span></span><br/><span class="">void</span><span class=""> </span><span class="">reverseNonNullString</span><span class="">() { … } </span><span class=""/></pre></div>
+            
+            <p class="standard">Thus, if desired, a method name can be inserted according to the usual naming convention.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.10">22.2.10    Nested Tests
+                <a class="indexanchor" id="i22_18"/>
+                <a class="indexanchor" id="i22_19"/>
+            </h3>
+            
+            <p class="standard">If programmers choose the approach of writing exactly one 
+                <samp class="listingcharacter listingcharacter">@Test</samp> method for each method to be tested, a large number of 
+                <samp class="listingcharacter listingcharacter">assert*(...)</samp>
+             methods will be required for different areas. This option is thus confusing and not ideal because the entire test method will abort if an error occurs.</p>
+            
+            <p class="standard">A good solution to bundle tests of an operation or method under test is to use nested tests. JUnit implements this kind of testing with nested classes annotated with 
+                <samp class="listingcharacter listingcharacter">@Nested</samp>. The annotation 
+                <samp class="listingcharacter listingcharacter">@DisplayName</samp>
+             isn’t mandatory but pretty useful, as in the following example:</p>
+            
+            <div class="listing " id="l22.7"><pre><span class="">class</span><span class=""> StringsTest </span><span class="">{</span><span class=""><br/></span> <br/>  <span class="">@DisplayName</span><span class="">(</span><span class=""> </span><span class="">"reverse(string)"</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  
+                <span class="bold"><span class="">@Nested</span><span class=""> </span><span class="">class</span><span class=""> reverse {</span><br/> </span><br/>    <span class="">@Test</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">reverse_non_null_string</span><span class="">() { … }</span><br/> <br/>    <span class="">@Test</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">reverse_null_string_2</span><span class="">() { … }</span><br/>  
+                <span class="bold">}</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 22.7</b>    
+            com/tutego/insel/junit/util/StringsTest.java (Snippet)</p>
+            
+            <p class="standard">If other methods exist in the utility class besides 
+                <samp class="listingcharacter listingcharacter">reverse(String)</samp>
+            , nested classes could exist for each of them. Basically, the levels could go as deep as required.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.11">22.2.11    Ignoring Tests
+                <a class="indexanchor" id="i22_20"/>
+            </h3>
+            
+            <p class="standard">Restructuring source code may mean that test code is no longer valid and must be removed or rebuilt. To prevent a test case from being executed, you don’t to commented it out. (One added disadvantage is that refactoring, for example in the course 
+                <a id="p1079"/>of renaming identifiers, won’t affect areas that have been commented out.) Instead, another 
+                <samp class="listingcharacter listingcharacter">@Disabled</samp>
+                <a class="indexanchor" id="i22_21"/>
+             annotation can be set to the method, as in the following example:</p>
+            
+            <div class="listing " id="l_none_22178"><pre>
+                <span class="bold"><span class="">@Disabled</span></span><span class=""> </span><span class="">@Test</span><span class=""><br/></span><span class="">void</span><span class=""> </span><span class="">reverse_non_null_string</span><span class="">() </span><span class=""/></pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.12">22.2.12    Canceling Tests with Methods of the Assumptions Class
+                <a class="indexanchor" id="i22_22"/>
+            </h3>
+            
+            <p class="standard">While the 
+                <samp class="listingcharacter listingcharacter">assert*(...)</samp> methods lead internally to an exception in case of a failure and thus indicate that the test has found something that isn’t correct, JUnit provides 
+                <samp class="listingcharacter listingcharacter">Assumptions.assume*(...)</samp>
+             methods that enable you to discontinue the tests. This cancelation is useful if test execution isn’t possible, for example, because the test computer doesn’t have a graphics card, the network doesn’t respond, or the file system is full. The point in this case is not to test how the routine behaves in the absence of a network—of course, that functionality also needs to be tested. But if the network isn’t available, then logically no tests can run that require the network.</p>
+            
+            <p class="standard">Two of the dozen or so 
+                <samp class="listingcharacter listingcharacter">assume*(…)</samp>
+             methods include the following:</p>
+            
+            <div class="listing " id="l_none_22178915"><pre><span class="">class</span><span class=""> org</span><span class="">.</span><span class="">junit</span><span class="">.</span><span class="">jupiter</span><span class="">.</span><span class="">api</span><span class="">.</span>
+                <span class="bold">Assumptions</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void assumeTrue(boolean assumption)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void assumeFalse(boolean assumption)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">assume*(...)</samp>
+             methods don’t raise an exception but instead abort the test execution.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.2.13">22.2.13    Parameterized Tests
+                <a class="indexanchor" id="i22_23"/>
+                <a class="indexanchor" id="i22_24"/>
+            </h3>
+            
+            <p class="standard">In test cases, the methods to be tested are often fed with different values. Earlier, we used such a case:</p>
+            
+            <div class="listing " id="l_none_22188"><pre><span class="">assertEquals</span><span class="">(</span><span class=""> </span><span class="">""</span><span class="">,</span><span class="">    Strings</span><span class="">.</span><span class="">reverse</span><span class="">(</span><span class=""> </span><span class="">""</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">assertEquals</span><span class="">(</span><span class=""> </span><span class="">"cba"</span><span class="">,</span><span class=""> Strings</span><span class="">.</span><span class="">reverse</span><span class="">(</span><span class=""> </span><span class="">"abc"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">Unfortunately, this test approaches code duplication, which can be reduced by means of parameterized tests.</p>
+            
+            
+                
+                <h4 class="t4" id="h22.2.13.1">org.junit.jupiter:junit-jupiter-params Dependency</h4>
+                
+                <p class="standard">Because parameterized tests aren’t part of the JUnit core, you must add a new dependency in the Maven POM, as shown in the following example:</p>
+                
+                <div class="listing " id="l22.8"><pre><span class="">&lt;dependency&gt;</span><span class=""/><br/>  <span class="">&lt;groupId&gt;</span><span class="">org.junit.jupiter</span><span class="">&lt;/groupId&gt;</span><span class=""/><br/>  <span class="">&lt;artifactId&gt;</span><span class="">junit-jupiter-params</span><span class="">&lt;/artifactId&gt;</span><span class=""/><br/>
+                    <a id="p1080"/>  <span class="">&lt;version&gt;</span><span class="">5.8.1</span><span class="">&lt;/version&gt;</span><span class=""/><br/>  <span class="">&lt;scope&gt;</span><span class="">test</span><span class="">&lt;/scope&gt;</span><span class=""/><br/><span class="">&lt;/dependency&gt;</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>numbering_unknown </b>    
+            pom.xml (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h22.2.13.2">@org.junit.jupiter.params.ParameterizedTest</h4>
+                
+                <p class="standard">Let’s return to the Java code. For parameterized tests, methods are no longer annotated with 
+                    <samp class="listingcharacter listingcharacter">@org.junit.jupiter.api.Test</samp>, but instead with 
+                    <samp class="listingcharacter listingcharacter">@org.junit.jupiter.params.ParameterizedTest</samp>
+                .</p>
+                
+                <p class="standard">Next, valid input values must be determined, which can be done in several ways. Let’s look at two options next.</p>
+                
+                <p class="standard">The first option is to specify a collection of values via 
+                    <samp class="listingcharacter listingcharacter">@ValueSource</samp>. Various data types are possible, including numeric values, strings, and 
+                    <samp class="listingcharacter listingcharacter">Class</samp>
+                 objects. JUnit runs through the collection and submits each value to the test method via the method parameter. You can then process these parameters and pass them to the method under test, as in the following example:</p>
+                
+                <div class="listing " id="l22.9"><pre><span class="">@ParameterizedTest</span><span class=""><br/></span>
+                    <span class="bold"><span class="">@ValueSource</span><span class="">( strings = { </span><span class="">""</span><span class="">, </span><span class="">"  "</span><span class="">, </span><span class="">"abc"</span><span class=""> } )</span></span><br/><span class="">void</span><span class=""> </span><span class="">reverse_will_not_throw_exception_with_non_null_inputs</span><span class="">( </span>
+                    <span class="bold"><span class="">String</span><span class=""> input</span></span> ) {<br/>  Strings.<span class="">reverse</span><span class="">( </span>
+                    <span class="bold">input</span> );<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 22.9</b>    
+            com/tutego/insel/junit/util/StringsTest.java (Snippet)</p>
+                
+                <p class="standard">What you can’t do with 
+                    <samp class="listingcharacter listingcharacter">@ValueSource</samp> is include expected results along with the given values. Instead, you can use 
+                    <samp class="listingcharacter listingcharacter">@CsvSource</samp>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l22.10"><pre><span class="">@ParameterizedTest</span><span class=""><br/></span>
+                    <span class="bold"><span class="">@CsvSource</span><span class="">( { </span><span class="">"a,a"</span><span class="">, </span><span class="">"ab,ba"</span><span class="">, </span><span class="">"abc,cba"</span><span class=""> } )</span><br/></span><span class="">void</span><span class=""> </span><span class="">reverse_non_null_inputs</span><span class="">( </span>
+                    <span class="bold"><span class="">String</span><span class=""> input, </span><span class="">String</span><span class=""> expected</span></span> ) {<br/>  <span class="">assertEquals</span><span class="">( expected, Strings.</span><span class="">reverse</span><span class="">( input ) );</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 22.10</b>    
+            com/tutego/insel/junit/util/StringsTest.java (Snippet)</p>
+                
+                <p class="standard">One warning: you can’t take a “,” for the empty string; otherwise, an 
+                    <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>
+                 will follow. By default, the delimiter is a comma, but this delimiter choice can be changed.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

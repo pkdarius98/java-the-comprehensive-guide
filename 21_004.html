@@ -1,0 +1,599 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Bits and Bytes, Mathematics and Money" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Bits and Bytes, Mathematics and Money" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Bits and Bytes, Mathematics and Money</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h21.4">21.4    
+            <a id="p1042"/>
+        Accuracy and the Value Range of Type and Overflow Control*</h2>
+        
+        <p class="standard">Data types in Java always have a certain number of bytes, and thus the value range is known. However, an operation can run beyond this range of values.</p>
+        
+        
+            
+            <h3 class="t3" id="h21.4.1">21.4.1    The Largest and Smallest Values</h3>
+            
+            <p class="standard">For each primitive data type, a separate class in Java is available with various methods and constants. The classes 
+                <samp class="listingcharacter listingcharacter">Byte</samp>, 
+                <samp class="listingcharacter listingcharacter">Short</samp>, 
+                <samp class="listingcharacter listingcharacter">Integer</samp>, 
+                <samp class="listingcharacter listingcharacter">Long</samp>, 
+                <samp class="listingcharacter listingcharacter">Float</samp>, and 
+                <samp class="listingcharacter listingcharacter">Double</samp> have the constants 
+                <samp class="listingcharacter listingcharacter">MIN_VALUE</samp>
+                <a class="indexanchor" id="i21_102"/> and 
+                <samp class="listingcharacter listingcharacter">MAX_VALUE</samp> for their minimum and maximum value ranges. The 
+                <samp class="listingcharacter listingcharacter">Float</samp> and 
+                <samp class="listingcharacter listingcharacter">Double</samp> classes also have the important constants 
+                <samp class="listingcharacter listingcharacter">NEGATIVE_INFINITY</samp>
+                <a class="indexanchor" id="i21_103"/> and 
+                <samp class="listingcharacter listingcharacter">POSITIVE_INFINITY</samp>
+                <a class="indexanchor" id="i21_104"/> for negative and positive infinity as well as 
+                <samp class="listingcharacter listingcharacter">NaN</samp>
+                <a class="indexanchor" id="i21_105"/>
+             (undefined).</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">
+                    <samp class="listingcharacter listingcharacter">Integer.MIN_VALUE</samp> represents the smallest value the integer can assume: –2,147,483,648. However, 
+                    <samp class="listingcharacter listingcharacter">Double.MIN_VALUE</samp> represents the smallest 
+                    <span class="italic">positive</span> number (best approximation to 0) that a 
+                    <samp class="listingcharacter listingcharacter">double</samp>
+                 can represent (4.9E-324).</p>
+            
+            </div>
+            
+            <p class="standard">When we speak of “double precision,” especially when hearing the word 
+                <samp class="listingcharacter listingcharacter">double</samp> as opposed to 
+                <samp class="listingcharacter listingcharacter">float</samp>, you must be careful because 
+                <samp class="listingcharacter listingcharacter">double</samp>
+             provides more than twice as precise a mantissa, at least according to the number of bits. However, this precision doesn’t say anything about the number of decimal places.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Craft Task</h6>
+                
+                <p class="standard first">Ask yourself the question, “Why are the expenses the way they are?” when considering the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_21579"><pre><span class="">double</span><span class=""> d1 </span><span class="">=</span><span class=""> </span><span class="">0.02d</span><span class="">;</span><span class=""><br/></span><span class="">float</span><span class="">  f1 </span><span class="">=</span><span class=""> </span><span class="">0.02f</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">d1 == f1</span></span> );        <span class=""> // false</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">(<span class="">float</span><span class="">) d1 == f1</span></span> );<span class=""> // true</span><span class=""><br/></span><br/><span class="">double</span><span class=""> d2 = </span><span class="">0.02f</span><span class="">;</span><br/><span class="">float</span><span class="">  f2 = </span><span class="">0.02f</span><span class="">;</span><br/>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">d2 == f2</span> );        <span class=""> // true</span><span class=""> </span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.4.2">21.4.2    Overflow and Everything Entirely Exact
+                <a class="indexanchor" id="i21_106"/>
+            </h3>
+            
+            <p class="standard">For some mathematical questions, you must determine whether operations (such as addition, subtraction, or multiplication) may go beyond the valid number range (i.e., leave the integer range of an integer of 32 bits, for example). If the result of a calculation doesn’t fit into the value range of a number, this error won’t be displayed by Java by 
+                <a id="p1043"/>
+            default; neither the compiler nor the runtime environment will report this problem. Also, no exception is raised since no built-in overflow control is available in Java.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Mathematically, 
+                    <span class="italic">a</span> × 
+                    <span class="italic">a</span> ÷ 
+                    <span class="italic">a</span> = 
+                    <span class="italic">a</span> is correct, so, for example, 100,000 × 100,000 ÷ 100,000 = 100,000. In Java, the result is different because overflow occurs in 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                 at 100,000 × 100,000. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_21592"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> 100_000 </span><span class="">*</span><span class=""> 100_000</span><span class=""> / 100_000 );    </span><span class=""> // 14100</span><span class=""/> </pre></div>
+                
+                <p class="standard">This statement prints 
+                    <samp class="listingcharacter listingcharacter">14100</samp>. If we increase the data type to 
+                    <samp class="listingcharacter listingcharacter">long</samp> by placing an 
+                    <samp class="listingcharacter listingcharacter">L</samp> after 
+                    <samp class="listingcharacter listingcharacter">100_000</samp>, we’re still safe with this multiplication since a 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                 can store the result, as in the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_21613"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> 100_000</span>
+                    <span class="bold"><span class="">L</span></span> * 100_000<span class=""> / 100_000 );   </span><span class=""> // 100000</span><span class=""/><span class=""/> </pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h21.4.2.1">Multiplying int Integers</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">*</samp> operator doesn’t perform any data type matching on 
+                    <samp class="listingcharacter listingcharacter">int</samp>, so multiplying two 
+                    <samp class="listingcharacter listingcharacter">ints</samp> again returns 
+                    <samp class="listingcharacter listingcharacter">int</samp>. But the product can quickly run beyond the acceptable value range, thus causing an overflow. Even if the product is written to a 
+                    <samp class="listingcharacter listingcharacter">long</samp> variable, the conversion from 
+                    <samp class="listingcharacter listingcharacter">int</samp> to 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                 doesn’t occur until after the multiplication. Consider the following examples:</p>
+                
+                <div class="listing " id="l_none_21628"><pre><span class="">int</span><span class="">  i </span><span class="">=</span><span class=""> Integer</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">*</span><span class=""> Integer</span><span class="">.</span><span class="">MAX_VALUE</span><span class="">;</span><span class=""><br/></span><span class="">long</span><span class=""> l </span><span class="">=</span><span class=""> Integer</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">*</span><span class=""> Integer</span><span class="">.</span><span class="">MAX_VALUE</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> i </span><span class="">);</span><span class="">    </span><span class=""> // 1</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> l </span><span class="">);</span><span class="">    </span><span class=""> // 1</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If two 
+                    <samp class="listingcharacter listingcharacter">ints </samp>must be multiplied without overflow, one of the two factors must be adjusted to 
+                    <samp class="listingcharacter listingcharacter">long</samp> so that the calculation leads to the correct result (
+                    <samp class="listingcharacter listingcharacter">4611686014132420609</samp>
+                ), as in the following example:</p>
+                
+                <div class="listing " id="l_none_21637"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Integer</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">*</span><span class=""> </span><span class="">(</span><span class="">long</span><span class="">)</span><span class=""> Integer</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">long</span><span class="">)</span><span class=""> Integer</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">*</span><span class=""> Integer</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Because this typecasting can be quickly forgotten and isn’t particularly explicit, the 
+                    <samp class="listingcharacter listingcharacter">Math</samp> class provides the static method 
+                    <samp class="listingcharacter listingcharacter">long multiplyFull(int x, int y)</samp>, which performs the typecasting for you using 
+                    <samp class="listingcharacter listingcharacter">(long)x * (long)y</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.4.2.2">Multiplying Long Integers</h4>
+                
+                <p class="standard">No primitive data type has more than 64 bits (8 bytes), so the result of 
+                    <samp class="listingcharacter listingcharacter">long * long</samp> with its 128 bits only fits completely into a 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp>. However, one method allows you to query the upper 64 bits of a 
+                    <samp class="listingcharacter listingcharacter">long</samp> multiplication separately, using the 
+                    <samp class="listingcharacter listingcharacter">multiplyHigh(long x, long y)</samp> method in 
+                    <samp class="listingcharacter listingcharacter">Math</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p1044"/>
+                    Example</h6>
+                    
+                    <p class="standard first">Example of multiplying large numbers:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21630"><pre>BigInteger v <span class="">=</span><span class=""> BigInteger</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> Long</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">)</span><span class=""><br/></span>                         <span class="">.</span><span class="">multiply</span><span class="">(</span><span class=""> BigInteger</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> Long</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> v </span><span class="">);</span><span class=""> </span><span class=""> // 85070591730234615847396907784232501249</span><span class=""><br/></span><br/><span class="">long</span><span class=""> lowLong </span><span class="">=</span><span class=""> Long</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">*</span><span class=""> Long</span><span class="">.</span><span class="">MAX_VALUE</span><span class="">;</span><span class=""><br/></span><span class="">long</span><span class=""> highLong </span><span class="">=</span><span class=""> </span>
+                        <span class="bold"><span class="">Math.</span><span class="">multiplyHigh</span></span><span class="">( Long.MAX_VALUE, Long.MAX_VALUE );</span><br/>BigInteger w = BigInteger.<span class="">valueOf</span><span class="">( highLong )</span><br/>                         .<span class="">shiftLeft</span><span class="">( </span><span class="">64</span><span class=""> )</span><br/>                         .<span class="">add</span><span class="">( BigInteger.</span><span class="">valueOf</span><span class="">( lowLong ) );</span><br/>System.out.<span class="">println</span><span class="">( w ); </span><span class=""> // 85070591730234615847396907784232501249</span><span class=""/><span class=""/> </pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.4.2.3">Detecting an Overflow</h4>
+                
+                <p class="standard">All the methods listed below in 
+                    <samp class="listingcharacter listingcharacter">Math</samp>
+                 provide overflow detection:</p>
+                
+                <div class="listing " id="l_none_21646"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Math</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int addExact(int x, int y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long addExact(long x, long y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int subtractExact(int x, int y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long subtractExact(long x, long y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int multiplyExact(int x, int y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int multiplyExact(long x, int y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long multiplyExact(long x, long y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int toIntExact(long value)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int incrementExact(int a)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long incrementExact(long a)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int decrementExact(int a)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long decrementExact(long a)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int negateExact(int a)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long negateExact(long a)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">All methods throw an 
+                    <samp class="listingcharacter listingcharacter">ArithmeticException</samp> if the operation isn’t feasible—the last one, for example, if 
+                    <samp class="listingcharacter listingcharacter">(int)value != value</samp>. Unfortunately, Java doesn’t declare subclasses like 
+                    <samp class="listingcharacter listingcharacter">UnderflowException</samp> or 
+                    <samp class="listingcharacter listingcharacter">OverflowException</samp> and only reports anything of type 
+                    <samp class="listingcharacter listingcharacter">ArithmeticException</samp>
+                 with the error message “xxx overflow,” even if it’s actually an underflow.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p1045"/>
+                    Example</h6>
+                    
+                    <p class="standard first">As shown in the following example, subtracting 1 from the smallest integer using 
+                        <samp class="listingcharacter listingcharacter">subtractExact(...)</samp>
+                     leads to an exception:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21660"><pre><span class="">subtractExact</span><span class="">(</span><span class=""> Integer</span><span class="">.</span><span class="">MIN_VALUE</span><span class="">,</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class="">   </span><span class=""> // 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                         ArithmeticException</span><span class=""/> </pre></div>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Comparison with C#</h6>
+                    
+                    <p class="standard first last">C# behaves the same way as Java and doesn’t respond to an overflow by default. However, special 
+                        <samp class="listingcharacter listingcharacter">checked</samp> blocks can report an 
+                        <samp class="listingcharacter listingcharacter">OverflowException</samp> when an overflow occurs in basic arithmetic operations. The following code raises this exception: 
+                        <samp class="listingcharacter listingcharacter">checked { int val = int.MaxValue; val++; }</samp>. Such 
+                        <samp class="listingcharacter listingcharacter">checked</samp> blocks don’t exist in Java. If you require this special overflow control, you must use the methods and then also rewrite a 
+                        <samp class="listingcharacter listingcharacter">val++</samp> to 
+                        <samp class="listingcharacter listingcharacter">Math.addExact(val, 1)</samp> or 
+                        <samp class="listingcharacter listingcharacter">Math.incrementExact(val)</samp>
+                    .</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.4.3">21.4.3    What in the World Does the ulp Method Do?</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Math</samp>
+             class provides special methods if you’re concerned about computational (im)precision and may work with numerical approximations.</p>
+            
+            <p class="standard">The distance from one float to the next isn’t always the same due to the internal structure. The exact distance of a number to the next possible one is shown by 
+                <samp class="listingcharacter listingcharacter">ulp(double)</samp> or 
+                <samp class="listingcharacter listingcharacter">ulp(float)</samp>. This funny method name is an abbreviation for “unit in the last place.” The exact next higher/lower number is determined by the methods 
+                <samp class="listingcharacter listingcharacter">nextUp(float|double)</samp> and 
+                <samp class="listingcharacter listingcharacter">nextDown(float|double)</samp>, which use 
+                <samp class="listingcharacter listingcharacter">nextAfter(...)</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Ask yourself the question, “What comes after and before 1?” when considering the following example:</p>
+                
+                <div class="listing " id="l_none_21680"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%.16f%n"</span><span class="">,</span><span class=""> Math</span><span class="">.</span>
+                    <span class="bold"><span class="">nextUp</span></span><span class="">( </span><span class="">1</span><span class=""> ) );</span><br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%.16f%n"</span><span class="">, Math.</span>
+                    <span class="bold"><span class="">nextDown</span></span><span class="">( </span><span class="">1</span><span class=""> ) );</span><br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%.16f%n"</span><span class="">, Math.</span>
+                    <span class="bold"><span class="">nextAfter</span></span><span class="">( </span><span class="">1</span><span class="">, Double.</span>
+                    <span class="bold">POSITIVE_INFINITY</span> ) );<br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%.16f%n"</span><span class="">, Math.</span>
+                    <span class="bold"><span class="">nextAfter</span></span><span class="">( </span><span class="">1</span><span class="">, Double.</span>
+                    <span class="bold">NEGATIVE_INFINITY</span> ) );<span class=""/></pre></div>
+                
+                <p class="standard">The result is the following output:</p>
+                
+                <div class="listing  last_item" id="l_none_21675"><pre>1.000000119209289<br/>0.9999999403953552<br/>1.0000001192092896<br/>0.9999999403953552</pre></div>
+            
+            </div>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">
+                    <a id="p1046"/>
+                next</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">Up</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">(d)</samp> is an abbreviation for 
+                <samp class="listingcharacter listingcharacter">nextAfter(d, Double.</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">POSITIVE_INFINITY</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">)</samp>, and 
+                <samp class="listingcharacter listingcharacter">next</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">Down</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">(d)</samp> is an abbreviation for 
+                <samp class="listingcharacter listingcharacter">nextAfter(d, Double.</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">NEGATIVE_INFINITY</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">)</samp>. If the second argument of 
+                <samp class="listingcharacter listingcharacter">Math.nextAfter(...)</samp>
+             is larger than the first, then the next larger number will be returned; if the second argument is smaller, then the next smaller number will be returned. In case of equality, the same number comes back.</p>
+            
+            <table class="standardtable" id="t21.12">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Method</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Return</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Math.ulp( 0.00001 )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">0.000000000000000000001694065895</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Math.ulp( –1 )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">0.00000011920928955078125</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Math.ulp( 1 )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">0.00000011920928955078125</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Math.ulp( 2 )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">0.0000002384185791015625</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Math.ulp( 10E30 )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">1125899906842624</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 21.12</b>    
+            As the Numbers Get Bigger, the Jumps Also Get Bigger</p>
+            
+            
+                
+                <h4 class="t4" id="h21.4.3.1">A Quantum of Inaccuracy</h4>
+                
+                <p class="standard">The usual mathematical floating point operations have a ulp of ½, which is as accurate as possible. The Javadoc will indicate how much in ulps 
+                    <samp class="listingcharacter listingcharacter">Math</samp> methods can deviate from the real result. Calculation errors can’t be avoided, especially with complex methods. Thus, 
+                    <samp class="listingcharacter listingcharacter">sin(double)</samp> may have a possible inaccuracy of 1 ulp; 
+                    <samp class="listingcharacter listingcharacter">atan2(double, double)</samp>, an inaccuracy of at most 2 ulps; and 
+                    <samp class="listingcharacter listingcharacter">sinh(double)</samp>, 
+                    <samp class="listingcharacter listingcharacter">cosh(double)</samp>, 
+                    <samp class="listingcharacter listingcharacter">tanh(double)</samp>
+                , inaccuracies of 2.5 ulp.</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">ulp(...)</samp>
+                 method is interesting for testing because you can always implement deviations in the appropriate order of magnitude. For small numbers, a difference of perhaps 0.001 makes sense; for larger numbers, the tolerance may be larger.</p>
+                
+                <p class="standard">Java declares three special constants in the 
+                    <samp class="listingcharacter listingcharacter">Double</samp> and 
+                    <samp class="listingcharacter listingcharacter">Float</samp> classes, which can be illustrated via 
+                    <samp class="listingcharacter listingcharacter">nextAfter(...)</samp>. Let’s look at some examples using 
+                    <samp class="listingcharacter listingcharacter">Double</samp>
+                :</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">MIN_VALUE</samp> = 
+                            <samp class="listingcharacter listingcharacter">nextUp(0.0)</samp> = 
+                            <samp class="listingcharacter listingcharacter">Double.longBitsToDouble(0x0010000000000000L)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">MIN_NORMAL</samp> = 
+                            <samp class="listingcharacter listingcharacter">MIN_VALUE/(nextUp(1.0)-1.0)</samp> = 
+                            <samp class="listingcharacter listingcharacter">Double.longBitsToDouble(0x1L)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">MAX_VALUE = nextAfter(POSITIVE_INFINITY, 0.0) =<br/>   Double.longBitsToDouble(0x7fefffffffffffffL)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

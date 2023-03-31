@@ -1,0 +1,544 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Interfaces, Enumerations, Sealed Classes, Records" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Interfaces, Enumerations, Sealed Classes, Records" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Interfaces, Enumerations, Sealed Classes, Records</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h8.2">8.2    Enumeration Types</h2>
+        
+        <p class="standard">Each enumeration type inherits from the special class 
+            <samp class="listingcharacter listingcharacter">Enum</samp>
+            <a class="indexanchor" id="i08_21"/>
+        . For this next example, let’s define some countries:</p>
+        
+        <div class="listing " id="l8.19"><pre><span class="">
+                <a id="p514"/>
+            public</span><span class=""> </span><span class="">enum</span><span class=""> Country </span><span class="">{</span><span class=""><br/></span>  GERMANY<span class="">,</span><span class=""> UK</span><span class="">,</span><span class=""> CHINA</span><br/><span class="">}</span><span class=""> </span></pre></div>
+        
+        <p class="caption "><b>Listing 8.19</b>    
+            src/main/java/com/tutego/insel/enums/v1/Country.java (Snippet)</p>
+        
+        <p class="standard">The compiler translates this code into an enumeration class that resembles the following code:</p>
+        
+        <div class="listing " id="l_none_8511"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Country </span><span class="">extends</span><span class=""> Enum </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> Country GERMANY </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Country</span><span class="">(</span><span class=""> </span><span class="">"GERMANY"</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> Country UK      </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Country</span><span class="">(</span><span class=""> </span><span class="">"UK"</span><span class="">,</span><span class="">      </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span> <span class=""> // other constants...</span><span class=""><br/></span><br/>  <span class="">private</span><span class=""> </span><span class="">Country</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> s</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">super</span><span class="">(</span><span class=""> s</span><span class="">,</span><span class=""> i </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/> <span class=""> // other methods...</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+        
+        
+            
+            <h3 class="t3" id="h8.2.1">8.2.1    Methods on Enum Objects</h3>
+            
+            <p class="standard">Each enumeration element is an object that automatically has some default methods coming from the superclass 
+                <samp class="listingcharacter listingcharacter">java.lang.Enum</samp>. On one hand, these default methods overwrite the methods from 
+                <samp class="listingcharacter listingcharacter">java.lang.Object</samp>. On the other hand, some new object methods and some static methods are also added, as shown in 
+                <span class="crossreference "><a href="08_002.html#f8.4">Figure 8.4</a></span>
+            .</p>
+            
+            <div class="imagebox figure-type"><a href="img-f8.4.html" id="f8.4"><img alt="Type Relationship of Enum" id="img-f8.4" src="bilderklein/klein08_004.png"/></a></div>
+            
+            <p class="caption "><b>Figure 8.4</b>    
+            Type Relationship of Enum</p>
+            
+            
+                
+                <h4 class="t4" id="h8.2.1.1">
+                    <a id="p515"/>
+                String Representation</h4>
+                
+                <p class="standard">The name of the constant is returned by the 
+                    <samp class="listingcharacter listingcharacter">name()</samp> method, which is joined by the familiar 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> method, which calls 
+                    <samp class="listingcharacter listingcharacter">name()</samp> by default but can be overridden. The 
+                    <samp class="listingcharacter listingcharacter">name()</samp>
+                 method can’t be overridden. Consider the following example:</p>
+                
+                <div class="listing " id="l8.20"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">Country.GERMANY.</span><span class="">toString</span><span class="">()</span></span> );           <span class=""> // GERMANY</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">Country.GERMANY.<span class="">name</span><span class="">()</span></span> );               <span class=""> // GERMANY</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.20</b>    
+            src/main/java/com/tutego/insel/enums/v1/CountyDemo.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.2.1.2">From the Enumeration Element Name to the Enum Object</h4>
+                
+                <p class="standard">The enumeration class generated by the compiler provides a static 
+                    <samp class="listingcharacter listingcharacter">valueOf(String)</samp>
+                    <a class="indexanchor" id="i08_22"/> method that returns the enumeration element matching the 
+                    <samp class="listingcharacter listingcharacter">name()</samp> representation. If 
+                    <samp class="listingcharacter listingcharacter">valueOf(String)</samp> receives a string for which no enumeration element exists, an 
+                    <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> will follow. In addition, another static method, 
+                    <samp class="listingcharacter listingcharacter">Enum.valueOf(Class&lt;T&gt; enumType, String name)</samp>, originates from the 
+                    <samp class="listingcharacter listingcharacter">Enum</samp>
+                 superclass.</p>
+                
+                <p class="standard">The following example illustrates the conversion of a string to its corresponding 
+                    <samp class="listingcharacter listingcharacter">Enum</samp>
+                 object:</p>
+                
+                <div class="listing " id="l8.21"><pre>Country germany1 <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">Country.</span><span class="">valueOf</span><span class="">( </span><span class="">"GERMANY"</span><span class=""> )</span></span>;<br/>Country germany2 = 
+                    <span class="bold">Enum.<span class="">valueOf</span><span class="">( Country.</span><span class="">class</span><span class="">, </span><span class="">"GERMANY"</span><span class=""> )</span></span>;<br/>System.out.<span class="">println</span><span class="">( germany1 );  </span><span class=""> // GERMANY</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( germany2 );  </span><span class=""> // GERMANY</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.21</b>    
+            src/main/java/com/tutego/insel/enums/v1/CountyDemo.java (Snippet)</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">While the 
+                        <samp class="listingcharacter listingcharacter">Enum.valueOf(Class, String)</samp> method exists only once, the compiler generates a 
+                        <samp class="listingcharacter listingcharacter">valueOf(String)</samp> method for each enumeration type; since the method has been generated by the compiler, the method doesn’t appear in the Javadoc. 
+                        <samp class="listingcharacter listingcharacter">Enum.valueOf(...)</samp> is slightly more dynamic in use because that makes the method parameterizable with the 
+                        <samp class="listingcharacter listingcharacter">Class</samp>
+                     object. Consider the following example:</p>
+                    
+                    <div class="listing " id="l_none_8525"><pre><span class="">String</span><span class=""> name </span><span class="">=</span><span class=""> </span><span class="">"GERMANY"</span><span class="">;</span><span class=""><br/></span>Class<span class="">&lt;</span><span class="">Country</span><span class="">&gt;</span><span class=""> enumClass </span><span class="">=</span><span class=""> Country</span><span class="">.</span><span class="">class</span><span class="">;</span><span class=""><br/></span>Enum<span class="">&lt;</span><span class="">Country</span><span class="">&gt;</span><span class="">  anEnum </span><span class="">=</span><span class=""> Enum</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> enumClass</span><span class="">,</span><span class=""> name </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">The data in angle brackets are part of generics (i.e., type specifications); 
+                        <span class="crossreference "><a href="12_001.html#h12">Chapter 12</a></span>
+                     will explain generics in greater detail.</p>
+                
+                </div>
+                
+                <div class="listing " id="l_none_8541"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Enum</span>&lt;E <span class="">extends</span><span class=""> Enum&lt;E&gt;&gt;</span><br/><span class="">implements</span><span class=""> Comparable&lt;E&gt;, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p516"/>
+                            final String name()</samp><br/>Returns the name of the constant. Since the method—like many others of the class—is final, the name can’t be changed.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String toString()</samp><br/>Returns the name of the constant. This method calls 
+                            <samp class="listingcharacter listingcharacter">name()</samp>
+                         by default but can be overridden because it isn’t final.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T extends Enum&lt;T&gt;&gt; T valueOf(Class&lt;T&gt; enumType, String s)</samp><br/>Enables searching 
+                            <samp class="listingcharacter listingcharacter">Enum</samp> objects for a constant name and 
+                            <samp class="listingcharacter listingcharacter">Enum</samp> class. This method returns the 
+                            <samp class="listingcharacter listingcharacter">Enum</samp> object for the given string or throws an 
+                            <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> if no 
+                            <samp class="listingcharacter listingcharacter">Enum</samp>
+                         object can be assigned to the string.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.2.1.3">Enumerating All Constants of the Class</h4>
+                
+                <p class="standard">A useful static method is 
+                    <samp class="listingcharacter listingcharacter">values()</samp>, which returns an array of all enumerations of the enumeration type. This method is useful for extended 
+                    <samp class="listingcharacter listingcharacter">for</samp> loops, which are supposed to enumerate all constants. An alternative with the same result is the 
+                    <samp class="listingcharacter listingcharacter">Class</samp> method 
+                    <samp class="listingcharacter listingcharacter">getEnumConstants()</samp>
+                .</p>
+                
+                <div class="listing " id="l8.22"><pre><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> Country c </span><span class="">:</span><span class=""> Country</span><span class="">.</span><span class="">values</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%s "</span><span class="">,</span><span class=""> c </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%n%s%n"</span><span class="">,</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> Country</span><span class="">.</span><span class="">class</span><span class="">.</span><span class="">getEnumConstants</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 8.22</b>    
+            src/main/java/com/tutego/insel/enums/v1/CountyDemo.java (Snippet)</p>
+                
+                <p class="standard">The result is the following output:</p>
+                
+                <div class="listing " id="l_none_8565"><pre>GERMANY UK CHINA <br/>[GERMANY, UK, CHINA] </pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.2.1.4">Ordinal Number, Order</h4>
+                
+                <p class="standard">From the 
+                    <samp class="listingcharacter listingcharacter">Enum</samp> superclass, each enumeration inherits a protected parameterized constructor that expects the name of the constant and an associated counter. Thus, each element of the enumeration becomes an object of the base type 
+                    <samp class="listingcharacter listingcharacter">Enum</samp>, which stores a name and an ID, the 
+                    <span class="italic">ordinal number</span>
+                    <a class="indexanchor" id="i08_23"/>
+                . Of course, you can also ask for its name and counter.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example is a method that returns the ordinal number of an element of the enumeration or returns “-1” if the constant doesn’t exist:</p>
+                    
+                    <div class="listing " id="l8.23"><pre><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">getOrdinal</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">try</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span>
+                        <span class="bold"><span class="">Country.</span><span class="">valueOf</span><span class="">( name )</span></span>.<span class="">ordinal</span><span class="">(); }</span><br/>  <span class="">catch</span><span class=""> ( IllegalArgumentException e ) { </span><span class="">return</span><span class=""> -</span><span class="">1</span><span class="">; }</span><br/>}<span class=""/></pre></div>
+                    
+                    <p class="caption "><b>Listing 8.23</b>    
+            src/main/java/com/tutego/insel/enums/v1/CountyDemo.java (Snippet)</p>
+                    
+                    <p class="standard last">
+                        <a id="p517"/>Thus, 
+                        <samp class="listingcharacter listingcharacter">getOrdinal("UK") = 1</samp> and 
+                        <samp class="listingcharacter listingcharacter">getOrdinal("ENGLAND") == -1</samp>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">The ordinal number specifies the position in the declaration and is also the ordering criteria of the 
+                    <samp class="listingcharacter listingcharacter">compareTo(...)</samp>
+                 method. The ordinal number can’t be changed and always represents the order of the declared constants.</p>
+                
+                <div class="listing " id="l_none_8595"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Enum</span>&lt;E <span class="">extends</span><span class=""> Enum&lt;E&gt;&gt;</span><br/><span class="">implements</span><span class=""> Comparable&lt;E&gt;, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">final int ordinal()</samp><br/>Returns the ID associated with the constant. In general, this ordinal number
+                            <a class="indexanchor" id="i08_24"/> isn’t important, but special data structures like 
+                            <samp class="listingcharacter listingcharacter">EnumSet</samp> or 
+                            <samp class="listingcharacter listingcharacter">EnumMap</samp>
+                         use this unique ID. The order of the numbers is given by the order in which they are specified.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">final boolean equals(Object other)</samp><br/>The 
+                            <samp class="listingcharacter listingcharacter">Enum</samp> superclass overrides 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp> with the logic as in 
+                            <samp class="listingcharacter listingcharacter">Object</samp> (i.e., the comparison of the references) to mark it as 
+                            <samp class="listingcharacter listingcharacter">final</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">protected final Object clone() throws CloneNotSupportedException</samp><br/>The 
+                            <samp class="listingcharacter listingcharacter">clone()</samp> method is 
+                            <samp class="listingcharacter listingcharacter">final protected</samp> and can therefore neither be overridden nor called from outside. In this way, no instances of the 
+                            <samp class="listingcharacter listingcharacter">Enum</samp> objects could compromise the identity of every object of the 
+                            <samp class="listingcharacter listingcharacter">enum</samp>. Basically, however, custom implementations of 
+                            <samp class="listingcharacter listingcharacter">clone()</samp> are allowed to provide the 
+                            <samp class="listingcharacter listingcharacter">this</samp>
+                         reference.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">final int compareTo(E o)</samp><br/>Since the 
+                            <samp class="listingcharacter listingcharacter">Enum</samp> class implements the 
+                            <samp class="listingcharacter listingcharacter">Comparable</samp> interface, the 
+                            <samp class="listingcharacter listingcharacter">compareTo(...)</samp> method is also available. Its comparisons are based on the ordinal numbers. Comparisons are only allowed within an 
+                            <samp class="listingcharacter listingcharacter">Enum</samp>
+                         type.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">final Class&lt;E&gt; getDeclaringClass()</samp><br/>Returns the 
+                            <samp class="listingcharacter listingcharacter">Class</samp> object from the enumeration class for a concrete 
+                            <samp class="listingcharacter listingcharacter">Enum</samp>. Warning: If applied to the enumeration class itself, the method will return 
+                            <samp class="listingcharacter listingcharacter">null</samp>. Only on the elements of the enumeration does the method provide a value that makes sense. So, 
+                            <samp class="listingcharacter listingcharacter">Country.class.getDeclaringClass()</samp> would be 
+                            <samp class="listingcharacter listingcharacter">null</samp>, but 
+                            <samp class="listingcharacter listingcharacter">Country.UK.getDeclaringClass()</samp> would return 
+                            <samp class="listingcharacter listingcharacter">Class&lt;Country&gt;</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">In the 
+                        <samp class="listingcharacter listingcharacter">Class</samp> object, the 
+                        <samp class="listingcharacter listingcharacter">getEnumConstants()</samp> method is interesting because, like 
+                        <samp class="listingcharacter listingcharacter">values()</samp>, this method also returns an array with all entries. However, the advantage of using the 
+                        <samp class="listingcharacter listingcharacter">Class</samp> object is that it’s general: The call of the static 
+                        <samp class="listingcharacter listingcharacter">values()</samp> method is always associated with the class; 
+                        <samp class="listingcharacter listingcharacter">getEnumConstants()</samp> works with any 
+                        <samp class="listingcharacter listingcharacter">Class</samp> object; and even if it’s not supposed to represent an enumeration class, the return is 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                    .</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.2.2">8.2.2    
+                <a id="p518"/>
+            Enumerations with Custom Methods, Constructors, and Initializers*</h3>
+            
+            <p class="standard">Since an 
+                <samp class="listingcharacter listingcharacter">enum</samp> type is a special kind of class declaration, it can also declare object/class variables, methods, static or object initializers, and constructors. Each enumeration automatically has methods like 
+                <samp class="listingcharacter listingcharacter">name()</samp> and 
+                <samp class="listingcharacter listingcharacter">ordinal()</samp>
+            , and developers can also add their own.</p>
+            
+            
+                
+                <h4 class="t4" id="h8.2.2.1">Country with an Additional Class Method</h4>
+                
+                <p class="standard">An enumeration type can have static methods. These methods can access static members of the enumeration type and, for example, select constants. 
+                    <samp class="listingcharacter listingcharacter">values()</samp>
+                 is one such given static method that returns an array of all enumeration elements.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example declares an enumeration named 
+                        <samp class="listingcharacter listingcharacter">Country</samp> and two static methods so that 
+                        <samp class="listingcharacter listingcharacter">Country.getDefault()</samp> returns 
+                        <samp class="listingcharacter listingcharacter">GERMANY</samp> and 
+                        <samp class="listingcharacter listingcharacter">Country.random()</samp>
+                     returns a randomly chosen country:</p>
+                    
+                    <div class="listing  last_item" id="l_none_8610"><pre><span class="">public</span><span class=""> </span><span class="">enum</span><span class=""> Country </span><span class="">{</span><span class=""><br/></span>  GERMANY<span class="">,</span><span class=""> UK</span><span class="">,</span><span class=""> CHINA</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> Country </span><span class="">getDefault</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> GERMANY</span><span class="">;</span><span class=""> </span><span class="">}</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> Country </span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">values</span><span class="">()[</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)(</span><span class="">Math</span><span class="">.</span><span class="">random</span><span class="">()*</span><span class="">3</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">];</span><span class=""> </span><span class="">}</span><span class=""><br/></span>}</pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.2.2.2">Additional Static Initializers</h4>
+                
+                <p class="standard">Blocks of the type 
+                    <samp class="listingcharacter listingcharacter">static { ... }</samp> are allowed in the body of an enumeration type. When the runtime environment of a class loads, it initializes all static variables one after the other or executes the 
+                    <samp class="listingcharacter listingcharacter">static</samp> blocks. The enumerations are static variables and are initialized upon loading. If the static initializer is located after the constants, it too will be called later than the constructors, which may want to access static variables initialized by the 
+                    <samp class="listingcharacter listingcharacter">static</samp>
+                 block. Consider the following example:</p>
+                
+                <div class="listing " id="l8.24"><pre><span class="">public</span><span class=""> </span><span class="">enum</span><span class=""> Country </span><span class="">{</span><span class=""><br/></span><br/>  GERMANY<span class="">,</span><span class=""> UK</span><span class="">,</span><span class=""> CHINA</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Object initializer"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Class initializer"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>
+                    <a id="p519"/>  <span class="">private</span><span class=""> </span><span class="">Country</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Constructor"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> GERMANY </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 8.24</b>    
+            src/main/java/com/tutego/insel/enums/v2/Country.java (Snippet)</p>
+                
+                <p class="standard">The result is the following output:</p>
+                
+                <div class="listing " id="l_none_8615"><pre>Object initializer<br/>Constructor<br/>Object initializer<br/>Constructor<br/>Object initializer<br/>Constructor<br/>Class initializer<br/>GERMANY </pre></div>
+                
+                <p class="standard">Both execution and output depend on the order of declaration, and any rearrangement results in a change of behavior. Now, programmers might try to place potential 
+                    <samp class="listingcharacter listingcharacter">static</samp>
+                 blocks at the beginning (i.e., before the constants), but readers should test the result. We’ll return to constructors later in this section.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.2.2.3">Country with Additional Object Method</h4>
+                
+                <p class="standard">Let’s provide an enumeration named 
+                    <samp class="listingcharacter listingcharacter">Country</samp>
+                 with a method that returns the ISO-3166-2 country code of the respective enumeration element. Consider the following example:</p>
+                
+                <div class="listing " id="l8.25"><pre><span class="">public</span><span class=""> </span><span class="">enum</span><span class=""> Country </span><span class="">{</span><span class=""><br/></span><br/>  GERMANY<span class="">,</span><span class=""> UK</span><span class="">,</span><span class=""> CHINA</span><span class="">;</span><span class=""><br/></span><br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">getISO3Country</span><span class="">()</span></span> {<br/>    <span class="">return</span><span class=""> </span><span class="">switch</span><span class=""> ( </span><span class="">this</span><span class=""> ) {</span><br/>      <span class="">case</span><span class=""> GERMANY -&gt; </span><span class="">"DEU"</span><span class="">;</span><br/>      <span class="">case</span><span class=""> UK -&gt; </span><span class="">"GBR"</span><span class="">;</span><br/>      <span class="">default</span><span class=""> -&gt; </span><span class="">"CHN"</span><span class="">;</span><br/>    };<br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.25</b>    
+            src/main/java/com/tutego/insel/enums/v3/Country.java (Snippet)</p>
+                
+                <p class="standard">
+                    <a id="p520"/>The 
+                    <samp class="listingcharacter listingcharacter">getISO3Country()</samp>
+                 method can now be called on the enumeration, in the following way:</p>
+                
+                <div class="listing " id="l_none_8648"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Country</span><span class="">.</span><span class="">CHINA</span><span class="">.</span><span class="">getISO3Country</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // CHN</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Note that the 
+                    <samp class="listingcharacter listingcharacter">switch</samp>
+                 statement is permitted on enumerations, which is quite useful. Let’s write a small demo program next:</p>
+                
+                <div class="listing " id="l8.26"><pre>Country c <span class="">=</span><span class=""> Country</span><span class="">.</span><span class="">GERMANY</span><span class="">;</span><span class=""><br/></span><br/><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> c </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">case</span><span class=""> GERMANY </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"A beer?"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> c</span><span class="">.</span><span class="">getISO3Country</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // DEU</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">default</span><span class=""> </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Different country"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 8.26</b>    
+            src/main/java/com/tutego/insel/enums/v3/CountryEnumDemo.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.2.2.4">enum with Custom Constructors</h4>
+                
+                <p class="standard">Besides the first variant for 
+                    <samp class="listingcharacter listingcharacter">getISO3Country()</samp>
+                , let’s say we need to use a second implementation and add constructors to solve the same problem but in a different way. Consider the following example:</p>
+                
+                <div class="listing " id="l8.27"><pre><span class="">public</span><span class=""> </span><span class="">enum</span><span class=""> Country </span><span class="">{</span><span class=""><br/></span><br/>  
+                    <span class="bold"><span class="">GERMANY</span><span class="">( </span><span class="">"DEU"</span><span class=""> ),</span><br/>  <span class="">UK</span><span class="">( </span><span class="">"GBR"</span><span class=""> ),</span><br/>  <span class="">CHINA</span><span class="">( </span><span class="">"CHN"</span><span class=""> );</span><br/></span><br/>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">String</span><span class=""> iso3Country;</span><br/><br/>  
+                    <span class="bold"><span class="">Country</span><span class="">( </span><span class="">String</span><span class=""> iso3Country ) {</span><br/>    <span class="">this</span><span class="">.iso3Country = iso3Country;</span><br/>  }<br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">getISO3Country</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> iso3Country;</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.27</b>    
+            src/main/java/com/tutego/insel/enums/v4/Country.java (Snippet)</p>
+                
+                <p class="standard">When constants are declared, an argument for the constructor is passed in parentheses. The constructor stores the string in the internal variable 
+                    <samp class="listingcharacter listingcharacter">iso3Country</samp>, which is then referenced by 
+                    <samp class="listingcharacter listingcharacter">getISO3Country()</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p521"/>
+                    Note</h6>
+                    
+                    <p class="standard first last">Constructors of enumeration types are always automatically private and can’t have any other visibility. This limitation is logical because calling constructors from outside should not be possible. The methods may well have different visibilities.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.2.2.5">enum with Overridden Methods</h4>
+                
+                <p class="standard">In the enumeration type, not only can methods be added, but also overridden. Let’s start with a localized and overloaded method 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                 for a new enumeration containing weekdays.</p>
+                
+                <div class="listing " id="l8.28"><pre><span class="">public</span><span class=""> </span><span class="">enum</span><span class=""> WeekdayInternational </span><span class="">{</span><span class=""><br/></span><br/>  SUNDAY<span class="">,</span><span class=""> MONDAY</span><span class="">,</span><span class=""> TUESDAY</span><span class="">,</span><span class=""> WEDNESDAY</span><span class="">,</span><span class=""> THURSDAY</span><span class="">,</span><span class=""> FRIDAY</span><span class="">,</span><span class=""> SATURDAY</span><span class="">;</span><span class=""><br/></span><br/>  
+                    <span class="bold"><span class="">@Override</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span></span> {<br/>    <span class="">return</span><span class=""> </span><span class="">toString</span><span class="">( Locale.</span><span class="">getDefault</span><span class="">() );</span><br/>  }<br/><br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">( Locale l )</span></span> {<br/>    <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">SimpleDateFormat</span><span class="">( </span><span class="">""</span><span class="">, l ).</span><span class="">getDateFormatSymbols</span><span class="">()</span><br/>                                        .<span class="">getWeekdays</span><span class="">()[ </span><span class="">ordinal</span><span class="">() + </span><span class="">1</span><span class=""> ];</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.28</b>    
+            src/main/java/com/tutego/insel/enums/WeekdayInternational.java (Snippet)</p>
+                
+                <p class="standard">The first method gets overridden from within our 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 superclass, while the second one is added as an overloaded method. An example will clarify the call and the functionality:</p>
+                
+                <div class="listing " id="l8.29"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> WeekdayInternational</span><span class="">.</span><span class="">SATURDAY </span><span class="">);</span><span class=""> </span><span class=""><br/></span>// Saturday<span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> WeekdayInternational</span><span class="">.</span><span class="">SATURDAY</span><span class="">.</span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""><br/></span>// Saturday<span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> WeekdayInternational</span><span class="">.</span><span class="">SATURDAY</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class="">Locale</span><span class="">.</span><span class="">FRANCE</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""><br/></span>// samedi<span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> WeekdayInternational</span><span class="">.</span><span class="">SATURDAY</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class="">Locale</span><span class="">.</span><span class="">ITALY</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""><br/></span>// sabato<span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 8.29</b>    
+            src/main/java/com/tutego/insel/enums/WeekdayInternationalDemo.java (Snippet)</p>
+                
+                <p class="standard">
+                    <a id="p522"/>At this point, however, the possibilities of the 
+                    <samp class="listingcharacter listingcharacter">enum</samp>
+                 syntax don’t end. Similar to the syntax of inner anonymous classes that allow methods to be overridden, enumeration types provide a comparable syntax for specifically overriding methods for a specific constant.</p>
+                
+                <p class="standard">Let’s assume that a game has its own currency, the Pono dollar. Now, this currency should be related to a reference currency, the euro; let’s make the exchange rate simply 1:2 in the following example:</p>
+                
+                <div class="listing " id="l8.30"><pre><span class="">public</span><span class=""> </span><span class="">enum</span><span class=""> GameCurrency </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">EURO</span><span class="">()</span><span class=""> </span>
+                    <span class="bold"><span class="">{</span><br/>    <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">convertTo</span><span class="">( GameCurrency targetCurrency, </span><span class="">double</span><span class=""> value ) {</span><br/>      <span class="">return</span><span class=""> targetCurrency == EURO ? value : value / </span><span class="">2</span><span class="">;</span><br/>    }<br/>  }</span>,<br/>  <span class="">PONODOLLAR</span><span class="">() </span>
+                    <span class="bold">{<br/>    <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">convertTo</span><span class="">( GameCurrency targetCurrency, </span><span class="">double</span><span class=""> value ) {</span><br/>      <span class="">return</span><span class=""> targetCurrency == PONODOLLAR ? value : value * </span><span class="">2</span><span class="">;</span><br/>    }<br/>  }</span>;<br/><br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">abstract</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">convertTo</span><span class="">( GameCurrency targetCurrency, </span><span class="">double</span><span class=""> value );</span></span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.30</b>    
+            src/main/java/com/tutego/insel/enums/GameCurrency.java (Snippet)</p>
+                
+                <p class="standard">The interesting part is the declaration of the abstract 
+                    <samp class="listingcharacter listingcharacter">convertTo(...)</samp> method and the local implementation for each constant. (Of course, you don’t need to make every method in 
+                    <samp class="listingcharacter listingcharacter">enum</samp> abstract; it can also be concrete. Then, not every 
+                    <samp class="listingcharacter listingcharacter">enum</samp>
+                 element must implement the abstract method.)</p>
+                
+                <p class="standard">The following static import for the enumeration can be used to quickly illustrate its usage and functionality:</p>
+                
+                <div class="listing " id="l8.31"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">EURO.</span><span class="">convertTo</span><span class="">( EURO, </span><span class="">12</span><span class=""> )</span></span> );              <span class=""> // 12.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">EURO.<span class="">convertTo</span><span class="">( PONODOLLAR, </span><span class="">12</span><span class=""> )</span></span> );       <span class=""> //  6.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">PONODOLLAR.<span class="">convertTo</span><span class="">( EURO, </span><span class="">12</span><span class=""> )</span></span> );       <span class=""> // 24.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">PONODOLLAR.<span class="">convertTo</span><span class="">( PONODOLLAR, </span><span class="">12</span><span class=""> )</span></span> );<span class=""> // 12.0</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.31</b>    
+            src/main/java/com/tutego/insel/enums/GameCurrencyDemo.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.2.2.6">
+                    <a id="p523"/>
+                enum Can Implement Interfaces</h4>
+                
+                <p class="standard">The API documentation of 
+                    <samp class="listingcharacter listingcharacter">Enum</samp> indicates that the abstract class implements two interfaces: 
+                    <samp class="listingcharacter listingcharacter">Comparable</samp> and 
+                    <samp class="listingcharacter listingcharacter">Serializable</samp>. Each constant declared in 
+                    <samp class="listingcharacter listingcharacter">enum</samp> is a subclass of 
+                    <samp class="listingcharacter listingcharacter">Enum</samp>, so each constant is always comparable and serializable by default. Besides these default interfaces, an 
+                    <samp class="listingcharacter listingcharacter">enum</samp> can implement other interfaces. This feature is particularly useful because this way it prescribes a certain behavior for all enumeration elements, and each enumeration element then provides these operations. The operations of the interface can be implemented in two ways: 
+                    <samp class="listingcharacter listingcharacter">enum</samp>
+                 itself implements the operations of the interface in the body, or the individual enumeration elements each implement the implementations differently. Often, the elements themselves may provide different implementations.</p>
+                
+                <p class="standard">Our next example of 
+                    <samp class="listingcharacter listingcharacter">enum</samp> (
+                    <samp class="listingcharacter listingcharacter">DefaultIcons</samp>) implements the 
+                    <samp class="listingcharacter listingcharacter">Icon</samp> interface for graphical icons. Since the icons all have the same dimensions, the 
+                    <samp class="listingcharacter listingcharacter">Icon</samp> operations 
+                    <samp class="listingcharacter listingcharacter">getIconWidth()</samp> and 
+                    <samp class="listingcharacter listingcharacter">getIconHeight()</samp> are always the same and are implemented only once; the actual 
+                    <samp class="listingcharacter listingcharacter">paintIcon(...)</samp>
+                 implementations (which are only hinted at here) differ.</p>
+                
+                <div class="listing " id="l8.32"><pre><span class="">public</span><span class=""> </span><span class="">enum</span><span class=""> DefaultIcons </span>
+                    <span class="bold"><span class="">implements</span><span class=""> Icon</span></span> {<br/><br/>  WARNING {<br/>    
+                    <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">paintIcon</span><span class="">( Component c, Graphics g, </span><span class="">int</span><span class=""> x, </span><span class="">int</span><span class=""> y )</span></span> {<br/>     <span class=""> // g.draw*()</span><span class=""><br/></span>    } },<br/>  ERROR {<br/>    
+                    <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">paintIcon</span><span class="">( Component c, Graphics g, </span><span class="">int</span><span class=""> x, </span><span class="">int</span><span class=""> y )</span></span> {<br/>     <span class=""> // g.draw*()</span><span class=""><br/></span>    } };<br/><br/>  
+                    <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">getIconWidth</span><span class="">()</span></span> { <span class="">return</span><span class=""> </span><span class="">16</span><span class="">; }</span><br/><br/>  
+                    <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">getIconHeight</span><span class="">()</span></span> { <span class="">return</span><span class=""> </span><span class="">16</span><span class="">; }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.32</b>    
+            src/main/java/com/tutego/insel/enums/DefaultIcons.java (Snippet)</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">DefaultIcons.ERROR</samp> access provides an object that is, among other things, of type 
+                    <samp class="listingcharacter listingcharacter">Icon</samp> and can be passed in all places where an 
+                    <samp class="listingcharacter listingcharacter">Icon</samp>
+                 is desired.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

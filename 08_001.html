@@ -1,0 +1,1907 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Interfaces, Enumerations, Sealed Classes, Records" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Interfaces, Enumerations, Sealed Classes, Records" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Interfaces, Enumerations, Sealed Classes, Records</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h8">8    
+        <a id="p483"/>
+    Interfaces, Enumerations, Sealed Classes, Records</h1><p class="introductorynote indent_chapter_single">“Education comes not from reading, but from thinking about what you read.”<br/>—Carl Hilty (1833–1909)</p><p class="standard">Classes are the most important types in the Java language, but they aren’t the only types; you’ll also encounter interfaces, enumeration types, records, and annotation types. Annotation types (which you’ll learn more about in 
+        <span class="crossreference "><a href="11_001.html#h11">Chapter 11</a></span>, 
+        <span class="crossreference "><a href="11_007.html#h11.7">Section 11.7</a></span>
+    ) are a topic related to reflection and don’t play a role in this chapter, which instead focuses on the other three types.</p>
+        
+        <h2 class="t2" id="h8.1">8.1    Interfaces</h2>
+        
+        <p class="standard">Interfaces are a good complement to abstract classes/methods, which we covered in 
+            <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>, 
+            <span class="crossreference "><a href="07_007.html#h7.7">Section 7.7</a></span>
+        . In object-oriented (OO) design, you must separate the “what” from the “how.” Abstract methods, like interfaces, say something about the “what,” but only concrete implementations realize the “how.”</p>
+        
+        
+            
+            <h3 class="t3" id="h8.1.1">8.1.1    Interfaces Are New Types</h3>
+            
+            <p class="standard">Because Java only knows single inheritance, providing classes with more than one type is difficult. However, since a class can accept several types in general OO modeling, we can use the concept of the 
+                <span class="italic">interface</span>
+                <a class="indexanchor" id="i08_00"/>
+            . A class can then inherit from another class and implement any number of interfaces and in this way obtain additional types.</p>
+            
+            <p class="standard">Like a class, an interface is a type, and the two have many things in common, the only difference being the intention. An interface may contain the following elements:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Abstract methods</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Private and public concrete methods (also known as 
+                        <span class="italic">default methods</span>
+                    )</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Private and public static methods</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Constants (i.e., static variables)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Nested types (you’ll learn more about these in 
+                        <span class="crossreference "><a href="10_001.html#h10">Chapter 10</a></span>
+                    ), such as enumerations</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <a id="p484"/>
+            An interface must not declare a constructor. This rule is obvious because instances of interfaces can’t be created, only instances of the concrete implementing classes. Also, an interface can’t declare object variables; every variable is automatically a class variable.</p>
+            
+            <p class="standard">Class inheritance is always linear. For instance, 
+                <samp class="listingcharacter listingcharacter">Candy</samp> inherits from 
+                <samp class="listingcharacter listingcharacter">Object</samp>, 
+                <samp class="listingcharacter listingcharacter">Workout</samp> inherits from 
+                <samp class="listingcharacter listingcharacter">Event</samp>, and 
+                <samp class="listingcharacter listingcharacter">Event</samp> inherits from 
+                <samp class="listingcharacter listingcharacter">Object</samp>; from the subclasses, a direct path to the superclass can be traversed. Since multiple inheritance is not possible in Java, you can’t say in one place, for example, that a 
+                <samp class="listingcharacter listingcharacter">Candy</samp> is an 
+                <samp class="listingcharacter listingcharacter">Object</samp> but should additionally take the type 
+                <samp class="listingcharacter listingcharacter">Buyable</samp> because it can also have a price. A class can’t inherit from multiple types; you can’t do that with single inheritance. This limitation is a disadvantage because, in practice, a class often needs to appear under different “views,” which is where 
+                <span class="italic">interfaces</span> can help
+                <a class="indexanchor" id="i08_01"/>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.2">8.1.2    Declaring Interfaces</h3>
+            
+            <p class="standard">The declaration of an interface is reminiscent of an abstract class. One difference is that, instead of 
+                <samp class="listingcharacter listingcharacter">class</samp>, the keyword 
+                <samp class="listingcharacter listingcharacter">interface</samp>
+                <a class="indexanchor" id="i08_02"/>
+             is used, as in the following example:</p>
+            
+            <div class="listing " id="l_none_819"><pre>
+                <span class="bold"><span class="">interface</span></span><span class=""> Buyable {</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">The interface can then be implemented by classes.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.3">8.1.3    Abstract Methods in Interfaces</h3>
+            
+            <p class="standard">The most important elements in interfaces are abstract methods. In an abstract class, an abstract method has no implementation but declares only the head of a method with modifiers; the return type; and the signature but without body). Thus, only one rule is declared, while the implementation of an object method is done subsequently by a class.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_01" id="fn08_01">[ 146 ]</a></span>
+            </p>
+            
+            <p class="standard">Let’s say certain things need be “buyable” in a game; they have a price. A 
+                <samp class="listingcharacter listingcharacter">Buyable</samp> interface is supposed to prescribe the 
+                <samp class="listingcharacter listingcharacter">price()</samp>
+             method to all classes.</p>
+            
+            <div class="listing " id="l8.1"><pre>
+                <span class="bold"><span class="">interface</span></span><span class=""> Buyable {</span><br/>  <span class="">double</span><span class=""> </span><span class="">price</span><span class="">();</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.1</b>    
+            src/main/java/com/tutego/insel/game/i/v1/Buyable.java, Buyable</p>
+            
+            <p class="standard">As object methods in interfaces are abstract and public by default, the 
+                <samp class="listingcharacter listingcharacter">abstract</samp> and 
+                <samp class="listingcharacter listingcharacter">public</samp> modifiers are redundant and can be omitted. The operations declared by the 
+                <a id="p485"/>interfaces are terminated with a semicolon, as with abstract methods. Implementation is possible, as we’ll discuss later in 
+                <span class="crossreference "><a href="08_001.html#h8.1.14">Section 8.1.14</a></span>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The name of an interface often ends in 
+                    <samp class="listingcharacter listingcharacter">-ble</samp> (i.e., 
+                    <samp class="listingcharacter listingcharacter">Accessible</samp>, 
+                    <samp class="listingcharacter listingcharacter">Adjustable</samp>, or 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp>
+                ). The name doesn’t usually start with a prefix like “I,” although the Eclipse developers use this naming convention, which is also common in .NET.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.4">8.1.4    Implementing Interfaces</h3>
+            
+            <p class="standard">If a class wants to use an interface, the 
+                <samp class="listingcharacter listingcharacter">implements</samp>
+             keyword follows the class name which in turn is followed by the name of the interface. The expression then is: “Classes are inherited, and interfaces are implemented.”</p>
+            
+            <p class="standard">Let’s say a player can buy a bike for his trip. Bikes are buyable and should implement the 
+                <samp class="listingcharacter listingcharacter">Buyable</samp> interface, as shown in 
+                <span class="crossreference "><a href="08_001.html#f8.1">Figure 8.1</a></span>
+            . Each bike should always have a unit price of 199.</p>
+            
+            <div class="listing " id="l8.2"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Bike </span>
+                <span class="bold"><span class="">implements</span><span class=""> Buyable</span></span> {<br/>  
+                <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">price</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> </span><span class="">199</span><span class="">;</span><br/>  }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.2</b>    
+            src/main/java/com/tutego/insel/game/i/v1/Bike.java, Bike</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">@Override</samp>
+                <a class="indexanchor" id="i08_03"/>
+             annotation again indicates an overridden method (in this case, the implemented method of an interface).</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">If the operations declared in interfaces are 
+                    <samp class="listingcharacter listingcharacter">public</samp>, the implemented methods in the classes must also always be public. 
+                    <samp class="listingcharacter listingcharacter">protected</samp>
+                 isn’t allowed as visibility. And private interface methods are not visible in implementing classes anyway.</p>
+            
+            </div>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">Bike</samp> is a class that has no explicit superclass, so 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+             extends it. Thus, no problem arises if a class extends another class and additionally implements an interface.</p>
+            
+            <p class="standard">In the following example, a visit to a museum is an event that is buyable:</p>
+            
+            <div class="listing " id="l8.3"><pre><span class="">class</span><span class=""> MuseumVisit </span>
+                <span class="bold"><span class="">extends</span><span class=""> Event </span><span class="">implements</span><span class=""> Buyable</span></span> {<br/>  <span class="">int</span><span class=""> price;</span><br/>  <span class="">MuseumVisit</span><span class="">( </span><span class="">int</span><span class=""> price ) { </span><span class="">this</span><span class="">.price = price; }</span><br/> <br/>
+                <a id="p486"/>  
+                <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">price</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> price;</span><br/>  }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.3</b>    
+            src/main/java/com/tutego/insel/game/i/v1/MuseumVisit.java, MuseumVisit</p>
+            
+            <p class="standard">So, as desired in our case, the class extends another class and additionally implements operations from an interface. A little hint: For the examples we use a simplified version of the 
+                <samp class="listingcharacter listingcharacter">Event</samp> class: 
+                <samp class="listingcharacter listingcharacter">abstract class Event {}</samp>
+            .</p>
+            
+            <div class="imagebox figure-type"><a href="img-f8.1.html" id="f8.1"><img alt="UML Diagram of the Buyable Interface and the Bike and MuseumVisit Implementations" id="img-f8.1" src="bilderklein/klein08_001.png"/></a></div>
+            
+            <p class="caption "><b>Figure 8.1</b>    
+            UML Diagram of the Buyable Interface and the Bike and MuseumVisit Implementations</p>
+            
+            <p class="standard">The following type relationships now apply, which can also be tested with 
+                <samp class="listingcharacter listingcharacter">instanceof</samp>
+            :</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Event</samp> is an 
+                        <samp class="listingcharacter listingcharacter">Event</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Event</samp> is an 
+                        <samp class="listingcharacter listingcharacter">Object</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">MuseumVisit</samp> is a 
+                        <samp class="listingcharacter listingcharacter">MuseumVisit</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">MuseumVisit</samp> is an 
+                        <samp class="listingcharacter listingcharacter">Event</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">MuseumVisit</samp> is an 
+                        <samp class="listingcharacter listingcharacter">Object</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">MuseumVisit</samp> is a 
+                        <samp class="listingcharacter listingcharacter">Buyable</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Bike</samp> is a 
+                        <samp class="listingcharacter listingcharacter">Bike</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Bike</samp> is a 
+                        <samp class="listingcharacter listingcharacter">Buyable</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Bike</samp> is an 
+                        <samp class="listingcharacter listingcharacter">Object</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">If a method requires an object of a certain type, many options are available.</p>
+            
+            <table class="standardtable" id="t8.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a id="p487"/>
+                            Method Requires Type</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Is a Valid Argument Type</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Object</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Object</samp>, 
+                                <samp class="listingcharacter listingcharacter">Event</samp>, 
+                                <samp class="listingcharacter listingcharacter">MuseumVisit</samp>, 
+                                <samp class="listingcharacter listingcharacter">Bike</samp>, 
+                                <samp class="listingcharacter listingcharacter">Buyable</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Event</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Event</samp>, 
+                                <samp class="listingcharacter listingcharacter">MuseumVisit</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Buyable</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Buyable</samp>, 
+                                <samp class="listingcharacter listingcharacter">Bike</samp>, 
+                                <samp class="listingcharacter listingcharacter">MuseumVisit</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Bike</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Bike</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">MuseumVisit</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">MuseumVisit</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 8.1</b>    
+            What Methods Can Get When They Require Certain Types</p>
+            
+            <p class="standard">To summarize, when a specific type like 
+                <samp class="listingcharacter listingcharacter">Bike</samp> or 
+                <samp class="listingcharacter listingcharacter">MuseumVisit</samp>
+             is required, we have a few options. With base types, usually several variants exist—if you want a little, you can get a lot.</p>
+            
+            <p class="standard">If a class doesn’t implement all operations from the interfaces, it thus inherits abstract methods and must itself be marked as abstract again.</p>
+            
+            <p class="standard">IntelliJ displays the type hierarchy when you press 
+                <span class="keyboard">(Ctrl)</span>+
+                <span class="keyboard">(H)</span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.5">8.1.5    A Polymorphism Example with Interfaces</h3>
+            
+            <p class="standard">Although interfaces don’t “do” anything at first glance; programmers like to inherit something so they can save implementation work. Interfaces are enormously important inventions. Interfaces can be used to describe vastly different views of an object. Each interface enables a new view of the object, a kind of role. If a class implements diverse interfaces, its instances can appear in different roles. In this case, again the substitution principle becomes important, for example, where a powerful object is used as an argument of a method. However, depending on the context, the parameter type of a method may be only the small interface.</p>
+            
+            <p class="standard">With 
+                <samp class="listingcharacter listingcharacter">Bike</samp> or 
+                <samp class="listingcharacter listingcharacter">MuseumVisit</samp>, you have two classes that implement 
+                <samp class="listingcharacter listingcharacter">Buyable</samp>. Thus, two classes exist that have a common type and a common 
+                <samp class="listingcharacter listingcharacter">price()</samp>
+             method.</p>
+            
+            <div class="listing " id="l8.4"><pre>Buyable hercules <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Bike</span><span class="">();</span><span class=""><br/></span>Buyable binarium <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">MuseumVisit</span><span class="">(</span><span class=""> </span><span class="">8</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> hercules</span><span class="">.</span><span class="">price</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 199.0</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> binarium</span><span class="">.</span><span class="">price</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 8.0</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.4</b>    
+            src/main/java/com/tutego/insel/game/i/v1/Application.java, main</p>
+            
+            <p class="standard">For 
+                <samp class="listingcharacter listingcharacter">Buyable</samp>, let’s write a static method 
+                <samp class="listingcharacter listingcharacter">calculateSum(...)</samp> that calculates the price of a collection of objects available for purchase. To allow 
+                <samp class="listingcharacter listingcharacter">calculateSum(...)</samp>
+             to take any number of arguments, but at least one, you can implement the method via a vararg.</p>
+            
+            <div class="listing " id="l8.5"><pre><span class="">
+                    <a id="p488"/>
+                class</span><span class=""> PriceUtils </span><span class="">{</span><span class=""><br/></span> <br/>  <span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">calculateSum</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">Buyable first, Buyable... more</span></span> ) {<br/>    <span class="">double</span><span class=""> result = </span>
+                <span class="bold">first.<span class="">price</span><span class="">()</span></span>;<br/><br/>    <span class="">for</span><span class=""> ( Buyable buyable : more )</span><br/>      result += 
+                <span class="bold">buyable.<span class="">price</span><span class="">()</span></span>;<br/><br/>    <span class="">return</span><span class=""> result;</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.5</b>    
+            src/main/java/com/tutego/insel/game/i/v1/PriceUtils.java, PriceUtils</p>
+            
+            <p class="standard">This method assumes some things are buyable, not caring what exactly the 
+                <samp class="listingcharacter listingcharacter">Buyable</samp> types are. What matters is the fact that the elements implement the 
+                <samp class="listingcharacter listingcharacter">Buyable</samp>
+             interface.</p>
+            
+            <p class="standard">The dynamic binding occurs in the first expression, 
+                <samp class="listingcharacter listingcharacter">first.price()</samp>. Also, later we’re calling the 
+                <samp class="listingcharacter listingcharacter">price()</samp> method on each object that implements 
+                <samp class="listingcharacter listingcharacter">Buyable</samp>
+            . By totaling the different values, you can calculate the total price of the elements from the parameter list. This method can be called in the following way:</p>
+            
+            <div class="listing " id="l8.6"><pre>Bike hercules <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Bike</span><span class="">();</span><span class=""><br/></span>MuseumVisit binarium <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">MuseumVisit</span><span class="">(</span><span class=""> </span><span class="">8</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Buyable winora <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Bike</span><span class="">();</span><span class=""><br/></span>Buyable mimomenta <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">MuseumVisit</span><span class="">(</span><span class=""> </span><span class="">12</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">double</span><span class=""> sum </span><span class="">=</span><span class=""> PriceUtils</span><span class="">.</span><span class="">calculateSum</span><span class="">(</span><span class=""> hercules</span><span class="">,</span><span class=""> binarium</span><span class="">,</span><span class=""> winora</span><span class="">,</span><span class=""> mimomenta </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> sum </span><span class="">);</span><span class="">    </span><span class=""> // 418.0</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.6</b>    
+            src/main/java/com/tutego/insel/game/i/v1/PriceUtilsDemo.java, main</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">As mentioned earlier, the type of a variable should always be the smallest necessary type. Interfaces as variable types aren’t excluded. Developers who declare all their variables to be of an interface type apply the concept of 
+                    <span class="italic">programming against interfaces</span>
+                    <a class="indexanchor" id="i08_04"/>
+                . Thus, they don’t bind to a specific implementation, but to a base type.</p>
+            
+            </div>
+            
+            <p class="standard">In summary, in the context of interfaces, pure dynamic binding for method calls is possible.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.6">8.1.6    Multiple Inheritance
+                <a class="indexanchor" id="i08_05"/>
+             with Interfaces</h3>
+            
+            <p class="standard">A class can’t have more than one base class, regardless of whether the former is abstract or not. The reason is that multiple inheritance can lead to a problem: that a class inher
+                <a id="p489"/>
+            its the same method from two superclasses and then doesn’t know which method to include. The situation is different for interfaces; a class can implement any number of interfaces because no code comes from an interface—only a rule for implementation. In the worst case, the rule for implementing an operation exists several times.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Terminology</h6>
+                
+                <p class="standard first last">When some developers say Java has multiple inheritance and others say Java doesn’t have multiple inheritance, both parties are right. In 
+                    <span class="italic">class inheritance</span>, also called 
+                    <span class="italic">implementation inheritance,</span> no two superclasses are allowed. In 
+                    <span class="italic">interface inheritance</span>, a class may very well have multiple base types. Typically, the term 
+                    <span class="italic">multiple inheritance</span>
+                 isn’t used in Java because it traditionally refers to class inheritance.</p>
+            
+            </div>
+            
+            <p class="standard">Let’s write a new class named 
+                <samp class="listingcharacter listingcharacter">Flight</samp>
+            , defined in the following way:</p>
+            
+            <ol>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The class represents an event, so 
+                        <samp class="listingcharacter listingcharacter">Flight</samp> can be a subclass of 
+                        <samp class="listingcharacter listingcharacter">Event</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Flights are buyable, the class can implement the interface 
+                        <samp class="listingcharacter listingcharacter">Buyable</samp> and thus the method 
+                        <samp class="listingcharacter listingcharacter">price()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">You need to compare the airfare of a flight with the airfares of other flights. A suitable interface for this task already exists in the Java library: 
+                        <samp class="listingcharacter listingcharacter">java.lang.Comparable</samp>. The 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp> interface
+                        <a class="indexanchor" id="i08_06"/> requires our 
+                        <samp class="listingcharacter listingcharacter">Flight</samp> to implement the 
+                        <samp class="listingcharacter listingcharacter">int compareTo(Flight)</samp> method. The return value of the method shows how one fare relates to the other fare. We’ll define that the cheaper flight is placed “before” a more expensive one. In programming terms, if our own flight is “smaller” than the other, 
+                        <samp class="listingcharacter listingcharacter">compareTo(...)</samp> returns a negative result. If our flight is “bigger,” that is, more expensive, 
+                        <samp class="listingcharacter listingcharacter">compareTo(...)</samp> returns a positive result; otherwise, the return value is 
+                        <samp class="listingcharacter listingcharacter">0</samp>. We’ll define the 
+                        <samp class="listingcharacter listingcharacter">Double.compare(double, double)</samp> method to achieve this task. (Actually, together with the 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp> method we should also override 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> and 
+                        <samp class="listingcharacter listingcharacter">hashCode()</samp> from 
+                        <samp class="listingcharacter listingcharacter">Object</samp>, but our current example omits this part.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_02" id="fn08_02">[ 147 ]</a></span>
+                    )</p>
+                
+                </li>
+            
+            </ol>
+            
+            <p class="standard">The resulting implementation should appear as follows:</p>
+            
+            <div class="listing " id="l8.7"><pre><span class="">class</span><span class=""> Flight </span>
+                <span class="bold"><span class="">extends</span><span class=""> Event </span><span class="">implements</span><span class=""> Buyable, Comparable&lt;Flight&gt;</span></span> {<br/>  <span class="">final</span><span class=""> </span><span class="">double</span><span class=""> ticketPrice;</span><br/> <br/>  <span class="">Flight</span><span class="">( </span><span class="">int</span><span class=""> ticketPrice ) { </span><span class="">this</span><span class="">.ticketPrice = ticketPrice; }</span><br/> <br/>
+                <a id="p490"/>  
+                <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">price</span><span class="">()</span></span> {<br/>    <span class="">return</span><span class=""> ticketPrice;</span><br/>  }<br/> <br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">compareTo</span><span class="">( Flight other ) {</span><br/>    <span class="">return</span><span class=""> Double.</span><span class="">compare</span><span class="">( ticketPrice, other.ticketPrice );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.7</b>    
+            src/main/java/com/tutego/insel/game/i/v1/Flight.java, Flight</p>
+            
+            <p class="standard">This implementation uses generics with 
+                <samp class="listingcharacter listingcharacter">Comparable&lt;Magazine&gt;</samp>, which you’ll learn about in more detail in 
+                <span class="crossreference "><a href="12_001.html#h12">Chapter 12</a></span>, 
+                <span class="crossreference "><a href="12_001.html#h12.1.6">Section 12.1.6</a></span>, but let’s use them now. In the background, 
+                <samp class="listingcharacter listingcharacter">Comparable</samp>
+             now knows exactly with which other type the comparison should take place.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f8.2.html" id="f8.2"><img alt="The Flight Class with Various Supertypes" id="img-f8.2" src="bilderklein/klein08_002.png"/></a></div>
+            
+            <p class="caption "><b>Figure 8.2</b>    
+            The Flight Class with Various Supertypes</p>
+            
+            <p class="standard">This “multiple inheritance” provides 
+                <samp class="listingcharacter listingcharacter">Flight</samp>
+             with entirely different types, as tested in the following example:</p>
+            
+            <div class="listing " id="l8.8"><pre>Flight londonToDurban <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Flight</span><span class="">(</span><span class=""> </span><span class="">1200</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> londonToDurban </span><span class="">instanceof</span><span class=""> Flight </span><span class="">);</span><span class="">    </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> londonToDurban </span><span class="">instanceof</span><span class=""> Event </span><span class="">);</span><span class="">     </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> londonToDurban </span><span class="">instanceof</span><span class=""> Object </span><span class="">);</span><span class="">    </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> londonToDurban </span><span class="">instanceof</span><span class=""> Buyable </span><span class="">);</span><span class="">   </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> londonToDurban </span><span class="">instanceof</span><span class=""> Comparable </span><span class="">);</span><span class=""> // true</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.8</b>    
+            src/main/java/com/tutego/insel/game/i/v1/FlightDemo.java, main()</p>
+            
+            <p class="standard">
+                <a id="p491"/>Our 
+                <samp class="listingcharacter listingcharacter">Flight</samp> can now be passed exactly where a 
+                <samp class="listingcharacter listingcharacter">Flight</samp>, 
+                <samp class="listingcharacter listingcharacter">Event</samp>, 
+                <samp class="listingcharacter listingcharacter">Object</samp>, 
+                <samp class="listingcharacter listingcharacter">Buyable</samp> (
+                <samp class="listingcharacter listingcharacter">PriceUtils.calculateSum(...)</samp>), or 
+                <samp class="listingcharacter listingcharacter">Comparable</samp>
+             is required.</p>
+            
+            <p class="standard">Thus,
+                <samp class="listingcharacter listingcharacter"> Comparable</samp>
+             enables you to compare two flights in the following way:</p>
+            
+            <div class="listing " id="l8.9"><pre>Flight londonToDurban     <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Flight</span><span class="">(</span><span class=""> </span><span class="">1200</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Flight dortmundToBrussels <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Flight</span><span class="">(</span><span class=""> </span><span class="">200</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> londonToDurban</span><span class="">.</span><span class="">compareTo</span><span class="">(</span><span class=""> londonToDurban </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">       </span><span class=""> // 0</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> londonToDurban</span><span class="">.</span><span class="">compareTo</span><span class="">(</span><span class=""> dortmundToBrussels </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">   </span><span class=""> // 1</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> dortmundToBrussels</span><span class="">.</span><span class="">compareTo</span><span class="">(</span><span class=""> londonToDurban </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">   </span><span class=""> //-1</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> dortmundToBrussels</span><span class="">.</span><span class="">compareTo</span><span class="">(</span><span class=""> dortmundToBrussels </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">;// 0</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.9</b>    
+            src/main/java/com/tutego/insel/game/i/v1/FlightComparison.java, main()</p>
+            
+            <p class="standard">Just as the 
+                <samp class="listingcharacter listingcharacter">calculateSum(...)</samp> method doesn’t care what 
+                <samp class="listingcharacter listingcharacter">Buyable</samp> objects are specifically passed, which enables sorting, a particularly useful use case for 
+                <samp class="listingcharacter listingcharacter">Comparable</samp>
+            . A sorting method doesn’t care what exactly objects it must sort, as long as the objects say whether they are located before or after another object. Consider the following example:</p>
+            
+            <div class="listing " id="l8.10"><pre>Flight londonToDurban        <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Flight</span><span class="">(</span><span class=""> </span><span class="">1200</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Flight dortmundToBrussels    <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Flight</span><span class="">(</span><span class=""> </span><span class="">200</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Flight berlinToNairobi       <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Flight</span><span class="">(</span><span class=""> </span><span class="">1500</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Flight duesseldorfToWindhoek <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Flight</span><span class="">(</span><span class=""> </span><span class="">1400</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Flight<span class="">[]</span><span class=""> flights </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  londonToDurban<span class="">,</span><span class=""> dortmundToBrussels</span><span class="">,</span><span class=""> berlinToNairobi</span><span class="">,</span><span class=""> duesseldorfToWindhoek</span><br/><span class="">};</span><span class=""><br/></span>
+                <span class="bold"><span class="">Arrays.</span><span class="">sort</span><span class="">( flights );</span></span><br/><span class="">for</span><span class=""> ( Flight flight : flights )</span><br/>  System.out.<span class="">print</span><span class="">( (</span><span class="">int</span><span class="">) flight.</span><span class="">price</span><span class="">() + </span><span class="">" "</span><span class="">);</span><span class=""> // 200 1200 1400 1500</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.10</b>    
+            src/main/java/com/tutego/insel/game/i/v1/FlightComparison.java, main()</p>
+            
+            <p class="standard">The static method 
+                <samp class="listingcharacter listingcharacter">Arrays.sort(...)</samp> expects an array whose elements are 
+                <samp class="listingcharacter listingcharacter">Comparable</samp>. The sorting algorithm makes comparisons via 
+                <samp class="listingcharacter listingcharacter">compareTo(...)</samp>
+             but doesn’t need to know anything else about the objects. </p>
+            
+            <p class="standard">Our flights with the types 
+                <samp class="listingcharacter listingcharacter">Flight</samp>, 
+                <samp class="listingcharacter listingcharacter">Event</samp>, 
+                <samp class="listingcharacter listingcharacter">Object</samp>, 
+                <samp class="listingcharacter listingcharacter">Buyable</samp>, and 
+                <samp class="listingcharacter listingcharacter">Comparable</samp>
+             can therefore be used flexibly in different contexts. Thus, you don’t need to write a special sorting method that can only sort flights or a method for calculating a total that works only on flights. Instead, you can model different application scenarios, each with different interfaces that expect different things from the object.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.7">8.1.7    No Risk of Collision with Multiple Inheritance*</h3>
+            
+            <p class="standard">With the multiple inheritance of classes, the danger arises that two superclasses might inherit the same method with two different implementations to their subclasses. The 
+                <a id="p492"/>
+            subclass would then not know which logic it inherits, and thus, special syntax would be needed in Java to resolve this dilemma. The designers of the Java language didn’t want to enable multiple inheritance.</p>
+            
+            <p class="standard">The problem doesn’t exist with interfaces because, even if two implementing interfaces were to prescribe the same operation, two different implementations of application logic wouldn’t exist. The implementing class gets the request to realize the operation twice, so to speak. Let’s say a politician must combine two different things: he must be likeable, but he must also act assertively. You could model this logic in the following way:</p>
+            
+            <div class="listing " id="l8.11"><pre><span class="">interface</span><span class=""> Likeable </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">void</span><span class=""> </span><span class="">act</span><span class="">()</span></span>;<br/>}<br/><br/><span class="">interface</span><span class=""> Assertive {</span><br/>  
+                <span class="bold"><span class="">void</span><span class=""> </span><span class="">act</span><span class="">()</span></span>;<br/>}<br/><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Politician </span>
+                <span class="bold"><span class="">implements</span><span class=""> Likeable, Assertive</span></span> {<br/>  <span class="">@Override</span><span class=""> </span>
+                <span class="bold"><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">act</span><span class="">()</span></span> {<br/>   <span class=""> // Implementation</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.11</b>    
+            src/main/java/com/tutego/insel/oop/Politician.java</p>
+            
+            <p class="standard">Two interfaces prescribe the same operation. A class implements these two interfaces and must satisfy both specifications, as shown in 
+                <span class="crossreference "><a href="08_001.html#f8.3">Figure 8.3</a></span>
+            .</p>
+            
+            <div class="imagebox figure-type"><a href="img-f8.3.html" id="f8.3"><img alt="A Class Inheriting the Same Operation from Two Interfaces" id="img-f8.3" src="bilderklein/klein08_003.png"/></a></div>
+            
+            <p class="caption "><b>Figure 8.3</b>    
+            A Class Inheriting the Same Operation from Two Interfaces</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p493"/>
+                Note</h6>
+                
+                <p class="standard first last">A return type isn’t part of the signature of a method in Java. If a class implements two interfaces and the signatures of the operations from the interfaces are the same, the return types must also be the same. Problems in implementation arise if the signatures of the methods from the interfaces are the same (i.e., same method name and same parameter list), but the return types aren’t type-compatible. The reason is simple: A class can’t implement two methods with the same signature but different return types. If 
+                    <samp class="listingcharacter listingcharacter">Assertive</samp> had a 
+                    <samp class="listingcharacter listingcharacter">boolean act()</samp>, 
+                    <samp class="listingcharacter listingcharacter">Politician</samp> would then have to implement 
+                    <samp class="listingcharacter listingcharacter">void act()</samp> and 
+                    <samp class="listingcharacter listingcharacter">boolean act()</samp>
+                 at the same time, which isn’t possible.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.8">8.1.8    Extending Interfaces: Subinterfaces</h3>
+            
+            <p class="standard">A
+                <a class="indexanchor" id="i08_07"/>
+                <span class="italic"> subinterface</span> is an extension of another interface. As is the case with inheritance, this extension is created via the 
+                <samp class="listingcharacter listingcharacter">extends</samp>
+                <a class="indexanchor" id="i08_08"/>
+             keyword. Consider the following example, which evaluates the how smelly something is:</p>
+            
+            <div class="listing " id="l_none_8132"><pre><span class="">interface</span><span class=""> Disgusting </span><span class="">{</span><span class=""><br/></span>  <span class="">double</span><span class=""> </span><span class="">disgustingValue</span><span class="">();</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><br/><span class="">interface</span><span class=""> Stinky </span>
+                <span class="bold"><span class="">extends</span><span class=""> Disgusting</span></span> {<br/>  <span class="">double</span><span class=""> </span><span class="">olf</span><span class="">();</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">The interface models smells that are particularly repulsive. In addition, the stinky source should indicate the strength of stinkiness in units of “olf.” A class that now implements 
+                <samp class="listingcharacter listingcharacter">Stinky</samp> must implement the abstract methods from both interfaces—thus the 
+                <samp class="listingcharacter listingcharacter">disgustingValue()</samp> method from 
+                <samp class="listingcharacter listingcharacter">Disgusting</samp> as well as the operation 
+                <samp class="listingcharacter listingcharacter">olf()</samp> specified in 
+                <samp class="listingcharacter listingcharacter">Stinky</samp>
+             itself. Without implementing both methods, an implementing class will have to be abstract.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first">A subinterface can “override” an operation of the super-interface. While at first glance, this overriding feature doesn’t make much sense, two purposes are served:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">In the subinterface, the application programming interface (API) documentation can be specified.
+                            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_03" id="fn08_03">[ 148 ]</a></span>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Because of covariant returns, an operation in the subinterface can receive a more special return type.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.9">8.1.9    
+                <a id="p494"/>Constant Declarations
+                <a class="indexanchor" id="i08_09"/>
+                <a class="indexanchor" id="i08_10"/>
+             for Interfaces</h3>
+            
+            <p class="standard">Interfaces can’t have object variables and consequently can’t store states, but they may declare named constants.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Let’s say our 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp>
+                 interface needs to declare a constant for a maximum price. You could write the following code:</p>
+                
+                <div class="listing  last_item" id="l_none_8152"><pre><span class="">interface</span><span class=""> Buyable </span><span class="">{</span><span class=""><br/></span> <span class=""> /* public static final */</span><span class=""> </span>
+                    <span class="bold"><span class="">int</span><span class=""> MAX_PRICE = 10_000_000</span></span>;<br/>  <span class="">double</span><span class=""> </span><span class="">price</span><span class="">();</span><br/>}<span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">All class variables of an interface (object variables don’t exist in the interface) are always implicitly 
+                <samp class="listingcharacter listingcharacter">public static final</samp>
+            . This scenario prevents the variable from being reassigned. You can still set these three modifiers, but since these modifiers are already implied, you should omit them. Other modifiers aren’t allowed anyway.</p>
+            
+            <p class="standard">While the class variable may be 
+                <samp class="listingcharacter listingcharacter">final</samp>
+            , this keyword doesn’t prevent object manipulation. Manipulation is possible because, even if the variables themselves don’t allow any change after initialization, mutably referenced objects may later change.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example and Tip</h6>
+                
+                <p class="standard first">In the following example, the 
+                    <samp class="listingcharacter listingcharacter">Volcano</samp> interface references a mutable 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                 object:</p>
+                
+                <div class="listing " id="l_none_8158"><pre><span class="">interface</span><span class=""> Volcano </span><span class="">{</span><span class=""><br/></span>  StringBuilder EYJAFJALLAJÖKULL <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"Eyjafjallajökull"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>}</pre></div>
+                
+                <p class="standard last">Since 
+                    <samp class="listingcharacter listingcharacter">EYJAFJALLAJÖKULL</samp> is a public 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> variable and since 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> is a mutable container, a statement like 
+                    <samp class="listingcharacter listingcharacter">Volcano.EYJAFJALLAJÖKULL.replace(0, Volcano.EYJAFJALLAJÖKULL.length(), "Vesuvius");</samp> modifies the contents, which absolutely contradicts the idea of a constant. A better approach is to always reference immutable objects, such as strings. Arrays in which elements can be exchanged are problematic as well are all mutable objects such as 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> or 
+                    <samp class="listingcharacter listingcharacter">ArrayList</samp>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.10">8.1.10    Subsequent Implementation of Interfaces*</h3>
+            
+            <p class="standard">If a class doesn’t implement a particular interface, it can’t participate in dynamic binding through that interface, even if the class has a method through which an interface abstracts. For example, if the non-final class 
+                <samp class="listingcharacter listingcharacter">FIFA</samp> has a public method 
+                <samp class="listingcharacter listingcharacter">price()</samp>, but doesn’t implement 
+                <samp class="listingcharacter listingcharacter">Buyable</samp> with a method of the same name, you would use a trick. By 
+                <a id="p495"/>
+            creating a new class, you can bring in an existing method from the class and bring in the method from the interface into the type hierarchy, as in the following example:</p>
+            
+            <div class="listing " id="l_none_8170"><pre><span class="">class</span><span class=""> FIFA </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span>
+                <span class="bold"><span class="">double</span><span class=""> </span><span class="">price</span><span class="">()</span></span> { … }<br/>}<br/><br/><span class="">interface</span><span class=""> Buyable {</span><br/>  
+                <span class="bold"><span class="">double</span><span class=""> </span><span class="">price</span><span class="">()</span></span>;<br/>}<br/><br/><span class="">class</span><span class=""> FIFAisBuyable </span>
+                <span class="bold"><span class="">extends</span><span class=""> FIFA </span><span class="">implements</span><span class=""> Buyable</span></span> { } <span class=""/></pre></div>
+            
+            <p class="standard">A new 
+                <samp class="listingcharacter listingcharacter">FIFAisBuyable</samp> subclass inherits from the 
+                <samp class="listingcharacter listingcharacter">FIFA</samp> class and implements the 
+                <samp class="listingcharacter listingcharacter">Buyable</samp> interface, so that the compiler unifies the existing 
+                <samp class="listingcharacter listingcharacter">price()</samp> method with default interface. Now, 
+                <samp class="listingcharacter listingcharacter">FIFAisBuyable</samp> can be used as 
+                <samp class="listingcharacter listingcharacter">Buyable</samp> and behind it is the implementation of 
+                <samp class="listingcharacter listingcharacter">FIFA</samp>. As a subclass, all visible members of the superclass are also retained. However, this solution doesn’t us if a 
+                <samp class="listingcharacter listingcharacter">FIFA </samp>
+            object is received from elsewhere.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.11">8.1.11    Static Programmed Methods in Interfaces</h3>
+            
+            <p class="standard">As a rule, an interface declares operations (i.e., abstract object methods), which a class must implement later. The interface method implemented in a class can be overridden again later, so it participates in dynamic binding in a normal manner. The interface can’t declare an object state because object variables are taboo in interfaces—every declared variable is automatically static (i.e., a class variable).</p>
+            
+            <p class="standard">Static methods are allowed in interfaces and can be placed next to constants as utility methods. Thus, you can write static class methods and static interface methods
+                <a class="indexanchor" id="i08_11"/>
+                <a class="indexanchor" id="i08_12"/>
+            ; neither would be dynamically bound.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In 
+                    <span class="crossreference "><a href="08_001.html#h8.1.2">Section 8.1.2</a></span>, we declared a 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp>
+                 interface. The idea behind this interface is that anything that can be bought implements this interface and has a price. Additionally, a constant exists to codify a maximum price. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_8189"><pre><span class="">interface</span><span class=""> Buyable </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> MAX_PRICE </span><span class="">=</span><span class=""> 10_000_000</span><span class="">;</span><span class=""><br/></span>  <span class="">double</span><span class=""> </span><span class="">price</span><span class="">();</span><span class=""><br/></span>}</pre></div>
+                
+                <p class="standard">A static 
+                    <samp class="listingcharacter listingcharacter">isValidPrice(double)</samp>
+                 method can now be added to check whether a purchase price is within the valid range, as shown in the following example:</p>
+                
+                <div class="listing " id="l_none_8195"><pre><span class="">interface</span><span class=""> Buyable </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> MAX_PRICE </span><span class="">=</span><span class=""> 10_000_000</span><span class="">;</span><span class=""><br/></span>
+                    <a id="p496"/>  
+                    <span class="bold"><span class="">static</span></span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isValidPrice</span><span class="">( </span><span class="">double</span><span class=""> price ) {</span><br/>    <span class="">return</span><span class=""> price &gt;= </span><span class="">0</span><span class=""> &amp;&amp; price &lt; MAX_PRICE;</span><br/>  }<br/>  <span class="">double</span><span class=""> </span><span class="">price</span><span class="">();</span><br/>}<span class=""/></pre></div>
+                
+                <p class="standard last">The 
+                    <samp class="listingcharacter listingcharacter">Buyable.isValidPrice(123)</samp>
+                 call is then possible from the outside.</p>
+            
+            </div>
+            
+            <p class="standard">All declared members are 
+                <samp class="listingcharacter listingcharacter">public</samp> by default but can also be private. Implicitly, constants are always static. Static methods must carry the 
+                <samp class="listingcharacter listingcharacter">static</samp>
+             modifier; otherwise, they are considered abstract methods.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">Static interface methods enable a new way of declaring the 
+                    <samp class="listingcharacter listingcharacter">main(...)</samp>
+                 method:</p>
+                
+                <div class="listing " id="l_none_8209"><pre><span class="">interface</span><span class=""> HelloWorldInInterfaces </span><span class="">{</span><span class=""><br/></span>  <span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"A different Hello World!"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>}</pre></div>
+                
+                <p class="standard last">The 
+                    <samp class="listingcharacter listingcharacter">interface</samp> keyword is four characters longer than 
+                    <samp class="listingcharacter listingcharacter">class</samp> but saving 
+                    <samp class="listingcharacter listingcharacter">public</samp>
+                 and a separator results in a shortening of three characters—again, a new way to haggle over length.</p>
+            
+            </div>
+            
+            <p class="standard">Access to a static interface method is possible only through the name of the interface, or the members can be imported statically. For static methods of classes, access by reference is basically allowed too (although undesirable), such as via 
+                <samp class="listingcharacter listingcharacter">new Integer(12).MAX_VALUE</samp>. However, you cannot use this approach with the static methods of interfaces. For example, if 
+                <samp class="listingcharacter listingcharacter">Car</samp> implements the 
+                <samp class="listingcharacter listingcharacter">Buyable</samp> interface, 
+                <samp class="listingcharacter listingcharacter">new Car().isValidPrice(123)</samp> would result in a compiler error. Even 
+                <samp class="listingcharacter listingcharacter">Car.isValidPrice(123)</samp>
+             is false, which is a bit surprising since static methods are usually inherited.</p>
+            
+            <p class="standard">Let’s summarize the allowed members of an interface:</p>
+            
+            <table class="standardtable" id="t8.2">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell"/>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Variable</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Method</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Object</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">No, not allowed</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Yes, usually abstract</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Class</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Yes, as a constant</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Yes, always with implementation</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 8.2</b>    
+            Allowed Members of an Interface</p>
+            
+            <p class="standard">Interface methods can have implementations, so they don’t have to be abstract.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p497"/>
+                Design</h6>
+                
+                <p class="standard first last">An interface with only static methods is an indication of a design problem and should be replaced by a final class with a private constructor. Interfaces are always intended as specifications for implementation. If only static methods occur in an interface, the interface doesn’t fulfill its purpose of providing specifications that can be implemented differently.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.12">8.1.12    Extending and Modifying Interfaces</h3>
+            
+            <p class="standard">Once interfaces have been declared and spread across a large application, changes are difficult to make because they quickly break compatibility. Changing the name of a parameter variable is not a problem. But if an interface gets a new operation, then a compiler error will arise if not all implementing classes implement this new method. So, framework developers are careful about how they modify interfaces, and they are in control of how far compatibility is broken.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>History Lesson</h6>
+                
+                <p class="standard first last">Changing interfaces subsequently (i.e., when many classes already implement the interface) is a bad idea. If the interface renews itself, for example, if only one operation is added or a parameter type changes, then suddenly all implementing classes are broken. Sun itself risked this fragility with the 
+                    <samp class="listingcharacter listingcharacter">java.sql.Connection</samp>
+                 interface. During the transition from Java 5 to Java 6, the interface was extended, and no driver implementations could be compiled anymore.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h8.1.12.1">Code Compatibility and Binary Compatibility*</h4>
+                
+                <p class="standard">If you insert a constant (
+                    <samp class="listingcharacter listingcharacter">public static final</samp> variable) in an interface or change the name of a parameter, for the implementing classes, no compiler error will arise. In this case, these changes are 
+                    <span class="italic">code compatible</span>
+                .</p>
+                
+                <p class="standard">If you add a new operation to an interface, however, a compiler error for all implementing classes will immediately arise. However, if you were to just recompile the interface into bytecode, the code will operate just fine at runtime because, if an interface gets a new method, no problem arises for the JVM at all. The JVM works on the class files themselves and doesn’t care if a class dutifully implements all the methods of the interface; it only resolves method references. If an interface suddenly dictates “more,” the JVM has no problem with that.</p>
+                
+                <p class="standard">So, while almost all interface changes lead to compiler errors, some changes are fine for the JVM. We refer to this compatibility as 
+                    <span class="italic">binary compatibility</span>
+                    <a class="indexanchor" id="i08_13"/>. For example, if the inter
+                    <a id="p498"/>
+                face is modified, recompiled, and placed in the module path, the following tasks are fine:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Adding new methods in the interface</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Having the interface inherit from an additional interface</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Adding or deleting a 
+                            <samp class="listingcharacter listingcharacter">throws</samp>
+                         exception</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Changing the last parameter type from 
+                            <samp class="listingcharacter listingcharacter">T[]</samp> to 
+                            <samp class="listingcharacter listingcharacter">T...</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Adding new constants (i.e., static variables)</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">However, some changes aren’t binary compatible and will result in a JVM error, such as the following:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Changing the method name</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Changing parameter types and reordering the parameters</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Adding or removing a formal parameter</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.1.12.2">Strategies for Changing Interfaces</h4>
+                
+                <p class="standard">When an interface hasn’t been widely used, changes are easier to make. For example, if the name of an operation is poorly chosen, refactoring in the integrated development environment (IDE) will change the name in the interface as well as any identifiers in the implementing classes. What’s more problematic is when external users rely on the interface. Then, clients also must make adjustments, or developers simply must make do without “cosmetic changes” like changing the method name.</p>
+                
+                <p class="standard">If operations are added, a convention has been established that is often encountered in the Java universe: If an interface is to be extended by operations, a new interface comes into being that extends the old one and whose name ends in “2.” Thus, 
+                    <samp class="listingcharacter listingcharacter">java.awt.LayoutManager2</samp> is an example from the area of graphical interfaces, and 
+                    <samp class="listingcharacter listingcharacter">Attributes2</samp>, 
+                    <samp class="listingcharacter listingcharacter">EntityResolver2</samp>, and 
+                    <samp class="listingcharacter listingcharacter">Locator2</samp> are examples in XML processing.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_04" id="fn08_04">[ 149 ]</a></span>
+                </p>
+                
+                <p class="standard">Default methods are another way to extend interfaces at a later time. These methods extend an interface but bring with them ready-made implementations so that subclasses don’t necessarily have to provide an implementation. Let’s look at how to use default methods next.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.13">8.1.13    Default Methods</h3>
+            
+            <p class="standard">After an interface has been propagated, you should still be able to add operations. Developers should be allowed to introduce new operations without requiring subclasses to implement these methods. For this to be possible, the interface must have a 
+                <a id="p499"/>default implementation. In this way, the problem of “mandatory implementation” is solved because, if an implementation already exists, the implementing classes have nothing to complain about and can override the default behavior if needed. Oracle calls these methods 
+                <span class="italic">default methods</span> in interfaces with predefined implementations.
+                <a class="indexanchor" id="i08_14"/>
+                <a class="indexanchor" id="i08_15"/>
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_05" id="fn08_05">[ 150 ]</a></span> Interfaces with default methods are called 
+                <span class="italic">extended interfaces</span>
+                <a class="indexanchor" id="i08_16"/>
+                <a class="indexanchor" id="i08_17"/>
+            .</p>
+            
+            <p class="standard">As far as the syntax is concerned, a default method differs from the conventional implicitly abstract method declaration in two aspects:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The declaration of a default method starts with the 
+                        <samp class="listingcharacter listingcharacter">default</samp> keyword.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_06" id="fn08_06">[ 151 ]</a></span>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Instead of a semicolon, a block with the implementation in curly brackets marks the end of the declaration for a default method. We call the implementation of the default method the 
+                        <span class="italic">default code</span>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Apart from these differences, extended interfaces behave like normal interfaces. A class that implements an interface inherits all operations, whether abstract methods or default methods. If the class should be non-abstract, it must implement all abstract methods inherited from the interface. A class can override the default methods but doesn’t have to because a pre-implementation is already given in the default method of the interface.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">Extended interfaces put “code” into an interface, but this insertion was also possible previously, for example, by having an implicit public and static variable reference an implementation, as in the following example:</p>
+                
+                <div class="listing " id="l_none_8201"><pre><span class="">interface</span><span class=""> Comparators </span><span class="">{</span><span class=""><br/></span>  Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> TRIM_COMPARATOR </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Comparator</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">compare</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> s1</span><span class="">,</span><span class=""> </span><span class="">String</span><span class=""> s2 </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">return</span><span class=""> s1</span><span class="">.</span><span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">(</span><span class=""> s2</span><span class="">.</span><span class="">trim</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    <span class="">}</span><span class=""> </span><span class="">};</span><span class=""><br/></span>}</pre></div>
+                
+                <p class="standard last">In this case, the implementation uses an inner anonymous class, a concept that is explored in more detail in 
+                    <span class="crossreference "><a href="10_001.html#h10">Chapter 10</a></span>, 
+                    <span class="crossreference "><a href="10_005.html#h10.5">Section 10.5</a></span>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.14">8.1.14    
+                <a id="p500"/>
+            Declaring and Using Extended Interfaces</h3>
+            
+            <p class="standard">Let’s implement all these concepts in an example. For events, a lifecycle should be made possible. Defined by 
+                <samp class="listingcharacter listingcharacter">start()</samp> and 
+                <samp class="listingcharacter listingcharacter">finish()</samp>
+             methods, the lifecycle is provided as an interface that can be implemented by events. So, let’s start with version 1 of this interface:</p>
+            
+            <div class="listing " id="l8.12"><pre><span class="">interface</span><span class=""> EventLifecycle </span><span class="">{</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">start</span><span class="">();</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">finish</span><span class="">();</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.12</b>    
+            src/main/java/com/tutego/insel/game/i/v2/EventLifecycle.java, EventLifecycle</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Event</samp>
+             class implements the interface when written in the following way:</p>
+            
+            <div class="listing " id="l8.13"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> Event </span>
+                <span class="bold"><span class="">implements</span><span class=""> EventLifecycle</span></span> {<br/>  <span class="">String</span><span class=""> about;</span><br/>  <span class="">int</span><span class=""> duration;</span><br/> <br/>  <span class="">abstract</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">process</span><span class="">();</span><br/> <br/>  
+                <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">start</span><span class="">() { }</span><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">finish</span><span class="">() { }</span></span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.13</b>    
+            src/main/java/com/tutego/insel/game/i/v2/EventLifecycle.java, EventLifecycle</p>
+            
+            <p class="standard">The class overwrites the two methods empty so the 
+                <samp class="listingcharacter listingcharacter">Event</samp> subclasses like 
+                <samp class="listingcharacter listingcharacter">Nap</samp> or 
+                <samp class="listingcharacter listingcharacter">Workout</samp>
+             are free to decide whether to override the empty methods again or not.</p>
+            
+            <p class="standard">A subclass can then be quickly written in the following way:</p>
+            
+            <div class="listing " id="l8.14"><pre><span class="">class</span><span class=""> Nap </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">process</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Yaaaawn"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.14</b>    
+            src/main/java/com/tutego/insel/game/i/v2/Nap.java, Nap</p>
+            
+            <p class="standard">The longer the software lives, the more design mistakes come to the fore. Converting an entire architecture is a mammoth task, although simple changes like renaming can be quickly accomplished via refactoring. Let’s assume that we receive a change request for our interface because merely reporting the start and end doesn’t suffice. To enable pausing an event, a new method should be added to the interface: 
+                <samp class="listingcharacter listingcharacter">pause()</samp>. What are the consequences of the new 
+                <samp class="listingcharacter listingcharacter">pause()</samp> method in 
+                <samp class="listingcharacter listingcharacter">EventLifecycle</samp>
+            ?</p>
+            
+            <div class="listing " id="l_none_8250"><pre><span class="">
+                    <a id="p501"/>
+                interface</span><span class=""> EventLifecycle </span><span class="">{</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">start</span><span class="">();</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">finish</span><span class="">();</span><span class=""><br/></span>  
+                <span class="bold"><span class="">void</span><span class=""> </span><span class="">pause</span><span class="">();</span></span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">That would be a problem! Suddenly, an error concerning 
+                <samp class="listingcharacter listingcharacter">Nap</samp>
+             would arise, and you’d see the following message: </p>
+            
+            <div class="listing " id="l_none_8258"><pre>Class 'Nap' must either be declared abstract or implement abstract method 'pause()' in 'EventLifecycle' </pre></div>
+            
+            <p class="standard">Adding methods in interfaces is difficult because then all implementing classes must be changed. In this case, default methods play perfectly into our hands because you can extend the interface but pass along an empty default implementation. Thus, subclasses don’t have to implement the 
+                <samp class="listingcharacter listingcharacter">pause()</samp> method, but they can, as version 2 of our now extended 
+                <samp class="listingcharacter listingcharacter">EventLifecycle</samp>
+             interface shows:</p>
+            
+            <div class="listing " id="l_none_8272"><pre><span class="">interface</span><span class=""> EventLifecycle </span><span class="">{</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">start</span><span class="">();</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">finish</span><span class="">();</span><span class=""><br/></span>  
+                <span class="bold"><span class="">default</span></span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">pause</span><span class="">() </span>
+                <span class="bold">{}</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">Classes that have already used 
+                <samp class="listingcharacter listingcharacter">EventLifecycle</samp> won’t notice the change, which has an advantage: The interface can evolve, but everything remains binary compatible, and nothing needs to be recompiled. Existing code can draw on the new method, which is automatically present with the “empty” implementation. Furthermore, default methods behave like other methods of interfaces: Dynamic binding will continue to be kept when implementing classes override the methods. For example, if an implementation like 
+                <samp class="listingcharacter listingcharacter">Workout</samp> does something when you pause, 
+                <samp class="listingcharacter listingcharacter">Workout</samp> overrides the method and stops calorie consumption, for example. A nap, on the other hand, has nothing to pause and can live well with the default code in 
+                <samp class="listingcharacter listingcharacter">pause()</samp>
+            . The procedure is somewhat comparable to normal, non-final methods: They can be overridden, but overriding them isn’t necessary.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Instead of the empty block, the body could also include the expression 
+                    <samp class="listingcharacter listingcharacter">throw new UnsupportedOperationException ("Not yet implemented");</samp>
+                 to announce that no implementation exists. Thus, an added default method doesn’t lead to a compiler error, but during runtime, methods that are not overridden lead to an exception. Basically, this scenario is the opposite of the default code has been achieved because no logic is executed by default—triggering an exception to report an error is not considered logic.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h8.1.14.1">
+                    <a id="p502"/>
+                Context of the Default Methods</h4>
+                
+                <p class="standard">Default methods behave like methods in abstract classes and can call all methods of the interface (including inherited methods).
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_07" id="fn08_07">[ 152 ]</a></span>
+                 The methods are later bound dynamically at runtime.</p>
+                
+                <p class="standard">Let’s examine an interface named 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp>
+                 for buyable objects next:</p>
+                
+                <div class="listing " id="l_none_8273"><pre>
+                    <span class="bold"><span class="">interface</span></span><span class=""> Buyable {</span><br/>  <span class="">double</span><span class=""> </span><span class="">price</span><span class="">();</span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">Unfortunately, the interface doesn’t prescribe whether things are purchasable at all. A method like 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp> would be quite good in 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp>. But what would be the default implementation? You can resort to 
+                    <samp class="listingcharacter listingcharacter">price()</samp>
+                 and test if the return is a valid price, which is true if the price is greater than 0. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_8291"><pre><span class="">interface</span><span class=""> Buyable </span><span class="">{</span><span class=""><br/></span>  <span class="">double</span><span class=""> </span><span class="">price</span><span class="">();</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">default</span></span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">() </span>
+                    <span class="bold">{ <span class="">return</span><span class=""> </span><span class="">price</span><span class="">() &gt; </span><span class="">0</span><span class="">; }</span></span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">If classes implement the 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp> interface, they must implement 
+                    <samp class="listingcharacter listingcharacter">price()</samp> because the method is not a default method. However, these subclasses are free to override 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp>, fill it with their own logic, and thus not use the default implementation. If implementing classes don’t choose a new implementation, they get the default code and inherit a concrete 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp> method. In that case, a call of 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp> gets passed internally to 
+                    <samp class="listingcharacter listingcharacter">price()</samp> and then to the class that implements 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp> and the 
+                    <samp class="listingcharacter listingcharacter">price()</samp>
+                 method. The calls are dynamically bound and end up with the actual implementation.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">An interface can also declare the methods of the absolute superclass 
+                        <samp class="listingcharacter listingcharacter">java.lang.Object</samp>, for example, to add a description with Javadoc. However, you 
+                        <span class="italic">cannot</span> preset methods like 
+                        <samp class="listingcharacter listingcharacter">toString()</samp> or 
+                        <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                     using default code.</p>
+                
+                </div>
+                
+                <p class="standard">In addition to the option to draw on methods of the custom interface, the 
+                    <samp class="listingcharacter listingcharacter">this</samp> reference is also available. The 
+                    <samp class="listingcharacter listingcharacter">this</samp> reference is especially important because it allows the default code to delegate to utility methods and pass a reference to itself. For example, if you’ve already implemented a 
+                    <samp class="listingcharacter listingcharacter">hasPrice(Buyable)</samp> method in a 
+                    <samp class="listingcharacter listingcharacter">PriceUtils</samp>
+                 utility class, the default code could consist of simple delegation through the following code:</p>
+                
+                <div class="listing " id="l_none_8314"><pre><span class="">class</span><span class=""> PriceUtils </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span>
+                    <span class="bold"><span class="">hasPrice</span><span class="">( Buyable b )</span></span> { <span class="">return</span><span class=""> b.</span><span class="">price</span><span class="">() &gt; </span><span class="">0</span><span class="">; }</span><br/>}<br/><span class="">
+                        <a id="p503"/>
+                    interface</span><span class=""> Buyable {</span><br/>  <span class="">double</span><span class=""> </span><span class="">price</span><span class="">();</span><br/>  <span class="">default</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">() { </span>
+                    <span class="bold"><span class="">return</span><span class=""> PriceUtils.</span><span class="">hasPrice</span><span class="">( </span><span class="">this</span><span class=""> )</span></span>; }<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">The fact that the 
+                    <samp class="listingcharacter listingcharacter">PriceUtils.hasPrice(Buyable)</samp> method provides the 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp> type for the parameter and the default code with 
+                    <samp class="listingcharacter listingcharacter">this</samp> refers to just such a 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp> object is of course no coincidence, but deliberately chosen. The type of the 
+                    <samp class="listingcharacter listingcharacter">this</samp>
+                 reference at runtime corresponds to that of the class that implemented the interface and whose object instance was created.</p>
+                
+                <p class="standard">If the default methods have additional parameters, these parameters can also be passed on to the static method, as in the following example:</p>
+                
+                <div class="listing " id="l_none_8327"><pre><span class="">class</span><span class=""> PriceUtils </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">(</span><span class=""> Buyable b </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> b</span><span class="">.</span><span class="">price</span><span class="">()</span><span class=""> </span><span class="">&gt;</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> </span><span class="">}</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span>
+                    <span class="bold"><span class="">priceOr</span><span class="">( Buyable b, </span><span class="">double</span><span class=""> defaultPrice )</span></span> {<br/>    <span class="">if</span><span class=""> ( b != null &amp;&amp; b.</span><span class="">price</span><span class="">() &gt; </span><span class="">0</span><span class=""> )</span><br/>      <span class="">return</span><span class=""> b.</span><span class="">price</span><span class="">();</span><br/>    <span class="">return</span><span class=""> defaultPrice;</span><br/>  }<br/>}<br/><span class="">interface</span><span class=""> Buyable {</span><br/>  <span class="">double</span><span class=""> </span><span class="">price</span><span class="">();</span><br/>  <span class="">default</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">() { </span><span class="">return</span><span class=""> PriceUtils.</span><span class="">hasPrice</span><span class="">( </span><span class="">this</span><span class=""> ); }</span><br/>  <span class="">default</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">priceOr</span><span class="">( </span><span class="">double</span><span class=""> </span>
+                    <span class="bold">defaultPrice</span> ) {<br/>   <span class="">return</span><span class=""> </span>
+                    <span class="bold">PriceUtils.<span class="">priceOr</span><span class="">( </span><span class="">this</span><span class="">, defaultPrice )</span></span>;<br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">Since interfaces can contain static utility methods with implementation, the default code can delegate to these static methods. However, you should consider whether most of the code should really be placed in an interface or whether a better choice would be to move it into a package-visible implementation. We recommend swapping out the implementation so that interfaces don’t become too code heavy. If the Java Development Kit (JDK) uses default code, a static method is always available in a utility class.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.15">8.1.15    Public and Private Interface Methods</h3>
+            
+            <p class="standard">Static and default methods don’t necessarily have to be 
+                <samp class="listingcharacter listingcharacter">public</samp>; they can also be 
+                <samp class="listingcharacter listingcharacter">private</samp>
+            . This is good because it prevents code duplication; private methods can be used to swap out parts of the program within the interface. Private methods remain in the interface and aren’t inherited by the implementing classes.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.16">8.1.16    
+                <a id="p504"/>
+            Extended Interfaces, Multiple Inheritance, and Ambiguities*</h3>
+            
+            <p class="standard">Default methods had to be introduced to subsequently equip interfaces with new operations without significant compiler errors. The ideal situation is when new default methods are added and define default behaviors, thus avoiding compiler errors for implementing classes or errors for interfaces that extend extended interfaces.</p>
+            
+            <p class="standard">Extended interfaces with default code normally participate in OO modeling, can be inherited and overridden, and are dynamically bound. Some special cases exist, however, that we should examine, for example, the following cases:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A class inherits a method from a superclass but at the same time receives default code for the same method from an interface.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A class of two extended interfaces is offered different implementations.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Let’s go through some different cases.</p>
+            
+            
+                
+                <h4 class="t4" id="h8.1.16.1">Overriding Default Code</h4>
+                
+                <p class="standard">An interface can extend other interfaces and provide new default code. In other words, default methods can override other default methods from super-interfaces and implement them with new behaviors.</p>
+                
+                <p class="standard">Let’s introduce an interface named 
+                    <samp class="listingcharacter listingcharacter">Priced</samp>
+                 with a default method, shown in the following example:</p>
+                
+                <div class="listing " id="l_none_8317"><pre><span class="">interface</span><span class=""> Priced </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">default</span></span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">() { </span><span class="">return</span><span class=""> true; }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">Another interface can override the default method, as in the following example:</p>
+                
+                <div class="listing " id="l_none_8332"><pre><span class="">interface</span><span class=""> </span>
+                    <span class="bold"><span class="">NotPriced </span><span class="">extends</span><span class=""> Priced</span></span> {<br/>  <span class="">@Override</span><span class=""> </span>
+                    <span class="bold"><span class="">default</span></span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">() { </span><span class="">return</span><span class=""> false; }</span><br/>}<br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> </span>
+                    <span class="bold">TrueLove <span class="">implements</span><span class=""> NotPriced</span></span> {<br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ){</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">TrueLove</span><span class="">().</span><span class="">hasPrice</span><span class="">() );         </span><span class=""> // false</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">When the 
+                    <samp class="listingcharacter listingcharacter">TrueLove</samp> class implements the 
+                    <samp class="listingcharacter listingcharacter">NotPriced</samp> interface, everything is fine, and no conflict arises. The inheritance relation is linear (
+                    <samp class="listingcharacter listingcharacter">TrueLove</samp> → 
+                    <samp class="listingcharacter listingcharacter">NotPriced</samp> → 
+                    <samp class="listingcharacter listingcharacter">Priced</samp>
+                ).</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.1.16.2">Class Implementation Takes Precedence over Default Methods</h4>
+                
+                <p class="standard">If a class implements an interface and also inherits it from a superclass, the following can happen: The interface has default code for a method, and the superclass also inherits the 
+                    <a id="p505"/>
+                same method with code. Then, the subclass gets an implementation from two sides. First, the compiler must decide whether something like this is syntactically correct at all, which is confirmed with the following code:</p>
+                
+                <div class="listing " id="l_none_8351"><pre>
+                    <span class="bold"><span class="">interface</span></span><span class=""> Priced {</span><br/>  <span class="">default</span><span class=""> </span>
+                    <span class="bold"><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">()</span></span> { <span class="">return</span><span class=""> true; }</span><br/>}<br/>
+                    <span class="bold"><span class="">class</span></span><span class=""> Unsaleable {</span><br/>  <span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">()</span></span> { <span class="">return</span><span class=""> false; }</span><br/>}<br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> TrueLove </span>
+                    <span class="bold"><span class="">extends</span><span class=""> Unsaleable </span><span class="">implements</span><span class=""> Priced</span></span> {<br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">TrueLove</span><span class="">().</span><span class="">hasPrice</span><span class="">() );  </span><span class=""> // false</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">TrueLove</samp> inherits the 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp> implementation from the 
+                    <samp class="listingcharacter listingcharacter">Unsaleable</samp> superclass and also from the extended 
+                    <samp class="listingcharacter listingcharacter">Priced</samp> interface. The code compiles and results in the output 
+                    <samp class="listingcharacter listingcharacter">false</samp>, which means the class with the code “wins” against the default code. This functionality can be easily seen in the order 
+                    <samp class="listingcharacter listingcharacter">class ... extends ... implements...</samp>. In this case, 
+                    <samp class="listingcharacter listingcharacter">extends</samp>
+                 is located at the beginning, so methods from implementations have a higher priority than the methods from extended interfaces.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.1.16.3">Addressing Default Methods from Special Super-Interfaces*</h4>
+                
+                <p class="standard">A subclass can override a concrete method of the superclass but can still access the implementation of the overridden method. However, the call must be made via 
+                    <samp class="listingcharacter listingcharacter">super</samp>
+                ; otherwise, a method call will be called recursively.</p>
+                
+                <p class="standard">Default methods can also override other default methods from super-interfaces and implement them with new behavior. But just like normal methods, default methods can use 
+                    <samp class="listingcharacter listingcharacter">super</samp>
+                 to draw on a default behavior from the parent type.</p>
+                
+                <p class="standard">For an example, let’s use our well-known interface 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp> and a new extended interface 
+                    <samp class="listingcharacter listingcharacter">PeanutsBuyable</samp>
+                . Consider the following example:</p>
+                
+                <div class="listing " id="l_none_8348"><pre><span class="">interface</span><span class=""> Buyable </span><span class="">{</span><span class=""><br/></span>  <span class="">double</span><span class=""> </span><span class="">price</span><span class="">();</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">default</span></span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">() { </span><span class="">return</span><span class=""> </span><span class="">price</span><span class="">() &gt; </span><span class="">0</span><span class="">; }</span><br/>}<br/><span class="">interface</span><span class=""> PeanutsBuyable </span><span class="">extends</span><span class=""> Buyable {</span><br/>  <span class="">@Override</span><span class=""> </span>
+                    <span class="bold"><span class="">default</span></span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> </span>
+                    <span class="bold">Buyable.<span class="">super</span><span class="">.</span><span class="">hasPrice</span><span class="">()</span></span> &amp;&amp; <span class="">price</span><span class="">() &lt; 50_000_000;</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">
+                    <a id="p506"/>In the 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp> interface, the default code of 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp> says that everything greater than 0 has a price. 
+                    <samp class="listingcharacter listingcharacter">PeanutsBuyable</samp>, on the other hand, uses an extended definition and therefore reimplements the default behavior. According to the famous statement of a former Deutsche Bank CEO
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_08" id="fn08_08">[ 153 ]</a></span> everything priced under 50 million is “peanuts” and can be bought without any problem, causing no pain, at least for Deutsche Bank. In the implementation of 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp>, 
+                    <samp class="listingcharacter listingcharacter">PeanutsBuyable</samp> resorts to the default code of 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp>
+                 to get a decision on the price from the supertype and becomes even more specialized with the AND operation.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.1.16.4">Inheriting Default Code for a Method from Multiple Interfaces*</h4>
+                
+                <p class="standard">If a class from two extended interfaces is offered the same default code, a compiler error will arise. The following 
+                    <samp class="listingcharacter listingcharacter">RockAndRoll</samp>
+                 class illustrates this dilemma:</p>
+                
+                <div class="listing " id="l_none_8367"><pre><span class="">interface</span><span class=""> Sex </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">default</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">()</span></span> { <span class="">return</span><span class=""> false; }</span><br/>}<br/><span class="">interface</span><span class=""> Drugs {</span><br/>  
+                    <span class="bold"><span class="">default</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">()</span></span> { <span class="">return</span><span class=""> true; }</span><br/>}<br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> RockAndRoll </span>
+                    <span class="bold"><span class="">implements</span><span class=""> Sex, Drugs</span></span> { }<span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">Even if both implementations were identical, the compiler would have to reject this code because the code could change at any time.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.1.16.5">Solving the Multiple Inheritance Problem via super</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">RockAndRoll</samp> class can’t be simply translated because the class gets code from two sources. However, the problem can be easily solved by overriding the 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp> method in 
+                    <samp class="listingcharacter listingcharacter">RockAndRoll</samp>
+                 and then delegating it to a method.</p>
+                
+                <div class="listing " id="l8.15"><pre><span class="">interface</span><span class=""> Sex </span><span class="">{</span><span class=""><br/></span>  <span class="">default</span><span class=""> </span>
+                    <span class="bold"><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">()</span></span> { <span class="">return</span><span class=""> false; }</span><br/>}<br/><span class="">interface</span><span class=""> Drugs {</span><br/>  <span class="">default</span><span class=""> </span>
+                    <span class="bold"><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">()</span></span> { <span class="">return</span><span class=""> true; }</span><br/>}<br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> RockAndRoll </span>
+                    <span class="bold"><span class="">implements</span><span class=""> Sex, Drugs</span></span> { <br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">()</span></span> { <span class="">return</span><span class=""> </span>
+                    <span class="bold">Sex.<span class="">super</span><span class="">.</span><span class="">hasPrice</span><span class="">()</span></span>; }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.15</b>    
+            src/main/java/com/tutego/insel/oop/RockAndRoll.java</p>
+                
+                <p class="standard">
+                    <a id="p507"/>In the body of the 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp> method, you can’t simply write 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp> because doing so would create a recursive call. Also, you can’t write 
+                    <samp class="listingcharacter listingcharacter">Drugs.hasPrice()</samp> because this syntax is reserved for calling static methods. For this reason, 
+                    <samp class="listingcharacter listingcharacter">super</samp> comes into play with the following new notation: 
+                    <samp class="listingcharacter listingcharacter">Drugs.super.hasPrice()</samp>; the same is true for the interface 
+                    <samp class="listingcharacter listingcharacter">Sex</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.1.16.6">Abstract Overridden Interface Operations Take Away Default Methods</h4>
+                
+                <p class="standard">Default methods have the interesting language feature in that subtypes can change the status from “has implementation” to “has no default implementation.” Consider the following example:</p>
+                
+                <div class="listing " id="l_none_8391"><pre><span class="">interface</span><span class=""> Priced </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">default</span></span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">() { </span><span class="">return</span><span class=""> false; }</span><br/>}<br/><span class="">interface</span><span class=""> Buyable </span><span class="">extends</span><span class=""> Priced {</span><br/>  
+                    <span class="bold"><span class="">@Override</span></span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasPrice</span><span class="">();</span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Priced</samp> interface provides a default method. 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp> extends the 
+                    <samp class="listingcharacter listingcharacter">Priced</samp> interface but overwrites the method—but not with code! This approach makes the 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp> method abstract again in 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp>. Thus, an abstract method may well override a default method. In this case, classes that implement 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp> still need to implement a 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp>
+                 method if they don’t want to be abstract themselves. An interesting Java feature is that the implementation of a default method in a subtype can be “taken away” again. This change isn’t possible with visibility, for example: Once a method is public, a subclass can’t restrict its visibility.</p>
+                
+                <p class="standard">With default methods, the behavior of the compiler has a great advantage: Certain changes to the super-interface are allowed and have no effect on the subtypes. Let’s assume that 
+                    <samp class="listingcharacter listingcharacter">hasPrice()</samp> didn’t exist previously in 
+                    <samp class="listingcharacter listingcharacter">Priced</samp>, but only abstractly in 
+                    <samp class="listingcharacter listingcharacter">Buyable</samp>. Default code is merely a nice gesture, after all, and should be easily integrated it into 
+                    <samp class="listingcharacter listingcharacter">Priced</samp> without any problem. In other words, developers can include such a default method in the base type without a problem and without causing errors in the subtypes. Supertypes can therefore be changed without touching the lower subtypes. However, the annotation 
+                    <samp class="listingcharacter listingcharacter">@Override</samp>
+                 can subsequently be set to the subinterface for documentation purposes.</p>
+                
+                <p class="standard">Not only can a subinterface “take away” the default methods, but an abstract can also take away default methods, as in the following example:</p>
+                
+                <div class="listing " id="l_none_8407"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> Food </span>
+                    <span class="bold"><span class="">implements</span><span class=""> Priced</span></span> {<br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">abstract</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">price</span><span class="">();</span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">
+                    <a id="p508"/>The 
+                    <samp class="listingcharacter listingcharacter">Priced</samp> interface brings a default method, but the abstract 
+                    <samp class="listingcharacter listingcharacter">Food</samp> class takes it away again, so extending 
+                    <samp class="listingcharacter listingcharacter">Food</samp> classes must implement 
+                    <samp class="listingcharacter listingcharacter">price()</samp> in any case if they don’t want to be 
+                    <samp class="listingcharacter listingcharacter">abstract</samp>
+                 themselves.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.17">8.1.17    Creating Building Blocks with Default Methods*</h3>
+            
+            <p class="standard">Default methods provide library designers with an entire new set of options. Currently, we’re not sure what Java’s developers will do with default methods and which direction the Java API will take. In any case, the question will arise as to whether a default implementation moves into an interface as default code or, as before, a default implementation is provided as an abstract class from which, in turn, other classes derive. As an example, let’s consider data structures: A 
+                <samp class="listingcharacter listingcharacter">Collection</samp> interface prescribes a default behavior, 
+                <samp class="listingcharacter listingcharacter">AbstractCollection</samp>, which specifies an implementation as much as possible, and subclasses like 
+                <samp class="listingcharacter listingcharacter">ArrayList</samp>
+             then again build on top of this base implementation. Extended interfaces can reduce hierarchies because an abstract base implementation can be dispensed with. On the other hand, an abstract class can introduce states via object variables, which is something an interface can’t do.</p>
+            
+            <p class="standard">Default methods can do something else as well—serve as building blocks for classes. A class can implement multiple interfaces with default methods and thus basically inherits basic functionality from different places. In other programming languages, this feature is known as 
+                <span class="italic">mixin</span>
+                <a class="indexanchor" id="i08_18"/> or 
+                <span class="italic">trait</span>
+                <a class="indexanchor" id="i08_19"/>
+            . This approach is different from multiple inheritance, which isn’t allowed in Java. Let’s take a closer look at this difference now.</p>
+            
+            
+                
+                <h4 class="t4" id="h8.1.17.1">Using Default Methods for Developing Traits</h4>
+                
+                <p class="standard">What is the core concept of object-oriented programming (OOP)? Without hesitation, you might answer with classes, encapsulation, and abstraction. Classes and class relationships are the framework of any Java program. In the context of inheritance, subclasses are specializations, and the Liskov substitution principle applies (see 
+                    <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>, 
+                    <span class="crossreference "><a href="07_003.html#h7.3.2">Section 7.3.2</a></span>
+                ). Thus, if a type is required, you can also pass a subtype. With perfect inheritance, a subclass specializes in behavior but doesn’t inherit from a class simply because it has useful functionality. But why not, actually? The first thing to note is that inheritance often violates the is-a-kind-of relationship because of its usefulness. Second, Java only allows single inheritance with only a single superclass. If a class provides something useful like logging and our class inherits from it, it can’t simultaneously inherit from another class, for example, to record states in configuration data. An unfortunate inheritance thus obstructs a later extension. So, the problem with “functionality inheritance” is that we can only commit once.</p>
+                
+                <p class="standard">If a class simply needs a certain functionality, where should that functionality come from if not from the superclass? Actually, only one variant is obvious in this case: The class can access other objects by means of delegation. If a point with color shouldn’t inherit from 
+                    <samp class="listingcharacter listingcharacter">java.awt.Point</samp>, a color point can simply reference a 
+                    <samp class="listingcharacter listingcharacter">point</samp> in an internal 
+                    <a id="p509"/>
+                variable. This is a solution, but then not ideal if there is an is-a-kind-of relationship. And interfaces were specifically introduced so that a class has multiple types. Abstractions over interfaces and superclasses are important, and delegation doesn’t help in this case. What we need is a technique to put a program block into a class—basically something like multiple inheritance, but different because the blocks don’t appear as complete types; the block itself is only an implant and not interesting on its own. What is more, an object can’t be created by this block type.</p>
+                
+                <p class="standard">The closest thing to these building blocks are abstract classes, which would be classes, and thus, users could only inherit from that building block once. Extended interfaces enable completely new options: They form the building blocks from which classes can access additional functionality.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_09" id="fn08_09">[ 154 ]</a></span> These building blocks are useful because they allow an algorithm to be put into an extra compilation unit and reused more easily. For example, let’s assume you have two extended interfaces: 
+                    <samp class="listingcharacter listingcharacter">PersistentPreference</samp> and 
+                    <samp class="listingcharacter listingcharacter">Logged</samp>. The first extended interface is supposed to write key-value pairs to the central configuration using 
+                    <samp class="listingcharacter listingcharacter">store()</samp>, while 
+                    <samp class="listingcharacter listingcharacter">get()</samp>
+                 should read these pairs, as in the following example:</p>
+                
+                <div class="listing " id="l_none_84079519781791"><pre><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">prefs</span><span class="">.</span><span class="">Preferences</span><span class="">;</span><span class=""><br/></span><span class="">interface</span><span class=""> PersistentPreference </span><span class="">{</span><span class=""><br/></span>  <span class="">default</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">store</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> key</span><span class="">,</span><span class=""> </span><span class="">String</span><span class=""> value </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    Preferences<span class="">.</span><span class="">userRoot</span><span class="">().</span><span class="">put</span><span class="">(</span><span class=""> key</span><span class="">,</span><span class=""> value </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">default</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> key </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> Preferences</span><span class="">.</span><span class="">userRoot</span><span class="">().</span><span class="">get</span><span class="">(</span><span class=""> key</span><span class="">,</span><span class=""> </span><span class="">""</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The second extended interface is 
+                    <samp class="listingcharacter listingcharacter">Logged</samp>
+                , which provides with the following three compact logger methods:</p>
+                
+                <div class="listing " id="l_none_8412"><pre><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">logging</span><span class="">.*;</span><span class=""><br/></span><span class="">interface</span><span class=""> Logged </span><span class="">{</span><span class=""><br/></span>  <span class="">default</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">error</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> message </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    Logger<span class="">.</span><span class="">getLogger</span><span class="">(</span><span class=""> </span><span class="">getClass</span><span class="">().</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">).</span><span class="">log</span><span class="">(</span><span class=""> Level</span><span class="">.</span><span class="">SEVERE</span><span class="">,</span><span class=""> message </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">default</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">warn</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> message </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    Logger<span class="">.</span><span class="">getLogger</span><span class="">(</span><span class=""> </span><span class="">getClass</span><span class="">().</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">).</span><span class="">log</span><span class="">(</span><span class=""> Level</span><span class="">.</span><span class="">WARNING</span><span class="">,</span><span class=""> message </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">default</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">info</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> message </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    Logger<span class="">.</span><span class="">getLogger</span><span class="">(</span><span class=""> </span><span class="">getClass</span><span class="">().</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">).</span><span class="">log</span><span class="">(</span><span class=""> Level</span><span class="">.</span><span class="">INFO</span><span class="">,</span><span class=""> message </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <a id="p510"/>
+                A class can now incorporate these building blocks in the following way:</p>
+                
+                <div class="listing " id="l_none_8435"><pre><span class="">class</span><span class=""> Player </span>
+                    <span class="bold"><span class="">implements</span><span class=""> PersistentPreference, Logged</span></span> {<br/> <span class=""> // …</span><span class=""><br/></span>} <span class=""/></pre></div>
+                
+                <p class="standard">The methods are now part of 
+                    <samp class="listingcharacter listingcharacter">Player</samp> and can also be overridden by subclasses. Our next task is to change the implementation of 
+                    <samp class="listingcharacter listingcharacter">store()</samp> in 
+                    <samp class="listingcharacter listingcharacter">Player</samp> so that the key always starts with 
+                    <samp class="listingcharacter listingcharacter">player</samp>. The question you should answer is whether 
+                    <samp class="listingcharacter listingcharacter">store()</samp> from 
+                    <samp class="listingcharacter listingcharacter">Player</samp> can access the 
+                    <samp class="listingcharacter listingcharacter">store()</samp>
+                 from the extended interface.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.1.17.2">State in the Building Blocks?</h4>
+                
+                <p class="standard">Not every desirable module is possible with extended interfaces. One reason is that the interfaces can’t introduce a state. For example, let’s take a container as a data structure that stores and manages elements. You can’t easily implement a block for a container because a container manages children, which requires an object variable for the state. Interfaces have only static variables, which are visible to everybody. Even if the interface referenced a modifiable data structure, every user of the container module would be affected by these changes. Since no state is available, no constructors for interfaces can be used, and consequently no constructors exist for such blocks. Where there is no state, there is nothing to initialize. If a default method needs a state, that method must request that state by itself. A technique that Java Language Architect at Oracle Brian Goetz calls a “virtual field pattern”
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_10" id="fn08_10">[ 155 ]</a></span>
+                 can be used in this case, which we’ll explore in the following example.</p>
+                
+                <p class="standard">If a container references a set of objects that are sortable, you can implement a 
+                    <samp class="listingcharacter listingcharacter">Sortable</samp> block with a 
+                    <samp class="listingcharacter listingcharacter">sort()</samp> method. The 
+                    <samp class="listingcharacter listingcharacter">Comparable</samp> interface is not supposed to implement the class directly because only the referenced elements are sortable, but not objects of the class itself. Furthermore, a new 
+                    <samp class="listingcharacter listingcharacter">sort()</samp> method is to be added to 
+                    <samp class="listingcharacter listingcharacter">Sortable</samp>. For sorting to succeed, the implementation must somehow get to the data, which is where a trick comes into play: Although 
+                    <samp class="listingcharacter listingcharacter">sort()</samp> is a default method, the extended interface 
+                    <samp class="listingcharacter listingcharacter">Sortable</samp> has an abstract 
+                    <samp class="listingcharacter listingcharacter">getValues()</samp>
+                 method that must be implemented by the class and that passes the data to the sorter. In the source code, the following code would be used:</p>
+                
+                <div class="listing " id="l8.16"><pre><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.*;</span><span class=""><br/></span><span class="">interface</span><span class=""> Sortable</span><span class="">&lt;</span><span class="">T </span><span class="">extends</span><span class=""> Comparable</span><span class="">&lt;?&gt;&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  T<span class="">[]</span><span class=""> </span><span class="">getValues</span><span class="">();</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">setValues</span><span class="">(</span><span class=""> T</span><span class="">[]</span><span class=""> values </span><span class="">);</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">default</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">sort</span><span class="">()</span></span> {<br/>    T[] values = <span class="">getValues</span><span class="">();</span><br/>    Arrays.<span class="">sort</span><span class="">( values );</span><br/>
+                    <a id="p511"/>    <span class="">setValues</span><span class="">( values );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.16</b>    
+            src/main/java/com/tutego/insel/oop/SortableDemo.java (Part 1)</p>
+                
+                <p class="standard">To summarize, for 
+                    <samp class="listingcharacter listingcharacter">sort()</samp> to access the data, 
+                    <samp class="listingcharacter listingcharacter">Sortable</samp> expects a 
+                    <samp class="listingcharacter listingcharacter">getValues()</samp> method from the implementing classes, and for the data to be written back after sorting, it expects a second method: 
+                    <samp class="listingcharacter listingcharacter">setValues(...)</samp>. The trick is that the later implementation of 
+                    <samp class="listingcharacter listingcharacter">Sortable</samp>
+                 with the two methods provides the sorter access to the data, but also includes access to any other piece of code since the methods are public. This perhaps unintentionally leaves a “bad taste.”</p>
+                
+                <p class="standard">Let’s say
+                    <samp class="listingcharacter listingcharacter"> RandomValues</samp> is supposed to be one user of 
+                    <samp class="listingcharacter listingcharacter">Sortable</samp>
+                ; this class internally generates random numbers.</p>
+                
+                <div class="listing " id="l8.17"><pre><span class="">class</span><span class=""> RandomValues </span><span class="">implements</span><span class=""> Sortable</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> List</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> values </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">RandomValues</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    Random r <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Random</span><span class="">();</span><span class=""><br/></span>    <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> r</span><span class="">.</span><span class="">nextInt</span><span class="">(</span><span class=""> </span><span class="">20</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""> i </span><span class="">&gt;</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> i</span><span class="">--</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      values<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> r</span><span class="">.</span><span class="">nextInt</span><span class="">(</span><span class="">10000</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> Integer</span><span class="">[]</span><span class=""> </span><span class="">getValues</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> values</span><span class="">.</span><span class="">toArray</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> Integer</span><span class="">[</span><span class="">values</span><span class="">.</span><span class="">size</span><span class="">()]</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span> <br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setValues</span><span class="">(</span><span class=""> Integer</span><span class="">[]</span><span class=""> values </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">this</span><span class="">.</span><span class="">values</span><span class="">.</span><span class="">clear</span><span class="">();</span><span class=""><br/></span>    Collections<span class="">.</span><span class="">addAll</span><span class="">(</span><span class=""> </span><span class="">this</span><span class="">.</span><span class="">values</span><span class="">,</span><span class=""> values </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 8.17</b>    
+            src/main/java/com/tutego/insel/oop/SortableDemo.java (Part 2)</p>
+                
+                <p class="standard">The previous part prepared the types, and the last part of the demo concludes with the following example code:</p>
+                
+                <div class="listing " id="l8.18"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> SortableDemo </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    RandomValues r <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">RandomValues</span><span class="">();</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> r</span><span class="">.</span><span class="">getValues</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    r<span class="">.</span>
+                    <span class="bold"><span class="">sort</span></span><span class="">();</span><br/>    System.out.<span class="">println</span><span class="">( Arrays.</span><span class="">toString</span><span class="">( r.</span><span class="">getValues</span><span class="">() ) );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.18</b>    
+            src/main/java/com/tutego/insel/oop/SortableDemo.java (Part 3)</p>
+                
+                <p class="standard">
+                    <a id="p512"/>
+                When the demo program is called, the console displays the following example output:</p>
+                
+                <div class="listing " id="l_none_8478"><pre>[2732, 4568, 4708, 4302, 4315, 5946, 2004]<br/>[2004, 2732, 4302, 4315, 4568, 4708, 5946] </pre></div>
+                
+                <p class="standard">As interesting as this option is, one problem has already been addressed: Each method in an interface is either 
+                    <samp class="listingcharacter listingcharacter">public</samp> or 
+                    <samp class="listingcharacter listingcharacter">private</samp>. What would be nice is if the data access method was 
+                    <samp class="listingcharacter listingcharacter">protected</samp>
+                 and thus only visible to the implementing class, but that doesn’t work.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.1.17.3">Summary</h4>
+                
+                <p class="standard">What we did in the last few examples of building blocks was to include a default behavior in classes without requiring access to the base class, which exists only once, and without the class delegating to helper classes. In this way of working, subclasses can override and specialize methods in any case. Thus, you’re dealing with common classes and with extended interfaces that don’t form independent entities themselves. In practice, some cases will exist where either an abstract class or an extended interface comes into question for an implementation of a problem. </p>
+                
+                <p class="standard">You should then remember the differences between abstract classes and interfaces once again: An abstract class can have object variables and methods of all visibilities and also set them final so that they can no longer be overridden. An interface, on the other hand, is designed with no state and only contain purely virtual and public methods to allow the implementation to be overridden.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.18">8.1.18    Marker Interfaces*</h3>
+            
+            <p class="standard">Interfaces without methods are also possible, and these empty interfaces are referred to as 
+                <span class="italic">marker interfaces</span>
+                <a class="indexanchor" id="i08_20"/>. They’re useful because you can easily use 
+                <samp class="listingcharacter listingcharacter">instanceof</samp>
+             to check whether an object takes an intended type.</p>
+            
+            <p class="standard">The Java library already contains some marker interfaces, such as following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">java.util.RandomAccess</samp>
+                    : A data structure provides quick access via an index.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">java.rmi.Remote</samp>
+                    : Identifies interfaces whose operations can be called from the outside.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">java.lang.Cloneable</samp>: Ensures that the 
+                        <samp class="listingcharacter listingcharacter">clone()</samp> method of 
+                        <samp class="listingcharacter listingcharacter">Object</samp>
+                     can be called.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">java.util.EventListener</samp>
+                    : This type is implemented by many listeners in the Java library.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">java.io.Serializable</samp>: States of an object can be written to a data stream (more on this topic will follow in 
+                        <span class="crossreference "><a href="19_001.html#h19">Chapter 19</a></span>
+                    ).</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Since annotations were made a tool of the language, marker interfaces are not generally encountered in new libraries.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.1.19">8.1.19    
+                <a id="p513"/>
+            (Abstract) Classes and Interfaces in Comparison</h3>
+            
+            <p class="standard">An abstract class and an interface with abstract methods are similar: Both prescribe operations to their subclasses or the classes that must be implemented. However, one important difference is that any number of interfaces can be implemented, but only one class—whether abstract or not—can be extended. Furthermore, abstract classes are usually useful for refactoring or during the design phase, when commonalities can be easily swapped out to a superclass. Abstract classes can also contain object states, but interfaces can’t.</p>
+            
+            <p class="standard">During design, the basic idea for interfaces still applies: When regulating behavior, an interface is golden. For basic implementations, abstract classes come into play, often ending in 
+                <samp class="listingcharacter listingcharacter">Abstract</samp>
+             in the Java library.</p>
+            
+            
+                
+                <h4 class="t4" id="h8.1.19.1">Binding How, Where, and What Dynamically</h4>
+                
+                <p class="standard">Where the call “ends up” is different depending on whether the method is included in a concrete class, an abstract class, and an interface. Let’s explore this topic with the following method:</p>
+                
+                <div class="listing " id="l_none_8488"><pre><span class="">void</span><span class=""> </span><span class="">fun</span><span class="">(</span><span class=""> T t </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  t<span class="">.</span><span class="">m</span><span class="">();</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If the method requests an argument of type 
+                    <samp class="listingcharacter listingcharacter">T</samp> and calls the method 
+                    <samp class="listingcharacter listingcharacter">m()</samp> on the parameter variable 
+                    <samp class="listingcharacter listingcharacter">t</samp>
+                , the following statements are true:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If 
+                            <samp class="listingcharacter listingcharacter">T</samp> is a final class, the method 
+                            <samp class="listingcharacter listingcharacter">m()</samp> of 
+                            <samp class="listingcharacter listingcharacter">T</samp> is always called since there can be no subclasses that override 
+                            <samp class="listingcharacter listingcharacter">m()</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If 
+                            <samp class="listingcharacter listingcharacter">T</samp> is a non-final class and 
+                            <samp class="listingcharacter listingcharacter">m()</samp> is a final method, exactly 
+                            <samp class="listingcharacter listingcharacter">m()</samp> is called because no subclass can override 
+                            <samp class="listingcharacter listingcharacter">m()</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If 
+                            <samp class="listingcharacter listingcharacter">T</samp> is a non-final class and 
+                            <samp class="listingcharacter listingcharacter">m()</samp> is not a final method, subclasses of 
+                            <samp class="listingcharacter listingcharacter">T</samp> could override 
+                            <samp class="listingcharacter listingcharacter">m()</samp>, and 
+                            <samp class="listingcharacter listingcharacter">t.m()</samp>
+                         would then dynamically call the overridden method.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If 
+                            <samp class="listingcharacter listingcharacter">T</samp> is an abstract class and 
+                            <samp class="listingcharacter listingcharacter">m()</samp> is an abstract method, a subclass implementation of 
+                            <samp class="listingcharacter listingcharacter">m()</samp>
+                         is called in each case.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If 
+                            <samp class="listingcharacter listingcharacter">T</samp> is an interface and 
+                            <samp class="listingcharacter listingcharacter">m()</samp> is not a default implementation, an implementation 
+                            <samp class="listingcharacter listingcharacter">m()</samp>
+                         of an implementing class is called in any case.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If 
+                            <samp class="listingcharacter listingcharacter">T</samp> is an interface and 
+                            <samp class="listingcharacter listingcharacter">m()</samp> is a default implementation, 
+                            <samp class="listingcharacter listingcharacter">t.m()</samp>
+                         may end up with the default implementation or with an overridden version of an implementing class.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

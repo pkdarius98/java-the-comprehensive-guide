@@ -1,0 +1,426 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Generics&lt;T&gt;" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Generics&lt;T&gt;" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Generics&lt;T&gt;</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h12.6">12.6    Consequences of Type Erasure: Type Tokens, Arrays*</h2>
+        
+        <p class="standard">Type erasure is generally not such a big deal, but in special situations, that the type isn’t present at runtime can be annoying.</p>
+        
+        
+            
+            <h3 class="t3" id="h12.6.1">12.6.1    Type Tokens</h3>
+            
+            <p class="standard">As you’ve seen, when a rocket has been declared with the type variable 
+                <samp class="listingcharacter listingcharacter">T</samp>, this 
+                <samp class="listingcharacter listingcharacter">T</samp> isn’t really replaced by the actual type parameter like a search and replace in an office document. Instead, usually only 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+             is used. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_121196"><pre><span class="">class</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span> T <span class="">newRocketContent</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">T</span><span class="">();</span><span class=""> </span><span class="">}</span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Compiler error</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">So, the type erasure turns 
+                <samp class="listingcharacter listingcharacter">new T()</samp> into 
+                <samp class="listingcharacter listingcharacter">new Object()</samp>, which isn’t worth anything. But how can a type still be created and type 
+                <samp class="listingcharacter listingcharacter">T</samp>
+             be present at runtime?</p>
+            
+            <p class="standard">The trick is to use a 
+                <samp class="listingcharacter listingcharacter">Class</samp>
+             object for the type.</p>
+            
+            <table class="standardtable" id="t12.12">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Actual Type Parameter</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Class Object Represents Type Argument</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">String</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">String.class</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Integer</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Integer.class</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 12.12</b>    
+            Transfer of Actual Type Parameters via Class objects</p>
+            
+            <p class="standard">This 
+                <samp class="listingcharacter listingcharacter">Class</samp> object, which now represents the type, is referred to as the 
+                <span class="italic">type token</span>
+                <a class="indexanchor" id="i12_26"/>. Of course, that 
+                <samp class="listingcharacter listingcharacter">Class</samp>
+             itself is declared as a generic type suits the situation, and two interesting methods have been “made generic” as well.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p726"/>
+                Example</h6>
+                
+                <p class="standard first">The following example queries 
+                    <samp class="listingcharacter listingcharacter">Class</samp>
+                 objects:</p>
+                
+                <div class="listing " id="l_none_121217"><pre>Class<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> clazz1 </span><span class="">=</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">class</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> newInstance </span><span class="">=</span><span class=""> clazz1</span><span class="">.</span><span class="">getConstructor</span><span class="">().</span>
+                    <span class="bold"><span class="">newInstance</span><span class="">()</span></span>;<br/>Class&lt;? <span class="">extends</span><span class=""> </span><span class="">String</span><span class="">&gt; clazz2 = newInstance.</span>
+                    <span class="bold"><span class="">getClass</span><span class="">()</span></span>;<br/>System.out.<span class="">println</span><span class="">( clazz1.</span><span class="">equals</span><span class="">( clazz2 ) ); </span><span class=""> // true</span><span class=""/><span class=""/></pre></div>
+                
+                <p class="standard last">First, the 
+                    <samp class="listingcharacter listingcharacter">getConstructor()</samp> method uses the 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object to pick out the parameterless constructor. Using the 
+                    <samp class="listingcharacter listingcharacter">Constructor</samp> object, 
+                    <samp class="listingcharacter listingcharacter">newInstance()</samp> then creates a new instance with the type represented by the 
+                    <samp class="listingcharacter listingcharacter">Class</samp>
+                 object.</p>
+            
+            </div>
+            
+            <p class="standard">With a given object, 
+                <samp class="listingcharacter listingcharacter">getClass()</samp> can be used to query the associated 
+                <samp class="listingcharacter listingcharacter">Class</samp>
+             object for the class:</p>
+            
+            <div class="listing " id="l_none_121230"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Object</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final native Class&lt;?&gt; getClass()</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">Class</samp>
+                     object.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">The 
+                    <samp class="listingcharacter listingcharacter">Class&lt;?&gt;</samp> return on 
+                    <samp class="listingcharacter listingcharacter">getClass()</samp>
+                 isn’t the best code, especially the general wildcard. Furthermore, this expression prevents the following statement from being written:</p>
+                
+                <div class="listing " id="l_none_121219"><pre>Class<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> clazz </span><span class="">=</span><span class=""> </span><span class="">"Simulatte.getClass(); </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     "Type mismatch" compiler error</span><span class=""/></pre></div>
+                
+                <p class="standard">Instead, the query should read:</p>
+                
+                <div class="listing " id="l_none_121249"><pre>Class<span class="">&lt;?</span><span class=""> </span><span class="">extends</span><span class=""> </span><span class="">String</span><span class="">&gt;</span><span class=""> clazz </span><span class="">=</span><span class=""> </span><span class="">"Simulatte"</span><span class="">.</span><span class="">getClass</span><span class="">()</span><span class="">;</span></pre></div>
+                
+                <p class="standard last">Since 
+                    <samp class="listingcharacter listingcharacter">Object</samp> isn’t declared generically, 
+                    <samp class="listingcharacter listingcharacter">getClass()</samp>
+                 can’t provide more precise information.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h12.6.1.1">Solutions with Type Tokens</h4>
+                
+                <p class="standard">To use type tokens, the 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object must be passed as an argument in a constructor or method. For example, you can create a 
+                    <samp class="listingcharacter listingcharacter">newInstance()</samp> method that catches checked exceptions and reports them as 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+                 in case errors arise.</p>
+                
+                <p class="standard">The type of the 
+                    <samp class="listingcharacter listingcharacter">Class</samp>
+                 object can be easily transferred to the return in the following way:</p>
+                
+                <div class="listing " id="l_none_121241"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">&lt;T&gt; T</span></span> <span class="">newInstance</span><span class="">( </span>
+                    <span class="bold">Class&lt;T&gt; type</span> ) {<br/>  <span class="">try</span><span class=""> {</span><br/>    <span class="">return</span><span class=""> type.</span><span class="">getConstructor</span><span class="">().</span><span class="">newInstance</span><span class="">();</span><br/>  }<br/>
+                    <a id="p727"/>  <span class="">catch</span><span class=""> ( ReflectiveOperationException e ) {</span><br/>    <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">RuntimeException</span><span class="">( e );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">ReflectiveOperationException</samp> is the superclass of 
+                    <samp class="listingcharacter listingcharacter">ClassNotFoundException</samp>, 
+                    <samp class="listingcharacter listingcharacter">IllegalAccessException</samp>, 
+                    <samp class="listingcharacter listingcharacter">InstantiationException</samp>, 
+                    <samp class="listingcharacter listingcharacter">InvocationTargetException</samp>, 
+                    <samp class="listingcharacter listingcharacter">NoSuchFieldException</samp>, and 
+                    <samp class="listingcharacter listingcharacter">NoSuchMethodException</samp>
+                . Specifying this base type is useful because it saves typing—a lot that can go wrong with reflection, and countless checked exceptions exist.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.6.2">12.6.2    Supertype Tokens</h3>
+            
+            <p class="standard">A 
+                <samp class="listingcharacter listingcharacter">Class</samp> object is a good way to represent a type, but one problem exists. The 
+                <samp class="listingcharacter listingcharacter">Class</samp>
+             object itself can’t represent generic types.</p>
+            
+            <table class="standardtable" id="t12.13">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Actual Type Parameter</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Class Object Represents Type Argument</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">String</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">String.class</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Integer</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Integer.class</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;.class</samp> Does not work! 
+                                <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 12.13</b>    
+            A Class Object Can’t Describe a Generic Type</p>
+            
+            <p class="standard">The real type can only be determined and captured with a lot of trickery. The Reflection API is used in this context, so we’ll only briefly explore the class through an example. </p>
+            
+            <div class="listing " id="l12.25"><pre><span class="">public</span><span class=""> </span><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> TypeRef</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">final</span><span class=""> Type type</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">protected</span><span class=""> </span><span class="">TypeRef</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    ParameterizedType superclass <span class="">=</span><span class=""> </span><span class="">(</span><span class="">ParameterizedType</span><span class="">)</span><span class=""> </span><span class="">getClass</span><span class="">().</span><span class="">getGenericSuperclass</span><span class="">();</span><span class=""><br/></span>    type <span class="">=</span><span class=""> superclass</span><span class="">.</span><span class="">getActualTypeArguments</span><span class="">()[</span><span class="">0</span><span class="">];</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 12.25</b>    
+            src/main/java/com/tutego/insel/generic/TypeRef, TypeRef</p>
+            
+            <p class="standard">The following example creates an anonymous subclass, thus making the type accessible:</p>
+            
+            <div class="listing " id="l12.26"><pre>TypeRef<span class="">&lt;</span><span class="">Rocket</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;&gt;</span><span class=""> ref1 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> TypeRef</span><span class="">&lt;&gt;(){};</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> ref1</span><span class="">.</span><span class="">type </span><span class="">);</span><span class=""> // com.tutego.insel.generic.Rocket&lt;java.lang.String&gt;</span><span class=""><br/></span>
+                <a id="p728"/>TypeRef<span class="">&lt;</span><span class="">Rocket</span><span class="">&lt;</span><span class="">Byte</span><span class="">&gt;&gt;</span><span class=""> ref2 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> TypeRef</span><span class="">&lt;&gt;(){};</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> ref2</span><span class="">.</span><span class="">type </span><span class="">);</span><span class=""> // com.tutego.insel.generic.Rocket&lt;java.lang.Byte&gt;</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 12.26</b>    
+            src/main/java/com/tutego/insel/generic/TypeRefDemo, main()</p>
+            
+            <p class="standard">In this way, you’re allowed to capture the type argument via 
+                <samp class="listingcharacter listingcharacter">java.lang.reflect.Type</samp>, and 
+                <samp class="listingcharacter listingcharacter">ref1</samp> is clearly different from 
+                <samp class="listingcharacter listingcharacter">ref2</samp>
+            .</p>
+            
+            <p class="standard">However, the type doesn’t exist as a 
+                <samp class="listingcharacter listingcharacter">Class</samp> object, and operations like 
+                <samp class="listingcharacter listingcharacter">getConstructor(). newInstance()</samp> aren’t possible on 
+                <samp class="listingcharacter listingcharacter">Type</samp>
+             because the interface doesn’t declare any methods at all and can only represent types.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.6.3">12.6.3    Generics and Arrays</h3>
+            
+            <p class="standard">Type erasure is the reason why arrays can’t be implemented in a way a developer might like to.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn12_08" id="fn12_08">[ 187 ]</a></span>
+             The following code, for instance, results in a compiler error:</p>
+            
+            <div class="listing " id="l_none_121279"><pre><span class="">class</span><span class=""> TwoBox</span>
+                <span class="bold"><span class="">&lt;T&gt;</span></span> {<br/>  T[] array = 
+                <span class="bold"><span class="">new</span><span class=""> T[ </span><span class="">2</span><span class=""> ];</span></span>  <span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Cannot create a generic array of T</span><span class=""><br/></span>  T[] <span class="">getArray</span><span class="">() { </span><span class="">return</span><span class=""> array; }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">The reason for this error can be easily seen if you consider code would be required for type erasure:</p>
+            
+            <div class="listing " id="l_none_121283"><pre><span class="">class</span><span class=""> TwoBox </span><span class="">{</span><span class=""><br/></span>  Object<span class="">[]</span><span class=""> array </span><span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">new</span><span class=""> Object[ </span><span class="">2</span><span class=""> ]</span></span>;          <span class=""> // (1)</span><span class=""><br/></span>  Object[] <span class="">getArray</span><span class="">() { </span><span class="">return</span><span class=""> array; }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">The caller would now want to use 
+                <samp class="listingcharacter listingcharacter">TwoBox</samp>
+             parameterized, as in the following example:</p>
+            
+            <div class="listing " id="l_none_121298"><pre>TwoBox<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> twoStrings </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> TwoBox</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;();</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> stringArray </span><span class="">=</span><span class=""> twoStrings</span><span class="">.</span><span class="">getArray</span><span class="">();</span><span class=""> </span></pre></div>
+            
+            <p class="standard">At this point, let’s think again about type erasure and what the compiler generates:</p>
+            
+            <div class="listing " id="l_none_121303"><pre>TwoBox twoStrings <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">TwoBox</span><span class="">();</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> stringArray </span>
+                <span class="bold"><span class="">= (</span><span class="">String</span><span class="">[]) twoStrings.</span><span class="">getArray</span><span class="">()</span></span>;<span class=""> // (2)</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="standard">Now, while line 
+                <samp class="listingcharacter listingcharacter">(1)</samp> builds an 
+                <samp class="listingcharacter listingcharacter">Object</samp> array of length 2 and also 
+                <samp class="listingcharacter listingcharacter">getArray()</samp> passes this array out as an 
+                <samp class="listingcharacter listingcharacter">Object</samp> array, line 
+                <samp class="listingcharacter listingcharacter">(2)</samp> casts this 
+                <samp class="listingcharacter listingcharacter">Object</samp> array to a string array. But this step isn’t possible because these two types aren’t type compatible. Of course, an 
+                <samp class="listingcharacter listingcharacter">Object</samp> array can reference strings, but the array itself as an object is an 
+                <samp class="listingcharacter listingcharacter">
+                    <a id="p729"/>
+                Object[]</samp> and not a 
+                <samp class="listingcharacter listingcharacter">String[]</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h12.6.3.1">Reflection Helps</h4>
+                
+                <p class="standard">The Java API provides a way to create arrays of a type via reflection:</p>
+                
+                <div class="listing " id="l_none_121333"><pre>T<span class="">[]</span><span class=""> array </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">T</span><span class="">[])</span><span class=""> Array</span><span class="">.</span><span class="">newInstance</span><span class="">(</span><span class=""> clazz</span><span class="">,</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">However, the 
+                    <samp class="listingcharacter listingcharacter">Class</samp> type 
+                    <samp class="listingcharacter listingcharacter">clazz</samp> must be known and passed as an additional parameter. The syntax 
+                    <samp class="listingcharacter listingcharacter">T.class</samp> causes a compiler error because, via type erasure, it would always be 
+                    <samp class="listingcharacter listingcharacter">Object.class</samp>
+                 anyway.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

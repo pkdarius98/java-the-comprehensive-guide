@@ -1,0 +1,969 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    The Tools of the JDK" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    The Tools of the JDK" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    The Tools of the JDK</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h23.4">23.4    Documentation Comments with Javadoc</h2>
+        
+        <p class="standard">The documentation of software systems is an important but often neglected part of software development. Unfortunately, because software is generally read more often than written. During the development process, developers must invest time in the description of each component, especially when additional developers make these components available to other developers in a public library for reuse. To understand the classes, interfaces, enumerations, and methods as well as class/object variables fully, they must be described carefully. Important elements in a description include the type name, the method name, the type and number of parameters, the effect of the methods, and the runtime behavior. Since creating external documentation (i.e., a description outside the source code file) is error-prone and therefore not terribly exciting, special documentation comments are introduced into the Java source code. A special program generates description files (generally HTML) with the desired information from the comments.
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn23_03" id="fn23_03">[ 245 ]</a></span>
+        </p>
+        
+        
+            
+            <h3 class="t3" id="h23.4.1">23.4.1    Setting a Documentation Comment</h3>
+            
+            <p class="standard">
+                <span class="italic">Documentation comments</span>
+                <a class="indexanchor" id="i23_20"/> (also called “Javadoc”
+                <a class="indexanchor" id="i23_21"/>) are used in a particularly excellent comment environment. The comment environment extends a block comment and is common before all types (classes, interfaces, enumerations) as well as methods and variables. In the following example, Javadoc
+                <a class="indexanchor" id="i23_22"/>
+             provides comments for the class, for class/object variables, and for methods:</p>
+            
+            <div class="listing " id="l23.1"><pre><span class="">package</span><span class=""> com.tutego.insel.javadoc;</span><span class=""/><br/><br/><span class=""/>
+                <span class="bold"><span class="">/**</span><span class=""/><br/><span class=""> * This class models a room with a given number of players.</span><span class=""/><br/><span class=""> */</span><span class=""/></span><span class=""/><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Room {</span><span class=""/><br/><br/><span class="">  </span><span class=""/>
+                <span class="bold">/** Number of players in a room. */</span><span class=""/><br/><span class="">  </span><span class="">private</span><span class=""> </span><span class="">int</span><span class=""> numberOfPersons;</span><span class=""/><br/><br/><span class="">
+                    <a id="p1097"/>
+                  </span><span class=""/>
+                <span class="bold">/**<span class=""/><br/><span class="">   * A person enters the room.</span><span class=""/><br/><span class="">   * Increments the number of persons.</span><span class=""/><br/><span class="">   */</span></span><span class=""/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">enterPerson</span><span class="">() {</span><span class=""/><br/><span class="">    numberOfPersons++;</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><br/><span class="">  </span><span class=""/>
+                <span class="bold">/**<span class=""/><br/><span class="">   * A person leaves the room.</span><span class=""/><br/><span class="">   * Decrements the number of persons.</span><span class=""/><br/><span class="">   */</span></span><span class=""/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">leavePerson</span><span class="">() {</span><span class=""/><br/><span class="">    </span><span class="">if</span><span class=""> ( numberOfPersons &gt; </span><span class="">0</span><span class=""> )</span><span class=""/><br/><span class="">      numberOfPersons--;</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><br/><span class="">  </span><span class=""/>
+                <span class="bold">/**<span class=""/><br/><span class="">   * Gets the number of persons in this room.</span><span class=""/><br/><span class="">   * This is always greater than or equal to 0.</span><span class=""/><br/><span class="">   *</span><span class=""/><br/><span class="">   * @return Number of persons.</span><span class=""/><br/><span class="">   */</span></span><span class=""/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">getNumberOfPersons</span><span class="">() {</span><span class=""/><br/><span class="">    </span><span class="">return</span><span class=""> numberOfPersons;</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 23.1</b>    
+            com/tutego/insel/javadoc/Room.java</p>
+            
+            <table class="standardtable" id="t23.3">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Comment</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Description</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Example</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@param</samp>
+                                <a class="indexanchor" id="i23_23"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Parameter description.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@param x coordinate</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@see</samp>
+                                <a class="indexanchor" id="i23_24"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Reference to another package, type, or member.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@see java.util.Date<br/>@see java.lang.String#length()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@version</samp>
+                                <a class="indexanchor" id="i23_25"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Version.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@version 1.12</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@author</samp>
+                                <a class="indexanchor" id="i23_26"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Creator.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@author Christian Ullenboom</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@return</samp>
+                                <a class="indexanchor" id="i23_27"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Return value of a method.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@return Number of elements</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@exception</samp>
+                                <a class="indexanchor" id="i23_28"/>/
+                                <samp class="listingcharacter listingcharacter">@throws</samp>
+                                <a class="indexanchor" id="i23_29"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Exceptions that can be thrown.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@exception NumberFormatException</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i23_30"/>
+                                <samp class="listingcharacter listingcharacter">{@link  reference}</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <a id="p1098"/>Built-in reference in text in code font; same parameters as for 
+                                <samp class="listingcharacter listingcharacter">@see</samp>
+                            .</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">{@link java.lang.Thread}</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i23_31"/>
+                                <samp class="listingcharacter listingcharacter">{@linkplain  reference}</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Like 
+                                <samp class="listingcharacter listingcharacter">{@link}</samp>
+                            , but in normal font.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">{@linkplain java.lang.Thread}</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i23_32"/>
+                                <samp class="listingcharacter listingcharacter">{@code  Code}</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Source code in code font, also with HTML special characters.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">{@code 1 is &lt; 2}</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i23_33"/>
+                                <samp class="listingcharacter listingcharacter">{@literal  literals}</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Masks HTML special characters. No code font.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">{@literal 1 &lt; 2 &amp;&amp; 2 &gt; 1}</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 23.3</b>    
+            The Most Important Documentation Comments at a Glance</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">The documentation comments are structured in such a way that the first sentence appears in the listing of methods and state variables and the rest in the detail view. Consider the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_2372"><pre><span class="">/**</span><br/> * A short sentence that will be in the Method Summary section
+                    <span class="bold">.</span><br/> * The following is a detailed description, which can later be found in the<br/> * Method Detail section, but not in the overview.<br/> */<span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">foo</span><span class="">() { }</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">Because a documentation comment 
+                <samp class="listingcharacter listingcharacter">/**</samp> starts with 
+                <samp class="listingcharacter listingcharacter">/*</samp>
+            , it’s a typical block comment for the compiler. Javadoc comments are often visually enhanced by putting an asterisk at the beginning of each line—Javadoc ignores this.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h23.4.2">23.4.2    Creating Documentation with the javadoc Tool</h3>
+            
+            <p class="standard">An external program generates the target documents from the source code with comments. The JDK provides the console program 
+                <span class="italic">javadoc</span>
+                <a class="indexanchor" id="i23_34"/>
+             to which is passed a filename of the class with comments as a parameter. Of course, description files can’t be created from compiled files. Like the Java compiler, Javadoc is usually deployed via a build tool such as Maven. You have two options: You can either use a plugin configuration in the Project Object Model (POM) file or you can directly deploy Javadoc with the following command:</p>
+            
+            <div class="listing " id="l_none_2382"><pre>$ 
+                <span class="bold">mvn javadoc:javadoc</span>
+             </pre></div>
+            
+            <p class="standard">
+                <a id="p1099"/>
+            Javadoc runs through the source code, parses the declarations, and pulls out the documentation. From this process, the tool generates a description, which is usually an HTML page.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Visibility plays an important role in Javadoc. By default, Javadoc only includes public things in the documentation.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h23.4.3">23.4.3    HTML Tags in Documentation Comments*</h3>
+            
+            <p class="standard">HTML tags can be used in the comments, for example, 
+                <samp class="listingcharacter listingcharacter">&lt;b&gt;bold&lt;/b&gt;</samp> and 
+                <samp class="listingcharacter listingcharacter">&lt;i&gt;italic&lt;/i&gt;</samp>, to set text attributes. These tags are transferred directly to the documentation and must be correctly nested so that the output displays correctly. Heading tags 
+                <samp class="listingcharacter listingcharacter">&lt;h1&gt;</samp>...
+                <samp class="listingcharacter listingcharacter">&lt;/h1&gt;</samp> and 
+                <samp class="listingcharacter listingcharacter">&lt;h2&gt;</samp>...
+                <samp class="listingcharacter listingcharacter">&lt;/h2&gt;</samp>
+             shouldn’t be used, however, because Javadoc uses these tags to organize its own output and assigns style sheets to these tags.</p>
+            
+            <p class="standard">In Eclipse, the 
+                <span class="screenelement">javadoc</span>
+             view previews the result of the documentation comment.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h23.4.4">23.4.4    Generated Files</h3>
+            
+            <p class="standard">For each public class, Javadoc creates a HTML file. If classes aren’t public, a switch must be specified. The HTML files are additionally cross-referenced to the other documented classes. In addition, Javadoc creates other files, such as the following files:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">index-all.html</span>
+                    : An overview of all classes, interfaces, exceptions, methods, and fields in an index.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">overview-tree.html</span>
+                    : Displays the classes in a tree structure so that the inheritance is clearly visible.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">allclasses-frame.html</span>
+                    : Lists all documented classes in all subpackages.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">deprecated-list.html</span>
+                    : A list of deprecated methods and classes.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">serialized-form.html</span>: A list of all classes that implement 
+                        <samp class="listingcharacter listingcharacter">Serializable</samp>
+                    . Each class/object variable appears with a description in a paragraph.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">help-doc.html</span>
+                    : Shows a short description of Javadoc.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">index.html:</span> Javadoc creates a view with frames. Thus, this file is the main file that references frames on the right and on the left. The left frame is the 
+                        <span class="italic">allclasses-frame.html</span>
+                     file. In the frame on the right, the first class is displayed if the package description is missing.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">stylesheet.css</span>
+                    : A style sheet for HTML files in which, among other things, colors and fonts can be specified, which are then used by all HTML files.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">packages.htm</span>
+                    : An obsolete file that references the new files.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h23.4.5">23.4.5    
+                <a id="p1100"/>
+            Documentation Comments at a Glance*</h3>
+            
+            <p class="standard">Some Javadoc comments must be isolated after the main description, like 
+                <samp class="listingcharacter listingcharacter">@param</samp> (description of parameters) or 
+                <samp class="listingcharacter listingcharacter">@return</samp> (description of returns). These tags are called 
+                <span class="italic">block tags</span>. Other tags may appear in the text, such as 
+                <samp class="listingcharacter listingcharacter">{@link}</samp> to set a reference to another type or method. These tags are called 
+                <span class="italic">inline tags</span>
+                <a class="indexanchor" id="i23_35"/>
+            . The Javadoc tool recognizes the following tags, among others:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Block tags</span>: 
+                        <samp class="listingcharacter listingcharacter">@apiNote</samp>, 
+                        <samp class="listingcharacter listingcharacter">@author</samp>, 
+                        <samp class="listingcharacter listingcharacter">@deprecated</samp>, 
+                        <samp class="listingcharacter listingcharacter">@exception</samp>, 
+                        <samp class="listingcharacter listingcharacter">@implNote</samp>, 
+                        <samp class="listingcharacter listingcharacter">@implSpec</samp>, 
+                        <samp class="listingcharacter listingcharacter">@param</samp>, 
+                        <samp class="listingcharacter listingcharacter">@return</samp>, 
+                        <samp class="listingcharacter listingcharacter">@see</samp>, 
+                        <samp class="listingcharacter listingcharacter">@serial</samp>, 
+                        <samp class="listingcharacter listingcharacter">@serialData</samp>, 
+                        <samp class="listingcharacter listingcharacter">@serialField</samp>, 
+                        <samp class="listingcharacter listingcharacter">@since</samp>, 
+                        <samp class="listingcharacter listingcharacter">@throws</samp>, and 
+                        <samp class="listingcharacter listingcharacter">@version</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Inline tags</span>: 
+                        <samp class="listingcharacter listingcharacter">{@code}</samp>, 
+                        <samp class="listingcharacter listingcharacter">{@docRoot}</samp>, 
+                        <samp class="listingcharacter listingcharacter">{@inheritDoc}</samp>, 
+                        <samp class="listingcharacter listingcharacter">{@link}</samp>, 
+                        <samp class="listingcharacter listingcharacter">{@linkplain}</samp>, <br/>
+                        <samp class="listingcharacter listingcharacter">{@literal}</samp>, and 
+                        <samp class="listingcharacter listingcharacter">{@value}</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h23.4.5.1">Examples</h4>
+                
+                <p class="standard">You can specify an external additional source in the following way:</p>
+                
+                <div class="listing " id="l_none_23105"><pre>@see &lt;a href="spec.html#section"&gt;Java Spec&lt;/a&gt;. </pre></div>
+                
+                <p class="standard">Thus, we can reference a method that is related to the method described in the following way:</p>
+                
+                <div class="listing " id="l_none_2398"><pre>@see String#equals(Object) equals </pre></div>
+                
+                <p class="standard">Several variants of 
+                    <samp class="listingcharacter listingcharacter">@see</samp>
+                 are available, such as the following:</p>
+                
+                <div class="listing " id="l_none_23116"><pre>@see #field<br/>@see #method(Type, Type,...)<br/>@see #method(Type argname, Type argname,...)<br/>@see #constructor(Type, Type,...)<br/>@see #constructor(Type argname, Type argname,...)<br/>@see Class#field<br/>@see Class#method(Type, Type,...)<br/>@see Class#method(Type argname, Type argname,...)<br/>@see Class#constructor(Type, Type,...)<br/>@see Class#constructor(Type argname, Type argname,...)<br/>@see Class.NestedClass<br/>@see Class<br/>@see package.Class#field<br/>@see package.Class#method(Type, Type,...)<br/>@see package.Class#method(Type argname, Type argname,...)<br/>@see package.Class#constructor(Type, Type,...)<br/>@see package.Class#constructor(Type argname, Type argname,...)<br/>@see package.Class.NestedClass<br/>@see package.Class<br/>@see package </pre></div>
+                
+                <p class="standard">
+                    <a id="p1101"/>
+                While documenting a variable, you can specify a reference to a method, as in the following example:</p>
+                
+                <div class="listing " id="l_none_23135"><pre>/**<br/> * The X-coordinate of the component.<br/> *<br/> * @see #getLocation()<br/> */<br/>int x = 1263732; </pre></div>
+                
+                <p class="standard">A deprecated method that references an alternative is indicated in the following way:</p>
+                
+                <div class="listing " id="l_none_23130"><pre>/**<br/> * @deprecated  As of JDK 1.1,<br/> * replaced by {@link #setBounds(int,int,int,int)}<br/> */ </pre></div>
+                
+                <p class="standard">Instead of using HTML tags like 
+                    <samp class="listingcharacter listingcharacter">&lt;tt&gt;</samp> or 
+                    <samp class="listingcharacter listingcharacter">&lt;code&gt;</samp> for source code, 
+                    <samp class="listingcharacter listingcharacter">{@code}</samp>
+                 is much easier, as shown in the following example:</p>
+                
+                <div class="listing " id="l_none_23159"><pre>/**<br/> * Compares this current object with another object.<br/> * Uses {@code equals()} an not {@code ==}.<br/> */ </pre></div>
+                
+                <p class="standard">Other useful tags include 
+                    <samp class="listingcharacter listingcharacter">@index</samp>, 
+                    <samp class="listingcharacter listingcharacter">@hidden</samp>, 
+                    <samp class="listingcharacter listingcharacter">@provides</samp>, 
+                    <samp class="listingcharacter listingcharacter">@uses</samp>, and
+                    <samp class="listingcharacter listingcharacter"> @summary</samp>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h23.4.6">23.4.6    Javadoc and Doclets*</h3>
+            
+            <p class="standard">The output of Javadoc can be customized to meet your needs by using
+                <a class="indexanchor" id="i23_36"/>
+                <span class="italic"> doclets</span>, which is a Java program based on the Doclet API and writes to an output file. The program reads source files like the well-known Javadoc tool and creates any output format from them. This format can be chosen and implemented by yourself. Thus, if you want to create Framemaker files (MIF) or RTF files besides the standard doclet for HTML files provided by JavaSoft, you must program your own doclet, or you can use doclets made by different vendors. For example, the (somewhat dusty) website <span class="url"><a href="http://www.doclet.com/">http://www.doclet.com/</a></span> lists doclets that generate DocBook or include Unified Modeling Language (UML) diagrams.</p>
+            
+            <p class="standard">In addition, a doclet isn’t only used for interface documentation. A doclet can also show whether documentation exists for each method and whether each parameter and return value has been correctly described.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h23.4.7">23.4.7    Deprecated Types and Members</h3>
+            
+            <p class="standard">During the development stage of a software, method signatures change again and again, or methods are added or dropped, which may occur for many reasons such as the following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <a id="p1102"/>Methods can’t really be programmed to be platform independent but were once offered that way. Now, the method should no longer be supported (an example is the method 
+                        <samp class="listingcharacter listingcharacter">stop()</samp>
+                     of a thread).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The Java naming convention should be introduced, and older method names should be discontinued. This reason primarily concerns special 
+                        <samp class="listingcharacter listingcharacter">set*(…)</samp>/
+                        <samp class="listingcharacter listingcharacter">get*()</samp> methods that were available from version 1.1. Thus, you’ll find many examples of inconsistencies with the Abstract Windowing Toolkit (AWT). Now, for example, instead of 
+                        <samp class="listingcharacter listingcharacter">size()</samp> in a graphical component, you would use 
+                        <samp class="listingcharacter listingcharacter">getSize()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The program authors were mistaken about the method name. So, in 
+                        <samp class="listingcharacter listingcharacter">FontMetrics</samp>, it was previously called 
+                        <samp class="listingcharacter listingcharacter">getMaxDecent()</samp>, and now it’s 
+                        <samp class="listingcharacter listingcharacter">getMaxDe</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">s</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">cent()</samp>, and in 
+                        <samp class="listingcharacter listingcharacter">HTMLEditorKit</samp>, 
+                        <samp class="listingcharacter listingcharacter">insertAtBoundry(...)</samp> becomes 
+                        <samp class="listingcharacter listingcharacter">insertAtBound</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">a</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">ry(…)</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Simply deleting methods is now inconvenient because compiler errors will occur. For this reason, one solution is to declare the method or constructor as deprecated. 
+                <samp class="listingcharacter listingcharacter">@deprecated</samp>
+                <a class="indexanchor" id="i23_37"/> is a separate documentation comment. The following excerpt from the 
+                <samp class="listingcharacter listingcharacter">java.util.Date</samp>
+             class illustrates its use:</p>
+            
+            <div class="listing " id="l23.2"><pre>/**<br/> * Sets the day of the month of this &lt;tt&gt;Date&lt;/tt&gt; object to the<br/> * specified value. …<br/> *<br/> * @param   date   the day of the month value between 1-31.<br/> * @see     java.util.Calendar<br/> * 
+                <span class="bold">@deprecated As of JDK version 1.1,<br/> * replaced by &lt;code&gt;Calendar.set(Calendar.DAY_OF_MONTH, int date)&lt;/code&gt;.</span> */<br/><br/>public void setDate(int date) {<br/>  setField(Calendar.DATE, date);<br/>} </pre></div>
+            
+            <p class="caption "><b>Listing 23.2</b>    
+            java.util.Date.java (Snippet)</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">@deprecated</samp>
+                <a class="indexanchor" id="i23_38"/> identifier indicates that a method or constructor should no longer be used. Robust commentary will also point out alternatives if any are available. One alternative is using the 
+                <samp class="listingcharacter listingcharacter">set(...)</samp> method from the 
+                <samp class="listingcharacter listingcharacter">Calendar</samp>
+             object. Since the comment is included in the generated API documentation, the developer can easily recognize that a method is deprecated.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">That a method is marked as “deprecated” doesn’t necessarily mean that the method will be deleted in the next Java version. This marker is only an indication that the method should no longer be used and that support is no longer provided.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h23.4.7.1">
+                    <a id="p1103"/>
+                Compiler Messages for Deprecated Methods</h4>
+                
+                <p class="standard">The compiler displays a small message on the screen for deprecated methods. Let’s test this feature on the 
+                    <samp class="listingcharacter listingcharacter">OldSack</samp>
+                 class:</p>
+                
+                <div class="listing " id="l23.3"><pre>package com.tutego.insel.tool;<br/><br/>//@SuppressWarnings( "deprecation" )<br/>public class OldSack {<br/>  java.util.Date d = new java.util.Date( 62, 3, 4 );<br/>} </pre></div>
+                
+                <p class="caption "><b>Listing 23.3</b>    
+            src/main/java/com/tutego/insel/tools/OldSack.java</p>
+                
+                <p class="standard">Now, let’s call the compiler as usual:</p>
+                
+                <div class="listing " id="l_none_23183"><pre>$ 
+                    <span class="bold">javac com/tutego/insel/tool/OldSack.java</span><br/>Note: com\tutego\insel\tool\OldSack.java uses or overrides a deprecated API.<br/>Note: Recompile with -Xlint:deprecation for details. </pre></div>
+                
+                <p class="standard">As shown in the following example, the compiler indicates that the 
+                    <samp class="listingcharacter listingcharacter">-deprecation</samp> switch
+                    <a class="indexanchor" id="i23_39"/>
+                 provides additional hints:</p>
+                
+                <div class="listing " id="l_none_23192"><pre>$ 
+                    <span class="bold">javac -deprecation com.tutego.insel.tool.OldSack.java</span><br/>com\tutego\insel\tool\OldSack.java:5: warning: [deprecation] Date(int,int,int) in Date has been deprecated<br/>  java.util.Date d = new java.util.Date( 62, 3, 4 );<br/>                     ^<br/>1 warning </pre></div>
+                
+                <p class="standard">The output provides exactly the line with the deprecated code; the compiler doesn’t mention any alternatives. However, interestingly, the compiler looks into the documentation comments even though it should ignore comments. Finally, to evaluate the special comments, there is an extra tool called 
+                    <span class="italic">javadoc</span>
+                 and it has nothing to do with the Java compiler.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Classes can also be marked as 
+                        <samp class="listingcharacter listingcharacter">deprecated</samp> (see, for example, 
+                        <samp class="listingcharacter listingcharacter">java.io.LineNumberInputStream</samp>
+                    ). However, you rarely find this marker in the Java library, and with custom types, you should avoid its use.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h23.4.7.2">The @Deprecated Annotation</h4>
+                
+                <p class="standard">Annotations are a kind of additional modifier. The 
+                    <samp class="listingcharacter listingcharacter">@Deprecated</samp>
+                    <a class="indexanchor" id="i23_40"/> annotation (capitalized) is standard and allows things to be marked as deprecated. For this purpose, the annotation is placed before the return type, like a usual modifier for methods, for example. Oracle 
+                    <a id="p1104"/>has marked the 
+                    <samp class="listingcharacter listingcharacter">setDate(...)</samp>
+                 method with this annotation, as the following snippet shows:</p>
+                
+                <div class="listing " id="l_none_23199"><pre><span class="">/** …</span><br/> * @deprecated As of JDK version 1.1,<br/> * replaced by &lt;code&gt;Calendar.set(Calendar.DAY_OF_MONTH, int date)&lt;/code&gt;.<br/> */<span class=""><br/></span>
+                    <span class="bold"><span class="">@Deprecated</span></span><span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setDate</span><span class="">(</span><span class="">int</span><span class=""> date) { … } </span><span class=""/></pre></div>
+                
+                <p class="standard">One advantage of the 
+                    <samp class="listingcharacter listingcharacter">@Deprecated</samp> annotation over the Javadoc tag is that the annotation is also visible at runtime. If you have a 
+                    <samp class="listingcharacter listingcharacter">@Deprecated</samp>
+                 tester before a method call, it can report the deprecated methods at runtime. With the Javadoc tag, the compiler translates the program into bytecode and outputs a message at compile time, but no hint exists in the bytecode itself.</p>
+                
+                <p class="standard">The annotation type 
+                    <samp class="listingcharacter listingcharacter">@Deprecated</samp>
+                 has two annotation attributes:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String since() default ""</samp>
+                        : Documents the version when the element became obsolete.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean forRemoval() default false</samp>
+                        : Indicates that the element should be deleted in the future.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Consider the following example from the 
+                        <samp class="listingcharacter listingcharacter">Thread</samp>
+                     class:</p>
+                    
+                    <div class="listing  last_item" id="l_none_23201"><pre><span class="">@Deprecated</span><span class="">(</span><span class="">since</span><span class="">=</span><span class="">"1.2"</span><span class="">,</span><span class=""> forRemoval</span><span class="">=true)</span><span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">synchronized</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">stop</span><span class="">(</span><span class="">Throwable obj</span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">UnsupportedOperationException</span><span class="">();</span><span class=""><br/></span>}</pre></div>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Deprecated Libraries</h6>
+                    
+                    <p class="standard first last">A large number of deprecated elements have accumulated over time. An overview is provided by <span class="url"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/deprecated-list.html">https://docs.oracle.com/en/java/javase/17/docs/api/deprecated-list.html</a></span>.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h23.4.8">23.4.8    Javadoc Verification with DocLint</h3>
+            
+            <p class="standard">The Javadoc tool can detect errors in the Javadoc comments; this check can be activated via the 
+                <samp class="listingcharacter listingcharacter">Xdoclint</samp>
+             switch. DocLint detects the following groups of errors, which can also be specified as options:</p>
+            
+            <table class="standardtable" id="t23.4">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a id="p1105"/>
+                            Group</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Description</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">accessibility</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Checks for documentation accessibility issues, for instance, checking that tables always have summaries.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">html</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Detects HTML errors, such as missing closing angle brackets.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">missing</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Checks for missing elements, for example, if a comment or 
+                                <samp class="listingcharacter listingcharacter">@return</samp>
+                             is missing.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">reference</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Checks all references in the Javadoc tags, for example, at 
+                                <samp class="listingcharacter listingcharacter">@see</samp>, or checks for invalid names at 
+                                <samp class="listingcharacter listingcharacter">@param</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">syntax</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Checks common syntax errors such as unmasked HTML characters like 
+                                <samp class="listingcharacter listingcharacter">&lt;</samp>, 
+                                <samp class="listingcharacter listingcharacter">&gt;</samp>, or 
+                                <samp class="listingcharacter listingcharacter">&amp;</samp>
+                             and non-existent Javadoc tags.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 23.4</b>    
+            Possible Groups with Javadoc and the DocLint Tool</p>
+            
+            <p class="standard">For more options for the Javadoc extension, see <span class="url"><a href="https://docs.oracle.com/en/java/javase/17/docs/specs/man/javadoc.html">https://docs.oracle.com/en/java/javase/17/docs/specs/man/javadoc.html</a></span>.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,221 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Generics&lt;T&gt;" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Generics&lt;T&gt;" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Generics&lt;T&gt;</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h12.4">12.4    Type Parameters in the throws Clause*</h2>
+        
+        <p class="standard">In 
+            <span class="crossreference "><a href="12_002.html#h12.2.3">Section 12.2.3</a></span>, you learned how type erasure makes a construction like 
+            <samp class="listingcharacter listingcharacter">class MyException&lt;T&gt; extends Exception</samp> impossible. However, a type parameter is permitted in the 
+            <samp class="listingcharacter listingcharacter">throws</samp>
+         clause. This use opens up interesting options for classes that can throw checked or unchecked exceptions, depending on the use case.</p>
+        
+        
+            
+            <h3 class="t3" id="h12.4.1">12.4.1    Declaring a Class with Type Variable &lt;E extends Exception&gt;</h3>
+            
+            <p class="standard">For our next example, the 
+                <samp class="listingcharacter listingcharacter">CharIterable</samp> interface should be implemented by classes that provide a stream of characters. 
+                <samp class="listingcharacter listingcharacter">CharIterable</samp> is a generic interface type with a formal type parameter that must later be a subclass of 
+                <samp class="listingcharacter listingcharacter">Exception</samp>
+            . Consider the following example:</p>
+            
+            <div class="listing " id="l12.13"><pre><span class="">public</span><span class=""> </span><span class="">interface</span><span class=""> CharIterable</span>
+                <span class="bold"><span class="">&lt;E </span><span class="">extends</span><span class=""> Exception&gt;</span></span> {<br/>  <span class="">boolean</span><span class=""> </span><span class="">hasNext</span><span class="">() </span><span class="">throws</span><span class=""> </span>
+                <span class="bold">E</span>;<br/>  <span class="">char</span><span class="">    </span><span class="">next</span><span class="">()    </span><span class="">throws</span><span class=""> </span>
+                <span class="bold">E</span>;<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 12.13</b>    
+            src/main/java/com/tutego/insel/generic/CharIterable.java, CharIterable</p>
+            
+            <p class="standard">Characters can originate from a file, an internet resource, or a string, for example, but the usage always looks the same:</p>
+            
+            <div class="listing " id="l_none_12815"><pre><span class="">while</span><span class=""> </span><span class="">(</span><span class=""> iter</span><span class="">.</span><span class="">hasNext</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> iter</span><span class="">.</span><span class="">next</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.4.2">12.4.2    Parameterized Type for Type Variable &lt;E extends Exception&gt;</h3>
+            
+            <p class="standard">Let’s move on to the classes that implement 
+                <samp class="listingcharacter listingcharacter">CharIterable</samp> so that users can run off characters with the loop we just created. The declaration of the 
+                <samp class="listingcharacter listingcharacter">CharIterable&lt;E extends Exception&gt;</samp> interface contains a type variable restricted to 
+                <samp class="listingcharacter listingcharacter">Exception</samp>
+            , which allows, for example, the following implementations:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">class StringIterable implements CharIterable&lt;</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">&gt;</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">class WebIterable implements CharIterable&lt;</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">IOException</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">&gt;</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">In the case of 
+                <samp class="listingcharacter listingcharacter">StringIterable</samp>, if the characters come from a string, no input/output exception is expected. For this reason, the actual type parameter is 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>. 
+                <a id="p711"/>However, when reading from files or internet resources, 
+                <samp class="listingcharacter listingcharacter">IOExceptions</samp> may occur, so 
+                <samp class="listingcharacter listingcharacter">WebIterable</samp> chooses the actual type parameter (
+                <samp class="listingcharacter listingcharacter">IOException</samp>
+            ).</p>
+            
+            
+                
+                <h4 class="t4" id="h12.4.2.1">Sample Implementations for the Parameterized Type</h4>
+                
+                <p class="standard">Let’s implement the two classes 
+                    <samp class="listingcharacter listingcharacter">StringIterable</samp> and 
+                    <samp class="listingcharacter listingcharacter">WebIterable</samp>. Since 
+                    <samp class="listingcharacter listingcharacter">StringIterable</samp> chooses the actual type parameter 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp> when implementing the interface, we’ll write a 
+                    <samp class="listingcharacter listingcharacter">throws RuntimeException</samp>, although the 
+                    <samp class="listingcharacter listingcharacter">throws</samp>
+                 clause is again optional and can be omitted. Consider the following example:</p>
+                
+                <div class="listing " id="l12.14"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> StringIterable </span><span class="">implements</span><span class=""> CharIterable</span><span class="">&lt;</span>
+                    <span class="bold">RuntimeException</span>&gt; {<br/><br/>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">String</span><span class=""> string;</span><br/>  <span class="">private</span><span class=""> </span><span class="">int</span><span class="">   pos;</span><br/><br/>  <span class="">public</span><span class=""> </span><span class="">StringIterable</span><span class="">( </span><span class="">String</span><span class=""> string ) {</span><br/>    <span class="">this</span><span class="">.string = string;</span><br/>  }<br/><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasNext</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> pos &lt; string.</span><span class="">length</span><span class="">();</span><br/>  }<br/><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">char</span><span class=""> </span><span class="">next</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> string.</span><span class="">charAt</span><span class="">( pos++ );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 12.14</b>    
+            src/main/java/com/tutego/insel/generic/StringIterable.java, StringIterable</p>
+                
+                <p class="standard">With 
+                    <samp class="listingcharacter listingcharacter">WebIterable</samp>, things look different. In this case, the actual type parameter is 
+                    <samp class="listingcharacter listingcharacter">IOException</samp>, and thus a 
+                    <samp class="listingcharacter listingcharacter">throws IOException</samp>
+                 is required at the method signature.</p>
+                
+                <div class="listing " id="l12.15"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> WebIterable </span><span class="">implements</span><span class=""> CharIterable</span><span class="">&lt;</span>
+                    <span class="bold">IOException</span>&gt; {<br/><br/>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> Reader reader;</span><br/><br/>  <span class="">public</span><span class=""> </span><span class="">WebIterable</span><span class="">( </span><span class="">String</span><span class=""> url ) </span>
+                    <span class="bold"><span class="">throws</span><span class=""> IOException</span></span> {<br/>    reader = <span class="">new</span><span class=""> </span><span class="">InputStreamReader</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">URL</span><span class="">( url ).</span><span class="">openStream</span><span class="">() ) ;</span><br/>  }<br/><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasNext</span><span class="">() </span>
+                    <span class="bold"><span class="">throws</span><span class=""> IOException</span></span> {<br/>    <span class="">return</span><span class=""> reader.</span><span class="">ready</span><span class="">();</span><br/>  }<br/><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">char</span><span class=""> </span><span class="">next</span><span class="">() </span>
+                    <span class="bold"><span class="">throws</span><span class=""> IOException</span></span> {<br/>
+                    <a id="p712"/>    <span class="">return</span><span class=""> (</span><span class="">char</span><span class="">) reader.</span><span class="">read</span><span class="">();</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 12.15</b>    
+            src/main/java/com/tutego/insel/generic/WebIterable.java, WebIterable</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.4.2.2">Using StringIterable and WebIterable</h4>
+                
+                <p class="standard">The following example shows that exception handling isn’t necessary when running a string but is required when reading characters from the web:</p>
+                
+                <div class="listing " id="l12.16"><pre>StringIterable iter1 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringIterable</span><span class="">(</span><span class=""> </span><span class="">"Shasha"</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // try is unnecessary</span><span class=""><br/></span><span class="">while</span><span class=""> </span><span class="">(</span><span class=""> iter1</span><span class="">.</span><span class="">hasNext</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> iter1</span><span class="">.</span><span class="">next</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">();</span><span class=""><br/></span><br/>
+                    <span class="bold"><span class="">try</span></span><span class=""> {</span><br/>  WebIterable iter2 = <span class="">new</span><span class=""> </span><span class="">WebIterable</span><span class="">( </span><span class="">"http://tutego.de/javabuch/aufgaben/bond.txt"</span><span class=""> );</span><br/>  <span class="">while</span><span class=""> ( iter2.</span><span class="">hasNext</span><span class="">() )</span><br/>    System.out.<span class="">print</span><span class="">( iter2.</span><span class="">next</span><span class="">() );</span><br/>}<br/>
+                    <span class="bold"><span class="">catch</span></span><span class=""> ( IOException e ) {</span><br/>  e.<span class="">printStackTrace</span><span class="">();</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 12.16</b>    
+            src/main/java/com/tutego/insel/generic/CharReadableExample.java, main()</p>
+                
+                <p class="standard">Instead of 
+                    <samp class="listingcharacter listingcharacter">StringIterable iter1 = new StringIterable...</samp> you could of course have written 
+                    <samp class="listingcharacter listingcharacter">CharIterable &lt;RuntimeException&gt; iter1...</samp> and similarly 
+                    <samp class="listingcharacter listingcharacter">CharIterable&lt;IOException&gt; iter2</samp> instead of 
+                    <samp class="listingcharacter listingcharacter">WebIterable iter2</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.4.2.3">Summary</h4>
+                
+                <p class="standard">These examples clearly show that the actual type parameter 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp> disables even such elementary things as checked exceptions. Some peculiarities of the compiler are that it permits things like 
+                    <samp class="listingcharacter listingcharacter">throws E</samp> and that 
+                    <samp class="listingcharacter listingcharacter">E</samp> can then be a checked or unchecked exception. With this peculiarity, however, we can declare 
+                    <samp class="listingcharacter listingcharacter">CharIterable</samp>
+                 in the following way:</p>
+                
+                <div class="listing " id="l_none_12854"><pre><span class="">public</span><span class=""> </span><span class="">interface</span><span class=""> CharIterable</span>
+                    <span class="bold"><span class="">&lt;E </span><span class="">extends</span><span class=""> Exception&gt;</span></span> {<br/>  <span class="">boolean</span><span class=""> </span><span class="">hasNext</span><span class="">() </span><span class="">throws</span><span class=""> </span>
+                    <span class="bold">E</span>;<br/>  <span class="">char</span><span class="">    </span><span class="">next</span><span class="">()    </span><span class="">throws</span><span class=""> </span>
+                    <span class="bold">E</span>;<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">
+                    <a id="p713"/>This approach is particularly useful because our use case makes it clear that unchecked exceptions, as in the case of string traversal with 
+                    <samp class="listingcharacter listingcharacter">StringIterable</samp>
+                , are quite possible; checked exceptions, after all, always require a bit more effort.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Application Programming Interface Design of the Scanner Class</h6>
+                    
+                    <p class="standard first">
+                        <samp class="listingcharacter listingcharacter">Scanner</samp> represents a class where the Java API designers didn’t want checked exceptions on 
+                        <samp class="listingcharacter listingcharacter">next()</samp> methods. The 
+                        <samp class="listingcharacter listingcharacter">Scanner</samp> class can split normal strings where 
+                        <samp class="listingcharacter listingcharacter">next()</samp> can’t throw an 
+                        <samp class="listingcharacter listingcharacter">IOException</samp>. But 
+                        <samp class="listingcharacter listingcharacter">Scanner</samp>
+                     can also get an input stream, and then input/output exceptions are quite possible.</p>
+                    
+                    <p class="standard last">So, what should you do? Either always trigger an 
+                        <samp class="listingcharacter listingcharacter">IOExeption</samp> for the 
+                        <samp class="listingcharacter listingcharacter">next()</samp> methods or never? If the 
+                        <samp class="listingcharacter listingcharacter">next()</samp> methods don’t throw an exception (this is the design at the moment), the errors that can occur when reading from the data stream fall by the wayside. However, if the 
+                        <samp class="listingcharacter listingcharacter">next()</samp> methods declared a 
+                        <samp class="listingcharacter listingcharacter">throws IOException</samp>, this would be annoying when splitting pure strings—and the developers didn’t want that. As a result, the 
+                        <samp class="listingcharacter listingcharacter">IOException</samp> gets dropped in 
+                        <samp class="listingcharacter listingcharacter">next()</samp> and must be explicitly requested via the 
+                        <samp class="listingcharacter listingcharacter">ioException()</samp> method. This is contrary to the idea of always using checked exceptions for input/output errors. By the way, it’s the same with 
+                        <samp class="listingcharacter listingcharacter">PrintWriter</samp>: The 
+                        <samp class="listingcharacter listingcharacter">write(...)</samp> and 
+                        <samp class="listingcharacter listingcharacter">print*(...)</samp> methods don’t throw an 
+                        <samp class="listingcharacter listingcharacter">IOException</samp>, but developers ask later via 
+                        <samp class="listingcharacter listingcharacter">checkError()</samp> whether any problems arose. You may consider whether 
+                        <samp class="listingcharacter listingcharacter">Scanner&lt;E extends Exception&gt;</samp> and methods like 
+                        <samp class="listingcharacter listingcharacter">next() throws E</samp>
+                     would solve the problem.</p>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

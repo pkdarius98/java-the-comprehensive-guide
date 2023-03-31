@@ -1,0 +1,1768 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Lambda Expressions and Functional Programming" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Lambda Expressions and Functional Programming" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Lambda Expressions and Functional Programming</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h13">13    
+        <a id="p731"/>
+    Lambda Expressions and Functional Programming</h1><p class="introductorynote indent_chapter_double">“Computer systems process what they are fed. <br/>If crap comes in, crap comes out.”<br/>—André Kostolany (1906–1999)</p><p class="standard">The development from machine language (or Assembler) to high-level language illustrates the interesting history of parameterization. Even the first high-level languages allowed the parameterization of functions with different arguments. “Born” in 1996, several decades after the first high-level languages, Java provided parameterized subroutines from the start. Later, generics were added for the parameterization of a type. Functional programming made it possible to parameterize a behavior—a sorting method always works the same, but its behavior during comparisons is adjusted. This parameterization can be of a completely different quality than passing different values. With lambda expressions, parameterizing a behavior is quite simple.</p>
+        
+        <h2 class="t2" id="h13.1">13.1    Functional Interfaces and Lambda Expressions</h2>
+        
+        <p class="standard">Interfaces play an important role in Java because they prescribe an application programming interface (API) and represent a link between the implementation and the caller. To implement interfaces in general, you can use classes and records, and for certain interfaces, you can also use compact lambda expressions—the focus of this chapter.</p>
+        
+        
+            
+            <h3 class="t3" id="h13.1.1">13.1.1    Classes Implement Interfaces</h3>
+            
+            <p class="standard">Class declarations can exist in different places in your code—let’s look at two ways.</p>
+            
+            
+                
+                <h4 class="t4" id="h13.1.1.1">Nested Classes as Code Transporters</h4>
+                
+                <p class="standard">Suppose we need to sort strings so that any whitespace at the beginning and the end is ignored in the comparison. For instance, 
+                    <samp class="listingcharacter listingcharacter">" Newton "</samp> should equal 
+                    <samp class="listingcharacter listingcharacter">"Newton"</samp>. For specifications of this type, a 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>
+                 must be passed to a sorting algorithm as a piece of code so that the algorithm can establish the correct order. In practice, you would write the following code:</p>
+                
+                <div class="listing " id="l13.1"><pre><span class="">
+                        <a id="p732"/>
+                    public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">class</span><span class=""> TrimComparator </span><span class="">implements</span><span class=""> Comparator&lt;</span><span class="">String</span><span class="">&gt; {</span><br/>    <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">compare</span><span class="">( </span><span class="">String</span><span class=""> s1, </span><span class="">String</span><span class=""> s2 ) {</span><br/>      <span class="">return</span><span class=""> s1.</span><span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">( s2.</span><span class="">trim</span><span class="">() );</span><br/>    }<br/>  }</span><br/>  <span class="">String</span><span class="">[] words = { </span><span class="">"M"</span><span class="">, </span><span class="">"\nSkyfall"</span><span class="">, </span><span class="">" Q"</span><span class="">, </span><span class="">"\t\tAdele\t"</span><span class=""> };</span><br/>  Arrays.<span class="">sort</span><span class="">( words, </span>
+                    <span class="bold"><span class="">new</span><span class=""> </span><span class="">TrimComparator</span><span class="">()</span></span> );<br/>  System.out.<span class="">println</span><span class="">( Arrays.</span><span class="">toString</span><span class="">( words ) );</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 13.1</b>    
+            src/main/java/com/tutego/insel/lambda/TrimCompare.java, main()</p>
+                
+                <p class="standard">The result is the following output:</p>
+                
+                <div class="listing " id="l_none_1320"><pre>[        Adele    , M,  Q, <br/>Skyfall] </pre></div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">TrimComparator</samp> contains the program code for the comparison logic in the 
+                    <samp class="listingcharacter listingcharacter">compare(...)</samp> method. An object from 
+                    <samp class="listingcharacter listingcharacter">TrimComparator</samp> is created and passed to 
+                    <samp class="listingcharacter listingcharacter">Arrays.sort(...)</samp>
+                . In the next sections we will see how we can make this code more compact.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.1.2">Anonymous Inner Classes as Code Transporters</h4>
+                
+                <p class="standard">Classes contain program code, and objects of classes are passed to methods like 
+                    <samp class="listingcharacter listingcharacter">sort(...)</samp>
+                 to get the program code where it needs to go. But this approach is rather inelegant. For the description of the program code, you’ll need an extra class, which is a lot of typing. By using an anonymous inner class, the program code can be shortened a bit, however, as in the following example:</p>
+                
+                <div class="listing " id="l_none_1341"><pre><span class="">String</span><span class="">[]</span><span class=""> words </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"M"</span><span class="">,</span><span class=""> </span><span class="">"\nSkyfall"</span><span class="">,</span><span class=""> </span><span class="">" Q"</span><span class="">,</span><span class=""> </span><span class="">"\t\tAdele\t"</span><span class=""> </span><span class="">};</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> words</span><span class="">,</span><span class=""> </span>
+                    <span class="bold"><span class="">new</span><span class=""> Comparator&lt;</span><span class="">String</span><span class="">&gt;() {</span><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">compare</span><span class="">( </span><span class="">String</span><span class=""> s1, </span><span class="">String</span><span class=""> s2 ) {</span><br/>    <span class="">return</span><span class=""> s1.</span><span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">( s2.</span><span class="">trim</span><span class="">() );</span><br/>  } }</span> );<br/>System.out.<span class="">println</span><span class="">( Arrays.</span><span class="">toString</span><span class="">( words ) ); </span><span class=""/></pre></div>
+                
+                <p class="standard">However, a lot of work is still required: We need to override a method and then create an object. For program authors, this task is annoying, and the JVM must deal with many superfluous class metadata. If the compiler knows that a 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> is needed for 
+                    <samp class="listingcharacter listingcharacter">sort(...)</samp>, and if a 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> has only one method, why can’t the compiler figure it out by itself and we can just write the core of the method, the statement 
+                    <samp class="listingcharacter listingcharacter">s1.trim().compareTo(s2.trim())</samp>
+                ?</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.1.2">13.1.2    
+                <a id="p733"/>
+            Lambda Expressions Implement Interfaces</h3>
+            
+            <p class="standard">Lambda expressions make passing program code to a method easier because this compact syntax can implement interfaces with an operation. Thus, our example can be rewritten in the following way:</p>
+            
+            <div class="listing " id="l_none_1336"><pre><span class="">String</span><span class="">[]</span><span class=""> words </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"M"</span><span class="">,</span><span class=""> </span><span class="">"\nSkyfall"</span><span class="">,</span><span class=""> </span><span class="">" Q"</span><span class="">,</span><span class=""> </span><span class="">"\t\tAdele\t"</span><span class=""> </span><span class="">};</span><span class=""><br/></span>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c </span><span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">(</span><span class="">String</span><span class=""> s1, </span><span class="">String</span><span class=""> s2) -&gt;</span><br/>                           { <span class="">return</span><span class=""> s1.</span><span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">( s2.</span><span class="">trim</span><span class="">() ); }</span></span><br/>Arrays.<span class="">sort</span><span class="">( words, c );</span><br/>System.out.<span class="">println</span><span class="">( Arrays.</span><span class="">toString</span><span class="">( words ) ); </span><span class=""/></pre></div>
+            
+            <p class="standard">The expression in bold is a 
+                <span class="italic">lambda expression</span>
+                <a class="indexanchor" id="i13_00"/>, which is
+                <span class="italic"> </span>a compact way to implement interfaces with exactly one method: The 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> interface has exactly one operation, 
+                <samp class="listingcharacter listingcharacter">compare(...)</samp>
+            .</p>
+            
+            <p class="standard">A lambda expression and a method declaration look similar, but modifiers, the return type, the method name, and (potential) 
+                <samp class="listingcharacter listingcharacter">throws</samp>
+             clauses are omitted from lambda expressions.</p>
+            
+            <table class="standardtable" id="t13.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Method Declaration</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Lambda Expression</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <div class="listing " id="l_none_1351"><pre>public int compare<br/>
+                                <span class="bold">( String s1, String s2 )<br/><br/>{ return s1.trim().compareTo(s2.trim()); }</span>
+                            </pre></div>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <div class="listing " id="l_none_1373"><pre>
+                                <span class="bold"><br/>( String s1, String s2 ) </span><br/>-&gt;<br/>
+                                <span class="bold">{ return s1.trim().compareTo(s2.trim()); }</span>
+                            </pre></div>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 13.1</b>    
+            Comparison of the Method Declaration of an Interface with Its Lambda Expression</p>
+            
+            <p class="standard">If you consider a lambda expression as an implementation of the interface, nothing about 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> or 
+                <samp class="listingcharacter listingcharacter">compare(...)</samp>
+             specifically requires mention—a lambda expression more or less just represents the Java code and leaves out information that that the compiler can infer from the context.</p>
+            
+            <p class="standard">You can explicitly store the lambda expression in a variable, but even better, you can use it directly as an argument of 
+                <samp class="listingcharacter listingcharacter">Arrays.sort(...)</samp>
+            , as in the following example:</p>
+            
+            <div class="listing " id="l_none_1384"><pre>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> words</span><span class="">,</span><span class=""><br/></span>             
+                <span class="bold"><span class="">(</span><span class="">String</span><span class=""> s1, </span><span class="">String</span><span class=""> s2) -&gt; { </span><span class="">return</span><span class=""> s1.</span><span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">(s2.</span><span class="">trim</span><span class="">()); }</span></span> ); <span class=""/></pre></div>
+            
+            <p class="standard">Of course, this approach is nice and compact, much shorter than using anonymous classes. We can even get more concise with lambda expressions, as we’ll see later in 
+                <span class="crossreference "><a href="13_001.html#h13.1.4">Section 13.1.4</a></span>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h13.1.2.1">
+                    <a id="p734"/>
+                General Syntax for Lambda Expressions</h4>
+                
+                <p class="standard">All lambda expressions can be formulated in a syntax with the following general form:</p>
+                
+                <div class="listing " id="l_none_1377"><pre><span class="">(</span><span class=""> </span>
+                    <span class="italic"><span class="">LambdaParameter</span></span> ) -&gt; { 
+                    <span class="italic">Statements</span> } <span class=""/></pre></div>
+                
+                <p class="standard">Lambda parameters are, so to speak, the input values for the instructions. The parameter list is declared as known from methods or constructors, but no varargs are allowed in the “lambda parameter list”. Further syntactic shortcuts are available, as we’ll see later in 
+                    <span class="crossreference "><a href="13_001.html#h13.1.6">Section 13.1.6</a></span>
+                , but for now, let’s stick with this basic notation.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>History</h6>
+                    
+                    <p class="standard first last">The Java term 
+                        <span class="italic">lambda expression</span> goes back to the 1930s with lambda calculus (also written as 
+                        <span class="italic">λ-calculus</span>
+                    ), which is a formal language for examining functions.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.1.3">13.1.3    Functional Interfaces</h3>
+            
+            <p class="standard">Not every interface has a shortcut via a lambda expression, and a central condition governs when a lambda expression can be used.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Definition</h6>
+                
+                <p class="standard first last">Interfaces that have only one abstract method are called 
+                    <span class="italic">functional interfaces</span>
+                    <a class="indexanchor" id="i13_01"/>
+                    <a class="indexanchor" id="i13_02"/>. A 
+                    <span class="italic">function descriptor</span>
+                    <a class="indexanchor" id="i13_03"/> describes this method. An abstract class with exactly one abstract method does 
+                    <span class="italic">not</span>
+                 count as a functional interface.</p>
+            
+            </div>
+            
+            <p class="standard">Lambda expressions and functional interfaces have a special relationship because a lambda expression is an instance of the functional interface. Of course, types and exceptions must fit. One obvious limitation is that functional interfaces prescribe exactly one abstract method because, if more than one existed, a lambda expression would have to provide multiple implementations or somehow favor one method over the others.</p>
+            
+            <p class="standard">Consequently, to create an object of a functional interface type, you have two options: You can choose the traditional way via creating classes that implement functional interfaces and then use 
+                <samp class="listingcharacter listingcharacter">new</samp>
+             to create an object. </p>
+            
+            <p class="standard">Alternatively, you can use compact lambda expressions. Modern integrated development environments (IDEs) can show you when compact lambda expressions can be used instead of anonymous inner classes, for example, and provide possible refactoring suggestions. Lambda expressions make you code more compact and, after a short learning curve, more readable.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p735"/>
+                Note</h6>
+                
+                <p class="standard first">Functional interfaces must boil down to exactly one method to be implemented, even if several operations are prescribed from upper-level interfaces but condensed to one operation through the use of generics. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_13101"><pre><span class="">interface</span><span class=""> I</span><span class="">&lt;</span><span class="">S</span><span class="">,</span><span class=""> T </span><span class="">extends</span><span class=""> CharSequence</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">len</span><span class="">(</span><span class=""> S text </span><span class="">);</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">len</span><span class="">(</span><span class=""> T text </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">interface</span><span class=""> FI </span><span class="">extends</span><span class=""> I</span><span class="">&lt;</span><span class="">String</span><span class="">,</span><span class=""> </span><span class="">String</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""> }</span></pre></div>
+                
+                <p class="standard last">
+                    <samp class="listingcharacter listingcharacter">FI</samp> is our functional interface with a unique 
+                    <samp class="listingcharacter listingcharacter">len(String)</samp>
+                 operation. Static and default methods don’t interfere in functional interfaces.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h13.1.3.1">Multiple Functional Interfaces in the Java Standard Library</h4>
+                
+                <p class="standard">Java comes with a large number of interfaces that are characterized as functional interfaces. A small selection of interfaces includes the following:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">interface Runnable { void run(); }</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">interface Supplier&lt;T&gt; { T get(); }</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">interface Consumer&lt;T&gt; { void accept(T t); }</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">interface Comparator&lt;T&gt; { int compare(T o1, T o2); }</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">interface ActionListener { void actionPerformed(ActionEvent e); }</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Many of these interfaces are located in the 
+                    <samp class="listingcharacter listingcharacter">java.util.function</samp>
+                 package introduced in Java 8. Whether an interface has other static methods or default methods (i.e., interface methods with a given implementation) doesn’t matter—all that matters is that the interface declares exactly one operation to be implemented.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The parameter list can be empty, and the return can be 
+                        <samp class="listingcharacter listingcharacter">void</samp>, as in the example of the 
+                        <samp class="listingcharacter listingcharacter">Runnable</samp> interface, which has a 
+                        <samp class="listingcharacter listingcharacter">void run()</samp> method, and thus, the following statement is the 
+                        <samp class="listingcharacter listingcharacter">Runnable </samp>
+                    interface’s corresponding lambda expression:</p>
+                    
+                    <div class="listing  last_item" id="l_none_1398"><pre>Runnable run <span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{}</span><span class="">;</span></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.1.4">13.1.4    The Type of a Lambda Expression Depends on the Target Type</h3>
+            
+            <p class="standard">In Java, every expression has a type. The expressions 
+                <samp class="listingcharacter listingcharacter">1</samp> and 
+                <samp class="listingcharacter listingcharacter">1*2</samp> have types (namely 
+                <samp class="listingcharacter listingcharacter">int</samp>), just like 
+                <samp class="listingcharacter listingcharacter">"A" + "B"</samp> (type 
+                <samp class="listingcharacter listingcharacter">String</samp>) or 
+                <samp class="listingcharacter listingcharacter">String.CASE_INSENSITIVE_ORDER</samp> (type 
+                <samp class="listingcharacter listingcharacter">Comparator&lt;String&gt;</samp>). Lambda expressions also always have a type because a lambda expression is like an instance of a functional interface. However, compared to expressions such as 
+                <samp class="listingcharacter listingcharacter">1*2</samp>, lambda expressions behave somewhat differently because the type of a lambda expression is determined exclusively from its context. Let’s recall our earlier 
+                <samp class="listingcharacter listingcharacter">
+                    <a id="p736"/>
+                sort(...)</samp>
+             method:</p>
+            
+            <div class="listing " id="l_none_13111"><pre>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> words</span><span class="">,</span><span class=""> </span>
+                <span class="bold"><span class="">(</span><span class="">String</span><span class=""> s1, </span><span class="">String</span><span class=""> s2) -&gt; { </span><span class="">return</span><span class=""> … }</span></span> ); <span class=""/></pre></div>
+            
+            <p class="standard">No mention of the type 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> can be found in the expression, but the compiler recognizes from the type of the second parameter of 
+                <samp class="listingcharacter listingcharacter">sort(...)</samp>, which is from 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>, whether or not the lambda expression matches the method of the 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>
+            .</p>
+            
+            <p class="standard">Consequently, the type of a lambda expression depends on which functional interface it currently implements in the respective context. The compiler can’t construct a lambda expression without knowledge of the 
+                <span class="italic">target type</span>
+                <a class="indexanchor" id="i13_04"/>, as shown in 
+                <span class="crossreference "><a href="13_001.html#f13.1">Figure 13.1</a></span>
+            .</p>
+            
+            <div class="imagebox figure-type"><a href="img-f13.1.html" id="f13.1"><img alt="Type Inference of the Compiler" id="img-f13.1" src="bilderklein/klein13_001.png"/></a></div>
+            
+            <p class="caption "><b>Figure 13.1</b>    
+            Type Inference of the Compiler</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">
+                    <samp class="listingcharacter listingcharacter">Callable</samp> and 
+                    <samp class="listingcharacter listingcharacter">Supplier</samp>
+                 are functional interfaces with methods that declare no parameter lists and return a reference; the code for the lambda expression looks the same, as shown in the following examples:</p>
+                
+                <div class="listing  last_item" id="l_none_13128"><pre>java<span class="">.</span><span class="">util</span><span class="">.</span><span class="">concurrent</span><span class="">.</span><span class="">Callable</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">() -&gt; { </span><span class="">return</span><span class=""> </span><span class="">""</span><span class="">; }</span></span>;<br/>java.util.function.Supplier&lt;<span class="">String</span><span class="">&gt;   s = </span>
+                    <span class="bold">() -&gt; { <span class="">return</span><span class=""> </span><span class="">""</span><span class="">; }</span></span>;<span class=""/></pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h13.1.4.1">Who Determines the Target Type?</h4>
+                
+                <p class="standard">Precisely because the type can’t be read from the lambda expression, you can only use lambda expressions where sufficient type information is available, which includes, but isn’t limited to, the following positions:</p>
+                
+                <table class="standardtable" id="t13.2">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Context</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Example</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Variable declarations</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Runnable run = () -&gt; { };</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <a id="p737"/>
+                                Assignments to declared variables</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Runnable run;<br/>run = () -&gt; { };</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">Arguments to methods or constructors</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Arrays.sort( list,<br/>  (s, t) -&gt; { return 0; } );</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">Method returns</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Runnable boring() {<br/>  return () -&gt; { };<br/>}</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">Array initializations</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Runnable[] runnables = {<br/>  () -&gt; { }, () -&gt; { }<br/>};</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">Typecasting</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Object o = (Runnable) () -&gt; { };</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 13.2</b>    
+            Positions Providing Context for Lambda Expressions</p>
+                
+                <p class="standard">Thus, the use of a lambda expression is always possible if enough context information is available. This rule also applies to the condition operator—it can return a different lambda expression depending on the condition. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_13139"><pre>Supplier<span class="">&lt;</span><span class="">Double</span><span class="">&gt;</span><span class=""> randomNegOrPos </span><span class="">=</span><span class=""> Math</span><span class="">.</span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">&gt;</span><span class=""> </span><span class="">0.5</span><span class=""><br/></span>                                      <span class="">?</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> Math</span><span class="">.</span><span class="">random</span><span class="">();</span><span class=""> </span><span class="">}</span><span class=""><br/></span>                                      <span class="">:</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">-</span><span class="">Math</span><span class="">.</span><span class="">random</span><span class="">();</span><span class=""> </span><span class="">};</span><span class=""> </span></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">A local variable declaration with 
+                        <samp class="listingcharacter listingcharacter">var</samp> doesn’t work with lambda expressions. A lambda expression requires placement on the left and 
+                        <samp class="listingcharacter listingcharacter">var</samp>
+                     the type on the right.</p>
+                    
+                    <div class="listing  last_item" id="l_none_13140"><pre>var o <span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{};</span><span class="">      </span><span class=""> // 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                         Lambda expression needs an explicit target-type</span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.4.2">Parameter Types</h4>
+                
+                <p class="standard">In practice, the most common case is that the parameter types of methods specify the target type. The use of lambda expressions slightly changes the view on overloaded methods. Our example with 
+                    <samp class="listingcharacter listingcharacter">() -&gt; { return ""; }</samp> illustrates this change because it “fits” the target type 
+                    <samp class="listingcharacter listingcharacter">Callable&lt;String&gt;</samp> as well as 
+                    <samp class="listingcharacter listingcharacter">Supplier&lt;String&gt;</samp>. Let’s assume we have the following two overloaded 
+                    <samp class="listingcharacter listingcharacter">run(...)</samp>
+                 methods:</p>
+                
+                <div class="listing " id="l_none_13150"><pre><span class="">class</span><span class=""> OverloadedFuntionalInterfaceMethods </span><span class="">{</span><span class=""><br/></span>  <span class="">static</span><span class=""> </span><span class="">&lt;</span><span class="">V</span><span class="">&gt;</span><span class=""> </span><span class="">void</span><span class=""> </span>
+                    <span class="bold"><span class="">run</span><span class="">( Callable&lt;V&gt; callable )</span></span> { }<br/>  <span class="">static</span><span class=""> &lt;V&gt; </span><span class="">void</span><span class=""> </span>
+                    <span class="bold"><span class="">run</span><span class="">( Supplier&lt;V&gt; callable )</span></span> { }<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">
+                    <a id="p738"/>
+                Let’s go through calling the methods next:</p>
+                
+                <div class="listing " id="l_none_13171"><pre>Callable<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c </span><span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">"Don’t tell me how to eat donuts!"</span><span class="">;</span><span class=""> </span><span class="">};</span><span class=""><br/></span>Supplier<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">"Don’t tell me how to eat donuts!"</span><span class="">;</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">run</span><span class="">(</span><span class=""> c </span><span class="">);</span><span class=""><br/></span><span class="">run</span><span class="">(</span><span class=""> s </span><span class="">);</span><span class=""><br/></span>// run( () -&gt; { return "Don’t tell me how to eat donuts!"; } ); // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/> Compiler error<span class=""><br/></span><span class="">run</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">(Callable&lt;</span><span class="">String</span><span class="">&gt;)</span></span> () -&gt; { <span class="">return</span><span class=""> </span><span class="">"Don’t tell me how to eat donuts!"</span><span class="">; } ); </span><span class=""/></pre></div>
+                
+                <p class="standard">If you call 
+                    <samp class="listingcharacter listingcharacter">run(c)</samp> or 
+                    <samp class="listingcharacter listingcharacter">run(s)</samp>, no problem arises because 
+                    <samp class="listingcharacter listingcharacter">c</samp> and 
+                    <samp class="listingcharacter listingcharacter">s</samp> are clearly typed. However, calling 
+                    <samp class="listingcharacter listingcharacter">run(...)</samp> with the lambda expression doesn’t work because the target type (either 
+                    <samp class="listingcharacter listingcharacter">Callable</samp> or 
+                    <samp class="listingcharacter listingcharacter">Supplier</samp>
+                ) is ambiguous. In this case, explicit typecasting can help.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Application Programming Interface Design Tip</h6>
+                    
+                    <p class="standard first last">From an API designer’s point of view, overloaded methods are nice, of course, but from a user’s point of view, type conversions are not nice. To avoid explicit typecasting, overloaded methods should be avoided if they have the parameter type of a functional interface. Instead, the methods can be named differently (which of course doesn’t work for constructors). In our case, if the method is named 
+                        <samp class="listingcharacter listingcharacter">runCallable(...)</samp> and 
+                        <samp class="listingcharacter listingcharacter">runSupplier(...)</samp>
+                    , no typecasting is needed anymore, and the compiler can infer the type.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.4.3">Return Types</h4>
+                
+                <p class="standard">Type inference plays a significant role in lambda expressions. This influence is especially true on the return types, which don’t appear in the declaration and for which no syntax exists at all. Instead, the compiler “infers” the appropriate return type. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_13173"><pre>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c </span><span class="">=</span><span class=""><br/></span>  <span class="">(</span>
+                    <span class="bold"><span class="">String</span></span><span class=""> s1, </span>
+                    <span class="bold"><span class="">String</span></span><span class=""> s2) -&gt; { </span><span class="">return</span><span class=""> s1.</span><span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">( s2.</span><span class="">trim</span><span class="">() ); }; </span><span class=""/></pre></div>
+                
+                <p class="standard">In this case,
+                    <samp class="listingcharacter listingcharacter"> string</samp> is explicitly provided as the parameter type of the 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> method; the return type 
+                    <samp class="listingcharacter listingcharacter">int</samp>, which is returned by the expression 
+                    <samp class="listingcharacter listingcharacter">s1.trim().compareTo( s2.trim() )</samp>
+                , on the other hand, doesn’t appear.</p>
+                
+                <p class="standard">Sometimes, the compiler needs a little help: Let’s use the functional interface 
+                    <samp class="listingcharacter listingcharacter">Supplier&lt;T&gt;</samp> as an example, which declares a 
+                    <samp class="listingcharacter listingcharacter">T get()</samp>
+                 method. For the assignment, you would write the following code:</p>
+                
+                <div class="listing " id="l_none_13201"><pre>Supplier<span class="">&lt;</span><span class="">Long</span><span class="">&gt;</span><span class=""> two  </span><span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">2</span><span class="">;</span><span class=""> </span><span class="">}</span><span class="">      </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""> </span></pre></div>
+                
+                <p class="standard">However, this code isn’t correct and leads to the compiler error “incompatible types: bad return type in lambda expression.” In this case, 
+                    <samp class="listingcharacter listingcharacter">2</samp> is a literal of type 
+                    <samp class="listingcharacter listingcharacter">int</samp>, and the compiler can’t adapt this value to 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                . Thus, you must write the following code:</p>
+                
+                <div class="listing " id="l_none_13189"><pre>
+                    <a id="p739"/>Supplier<span class="">&lt;</span><span class="">Long</span><span class="">&gt;</span><span class=""> two  </span><span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> 2L </span><span class="">};</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Alternatively, you could write the following:</p>
+                
+                <div class="listing " id="l_none_13208"><pre>Supplier<span class="">&lt;</span><span class="">Long</span><span class="">&gt;</span><span class=""> two  </span><span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">(</span><span class="">long</span><span class="">)</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">};</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Ultimately, no new rules apply to lambda expressions that don’t already apply to method returns because even a method declaration like the following is criticized by the compiler:</p>
+                
+                <div class="listing " id="l_none_13223"><pre>Long <span class="">two</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">2</span><span class="">;</span><span class=""> </span><span class="">}</span><span class="">     </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""> </span></pre></div>
+                
+                <p class="standard">However, because wrapper types are much more common with functional interfaces due to generics, these features occur more often than with method declarations.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.4.4">Are Lambda Expressions Objects?</h4>
+                
+                <p class="standard">A lambda expression is an instance of a functional interface and occurs as an object. For objects, normally a natural is-a-kind-of relationship to 
+                    <samp class="listingcharacter listingcharacter">java.lang.Object</samp> always exists. But if the context is missing, even the is-a-kind-of relationship to 
+                    <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+                 is disturbed. In this case, then, the following code isn’t correct:</p>
+                
+                <div class="listing " id="l_none_13232"><pre>Object o <span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{};</span><span class="">         </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The compiler error is: “incompatible types: the target type must be a functional interface.” Only an explicit type conversion can correct the error and specify the target type to the compiler, as shown in the following example:</p>
+                
+                <div class="listing " id="l_none_13253"><pre>Object r <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">(Runnable)</span></span> () -&gt; {}; <span class=""/></pre></div>
+                
+                <p class="standard">Lambda expressions don’t have their own types per se, and basically nothing changes for Java’s type system. (Later Java versions may introduce changes to the type system, however.)</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">The fact that lambda expressions are objects is a feature that shouldn’t be overused. Thus, the usual 
+                        <samp class="listingcharacter listingcharacter">Object</samp> methods 
+                        <samp class="listingcharacter listingcharacter">equals(Object)</samp>, 
+                        <samp class="listingcharacter listingcharacter">hashCode()</samp>, 
+                        <samp class="listingcharacter listingcharacter">getClass()</samp>, and 
+                        <samp class="listingcharacter listingcharacter">toString()</samp> as well as those for thread control are of no particular importance. You should never have a scenario where lambda expressions must be compared using 
+                        <samp class="listingcharacter listingcharacter">==</samp>
+                     because the result is undefined according to the Java Language Specification (JLS). </p>
+                    
+                    <p class="standard last">Real objects have an identity (an identity hashcode) that can be compared and tested with 
+                        <samp class="listingcharacter listingcharacter">instanceof</samp>
+                     and that can be backed up with a synchronized block—none of these features apply to lambda expressions. Basically, the term “lambda expression” already captures something you should never forget: It’s an expression, that is, something that’s evaluated and produces a result.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.1.5">13.1.5    
+                <a id="p740"/>
+            @FunctionalInterface Annotations</h3>
+            
+            <p class="standard">Any interface with exactly one abstract method is suitable as a functional interface and thus suitable for a lambda expression. However, not every interface in the API that declares only an abstract method at the moment should also be used for lambda expressions. For example, further development of an interface with several (abstract) methods may be planned, but currently only one abstract method is available. The compiler can’t know if an interface might evolve.</p>
+            
+            <p class="standard">To indicate that an interface is intended as a functional interface, the annotation type 
+                <samp class="listingcharacter listingcharacter">FunctionalInterface</samp>
+                <a class="indexanchor" id="i13_05"/> exists in the 
+                <samp class="listingcharacter listingcharacter">java.lang </samp>
+            package. This annotation indicates that the interface should have exactly one abstract method indefinitely and thus will continue to be a functional interface in the future.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">A custom functional interface should always be marked as 
+                    <samp class="listingcharacter listingcharacter">FunctionalInterface</samp>
+                , as in the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_13250"><pre>
+                    <span class="bold"><span class="">@FunctionalInterface</span></span><span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">interface</span><span class=""> Buyable {</span><br/>  <span class="">double</span><span class=""> </span><span class="">price</span><span class="">();</span><br/>}<span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">The compiler checks whether the annotated interface contains exactly one abstract method and raises an error if it doesn’t. For compatibility reasons, however, the compiler doesn’t enforce this annotation for functional interfaces. Thus, you can easily rewrite nested classes that implement traditional interfaces with one method into lambda expressions. In other words, the annotation is not a prerequisite for using the interface in a lambda expression and serves only for documentation purposes. In Java Platform, Standard Edition (Java SE), however, all central functional interfaces are marked in this way.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">Any interface marked with 
+                    <samp class="listingcharacter listingcharacter">@FunctionalInterface</samp>
+                 gets an extra sentence in the Javadoc: “Functional Interface: This is a functional interface and can therefore be used as the assignment target for a lambda expression or method reference.” This addition makes functional interfaces even more visible.</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The 
+                    <samp class="listingcharacter listingcharacter">FunctionalInterface</samp> annotation type is also visible at runtime, which means that programs can also test whether an interface is annotated via reflection.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn13_01" id="fn13_01">[ 188 ]</a></span>
+                </p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.1.6">13.1.6    
+                <a id="p741"/>
+            Syntax for Lambda Expressions</h3>
+            
+            <p class="standard">Lambda expressions, like methods, have possible parameter and return values. The Java grammar for writing lambda expressions provides a few useful syntactic shortcuts.</p>
+            
+            
+                
+                <h4 class="t4" id="h13.1.6.1">Detailed Notation</h4>
+                
+                <p class="standard">Lambda expressions can be written in different ways since short versions exist for various constructions. However, one notation that always applies is the following:</p>
+                
+                <div class="listing " id="l_none_13263"><pre><span class="">(</span><span class=""> </span>
+                    <span class="italic"><span class="">LambdaParameter</span></span> ) -&gt; { 
+                    <span class="italic">Statements</span> } <span class=""/></pre></div>
+                
+                <p class="standard">Fully written out, the lambda parameter—like a method parameter—consists of several elements:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The type</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The name </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Optional modifiers</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The parameter name opens a new scope for a variable, where the parameter name must 
+                    <span class="italic">not</span> override 
+                    <span class="italic">any</span>
+                 other local variable names. Now, the lambda parameter variable behaves like a new variable from an inner block and not like a variable from an inner class where the visibility is different.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following results in a compiler error in the lambda expression because 
+                        <samp class="listingcharacter listingcharacter">s</samp>
+                     has already been declared—the parameter variable from the lambda expression must be “fresh.” Consider the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_13266"><pre><span class="">String</span><span class=""> </span>
+                        <span class="bold"><span class="">s</span></span> = <span class="">"Donuts. Is there anything they can’t do?"</span><span class="">;</span><br/>Comparator&lt;<span class="">String</span><span class="">&gt; c = (</span><span class="">String</span><span class=""> </span>
+                        <span class="bold">s</span>, <span class="">String</span><span class=""> t) -&gt; { … };</span><span class=""> // 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                         Compiler error</span><span class=""> </span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.6.2">Short Version 1: Type Inference (Implicit Type)</h4>
+                
+                <p class="standard">The Java compiler can read many types from context, which is called 
+                    <span class="italic">type inference</span>. We covered this topic in 
+                    <span class="crossreference "><a href="12_001.html#h12">Chapter 12</a></span>, 
+                    <span class="crossreference "><a href="12_001.html#h12.1.5">Section 12.1.5</a></span>
+                , when we discussed the diamond operator. With this operator, you can write something like the following code:</p>
+                
+                <div class="listing " id="l_none_13277"><pre>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;()</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If enough type information is available to the compiler, then the compiler allows a short version for lambda expressions. The following declaration is valid:</p>
+                
+                <div class="listing " id="l_none_13304"><pre>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c </span><span class="">=</span><span class=""><br/></span>  <span class="">(</span>
+                    <span class="bold"><span class="">String</span><span class=""> s1, </span><span class="">String</span><span class=""> s2</span></span>) -&gt; { <span class="">return</span><span class=""> s1.</span><span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">( s2.</span><span class="">trim</span><span class="">() ); }; </span><span class=""/></pre></div>
+                
+                <p class="standard">
+                    <a id="p742"/>The compiler knows, thanks to type inference, that to the right of the equal sign an expression of type 
+                    <samp class="listingcharacter listingcharacter">Comparator&lt;String&gt;</samp> must exist and that the 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> method 
+                    <samp class="listingcharacter listingcharacter">compare(...)</samp> has two parameters of type 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                . Therefore, the following shortcut works:</p>
+                
+                <div class="listing " id="l_none_13314"><pre>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c </span><span class="">=</span><span class=""> </span><span class="">(</span>
+                    <span class="bold">s1, s2</span>) -&gt; { <span class="">return</span><span class=""> s1.</span><span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">( s2.</span><span class="">trim</span><span class="">() ); }; </span><span class=""/></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">The parameter list contains either explicitly declared parameter types or implicit inferred types. A mix of explicit and implicit isn’t permitted, the compiler blocks something like 
+                        <samp class="listingcharacter listingcharacter">(string s1, s2)</samp> or 
+                        <samp class="listingcharacter listingcharacter">(s1, string s2)</samp>
+                     with an error message.</p>
+                
+                </div>
+                
+                <p class="standard">If the compiler can determine the types, parameter types are optional. But type inference isn’t always possible, so the short version isn’t always possible either. In addition, the explicit notation also increases readability: Short expressions aren’t necessarily the most understandable ones.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">The compiler reads from the types whether all members are present. The types are provided either explicitly or implicitly. Consider the following example:</p>
+                    
+                    <div class="listing " id="l_none_13306"><pre>Comparator<span class="">&lt;</span>
+                        <span class="bold"><span class="">String</span></span><span class="">&gt; sc = (a, b) -&gt; </span><br/> { <span class="">return</span><span class=""> Integer.</span><span class="">compare</span><span class="">( a.</span><span class="">length</span><span class="">(),  b.</span><span class="">length</span><span class="">() ); };</span><br/>Comparator&lt;
+                        <span class="bold">BitSet</span>&gt; bc = (a, b) -&gt; <br/> { <span class="">return</span><span class=""> Integer.</span><span class="">compare</span><span class="">( a.</span><span class="">length</span><span class="">(),  b.</span><span class="">length</span><span class="">() ); };</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">The 
+                        <samp class="listingcharacter listingcharacter">String</samp> and 
+                        <samp class="listingcharacter listingcharacter">BitSet</samp> classes both have the 
+                        <samp class="listingcharacter listingcharacter">length()</samp> method, so the lambda expression is correct. The same lambda code in the source code can be used for two completely different classes that have nothing in common at all, except that they both happen to have a method called 
+                        <samp class="listingcharacter listingcharacter">length()</samp>
+                    .</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.6.3">Short Version 2: The Lambda Body Is Either a Single Expression or a Block</h4>
+                
+                <p class="standard">If the body of a lambda expression consists of only a single expression, a shortened notation can make the block parentheses and the semicolon redundant. Thus, you could write the following code:</p>
+                
+                <div class="listing " id="l_none_13335"><pre><span class="">(</span><span class=""> </span>
+                    <span class="italic"><span class="">LambdaParameter</span></span> ) -&gt; { <span class="">return</span><span class=""> </span>
+                    <span class="italic">expression;</span> } <span class=""/></pre></div>
+                
+                <p class="standard">But the following code is more concise:</p>
+                
+                <div class="listing " id="l_none_13346"><pre><span class="">(</span><span class=""> </span>
+                    <span class="italic"><span class="">LambdaParameter</span></span> ) -&gt; 
+                    <span class="italic">expression</span> <span class=""/></pre></div>
+                
+                <p class="standard">
+                    <a id="p743"/>Lambda expressions with 
+                    <samp class="listingcharacter listingcharacter">return</samp> statements in their bodies occur frequently since this construction corresponds to typical functions. Thus, the abbreviated syntax for lambda expressions only requires the expression, which then forms the return. 
+                    <span class="crossreference "><a href="13_001.html#t13.3">Table 13.3</a></span>
+                 shows two examples.</p>
+                
+                <table class="standardtable" id="t13.3">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Long Notation</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Short Notation</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(s1, s2) -&gt;<br/> { return </samp>
+                                    <span class="bold"><samp class="listingcharacter listingcharacter">s1.trim().compareTo( s2.trim() )</samp></span>
+                                    <samp class="listingcharacter listingcharacter">; }</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(s1, s2) -&gt;<br/> </samp>
+                                    <span class="bold"><samp class="listingcharacter listingcharacter">s1.trim().compareTo( s2.trim() )</samp></span>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(a, b) -&gt; { return </samp>
+                                    <span class="bold"><samp class="listingcharacter listingcharacter">a + b</samp></span>
+                                    <samp class="listingcharacter listingcharacter">; }</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(a, b) -&gt; </samp>
+                                    <span class="bold"><samp class="listingcharacter listingcharacter">a + b</samp></span>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 13.3</b>    
+            Long Notation and Short Notation</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">Notations with the curly brackets and notations with the return expressions can’t be mixed. Either you have a block of curly brackets and a 
+                        <samp class="listingcharacter listingcharacter">return</samp>, or you have no brackets and no 
+                        <samp class="listingcharacter listingcharacter">return</samp>
+                     keyword. Incorrect mixes, such as the following statements, result in errors:</p>
+                    
+                    <div class="listing " id="l_none_1334612"><pre>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c</span><span class="">;</span><span class=""><br/></span>c <span class="">=</span><span class=""> </span><span class="">(</span><span class="">s1</span><span class="">,</span><span class=""> s2</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span>
+                        <span class="bold"><span class="">{</span></span> s1.<span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">( s2.</span><span class="">trim</span><span class="">() ) </span>
+                        <span class="bold">}</span>; <span class="">   // 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                         Compiler error (1)</span><span class=""><br/></span>c = (s1, s2) -&gt; 
+                        <span class="bold"><span class="">return</span></span><span class=""> s1.</span><span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">( s2.</span><span class="">trim</span><span class="">() );</span><span class=""> // 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                         Compiler error (2)</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">If you used an explicit 
+                        <samp class="listingcharacter listingcharacter">return</samp> in line 
+                        <samp class="listingcharacter listingcharacter">(1)</samp>, everything would be fine; if you omitted the 
+                        <samp class="listingcharacter listingcharacter">return</samp> in line 
+                        <samp class="listingcharacter listingcharacter">(2)</samp>
+                    , the line would also be compilable.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.6.4">void-compatible</h4>
+                
+                <p class="standard">Expressions can also evaluate to 
+                    <samp class="listingcharacter listingcharacter">void</samp> in Java, so without problems a call like 
+                    <samp class="listingcharacter listingcharacter">System.out.println()</samp>
+                 can be set in the compact notation without block. In other words, when lambda expressions are used with the short expression syntax, these expressions might return something but don’t have to.</p>
+                
+                <table class="standardtable" id="t13.4">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Long Notation</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Short Notation</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">() -&gt; { System.out.println(); }</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">() -&gt; System.out.println()</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(s) -&gt; { System.out.println(s); }</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(s) -&gt; System.out.println(s)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 13.4</b>    
+            Long Notation and Short Notation</p>
+                
+                <p class="standard">Whether lambda expressions have a return is expressed by two terms:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <a class="indexanchor" id="i13_06"/>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">void</samp>
+                            </span> 
+                            <span class="bold"> compatible</span> <br/>The lambda body doesn’t return a result, either because the block doesn’t contain a 
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p744"/>
+                            return</samp> (or contains a 
+                            <samp class="listingcharacter listingcharacter">return</samp> without a return value) or because a 
+                            <samp class="listingcharacter listingcharacter">void</samp> expression is used in the short notation. So, the lambda expression 
+                            <samp class="listingcharacter listingcharacter">() -&gt; System.out.println()</samp> is 
+                            <samp class="listingcharacter listingcharacter">void</samp> compatible, as is 
+                            <samp class="listingcharacter listingcharacter">() -&gt; {}</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <span class="bold">Value compatible</span><br/>The body terminates the lambda expression with a 
+                            <samp class="listingcharacter listingcharacter">return</samp> statement that returns a value or consists of the compact notation with a return not equal to 
+                            <samp class="listingcharacter listingcharacter">void</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">A mixture of 
+                    <samp class="listingcharacter listingcharacter">void</samp> compatible and value compatible isn’t permitted and leads to a compiler error in the same way as with methods.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn13_02" id="fn13_02">[ 189 ]</a></span>
+                </p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.6.5">Short Version 3: Single Identifier instead of Parameter List and Parentheses</h4>
+                
+                <p class="standard">The parentheses can be omitted if the parameter list fulfills the following prerequisites:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Only a single identifier exists.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The type is clear due to type inference.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <table class="standardtable" id="t13.5">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Long Notation</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">Types Inferred</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Fully Shortened</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(String s) -&gt; s.length()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(s) -&gt; s.length()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">s -&gt; s.length()</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(int i) -&gt; Math.abs( i )</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(i) -&gt; Math.abs( i )</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">i -&gt; Math.abs( i )</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 13.5</b>    
+            Different Degree of Shortening</p>
+                
+                <p class="standard">If all the short versions come together, about half the code can be saved. Thus,
+                    <samp class="listingcharacter listingcharacter"> (int i) -&gt; { return Math.abs( i ); }</samp> will simply become 
+                    <samp class="listingcharacter listingcharacter">i -&gt; Math.abs( i )</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note on the Syntax</h6>
+                    
+                    <p class="standard first last">Only in the case of exactly one lambda parameter can the parentheses be omitted; otherwise, ambiguities will exist for which complex rules are required for resolution. For example, in a notation like 
+                        <samp class="listingcharacter listingcharacter">foo( k, v -&gt; { ... } )</samp>, whether 
+                        <samp class="listingcharacter listingcharacter">foo</samp> declares two parameters is unclear. Is the second argument a lambda expression, or is it exactly one parameter, in which case a lambda expression is passed that itself declares two parameters? To avoid these problems, developers can see at a glance that 
+                        <samp class="listingcharacter listingcharacter">foo( k, v -&gt; { ... } )</samp> clearly represents two arguments and 
+                        <samp class="listingcharacter listingcharacter">foo( (k, v) -&gt; { ... } )</samp>
+                     passes only one argument.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.6.6">Short Version 4: Type Inference via var</h4>
+                
+                <p class="standard">In lambda expressions, 
+                    <samp class="listingcharacter listingcharacter">var</samp> can also be used. However, a mixture of explicit types, implicit types, and 
+                    <samp class="listingcharacter listingcharacter">var</samp>
+                 types isn’t permitted. Consider the following examples:</p>
+                
+                <div class="listing " id="l_none_13355"><pre>
+                    <a id="p745"/>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c0 </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">var x</span><span class="">,</span><span class=""> var y</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c1 </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">x</span><span class="">,</span><span class=""> var y</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">0</span><span class="">;</span><span class="">        </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     implicit and var</span><span class=""><br/></span>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c2 </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">var x</span><span class="">,</span><span class=""> y</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">0</span><span class="">;</span><span class="">        </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     var and implicit</span><span class=""><br/></span>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c3 </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">int</span><span class=""> x</span><span class="">,</span><span class=""> var y</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">0</span><span class="">;</span><span class="">    </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     var and explicit</span><span class=""><br/></span>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c4 </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">int</span><span class=""> x</span><span class="">,</span><span class=""> y</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">0</span><span class="">;</span><span class="">        </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     explicit and implicit</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Actually, the use of 
+                    <samp class="listingcharacter listingcharacter">var</samp>
+                 makes little sense when you can use implicit types.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.6.7">Unused Parameters in Lambda Expressions</h4>
+                
+                <p class="standard">Sometimes, a lambda expression implements a functional interface, but not every parameter is of interest. For example, let’s look at a functional interface from Java SE, somewhat simplified in the following way:</p>
+                
+                <div class="listing " id="l_none_13371"><pre><span class="">interface</span><span class=""> Consumer</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">accept</span><span class="">(</span><span class=""> T t </span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">A consumer that outputs the argument in quotation marks could be written in the following way:</p>
+                
+                <div class="listing " id="l_none_13377"><pre>Consumer<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> printQuoted </span><span class="">=</span><span class=""> s </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> "</span><span class="">'%s'", s );</span><br/>printQuoted.accept( "<span class="">Chris" </span><span class="">);</span><span class=""> </span><span class=""> // 'Chris'</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Now, what if a consumer doesn’t want to access the argument at all, for example, because the current time is output, but the code must be present as a 
+                    <samp class="listingcharacter listingcharacter">Consumer</samp>
+                . In this case, you could write the following code:</p>
+                
+                <div class="listing " id="l_none_13388"><pre>Consumer<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> printNow </span><span class="">=</span><span class=""><br/></span>  s <span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">currentTimeMillis</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The variable 
+                    <samp class="listingcharacter listingcharacter">s</samp>
+                 in the lambda parameter list is unused and a code checker might issue a warning such as “unused variable.”</p>
+                
+                <p class="standard">No special notation for unused parameters exists, nor can you omit the variable name and specify only the type.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.1.7">13.1.7    The Environment of Lambda Expressions and Variable Accesses</h3>
+            
+            <p class="standard">A lambda expression “sees” its environment just like the rest of the code in the block. Object variables and class variables can be accessed via read and write access by lambda expressions without any problems.</p>
+            
+            
+                
+                <h4 class="t4" id="h13.1.7.1">Read Access to Final, Local, or Parameter Variables</h4>
+                
+                <p class="standard">A lambda expression has 
+                    <span class="italic">read-only</span> access to local variables and method or exception parameters, and the variables must be (effectively) final. The fact that a variable is final does not have to be written with a modifier, but it must be 
+                    <span class="italic">effectively final</span>
+                    <a class="indexanchor" id="i13_07"/>. A variable is 
+                    <a id="p746"/>effectively final if it’s no longer written to after initialization. The 
+                    <samp class="listingcharacter listingcharacter">final</samp>
+                 modifier can then be omitted.</p>
+                
+                <p class="standard">For example, if a lambda expression is in a loop, the expression can’t access the loop counter because the counter changes on each iteration. (A different scenario occurs for a variable in an extended 
+                    <samp class="listingcharacter listingcharacter">for</samp>
+                 loop, which can be accessed by a lambda expression.)</p>
+                
+                <p class="standard">For example, let’s say a user should be given the option, via an input, to specify whether string comparisons with our trimming 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>
+                 should take place regardless of case.</p>
+                
+                <div class="listing " id="l13.2"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span> <span class=""> /*final*/</span><span class=""> </span><span class="">boolean</span><span class=""> </span>
+                    <span class="bold"><span class="">ignoreCase</span></span> = <span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">nextBoolean</span><span class="">();</span><br/>  Comparator&lt;<span class="">String</span><span class="">&gt; c = (s1, s2) -&gt; </span>
+                    <span class="bold">ignoreCase</span> ? <br/>        s1.<span class="">trim</span><span class="">().</span><span class="">compareToIgnoreCase</span><span class="">( s2.</span><span class="">trim</span><span class="">() ) :</span><br/>        s1.<span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">( s2.</span><span class="">trim</span><span class="">() );</span><br/>  <span class="">String</span><span class="">[] words = { </span><span class="">"M"</span><span class="">, </span><span class="">"\nSkyfall"</span><span class="">, </span><span class="">" Q"</span><span class="">, </span><span class="">"\t\tAdele\t"</span><span class=""> };</span><br/>  Arrays.<span class="">sort</span><span class="">( words, c );</span><br/>  System.out.<span class="">println</span><span class="">( Arrays.</span><span class="">toString</span><span class="">( words ) );</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 13.2</b>    
+            src/main/java/com/tutego/insel/lambda/TrimIgnoreCaseCompare.java, main</p>
+                
+                <p class="standard">Whether 
+                    <samp class="listingcharacter listingcharacter">ignoreCase</samp> is set 
+                    <samp class="listingcharacter listingcharacter">final</samp> by us or not doesn’t matter because the variable is used as effectively final in this case. Of course, it’s no harm to always put 
+                    <samp class="listingcharacter listingcharacter">final</samp>
+                 in front as a modifier to make other programmers aware of this fact.</p>
+                
+                <p class="standard">Newly inserted lambda expressions that access local variables or parameter variables can therefore lead to compiler errors in retrospect. The following segment is correct without a lambda expression:</p>
+                
+                <div class="listing " id="l_none_13403"><pre><span class="">boolean</span><span class=""> ignoreCase </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">nextBoolean</span><span class="">();</span><span class=""> </span><span class=""> // 1</span><span class=""><br/></span>…                                                            <span class=""> // 2</span><span class=""><br/></span>ignoreCase <span class="">=</span><span class=""> </span><span class="">true;</span><span class="">                                           </span><span class=""> // 3</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If a lambda expression that accesses 
+                    <samp class="listingcharacter listingcharacter">ignoreCase</samp> is subsequently inserted between lines 1 and 3, a compiler error will occur. However, the error is not in line 3, but in the lambda expression because the 
+                    <samp class="listingcharacter listingcharacter">ignoreCase</samp>
+                 variable is no longer effectively final after the change, which is required for use in the lambda expression.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.7.2">Write Access to Local Variables or Parameter Variables?*</h4>
+                
+                <p class="standard">Lambda expressions can only read local variables but not write to them. The same applies to anonymous inner classes. (This limitation involves the location where variables are stored: Object variables and static variables are “living” on the heap, while local variables and parameters are “living” on the stack.) Now, when threads come into play, commonly, you’ll have different threads use variables from the heap, and 
+                    <a id="p747"/>
+                synchronization options are available for this task. However, a thread can’t access local variables from another thread because one thread cannot access the stack memory of another thread.</p>
+                
+                <p class="standard">The restriction that outer local variables can only be read by lambda expressions is in itself a good thing because this restriction minimizes errors during the concurrent execution of lambda expressions: If several threads process lambda expressions and describe a local variable, thread synchronization would otherwise be required.</p>
+                
+                <p class="standard">Ultimately, not every programming language prohibits writing local variables from lambda expressions. In C#, a lambda expression can describe local variables, which then cease to “live” on the stack.</p>
+                
+                <p class="standard">With containers like an array or with special 
+                    <samp class="listingcharacter listingcharacter">Atomic*</samp> classes from the 
+                    <samp class="listingcharacter listingcharacter">java.util.concurrent.atomic</samp> package, the problem can be solved. For example, if a lambda expression accesses the array 
+                    <samp class="listingcharacter listingcharacter">boolean[] ignoreCase = new boolean[1];</samp>, the 
+                    <samp class="listingcharacter listingcharacter">ignoreCase</samp> variable itself is final, but 
+                    <samp class="listingcharacter listingcharacter">ignoreCase[0] = true;</samp> is permitted because this statement is a write access to the array, not to the 
+                    <samp class="listingcharacter listingcharacter">ignoreCase</samp>
+                 variable. However, depending on the code, risk grows when multiple lambda expressions are executed in parallel. If, for example, a lambda expression can change an array’s content and is executed in parallel, the access isn’t synchronized, and the result may be “corrupt” because parallel access to variables must always be performed in a coordinated manner.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.7.3">Implementation Details and Exceptions in Lambda Expressions*</h4>
+                
+                <p class="standard">When the developers of the compiler built a prototype for lambda expressions, they technically implemented them with nested classes—but only in the test phase because nested classes are complete classes for the JVM and resource heavy. Loading and initializing classes is relatively expensive and involve high overheads because of the many small lambda expressions.</p>
+                
+                <p class="standard">Currently, the Java compiler converts lambda expressions with methods. If we apply the Java Development Kit (JDK) tool 
+                    <span class="italic">javap</span> to the bytecode via the call 
+                    <samp class="listingcharacter listingcharacter">javap -p TrimIgnoreCaseCompare</samp>
+                , the following result occurs, somewhat abbreviated:</p>
+                
+                <div class="listing " id="l_none_13417"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> TrimIgnoreCaseCompare </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">TrimIgnoreCaseCompare</span><span class="">();</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class="">String</span><span class="">[]);</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">private</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> lambda$</span><span class="">0</span><span class="">(</span><span class="">boolean</span><span class="">, </span><span class="">String</span><span class="">, </span><span class="">String</span><span class="">)</span></span>;<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">The body of the private static method 
+                    <samp class="listingcharacter listingcharacter">lambda$0(...)</samp> contains the code block 
+                    <samp class="listingcharacter listingcharacter">ignoreCase ? s1.trim() ...</samp>. The JVM as the caller of the method passes the content of the 
+                    <samp class="listingcharacter listingcharacter">ignoreCase</samp> variable. Since Java only has 
+                    <span class="italic">call by value</span> as a parameter passing mechanism, a copy of the value of 
+                    <samp class="listingcharacter listingcharacter">ignoreCase</samp> goes into the method. Even if the method were 
+                    <a id="p748"/>
+                to change the parameter variable, the new assignment would never come out of the method.</p>
+                
+                <p class="standard">The fact that lambda expressions are converted to methods is also clearly visible in stack trace exceptions. Let’s have the 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> use the following code to throw an 
+                    <samp class="listingcharacter listingcharacter">ArithmeticException</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_13443"><pre>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> c </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">s1</span><span class="">,</span><span class=""> s2</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span>
+                    <span class="bold"><span class="">1</span><span class=""> / </span><span class="">0</span></span><span class="">; </span><span class=""/></pre></div>
+                
+                <p class="standard">The execution then processes the following output:</p>
+                
+                <div class="listing " id="l_none_13450"><pre>Exception in thread "main" java.lang.ArithmeticException: / by zero<br/>  at TrimIgnoreCaseCompare.
+                    <span class="bold">lambda$0</span>(TrimIgnoreCaseCompare.java:6)<br/>  at java.base/java.util.TimSort.countRunAndMakeAscending(TimSort.java:355)<br/>  at java.base/java.util.TimSort.sort(TimSort.java:220)<br/>  at java.base/java.util.Arrays.sort(Arrays.java:1442)<br/>  at TrimIgnoreCaseCompare.main(TrimIgnoreCaseCompare.java:8) </pre></div>
+                
+                <p class="standard">So, the 
+                    <samp class="listingcharacter listingcharacter">lambda$0(...)</samp>
+                 method created by the compiler can be read easily.</p>
+                
+                <p class="standard">Now, we’ve seen where the lambda expression code goes; however, we don’t yet know how to call it. If you write 
+                    <samp class="listingcharacter listingcharacter">Arrays.sort(words, (s1, s2) -&gt; ...)</samp>, the JVM must call the 
+                    <samp class="listingcharacter listingcharacter">lambda$0(...)</samp> method for the lambda expression, which is still a long way to the method call. In this case, the compiler draws on a special bytecode: 
+                    <samp class="listingcharacter listingcharacter">invokedynamic</samp>. One great advantage of this special bytecode is that the runtime environment has a lot of scope for optimization. Nested classes are just one possible technical implementation for lambda expressions: 
+                    <samp class="listingcharacter listingcharacter">invokedynamic</samp> is the declarative variant, so to speak, and nested classes are the imperative, programmed play. Ultimately, the overhead with 
+                    <samp class="listingcharacter listingcharacter">invokedynamic</samp> is low, and refactoring program code from nested classes to lambda expressions results in small bytecode files. From a performance point of view, lambda expressions and the implementation of functional interfaces and classes don’t differ; rather, the optimization is to be found on the side of the JVM, which must deal with fewer class files. Conversely, the reverse is also true: When developers replace their old, existing implementation of functional interfaces with lambda expressions, the bytecode becomes more compact because a small 
+                    <samp class="listingcharacter listingcharacter">invokedynamic</samp>
+                 is much shorter than complex new class files.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.7.4">Namespaces</h4>
+                
+                <p class="standard">If an anonymous inner class declares variables inside the method, they are always “new.” In other words, the new variables overlay existing local variables from the outer context. For example, the 
+                    <samp class="listingcharacter listingcharacter">ignoreCase</samp> variable can be easily redeclared in the body of 
+                    <samp class="listingcharacter listingcharacter">compare(...)</samp>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l_none_13449"><pre><span class="">
+                        <a id="p749"/>
+                    boolean</span><span class=""> </span>
+                    <span class="bold"><span class="">ignoreCase</span></span> = true;<br/>Comparator&lt;<span class="">String</span><span class="">&gt; c = </span><span class="">new</span><span class=""> Comparator&lt;</span><span class="">String</span><span class="">&gt;() {</span><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">compare</span><span class="">( </span><span class="">String</span><span class=""> s1, </span><span class="">String</span><span class=""> s2 ) {</span><br/>   <span class="">boolean</span><span class=""> </span>
+                    <span class="bold">ignoreCase</span> = false;       <span class=""> // absolutely OK</span><span class=""><br/></span>   <span class="">return</span><span class="">… </span><br/>  }<br/>}; <span class=""/></pre></div>
+                
+                <p class="standard">In a lambda expression, this redeclaration isn’t possible, and thus, the following code leads to an error message, “variable ignoreCase is already defined” from the compiler:</p>
+                
+                <div class="listing " id="l_none_13453"><pre><span class="">boolean</span><span class=""> </span>
+                    <span class="bold"><span class="">ignoreCase</span></span> = true;<br/>Comparator&lt;<span class="">String</span><span class="">&gt; c = (s1, s2) -&gt; {</span><br/>  <span class="">boolean</span><span class=""> </span>
+                    <span class="bold">ignoreCase</span> = false; <span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""><br/></span>  <span class="">return</span><span class="">…</span><br/>} <span class=""/></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.7.5">this References</h4>
+                
+                <p class="standard">A lambda expression also differs from an inner (anonymous) class with regard what the 
+                    <samp class="listingcharacter listingcharacter">this</samp>
+                 reference points to:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">For the lambda expression, 
+                            <samp class="listingcharacter listingcharacter">this</samp>
+                         always points to the object in which the lambda expression is embedded.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">With an inner class, 
+                            <samp class="listingcharacter listingcharacter">this</samp>
+                         references the inner class, which is a completely new type.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The following example makes this clear:</p>
+                
+                <div class="listing " id="l13.3"><pre><span class="">class</span><span class=""> InnerVsLambdaThis </span><span class="">{</span><span class=""><br/></span>  <span class="">InnerVsLambdaThis</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    Runnable lambdaRun <span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">this</span></span><span class="">.</span><span class="">getClass</span><span class="">().</span><span class="">getName</span><span class="">() );</span><br/>    Runnable innerRun  = <span class="">new</span><span class=""> </span><span class="">Runnable</span><span class="">() {</span><br/>      <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">run</span><span class="">() { System.out.</span><span class="">println</span><span class="">( </span>
+                    <span class="bold"><span class="">this</span></span><span class="">.</span><span class="">getClass</span><span class="">().</span><span class="">getName</span><span class="">()); }</span><br/>    };<br/> <br/>    lambdaRun.<span class="">run</span><span class="">();     </span><span class=""> // InnerVsLambdaThis</span><span class=""><br/></span>    innerRun.<span class="">run</span><span class="">();      </span><span class=""> // InnerVsLambdaThis</span>
+                    <span class="bold">$1</span><span class=""><br/></span>  }<br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">new</span><span class=""> </span><span class="">InnerVsLambdaThis</span><span class="">();</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 13.3</b>    
+            src/main/java/com/tutego/insel/lambda/InnerVsLambdaThis.java (Snippet)</p>
+                
+                <p class="standard">
+                    <a id="p750"/>First, we’re using 
+                    <samp class="listingcharacter listingcharacter">this</samp> in a lambda expression in the constructor of the 
+                    <samp class="listingcharacter listingcharacter">InnerVsLambdaThis</samp> class. In this way, 
+                    <samp class="listingcharacter listingcharacter">this</samp> points to the newly built 
+                    <samp class="listingcharacter listingcharacter">InnerVsLambdaThis</samp> object. For the inner class, 
+                    <samp class="listingcharacter listingcharacter">this</samp> references another object, of type 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp>. Since an anonymous class has no name, it simply carries the identifier 
+                    <samp class="listingcharacter listingcharacter">InnerVsLambdaThis$1</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.7.6">Recursive Lambda Expressions</h4>
+                
+                <p class="standard">Lambda expressions can reference themselves. However, because 
+                    <samp class="listingcharacter listingcharacter">this</samp>
+                 doesn’t work for self-reference, a small detour is necessary. First, an object variable or a class variable must be declared, then a lambda expression must be assigned to this variable, and then the lambda expression can access this variable and start a recursive call. For the factorial calculation, you would write the following code:</p>
+                
+                <div class="listing " id="l13.4"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> RecursiveFactLambda </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> IntFunction</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> </span>
+                    <span class="bold"><span class="">fact</span></span> =<br/>      n -&gt; (n == <span class="">0</span><span class="">) ? </span><span class="">1</span><span class=""> : n * RecursiveFactLambda.</span>
+                    <span class="bold">fact</span>.<span class="">apply</span><span class="">( n - </span><span class="">1</span><span class=""> );</span><br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    System.out.<span class="">println</span><span class="">( fact.</span><span class="">apply</span><span class="">( </span><span class="">5</span><span class=""> ) );  </span><span class=""> // 120</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 13.4</b>    
+            src/main/java/com/tutego/insel/lambda/RecursiveFactLambda.java (Snippet)</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">IntFunction</samp> is a functional interface from the 
+                    <samp class="listingcharacter listingcharacter">java.util.function</samp> package with a 
+                    <samp class="listingcharacter listingcharacter">T apply(int i)</samp> operation. In this case, 
+                    <samp class="listingcharacter listingcharacter">T</samp> is a generic return type, which we’ve assigned to 
+                    <samp class="listingcharacter listingcharacter">Integer</samp>. By the way, writing 
+                    <samp class="listingcharacter listingcharacter">n * fact.apply( n - 1 )</samp> doesn’t work because the compiler then reports: “Cannot reference a field before it is defined.” 
+                    <samp class="listingcharacter listingcharacter">fact</samp> could have been declared as a normal method just as well. The notation with lambda expressions does not offer great advantages in this case, especially since the term 
+                    <span class="italic">anonymous method</span> doesn’t really fit anymore because the lambda expression has a name, namely, 
+                    <samp class="listingcharacter listingcharacter">fact</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.7.7">Lambda Expressions Can’t Fall Back on Their Own Default Methods</h4>
+                
+                <p class="standard">A functional interface may have only exactly one abstract method but may contain further static and default methods. If a class implements a functional interface, the method can fall back on default methods. Consider the following example:</p>
+                
+                <div class="listing " id="l13.5"><pre><span class="">class</span><span class=""> TruePredicate </span><span class="">implements</span><span class=""> Predicate</span><span class="">&lt;</span><span class="">Object</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">test</span><span class="">(</span><span class=""> Object o </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span>
+                    <span class="bold"><span class="">negate</span><span class="">()</span></span>.<span class="">test</span><span class="">( o );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 13.5</b>    
+            src/main/java/com/tutego/insel/lambda/InnerVsLambdaDefaultMethod.java (Snippet)</p>
+                
+                <p class="standard">
+                    <a id="p751"/>
+                A lambda expression can’t fall back on default methods, in the following example:</p>
+                
+                <div class="listing " id="l_none_13513"><pre>Predicate<span class="">&lt;</span><span class="">Object</span><span class="">&gt;</span><span class=""> truePredicate </span><span class="">=</span><span class=""> o </span><span class="">-&gt;</span><span class=""> </span>
+                    <span class="bold"><span class="">negate</span><span class="">()</span></span>.<span class="">test</span><span class="">( o );</span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">In practice, this problem is not a real problem, and it even prevents errors. Default methods fall back almost exclusively on abstract methods and “can do” nothing on their own, as can be easily seen in the 
+                    <samp class="listingcharacter listingcharacter">negate()</samp> method of 
+                    <samp class="listingcharacter listingcharacter">Predicate</samp>
+                 in the following example:</p>
+                
+                <div class="listing " id="l13.6"><pre><span class="">default</span><span class=""> Predicate</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">negate</span><span class="">()</span><span class=""> </span><span class="">{</span><span class="">return</span><span class=""> </span><span class="">(</span><span class="">t</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">!</span>
+                    <span class="bold"><span class="">test</span><span class="">(t)</span></span>;} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 13.6</b>    
+            java/util/function/Predicate.java (Snippet)</p>
+                
+                <p class="standard">The method
+                    <samp class="listingcharacter listingcharacter"> negate()</samp> calls 
+                    <samp class="listingcharacter listingcharacter">test(…)</samp> again. If the 
+                    <samp class="listingcharacter listingcharacter">negate</samp> method is called in the implementation of 
+                    <samp class="listingcharacter listingcharacter">test(...)</samp>
+                , endless recursion will follow.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.1.8">13.1.8    Exceptions in Lambda Expressions</h3>
+            
+            <p class="standard">Lambda expressions are implementations of functional interfaces, and so far, we haven’t considered what happens when a block of code from a lambda expression throws an exception, especially who must catch it.</p>
+            
+            
+                
+                <h4 class="t4" id="h13.1.8.1">Exceptions in the Code Block of a Lambda Expression</h4>
+                
+                <p class="standard">In 
+                    <samp class="listingcharacter listingcharacter">java.util.function</samp>, you’ll find a functional interface named 
+                    <samp class="listingcharacter listingcharacter">Predicate</samp>
+                , the basic declaration of which follows:</p>
+                
+                <div class="listing " id="l_none_13532"><pre><span class="">public</span><span class=""> </span><span class="">interface</span><span class=""> Predicate</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span>
+                    <span class="bold"><span class="">boolean</span><span class=""> </span><span class="">test</span><span class="">( T t );</span></span> } <span class=""/></pre></div>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">Predicate</samp> performs a test and returns true or false as a result. A lambda expression can implement this interface. Suppose you wanted to test whether a file has length 0, for example, to find inactive or unused files. Our first attempt will use the existing 
+                    <samp class="listingcharacter listingcharacter">Files</samp> class, which provides the 
+                    <samp class="listingcharacter listingcharacter">size(...)</samp>
+                 method, as in the following example:</p>
+                
+                <div class="listing " id="l_none_13538"><pre>Predicate<span class="">&lt;</span><span class="">Path</span><span class="">&gt;</span><span class=""> isEmptyFile </span><span class="">=</span><span class=""> path </span><span class="">-&gt;</span><span class=""> Files</span><span class="">.</span><span class="">size</span><span class="">(</span><span class=""> path </span><span class="">)</span><span class=""> </span><span class="">==</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> <br/></span><span class="">// 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The problem now is that 
+                    <samp class="listingcharacter listingcharacter">Files.size(...)</samp> throws an 
+                    <samp class="listingcharacter listingcharacter">IOException</samp> that must be handled as a checked exception, 
+                    <span class="italic">not</span> in the block containing the lambda expression as a whole, but by the code in the lambda expression itself, as dictated by the compiler. The following code is 
+                    <span class="italic">not</span>
+                 a solution:</p>
+                
+                <div class="listing " id="l_none_13542"><pre>
+                    <span class="bold">try {</span><br/>  Predicate&lt;Path&gt; isEmptyFile = path -&gt; Files.size( path ) == 0; // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                    <span class="bold"><br/>} catch ( IOException e ) { </span>…
+                    <span class="bold"> }</span>
+                 </pre></div>
+                
+                <p class="standard">
+                    <a id="p752"/>
+                Instead, you should write the following code:</p>
+                
+                <div class="listing " id="l_none_13548"><pre>Predicate<span class="">&lt;</span><span class="">Path</span><span class="">&gt;</span><span class=""> isEmptyFile </span><span class="">=</span><span class=""> path </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">try</span><span class=""> {</span></span><br/>    <span class="">return</span><span class=""> Files.</span><span class="">size</span><span class="">( path ) == </span><span class="">0</span><span class="">;</span><br/>  
+                    <span class="bold">} <span class="">catch</span><span class=""> ( IOException e ) { </span><span class="">return</span><span class=""> false; }</span></span><br/>}; <span class=""/></pre></div>
+                
+                <p class="standard">The feature Java doesn’t have is called 
+                    <span class="italic">exception transparency</span>
+                    <a class="indexanchor" id="i13_08"/>
+                , and in this case, you can clearly see the difference between checked and unchecked exceptions. With exception transparency, no exception handling is necessary in the lambda expression and instead can be performed at a higher-level location. </p>
+                
+                <p class="standard">However, since this feature is missing in Java, you must handle checked exceptions in your lambda expressions directly.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.8.2">Functional Interfaces with a throws Clause</h4>
+                
+                <p class="standard">Unchecked exceptions can always occur and (if uncaught) will cause the thread to abort as usual. A 
+                    <samp class="listingcharacter listingcharacter">throws</samp> clause on the methods/constructors isn’t needed for that. But functional interfaces can declare a 
+                    <samp class="listingcharacter listingcharacter">throws</samp>
+                 clause with checked exceptions, and the implementation of a functional interface can logically throw checked exceptions.</p>
+                
+                <p class="standard">A declaration like 
+                    <samp class="listingcharacter listingcharacter">Callable</samp> from the 
+                    <samp class="listingcharacter listingcharacter">java.util.concurrent</samp>
+                 package can clarify this issue:</p>
+                
+                <div class="listing " id="l_none_13566"><pre><span class="">public</span><span class=""> </span><span class="">interface</span><span class=""> Callable</span><span class="">&lt;</span><span class="">V</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  V <span class="">call</span><span class="">()</span><span class=""> </span>
+                    <span class="bold"><span class="">throws</span><span class=""> Exception</span></span>;<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">This code could be implemented via the following lambda expression:</p>
+                
+                <div class="listing " id="l_none_13571"><pre>Callable<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> randomDice </span><span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)(</span><span class="">Math</span><span class="">.</span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">*</span><span class=""> </span><span class="">6</span><span class="">)</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Calling 
+                    <samp class="listingcharacter listingcharacter">call()</samp> on a 
+                    <samp class="listingcharacter listingcharacter">randomDice</samp> must be accompanied by exception handling since 
+                    <samp class="listingcharacter listingcharacter">call()</samp> throws an 
+                    <samp class="listingcharacter listingcharacter">Exception</samp>
+                , as shown in the following example:</p>
+                
+                <div class="listing " id="l_none_13592"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> randomDice</span><span class="">.</span><span class="">call</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> randomDice</span><span class="">.</span><span class="">call</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> Exception e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> … </span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Now, that the caller must handle the exception is clear. The declaration of the lambda expression contains no reference to the exception, which is different from what we described in the previous subsection.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>
+                        <a id="p753"/>
+                    Design Tip</h6>
+                    
+                    <p class="standard first last">Exceptions in the methods of functional interfaces severely limit their usefulness, and therefore, none of the functional interfaces from, for example, 
+                        <samp class="listingcharacter listingcharacter">java.util.function</samp> throws a checked exception. The reason is simple: Every method caller would otherwise have to either forward or handle the exception.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn13_03" id="fn13_03">[ 190 ]</a></span>
+                    </p>
+                
+                </div>
+                
+                <p class="standard">To make the limitations and problems related to a 
+                    <samp class="listingcharacter listingcharacter">throws</samp> clause a bit clearer, let’s imagine that the 
+                    <samp class="listingcharacter listingcharacter">Predicate</samp> functional interface contains a 
+                    <samp class="listingcharacter listingcharacter">throws Exception</samp> at the operation (leaving aside the meaning of the 
+                    <samp class="listingcharacter listingcharacter">Exception</samp>
+                 type itself). Consider the following example:</p>
+                
+                <div class="listing " id="l_none_13601"><pre><span class="">interface</span><span class=""> Predicate</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">test</span><span class="">(</span><span class=""> T t </span><span class="">)</span><span class=""> </span>
+                    <span class="bold"><span class="">throws</span><span class=""> Exception</span></span>; }<span class=""> // What if?</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">The consequence would be that every caller of 
+                    <samp class="listingcharacter listingcharacter">test(...)</samp> would now in turn get hold of the 
+                    <samp class="listingcharacter listingcharacter">Exception</samp> and would have to catch it or forward it. If the 
+                    <samp class="listingcharacter listingcharacter">test(...)</samp> caller directed the exception further up with a 
+                    <samp class="listingcharacter listingcharacter">throws exception</samp>, we’d suddenly get a 
+                    <samp class="listingcharacter listingcharacter">throws Exception</samp> in all places in the method signature, which is not desired in any case. For example, 
+                    <samp class="listingcharacter listingcharacter">Collection</samp> (an interface that implements our familiar 
+                    <samp class="listingcharacter listingcharacter">ArrayList</samp>) contains a declaration of 
+                    <samp class="listingcharacter listingcharacter">removeIf(Predicate filter)</samp>; now, 
+                    <samp class="listingcharacter listingcharacter">removeIf(...)</samp>—which ultimately calls 
+                    <samp class="listingcharacter listingcharacter">filter.test(...)</samp>—would have to deal with the exception, and 
+                    <samp class="listingcharacter listingcharacter">removeIf(Predicate filter) throws Exception</samp>
+                 is not a good idea.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.1.8.3">From Checked to Unchecked</h4>
+                
+                <p class="standard">Checked exceptions aren’t nice in lambda expressions. One solution is to wrap code that throws checked exceptions and embed the checked exception in an unchecked one. You might write something like the following code:</p>
+                
+                <div class="listing " id="l13.7"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> PredicateWithException </span><span class="">{</span><span class=""><br/></span>  <span class="">@FunctionalInterface</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">interface</span><span class=""> ExceptionalPredicate&lt;T,E </span><span class="">extends</span><span class=""> Exception&gt; {</span><br/>    <span class="">boolean</span><span class=""> </span><span class="">test</span><span class="">( T t ) </span><span class="">throws</span><span class=""> E;</span><br/>  }</span><br/>  <span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">static</span><span class=""> &lt;T&gt; Predicate&lt;T&gt; </span><span class="">asUncheckedPredicate</span><span class="">(</span><br/>                                   ExceptionalPredicate&lt;T,Exception&gt; predicate ) {<br/>    <span class="">return</span><span class=""> t -&gt; {</span><br/>      <span class="">try</span><span class=""> {</span><br/>        <span class="">return</span><span class=""> predicate.</span><span class="">test</span><span class="">( t );</span><br/>      }<br/>
+                        <a id="p754"/>      <span class="">catch</span><span class=""> ( Exception e ) {</span><br/>        <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">RuntimeException</span><span class="">( e.</span><span class="">getMessage</span><span class="">(), e );</span><br/>      }<br/>    };<br/>  }</span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args )  {</span><br/>    Predicate&lt;Path&gt; isEmptyFile = <br/>      <span class="">asUncheckedPredicate</span><span class="">( path -&gt; Files.</span><span class="">size</span><span class="">( path ) == </span><span class="">0</span><span class=""> );</span><br/>    System.out.<span class="">println</span><span class="">( isEmptyFile.</span><span class="">test</span><span class="">( Paths.</span><span class="">get</span><span class="">( “c:/” ) ) );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 13.7</b>    
+            src/main/java/com/tutego/insel/lambda/PredicateWithException.java (Snippet)</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">ExceptionalPredicate</samp> interface is a predicate with an optional exception. In our own helper method 
+                    <samp class="listingcharacter listingcharacter">asUncheckedPredicate(ExceptionalPredicate)</samp>, we’re taking an 
+                    <samp class="listingcharacter listingcharacter">ExceptionalPredicate</samp> and wrapping it in a 
+                    <samp class="listingcharacter listingcharacter">Predicate</samp> that is returned by the method. Checked exceptions are set into an unchecked exception of 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp> type. Thus, 
+                    <samp class="listingcharacter listingcharacter">Predicate</samp>
+                 doesn’t have to redirect a checked exception, which it can’t do anyway according to the declaration.</p>
+                
+                <p class="standard">The Java library itself doesn’t provide any standard methods for embeddings of this kind. One internal method does something comparable. Consider the following example:</p>
+                
+                <div class="listing " id="l13.8"><pre><span class="">/**</span><br/> * Convert a Closeable to a Runnable by converting checked IOException<br/> * to UncheckedIOException<br/> */<span class=""><br/></span><span class="">private</span><span class=""> </span><span class="">static</span><span class=""> Runnable </span><span class="">asUncheckedRunnable</span><span class="">(</span><span class=""> Closeable c </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      c<span class="">.</span><span class="">close</span><span class="">();</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>    <span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IOException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">UncheckedIOException</span><span class="">(</span><span class=""> e </span><span class="">);</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>  <span class="">};</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 13.8</b>    
+            java.nio.file.Files.java, asUncheckedRunnable(…)</p>
+                
+                <p class="standard">Now is where the 
+                    <samp class="listingcharacter listingcharacter">UncheckedIOException</samp> class comes into play. This unchecked exception is used as a wrapper class for input/output errors. You’ll find the 
+                    <samp class="listingcharacter listingcharacter">UncheckedIOException</samp>, for example, with 
+                    <samp class="listingcharacter listingcharacter">lines()</samp> of 
+                    <samp class="listingcharacter listingcharacter">BufferedReader</samp> or 
+                    <samp class="listingcharacter listingcharacter">Files</samp>, which returns a 
+                    <samp class="listingcharacter listingcharacter">Stream&lt;String&gt;</samp>
+                 with lines—in this context, checked exceptions are only in the way.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.1.9">13.1.9    
+                <a id="p755"/>
+            Classes with an Abstract Method as a Functional Interface?*</h3>
+            
+            <p class="standard">When the developers of the Java language discussed lambda expressions, one question that arose was whether abstract classes with only one abstract method could also be used for lambda expressions.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn13_04" id="fn13_04">[ 191 ]</a></span>
+             The developers decided against it, among other things, because the JVM can make far-reaching optimizations when implementing interfaces. With classes, this limitation becomes difficult because a constructor does extensive initialization with side effects (not to mention the constructors of all superclasses) and could also throw exceptions. However, only the execution of an implementation of the functional interface is desired and no other code.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

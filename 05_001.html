@@ -1,0 +1,1144 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Handling Characters and Strings" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Handling Characters and Strings" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Handling Characters and Strings</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h5">5    
+        <a id="p287"/>
+    Handling Characters and Strings</h1><p class="introductorynote indent_chapter_single">“Without difference, equality is no fun.”<br/>—Dieter Hildebrandt (1927–2013)</p><p class="standard">So far we’ve worked mainly with primitive data types and briefly with the object types 
+        <samp class="listingcharacter listingcharacter">String</samp> and 
+        <samp class="listingcharacter listingcharacter">Point</samp>. In this chapter we’ll focus on single characters and sequences of characters, called 
+        <span class="italic">strings</span>
+    . Strings can be declared mutable and immutable.</p>
+        
+        <h2 class="t2" id="h5.1">5.1    From ASCII via ISO-8859-1 to Unicode</h2>
+        
+        <p class="standard">The transmission of data has always played a central role in IT. As a result, different standards have emerged to capture different kinds of information. We’ll cover these standards in this chapter.</p>
+        
+        
+            
+            <h3 class="t3" id="h5.1.1">5.1.1    ASCII</h3>
+            
+            <p class="standard">To enable the exchange of documents, the 
+                <span class="italic">American Standards Association</span> introduced a 7-bit encoding in 1963 called 
+                <span class="italic">American Standard Code for Information Interchange (ASCII)</span>
+                <a class="indexanchor" id="i05_00"/>
+            .</p>
+            
+            <p class="standard">ASCII places 128 characters in unique positions called 
+                <span class="italic">code points</span>
+                <a class="indexanchor" id="i05_01"/>
+            . (Characters beyond the original 128 don’t fit in 7 bits.) ASCII encodes 94 printable characters (letters, digits, and punctuation marks); 33 non-printable control characters (such as tabs and many other characters that have been useful in teleprinters but are no longer interesting today); and the space character, which does not count as a control character.</p>
+            
+            <p class="standard">At the beginning of the ASCII alphabet, control characters exist at code points 0 through 31, followed by the space character at code point 32, and then all printable characters. At the last code point, 127, the delete control character (“DEL,” formerly “rubout”) ends the ASCII table.</p>
+            
+            <p class="standard">The table shown in 
+                <span class="crossreference "><a href="05_001.html#f5.1">Figure 5.1</a></span>
+             is from the original ASCII standard from 1968 and gives an overview of the code points of the characters.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f5.1.html" id="f5.1"><img alt="&#10;                &#10;            The Original ASCII Table" id="img-f5.1" src="bilderklein/klein05_001.png"/></a></div>
+            
+            <p class="caption "><b>Figure 5.1</b>    
+            
+                <a id="p288"/>
+            The Original ASCII Table</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.1.2">5.1.2    ISO/IEC 8859-1</h3>
+            
+            <p class="standard">Over time, the ASCII standard has been updated several times, and some control characters were removed, but 7 bits could never accommodate all country-specific characters in natural languages. The German language uses umlauts, Russians use the Cyrillic alphabet, Greeks have alpha and beta, and so on. The solution, instead of 7-bit encoding, which can only accommodate 128 characters, was to simply use 8 bits, which then enabled the encoding of 256 characters. Since large parts of the world use the Latin alphabet, this encoding would naturally include all these letters with a large part of all diacritical characters (for example, ü, á, à, ó, â, Å, and Æ). Thus, a standardization committee created the 
+                <span class="italic">ISO/IEC 8859-1</span> standard in 1985
+                <a class="indexanchor" id="i05_02"/>, which describes 191 characters, making the encoding useful for a large number of languages such as German, Spanish, French, or Afrikaans. The characters from the ASCII alphabet kept their positions. Because of the Latin letters, the informal designation 
+                <span class="italic">Latin-1</span>
+                <a class="indexanchor" id="i05_03"/>
+             has become established as an alternative to ISO/IEC 8859-1.</p>
+            
+            <p class="standard">All characters from ISO/IEC 8859-1 are printable. Thus, all control characters, such as the tab or newline character, are 
+                <span class="italic">not</span>
+             included. Of the 256 possible positions, 65 positions remain vacant because of ASCII, namely, the code points 0 to 31 (the control characters), the code point 127, and the code points from 128 to 159.</p>
+            
+            
+                
+                <h4 class="t4" id="h5.1.2.1">
+                    <a id="p289"/>
+                ISO 8859-1</h4>
+                
+                <p class="standard">Since wasting the available space doesn’t make sense, an extension to the ISO/IEC 8859-1 standard, commonly known as 
+                    <span class="italic">ISO 8859-1</span>
+                    <a class="indexanchor" id="i05_04"/>
+                 (without IEC) was formulated. ISO 8859-1 contains all the characters from ISO/IEC 8859-1 as well as the control characters from the ASCII standard at code points 0 through 31 and code point 127. Thus, ASCII is completely contained in ISO 8859-1, but only the printable ASCII characters are in ISO/IEC 8859-1. The code points 128 to 159 are also defined in ISO 8859-1, although they’re all quite unknown control characters (such as padding, start of a selection, no line break).</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.1.2.2">Windows-1252*</h4>
+                
+                <p class="standard">Because the characters at code points 128 to 159 are uninteresting control characters, Windows has overlaid these code points with letters and punctuation marks in what’s called 
+                    <span class="italic">Windows-1252</span>
+                    <a class="indexanchor" id="i05_05"/>
+                 encoding. Code point 128, for example, is occupied by the € symbol, and at 153, you’ll find the trademark (™) symbol. This reassignment of code points 128 through 159 has now also become established in the non-Windows world. Now, what is declared as ISO-8859-1 on the web can now contain the symbols from code points 128 to 159 from the Windows-1251 standard and is displayed by browsers in this way.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.1.3">5.1.3    Unicode</h3>
+            
+            <p class="standard">Although Latin-1 included all the characters for most “major” languages, it lacked details such as Ő, ő, ű, or Ű for Hungarian; the complete Greek alphabet; Cyrillic letters; Chinese and Japanese characters; Indian script; mathematical characters; and much more. To solve this problem, the Unicode Consortium was formed
+                <a class="indexanchor" id="i05_06"/> with the task to encode every elementary character in the world and assign unique code points to them. Unicode thus contains all characters from ISO 8859-1, which simplifies the conversion of many documents. For example, “A” retains code point 65 from ISO 8859-1, which the letter in turn inherited from ASCII. But Unicode is much more powerful than ASCII or Latin-1: The current version of the Unicode
+                <a class="indexanchor" id="i05_07"/>
+             standard defines about 150,000 characters.</p>
+            
+            <p class="standard">Because of its many characters, specifying each character in decimal is difficult, so the hexadecimal specification has prevailed. The Unicode Standard uses the prefix “U+
+                <a class="indexanchor" id="i05_08"/>
+            ” followed by hexadecimal numbers. Thus, the letter “A” becomes U+0041. Basically, the range includes 1,114,112 possible code points, from U+0000 to U+10FFFF.</p>
+            
+            
+                
+                <h4 class="t4" id="h5.1.3.1">Unicode Tables on Windows*</h4>
+                
+                <p class="standard">On Windows, Microsoft includes the useful 
+                    <span class="italic">charmap.exe</span> program for a character table that can be used to examine each font for its installed characters. In addition, a conve
+                    <a id="p290"/>
+                nient feature of the character table is that it shows the position of a character in the Unicode table at the same time.</p>
+                
+                <p class="standard">Under 
+                    <span class="screenelement">Advanced View • Group by</span>, you can select Unicode sub-ranges in a new dialog box, such as currency characters or different languages. In the 
+                    <span class="screenelement">Latin</span> subsection, for example, you’ll find the characters from the French script (such as “Ç” with cedilla under U+00C7) and the Spanish script (“ñ” with tilde under U+00F1). Under 
+                    <span class="screenelement">General Punctuation</span>
+                , the inverted question mark can be found at U+00BF.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f5.2.html" id="f5.2"><img alt="The Character Map Program on Windows" id="img-f5.2" src="bilderklein/klein05_002.png"/></a></div>
+                
+                <p class="caption "><b>Figure 5.2</b>    
+            The Character Map Program on Windows</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.1.3.2">Displaying Unicode Characters*</h4>
+                
+                <p class="standard">The Unicode standard defines only the position of characters, not their graphical appearance. The graphical representation of a character is referred to as its 
+                    <span class="italic">glyph</span>, or simply 
+                    <span class="italic">character</span>
+                    <a class="indexanchor" id="i05_09"/>. 
+                    <span class="italic">Fonts</span>
+                    <a class="indexanchor" id="i05_10"/>
+                 like Times New Roman or Arial contain representations for the glyphs. However, most fonts contain only subsets of all Unicode characters; many free fonts, for example, contain no Asian characters at all.</p>
+                
+                <p class="standard">Also, the display of these characters—particularly on the console—is still a problem on some platforms. Support for the standard characters of the ASCII alphabet is less 
+                    <a id="p291"/>
+                of a problem than the special characters defined by the Unicode standard. An attempt to output the smiley character in a standard output, for example, often fails due to the limited capability of the terminal or shell.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Although Java internally encodes all strings to Unicode, it’s inconvenient to choose class names that contain Unicode characters. Some file systems store the names in the old 8-bit ASCII character set, so parts of a Unicode character would be lost.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.1.4">5.1.4    Unicode Character Encoding</h3>
+            
+            <p class="standard">Since there are about 150,000 characters in the current Unicode standard, 4 bytes (32 bits) are used to encode a character. A document containing Unicode characters thus has a memory requirement of 4 × (number of characters). When the characters are encoded in this way, it’s called 
+                <span class="italic">UTF-32 encoding</span>
+                <a class="indexanchor" id="i05_11"/>
+            .</p>
+            
+            <p class="standard">For most texts, UTF-32 is wasteful because, if the text consists of only simple ASCII characters, 3 bytes are equal to 0. Let`s take the string “Erf” as an example; in UTF-32 this would be: U+000045U+000072U+000066, we can clearly see the zeros.</p>
+            
+            <p class="standard">Therefore, we’re looking for an encoding that can compactly encode the vast majority of texts but still allow the use of Unicode characters. The following two encodings are commonly used: 
+                <span class="italic">UTF-8</span>
+                <a class="indexanchor" id="i05_12"/> and 
+                <span class="italic">UTF-16</span>
+                <a class="indexanchor" id="i05_13"/>. UTF-8 encodes a character in either 1, 2, 3, or 4 bytes; in UTF-16, characters are encoded in either 2 bytes or 4 bytes. The example from 
+                <span class="crossreference "><a href="05_001.html#t5.1">Table 5.1</a></span> shows the encoding for the letters “A” and “ß”; for the Chinese character for “east”; and for a character from 
+                <span class="italic">Deseret</span>
+            , a phonetic alphabet.</p>
+            
+            <table class="standardtable" id="t5.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Glyph</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">A</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">ß</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <img alt="inline image" class="inline_image" src="bilder/05_002_01.png"/>
+                            </p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <img alt="inline image" class="inline_image" src="bilder/05_002_02.png"/>
+                            </p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Unicode code point</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">U+0041</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">U+00DF</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">U+6771</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">U+10400</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">UTF-32</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">00000041</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">000000DF</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">00006771</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">00010400</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">UTF-16</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">0041</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">00DF</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">6771</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">D801 DC00</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">UTF-8</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">41</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">C3 9F</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">E6 9D B1</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">F0 90 90 80</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 5.1</b>    
+            Character Encoding in Various Versions of Unicode</p>
+            
+            <p class="standard">When texts are exchanged, they’re usually UTF-8 encoded. For websites, this UTF-8 is a good standard. UTF-16 is less common for documents but may be common as internal text representations. For example, the Java virtual machine (JVM) and the .NET runtime environment use UTF-16 internally.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.1.5">5.1.5    
+                <a id="p292"/>Escape Sequences
+                <a class="indexanchor" id="i05_14"/>
+            </h3>
+            
+            <p class="standard">To use certain special characters, such as a line break or a tab, in a string or 
+                <samp class="listingcharacter listingcharacter">char</samp>, you would use escape sequences.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_01" id="fn05_01">[ 111 ]</a></span>
+            </p>
+            
+            <table class="standardtable" id="t5.2">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Characters</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Meaning</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">\b</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Backspace</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">\n</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Line feed (newline)</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">\f</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Page break (form feed)</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">\r</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Carriage return</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">\t</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Horizontal tab</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">\"</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Double quotation mark</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">\'</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Single quotation mark</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">\\</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Backslash</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 5.2</b>    
+            Escape Sequences</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example declares and initializes a 
+                    <samp class="listingcharacter listingcharacter">char</samp>
+                 with simple characters and special characters:</p>
+                
+                <div class="listing " id="l_none_511"><pre><span class="">char</span><span class=""> theLetterA  </span><span class="">=</span><span class=""> </span><span class="">'a'</span><span class="">,</span><span class=""><br/></span>     doubleqoute <span class="">=</span><span class=""> </span><span class="">'"'</span><span class="">,</span><br/>     singlequote = <span class="">'\''</span><span class="">,</span><br/>     newline     = <span class="">'\n'</span><span class="">;</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">The escape symbols are the same for strings. In this case, too, certain characters can be represented with escape sequences, as in the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_529"><pre><span class="">String</span><span class=""> s        = </span><span class="">"Was she really 'chewing' a \"Tootsie Roll\"?"</span><span class="">;</span><br/><span class="">String</span><span class=""> filename = </span><span class="">"C:</span>
+                    <span class="bold">\\</span>Documents
+                    <span class="bold">\\</span>Nevada
+                    <span class="bold">\\</span>Area-51.doc"<span class="">; </span></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.1.6">5.1.6    Notation for Unicode Characters and Unicode Escapes</h3>
+            
+            <p class="standard">Since the Java compiler processes all input as Unicode, it can process source code with German
+                <a class="indexanchor" id="i05_15"/>
+             umlauts, Greek symbols, and Chinese characters. However, you should consider whether a program should directly contain Unicode characters because editors often have difficulties with Unicode characters—just like file systems.</p>
+            
+            
+                
+                <h4 class="t4" id="h5.1.6.1">
+                    <a id="p293"/>
+                Unicode Escapes</h4>
+                
+                <p class="standard">Any Unicode character can be written for the compiler via 
+                    <span class="italic">Unicode escapes</span>
+                    <a class="indexanchor" id="i05_16"/>. The source code will then say 
+                    <samp class="listingcharacter listingcharacter">\uxxxx</samp>, where 
+                    <samp class="listingcharacter listingcharacter">x</samp>
+                 is a hexadecimal digit (i.e., 0 to 9, A to F, and a to f, inclusive). These six ASCII characters can describe a Unicode character and thus can be written in any ASCII text editor—no separate Unicode-capable editor is needed. Unicode characters for German special characters include the following:</p>
+                
+                <table class="standardtable" id="t5.3">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Characters</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Unicode</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Ä, ä</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">\u00c4</samp>, 
+                                    <samp class="listingcharacter listingcharacter">\u00e4</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">Ö, ö</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">\u00d6</samp>, 
+                                    <samp class="listingcharacter listingcharacter">\u00f6</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">Ü, ü</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">\u00dc</samp>, 
+                                    <samp class="listingcharacter listingcharacter">\u00fc</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">ß</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">\u00df</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 5.3</b>    
+            Special German Characters in Unicode</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first last">If you have special characters like umlauts on your keyboard, Unicode encodings shouldn’t be used. As the author of source code, you shouldn’t force readers to have a Unicode table at hand. The alternative display is therefore only worthwhile if the program text is to be deliberately made illegible. As a rule, however, identifiers should preferably be written in English, so that Unicode escapes occur only with strings.</p>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example displays the pi symbol and a smiley in a GUI dialog:</p>
+                    
+                    <div class="listing " id="l_none_539"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Pi: </span>
+                        <span class="bold">\u03C0</span>"<span class=""> );                       </span><span class=""> // Pi: π</span><span class=""><br/></span>javax.swing.JOptionPane.<span class="">showMessageDialog</span><span class="">( null, </span><span class="">"</span>
+                        <span class="bold">\u263A</span>"<span class=""> );</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">The popular smiley
+                        <a class="indexanchor" id="i05_17"/> 
+                        <img alt="inline image" class="inline_image" src="bilder/smiley.png"/> is defined in Unicode as 
+                        <samp class="listingcharacter listingcharacter">\u263A</samp> (WHITE SMILING FACE) or as 
+                        <samp class="listingcharacter listingcharacter"> \u2639</samp> (WHITE FROWNING FACE) 
+                        <img alt="inline image" class="inline_image" src="bilder/gesicht_negativ.png"/>. The euro sign €
+                        <a class="indexanchor" id="i05_18"/> can be found at 
+                        <samp class="listingcharacter listingcharacter">\u20ac</samp>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">System.out.println("\u0009");</samp> will output a tab. The Unicode character 
+                    <samp class="listingcharacter listingcharacter">\uffff</samp>
+                 isn’t defined and can be used as an end symbol for strings.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.1.6.2">Setting the Encoding of the Source Code*</h4>
+                
+                <p class="standard">If source code contains non-ASCII characters (such as umlauts), then this is of course a disadvantage compared to the 
+                    <samp class="listingcharacter listingcharacter">\u</samp> notation, because it means that the file format plays a major role. It may happen that source code was stored in one character encoding (such as UTF-8), but another computer uses a different character encoding (perhaps 
+                    <a id="p294"/>Latin-1) and wants to read the Java source code. This scenario can become a problem because, by default, the compiler reads the source code in the encoding it has itself since the encoding can’t be read from a text file. If the source code is in a different format, the compiler unintentionally converts it to an incorrect, non-compliant Unicode format. To solve the problem, there’s the following approach: The 
+                    <span class="italic">javac</span> compiler can be given the encoding in which the source code is present with the 
+                    <samp class="listingcharacter listingcharacter">-encoding</samp> switch. For example, if the source code is in UTF-8, but the Latin-1 encoding is set on the system with the compiler, then the 
+                    <samp class="listingcharacter listingcharacter">-encoding UTF-8</samp> switch must be set for the compiler. Additional details about this topic are available at <span class="url"><a href="https://docs.oracle.com/en/java/javase/17/docs/specs/man/javac.html">https://docs.oracle.com/en/java/javase/17/docs/specs/man/javac.html</a></span>. However, if there are different files in different formats, then the global setting won’t help.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.1.7">5.1.7    Java Versions Go Hand in Hand with the Unicode Standard*</h3>
+            
+            <p class="standard">In recent years, the Unicode standard has been extended, and Java has followed along with these extensions.</p>
+            
+            <table class="standardtable" id="t5.4">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Java Version</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Unicode Version</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Number of Characters</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">1.0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">1.1.5</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">34,233</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">1.1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">2.0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">38,950</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">1.1.7, 1.2, 1.3</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">2.1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">38,952</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">1.4</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">3.0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">49,259</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">5, 6</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">4.0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">96,447</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">7</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">6.0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">109,242</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">8</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">6.2</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">110,182</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">9</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">8</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">120,737</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">11</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">10</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">136,690</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">12</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">11</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">137,374</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">13</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">12.1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">137,928</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">15</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">13</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">143,859</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 5.4</b>    
+            Java Versions and Their Supported Unicode Standard</p>
+            
+            <p class="standard">The Java versions from 1.0 to 1.4 used a Unicode standard that reserves 16 bits for each character. Thus, Java stores each character in 2 bytes and allows the encoding of more than 65,000 characters from the range U+0000 to U+FFFF. The range is also referred to as the 
+                <span class="italic">Basic Multilingual Plane (BMP)</span>
+                <a class="indexanchor" id="i05_19"/>
+                <a class="indexanchor" id="i05_20"/>. Java 5 supported the Unicode 4.0 standard for the 
+                <a id="p295"/>first time, which requires 32 bits (i.e., 4 bytes) to map a character. But with the change to Unicode 4, the internal length for a 
+                <samp class="listingcharacter listingcharacter">char</samp> character was not increased, so that a 
+                <samp class="listingcharacter listingcharacter">char</samp> is still 2 bytes in size and the range is 0x0 to 0xFFFF. But, as a result, characters larger than 65,536 must be encoded differently somehow. The trick is to compose a “large” Unicode character from two 
+                <samp class="listingcharacter listingcharacter">chars</samp>. This pair of two 16-bit characters is called a 
+                <span class="italic">surrogate pair</span>
+                <a class="indexanchor" id="i05_21"/>. They form a Unicode 4.0 character in the 
+                <span class="italic">UTF-16 encoding</span>
+                <a class="indexanchor" id="i05_22"/>. These surrogate pairs increase the range of the BMP. If we had 
+                <samp class="listingcharacter listingcharacter">char</samp>
+             as a real object, it could probably better hide internally how many bytes the storage really takes. But Java had to have primitive data types.</p>
+            
+            <p class="standard">With the introduction of Unicode 4, not every character fits into the 16 bits of a 
+                <samp class="listingcharacter listingcharacter">char</samp>. Many methods therefore also assume an 
+                <samp class="listingcharacter listingcharacter">int</samp>
+             for the full Unicode code point. In this book, however, this limit doesn’t matter since Unicode characters from the higher ranges (for example, for the Phoenician script, which lies in the Unicode block U+10900 to U+1091F—i.e., shortly after 65,536, which can be mapped by 2 bytes) are only important for a small interest group.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Developer Frustration</h6>
+                
+                <p class="standard first last">The mapping of a character to a position is done by a table called a 
+                    <span class="italic">code page</span>
+                    <a class="indexanchor" id="i05_23"/>. However, because different mappings of characters to positions exist, problems may arise when exchanging documents. If one code page places the tilde (~) in position 161 and another code page places the ß character in position 161, conflicts are inevitable. Therefore, when text documents are exchanged, an indication must always be provided as to which format the texts are in. Unfortunately, however, operating systems don’t always support such meta information. Thus, in XML or HTML documents, for example, the indication is written into the text itself. Unicode UTF-16 documents following a different convention: They start with the hex value 0xFEFF. This value is called the 
+                    <span class="italic">Byte Order Mark (BOM)</span>
+                    <a class="indexanchor" id="i05_24"/>
+                    <a class="indexanchor" id="i05_25"/>
+                 and is intended to serve as an indicator for the byte order.</p>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

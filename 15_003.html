@@ -1,0 +1,825 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Java Platform Module System" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Java Platform Module System" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Java Platform Module System</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h15.3">15.3    Developing Custom Modules</h2>
+        
+        <p class="standard">To show you how to implement modules practically, let’s create two new Maven Java projects, along with the necessary module info files.</p>
+        
+        
+            
+            <h3 class="t3" id="h15.3.1">15.3.1    Module com.tutego.candytester</h3>
+            
+            <p class="standard">Now, we’ll create a new Maven project with the coordinates 
+                <samp class="listingcharacter listingcharacter">com.tutego:candytester:1.0</samp>
+            . The project should contain the following simple class:</p>
+            
+            <div class="listing " id="l15.2"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">candy</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.*;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> YummyTester </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">testYumminess</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> List</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"ding ding tong"</span><span class="">,</span><span class=""> </span><span class="">"meiji"</span><span class="">,</span><span class=""> </span><span class="">"balikutsa"</span><span class="">,</span><span class=""> </span><span class="">"pez"</span><span class="">,</span><span class=""> </span><span class="">"gumballs"</span><span class=""> </span><span class="">)</span><span class=""><br/></span>               <span class="">.</span><span class="">contains</span><span class="">(</span><span class=""> name</span><span class="">.</span><span class="">toLowerCase</span><span class="">(</span><span class=""> Locale</span><span class="">.</span><span class="">ROOT </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 15.2</b>    
+            com/tutego/insel/candy/YummyTester.java</p>
+            
+            <p class="standard">The Maven project has the following simple Project Object Model (POM) file:</p>
+            
+            <div class="listing " id="l15.3"><pre><span class="">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><span class=""><br/></span><span class="">&lt;project </span><span class="">xmlns=</span><span class="">"http://maven.apache.org/POM/4.0.0"</span><span class=""/><br/>         <span class="">xmlns:xsi=</span><span class="">"http://www.w3.org/2001/XMLSchema-instance"</span><span class=""/><br/>
+                <a id="p826"/>         <span class="">xsi:schemaLocation=</span><span class="">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="">&gt;</span><span class=""/><br/>  <span class="">&lt;modelVersion&gt;</span><span class="">4.0.0</span><span class="">&lt;/modelVersion&gt;</span><span class=""/><br/>  <span class="">&lt;groupId&gt;</span><span class="">com.tutego</span><span class="">&lt;/groupId&gt;</span><span class=""/><br/>  <span class="">&lt;artifactId&gt;</span><span class="">candytester</span><span class="">&lt;/artifactId&gt;</span><span class=""/><br/>  <span class="">&lt;version&gt;</span><span class="">1.0</span><span class="">&lt;/version&gt;</span><span class=""/><br/>  <span class="">&lt;properties&gt;</span><span class=""/><br/>    <span class="">&lt;maven.compiler.source&gt;</span><span class="">17</span><span class="">&lt;/maven.compiler.source&gt;</span><span class=""/><br/>    <span class="">&lt;maven.compiler.target&gt;</span><span class="">17</span><span class="">&lt;/maven.compiler.target&gt;</span><span class=""/><br/>  <span class="">&lt;/properties&gt;</span><span class=""/><br/><span class="">&lt;/project&gt;</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 15.3</b>    
+            pom.xml</p>
+            
+            <p class="standard">Note how no special information in the POM file indicates the module system.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.3.2">15.3.2    Module Declaration with module-info.java and Exports</h3>
+            
+            <p class="standard">The module information is declared via a file called 
+                <span class="italic">module-info.java</span> (referred to as the 
+                <span class="italic">module info file</span>
+                <a class="indexanchor" id="i15_23"/>); annotations are not used. This central file is the main difference between a module and a simple JAR file. As soon as the special class file 
+                <span class="italic">module-info.class</span>
+             is present in the module path, the runtime environment starts interpreting the project as a module.</p>
+            
+            <p class="standard">Our project should have the following module info file:</p>
+            
+            <div class="listing " id="l15.4"><pre>
+                <span class="bold"><span class="">module</span></span> com.tutego.candytester {<br/>
+                <span class="bold">  exports</span> com.tutego.insel.candy;<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 15.4</b>    
+            module-info.java</p>
+            
+            <p class="standard">After the 
+                <samp class="listingcharacter listingcharacter">module</samp> keyword, you’ll add the name of the module, in this case, 
+                <samp class="listingcharacter listingcharacter">com.tutego.candytester</samp>
+            . This name is followed by a block in curly brackets.</p>
+            
+            <p class="standard">Usually, two keywords are prominent in the block: 
+                <samp class="listingcharacter listingcharacter">exports</samp> and 
+                <samp class="listingcharacter listingcharacter">requires</samp>. Since we don’t need anything yet, and are only offering something, only 
+                <samp class="listingcharacter listingcharacter">exports</samp> is relevant. Although we’ll need 
+                <samp class="listingcharacter listingcharacter">(requires) java.base</samp>
+            , the default module doesn’t need to be displayed.</p>
+            
+            <p class="standard">Our 
+                <samp class="listingcharacter listingcharacter">com.tutego.candytester</samp> module exports only types “behind” the 
+                <samp class="listingcharacter listingcharacter">com.tutego.insel.candy</samp>
+             package and no other packages, which don’t exist in this example anyway.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.3.3">15.3.3    Module com.tutego.main</h3>
+            
+            <p class="standard">Now, let’s say a second module should use the functionality of the 
+                <samp class="listingcharacter listingcharacter">com.tutego.candytester</samp> module. Let’s first create a new Maven project with the coordinates 
+                <samp class="listingcharacter listingcharacter">
+                    <a id="p827"/>
+                com.tutego:main:1.0</samp>
+            . We’ll enter a dependency in the POM file, as shown in the following example:</p>
+            
+            <div class="listing " id="l15.5"><pre><span class="">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><span class=""><br/></span><span class="">&lt;project </span><span class="">xmlns=</span><span class="">"http://maven.apache.org/POM/4.0.0"</span><span class=""/><br/>         <span class="">xmlns:xsi=</span><span class="">"http://www.w3.org/2001/XMLSchema-instance"</span><span class=""/><br/>         <span class="">xsi:schemaLocation=</span><span class="">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="">&gt;</span><span class=""/><br/>  <span class="">&lt;modelVersion&gt;</span><span class="">4.0.0</span><span class="">&lt;/modelVersion&gt;</span><span class=""/><br/>  <span class="">&lt;groupId&gt;</span><span class="">com.tutego</span><span class="">&lt;/groupId&gt;</span><span class=""/><br/>  <span class="">&lt;artifactId&gt;</span><span class="">main</span><span class="">&lt;/artifactId&gt;</span><span class=""/><br/>  <span class="">&lt;version&gt;</span><span class="">1.0</span><span class="">&lt;/version&gt;</span><span class=""/><br/>  <span class="">&lt;properties&gt;</span><span class=""/><br/>    <span class="">&lt;maven.compiler.source&gt;</span><span class="">17</span><span class="">&lt;/maven.compiler.source&gt;</span><span class=""/><br/>    <span class="">&lt;maven.compiler.target&gt;</span><span class="">17</span><span class="">&lt;/maven.compiler.target&gt;</span><span class=""/><br/>  <span class="">&lt;/properties&gt;</span><span class=""/><br/>  <span class="">&lt;dependencies&gt;</span><span class=""/><br/>
+                <span class="bold">    <span class="">&lt;dependency&gt;</span><span class=""/></span><br/>
+                <span class="bold">      <span class="">&lt;groupId&gt;</span><span class="">com.tutego</span><span class="">&lt;/groupId&gt;</span><span class=""/></span><br/>
+                <span class="bold">      <span class="">&lt;artifactId&gt;</span><span class="">candytester</span><span class="">&lt;/artifactId&gt;</span><span class=""/></span><br/>
+                <span class="bold">      <span class="">&lt;version&gt;</span><span class="">1.0</span><span class="">&lt;/version&gt;</span><span class=""/></span><br/>
+                <span class="bold">      <span class="">&lt;scope&gt;</span><span class="">compile</span><span class="">&lt;/scope&gt;</span><span class=""/></span><br/>
+                <span class="bold">    <span class="">&lt;/dependency&gt;</span><span class=""/></span><br/>  <span class="">&lt;/dependencies&gt;</span><span class=""/><br/><span class="">&lt;/project&gt;</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 15.5</b>    
+            pom.xml</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.3.4">15.3.4    Module info File with requires</h3>
+            
+            <p class="standard">The second module info file looks as follows:</p>
+            
+            <div class="listing " id="l15.6"><pre>module 
+                <span class="bold"><span class="">com.tutego.main</span></span> {<br/>  requires com.tutego.candytester;<br/>  requires java.desktop;<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 15.6</b>    
+            module-info.java</p>
+            
+            <p class="standard">The module has its own unique name: 
+                <samp class="listingcharacter listingcharacter">com.tutego.main</samp>. In addition, we have two module dependencies in this case. The 
+                <samp class="listingcharacter listingcharacter">requires</samp> keyword makes it clear that it requires two modules: 
+                <samp class="listingcharacter listingcharacter">com.tutego.candytester</samp> and 
+                <samp class="listingcharacter listingcharacter">java.desktop</samp>. The latter may be surprising because every Java program without a module system can use the graphical user interface (GUI) libraries of Java. However, if the module system has been activated, only the implicit 
+                <samp class="listingcharacter listingcharacter">java.base </samp>module is included, which, however, doesn’t contain any GUI 
+                <a id="p828"/>elements (i.e., no XML, SQL, or other modules). A look at the Javadoc will help: <span class="url"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/module-summary.html">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/module-summary.html</a></span></p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Information</h6>
+                
+                <p class="standard first last">A module 
+                    <samp class="listingcharacter listingcharacter">requires</samp> another module but 
+                    <samp class="listingcharacter listingcharacter">exports</samp>
+                 a package. You can easily be confused by the module name and package name.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.3.5">15.3.5    Writing Module Inserters: Java Virtual Machine Switches -p and -m</h3>
+            
+            <p class="standard">Let’s now add a main class that deploys 
+                <samp class="listingcharacter listingcharacter">YummyTester</samp>
+            :</p>
+            
+            <div class="listing " id="l15.7"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">main</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">candy</span><span class="">.</span><span class="">YummyTester</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Main </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> YummyTester</span><span class="">.</span><span class="">testYumminess</span><span class="">(</span><span class=""> </span><span class="">"Chris"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // false</span><span class=""><br/></span>    JOptionPane<span class="">.</span><span class="">showMessageDialog</span><span class="">(</span><span class=""> null</span><span class="">,</span><span class=""> YummyTester</span><span class="">.</span><span class="">testYumminess</span><span class="">(</span><span class=""> </span><span class="">"Meiji"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // true</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 15.7</b>    
+            com/tutego/insel/main/Main</p>
+            
+            <p class="standard">When the JVM starts the program, it loads the main module and all dependent modules. IntelliJ generates the following (shortened) output:</p>
+            
+            <div class="listing " id="l_none_15257"><pre>$ java.exe 
+                <span class="bold">–p </span>C:\Users\Christian\workspace\main\target\classes;C:\Users\Christian\workspace\candytester\target\classes 
+                <span class="bold">-m</span> com.tutego.main/com.tutego.insel.main.Main<br/>false<br/>true </pre></div>
+            
+            <p class="standard">Two switches (
+                <samp class="listingcharacter listingcharacter">-p</samp> and
+                <samp class="listingcharacter listingcharacter"> -m</samp>
+            ) are interesting in this context. In the following examples, the specification of the classpath is missing entirely:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">-m modulepath…</samp> or 
+                        <samp class="listingcharacter listingcharacter">--module-path modulepath…<br/></samp>
+                    List of directories separated by semicolons, containing modules.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">-m module[/mainclass]</samp> or 
+                        <samp class="listingcharacter listingcharacter">--module module[/mainclass]<br/></samp>Determines the 
+                        <span class="italic">initial module</span>
+                        <a class="indexanchor" id="i15_24"/>
+                        <a class="indexanchor" id="i15_25"/>
+                     for the main class.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">In these ways, you can also start the program yourself from the console.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.3.6">15.3.6    
+                <a id="p829"/>
+            Experiments with the Module Info File</h3>
+            
+            <p class="standard">Let’s start experimenting with our two 
+                <samp class="listingcharacter listingcharacter">module-info.java</samp>
+             files:</p>
+            
+            <table class="standardtable" id="t15.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Module</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Change</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Result</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">com.tutego.candytester<br/>com.tutego.main</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">requires java.base;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">The line is possible but unnecessary because 
+                                <samp class="listingcharacter listingcharacter">java.base</samp> is always required (
+                                <samp class="listingcharacter listingcharacter">requires</samp>
+                            ).</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">com.tutego.candytester</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">// exports com.tutego.insel.candy;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Results in a compiler error: “Package 'com.tutego.insel.candy' is declared in module 'com.tutego.candytester', which does not export it to module 'com.tutego.main'.”</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">com.tutego.candytester</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">exports com.tutego.insel.candy to god;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Only the 
+                                <samp class="listingcharacter listingcharacter">god</samp> module gets access to 
+                                <samp class="listingcharacter listingcharacter">com.tutego. island.greeter</samp>. We aren’t God, so the 
+                                <samp class="listingcharacter listingcharacter">main</samp>
+                             module reports the same error as in the line before.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">com.tutego.candytester</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">exports com.tutego. insel.notexisting;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Adding it results in a compiler error: “Package not found: com.tutego.insel.notexisting.”</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">com.tutego.main</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">// requires com.tutego.candytester;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Compiler error “Package 'com.tutego.insel.candy' is declared in module 'com.tutego.candytester', but module 'com.tutego.main' does not read it.”</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">com.tutego.main</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">exports com.tutego.insel.main;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">No result because 
+                                <samp class="listingcharacter listingcharacter">com.tutego.insel.main</samp> isn’t required (
+                                <samp class="listingcharacter listingcharacter">requires</samp>
+                            ) by any module.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 15.1</b>    
+            The Module Syntax and Its Effects</p>
+            
+            <p class="standard">The statement with 
+                <samp class="listingcharacter listingcharacter">exports com.tutego.island.candy to god</samp> is referred to as a 
+                <span class="italic">qualified export</span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.3.7">15.3.7    Automatic Modules</h3>
+            
+            <p class="standard">JAR files have played a central role in the Java system for 20 years; doing away with them from one day to the next would cause major problems. A look at <span class="url"><a href="https://mvnrepository.com/repos">https://mvnrepository.com/repos</a></span> reveals over 25 million artifacts. Although documentation and other files are included in these statistics, this figure illustrates how many JAR files are in circulation.</p>
+            
+            <p class="standard">
+                <a id="p830"/>Now, two directions exist for the use of JAR files: You can put the JAR either in a classpath or in a module path. If a JAR is used in a module path and it has no module info file, an 
+                <span class="italic">automatic module</span>
+                <a class="indexanchor" id="i15_26"/>
+                <a class="indexanchor" id="i15_27"/>
+             will be created. Except for one small limitation, this feature works for most existing Java libraries.</p>
+            
+            <p class="standard">An automatic module has certain properties for its module name and for consequences with its dependencies, such as the following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Without a module info file, automatic modules don’t have a self-selected name but instead are assigned a name by the system, which is derived from the file name.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn15_05" id="fn15_05">[ 205 ]</a></span> To put it more simply, appended version numbers and the file extension are removed, and all non-alphanumeric characters are replaced with dots, but never two dots in a row. The version will still be recognized. The documentation provides the example of 
+                        <span class="italic">foo-bar-1.2.3-SNAPSHOT.jar</span>, which leads to the module name 
+                        <samp class="listingcharacter listingcharacter">foo.bar</samp> and version 
+                        <samp class="listingcharacter listingcharacter">1.2.3-SNAPSHOT</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Automatic modules always export all their packages. So, a dependency to this automatic module exists, the procurer can use all visible types and members.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Automatic modules can read all other modules, even the unnamed ones.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">At first glance, migration seems to be a simple task for the modular system: All JARs go into the module path, whether module info files exist or not. However, some JAR files are rejected by the JVM as automatic modules, namely, if they contain types of a package already in another included module. Modules must not contain 
+                <span class="italic">split packages</span>
+             (i.e., containing the same package again). The migration then requires you complete one of the following tasks:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Merging of the packages into one module</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Shifting types into different packages</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Using the classpath</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.3.8">15.3.8    Unnamed Modules</h3>
+            
+            <p class="standard">The JVM has a classpath on the outside, but internally, the classpath looks different. If JAR files are placed in the classpath, they are packaged into an 
+                <span class="italic">unnamed module</span>
+                <a class="indexanchor" id="i15_28"/>
+                <a class="indexanchor" id="i15_29"/>. Every JAR in the classpath—regardless of whether it contains a 
+                <span class="italic">modul-info.class</span>
+             or not—goes into the unnamed module. Thus, we only have one unnamed module, so we are speaking in the singular, not in the plural.</p>
+            
+            <p class="standard">“Unnamed” already indicates that the module has no name, and consequently, no dependency to JAR files can exist in the unnamed module, which makes the unnamed module different from automatic modules. An unnamed module has the same property as an automatic module in that it exports all packages. Furthermore, because it’s part 
+                <a id="p831"/>
+            of the migration, an unnamed module also has access to all other modules.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.3.9">15.3.9    Readability and Accessibility</h3>
+            
+            <p class="standard">The runtime environment sorts modules into a graph. The dependence of each modules leads to 
+                <span class="italic">readability</span>
+                <a class="indexanchor" id="i15_30"/>
+                <a class="indexanchor" id="i15_31"/>
+                <a class="indexanchor" id="i15_32"/>: If module A needs module B, module A 
+                <span class="italic">reads</span> module B, and B is 
+                <span class="italic">read by</span> A. This concept is elementary for the functioning of the module system because, in this way, errors are already excluded at translation time, such as cycles or identical packages in different modules. Readability is key to a 
+                <span class="italic">reliable configuration</span>
+                <a class="indexanchor" id="i15_33"/>
+                <a class="indexanchor" id="i15_34"/>
+                <a class="indexanchor" id="i15_35"/>
+            .</p>
+            
+            <p class="standard">The concept of 
+                <span class="italic">accessibility</span>
+                <a class="indexanchor" id="i15_36"/>
+                <a class="indexanchor" id="i15_37"/> goes one step further. If a module can basically read another module, it doesn’t necessarily access all packages and types because only those types are visible that have been exported. Types that are both readable and reachable are referred to as 
+                <span class="italic">reachable</span>
+             types.</p>
+            
+            <p class="standard">The next question is which module type has access to which other module type. 
+                <span class="crossreference "><a href="15_003.html#t15.2">Table 15.2</a></span>
+             summarizes some considerations about readability.</p>
+            
+            <table class="standardtable" id="t15.2">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Module Type</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Origin</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Exports Packages</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Access</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Platform module</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">JDK</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Explicitly</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell"/>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Named modules</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Container with module info in module path</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Explicitly</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Platform modules, other named modules, and automatic modules</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Automatic modules</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Container without module info in module path</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">All</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Platform modules, other named modules, automatic modules, and unnamed module</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Unnamed module</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Class files and JAR files in the classpath</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">All</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Platform modules, named modules, and automatic modules</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 15.2</b>    
+            Readability of the Modules</p>
+            
+            <p class="standard">The module info file is the most important part because this file turns a JAR into a modular JAR. If the module information is missing, a JAR remains a regular JAR as Java developers have known for over 20 years. The JAR file can be set in the new module path or in the known classpath, which results in four combinations.</p>
+            
+            <table class="standardtable" id="t15.3">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell"/>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Module Path</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Classpath</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">JAR with module information</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Becomes named module</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Becomes unnamed module</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">JAR without module information</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Becomes automatic module</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Becomes unnamed module</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 15.3</b>    
+            JARs in the Path</p>
+            
+            <p class="standard">
+                <a id="p832"/>
+            JAR archives in the classpath are the known behavior, and using the module path is still rare.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.3.10">15.3.10    Module Migration</h3>
+            
+            <p class="standard">Let’s assume our monolithic application has no dependencies on external libraries and will be modularized. Then, the first step is to put the entire application into a large named module. Next, individual areas must be identified so that gradually the building blocks move into individual modules. This task isn’t always easy, especially since cyclical dependencies are likely. Oracle developers had a lot of trouble with the modularization of the JDK.</p>
+            
+            
+                
+                <h4 class="t4" id="h15.3.10.1">The Problem with Automatic Modules</h4>
+                
+                <p class="standard">Traditionally, build tools like Maven or Gradle generated JAR files, and filenames are somehow generated. However, if these JAR files become automatic modules, the filename suddenly plays a major role, but the filename may never have been deliberately chosen. If a named module references an automatic module, two problems may arise: If the file name changes (let’s leave the version number aside for the moment), the name of the automatic module also changes, and the dependency can no longer be resolved. The second problem is even bigger: Many Java libraries don’t yet have module information, and consequently, developers must express the dependency on this automatic module via a derived name.</p>
+                
+                <p class="standard">Take, for example, the popular open-source library 
+                    <span class="italic">Google Guava</span>. Version 31.0.1-jre of a JAR file would have the filename 
+                    <span class="italic">guava-31.0.1-jre.jar</span>. Consequently, the automatic module is named 
+                    <samp class="listingcharacter listingcharacter">guava</samp>. A named module can express a dependency via 
+                    <samp class="listingcharacter listingcharacter">required guava</samp>. If Google converts the library into a real Java module, the name will change. The plan is to use 
+                    <samp class="listingcharacter listingcharacter">com.google.guava</samp>. But, if the name changes, all referencing in projects that now still use 
+                    <samp class="listingcharacter listingcharacter">required guava</samp> will result in a compiler error. An alias would be a great idea, but this feature doesn’t exist. Furthermore, the problem is not only in our code that references Guava, but also in 
+                    <span class="italic">transitive dependencies</span>
+                .</p>
+                
+                <p class="standard">One solution may mitigate the problem: In the JAR manifest file, an 
+                    <samp class="listingcharacter listingcharacter">Automatic-Module-Name</samp>
+                    <a class="indexanchor" id="i15_38"/>
+                 entry can be set that “overrides” the automatic module name.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Apache Commons Lang sets a name in the following way:
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn15_06" id="fn15_06">[ 206 ]</a></span>
+                    </p>
+                    
+                    <div class="listing " id="l_none_15279"><pre>Automatic-Module-Name: org.apache.commons.lang3</pre></div>
+                    
+                    <p class="standard last">Guava doesn’t set a module name.</p>
+                
+                </div>
+                
+                <p class="standard">
+                    <a id="p833"/>Named modules that have dependencies on automatic modules are therefore problematic. We hope that the central Java libraries on which so many solutions rely will quickly introduce module information, which would be a 
+                    <span class="italic">bottom-up</span> solution. This approach is the only promising option but will probably take a long time. Even though Java provides a module system, few Java libraries have module information; instead, 
+                    <samp class="listingcharacter listingcharacter">Automatic-Module-Name</samp>
+                 is more common.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

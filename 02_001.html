@@ -1,0 +1,1358 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Imperative Language Concepts" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Imperative Language Concepts" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Imperative Language Concepts</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h2">2    
+        <a id="p83"/>
+    Imperative Language Concepts</h1><p class="introductorynote indent_chapter_single">“When I have conducted an opera a hundred times, it is time <br/>I start learning it again.”<br/>—Arturo Toscanini (1867–1957)</p><p class="standard">A program in Java isn’t described in colloquial language; rather, a set of rules and a grammar define the syntax and semantics. In the following sections, we’ll explore some smaller examples of Java programs to clear the way for larger programs.</p><div class="imagebox figure-type"><a href="img-f_none_02_00.html" id="f_none_02_00"><img alt="" id="img-f_none_02_00" src="bilderklein/klein02_000_01.png"/></a></div>
+        
+        <h2 class="t2" id="h2.1">2.1    Elements of the Java Programming Language</h2>
+        
+        <p class="standard">First, let’s talk about the set of rules that govern the Java programming language (the
+            <a class="indexanchor" id="i02_00"/> grammar and the syntax)
+            <a class="indexanchor" id="i02_01"/> and look at the Unicode encoding, tokens, and identifiers, among other things. When naming a method, for example, you can choose from a large number of characters; the character set is called the 
+            <span class="italic">lexicon</span>
+            <a class="indexanchor" id="i02_02"/>
+        .</p>
+        
+        <p class="standard">The syntax of a Java program defines the tokens and thus forms the vocabulary. However, correctly written programs aren’t necessarily correct. The term 
+            <span class="italic">semantics</span>
+            <a class="indexanchor" id="i02_03"/>
+         therefore summarizes the meaning of a syntactically correct program. Semantics determines what the program does. The abstraction order is as follows: lexicon, syntax, and semantics. The compiler goes through these steps before it can generate the bytecode.</p>
+        
+        
+            
+            <h3 class="t3" id="h2.1.1">2.1.1    
+                <a id="p84"/>
+            Tokens</h3>
+            
+            <p class="standard">A 
+                <span class="italic">token</span>
+                <a class="indexanchor" id="i02_04"/> is a lexical unit that provides the compiler with the building blocks of the program. Based on the grammar of a language, the compiler recognizes which sequences of characters form a token. For identifiers, for example, this recognition means “Take the next characters as long as a letter is followed only by letters or digits.” For example, a number like 1982 forms a token by the following rule: “Read digits until no digit follows.” For comments, the combinations 
+                <samp class="listingcharacter listingcharacter">/*</samp> and 
+                <samp class="listingcharacter listingcharacter">*/</samp>
+             form a token.</p>
+            
+            <p class="standard">Unfortunately, in C(++), an expression like 
+                <samp class="listingcharacter listingcharacter">*s/*t</samp>
+             won’t be parsed as expected. Only a space between the division sign and the asterisk “helps” the parser to recognize the desired division.</p>
+            
+            
+                
+                <h4 class="t4" id="h2.1.1.1">Whitespace</h4>
+                
+                <p class="standard">The compiler must be able to distinguish tokens from each other. For this reason, we use 
+                    <span class="italic">separators</span>
+                    <a class="indexanchor" id="i02_05"/>, which include 
+                    <span class="italic">whitespace</span>
+                 characters such as spaces, tabs, line feeds, and form feeds. These characters have no other meaning than being separators. Thus, you can place any number of whitespace characters between the tokens—any number of spaces is valid between tokens. And since you don’t have to be stingy with them, whitespace can clarify a section of a program tremendously. Programs are more readable when they are formatted with a lot of air.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.1.1.2">Separators</h4>
+                
+                <p class="standard">In addition to the separators, 12 tokens are created from ASCII characters, which are defined as 
+                    <span class="italic">separators</span>
+                    <a class="indexanchor" id="i02_06"/>
+                :</p>
+                
+                <div class="listing " id="l_none_221"><pre>(   )   {   }   [   ]   ;   ,   .   ...   @   :: </pre></div>
+                
+                <p class="standard">However, the following is anything but good to read, although the compiler does accept it:</p>
+                
+                <div class="imagebox figure-type"><a href="img-f_none_02_01.html" id="f_none_02_01"><img alt="" id="img-f_none_02_01" src="bilderklein/klein02_000_02.png"/></a></div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.1.2">2.1.2    
+                <a id="p85"/>
+            Text Encoding by Unicode Characters</h3>
+            
+            <p class="standard">Java encodes texts by means of
+                <a class="indexanchor" id="i02_07"/>
+                <span class="italic"> Unicode characters</span>. Each character is assigned a unique numerical value
+                <a class="indexanchor" id="i02_08"/> (
+                <span class="italic">code point</span>
+                <a class="indexanchor" id="i02_09"/>), so that the capital “A,” for example, is located at position 65. The Unicode character set includes the ISO-US-
+                <a class="indexanchor" id="i02_10"/>ASCII characters
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_01" id="fn02_01">[ 33 ]</a></span> from 0 to 127 (hexadecimal 0x00 to 0x7f, i.e., 7 bits) and the extended encoding according to
+                <a class="indexanchor" id="i02_11"/> ISO 8859-1 (Latin-1), which adds characters from 128 to 255. More details on Unicode are provided in 
+                <span class="crossreference "><a href="05_001.html#h5">Chapter 5</a></span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.1.3">2.1.3    Identifiers</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i02_12"/>For variables (and thus constants), methods, classes, and interfaces, 
+                <span class="italic">identifiers</span>
+                <a class="indexanchor" id="i02_13"/>
+             are assigned to subsequently identify the corresponding modules in the program. Data is then available under variables. Methods are the subroutines in object-oriented programming (OOP) languages, and classes are the building blocks of object-oriented (OO) programs.</p>
+            
+            <p class="standard">An identifier is a sequence of characters that can be almost arbitrarily long (the length is only theoretically fixed). These characters are elements from the Unicode character set, and each character is important for identification. Thus, an identifier that is 100 characters long must also always be specified correctly with all 100 characters. Some C and FORTRAN compilers are a bit more generous in this respect and evaluate only the first few digits.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following Java program, the identifiers are set in bold:</p>
+                
+                <div class="listing " id="l_none_227"><pre><span class="">class</span><span class=""> </span>
+                    <span class="bold"><span class="">Application</span></span> {<br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span>
+                    <span class="bold"><span class="">main</span></span><span class="">( </span>
+                    <span class="bold"><span class="">String</span></span><span class="">[] </span>
+                    <span class="bold">args</span> ) {<br/>    
+                    <span class="bold">System</span>.
+                    <span class="bold">out</span>.
+                    <span class="bold"><span class="">println</span></span><span class="">( </span><span class="">"Hello World"</span><span class=""> );</span><br/>  }<br/>}<span class=""/></pre></div>
+                
+                <p class="standard last">
+                    <samp class="listingcharacter listingcharacter">String</samp> is set in bold because 
+                    <samp class="listingcharacter listingcharacter">String</samp> is a class and not a built-in data type like 
+                    <samp class="listingcharacter listingcharacter">int</samp>. While the 
+                    <samp class="listingcharacter listingcharacter">String</samp> class is given preferential treatment in Java—and a plus sign can concatenate 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                s together—it’s still a class type.</p>
+            
+            </div>
+            
+            <p class="standard">Each Java identifier is a sequence of 
+                <span class="italic">Java letters</span> and 
+                <span class="italic">Java digits</span>,
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_02" id="fn02_02">[ 34 ]</a></span> where the identifier must start with a Java letter. Java letters include not only our Latin letters of the range “A” to “Z” (also “a” to “z”) but also include many other characters from the Unicode 
+                <a id="p86"/>alphabet, such as the underscore, currency characters—like the characters for dollar ($), euro (€), and yen (¥)—and Greek and Arabic letters. Even if a large number of wild characters are possible as identifier letters, the programming should nevertheless be done with English identifier names. At this point, we should emphasize once again that Java is strictly case sensitive
+                <a class="indexanchor" id="i02_14"/>
+            .</p>
+            
+            <p class="standard">
+                <span class="crossreference "><a href="02_001.html#t2.1">Table 2.1</a></span>
+             lists some valid identifiers.</p>
+            
+            <table class="standardtable" id="t2.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Valid Identifiers</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Reason</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Mami</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Mami</samp>
+                             consists only of alphabetic characters and is therefore correct.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">__RAPHAEL_IS_NICE__</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Underscores are allowed.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Bóolêáñ</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">This identifier is correct, even though it contains accents.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">α</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">The Greek alpha is a valid Java letter.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">RECE$$ION</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">The dollar sign is a valid Java letter.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">¥€$</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Actually, these letters are also valid Java letters.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 2.1</b>    
+            Example Valid Identifiers in Java</p>
+            
+            <p class="standard">Invalid identifiers, on the other hand, include the following:</p>
+            
+            <table class="standardtable" id="t2.2">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Invalid Identifier</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Reason</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">2plus2is4</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">The first symbol must be a Java letter and not a digit.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">get your shots</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Spaces aren’t allowed in identifiers.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">faster!</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">The exclamation mark, like many special characters, is invalid.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">null class</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">The name is already occupied by Java. 
+                                <samp class="listingcharacter listingcharacter">Null</samp> (case sensitive) or 
+                                <samp class="listingcharacter listingcharacter">cláss</samp>
+                             would be possible.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">_</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">A single underscore is considered a reserved keyword.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 2.2</b>    
+            Example Invalid Identifiers in Java</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">In Java programs, identifier names are often formed from compound words of a description. For instance, in a sentence like “open file read only,” the spaces are removed, and the words following the first word start with capital letters. Thus, the sample sentence becomes “openFileReadOnly.” Linguists refer to a capital letter in the middle of words as 
+                    <span class="italic">inner majuscule</span>
+                    <a class="indexanchor" id="i02_15"/>. Programmers and IT-savvy people, on the other hand, like to talk about the 
+                    <span class="italic">CamelCase notation</span>, because of two-humped camels. 
+                    <a id="p87"/>Mixed case notation gets difficult with capitalized abbreviations, such as HTTP or URL; in these cases, the Java libraries aren’t consistent so that class names such as 
+                    <samp class="listingcharacter listingcharacter">HttpConnection</samp> or 
+                    <samp class="listingcharacter listingcharacter">HTTPConnection</samp> are acceptable
+                    <a class="indexanchor" id="i02_16"/>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.1.4">2.1.4    Literals</h3>
+            
+            <p class="standard">A literal
+                <a class="indexanchor" id="i02_17"/>
+             is a constant expression. Several types of literals exist:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The truth values 
+                        <samp class="listingcharacter listingcharacter">true</samp> and 
+                        <samp class="listingcharacter listingcharacter">false</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Integral literals for numbers such as 
+                        <samp class="listingcharacter listingcharacter">122</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Floating point literals such as 
+                        <samp class="listingcharacter listingcharacter">12.567</samp> or 
+                        <samp class="listingcharacter listingcharacter">9.999E-2</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Character literals written in single quotes such as 
+                        <samp class="listingcharacter listingcharacter">'X'</samp> or 
+                        <samp class="listingcharacter listingcharacter">'\n'</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">String literals for character strings written in double quotes such as 
+                        <samp class="listingcharacter listingcharacter">"The rotation of earth 'really' makes my day."</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                     stands for a special reference type.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following Java program, the three literals are set in bold:</p>
+                
+                <div class="listing  last_item" id="l_none_244"><pre><span class="">class</span><span class=""> Application </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">"Hello World"</span></span><span class=""> );</span><br/>    System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold"><span class="">1</span></span><span class=""> + </span>
+                    <span class="bold"><span class="">2.65</span></span><span class=""> );</span><br/>  }<br/>}<span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.1.5">2.1.5    (Reserved) Keywords</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i02_18"/>Certain words aren’t allowed as identifiers because they’re treated specially by the compiler as 
+                <span class="italic">keywords</span>
+                <a class="indexanchor" id="i02_19"/>
+            . Keywords determine the “language” of a compiler, and you cannot add your own keywords when programming.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Keywords are set in bold in the following listing:</p>
+                
+                <div class="listing  last_item" id="l_none_236"><pre>
+                    <span class="bold"><span class="">class</span></span><span class=""> Application {</span><br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span></span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Hello World"</span><span class=""> );</span><br/>  }<br/>}<span class=""/></pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h2.1.5.1">
+                    <a id="p88"/>
+                Keywords</h4>
+                
+                <p class="standard">The strings in 
+                    <span class="crossreference "><a href="02_001.html#t2.3">Table 2.3</a></span> are keywords and therefore cannot be used as identifier names in Java.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_03" id="fn02_03">[ 35 ]</a></span>
+                </p>
+                
+                <table class="standardtable" id="t2.3">
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">abstract</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">continue</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">for</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">new</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">switch</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">assert</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">default</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">goto</samp>
+                                †</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">package</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">synchronized</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">boolean</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">do</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">if</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">private</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">this</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">break</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">double</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">implements</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">protected</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">throw</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">byte</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">else</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">import</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">public</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">throws</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">case</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">enum</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">instanceof</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">return</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">transient</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">catch</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">extends</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">int</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">short</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">try</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">char</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">final</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">interface</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">void</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">class</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">finally</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">long</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">strictfp</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">volatile</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">const</samp>
+                                †</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">float</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">native</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">super</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">while</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">_</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle"/>
+                            
+                            <td class="tablecell tablecell_middle"/>
+                            
+                            <td class="tablecell tablecell_middle"/>
+                            
+                            <td class="tablecell tablecell_last"/>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 2.3</b>    
+            (Reserved) Keywords in Java</p>
+                
+                <p class="standard">Although the words marked with † aren’t currently used by Java, variables of this name can’t be declared. We refer to these keywords as 
+                    <span class="italic">reserved keywords</span> because they’re reserved for future use. However, we don’t foresee a time that 
+                    <samp class="listingcharacter listingcharacter">goto</samp>
+                 will ever be used.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.1.5.2">Restricted Identifiers and Literals</h4>
+                
+                <p class="standard">Inserting new keywords can break old program code. So, a few years ago,
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_04" id="fn02_04">[ 36 ]</a></span> Oracle added a new way to extend the syntax: 
+                    <span class="italic">restricted identifiers</span>
+                    <a class="indexanchor" id="i02_20"/>. 
+                    <samp class="listingcharacter listingcharacter">var</samp>, 
+                    <samp class="listingcharacter listingcharacter">yield</samp>, and 
+                    <samp class="listingcharacter listingcharacter">record</samp> are examples of such restricted identifiers. In addition to the keywords, the literals 
+                    <samp class="listingcharacter listingcharacter">true</samp>, 
+                    <samp class="listingcharacter listingcharacter">false</samp>, and 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 are also not available for identifiers.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.1.6">2.1.6    Summary of the Lexical Analysis</h3>
+            
+            <p class="standard">When the compiler translates Java programs, it starts with a lexical examination of the source code. We’ve already learned about the central elements, but let’s summarize by looking at the following simple program:</p>
+            
+            <div class="listing " id="l_none_251"><pre><span class="">class</span><span class=""> Application </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>
+                <a id="p89"/>    <span class="">String</span><span class=""> text </span><span class="">=</span><span class=""> </span><span class="">"Hello World"</span><span class="">;</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> text </span><span class="">);</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">2.65</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The compiler will read over all comments, and the delimiters will take the compiler from token to token. The following tokens can be identified in the program:</p>
+            
+            <table class="standardtable" id="t2.4">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Token Type</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Example</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Explanation</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Identifiers</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Application</samp>, 
+                                <samp class="listingcharacter listingcharacter">main</samp>, 
+                                <samp class="listingcharacter listingcharacter">String</samp>, 
+                                <samp class="listingcharacter listingcharacter">args</samp>, 
+                                <samp class="listingcharacter listingcharacter">text</samp>, 
+                                <samp class="listingcharacter listingcharacter">System</samp>, 
+                                <samp class="listingcharacter listingcharacter">out</samp>, 
+                                <samp class="listingcharacter listingcharacter">println</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Names for class, variable, method, and so on</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Keyword</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">class</samp>, 
+                                <samp class="listingcharacter listingcharacter">public</samp>, 
+                                <samp class="listingcharacter listingcharacter">static</samp>, 
+                                <samp class="listingcharacter listingcharacter">void</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Reserved words</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Literal</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">" Lumberjack Song"</samp>, 
+                                <samp class="listingcharacter listingcharacter">1</samp>, 
+                                <samp class="listingcharacter listingcharacter">2.65</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Constant values, like strings, numbers, and so on</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Operator</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">=</samp>, 
+                                <samp class="listingcharacter listingcharacter">+</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Operator for assignments, calculations, and so on</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Separator</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(</samp>, 
+                                <samp class="listingcharacter listingcharacter">)</samp>, 
+                                <samp class="listingcharacter listingcharacter">{</samp>, 
+                                <samp class="listingcharacter listingcharacter">}</samp>, 
+                                <samp class="listingcharacter listingcharacter">;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Symbols that separate the tokens besides the separator character</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 2.4</b>    
+            Tokens in Our Sample Program</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.1.7">2.1.7    Comments</h3>
+            
+            <p class="standard">Programming isn’t only about expressing the correct algorithm in a language, but also about formulating our thoughts in an understandable way. This articulation is achieved, for example, by giving meaningful names to program elements such as classes, methods, and variables. Self-explanatory class names help considerably during development. But the solution concept and the algorithm don’t necessarily become clearer even by the most beautiful variable names. For outsiders (and after months, perhaps yourselves) to quickly understand the solution concept and later extend or modify the program, you can write 
+                <span class="italic">comments</span>
+             into the source code. They only help humans read the program and have no effect whatsoever on its processing.</p>
+            
+            
+                
+                <h4 class="t4" id="h2.1.7.1">Different Types of Comments</h4>
+                
+                <p class="standard">In Java, you can formulate comments in the following three ways:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <span class="italic">Line comments</span>: These comments start with two slashes
+                            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_05" id="fn02_05">[ 37 ]</a></span>
+                            <samp class="listingcharacter listingcharacter"> </samp>(
+                            <samp class="listingcharacter listingcharacter">//</samp>
+                        ) and comment out the rest of a line. The comment is valid from these characters until the end of the line, that is, until the newline character.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <span class="italic">
+                                <a id="p90"/>
+                            Block comments</span>: Using 
+                            <samp class="listingcharacter listingcharacter">/* */</samp>, you can comment out individual sections. The text in the block comment must not contain 
+                            <samp class="listingcharacter listingcharacter">*/</samp>
+                         itself because block comments must not be nested.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <span class="italic">Javadoc comments</span>: These comments are special block comments that contain Javadoc comments and are contained within 
+                            <samp class="listingcharacter listingcharacter">/** */</samp>
+                        . For example, a Javadoc comment describes the method or the parameters from which the application programming interface (API) documentation can be generated later.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Let’s look at an example where all three comment types appear:</p>
+                
+                <div class="listing " id="l_none_256"><pre>
+                    <span class="bold"><span class="">/*</span><span class=""/><br/><span class=""> * This source code is public domain.</span><span class=""/><br/><span class=""> */</span><span class=""/><br/><span class="">// Magic. Do not touch.</span><span class=""/><br/><span class="">/**</span><span class=""/><br/><span class=""> * @author Christian Ullenboom</span><span class=""/><br/><span class=""> */</span><span class=""/><br/><span class=""/></span><span class="">class</span><span class=""> DoYouHaveAnyCommentsToMake {     </span><span class=""/>
+                    <span class="bold">// TODO: Rename later<span class=""/><br/><span class="">  // When I wrote this, only God and I understood what I was doing</span><span class=""/><br/><span class="">  // Now, only God knows</span></span><span class=""/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args </span>
+                    <span class="bold"><span class="">/* Command line argument */</span></span><span class=""> )</span> {<span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span><span class="">"Sleeps all </span><span class="">/*night*/</span><span class=""/> and he <span class="">//works//</span><span class=""/> all day"<span class=""> );</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+                
+                <p class="standard">For the compiler, a comment is a token, which is why 
+                    <samp class="listingcharacter listingcharacter">1/*2*/3</samp> does not give the token 
+                    <samp class="listingcharacter listingcharacter">13</samp>, but the two tokens 
+                    <samp class="listingcharacter listingcharacter">1</samp> and 
+                    <samp class="listingcharacter listingcharacter">3</samp>. But simply speaking, to the compiler, a file with comments looks the same as without, that is, like 
+                    <samp class="listingcharacter listingcharacter">class DoYouHaveAnyCommentsToMake { public static void main( String[] args ) { System.out.println("Sleeps all /*night*/ and he //works// all day" );} }</samp>
+                . </p>
+                
+                <p class="standard">The console output is 
+                    <samp class="listingcharacter listingcharacter">Sleeps all /*night*/ and he //works// all day </samp>and shows that no comments exist inside the string literals; the symbols 
+                    <samp class="listingcharacter listingcharacter">/*</samp>, 
+                    <samp class="listingcharacter listingcharacter">*/</samp>, and 
+                    <samp class="listingcharacter listingcharacter">//</samp>
+                 belong to the string.</p>
+                
+                <p class="standard">The bytecode contains exactly the same—all comments are discarded by the compiler; no comments are included in the bytecode.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.1.7.2">Comments with Style</h4>
+                
+                <p class="standard">All comments and remarks should be written in English to facilitate reading for project members from other countries.</p>
+                
+                <p class="standard">Javadoc comments generally document the “what” and block comments document the “how.”</p>
+                
+                <p class="standard">
+                    <a id="p91"/>For general comments, you should use the 
+                    <samp class="listingcharacter listingcharacter">//</samp>
+                 characters, which offers two advantages:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">In editors that don’t highlight comments or in a simple source code output on the command line, you can quickly see that a line beginning with 
+                            <samp class="listingcharacter listingcharacter">//</samp> is a comment. Keeping track of a source text that is interrupted for several pages with the comment characters 
+                            <samp class="listingcharacter listingcharacter">/*</samp> and 
+                            <samp class="listingcharacter listingcharacter">*/</samp>
+                         is difficult. Line comments make it clear where comments start and where they end.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The use of line comments is better suited for commenting out blocks of code during the development and debugging phases. If you use the block comments for program documentation, you’ll be limited because you cannot nest comments of this type. Line comments can be nested more easily.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Pressing
+                    <span class="keyboard"> (Ctrl)</span>+
+                    <span class="keyboard">(/)</span> comments a line or block in and out of IntelliJ. But keep in mind that the forward slash 
+                    <span class="keyboard">(/)</span> must be selected via the numeric keypad on your keyboard! If several lines are selected, the key combination comments out all selected lines with line comments. In a commented line, another press of 
+                    <span class="keyboard">(Ctrl)</span>+
+                    <span class="keyboard">(/)</span>
+                 takes back the comments of a line.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

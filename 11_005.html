@@ -1,0 +1,2290 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Special Types of Java SE" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Special Types of Java SE" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Special Types of Java SE</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h11.5">11.5    Wrapper Classes and Autoboxing</h2>
+        
+        <p class="standard">The class library provides special classes for each primitive data type like 
+            <samp class="listingcharacter listingcharacter">int</samp>, 
+            <samp class="listingcharacter listingcharacter">double</samp>, or 
+            <samp class="listingcharacter listingcharacter">char</samp>. These 
+            <span class="italic">wrapper classes</span>
+            <a class="indexanchor" id="i11_66"/> (also called 
+            <span class="italic">envelope classes</span>
+        ) fulfill three important tasks:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Wrapper classes provide static helper methods for converting a primitive data type to a string (called 
+                    <span class="italic">formatting</span>) and from the string back to a primitive data type (called 
+                    <span class="italic">parsing</span>
+                ).</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The data structures such as lists and sets that are used in Java can only store references. Thus, the problem arises of how to add primitive data types to these containers. Wrapper objects encapsulate a simple primitive value in an object so that a reference exists that can be stored in a prebuilt data structure, for example.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The wrapper type is important for generics. For example, if a special 
+                    <samp class="listingcharacter listingcharacter">function</samp> maps an integer to a float, an implementation with 
+                    <samp class="listingcharacter listingcharacter">Function&lt;</samp>
+                    <span class="bold">
+                        <samp class="listingcharacter listingcharacter">int</samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">, </samp>
+                    <span class="bold">
+                        <samp class="listingcharacter listingcharacter">double</samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">&gt;</samp> isn’t correct—it must be 
+                    <samp class="listingcharacter listingcharacter">
+                        <a id="p652"/>
+                    Function&lt;</samp>
+                    <span class="bold">
+                        <samp class="listingcharacter listingcharacter">Integer</samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">,</samp>
+                    <span class="bold">
+                        <samp class="listingcharacter listingcharacter">Double</samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">&gt;</samp>
+                . Primitive data types don’t exist even with generics; wrapper types are always used instead.</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">Wrapper classes exist for all primitive data types, as listed in 
+            <span class="crossreference "><a href="11_005.html#t11.2">Table 11.2</a></span>
+        .</p>
+        
+        <table class="standardtable" id="t11.2">
+            
+            <thead>
+                
+                <tr>
+                    
+                    <th class="tablehead tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">Wrapper Class</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">Primitive Type</p>
+                    
+                    </th>
+                
+                </tr>
+            
+            </thead>
+            
+            <tbody>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Byte</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">byte</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Short</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">short</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Integer</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Long</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">long</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Double</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">double</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Float</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">float</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Boolean</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Character</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">char</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <p class="caption "><b>Table 11.2</b>    
+            Wrapper Classes and Primitive Data Types</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+            
+            <p class="standard first last">For 
+                <samp class="listingcharacter listingcharacter">void</samp>, which isn’t a data type, the class 
+                <samp class="listingcharacter listingcharacter">Void</samp> exists. This class declares only the constant 
+                <samp class="listingcharacter listingcharacter">TYPE</samp> of type 
+                <samp class="listingcharacter listingcharacter">Class&lt;Void&gt;</samp>
+             and is more relevant for reflection (reading properties of a class).</p>
+        
+        </div>
+        
+        <p class="standard">In this section, we’ll first look at creating wrapper objects then explore the methods that appear in all wrapper classes. Finally, we’ll introduce you to individual methods of each wrapper class. (Note that we covered the 
+            <samp class="listingcharacter listingcharacter">Character</samp> class in 
+            <span class="crossreference "><a href="05_001.html#h5">Chapter 5</a></span>, 
+            <span class="crossreference "><a href="05_003.html#h5.3">Section 5.3</a></span>
+        , when we talked about characters and strings.)</p>
+        
+        <div class="imagebox figure-type"><a href="img-f11.5.html" id="f11.5"><img alt="Essential Type Relationships of Wrapper Classes: Character Doesn’t Extend Number" id="img-f11.5" src="bilderklein/klein11_005.png"/></a></div>
+        
+        <p class="caption "><b>Figure 11.5</b>    
+            Essential Type Relationships of Wrapper Classes: Character Doesn’t Extend Number</p>
+        
+        
+            
+            <h3 class="t3" id="h11.5.1">11.5.1    
+                <a id="p653"/>
+            Creating Wrapper Objects</h3>
+            
+            <p class="standard">Wrapper objects can be created in two ways:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Via static 
+                        <samp class="listingcharacter listingcharacter">valueOf(...)</samp>
+                        <a class="indexanchor" id="i11_67"/>
+                     methods, which are passed a primitive expression or a string.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Via boxing: From a primitive value, the compiler automatically generates 
+                        <samp class="listingcharacter listingcharacter">valueOf(...)</samp>
+                     method calls that return the wrapper object.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example creates some wrapper objects:</p>
+                
+                <div class="listing  last_item" id="l_none_11680"><pre>Integer  int1 <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">Integer.</span><span class="">valueOf</span><span class="">(</span></span> <span class="">"</span>
+                    <span class="bold">30"<span class=""> )</span></span>; <span class=""> // valueOf()</span><span class=""><br/></span>Long     lng1 = 
+                    <span class="bold">Long.<span class="">valueOf</span><span class="">( 0xC0B0L )</span></span>; <span class=""> // valueOf()</span><span class=""><br/></span>Double   dobl = 
+                    <span class="bold">Double.<span class="">valueOf</span><span class="">( </span><span class="">12.3</span><span class=""> )</span></span>;  <span class=""> // valueOf()</span><span class=""><br/></span>Boolean  bool = true;                    <span class=""> // Boxing</span><span class=""><br/></span>Integer  int2 = <span class="">42</span><span class="">;                      </span><span class=""> // Boxing</span><span class=""><br/></span>Long     lng2 = 42L;                     <span class=""> // Boxing</span><span class=""/><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">Let’s compare and contrast these two ways of creating wrapper classes:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Boxing is the shortest variant in terms of writing effort, and generally the best, because this option is the most compact. (Boxing isn’t without its problems, however, as 
+                        <span class="crossreference "><a href="11_005.html#h11.5.12">Section 11.5.12</a></span> describes.) Since boxing accesses the 
+                        <samp class="listingcharacter listingcharacter">valueOf(...)</samp>
+                     methods, the two variants are semantically identical and differ only in the program code (but are not different in the bytecode).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Compared to a constructor, a static 
+                        <samp class="listingcharacter listingcharacter">valueOf(...)</samp> method for creating objects has an advantage: Unlike 
+                        <samp class="listingcharacter listingcharacter">new</samp> and the constructor, a static method doesn’t always have to create objects anew but can also use preconstructed objects. And that’s exactly what 
+                        <samp class="listingcharacter listingcharacter">valueOf(...)</samp> does with the four classes 
+                        <samp class="listingcharacter listingcharacter">Byte</samp>, 
+                        <samp class="listingcharacter listingcharacter">Short</samp>, 
+                        <samp class="listingcharacter listingcharacter">Integer</samp>, and 
+                        <samp class="listingcharacter listingcharacter">Long</samp>: If the integers come from the value range –128 to +127, 
+                        <samp class="listingcharacter listingcharacter">valueOf(...)</samp> uses prepared objects from a cache. Of course, this approach only works because callers of 
+                        <samp class="listingcharacter listingcharacter">valueOf(...)</samp> obtain an 
+                        <span class="italic">immutable</span>
+                     object—a wrapper object can’t be changed after its creation.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">In the wrapper class 
+                    <samp class="listingcharacter listingcharacter">Integer</samp>, three static overloaded methods exist: 
+                    <samp class="listingcharacter listingcharacter">getInteger(String)</samp>, 
+                    <samp class="listingcharacter listingcharacter">getInteger(String, int)</samp>, and 
+                    <samp class="listingcharacter listingcharacter">getInteger(String, Integer)</samp>. These methods can be easily confused with the 
+                    <samp class="listingcharacter listingcharacter">valueOf(String)</samp> method by language novices because of the same return and parameters. However, the 
+                    <samp class="listingcharacter listingcharacter">getInteger(String)</samp>
+                    <a class="indexanchor" id="i11_68"/> methods read an environment variable and thus have a completely different task than 
+                    <samp class="listingcharacter listingcharacter">valueOf(String)</samp>. In the wrapper class 
+                    <samp class="listingcharacter listingcharacter">Boolean</samp>, the method 
+                    <samp class="listingcharacter listingcharacter">getBoolean(String)</samp>
+                    <a class="indexanchor" id="i11_69"/>
+                 has the same feature that it read an environment variable. The other wrapper classes don’t have methods for reading environment variables.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h11.5.1.1">
+                    <a id="p654"/>
+                Wrapper Objects Are Immutable</h4>
+                
+                <p class="standard">Once a wrapper object has been created, the value stored in the wrapper object can’t be changed afterwards. To ensure this immutability, concrete wrapper classes are all final. These wrapper classes are intended only to serve as wrappers and not as complete data types. Since the value can’t be changed (it’s immutable), objects with this property are also called 
+                    <span class="italic">value objects</span>
+                    <a class="indexanchor" id="i11_70"/>. To increase the content of an 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> object 
+                    <samp class="listingcharacter listingcharacter">io</samp>
+                 by 1, for example, you must reference a new object. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_11687"><pre>Integer io <span class="">=</span><span class=""> Integer</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">12</span><span class=""> </span><span class="">);</span><span class=""><br/></span>
+                    <span class="bold"><span class="">io = Integer.</span><span class="">valueOf</span><span class="">( io.</span><span class="">intValue</span><span class="">() + </span><span class="">1</span><span class=""> );</span></span> <span class=""/></pre></div>
+                
+                <p class="standard">The variable 
+                    <samp class="listingcharacter listingcharacter">io</samp> references a second 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> object at the end, and the value of the first 
+                    <samp class="listingcharacter listingcharacter">io</samp> object with 
+                    <samp class="listingcharacter listingcharacter">12</samp> remains untouched, which is essentially the same as using the data type 
+                    <samp class="listingcharacter listingcharacter">String</samp>. When the string 
+                    <samp class="listingcharacter listingcharacter">s = "Co"; s = s + "ra";</samp> is called, the reference variable 
+                    <samp class="listingcharacter listingcharacter">s</samp>
+                 is also only assigned a new object, but the string itself doesn’t change.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.5.2">11.5.2    Conversions to a String Representation</h3>
+            
+            <p class="standard">All wrapper classes provide static 
+                <samp class="listingcharacter listingcharacter">toString(value)</samp>
+             methods for converting the primitive element to a string.</p>
+            
+            <div class="listing " id="l11.25"><pre><span class="">String</span><span class=""> s1 </span><span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">Integer.</span><span class="">toString</span></span><span class="">( </span><span class="">1234567891</span><span class=""> ),</span><br/>       s2 = 
+                <span class="bold">Long.<span class="">toString</span></span><span class="">( 123456789123L ),</span><br/>       s3 = 
+                <span class="bold">Float.<span class="">toString</span></span><span class="">( </span><span class="">12.345678912f</span><span class=""> ),</span><br/>       s4 = 
+                <span class="bold">Double.<span class="">toString</span></span><span class="">( </span><span class="">12.345678912</span><span class=""> ),</span><br/>       s5 = 
+                <span class="bold">Boolean.<span class="">toString</span></span><span class="">( true );</span><br/>System.out.<span class="">println</span><span class="">( s1 ); </span><span class=""> // 1234567891</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( s2 ); </span><span class=""> // 123456789123</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( s3 ); </span><span class=""> // 12.345679</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( s4 ); </span><span class=""> // 12.345678912</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( s5 ); </span><span class=""> // true</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 11.25</b>    
+            src/main/java/com/tutego/insel/wrapper/WrapperToString.java, main()</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first">The following statement is a Java-specific idiom
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn11_04" id="fn11_04">[ 175 ]</a></span>
+                 for conversion as well:</p>
+                
+                <div class="listing  last_item" id="l_none_11726"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">""</span><span class=""> </span><span class="">+</span><span class=""> number;</span></pre></div>
+            
+            </div>
+            
+            <p class="standard">The string always appears in the English written variant. For example, decimal numbers have a period instead of a comma.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p655"/>
+                Note</h6>
+                
+                <p class="standard first">When displaying numbers, country-specific formatting is often useful. You can access these formatting options via 
+                    <samp class="listingcharacter listingcharacter">printf(...)</samp>. Another option is to use a 
+                    <samp class="listingcharacter listingcharacter">Locale</samp>
+                 specification for the language as the first parameter. Consider the following examples:</p>
+                
+                <div class="listing " id="l_none_11724"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> Locale</span><span class="">.</span><span class="">GERMANY</span><span class="">,</span><span class=""> </span><span class="">"%f%n"</span><span class="">,</span><span class=""> </span><span class="">1000000</span><span class="">.</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 1000000,000000</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> Locale</span><span class="">.</span><span class="">ENGLISH</span><span class="">,</span><span class=""> </span><span class="">"%f%n"</span><span class="">,</span><span class=""> </span><span class="">1234.567</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 1234.567000</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> Locale</span><span class="">.</span><span class="">CHINA</span><span class="">,</span><span class=""> </span><span class="">"%,.3f%n"</span><span class="">,</span><span class=""> </span><span class="">1234.567</span><span class=""> </span><span class="">);</span><span class=""> // 1,234.567</span><span class=""> </span></pre></div>
+                
+                <p class="standard last">The format specifier for floats is 
+                    <samp class="listingcharacter listingcharacter">%f</samp>. The additional specification with 
+                    <samp class="listingcharacter listingcharacter">,.3f</samp>
+                 in the last case leads to the thousands separator and three decimal places.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h11.5.2.1">toString(...) as Object and Class Method</h4>
+                
+                <p class="standard">If a wrapper object is present, the object method 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> returns the string representation of the value stored by the wrapper object. Having identically named 
+                    <samp class="listingcharacter listingcharacter">toString(...)</samp> static methods and an object method 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                 shouldn’t cause confusion; while the class method pulls the working value for conversion from the argument, the object method uses the stored value in the wrapper object.</p>
+                
+                <p class="standard">Statements that go over the wrapper object exclusively for conversion, such as 
+                    <samp class="listingcharacter listingcharacter">Integer.valueOf(v).toString()</samp>, can be easily rewritten as 
+                    <samp class="listingcharacter listingcharacter">Integer</samp>.
+                    <samp class="listingcharacter listingcharacter">toString(v)</samp>. In addition, the overloaded static method 
+                    <samp class="listingcharacter listingcharacter">String.valueOf(v)</samp> is also useful, which—precisely because it is overloaded—is declared for all possible data types. However, 
+                    <samp class="listingcharacter listingcharacter">valueOf(v)</samp> internally also uses only 
+                    <samp class="listingcharacter listingcharacter">WrapperClass.toString(v)</samp>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.5.3">11.5.3    Parsing from a String Representation</h3>
+            
+            <p class="standard">Wrapper classes provide static 
+                <samp class="listingcharacter listingcharacter">parse*(...)</samp> methods to convert a string to a primitive data type. The string can be preceded by a minus for negative numbers, but a plus for positive numbers is also allowed. These methods were introduced in 
+                <span class="crossreference "><a href="05_001.html#h5">Chapter 5</a></span>, 
+                <span class="crossreference "><a href="05_008.html#h5.8.2">Section 5.8.2</a></span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.5.4">11.5.4    The Number Base Class for Numeric Wrapper Objects</h3>
+            
+            <p class="standard">All numeric wrapper classes can provide the stored value in any other numeric type. Like 
+                <samp class="listingcharacter listingcharacter">doubleValue()</samp> and 
+                <samp class="listingcharacter listingcharacter">intValue()</samp>, the method names consist of the name of the desired type and 
+                <samp class="listingcharacter listingcharacter">Value</samp>. Technically, the wrapper classes 
+                <samp class="listingcharacter listingcharacter">Byte</samp>
+                <a class="indexanchor" id="i11_71"/>, 
+                <samp class="listingcharacter listingcharacter">Short</samp>
+                <a class="indexanchor" id="i11_72"/>, 
+                <samp class="listingcharacter listingcharacter">Integer</samp>
+                <a class="indexanchor" id="i11_73"/>, 
+                <samp class="listingcharacter listingcharacter">Long</samp>
+                <a class="indexanchor" id="i11_74"/>, 
+                <samp class="listingcharacter listingcharacter">Float</samp>,
+                <a class="indexanchor" id="i11_75"/> and 
+                <samp class="listingcharacter listingcharacter">Double</samp>
+                <a class="indexanchor" id="i11_76"/> of the 
+                <samp class="listingcharacter listingcharacter">Number</samp>
+                <a class="indexanchor" id="i11_77"/>
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn11_05" id="fn11_05">[ 176 ]</a></span> class override 
+                <samp class="listingcharacter listingcharacter">*Value()</samp> methods.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn11_06" id="fn11_06">[ 177 ]</a></span>
+            </p>
+            
+            <div class="imagebox figure-type"><a href="img-f11.6.html" id="f11.6"><img alt="&#10;                &#10;            UML Diagram of Number" id="img-f11.6" src="bilderklein/klein11_006.png"/></a></div>
+            
+            <p class="caption "><b>Figure 11.6</b>    
+            
+                <a id="p656"/>
+            UML Diagram of Number</p>
+            
+            <div class="listing " id="l_none_11742"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Number</span><br/><span class="">implements</span><span class=""> Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">byte byteValue()</samp><br/>Returns the value of the number as 
+                        <samp class="listingcharacter listingcharacter">byte</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">abstract double doubleValue()</samp><br/>Returns the value of the number as 
+                        <samp class="listingcharacter listingcharacter">double</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">abstract float floatValue()</samp><br/>Returns the value of the number as 
+                        <samp class="listingcharacter listingcharacter">float</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">abstract int intValue()</samp><br/>Returns the value of the number as 
+                        <samp class="listingcharacter listingcharacter">int</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">abstract long longValue()</samp><br/>Returns the value of the number as 
+                        <samp class="listingcharacter listingcharacter">long</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">short shortValue()</samp><br/>Returns the value of the number as 
+                        <samp class="listingcharacter listingcharacter">short</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">If the operand types are different in the condition operator, an automatic adjustment will take place, as in the following examples:</p>
+                
+                <div class="listing " id="l_none_11744"><pre><span class="">boolean</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">true;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class="">  b </span><span class="">?</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">:</span><span class=""> </span><span class="">0.1</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 1.0</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">!</span><span class="">b </span><span class="">?</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">:</span><span class=""> </span><span class="">0.1</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 0.1</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The result type is 
+                    <samp class="listingcharacter listingcharacter">double</samp>
+                , so that the integer 1 is output as “1.0” (i.e., a float). The compiler makes the same adjustment for wrapper types that it unboxes and converts, as in the following examples:</p>
+                
+                <div class="listing " id="l_none_11754"><pre>Integer i <span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span>Double  d <span class="">=</span><span class=""> </span><span class="">0.1</span><span class="">;</span><span class=""><br/></span>
+                    <a id="p657"/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class="">  b </span><span class="">?</span><span class=""> i </span><span class="">:</span><span class=""> d </span><span class="">);</span><span class="">  </span><span class=""> // 1.0</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">!</span><span class="">b </span><span class="">?</span><span class=""> i </span><span class="">:</span><span class=""> d </span><span class="">);</span><span class="">  </span><span class=""> // 0.1</span><span class=""> </span></pre></div>
+                
+                <p class="standard">While this output is actually clear, misunderstandings can occur if the result isn’t simply output but cached as a reference to the resulting wrapper object. Since the type in the example is either 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> or 
+                    <samp class="listingcharacter listingcharacter">Double</samp>, the result type can only be the 
+                    <samp class="listingcharacter listingcharacter">Number</samp>
+                 supertype. Consider the following examples:</p>
+                
+                <div class="listing " id="l_none_11766"><pre>Number n1 <span class="">=</span><span class=""> b </span><span class="">?</span><span class=""> i </span><span class="">:</span><span class=""> d</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> n1 </span><span class="">);</span><span class="">          </span><span class=""> // 1.0</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> n1 </span><span class="">==</span><span class=""> i </span><span class="">);</span><span class="">     </span><span class=""> // false</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The program logic and output are, of course, exactly the same as before, but developers might assume that the compiler doesn’t perform a conversion, but instead references either the original 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> or 
+                    <samp class="listingcharacter listingcharacter">Double</samp> object; however, the compiler doesn’t. The 
+                    <samp class="listingcharacter listingcharacter">n1</samp> variable in this case references an 
+                    <samp class="listingcharacter listingcharacter">Integer</samp>-unboxed, 
+                    <samp class="listingcharacter listingcharacter">double</samp>-converted 
+                    <samp class="listingcharacter listingcharacter">Double</samp> object, and so the references of 
+                    <samp class="listingcharacter listingcharacter">n1</samp> and 
+                    <samp class="listingcharacter listingcharacter">i</samp>
+                 are not identical at all. </p>
+                
+                <p class="standard">If the compiler is really to return the original objects, either the 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> or the 
+                    <samp class="listingcharacter listingcharacter">Double</samp> object must be explicitly set to 
+                    <samp class="listingcharacter listingcharacter">Number</samp>
+                , so that unboxing is thus switched off and the condition operator assumes that only arbitrary references exist that aren’t to be interpreted, as in the following examples:</p>
+                
+                <div class="listing  last_item" id="l_none_11783"><pre>Number n2 <span class="">=</span><span class=""> b </span><span class="">?</span><span class=""> </span><span class="">(</span><span class="">Number</span><span class="">)</span><span class=""> i </span><span class="">:</span><span class=""> d</span><span class="">;</span><span class="">    </span><span class=""> // or Number n2 = b ? i : (Number) d;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> n2 </span><span class="">);</span><span class="">          </span><span class=""> // 1</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> n2 </span><span class="">==</span><span class=""> i </span><span class="">);</span><span class="">     </span><span class=""> // true</span><span class=""> </span></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.5.5">11.5.5    Performing Comparisons with compare*(...), compareTo(...), equals(...), and Hash Values</h3>
+            
+            <p class="standard">If we have two integers 1 and 2 in front of us, saying that 1 is smaller than 2 is a trivial task. With floats, this comparison is a bit more complicated because “special numbers” exist like infinity or a negative 0 and a positive 0. To ensure that comparing two values always follows the same schema, two kinds of methods in wrapper classes can tell you whether two values are less than, greater than, or equal to each other:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">On one hand, the object method 
+                        <samp class="listingcharacter listingcharacter">compareTo(...)</samp> is found in the wrapper classes. This method isn’t in the class by chance because wrapper classes implement the 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp> interface
+                        <a class="indexanchor" id="i11_78"/>
+                        <samp class="listingcharacter listingcharacter"> </samp>(as described in 
+                        <span class="crossreference "><a href="11_004.html#h11.4">Section 11.4</a></span>
+                    .)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Wrapper classes also have static 
+                        <samp class="listingcharacter listingcharacter">compare(x, y)</samp>
+                        <a class="indexanchor" id="i11_79"/> and sometimes 
+                        <samp class="listingcharacter listingcharacter">compareUnsigned(x, y)</samp>
+                     methods.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The return value of these methods is an 
+                <samp class="listingcharacter listingcharacter">int</samp>
+            , which encodes whether a value is greater than, less than, or equal to.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p658"/>
+                Example</h6>
+                
+                <p class="standard first">The following example tests several different values:</p>
+                
+                <div class="listing " id="l11.26"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">Integer.</span><span class="">compare</span><span class="">(</span><span class="">1</span><span class="">, </span><span class="">2</span><span class="">)</span></span> );        <span class=""> // -1</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">Integer.<span class="">compare</span><span class="">(</span><span class="">1</span><span class="">, </span><span class="">1</span><span class="">)</span></span> );        <span class=""> //  0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">Integer.<span class="">compare</span><span class="">(</span><span class="">2</span><span class="">, </span><span class="">1</span><span class="">)</span></span> );        <span class=""> //  1</span><span class=""><br/></span><br/>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">Double.<span class="">compare</span><span class="">(</span><span class="">2.0</span><span class="">, </span><span class="">2.1</span><span class="">)</span></span> );     <span class=""> // -1</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">Double.<span class="">compare</span><span class="">(Double.NaN, </span><span class="">0</span><span class="">)</span></span> );<span class=""> //  1</span><span class=""><br/></span><br/>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">Boolean.<span class="">compare</span><span class="">(true, false</span></span>) ); <span class=""> //  1</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">Boolean.<span class="">compare</span><span class="">(false, true</span></span>) ); <span class=""> // -1</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 11.26</b>    
+            src/main/java/com/tutego/insel/wrapper/CompareToDemo.java, main()</p>
+                
+                <p class="standard last">A 
+                    <samp class="listingcharacter listingcharacter">true</samp> is “greater” than a 
+                    <samp class="listingcharacter listingcharacter">false</samp>
+                .</p>
+            
+            </div>
+            
+            <p class="standard">
+                <span class="crossreference "><a href="11_005.html#t11.3">Table 11.3</a></span>
+             summarizes the methods of the wrapper classes.</p>
+            
+            <table class="standardtable" id="t11.3">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Class</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Method from Comparable</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Static Method compare*(...)</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Byte</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compareTo(Byte aByte)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compare[Unsigned](byte x, byte y)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Short</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compareTo(Short aShort)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compare[Unsigned](short x, short y)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Float</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compareTo(Float aFloat)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compare(float f1, float f2)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Double</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compareTo(Double aDouble)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compare(double d1, double d2)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Integer</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compareTo(Integer aInteger)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compare(int x, int y)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Long</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compareTo(Long aLong)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compare(long x, long y)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Character</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compareTo(Character aChar)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compare[Unsigned](char x, char y)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Boolean</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compareTo(Boolean aBoolean)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int compare(boolean x, boolean y)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 11.3</b>    
+            Methods of Wrapper Classes</p>
+            
+            <p class="standard">The implementation of a static 
+                <samp class="listingcharacter listingcharacter">WrapperClass.compare(...)</samp> method is equivalent to 
+                <samp class="listingcharacter listingcharacter">WrapperClass.valueOf(x).compareTo(WrapperClass.valueOf(y))</samp>
+            , only the second variant is slower and also longer in spelling.</p>
+            
+            
+                
+                <h4 class="t4" id="h11.5.5.1">
+                    <a id="p659"/>
+                Equal Test via equals(...)</h4>
+                
+                <p class="standard">All wrapper classes override the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method from the 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 base class. This scenario allows you to test whether two wrapper objects have the same value, even if the wrapper objects aren’t identical.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Let’s consider the results of some equal tests:</p>
+                    
+                    <div class="listing " id="l_none_11804"><pre>Boolean<span class="">.</span><span class="">TRUE</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> Boolean</span><span class="">.</span><span class="">TRUE</span><span class=""> </span><span class="">)</span><span class="">                       </span><span class="">true</span><span class=""><br/></span>Integer<span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">).</span><span class="">equals</span><span class="">(</span><span class=""> Integer</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">       </span><span class="">true</span><span class=""><br/></span>Integer<span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">).</span><span class="">equals</span><span class="">(</span><span class=""> Integer</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">       </span><span class="">false</span><span class=""><br/></span>Integer<span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">).</span><span class="">equals</span><span class="">(</span><span class=""> Long</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">          </span><span class="">false</span><span class=""><br/></span>Integer<span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">).</span><span class="">equals</span><span class="">(</span><span class=""> 1L </span><span class="">)</span><span class="">                         </span><span class="">fals</span><span class="">e</span></pre></div>
+                    
+                    <p class="standard last">Note that the parameter type of 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> is always 
+                        <samp class="listingcharacter listingcharacter">Object</samp>, but the types must be identical; otherwise, the comparison will automatically return 
+                        <samp class="listingcharacter listingcharacter">false</samp>. This fact is shown by the penultimate and the final examples. The 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> method from lines 4 and 5 rejects any comparison with a non-integer, and a 
+                        <samp class="listingcharacter listingcharacter">long</samp> is just not an 
+                        <samp class="listingcharacter listingcharacter">integer</samp>
+                    . Boxing is used in the last line, so the program code looks shorter but corresponds to the code from the penultimate line.</p>
+                
+                </div>
+                
+                <p class="standard">The object method 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> of wrapper classes is also a short alternative to 
+                    <samp class="listingcharacter listingcharacter">wrapperObject.compareTo(anotherWrapperObject) == 0</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Outlook</h6>
+                    
+                    <p class="standard first last">The fact that wrapper classes implement 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> is good because, in this way, wrapper objects can be easily placed and retrieved in data structures like an 
+                        <samp class="listingcharacter listingcharacter">ArrayList</samp>. Furthermore, the fact that wrapper objects are also 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp> is also great for data structures like 
+                        <samp class="listingcharacter listingcharacter">TreeSet</samp>, which—without externally given 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp>
+                     classes for comparisons—expect a natural ordering of the elements.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.5.5.2">Hash Values</h4>
+                
+                <p class="standard">The hash value of an object maps the state to a compact integer. If two objects have unequal hash values, the objects must also be unequal (at least if the calculation is correct). To determine the hash value, each class declares the 
+                    <samp class="listingcharacter listingcharacter">int hashCode()</samp> method via the superclass 
+                    <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+                . All wrapper classes override this method. In addition, static methods are available, so you can easily calculate the hash value even without a wrapper object.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p660"/>
+                    Example</h6>
+                    
+                    <p class="standard first">The following example calculates a hashcode via the object method and static method:</p>
+                    
+                    <div class="listing " id="l_none_11806"><pre>Double d <span class="">=</span><span class=""> </span><span class="">12.12</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> d</span><span class="">.</span><span class="">hashCode</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">            </span><span class=""> // -469813427</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Double</span><span class="">.</span><span class="">hashCode</span><span class="">(</span><span class=""> </span><span class="">12.12</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // -469813427</span><span class=""> </span></pre></div>
+                    
+                    <p class="standard last">The value itself is irrelevant.</p>
+                
+                </div>
+                
+                <p class="standard">For the calculation of hash values and their meanings for data structures, 
+                    <span class="crossreference "><a href="11_001.html#h11.1.5">Section 11.1.5</a></span>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.5.6">11.5.6    Static Reduction Methods in Wrapper Classes</h3>
+            
+            <p class="standard">In the numeric wrapper classes 
+                <samp class="listingcharacter listingcharacter">Integer</samp>, 
+                <samp class="listingcharacter listingcharacter">Long</samp>, 
+                <samp class="listingcharacter listingcharacter">Float</samp>, and 
+                <samp class="listingcharacter listingcharacter">Double</samp>, you’ll find three methods, 
+                <samp class="listingcharacter listingcharacter">sum(</samp>...
+                <samp class="listingcharacter listingcharacter">)</samp>, 
+                <samp class="listingcharacter listingcharacter">max(</samp>...
+                <samp class="listingcharacter listingcharacter">)</samp>, and 
+                <samp class="listingcharacter listingcharacter">min(</samp>...
+                <samp class="listingcharacter listingcharacter">)</samp>
+            , that do exactly as they promise.</p>
+            
+            <div class="listing " id="l_none_11828"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Integer</span>|
+                <span class="bold">Long</span>|
+                <span class="bold">Float</span>|
+                <span class="bold">Double</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;Integer&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static </samp>
+                        <span class="italic">
+                            <samp class="listingcharacter listingcharacter">Type </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">sum(</samp>
+                        <span class="italic">
+                            <samp class="listingcharacter listingcharacter">Type </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">a, </samp>
+                        <span class="italic">
+                            <samp class="listingcharacter listingcharacter">Type </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">b)</samp><br/>Calculates and returns the total of two values, corresponding to a simple 
+                        <span class="italic">a</span> + 
+                        <span class="italic">b</span>. The 
+                        <span class="italic">
+                            <samp class="listingcharacter listingcharacter">Type</samp>
+                        </span> specification stands for the corresponding primitive (type 
+                        <samp class="listingcharacter listingcharacter">byte</samp>, 
+                        <samp class="listingcharacter listingcharacter">short</samp>, 
+                        <samp class="listingcharacter listingcharacter">int</samp>, 
+                        <samp class="listingcharacter listingcharacter">long</samp>, 
+                        <samp class="listingcharacter listingcharacter">float</samp>, or 
+                        <samp class="listingcharacter listingcharacter">double</samp>), for example, in 
+                        <samp class="listingcharacter listingcharacter">int sum(int a, int b)</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static </samp>
+                        <span class="italic">
+                            <samp class="listingcharacter listingcharacter">Type </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">min(</samp>
+                        <span class="italic">
+                            <samp class="listingcharacter listingcharacter">Type </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">a, </samp>
+                        <span class="italic">
+                            <samp class="listingcharacter listingcharacter">Type </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">b)</samp><br/>Returns the minimum of the two numbers.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static </samp>
+                        <span class="italic">
+                            <samp class="listingcharacter listingcharacter">Type </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">max(</samp>
+                        <span class="italic">
+                            <samp class="listingcharacter listingcharacter">Type </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">a, </samp>
+                        <span class="italic">
+                            <samp class="listingcharacter listingcharacter">Type </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">b)</samp><br/>Returns the maximum of the two numbers.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Furthermore, the 
+                <samp class="listingcharacter listingcharacter">Boolean</samp>
+             classes provide three methods for three Boolean operations:</p>
+            
+            <div class="listing " id="l_none_11821"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Boolean</span><br/><span class="">implements</span><span class=""> Comparable&lt;Boolean&gt;, Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static boolean logicalAnd(boolean a, boolean b)</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">a &amp;&amp; b</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static boolean logicalOr(boolean a, boolean b)</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">a || b</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static boolean logicalXor(boolean a, boolean b)</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">a ^ b.</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <a id="p661"/>These methods aren’t exciting in themselves. For sums (addition), the 
+                <samp class="listingcharacter listingcharacter">+</samp> operator does just as well (and is located behind the 
+                <samp class="listingcharacter listingcharacter">sum(...)</samp> methods anyway), and so nobody will get the idea to write 
+                <samp class="listingcharacter listingcharacter">i = Integer.sum(i, 1)</samp> instead of 
+                <samp class="listingcharacter listingcharacter">i++</samp>. For the maximum/minimum values, the 
+                <samp class="listingcharacter listingcharacter">Math</samp> class also already provides the corresponding methods 
+                <samp class="listingcharacter listingcharacter">min(a, b)</samp> and 
+                <samp class="listingcharacter listingcharacter">max(a, b)</samp>
+            . The reason we mention these methods is because they’re quite interesting in the context of functional programming and because they can reduce two values to one.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.5.7">11.5.7    Constants for the Size of a Primitive Type*</h3>
+            
+            <p class="standard">All wrapper classes have an 
+                <samp class="listingcharacter listingcharacter">int</samp> constant named 
+                <samp class="listingcharacter listingcharacter">SIZE</samp> for the number of bits and an 
+                <samp class="listingcharacter listingcharacter">int</samp> constant named 
+                <samp class="listingcharacter listingcharacter">BYTES</samp>
+                <a class="indexanchor" id="i11_80"/>
+            , which is assigned the size of the associated primitive data type.</p>
+            
+            <table class="standardtable" id="t11.4">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Wrapper Class</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">SIZE Assignment</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">BYTES Assignment</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Byte</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">8</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Short</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">16</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">2</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Integer</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">32</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">4</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Long</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">64</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">8</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Float</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">32</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">4</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Double</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">64</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">8</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Character</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">16</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">2</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 11.4</b>    
+            BYTES and SIZE Constants in Wrapper Classes</p>
+            
+            <p class="standard">The assignments are basically clear to every developer, it’s rather intended for tools or generic libraries.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.5.8">11.5.8    Handling Unsigned Numbers*</h3>
+            
+            <p class="standard">All integer data types (except for 
+                <samp class="listingcharacter listingcharacter">char</samp>
+            ) are always signed, and Java is unlikely to ever introduce new data types to distinguish between positive and negative numbers, as C# and C(++) do, for example. Developers must live with the fact that a byte is always between –128 and +127 and not between 0 and 255. Even if the language doesn’t introduce new types, the Java API helps with methods in wrapper classes.</p>
+            
+            
+                
+                <h4 class="t4" id="h11.5.8.1">toUnsigned*(...) Methods</h4>
+                
+                <p class="standard">The first type of methods interprets a bit pattern as an unsigned number. For example, if a 
+                    <samp class="listingcharacter listingcharacter">byte</samp> is assigned the bit pattern 11111111, this value doesn’t stand for “255” but instead for “–1.” The static conversion 
+                    <samp class="listingcharacter listingcharacter">toUnsigned*(...)</samp> methods of the wrapper class can help interpret the bit pattern without a sign bit, thus requiring a change to a next higher 
+                    <a id="p662"/>data type. This change is obvious because, in the case of 11111111, a 
+                    <samp class="listingcharacter listingcharacter">byte</samp> can’t store the number 255 because of the restriction to the range of –127 to 128, whereas 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                 can.</p>
+                
+                <table class="standardtable" id="t11.5">
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell tablecell_has_rowspan" rowspan="2">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Byte</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static int toUnsignedInt(byte x)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static long toUnsignedLong(byte x)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first tablecell_has_rowspan" rowspan="2">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Short</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static int toUnsignedInt(short x)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static long toUnsignedLong(short x)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Integer</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static long toUnsignedLong(int x)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 11.5</b>    
+            toUnsigned*(...) Methods in Byte, Short, and Integer</p>
+                
+                <p class="standard">Obviously, 
+                    <samp class="listingcharacter listingcharacter">long</samp> doesn’t provide such a method because no built-in data type exists that is greater than 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.5.8.2">toUnsignedString(...) and parseUnsignedString(...)</h4>
+                
+                <p class="standard">What 
+                    <samp class="listingcharacter listingcharacter">Long</samp> does provide, however, and also 
+                    <samp class="listingcharacter listingcharacter">Integer</samp>
+                , are conversions to string representations and also parse methods:</p>
+                
+                <table class="standardtable" id="t11.6">
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell tablecell_has_rowspan" rowspan="4">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Integer</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static String toUnsignedString(int i)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static String toUnsignedString(int i, int radix)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static int parseUnsignedInt(String s)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static int parseUnsignedInt(String s, int radix)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first tablecell_has_rowspan" rowspan="4">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Long</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static String toUnsignedString(long i)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static String toUnsignedString(long i, int radix)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static long parseUnsignedLong(String s)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static long parseUnsignedLong(String s, int radix)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 11.6</b>    
+            Creating and Parsing String Representations of Unsigned Numbers</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">parse*(...)</samp> methods throw a 
+                    <samp class="listingcharacter listingcharacter">NumberFormatException</samp>
+                 if the format is wrong.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.5.8.3">Comparison, Division, and Remainder</h4>
+                
+                <p class="standard">Finally, a third group of methods are more mathematical: static methods for comparing, dividing, and residual value creation.</p>
+                
+                <table class="standardtable" id="t11.7">
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell tablecell_has_rowspan" rowspan="3">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter"><a id="p663"/>Integer</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static int compareUnsigned(int x, int y)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static int divideUnsigned(int dividend, int divisor)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static int remainderUnsigned(int dividend, int divisor)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first tablecell_has_rowspan" rowspan="3">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Long</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static int compareUnsigned(long x, long y)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static long divideUnsigned(long dividend, long divisor)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static long remainderUnsigned(long dividend, long divisor)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 11.7</b>    
+            Mathematical Methods</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.5.9">11.5.9    The Integer and Long Classes</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Integer</samp> class encapsulates the value of an integer of type 
+                <samp class="listingcharacter listingcharacter">int</samp>
+             in an object and provides the following elements:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Constants</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Static methods to convert to a string and back</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Other helper methods of a mathematical nature</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">To turn the string into a number, you can use 
+                <samp class="listingcharacter listingcharacter">Integer.parseInt(String)</samp>
+                <a class="indexanchor" id="i11_81"/>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example converts the integer 38,317, which is a string, into an integer:</p>
+                
+                <div class="listing " id="l_none_11833"><pre><span class="">String</span><span class=""> number </span><span class="">=</span><span class=""> </span><span class="">"38317"</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class=""> integer </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  integer <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">Integer.</span><span class="">parseInt</span><span class="">( number )</span></span>;<br/>}<br/><span class="">catch</span><span class=""> ( NumberFormatException e ) {</span><br/>  System.err.<span class="">println</span><span class="">( </span><span class="">"Error converting "</span><span class=""> + number );</span><br/>}<br/>System.out.<span class="">println</span><span class="">( integer );</span><span class=""/></pre></div>
+                
+                <p class="standard last">The 
+                    <samp class="listingcharacter listingcharacter">NumberFormatException</samp> is an unchecked exception (see 
+                    <span class="crossreference "><a href="09_001.html#h9">Chapter 9</a></span>, 
+                    <span class="crossreference "><a href="09_001.html#h9.1.3">Section 9.1.3</a></span>, for more details). So, you don’t need to enclose it in a 
+                    <samp class="listingcharacter listingcharacter">try</samp>
+                 block.</p>
+            
+            </div>
+            
+            <p class="standard">The static method 
+                <samp class="listingcharacter listingcharacter">Integer.parseInt(String)</samp> converts a string to 
+                <samp class="listingcharacter listingcharacter">int</samp>, and the reverse method 
+                <samp class="listingcharacter listingcharacter">Integer.toString(int)</samp> returns a 
+                <samp class="listingcharacter listingcharacter">String</samp>. Other variants with different bases were described in detail in 
+                <span class="crossreference "><a href="05_001.html#h5">Chapter 5</a></span>, 
+                <span class="crossreference "><a href="05_008.html#h5.8.2">Section 5.8.2</a></span>
+            .</p>
+            
+            <div class="listing " id="l_none_11853"><pre><span class="">
+                    <a id="p664"/>
+                final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Integer</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;Integer&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int parseInt(String s)</samp><br/>Generates the corresponding number from the string. The base is 10.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int parseInt(String s, int radix)</samp><br/>Generates the number with the given base.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String toString(int i)</samp><br/>Converts the integer to a string and returns it.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">parseInt(...)</samp>
+             doesn’t permit country-specific thousands separators, such as the period in Germany versus the comma in certain English-speaking countries.</p>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">Integer</samp> and 
+                <samp class="listingcharacter listingcharacter">Long</samp> are basically identical APIs, except that the smaller data type 
+                <samp class="listingcharacter listingcharacter">int</samp> is replaced by 
+                <samp class="listingcharacter listingcharacter">long</samp>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.5.10">11.5.10    The Double and Float Classes for Floats</h3>
+            
+            <p class="standard">Like the other wrapper classes, the 
+                <samp class="listingcharacter listingcharacter">Double</samp> and 
+                <samp class="listingcharacter listingcharacter">Float</samp> classes have dual functionality: On one hand, they encapsulate a float as an object and on the other hand, they provide static utility methods. We’ll return to mathematical object and class methods in more detail in 
+                <span class="crossreference "><a href="21_001.html#h21">Chapter 21</a></span>, 
+                <span class="crossreference "><a href="21_002.html#h21.2">Section 21.2</a></span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.5.11">11.5.11    The Boolean Class</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Boolean</samp> class
+                <a class="indexanchor" id="i11_82"/> encapsulates the 
+                <samp class="listingcharacter listingcharacter">boolean</samp>
+             data type.</p>
+            
+            
+                
+                <h4 class="t4" id="h11.5.11.1">Creating Boolean Objects</h4>
+                
+                <p class="standard">Besides the constructor and factory methods, 
+                    <samp class="listingcharacter listingcharacter">Boolean</samp> declares two constants: 
+                    <samp class="listingcharacter listingcharacter">TRUE</samp>
+                    <a class="indexanchor" id="i11_83"/> and 
+                    <samp class="listingcharacter listingcharacter">FALSE</samp>
+                    <a class="indexanchor" id="i11_84"/>
+                .</p>
+                
+                <div class="listing " id="l_none_11855"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Boolean</span><br/><span class="">implements</span><span class=""> Serializable, Comparable&lt;Boolean&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static final Boolean FALSE</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static final Boolean TRUE</samp><br/>Constants for truth values.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Boolean(boolean value)</samp><br/>Creates a new 
+                            <samp class="listingcharacter listingcharacter">Boolean</samp> object. This constructor shouldn’t be used; instead, 
+                            <samp class="listingcharacter listingcharacter">Boolean.TRUE</samp> or 
+                            <samp class="listingcharacter listingcharacter">Boolean.FALSE</samp> should be used. 
+                            <samp class="listingcharacter listingcharacter">Boolean</samp> objects are immutable, and a 
+                            <samp class="listingcharacter listingcharacter">new Boolean(value)</samp>
+                         is unnecessary.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p665"/>
+                            Boolean(String s)</samp><br/>Parses the string and returns a new 
+                            <samp class="listingcharacter listingcharacter">Boolean</samp>
+                         object.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static Boolean valueOf(String s)</samp><br/>Parses the string and returns the wrapper types 
+                            <samp class="listingcharacter listingcharacter">Boolean.TRUE</samp> or 
+                            <samp class="listingcharacter listingcharacter">Boolean.FALSE</samp>. The static method has an advantage over the 
+                            <samp class="listingcharacter listingcharacter">Boolean(boolean)</samp> constructor in that it always returns the same immutable object 
+                            <samp class="listingcharacter listingcharacter">Boolean.TRUE</samp> or 
+                            <samp class="listingcharacter listingcharacter">Boolean.FALSE</samp> instead of creating new objects. For this reason, you’ll rarely need to call the constructor to always create new 
+                            <samp class="listingcharacter listingcharacter">Boolean</samp>
+                         objects.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static boolean parseBoolean(String s)</samp><br/>Parses the string and returns either 
+                            <samp class="listingcharacter listingcharacter">true</samp> or 
+                            <samp class="listingcharacter listingcharacter">false</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Boolean(String name)</samp> constructor or the two static methods 
+                    <samp class="listingcharacter listingcharacter">valueOf(String name)</samp> and 
+                    <samp class="listingcharacter listingcharacter">parseBoolean(String name)</samp> accept strings and perform the test 
+                    <samp class="listingcharacter listingcharacter">name != null &amp;&amp; name.equalsIgnoreCase("true")</samp> in the Java Development Kit (JDK). Thus, on one hand, case is unimportant, and on the other hand, things like “ false ” (with spaces), “false,” or “easter eggs” automatically return 
+                    <samp class="listingcharacter listingcharacter">false</samp>, where “TRUE” or “True” then return 
+                    <samp class="listingcharacter listingcharacter">true</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first last">If every developer used only the constants 
+                        <samp class="listingcharacter listingcharacter">Boolean.TRUE</samp> and 
+                        <samp class="listingcharacter listingcharacter">Boolean.FALSE</samp>, comparisons with 
+                        <samp class="listingcharacter listingcharacter">==</samp> or 
+                        <samp class="listingcharacter listingcharacter">!=</samp> would be OK for only two objects. However, since a constructor exists for 
+                        <samp class="listingcharacter listingcharacter">Boolean</samp> objects (although it’s quite debatable why constructors exist for wrapper classes at all), the safest bet is 
+                        <samp class="listingcharacter listingcharacter">boolean1.equals(boolean2)</samp>. You just can’t know if a library method like 
+                        <samp class="listingcharacter listingcharacter">Boolean isNice()</samp> draws on the two constants or instead creates new 
+                        <samp class="listingcharacter listingcharacter">Boolean</samp>
+                     objects.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.5.11.2">Converting Boolean to an Integer</h4>
+                
+                <p class="standard">The primitive type 
+                    <samp class="listingcharacter listingcharacter">boolean</samp> can’t be converted to another primitive type via a type conversion. However, in practice, you may need 
+                    <samp class="listingcharacter listingcharacter">true</samp> to be mapped to 1 and 
+                    <samp class="listingcharacter listingcharacter">false</samp>
+                 to 0. The usual approach to achieve this mapping is the following statement:</p>
+                
+                <div class="listing " id="l_none_11863"><pre><span class="">int</span><span class=""> val </span><span class="">=</span><span class=""> aBoolean </span><span class="">?</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">:</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> </span></pre></div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.5.12">11.5.12    Autoboxing: Boxing and Unboxing</h3>
+            
+            <p class="standard">Autoboxing is a feature of Java where
+                <a class="indexanchor" id="i11_85"/>
+             primitive data types and wrapper types are converted into each other on demand. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_11880"><pre><span class="">int</span><span class="">     primInt </span><span class="">=</span><span class=""> </span><span class="">4711</span><span class="">;</span><span class=""><br/></span>Integer wrapInt <span class="">=</span><span class=""> primInt</span><span class="">;</span><span class=""> <br/></span><span class="">// stands for wrapInt = </span>
+                <span class="bold">Integer.valueOf(primInt)</span>  (1)<span class=""><br/></span>primInt = wrapInt;         <br/><span class="">// stands for  primInt = </span>
+                <span class="bold">wrapInt.intValue()</span>       (2)<span class=""/></pre></div>
+            
+            <p class="standard">
+                <a id="p666"/>The statement in 
+                <samp class="listingcharacter listingcharacter">(1)</samp> is called 
+                <span class="italic">boxing</span>
+                <a class="indexanchor" id="i11_86"/> and automatically creates a wrapper object if necessary. Notation 
+                <samp class="listingcharacter listingcharacter">(2)</samp> is called 
+                <span class="italic">unboxing</span>
+                <a class="indexanchor" id="i11_87"/> and stands for obtaining the element from the wrapper object. As a result, wherever the compiler expects a primitive element, but a wrapper object is present, the value from the wrapper is used with a matching 
+                <samp class="listingcharacter listingcharacter">*Value(...)</samp>
+             method. The compiler will generate the code automatically; nothing of the autoboxing will be obvious later in the bytecode.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f11.7.html" id="f11.7"><img alt="Autoboxing of int/Integer" id="img-f11.7" src="bilderklein/klein11_007.png"/></a></div>
+            
+            <p class="caption "><b>Figure 11.7</b>    
+            Autoboxing of int/Integer</p>
+            
+            
+                
+                <h4 class="t4" id="h11.5.12.1">The Operators ++ and --*</h4>
+                
+                <p class="standard">The compiler converts according to fixed rules, and also the operators 
+                    <samp class="listingcharacter listingcharacter">++</samp>, 
+                    <samp class="listingcharacter listingcharacter">--</samp>
+                 are permitted. Consider the following examples:</p>
+                
+                <div class="listing " id="l_none_11891"><pre>Integer i <span class="">=</span><span class=""> </span><span class="">12</span><span class="">;</span><span class=""><br/></span>i <span class="">=</span><span class=""> i </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">;</span><span class="">                  </span><span class=""> // (1)</span><span class=""><br/></span>i<span class="">++;</span><span class="">                        </span><span class=""> // (2)</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> i </span><span class="">);</span><span class="">    </span><span class=""> // 14</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Importantly, neither 
+                    <samp class="listingcharacter listingcharacter">(1)</samp> nor 
+                    <samp class="listingcharacter listingcharacter">(2)</samp> change the original integer object with the 
+                    <samp class="listingcharacter listingcharacter">12</samp> (because all wrapper objects are immutable), but 
+                    <samp class="listingcharacter listingcharacter">i</samp> only references other 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> objects for 
+                    <samp class="listingcharacter listingcharacter">13</samp> and 
+                    <samp class="listingcharacter listingcharacter">14</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">In loops, although valid, you shouldn’t write the following code due to excessive object generation:</p>
+                    
+                    <div class="listing  last_item" id="l_none_11894"><pre><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                        <span class="bold"><span class="">Double</span></span> d = <span class="">1.0</span><span class="">; d &lt; </span><span class="">100</span><span class="">; d *= </span><span class="">1.5</span><span class=""> )  </span><span class=""> // double is better, not Double</span><span class=""><br/></span>  System.out.<span class="">println</span><span class="">( d ); </span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.5.12.2">Boxing for Dynamic Data Structures (Outlook)</h4>
+                
+                <p class="standard">Autoboxing is convenient when “primitive” elements need to be stored in data structures, as in the following examples:</p>
+                
+                <div class="listing " id="l_none_11910"><pre>
+                    <a id="p667"/>ArrayList
+                    <span class="bold"><span class="">&lt;Double&gt;</span></span> list = <span class="">new</span><span class=""> ArrayList&lt;Double&gt;();</span><br/>list.<span class="">add</span><span class="">( Math.</span><span class="">sin</span><span class="">(Math.PI</span><span class=""> / 4) );  </span><span class=""> // Boxing with boolean add(Double)</span><span class=""><br/></span>double d = list.get( 0 );           <span class=""> // Unboxing with Double get(int)</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">Unfortunately, the type of the list actually must be set with the wrapper type 
+                    <samp class="listingcharacter listingcharacter">Double</samp> and not with the primitive type 
+                    <samp class="listingcharacter listingcharacter">double</samp>
+                . (But maybe that limitation will change at some point.) In any case, autoboxing makes these processes a little more bearable.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.5.12.3">No Conversion of the null Reference to 0</h4>
+                
+                <p class="standard">During unboxing, the compiler or runtime environment doesn’t perform a conversion from 
+                    <samp class="listingcharacter listingcharacter">null</samp> to 0. In other words, in the following attempted assignment, no compiler error arises, but a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                 is thrown at runtime:</p>
+                
+                <div class="listing " id="l_none_11917"><pre><span class="">int</span><span class=""> n </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">Integer</span><span class="">)</span><span class=""> null</span><span class="">;</span><span class=""> </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     java.lang.NullPointerException at runtime</span><span class=""> </span></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">In 
+                        <samp class="listingcharacter listingcharacter">switch</samp> blocks, the following types are permitted 
+                        <samp class="listingcharacter listingcharacter">int</samp>, enumerations, and strings. For integers, the compiler automatically performs conversions and unboxing to 
+                        <samp class="listingcharacter listingcharacter">int</samp>. However, the risk of a 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                     is real during unboxing. Consider the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_11930"><pre>Integer integer <span class="">=</span><span class=""> null</span><span class="">;</span><span class=""><br/></span><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> integer </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""> // 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                         NullPointerException at runtime</span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.5.12.4">Autoboxing for Arrays?</h4>
+                
+                <p class="standard">Since primitive data types and wrapper objects are automatically converted by autoboxing, the difference isn’t that noticeable in practice. With arrays, however, the difference becomes obvious because Java can’t perform automatic conversions. Even if, for example, 
+                    <samp class="listingcharacter listingcharacter">char</samp> and 
+                    <samp class="listingcharacter listingcharacter">character</samp> are automatically converted into each other, arrays just aren’t convertible. Consider the following array initialization of the type 
+                    <samp class="listingcharacter listingcharacter">char</samp>
+                : </p>
+                
+                <div class="listing " id="l_none_11947"><pre>Character<span class="">[]</span><span class=""> chars </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">'S'</span><span class="">,</span><span class=""> </span><span class="">'h'</span><span class="">,</span><span class=""> </span><span class="">'a'</span><span class=""> </span><span class="">};</span><span class=""> </span></pre></div>
+                
+                <p class="standard">This code contains boxing three times from 
+                    <samp class="listingcharacter listingcharacter">char</samp> to 
+                    <samp class="listingcharacter listingcharacter">character</samp>
+                 on the right, and an automatic conversion at the element level is valid, so that the following statement is of course fine:</p>
+                
+                <div class="listing " id="l_none_11952"><pre><span class="">char</span><span class=""> first </span><span class="">=</span><span class=""> chars</span><span class="">[</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">];</span><span class=""> </span></pre></div>
+                
+                <p class="standard">However, a type cast of array objects is incorrect:</p>
+                
+                <div class="listing " id="l_none_11961"><pre><span class="">char</span><span class="">[]</span><span class=""> sha </span><span class="">=</span><span class=""> chars</span><span class="">;</span><span class="">  </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error!</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <a id="p668"/>So, the types 
+                    <samp class="listingcharacter listingcharacter">char[]</samp> and 
+                    <samp class="listingcharacter listingcharacter">character[]</samp> are two completely different types, and a transition isn’t possible (not to mention the problems with 
+                    <samp class="listingcharacter listingcharacter">null</samp> references). Thus, in practice, it’s necessary to convert between the different types, and unfortunately, the Java standard library doesn’t provide methods for this task.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn11_07" id="fn11_07">[ 178 ]</a></span>
+                </p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.5.12.5">More Problems than Solutions Due to Autoboxing? (Part 1)*</h4>
+                
+                <p class="standard">A number of irregularities are associated with autoboxing that you’ll need to be aware of to avoid mistakes. One irregularity is related to unboxing, which the compiler performs whenever an expression expects a primitive value. If no primitive element is expected, no unboxing will be performed. Consider the following examples:</p>
+                
+                <div class="listing " id="l11.27"><pre>Double d1 <span class="">=</span><span class=""> Double</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Double d2 <span class="">=</span><span class=""> Double</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> d1 </span><span class="">&gt;=</span><span class=""> d2 </span><span class="">);</span><span class="">   </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> d1 </span><span class="">&lt;=</span><span class=""> d2 </span><span class="">);</span><span class="">   </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> d1 </span><span class="">==</span><span class=""> d2 </span><span class="">);</span><span class="">   </span><span class=""> // false</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> d1 </span><span class="">==</span><span class=""> d2</span><span class="">-</span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // true</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.27</b>    
+            src/main/java/com/tutego/insel/wrapper/Autoboxing.java (Snippet)</p>
+                
+                <p class="standard">The comparison with 
+                    <samp class="listingcharacter listingcharacter">==</samp> is a reference comparison. Since no unboxing occurs on primitive values, we are essentially comparing only primitive values. If the compiler sees two reference variables in front of it, no reason exists for unboxing, even if they are wrapper types. Therefore, for two different 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> objects, this identity comparison must always be false. This scenario is of course problematic because the old mathematical rule “from i &lt;= j and i &gt;= j follows automatically i == j” is no longer valid. If the different 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> objects for the same values didn’t exist, this problem wouldn’t exist either. The minus-null trick enables you to achieve an unboxing so that two numbers will be compared again. Alternatively, an explicit typecasting to 
+                    <samp class="listingcharacter listingcharacter">int</samp> or access to the object method 
+                    <samp class="listingcharacter listingcharacter">intValue()</samp>
+                 for deliberate unpacking will help too.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.5.12.6">More Problems than Solutions Due to Autoboxing? (Part 2)*</h4>
+                
+                <p class="standard">An interesting fact to know is what exactly happens now when boxing converts a number into a wrapper object. At that moment, the constructor isn’t called but instead the static 
+                    <samp class="listingcharacter listingcharacter">valueOf(...)</samp>
+                 method. Consider the following examples:</p>
+                
+                <div class="listing " id="l11.28"><pre>Integer n1 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Integer</span><span class="">(</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Integer n2 <span class="">=</span><span class=""> Integer</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">);</span><span class=""><br/></span>
+                    <a id="p669"/>Integer n3 <span class="">=</span><span class=""> </span><span class="">10</span><span class="">;</span><span class="">                 </span><span class=""> // Integer.valueOf( 10 );</span><span class=""><br/></span>Integer n4 <span class="">=</span><span class=""> </span><span class="">10</span><span class="">;</span><span class="">                 </span><span class=""> // Integer.valueOf( 10 );</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> n1 </span><span class="">==</span><span class=""> n2 </span><span class="">);</span><span class="">  </span><span class=""> // false</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> n2 </span><span class="">==</span><span class=""> n3 </span><span class="">);</span><span class="">  </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> n1 </span><span class="">==</span><span class=""> n3 </span><span class="">);</span><span class="">  </span><span class=""> // false</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> n3 </span><span class="">==</span><span class=""> n4 </span><span class="">);</span><span class="">  </span><span class=""> // true</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.28</b>    
+            src/main/java/com/tutego/insel/wrapper/Autoboxing.java (Snippet)</p>
+                
+                <p class="standard">In this example, we’re comparing the identity of the wrapper objects four times. What’s noticeable is that some comparisons are incorrect, which is no wonder and can be quickly explained by 
+                    <samp class="listingcharacter listingcharacter">new</samp> (because in these cases the runtime environment always creates new objects). The identical objects (
+                    <samp class="listingcharacter listingcharacter">n2</samp>, 
+                    <samp class="listingcharacter listingcharacter">n3</samp>, 
+                    <samp class="listingcharacter listingcharacter">n4</samp>) are conspicuous; they are created by the subsequent 
+                    <samp class="listingcharacter listingcharacter">valueOf(int)</samp> during the boxing process. The puzzle is solved via the Javadoc or with a look into the implementation created by Oracle. 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> objects created via boxing originate from a pool. Using the pool, the JDK tries to solve the problem with 
+                    <samp class="listingcharacter listingcharacter">==</samp> to determine that selected wrapper objects are really identical, and 
+                    <samp class="listingcharacter listingcharacter">==</samp> behaves with wrapper references as 
+                    <samp class="listingcharacter listingcharacter">==</samp>
+                 does with primitive values.</p>
+                
+                <p class="standard">Since not any number of wrapper objects can come from a pool, the identity of the objects created via boxing is valid only in a selected value range between –128 and +127 (i.e., in the value range of 1 byte). Consider the following examples:</p>
+                
+                <div class="listing " id="l11.29"><pre>Integer j1 <span class="">=</span><span class=""> </span><span class="">2</span><span class="">;</span><span class=""><br/></span>Integer j2 <span class="">=</span><span class=""> </span><span class="">2</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> j1 </span><span class="">==</span><span class=""> j2 </span><span class="">);</span><span class="">  </span><span class=""> // true</span><span class=""><br/></span>Integer k1 <span class="">=</span><span class=""> </span><span class="">127</span><span class="">;</span><span class=""><br/></span>Integer k2 <span class="">=</span><span class=""> </span><span class="">127</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> k1 </span><span class="">==</span><span class=""> k2 </span><span class="">);</span><span class="">  </span><span class=""> // true</span><span class=""><br/></span>Integer l1 <span class="">=</span><span class=""> </span><span class="">128</span><span class="">;</span><span class=""><br/></span>Integer l2 <span class="">=</span><span class=""> </span><span class="">128</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> l1 </span><span class="">==</span><span class=""> l2 </span><span class="">);</span><span class="">  </span><span class=""> // false</span><span class=""><br/></span>Integer m1 <span class="">=</span><span class=""> </span><span class="">1000</span><span class="">;</span><span class=""><br/></span>Integer m2 <span class="">=</span><span class=""> </span><span class="">1000</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> m1 </span><span class="">==</span><span class=""> m2 </span><span class="">);</span><span class="">  </span><span class=""> // false</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.29</b>    
+            src/main/java/com/tutego/insel/wrapper/Autoboxing.java (Snippet)</p>
+                
+                <p class="standard">As mentioned earlier, even for wrapper objects, the comparison with 
+                    <samp class="listingcharacter listingcharacter">==</samp> is always a reference comparison. Because 2 and 127 are within the value range between –128 and +127, the corresponding 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> objects come from the pool. This same isn’t true for values between 128 and 1,000, which are always new objects. Thus, the 
+                    <samp class="listingcharacter listingcharacter">==</samp> comparison also returns 
+                    <samp class="listingcharacter listingcharacter">false</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p670"/>
+                    Final Question</h6>
+                    
+                    <p class="standard first">What output comes onto the screen? Does anything change when 
+                        <samp class="listingcharacter listingcharacter">i</samp> and 
+                        <samp class="listingcharacter listingcharacter">j</samp>
+                     are at 222?</p>
+                    
+                    <div class="listing  last_item" id="l_none_111002"><pre>Integer i <span class="">=</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> j </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span><span class="">boolean</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">i </span><span class="">&lt;=</span><span class=""> j </span><span class="">&amp;&amp;</span><span class=""> j </span><span class="">&lt;=</span><span class=""> i </span><span class="">&amp;&amp;</span><span class=""> i </span><span class="">!=</span><span class=""> j</span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> b </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

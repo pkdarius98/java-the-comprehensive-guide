@@ -1,0 +1,531 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Lambda Expressions and Functional Programming" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Lambda Expressions and Functional Programming" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Lambda Expressions and Functional Programming</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h13.3">13.3    Constructor References</h2>
+        
+        <p class="standard">
+            <a class="indexanchor" id="i13_14"/>To create an object, you use the 
+            <samp class="listingcharacter listingcharacter">new</samp> keyword. This keyword entails the call of a constructor, which can optionally be passed arguments. However, the Java API also declares types from which no direct objects can be created via 
+            <samp class="listingcharacter listingcharacter">new</samp>
+        . Instead, factories are tasked with creating objects. These factories can be static or non-static methods.</p>
+        
+        <p class="standard">Typical examples of constructors include the following:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">new StringBuilder( “1” )</samp> → 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                </p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">new File( “dir” )</samp> → 
+                    <samp class="listingcharacter listingcharacter">File</samp>
+                </p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">new BigInteger( val )</samp> → 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                </p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">Examples of factories include the following:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">LocalDate.of( 2022, 02, 02 )</samp> → 
+                    <samp class="listingcharacter listingcharacter">LocalDate</samp>
+                </p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">Paths.get( “dir” )</samp> → 
+                    <samp class="listingcharacter listingcharacter">Path</samp>
+                </p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">BigInteger.valueOf( val )</samp> → 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                </p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">Both constructors and factories can be thought of as special functions that convert from one type to another, making them perfect for transformations. Let’s contrast the following two examples:</p>
+        
+        <table class="standardtable" id="t_none_13_06">
+            
+            <thead>
+                
+                <tr>
+                    
+                    <th class="tablehead tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">Constructor</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">Method</p>
+                    
+                    </th>
+                
+                </tr>
+            
+            </thead>
+            
+            <tbody>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">new BigDecimal( 12.2 )</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal.valueOf( 12.2 )</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <p class="standard">Basically, mapping 
+            <samp class="listingcharacter listingcharacter">double → BigDecimal</samp> is performed in two ways: once via 
+            <samp class="listingcharacter listingcharacter">new</samp> and a constructor and once via the 
+            <samp class="listingcharacter listingcharacter">valueOf(double)</samp>
+         method. </p>
+        
+        
+            
+            <h3 class="t3" id="h13.3.1">13.3.1    
+                <a id="p760"/>
+            Writing Constructor References</h3>
+            
+            <p class="standard">Where method references can specify static methods and object methods, 
+                <span class="italic">constructor references</span>
+                <a class="indexanchor" id="i13_15"/> provide the ability to specify constructors so that they can be passed elsewhere as creators. This feature allows you to elegantly specify constructors as creators, even from a class that doesn’t have any creator methods. As with method references, a functional interface plays a crucial role in this context. But this time the method of the functional interface, when called, causes the constructor call. Where syntactically for method references the method name is placed to the right of the colon, for constructor references, you would use a 
+                <samp class="listingcharacter listingcharacter">new</samp>.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn13_05" id="fn13_05">[ 192 ]</a></span>
+             </p>
+            
+            <p class="standard">Constructor references with the library methods of the Stream API are useful.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The Stream API can build a stream with three 
+                    <samp class="listingcharacter listingcharacter">Double</samp> numbers, for instance. The floats are converted to 
+                    <samp class="listingcharacter listingcharacter">BigDecimal</samp>
+                 objects, then calculated to the power of 20 before the return is output in the following example:</p>
+                
+                <div class="listing " id="l_none_13732"><pre>Stream<span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">12.5</span><span class="">,</span><span class=""> </span><span class="">11.5</span><span class="">,</span><span class=""> </span><span class="">9.5</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> BigDecimal</span><span class="">::</span><span class="">valueOf </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> bigDecimal </span><span class="">-&gt;</span><span class=""> bigDecimal</span><span class="">.</span><span class="">pow</span><span class="">(</span><span class=""> </span><span class="">20</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">This notation is equivalent to the following code:</p>
+                
+                <div class="listing " id="l_none_13739"><pre>Stream<span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">12.5</span><span class="">,</span><span class=""> </span><span class="">11.5</span><span class="">,</span><span class=""> </span><span class="">9.5</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> BigDecimal</span><span class="">::</span><span class="">valueOf </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> bigDecimal </span><span class="">-&gt;</span><span class=""> bigDecimal</span><span class="">.</span><span class="">pow</span><span class="">(</span><span class=""> </span><span class="">20</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard last">Put simply, the 
+                    <samp class="listingcharacter listingcharacter">map(...)</samp> method expects a 
+                    <samp class="listingcharacter listingcharacter">Function&lt;Double,BigDecimal&gt;</samp>—exactly the transformation that 
+                    <samp class="listingcharacter listingcharacter">new</samp>
+                 and constructor perform as well as the method.</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Let’s say we have the following custom functional interface:</p>
+                
+                <div class="listing " id="l_none_13764"><pre><span class="">interface</span><span class=""> DateFactory </span><span class="">{</span><span class=""> Date </span>
+                    <span class="bold"><span class="">create</span><span class="">()</span></span>; }<span class=""/></pre></div>
+                
+                <p class="standard">A constructor reference binds the constructor to the 
+                    <samp class="listingcharacter listingcharacter">create()</samp>
+                 method of the functional interface in the following example:</p>
+                
+                <div class="listing " id="l_none_13768"><pre>DateFactory factory <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">Date::</span><span class="">new</span></span><span class="">;</span><span class=""/><br/><span class="">System.out.</span><span class="">print</span><span class="">( factory.</span>
+                    <span class="bold"><span class="">create</span><span class="">()</span></span> );<span class=""/><br/><span class="">// for example, Fri Oct 06 22:34:24 CET 2017</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">The last two lines can also be summarized in the following way:</p>
+                
+                <div class="listing  last_item" id="l_none_13772"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">((</span><span class="">DateFactory</span><span class="">)</span><span class="">Date</span><span class="">::</span><span class="">new</span><span class="">).</span><span class="">create</span><span class="">()</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            <p class="standard">
+                <a id="p761"/>If only a parameterless constructor is to be called, the functional interface must have only one method that has no parameters and returns something. The return type of the method must of course match the class type. This rule applies to the 
+                <samp class="listingcharacter listingcharacter">DateFactory</samp> type from our earlier example. But you can also go a bit more generic, for example, with the existing functional interface 
+                <samp class="listingcharacter listingcharacter">Supplier</samp>, as we’ll see momentarily in 
+                <span class="crossreference "><a href="13_003.html#h13.3.2">Section 13.3.2</a></span>
+            .</p>
+            
+            <p class="standard">The Java API often contains parameters of the 
+                <samp class="listingcharacter listingcharacter">Class</samp> type, which are used as type specification to create objects via the 
+                <samp class="listingcharacter listingcharacter">Constructor</samp> of the 
+                <samp class="listingcharacter listingcharacter">Class</samp> with the 
+                <samp class="listingcharacter listingcharacter">newInstance()</samp> method. The use of 
+                <samp class="listingcharacter listingcharacter">Class</samp> can be replaced by a functional interface, and constructor references can be passed instead of 
+                <samp class="listingcharacter listingcharacter">Class</samp>
+             objects.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.3.2">13.3.2    Parameterless and Parameterized Constructors</h3>
+            
+            <p class="standard">With a parameterless constructor, the method has only one return. In contrast, with a parameterized constructor, the method of the functional interface must of course have a compatible parameter list, as illustrated in the following examples:</p>
+            
+            <table class="standardtable" id="t13.7">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Constructor</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Date()</samp>
+                            </p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Date(</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">long</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter"> t)</samp>
+                            </p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Compatible functional interface</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">interface DateFactory {<br/> Date create();<br/>}</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">interface DateFactory {<br/> Date create(</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">long</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter"> t);<br/>}</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Constructor reference</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">DateFactory factory =<br/> Date::new;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">DateFactory factory =<br/> Date::new;</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Call</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">factory.create();</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">factory.create(1);</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 13.7</b>    
+            Standard and Parameterized Constructor with Corresponding Functional Interfaces</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">If the type inference of the compiler reaches its limits, additional type information is required. In this case, the additional information is provided after the colon in square brackets, such as in 
+                    <samp class="listingcharacter listingcharacter">Class::&lt;Type1, Type2&gt;new</samp>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.3.3">13.3.3    Useful Predefined Interfaces for Constructor References</h3>
+            
+            <p class="standard">The functional interface appropriate for a parameterless constructor must have a return and take no parameter. In contrast, the functional interface for a parameterized constructor must have a corresponding parameter list. Often, a constructor might parameterless or takes exactly one parameter. For these two cases, the Java API provides two practical (generically declared) functional interfaces.</p>
+            
+            <table class="standardtable" id="t13.8">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a id="p762"/>Functional <br/>Interface</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Functional<br/>Descriptor</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Mapping</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Matches...</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Supplier&lt;T&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">T get()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">() → T</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Parameterless constructor</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Function&lt;T,R&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">R apply(T t)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">(T) → R</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Simple parameterized constructor</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 13.8</b>    
+            Existing Functional Interfaces as Creators</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The functional interface 
+                    <samp class="listingcharacter listingcharacter">Supplier&lt;T&gt;</samp> has a 
+                    <samp class="listingcharacter listingcharacter">T get()</samp> method that you can connect to the parameterless constructor of 
+                    <samp class="listingcharacter listingcharacter">Date</samp>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l_none_13782"><pre>Supplier<span class="">&lt;</span><span class="">Date</span><span class="">&gt;</span><span class=""> factory </span><span class="">=</span><span class=""> Date</span><span class="">::</span><span class="">new</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> factory</span><span class="">.</span><span class="">get</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard last">Using 
+                    <samp class="listingcharacter listingcharacter">Supplier</samp> with the type parameter 
+                    <samp class="listingcharacter listingcharacter">Date</samp> gives the parameterized type 
+                    <samp class="listingcharacter listingcharacter">Supplier&lt;Date&gt;</samp>, while 
+                    <samp class="listingcharacter listingcharacter">get()</samp> consequently returns the type 
+                    <samp class="listingcharacter listingcharacter">Date</samp>. The 
+                    <samp class="listingcharacter listingcharacter">factory.get()</samp>
+                 call leads to the call of the constructor.</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Brain Teaser</h6>
+                
+                <p class="standard first last">A constructor can be a 
+                    <samp class="listingcharacter listingcharacter">Supplier</samp> or a 
+                    <samp class="listingcharacter listingcharacter">Function</samp>. Once again, checked exceptions are problematic. You should consider whether the constructor 
+                    <samp class="listingcharacter listingcharacter">URI(String str) throws URISyntaxException</samp> can be addressed via 
+                    <samp class="listingcharacter listingcharacter">URI::new</samp>
+                .</p>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

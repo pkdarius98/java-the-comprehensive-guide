@@ -1,0 +1,314 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    The Class Library" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    The Class Library" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    The Class Library</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h16.6">16.6    Overview of Important Date Classes</h2>
+        
+        <p class="standard">Because date calculations are convoluted entities, we can be grateful to the developers of Java for providing many classes for date calculation and formatting. The developers have kept the classes abstract enough to allow for local specifics like output formatting
+            <a class="indexanchor" id="i16_45"/>, parsing, time zones,
+            <a class="indexanchor" id="i16_46"/> or daylight saving time/winter time
+            <a class="indexanchor" id="i16_47"/>
+         in different calendars.</p>
+        
+        <p class="standard">Prior to Java 1.1, only the 
+            <samp class="listingcharacter listingcharacter">java.util.Date</samp>
+            <a class="indexanchor" id="i16_48"/> class was available for displaying and manipulating
+            <a class="indexanchor" id="i16_49"/>
+         date values, and this class had to carry out several tasks:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Creation of a date/time object from year, month, day, minute, and second</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Querying day, month, year, and so on with an accuracy of milliseconds</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Processing and output of date strings</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">
+            <a id="p858"/>Since the 
+            <samp class="listingcharacter listingcharacter">Date</samp>
+         class wasn’t quite bug-free and internationalized, new classes were introduced in JDK 1.1, namely, the following:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">Calendar</samp>
+                    <a class="indexanchor" id="i16_50"/> takes on 
+                    <samp class="listingcharacter listingcharacter">Date</samp>’s task of converting between different date representations and time scales. The 
+                    <samp class="listingcharacter listingcharacter">GregorianCalendar</samp>
+                 subclass is created directly.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">DateFormat</samp>
+                    <a class="indexanchor" id="i16_51"/> breaks up date strings and formats the output. Date formats also depend on the country, which Java represents through 
+                    <samp class="listingcharacter listingcharacter">Locale</samp> objects, and on a time zone, which is represented by the instances of the 
+                    <samp class="listingcharacter listingcharacter">TimeZone</samp>
+                 class.</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">In Java 8, another date library was added with entirely new types. Finally, date and time can be represented separately:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">LocalDate</samp>, 
+                    <samp class="listingcharacter listingcharacter">LocalTime</samp>, and 
+                    <samp class="listingcharacter listingcharacter">LocalDateTime</samp>
+                 are the temporal classes for a date, for a time, and for a combination of date and time, respectively.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">Period</samp> and 
+                    <samp class="listingcharacter listingcharacter">Duration</samp>
+                 represent intervals.</p>
+            
+            </li>
+        
+        </ul>
+        
+        
+            
+            <h3 class="t3" id="h16.6.1">16.6.1    Unix Time: January 1, 1970</h3>
+            
+            <p class="standard">January 1, 1970, was a Thursday with groundbreaking changes: The British rejoiced that the age of majority dropped from 24 to 18, and as in every year, and people everywhere woke up to massive hangovers from the night before. For us, however, a technical innovation is of concern: The date of 1/1/1970,
+                <a class="indexanchor" id="i16_52"/> 0:00:00 UTC is also referred to as the 
+                <span class="italic">Unix epoch</span>,
+                <a class="indexanchor" id="i16_53"/> and a 
+                <span class="italic">Unix time</span>
+                <a class="indexanchor" id="i16_54"/> is described in relation to this time in terms of seconds. For example, 100,000,000 seconds after 1/1/1970 is March 3, 1973, at 09:46:40. The 
+                <span class="italic">Unix Billennium</span>
+             was celebrated 1,000,000,000 seconds after Jan. 1, 1970, namely, on Sept. 9, 2001, at 01:46:40.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.6.2">16.6.2    System.currentTimeMillis()</h3>
+            
+            <p class="standard">Unix time is also an important concept for us Java developers because many times in Java are relative to this date. The timestamp 0 refers to 1/1/1970 0:00:00 Greenwich Mean Time. The 
+                <samp class="listingcharacter listingcharacter">System.currentTimeMillis()</samp>
+                <a class="indexanchor" id="i16_55"/> method returns the past milliseconds—not seconds!—relative to 1/1/1970, 00:00 UTC, although your operating system’s clock may not be that accurate. The number of milliseconds is represented in a 
+                <samp class="listingcharacter listingcharacter">long</samp>
+             (i.e., in 64 bits), which will suffice for about 300 million years.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[ ! ]  </span>Warning</h6>
+                
+                <p class="standard first last">The values of 
+                    <samp class="listingcharacter listingcharacter">currentTimeMillis()</samp> don’t necessarily ascend because Java gets the time from the operating system, where the system time can change. A user can adjust the time, or a service such as the 
+                    <span class="italic">Network Time Protocol (NTP)</span> takes over this task. Differences of 
+                    <samp class="listingcharacter listingcharacter">currentTimeMillis()</samp> timestamps are then completely wrong and could even be negative. An alternative is 
+                    <samp class="listingcharacter listingcharacter">nanoTime()</samp>, which has no reference point, is more precise, and is always ascending.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn16_07" id="fn16_07">[ 213 ]</a></span>
+                </p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.6.3">16.6.3    
+                <a id="p859"/>
+            Simple Time Conversions via TimeUnit</h3>
+            
+            <p class="standard">A time duration in Java is often expressed in terms of milliseconds. 1,000 milliseconds correspond to 1 second, 1,000 × 60 milliseconds to 1 minute, and so on. However, all those large numbers aren’t easy to read, which is why 
+                <samp class="listingcharacter listingcharacter">TimeUnit</samp>
+                <a class="indexanchor" id="i16_56"/> objects are used with their 
+                <samp class="listingcharacter listingcharacter">to*(...)</samp> methods for the purpose of conversion. Java declares the following constants in 
+                <samp class="listingcharacter listingcharacter">TimeUnit</samp>: 
+                <samp class="listingcharacter listingcharacter">NANOSECONDS</samp>, 
+                <samp class="listingcharacter listingcharacter">MICROSECONDS</samp>, 
+                <samp class="listingcharacter listingcharacter">MILLISECONDS</samp>, 
+                <samp class="listingcharacter listingcharacter">DAYS</samp>, 
+                <samp class="listingcharacter listingcharacter">HOURS</samp>, 
+                <samp class="listingcharacter listingcharacter">SECONDS</samp>, and 
+                <samp class="listingcharacter listingcharacter">MINUTES</samp>
+            .</p>
+            
+            <p class="standard">Each of the enumeration elements defines the conversion methods, for instance, 
+                <samp class="listingcharacter listingcharacter">toDays(…)</samp>, 
+                <samp class="listingcharacter listingcharacter">toHours(…)</samp>, 
+                <samp class="listingcharacter listingcharacter">toMicros(…)</samp>, 
+                <samp class="listingcharacter listingcharacter">toMillis(…)</samp>, 
+                <samp class="listingcharacter listingcharacter">toMinutes(…)</samp>, 
+                <samp class="listingcharacter listingcharacter">toNanos(…)</samp>, and 
+                <samp class="listingcharacter listingcharacter">toSeconds(…)</samp>. These methods receive a 
+                <samp class="listingcharacter listingcharacter">long</samp> and return a 
+                <samp class="listingcharacter listingcharacter">long</samp> in the corresponding unit. In addition, two 
+                <samp class="listingcharacter listingcharacter">convert(...)</samp>
+             methods convert from one unit to another.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Example</h6>
+                
+                <p class="standard first last">The following example converts 23,746,387 milliseconds to hours:</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_16259"><pre><span class="">int</span><span class=""> v </span><span class="">=</span><span class=""> 23_746_387</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> TimeUnit</span><span class="">.</span><span class="">MILLISECONDS</span><span class="">.</span><span class="">toHours</span><span class="">(</span><span class=""> v </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // 6</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> TimeUnit</span><span class="">.</span><span class="">HOURS</span><span class="">.</span><span class="">convert</span><span class="">(</span><span class=""> v</span><span class="">,</span><span class=""> <br/>  TimeUnit</span><span class="">.</span><span class="">MILLISECONDS </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // 6</span><span class=""><br/></span><span class="">enum</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">concurrent</span><span class="">.</span>
+                <span class="bold">TimeUnit</span><br/><span class="">extends</span><span class=""> Enum&lt;TimeUnit&gt;</span><br/><span class="">implements</span><span class=""> Serializable, Comparable&lt;TimeUnit&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">NANOSECONDS</samp>, 
+                        <samp class="listingcharacter listingcharacter">MICROSECONDS</samp>, 
+                        <samp class="listingcharacter listingcharacter">MILLISECONDS</samp>, 
+                        <samp class="listingcharacter listingcharacter">SECONDS</samp>, 
+                        <samp class="listingcharacter listingcharacter">MINUTES</samp>, 
+                        <samp class="listingcharacter listingcharacter">HOURS</samp>, 
+                        <samp class="listingcharacter listingcharacter">DAYS</samp><br/>
+                        <samp class="listingcharacter listingcharacter">TimeUnit</samp>
+                     enumeration elements.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long toDays(long duration)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long toHours(long duration)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long toMicros(long duration)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long toMillis(long duration)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long toMinutes(long duration)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long toNanos(long duration)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long toSeconds(long duration)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long convert(long sourceDuration, TimeUnit sourceUnit)</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">sourceUnit.to*(sourceDuration)</samp>, where 
+                        <samp class="listingcharacter listingcharacter">*</samp> represents the respective unit. For example, this method returns 
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">HOURS</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">.convert(sourceDuration, sourceUnit)</samp>, then 
+                        <samp class="listingcharacter listingcharacter">sourceUnit.to</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">Hours</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">(1)</samp>. The readability of this method isn’t ideal, so the other methods should be preferred. Results may be truncated, not rounded. If an overflow occurs, no 
+                        <samp class="listingcharacter listingcharacter">ArithmeticException</samp>
+                     will follow.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p860"/>
+                        long convert(Duration duration)</samp><br/>Converts the passed 
+                        <samp class="listingcharacter listingcharacter">duration</samp> into the time unit that represents the current 
+                        <samp class="listingcharacter listingcharacter">TimeUnit</samp>. For example, 
+                        <samp class="listingcharacter listingcharacter">TimeUnit.MINUTES.convert( Duration.ofHours(12) )</samp> returns 720. Thus, for example, 
+                        <samp class="listingcharacter listingcharacter">aunit.convert(Duration.ofNanos(n))</samp> and 
+                        <samp class="listingcharacter listingcharacter">aunit.convert(n, NANOSECONDS)</samp>
+                     are the same.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

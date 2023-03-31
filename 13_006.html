@@ -1,0 +1,1412 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Lambda Expressions and Functional Programming" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Lambda Expressions and Functional Programming" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Lambda Expressions and Functional Programming</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h13.6">13.6    Optional Is Not a Non-Starter</h2>
+        
+        <p class="standard">Java has one particular reference that can make a developer’s hair stand on end and is a reason for long hours of debugging: the 
+            <samp class="listingcharacter listingcharacter">null</samp> reference. Actually, 
+            <samp class="listingcharacter listingcharacter">null</samp> merely says: “assigned, but not initialized.” What makes 
+            <samp class="listingcharacter listingcharacter">null</samp> so problematic is the 
+            <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+            <a class="indexanchor" id="i13_35"/>, which is thrown by referenced 
+            <samp class="listingcharacter listingcharacter">null</samp>
+         expressions.</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                <a id="p785"/>
+            Example</h6>
+            
+            <p class="standard first">Developers may forget to initialize the object variable 
+                <samp class="listingcharacter listingcharacter">location</samp> with an object, so 
+                <samp class="listingcharacter listingcharacter">setLocation(...)</samp>
+             will fail, as shown in the following example:</p>
+            
+            <div class="listing  last_item" id="l_none_131127"><pre><span class="">class</span><span class=""> Place </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> Point2D </span>
+                <span class="bold"><span class="">location</span></span>;<br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setLocation</span><span class="">( </span><span class="">double</span><span class=""> longitude, </span><span class="">double</span><span class=""> latitude ) {</span><br/>    
+                <span class="bold">location.<span class="">setLocation</span></span><span class="">( longitude, latitude ); </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 NullPointerException</span><span class=""><br/></span>  }<br/>}<span class=""/></pre></div>
+        
+        </div>
+        
+        
+            
+            <h3 class="t3" id="h13.6.1">13.6.1    Using null</h3>
+            
+            <p class="standard">Errors of this type are relatively easy to detect through testing. But the real problem is that developers generally like to consider the typeless 
+                <samp class="listingcharacter listingcharacter">null</samp>
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn13_08" id="fn13_08">[ 195 ]</a></span> as a special magic value, and thus 
+                <samp class="listingcharacter listingcharacter">null </samp>
+            can sometimes mean something else besides “not initialized.” Consider the following points:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If the API allows 
+                        <samp class="listingcharacter listingcharacter">null</samp> in arguments for methods/constructors, 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                     usually means “use a default value” or “if nothing given, then ignore.”</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">In method returns, 
+                        <samp class="listingcharacter listingcharacter">null</samp> often stands for “nothing done” or “no return.” In contrast, other methods in turn use the return 
+                        <samp class="listingcharacter listingcharacter">null</samp> to encode that an operation was successfully performed and would otherwise return error objects, for example.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn13_09" id="fn13_09">[ 196 ]</a></span>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h13.6.1.1">Example 1</h4>
+                
+                <p class="standard">Let’s look at the Javadoc documented method 
+                    <samp class="listingcharacter listingcharacter">getTask(out, fileManager, diagnosticListener, options, classes, compilationUnits)</samp> in the 
+                    <samp class="listingcharacter listingcharacter">JavaCompiler</samp> interface. This method is an example of several specific uses of 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                :</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">out</samp> means “a writer for additional output from the compiler; use 
+                            <samp class="listingcharacter listingcharacter">system.err</samp> 
+                            <span class="italic">if null</span>
+                        .”</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">fileManager</samp> means “a file manager; 
+                            <span class="italic">if null</span>
+                         use the compiler’s standard file manager.”</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">diagnosticListener</samp> means “a diagnostic listener; 
+                            <span class="italic">if null</span>
+                         use the compiler’s default method for reporting diagnostics.”</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">options</samp> means “compiler options, 
+                            <span class="bold">null</span>
+                         means no options.”</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">classes</samp> means “names of classes to be processed by annotation processing, 
+                            <span class="bold">null</span>
+                         means no class names.”</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">compilationUnits</samp> means “the compilation units to compile, 
+                            <span class="bold">null</span>
+                         means no compilation units.”</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">
+                    <a id="p786"/>All arguments can ultimately be 
+                    <samp class="listingcharacter listingcharacter">null</samp>: for instance, 
+                    <samp class="listingcharacter listingcharacter">getTask(null, null, null, null, null, null)</samp> is a correct call. The API isn’t beautiful, and for such long parameter lists, a fine alternative is available, namely, the 
+                    <span class="italic">builder pattern</span>. With this pattern, you could write 
+                    <samp class="listingcharacter listingcharacter">new CompilationTask.Builder().out(...).fileManager(...).....build()</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.6.1.2">Example 2</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">BufferedReader</samp> allows line-by-line reading from data sources, and 
+                    <samp class="listingcharacter listingcharacter">readLine()</samp> returns 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 if no more lines need to be read.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.6.1.3">Example 3</h4>
+                
+                <p class="standard">Much confusion about the API may exist in relation to the associative memory. An ordinary 
+                    <samp class="listingcharacter listingcharacter">HashMap</samp> can get 
+                    <samp class="listingcharacter listingcharacter">null</samp> as an associated value, but 
+                    <samp class="listingcharacter listingcharacter">get(key)</samp> returns 
+                    <samp class="listingcharacter listingcharacter">null</samp> even if no associated value exists. This scenario leads to an ambiguity since the return of 
+                    <samp class="listingcharacter listingcharacter">get(...)</samp> doesn’t reveal whether there’s a mapping to 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 or whether the key doesn’t exist. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_131151"><pre>Map<span class="">&lt;</span><span class="">Integer</span><span class="">,</span><span class="">String</span><span class="">&gt;</span><span class=""> map </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> HashMap</span><span class="">&lt;&gt;();</span><span class=""><br/></span>map<span class="">.</span><span class="">put</span><span class="">(</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> null </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> map</span><span class="">.</span><span class="">containsKey</span><span class="">(</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">     </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> map</span><span class="">.</span><span class="">containsValue</span><span class="">(</span><span class=""> null </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> map</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">             </span><span class=""> // null</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> map</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">             </span><span class=""> // </span>
+                    <span class="bold">null</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">If the map can contain 
+                    <samp class="listingcharacter listingcharacter">null</samp> values, there must always be a pair of the type 
+                    <samp class="listingcharacter listingcharacter">if(map.containsKey(key))</samp> followed by 
+                    <samp class="listingcharacter listingcharacter">map.get(key)</samp>. Ultimately, the best approach is for developers to do away with 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 in data structures.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.6.1.4">Documenting null</h4>
+                
+                <p class="standard">To get 
+                    <samp class="listingcharacter listingcharacter">null</samp> under control, several approaches are conceivable. First, you must consider whether you want to use 
+                    <samp class="listingcharacter listingcharacter">null</samp> at all. If so, you should always document 
+                    <samp class="listingcharacter listingcharacter">null</samp> as a potential return or valid parameter assignment in the API documentation. The only problem is not everyone reads the Javadoc. Thus, we’ll need something more explicit. Annotations such as 
+                    <samp class="listingcharacter listingcharacter">@Nullable</samp>
+                    <a class="indexanchor" id="i13_36"/> and 
+                    <samp class="listingcharacter listingcharacter">@NonNull</samp>
+                    <a class="indexanchor" id="i13_37"/>
+                , which aren’t part of Java SE, can be added to the classpath and evaluated by static analysis tools like IntelliJ. </p>
+                
+                <p class="standard">Of course, if 
+                    <samp class="listingcharacter listingcharacter">null</samp> isn’t permitted as a parameter, a method should perform a check and throw an exception. You can do this check explicitly via a test, for example, with 
+                    <samp class="listingcharacter listingcharacter">if ( param == null ) throw new ...</samp> or indirectly via 
+                    <samp class="listingcharacter listingcharacter">Objects.requireNonNull(param)</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.6.1.5">Alternatives to null</h4>
+                
+                <p class="standard">Since 
+                    <samp class="listingcharacter listingcharacter">null</samp> has so many use cases and many programmers skip reading the Javadoc, you should consider alternatives to some uses of 
+                    <samp class="listingcharacter listingcharacter">null</samp>. Sometimes, this substitution is easy, such as when the returns are collections. In this case, a good alternative to 
+                    <samp class="listingcharacter listingcharacter">null</samp> is just an empty collection. This scenario is a special case of the 
+                    <span class="italic">null object pattern</span>
+                    <a class="indexanchor" id="i13_38"/>
+                .</p>
+                
+                <p class="standard">
+                    <a id="p787"/>Errors that occur due to a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> could of course be completely avoided if you always properly tested for 
+                    <samp class="listingcharacter listingcharacter">null</samp> references. But developers tend to forget 
+                    <samp class="listingcharacter listingcharacter">null</samp> checks because they aren’t aware or don’t expect that a return can be 
+                    <samp class="listingcharacter listingcharacter">null</samp>. What is required is a program construct that makes it explicit that such a value can’t exist, so that 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 doesn’t have to take on this role. If you can see in the code that a value is optional (i.e., can be present or not), the potential for errors would be reduced.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>History</h6>
+                    
+                    <p class="standard first last">Tony Hoare
+                        <a class="indexanchor" id="i13_39"/> is considered the “inventor” of the 
+                        <samp class="listingcharacter listingcharacter">null</samp> reference. Today, he regrets it, calling the decision “my billion-dollar mistake.”
+                        <a class="indexanchor" id="i13_40"/>
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn13_10" id="fn13_10">[ 197 ]</a></span>
+                    </p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.6.2">13.6.2    The Optional
+                <a class="indexanchor" id="i13_41"/>
+             Type</h3>
+            
+            <p class="standard">The Java library provides a kind of container that may or may not contain an element. If the container contains an element, its value is never 
+                <samp class="listingcharacter listingcharacter">null</samp>. This container can be queried whether it contains an element or not. A 
+                <samp class="listingcharacter listingcharacter">null</samp>
+             as identifier is therefore superfluous.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first last">Construction of various 
+                    <samp class="listingcharacter listingcharacter">Optional</samp>
+                 objects and result of the methods:</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_131152"><pre>Optional<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> opt1 </span><span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">Optional.</span><span class="">of</span></span><span class="">( </span><span class="">"Aitazaz Hassan Bangash"</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( opt1.</span>
+                <span class="bold"><span class="">isPresent</span></span><span class="">() );  </span><span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( opt1.</span>
+                <span class="bold"><span class="">isEmpty</span></span><span class="">() );    </span><span class=""> // false</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( opt1.</span>
+                <span class="bold"><span class="">get</span></span><span class="">() );        </span><span class=""> // Aitazaz Hassan Bangash</span><span class=""><br/></span>Optional&lt;<span class="">String</span><span class="">&gt; opt2 = Optional.</span>
+                <span class="bold"><span class="">empty</span></span><span class="">();</span><br/>System.out.<span class="">println</span><span class="">( opt2.</span>
+                <span class="bold"><span class="">isPresent</span></span><span class="">() );  </span><span class=""> // false</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( opt2.</span>
+                <span class="bold"><span class="">isEmpty</span></span><span class="">() );    </span><span class=""> // true</span><br/>// opt2.get() -&gt; java.util.NoSuchElementException: No value present<span class=""><br/></span>Optional&lt;<span class="">String</span><span class="">&gt; opt3 = Optional.</span><span class="">ofNullable</span><span class="">( </span><span class="">"Malala"</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( opt3.</span>
+                <span class="bold"><span class="">isPresent</span></span><span class="">() );  </span><span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( opt3.</span>
+                <span class="bold"><span class="">isEmpty</span></span><span class="">() );    </span><span class=""> // false</span><span class=""><br/></span>
+                <a id="p788"/>System.out.<span class="">println</span><span class="">( opt3.</span>
+                <span class="bold"><span class="">get</span></span><span class="">() );        </span><span class=""> // Malala</span><span class=""><br/></span>Optional&lt;<span class="">String</span><span class="">&gt; opt4 = Optional.</span>
+                <span class="bold"><span class="">ofNullable</span></span><span class="">( null );</span><br/>System.out.<span class="">println</span><span class="">( opt4.</span>
+                <span class="bold"><span class="">isPresent</span></span><span class="">() );  </span><span class=""> // false</span><br/>// opt4.get() -&gt; java.util.NoSuchElementException: No value present<span class=""><br/></span><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java.util.</span>
+                <span class="bold">Optional</span>&lt;T&gt; <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; Optional&lt;T&gt; empty()</samp><br/>Returns an empty 
+                        <samp class="listingcharacter listingcharacter">Optional</samp>
+                     object.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean isPresent()</samp><br/>Returns true if this 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> object has a value, otherwise the return is 
+                        <samp class="listingcharacter listingcharacter">false</samp>, as in the case of 
+                        <samp class="listingcharacter listingcharacter">empty()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean isEmpty()</samp><br/>Opposite of 
+                        <samp class="listingcharacter listingcharacter">isPresent()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; Optional&lt;T&gt; of(T value)</samp><br/>Creates a new 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> object with a value that must not be 
+                        <samp class="listingcharacter listingcharacter">null</samp>; otherwise, you’ll get a 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp>, so getting 
+                        <samp class="listingcharacter listingcharacter">null</samp> into the 
+                        <samp class="listingcharacter listingcharacter">Optional</samp>
+                     object won’t work.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; Optional&lt;T&gt; ofNullable(T value)</samp><br/>Returns an 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> object with the value if it’s not 
+                        <samp class="listingcharacter listingcharacter">null</samp>; if it is 
+                        <samp class="listingcharacter listingcharacter">null</samp>, the return is 
+                        <samp class="listingcharacter listingcharacter">Optional.empty()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">T get()</samp><br/>Returns the value. If the 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> object doesn’t contain a value because it’s 
+                        <samp class="listingcharacter listingcharacter">isEmpty()</samp>, a 
+                        <samp class="listingcharacter listingcharacter">NoSuchElementException</samp>
+                     will follow.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">T orElse(T other)</samp><br/>If a value is 
+                        <samp class="listingcharacter listingcharacter">isPresent()</samp>, return the value; if it’s 
+                        <samp class="listingcharacter listingcharacter">isEmpty()</samp>, return 
+                        <samp class="listingcharacter listingcharacter">other</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Stream&lt;T&gt; stream()</samp><br/>Convert 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> to the 
+                        <samp class="listingcharacter listingcharacter">Stream</samp>
+                     data type.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Furthermore, 
+                <samp class="listingcharacter listingcharacter">Optional</samp> overrides the 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp>, 
+                <samp class="listingcharacter listingcharacter">toString()</samp> and 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp>
+             methods and a few more methods that we’ll explore later in this section.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Using 
+                    <samp class="listingcharacter listingcharacter">null</samp> internally, for example, has an advantage in that objects can be serialized. 
+                    <samp class="listingcharacter listingcharacter">Optional</samp> does 
+                    <span class="italic">not</span> implement 
+                    <samp class="listingcharacter listingcharacter">Serializable</samp>, which is why object variables of type 
+                    <samp class="listingcharacter listingcharacter">Optional</samp>
+                 aren’t serializable. Thus, object variables of this type can’t be transferred in the case of remote calls with Remote Method Invocation (RMI), for example. Also, mappings to XML or to databases are more cumbersome unless JavaBean properties are used instead of internal object variables.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h13.6.2.1">Spouse or Not?</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">Optional</samp> is thus used to explicitly express in code whether a value is present or not. This rule is true on both sides: The creator must explicitly call 
+                    <samp class="listingcharacter listingcharacter">of*(...)</samp>, and the user 
+                    <a id="p789"/>must explicitly call 
+                    <samp class="listingcharacter listingcharacter">isPresent()</samp>, 
+                    <samp class="listingcharacter listingcharacter">isEmpty()</samp>, or 
+                    <samp class="listingcharacter listingcharacter">get()</samp>
+                . Both sides are aware that they’re dealing with a value that’s optional, that is, the value may or may not exist. Let’s illustrate this concept in the following example, for a person who may have a spouse:</p>
+                
+                <div class="listing " id="l13.12"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Person </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> Person spouse</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setSpouse</span><span class="">(</span><span class=""> Person spouse </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">this</span><span class="">.</span><span class="">spouse </span><span class="">=</span><span class=""> Objects</span><span class="">.</span><span class="">requireNonNull</span><span class="">(</span><span class=""> spouse </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">removeSpouse</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    spouse <span class="">=</span><span class=""> null</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">Optional&lt;Person&gt;</span></span> <span class="">getSpouse</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> </span>
+                    <span class="bold">Optional.<span class="">ofNullable</span><span class="">( spouse )</span></span>;<br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 13.12</b>    
+            src/main/java/com/tutego/insel/lang/Person.java (Snippet)</p>
+                
+                <p class="standard">In this example, 
+                    <samp class="listingcharacter listingcharacter">null</samp> is possible for the internal reference to the partner; however, this encoding isn’t intended to reach the outside. For this reason, 
+                    <samp class="listingcharacter listingcharacter">getSpouse()</samp> doesn’t directly return the reference, but instead, 
+                    <samp class="listingcharacter listingcharacter">Optional</samp> is used and expresses whether a person has a spouse or not. Also, with 
+                    <samp class="listingcharacter listingcharacter">setSpouse(...)</samp>, we can’t accept 
+                    <samp class="listingcharacter listingcharacter">null</samp> because 
+                    <samp class="listingcharacter listingcharacter">null</samp> arguments should be avoided as much as possible. 
+                    <samp class="listingcharacter listingcharacter">Optional</samp> isn’t appropriate in this case because passing 
+                    <samp class="listingcharacter listingcharacter">null</samp> would be an error. Additionally, of course, the Javadoc should document for 
+                    <samp class="listingcharacter listingcharacter">setSpouse(...)</samp> that a 
+                    <samp class="listingcharacter listingcharacter">null</samp> argument results in a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>. Therefore, 
+                    <samp class="listingcharacter listingcharacter">Optional</samp>
+                 doesn’t fit as a parameter type.</p>
+                
+                <div class="listing " id="l13.13"><pre>Person john <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Person</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> john</span><span class="">.</span><span class="">getSpouse</span><span class="">().</span><span class="">isEmpty</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // true</span><span class=""><br/></span>Person eve <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Person</span><span class="">();</span><span class=""><br/></span>john<span class="">.</span><span class="">setSpouse</span><span class="">(</span><span class=""> eve </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> john</span><span class="">.</span><span class="">getSpouse</span><span class="">().</span><span class="">isPresent</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> john</span><span class="">.</span><span class="">getSpouse</span><span class="">().</span><span class="">get</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">      </span><span class=""> // com/…/Person</span><span class=""><br/></span>john.removeSpouse();<br/>System.out.println( john.getSpouse().isEmpty() );  <span class=""> // true</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 13.13</b>    
+            src/main/java/com/tutego/insel/lang/OptionalDemo.java, main()</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.6.3">13.6.3    Starting Functional Interfaces with Optional</h3>
+            
+            <p class="standard">In addition to methods like 
+                <samp class="listingcharacter listingcharacter">of*(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">isPresent()</samp> as well as 
+                <samp class="listingcharacter listingcharacter">isEmpty()</samp>
+            , other methods are also based on functional interfaces:</p>
+            
+            <div class="listing " id="l_none_131198"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Optional</span>&lt;T&gt; <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p790"/>
+                        void ifPresent(Consumer&lt;? super T&gt; consumer)</samp><br/>If 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> represents a value, call the 
+                        <samp class="listingcharacter listingcharacter">Consumer</samp>
+                     with that value; otherwise, do nothing.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void ifPresentOrElse(Consumer&lt;? super T&gt; action, Runnable emptyAction)</samp><br/>If 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> represents a value, call the 
+                        <samp class="listingcharacter listingcharacter">Consumer</samp> with that value; otherwise, execute 
+                        <samp class="listingcharacter listingcharacter">emptyAction</samp>. 
+                        <samp class="listingcharacter listingcharacter">Runnable</samp> must be used in this case as a type from 
+                        <samp class="listingcharacter listingcharacter">java.lang</samp> because no interface in the 
+                        <samp class="listingcharacter listingcharacter">java.util.function</samp>
+                     package lacks parameters and also doesn’t return any values.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Optional&lt;T&gt; filter(Predicate&lt;? super T&gt; predicate)</samp><br/>If 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> contains a value and the predicate 
+                        <samp class="listingcharacter listingcharacter">Predicate</samp> is true on the value, the return is the own 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> (i.e., 
+                        <samp class="listingcharacter listingcharacter">this</samp>); otherwise, the return is 
+                        <samp class="listingcharacter listingcharacter">Optional.empty()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;U&gt; Optional&lt;U&gt; map(Function&lt;? super T,? extends U&gt; mapper)</samp><br/>If 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> represents a value, then apply the function and wrap the result (if the result isn’t 
+                        <samp class="listingcharacter listingcharacter">null</samp>) back into an 
+                        <samp class="listingcharacter listingcharacter">Optional</samp>. If 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> is without value, then the return is 
+                        <samp class="listingcharacter listingcharacter">Optional.empty()</samp>, which is also true if the function returns 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;U&gt; Optional&lt;U&gt; flatMap(Function&lt;? super T,Optional&lt;U&gt;&gt; mapper)</samp><br/>Like 
+                        <samp class="listingcharacter listingcharacter">map(...)</samp>, except that the function returns 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> instead of a direct value. If the 
+                        <samp class="listingcharacter listingcharacter">mapper</samp> function returns an empty 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> object, the result of 
+                        <samp class="listingcharacter listingcharacter">flatMap(...)</samp> is also 
+                        <samp class="listingcharacter listingcharacter">Optional.empty()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Optional&lt;T&gt; or(Supplier&lt;? extends Optional&lt;? extends T&gt;&gt; supplier)</samp><br/>If 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> represents a value, return it. If 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> is empty, get the value from the other 
+                        <samp class="listingcharacter listingcharacter">Optional</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">T orElseGet(Supplier&lt;? extends T&gt; other)</samp><br/>If 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> represents a value, return it; if 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> is empty, get the alternative value from the 
+                        <samp class="listingcharacter listingcharacter">Supplier</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;X extends Throwable&gt; T orElseThrow(Supplier&lt;? extends X&gt; exceptionSupplier)</samp><br/>If 
+                        <samp class="listingcharacter listingcharacter">Optional</samp> represents a value, return it; otherwise, use 
+                        <samp class="listingcharacter listingcharacter">Supplier</samp>
+                     to fetch the exception object and trigger it.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">T orElseThrow()</samp><br/>Behaves like 
+                        <samp class="listingcharacter listingcharacter">get()</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">If 
+                    <samp class="listingcharacter listingcharacter">Optional</samp> has no value, a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> should be thrown instead of the 
+                    <samp class="listingcharacter listingcharacter">NoSuchElementException</samp>
+                , as in the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_131193"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> optionalString</span><span class="">.</span><span class="">orElseThrow</span><span class="">(</span><span class=""> NullPointerException</span><span class="">::</span><span class="">new</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h13.6.3.1">Example of a NullPointerException-Safe Cascading of Calls with Optional</h4>
+                
+                <p class="standard">The two 
+                    <samp class="listingcharacter listingcharacter">*map(...)</samp>
+                 methods are particularly interesting and enable an entirely new style of programming. Let’s look at an example: The following two-liner outputs “MICROSOFT 6TO4 ADAPTER” (retrieved from my system) in the console:</p>
+                
+                <div class="listing " id="l_none_131200"><pre><span class="">
+                        <a id="p791"/>
+                    String</span><span class=""> s </span><span class="">=</span><span class=""> NetworkInterface</span><span class="">.</span><span class="">getByIndex</span><span class="">(</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">).</span><span class="">getDisplayName</span><span class="">().</span><span class="">toUpperCase</span><span class="">();</span><span class=""><br/></span>//                                         ^ null?          ^ null?<span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">However, the program code is far from ideal because 
+                    <samp class="listingcharacter listingcharacter">NetworkInterface.getByIndex(int)</samp> can return 
+                    <samp class="listingcharacter listingcharacter">null</samp> as can 
+                    <samp class="listingcharacter listingcharacter">getDisplayName()</samp>. To get around this problem without a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                , you would write the following code:</p>
+                
+                <div class="listing " id="l_none_131212"><pre>NetworkInterface networkInterface <span class="">=</span><span class=""> NetworkInterface</span><span class="">.</span><span class="">getByIndex</span><span class="">(</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> networkInterface </span><span class="">!=</span><span class=""> null </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> displayName </span><span class="">=</span><span class=""> networkInterface</span><span class="">.</span><span class="">getDisplayName</span><span class="">();</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> displayName </span><span class="">!=</span><span class=""> null </span><span class="">)</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> displayName</span><span class="">.</span><span class="">toUpperCase</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Not much is left of the elegance of our original two-liner. Let’s integrate 
+                    <samp class="listingcharacter listingcharacter">Optional</samp>, which would actually be a great return type for 
+                    <samp class="listingcharacter listingcharacter">getByIndex()</samp> and 
+                    <samp class="listingcharacter listingcharacter">getDisplayName()</samp>
+                , in the following example:</p>
+                
+                <div class="listing " id="l_none_131228"><pre>Optional<span class="">&lt;</span><span class="">NetworkInterface</span><span class="">&gt;</span><span class=""> networkInterface </span><span class="">=</span><span class=""> Optional</span><span class="">.</span><span class="">ofNullable</span><span class="">(</span><span class=""> NetworkInterface</span><span class="">.</span><span class="">getByIndex</span><span class="">(</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> networkInterface</span><span class="">.</span><span class="">isPresent</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  Optional<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> name </span><span class="">=</span><span class=""> Optional</span><span class="">.</span><span class="">ofNullable</span><span class="">(</span><span class=""> networkInterface</span><span class="">.</span><span class="">get</span><span class="">().</span><span class="">getDisplayName</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> name</span><span class="">.</span><span class="">isPresent</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> name</span><span class="">.</span><span class="">get</span><span class="">().</span><span class="">toUpperCase</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">With 
+                    <samp class="listingcharacter listingcharacter">Optional</samp>, instead of 
+                    <samp class="listingcharacter listingcharacter">if</samp>, you can take a lambda expression and place in 
+                    <samp class="listingcharacter listingcharacter">ifPresent(...)</samp>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l_none_131246"><pre>Optional<span class="">&lt;</span><span class="">NetworkInterface</span><span class="">&gt;</span><span class=""> networkInterface </span><span class="">=</span><span class=""> Optional</span><span class="">.</span><span class="">ofNullable</span><span class="">(</span><span class=""> NetworkInterface</span><span class="">.</span><span class="">getByIndex</span><span class="">(</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>networkInterface<span class="">.</span><span class="">ifPresent</span><span class="">(</span><span class=""> ni </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  Optional<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> displayName </span><span class="">=</span><span class=""> Optional</span><span class="">.</span><span class="">ofNullable</span><span class="">(</span><span class=""> ni</span><span class="">.</span><span class="">getDisplayName</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  displayName<span class="">.</span><span class="">ifPresent</span><span class="">(</span><span class=""> name </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> name</span><span class="">.</span><span class="">toUpperCase</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> </span><br/>  <span class="">}</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Now, if you remove the local variables 
+                    <samp class="listingcharacter listingcharacter">networkInterface</samp> and 
+                    <samp class="listingcharacter listingcharacter">displayName</samp>
+                , you’ll end up with the following code:</p>
+                
+                <div class="listing " id="l_none_131259"><pre>Optional<span class="">.</span><span class="">ofNullable</span><span class="">(</span><span class=""> NetworkInterface</span><span class="">.</span><span class="">getByIndex</span><span class="">(</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">).</span><span class="">ifPresent</span><span class="">(</span><span class=""> ni </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  Optional<span class="">.</span><span class="">ofNullable</span><span class="">(</span><span class=""> ni</span><span class="">.</span><span class="">getDisplayName</span><span class="">()</span><span class=""> </span><span class="">).</span><span class="">ifPresent</span><span class="">(</span><span class=""> name </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> name</span><span class="">.</span><span class="">toUpperCase</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <a id="p792"/>In terms of structure, this code is identical to the 
+                    <samp class="listingcharacter listingcharacter">if</samp> query and can also be easily recognized by the indentation. Rewriting case distinctions with 
+                    <samp class="listingcharacter listingcharacter">Optional</samp> and 
+                    <samp class="listingcharacter listingcharacter">ifPresent(...)</samp>
+                 doesn’t bring any advantage.</p>
+                
+                <p class="standard">Thinking in terms of case distinctions doesn’t help in this scenario either. Keep in mind that 
+                    <samp class="listingcharacter listingcharacter">NetworkInterface.getByIndex( 2 ).getDisplayName().toUpperCase()</samp> is a chain of mappings. 
+                    <samp class="listingcharacter listingcharacter">NetworkInterface.getByIndex(int)</samp> maps to 
+                    <samp class="listingcharacter listingcharacter">NetworkInterface</samp>, 
+                    <samp class="listingcharacter listingcharacter">getDisplayName()</samp> of 
+                    <samp class="listingcharacter listingcharacter">NetworkInterface</samp> maps to 
+                    <samp class="listingcharacter listingcharacter">String</samp>, and 
+                    <samp class="listingcharacter listingcharacter">toUpperCase()</samp> maps from one 
+                    <samp class="listingcharacter listingcharacter">String</samp> to another 
+                    <samp class="listingcharacter listingcharacter">String</samp>. You can concatenate three mappings and thus express the following: If a mapping fails, then stop mapping. Here is where 
+                    <samp class="listingcharacter listingcharacter">Optional</samp> and 
+                    <samp class="listingcharacter listingcharacter">map(...)</samp>
+                 come into play. In code, you would write the following:</p>
+                
+                <div class="listing " id="l_none_131266"><pre>Optional<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> s </span><span class="">=</span><span class=""> Optional</span><span class="">.</span><span class="">ofNullable</span><span class="">(</span><span class=""> NetworkInterface</span><span class="">.</span><span class="">getByIndex</span><span class="">(</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>                             <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> ni </span><span class="">-&gt;</span><span class=""> ni</span><span class="">.</span><span class="">getDisplayName</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>                             <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> name </span><span class="">-&gt;</span><span class=""> name</span><span class="">.</span><span class="">toUpperCase</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>s<span class="">.</span><span class="">ifPresent</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Optional</samp> class helps us do two things: First, 
+                    <samp class="listingcharacter listingcharacter">map(...)</samp> will map to an 
+                    <samp class="listingcharacter listingcharacter">Optional.empty()</samp> when receiving a 
+                    <samp class="listingcharacter listingcharacter">null</samp> reference, and second, concatenating empty 
+                    <samp class="listingcharacter listingcharacter">Optionals</samp> isn’t a problem. Nothing will happen—
+                    <samp class="listingcharacter listingcharacter">Optional.empty().map(...)</samp> does nothing, and the return is just an empty 
+                    <samp class="listingcharacter listingcharacter">Optional</samp>. At the end of the chain, no 
+                    <samp class="listingcharacter listingcharacter">String</samp> exists (as at the beginning of the example), but instead, we have 
+                    <samp class="listingcharacter listingcharacter">Optional&lt;String&gt;</samp>
+                .</p>
+                
+                <p class="standard">Rewritten with method references and further shortened, the following code is both readable and safe from a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_131260"><pre>Optional<span class="">.</span><span class="">ofNullable</span><span class="">(</span><span class=""> NetworkInterface</span><span class="">.</span><span class="">getByIndex</span><span class="">(</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>        <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> NetworkInterface</span><span class="">::</span><span class="">getDisplayName </span><span class="">)</span><span class=""><br/></span>        <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">::</span><span class="">toUpperCase </span><span class="">)</span><span class=""><br/></span>        <span class="">.</span><span class="">ifPresent</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">This logic does away with external case distinctions and works only with optional mappings, and thus this code is a good example of functional programming.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.6.4">13.6.4    Primitive-Optional with Special Optional* Classes</h3>
+            
+            <p class="standard">While references can be 
+                <samp class="listingcharacter listingcharacter">null</samp> and in this way indicate non-existence, this use isn’t easy to apply to primitive data types. If a method returns a 
+                <samp class="listingcharacter listingcharacter">boolean</samp>, not much is left besides 
+                <samp class="listingcharacter listingcharacter">true</samp> and 
+                <samp class="listingcharacter listingcharacter">false</samp>, and an “unassigned” is then gladly wrapped again via a 
+                <samp class="listingcharacter listingcharacter">boolean</samp> and tested for 
+                <samp class="listingcharacter listingcharacter">null</samp>. Especially with integers you may encounter returns like 
+                <samp class="listingcharacter listingcharacter">-1</samp>,
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn13_11" id="fn13_11">[ 198 ]</a></span>
+             as is the case in the following examples:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If no more input is left for 
+                        <samp class="listingcharacter listingcharacter">InputStreams read(...)</samp>, 
+                        <samp class="listingcharacter listingcharacter">-1</samp>
+                     will be returned.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p793"/>
+                        indexOf(Object)</samp> of 
+                        <samp class="listingcharacter listingcharacter">List</samp> returns 
+                        <samp class="listingcharacter listingcharacter">-1</samp>
+                     if the searched object isn’t in the list and consequently no position can be referenced.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">With an unknown byte length of a MIDI file (type 
+                        <samp class="listingcharacter listingcharacter">MidiFileFormat</samp>) the method 
+                        <samp class="listingcharacter listingcharacter">getByteLength()</samp> has 
+                        <samp class="listingcharacter listingcharacter">-1</samp>
+                     as return.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">These magic values should be avoided, and therefore, the 
+                <samp class="listingcharacter listingcharacter">Optional*</samp>
+             can be introduced.</p>
+            
+            <p class="standard">As a generic type, 
+                <samp class="listingcharacter listingcharacter">Optional</samp> can encapsulate any type, and primitive values could be wrapped in wrappers. However, this approach isn’t efficient, and so the Java library provides the special 
+                <samp class="listingcharacter listingcharacter">Optional</samp> types 
+                <samp class="listingcharacter listingcharacter">OptionalInt</samp>
+                <a class="indexanchor" id="i13_42"/>, 
+                <samp class="listingcharacter listingcharacter">OptionalLong</samp>,
+                <a class="indexanchor" id="i13_43"/> and 
+                <samp class="listingcharacter listingcharacter">OptionalDouble</samp>
+                <a class="indexanchor" id="i13_44"/> for the primitive types 
+                <samp class="listingcharacter listingcharacter">int</samp>, 
+                <samp class="listingcharacter listingcharacter">long</samp>, and 
+                <samp class="listingcharacter listingcharacter">double</samp>
+            , respectively.</p>
+            
+            <p class="standard">Let’s explore the methods of the four 
+                <samp class="listingcharacter listingcharacter">Optional*</samp> classes, as listed in 
+                <span class="crossreference "><a href="13_006.html#t13.14">Table 13.14</a></span>
+            .</p>
+            
+            <table class="standardtable" id="t13.14">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Optional&lt;T&gt;</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">OptionalInt</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">OptionalLong</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">OptionalDouble</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">static &lt;T&gt;<br/>Optional&lt;T&gt; <br/>empty()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">static <br/>Optional</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Int <br/></samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">empty()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">static <br/>Optional</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Long <br/></samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">empty()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">static <br/>Optional</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Double <br/></samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">empty()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">T get()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int getAs</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Int</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">long getAs</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Long</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double <br/>getAs</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Double</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="4">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">boolean isPresent()<br/>boolean isEmpty()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">static &lt;T&gt;<br/>Optional&lt;T&gt; of(T)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">static Optional</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Int<br/></samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">of(</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">int</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">static Optional</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Long<br/></samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">of(</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">long</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">static Optional</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Double<br/></samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">of(</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">double</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">static &lt;T&gt;<br/>Optional&lt;T&gt;<br/>ofNullable(T)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last tablecell_has_colspan" colspan="3">
+                            
+                            <p class="standard first-item last-item">Not transferable</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">T orElse(T)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">int </samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">orElse(</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">int</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">long </samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">orElse(</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">long</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">double </samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">orElse (</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">double</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Stream&lt;T&gt; stream()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Int</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">Stream stream()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Long</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">Stream  stream()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Double</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">Stream  stream()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="4">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">boolean equals(Object)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="4">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int hashCode()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="4">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">String toString()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void ifPresent(<br/>Consumer&lt;? super T&gt;)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void ifPresent(<br/></samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Int</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">Consumer)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void ifPresent(<br/></samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Long</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">Consumer)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void ifPresent(<br/></samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Double</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">Consumer)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">
+                                    <a id="p794"/>
+                                Void ifPresentOrElse( Consumer&lt;? super T&gt;, Runnable)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void ifPresentOrElse( </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">IntConsumer</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">,  Runnable)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void ifPresentOrElse( </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">LongConsumer</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">,  Runnable)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void ifPresentOrElse( </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">DoubleConsumer</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">,  Runnable)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">T orElseGet( Supplier&lt;? extends T&gt;)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int orElseGet( </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Int</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">Supplier)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">long orElseGet( </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">LongSupplier</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double orElseGet( </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Double</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">Supplier)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">&lt;X extends Throwable&gt; T orElseThrow(Supplier&lt;? extends X&gt;)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">&lt;X extends Throwable&gt; </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">int </samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">orElseThrow(Supplier&lt;? extends X&gt;)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">&lt;X extends Throwable&gt; </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">long </samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">orElseThrow(Supplier&lt;? extends X&gt;)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">&lt;X extends Throwable&gt; </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">double <br/></samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">orElseThrow( Supplier&lt;? extends X&gt;)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Optional&lt;T&gt; filter(Predicate&lt;? super T&gt;)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle tablecell_has_rowspan" rowspan="3">
+                            
+                            <p class="standard first-item last-item">Not available</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle"/>
+                        
+                        <td class="tablecell tablecell_last"/>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">&lt;U&gt; Optional&lt;U&gt; <br/>flatMap(Function<br/>&lt;? super T,Optional&lt;U&gt;&gt;)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle"/>
+                        
+                        <td class="tablecell tablecell_last"/>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">&lt;U&gt; Optional&lt;U&gt; map(Function&lt;? super T, ? extends U&gt;)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle"/>
+                        
+                        <td class="tablecell tablecell_last"/>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 13.14</b>    
+            Comparison of Optional with the Primitive Optional* Classes. Parameter Variables Have Been Removed.</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Optional</samp> method 
+                <samp class="listingcharacter listingcharacter">ofNullable(...)</samp> falls out in the primitive 
+                <samp class="listingcharacter listingcharacter">Optional</samp> classes. The optional types for the three primitive types have fewer methods overall, and 
+                <span class="crossreference "><a href="13_006.html#t13.14">Table 13.14</a></span>
+             isn’t quite complete.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first">The fact that the 
+                    <samp class="listingcharacter listingcharacter">map*(...)</samp> methods are missing is impractical, but if transformations are desired, a stream can be requested with 
+                    <samp class="listingcharacter listingcharacter">stream()</samp>, and the 
+                    <samp class="listingcharacter listingcharacter">map*(...)</samp>
+                 methods can be called on the stream. The following example calculates the square root of an “optional number”:</p>
+                
+                <div class="listing  last_item" id="l_none_131277"><pre>OptionalDouble sqrt <span class="">=</span><span class=""> OptionalDouble</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">16</span><span class=""> </span><span class="">).</span><span class="">stream</span><span class="">().</span><span class="">map</span><span class="">(</span><span class=""> Math</span><span class="">::</span><span class="">sqrt </span><span class="">).</span><span class="">findFirst</span><span class="">()</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p795"/>
+                Best Practice</h6>
+                
+                <p class="standard first last">
+                    <samp class="listingcharacter listingcharacter">Optional*</samp> types are excellent as return types and are conceivable as parameter types, but they aren’t attractive as internal object variables. Internally, 
+                    <samp class="listingcharacter listingcharacter">null</samp> is an acceptable choice since this “type” is fast and saves memory. 
+                    <samp class="listingcharacter listingcharacter">Optional</samp> is good for the outside world in the API but internally using 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 is ok.</p>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

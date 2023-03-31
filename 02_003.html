@@ -1,0 +1,1638 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Imperative Language Concepts" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Imperative Language Concepts" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Imperative Language Concepts</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h2.3">2.3    Data Types, Typing, Variables, and Assignments</h2>
+        
+        <p class="standard">
+            <a class="indexanchor" id="i02_56"/>As is typical for imperative programming languages, Java uses variables to store data. A variable is a reserved memory area and—depending on the content—occupies a fixed number of bytes. All variables (and also expressions) have a 
+            <span class="italic">type</span> that is known at translation time. The type is also called a 
+            <span class="italic">data type</span> because a variable contains a data value. Examples of simple data types are integers
+            <a class="indexanchor" id="i02_57"/>, floats
+            <a class="indexanchor" id="i02_58"/>, truth values,
+            <a class="indexanchor" id="i02_59"/> and characters
+            <a class="indexanchor" id="i02_60"/>. The type also determines the allowed operations because truth values can’t be added, for example, whereas integers can. In contrast, floats can be added, but not linked via XOR. Since each variable has a fixed data type specified by the programmer, which is known at translation time and can’t be changed subsequently, and since Java is quite careful about which operations are allowed and also knows the type of each expression at runtime at the latest, Java is considered both a 
+            <span class="italic">statically typed</span>
+            <a class="indexanchor" id="i02_61"/>
+            <a class="indexanchor" id="i02_62"/> and 
+            <span class="italic">strictly (strongly) typed</span>
+            <a class="indexanchor" id="i02_63"/>
+            <a class="indexanchor" id="i02_64"/>
+            <a class="indexanchor" id="i02_65"/>
+            <a class="indexanchor" id="i02_66"/> programming language.
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_10" id="fn02_10">[ 42 ]</a></span>
+        </p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+            
+            <p class="standard first last">In Java, the data type of a variable must be known at translation time. This requirement is referred to as 
+                <span class="italic">statically typed</span>. The opposite is 
+                <span class="italic">dynamic typing</span>
+            , which is what JavaScript uses. In dynamic typing, the type of a variable can change at runtime, depending on what the variable contains.</p>
+        
+        </div>
+        
+        <p class="standard">
+            <a id="p103"/>
+        Data types in Java fall into two categories:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <span class="italic">Primitive types</span>
+                    <a class="indexanchor" id="i02_67"/>
+                : The primitive (simple) types are hard-coded data types in the Java language for numbers, Unicode characters, and truth values.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <span class="italic">Reference types</span>
+                    <a class="indexanchor" id="i02_68"/>
+                : This data type can be used to manage object references to strings, data structures, or players' objects in a computer game, for example.</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">At the time, Sun decided on this categorization for a simple reason: Java was designed as a programming language to support small, weak devices. On these devices, the Java software, which was still interpreted at the beginning, had to run as quickly as possible. If the compiler distinguishes between primitive types and reference types, it can generate bytecode relatively easily that also distinguishes between those two types. This distinction also allows the runtime environment to execute the program code much more quickly and with a relatively simple compiler. This criterion was more important in the early days and is no longer important today because the runtime environment performs various optimizations.</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[»]  </span>Language Comparison with Smalltalk and .NET*</h6>
+            
+            <p class="standard first">In Smalltalk, everything is an object, including the built-in language data types. For numbers, the base type 
+                <samp class="listingcharacter listingcharacter">Number</samp> has 
+                <samp class="listingcharacter listingcharacter">Integer</samp>, 
+                <samp class="listingcharacter listingcharacter">Float</samp>, and 
+                <samp class="listingcharacter listingcharacter">Fraction</samp> subtypes. Then, arithmetic operators, like 
+                <samp class="listingcharacter listingcharacter">+</samp>, 
+                <samp class="listingcharacter listingcharacter">-</samp>, 
+                <samp class="listingcharacter listingcharacter">*</samp>, 
+                <samp class="listingcharacter listingcharacter">/</samp>, 
+                <samp class="listingcharacter listingcharacter">//</samp>, and 
+                <samp class="listingcharacter listingcharacter">\\</samp>, (to list them all) exist, but these operators are only methods of the 
+                <samp class="listingcharacter listingcharacter">Number</samp> class.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_11" id="fn02_11">[ 43 ]</a></span> For Java developers, method names like 
+                <samp class="listingcharacter listingcharacter">+</samp> or 
+                <samp class="listingcharacter listingcharacter">-</samp> are unusual, but in Smalltalk, they aren’t. Syntactically, a 
+                <samp class="listingcharacter listingcharacter">1 + 2</samp> doesn’t differ in Java and Smalltalk, but in Smalltalk, the addition is a message call of the 
+                <samp class="listingcharacter listingcharacter">Integer</samp> object 
+                <samp class="listingcharacter listingcharacter">1</samp> and of the 
+                <samp class="listingcharacter listingcharacter">+</samp> method with the argument 
+                <samp class="listingcharacter listingcharacter">2</samp>, which in turn is an 
+                <samp class="listingcharacter listingcharacter">Integer</samp> object as well—the compiler builds the objects independently from the literals. An 
+                <samp class="listingcharacter listingcharacter">Integer</samp> class for integers has other methods like 
+                <samp class="listingcharacter listingcharacter">asCharacter</samp> and 
+                <samp class="listingcharacter listingcharacter">floor</samp>.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_12" id="fn02_12">[ 44 ]</a></span>
+             Note that this difference only impacts the semantic model on the language side; it has nothing to do with how later the runtime environment optimizes these particular message calls. By dividing Java into primitive data types and reference types, the language’s creators accepted a break from the OO principle to optimize the interpreted runtime in the early 1990s—an optimization that is unnecessary from today’s perspective.</p>
+            
+            <p class="standard last">.NET is more like Java: The compiler knows the built-in data types and gives them special treatment; they aren’t method calls. Statements such as addition and subtraction can also be found in the bytecode (called the 
+                <span class="italic">Common Intermediate Language</span>, or CIL in .NET). But there’s one more difference to Java: The compiler maps data types of .NET languages to .NET classes, and these classes have methods. In C#, the built-in 
+                <samp class="listingcharacter listingcharacter">float</samp> data type is identical to the 
+                <samp class="listingcharacter listingcharacter">Single</samp> data type (from the .NET 
+                <samp class="listingcharacter listingcharacter">System</samp> package), and whether developers write 
+                <samp class="listingcharacter listingcharacter">float f</samp> or 
+                <samp class="listingcharacter listingcharacter">Single f</samp> doesn’t matter. However, 
+                <samp class="listingcharacter listingcharacter">Single</samp> (or 
+                <samp class="listingcharacter listingcharacter">float</samp>) has no mathematical operations compared to Smalltalk but does have a few 
+                <a id="p104"/>methods like 
+                <samp class="listingcharacter listingcharacter">ToString()</samp>.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_13" id="fn02_13">[ 45 ]</a></span>
+             Consequently, in .NET, the built-in data types behave like objects: They have methods but have the same value semantics (for example, in method calls) as in Java and also look similar in bytecode, which gives them the same good performance.</p>
+        
+        </div>
+        
+        <p class="standard">The following sections deal with primitive data types. References are only used when objects come into play. We’ll look at references in detail in 
+            <span class="crossreference "><a href="03_001.html#h3">Chapter 3</a></span>, 
+            <span class="crossreference "><a href="03_007.html#h3.7.1">Section 3.7.1</a></span>
+        .</p>
+        
+        
+            
+            <h3 class="t3" id="h2.3.1">2.3.1    Overview of Primitive Data Types</h3>
+            
+            <p class="standard">In Java, two types of built-in primitive data types exist:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">Arithmetic types</span>
+                        <a class="indexanchor" id="i02_69"/>, for integers, such as integral types
+                        <a class="indexanchor" id="i02_70"/>
+                    , floats, and Unicode characters</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">Truth values</span>
+                     for the states true and false</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <span class="crossreference "><a href="02_003.html#t2.5">Table 2.5</a></span>
+             provides an overview of these data types. We’ll look at each data type in greater detail.</p>
+            
+            <table class="standardtable" id="t2.5">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Type</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Assignment (Value Range)</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i02_71"/>
+                                <samp class="listingcharacter listingcharacter">boolean</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i02_72"/>
+                                <samp class="listingcharacter listingcharacter">true</samp> or
+                                <a class="indexanchor" id="i02_73"/>
+                                <samp class="listingcharacter listingcharacter"> false</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i02_74"/>
+                                <samp class="listingcharacter listingcharacter">char</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">16-bit Unicode character (0x0000 ... 0xFFFF)</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i02_75"/>
+                                <samp class="listingcharacter listingcharacter">byte</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">–2
+                                <sup>7</sup> to 2
+                                <sup>7</sup>
+                             – 1 (–128 … 127)</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i02_76"/>
+                                <samp class="listingcharacter listingcharacter">short</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">–2
+                                <sup>15</sup> to 2
+                                <sup>15</sup>
+                             – 1 (–32,768 … 32,767)</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i02_77"/>
+                                <samp class="listingcharacter listingcharacter">int</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">–2
+                                <sup>31</sup> to 2
+                                <sup>31</sup>
+                             – 1 (–2,147,483,648 … 2,147,483,647)</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i02_78"/>
+                                <samp class="listingcharacter listingcharacter">long</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">–2
+                                <sup>63</sup> to 2
+                                <sup>63</sup>
+                             – 1 (–9,223,372,036,854,775,808 … 9,223,372,036,854,775,807)</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i02_79"/>
+                                <samp class="listingcharacter listingcharacter">float</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">1.4 × 10
+                                <sup>-45</sup> … 3.4 × 10
+                                <sup>38</sup>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i02_80"/>
+                                <samp class="listingcharacter listingcharacter">double</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">4.9 × 10
+                                <sup>-324</sup> … 1.7 × 10
+                                <sup>308</sup>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 2.5</b>    
+            Java Data Types and Their Value Ranges</p>
+            
+            <p class="standard">Concerning integers, note that there’s one positive number “less” than negative ones. This is due to the coding of two’s complement.</p>
+            
+            <p class="standard">For 
+                <samp class="listingcharacter listingcharacter">float</samp> and 
+                <samp class="listingcharacter listingcharacter">double</samp>, the display is somewhat abbreviated, and the sign is not specified since the smallest and largest numbers that can be represented can be both positive and negative. In other words, the value ranges don’t differ—unlike with 
+                <samp class="listingcharacter listingcharacter">int</samp>, for example—depending on the sign.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_14" id="fn02_14">[ 46 ]</a></span> 
+                <span class="crossreference "><a href="02_003.html#t2.6">Table 2.6</a></span>
+             shows a slightly different representation.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f_none_02_05.html" id="f_none_02_05"><img alt="" id="img-f_none_02_05" src="bilderklein/klein02_003_01.png"/></a></div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p105"/>
+                Detailed Knowledge</h6>
+                
+                <p class="standard first last">Strictly speaking, the grammar of the Java language doesn’t provide for negative number literals. For a number like 
+                    <samp class="listingcharacter listingcharacter">-1.2</samp> or 
+                    <samp class="listingcharacter listingcharacter">-1</samp>
+                , the minus is the unary operator and doesn’t belong to the number. In the bytecode itself, the negative numbers are mapped again.</p>
+            
+            </div>
+            
+            <table class="standardtable" id="t2.6">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Type</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Size</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Format</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first tablecell_last top_border_cell tablecell_has_colspan" colspan="3">
+                            
+                            <p class="standard first-item last-item">Integers</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">byte</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">8-bit</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Two’s complement</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">short</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">16-bit</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Two’s complement</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">32-bit</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Two’s complement</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">long</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">64-bit</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Two’s complement</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="3">
+                            
+                            <p class="standard first-item last-item">Floats</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">float</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">32-bit</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">IEEE 754</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">64-bit</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">IEEE 754</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="3">
+                            
+                            <p class="standard first-item last-item">Other data types</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">boolean</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">1-bit</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">true</samp>, 
+                                <samp class="listingcharacter listingcharacter">false</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">char</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">16-bit</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">16-bit Unicode</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 2.6</b>    
+            Java Data Types and Their Sizes and Formats</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p106"/>
+                Note</h6>
+                
+                <p class="standard first last">Strings are treated preferentially but are merely references to objects and not a primitive data type.</p>
+            
+            </div>
+            
+            <p class="standard">Two main aspects distinguish the primitive data types:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">All data types have a fixed length that doesn’t change under any circumstances. The disadvantage that the length of a data type can change in some high-level languages doesn’t exist in Java. In C(++), this length always remains uncertain, and the move to 64-bit machines entails a lot of problems. The 
+                        <samp class="listingcharacter listingcharacter">char</samp>
+                     data type is 16 bits long.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The numeric data types 
+                        <samp class="listingcharacter listingcharacter">byte</samp>, 
+                        <samp class="listingcharacter listingcharacter">short</samp>, 
+                        <samp class="listingcharacter listingcharacter">int</samp>, and 
+                        <samp class="listingcharacter listingcharacter">long</samp> are signed, floating point values of type 
+                        <samp class="listingcharacter listingcharacter">float</samp> and 
+                        <samp class="listingcharacter listingcharacter">double</samp>. Unfortunately, their usage is not always practical, yet you should keep this fact in mind at all times. Problems arise when assigning the value 240 to a byte, for example, because 240 is outside the range of values that extends from –128 to 127. A 
+                        <samp class="listingcharacter listingcharacter">char</samp>
+                     is basically an unsigned integer type.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">To sort the numeric data types by size (let’s leave 
+                <samp class="listingcharacter listingcharacter">char</samp>
+             out of this scenario), you could build two lines for integers and floats, as in the following example:</p>
+            
+            <div class="listing " id="l_none_2264"><pre><span class="">byte</span><span class=""> </span><span class="">&lt;</span><span class=""> </span><span class="">short</span><span class=""> </span><span class="">&lt;</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">&lt;</span><span class=""> </span><span class="">long</span><span class=""><br/></span><span class="">float</span><span class=""> </span><span class="">&lt;</span><span class=""> </span><span class="">double</span><span class=""> </span></pre></div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">The classes 
+                    <samp class="listingcharacter listingcharacter">Byte</samp>, 
+                    <samp class="listingcharacter listingcharacter">Integer</samp>, 
+                    <samp class="listingcharacter listingcharacter">Long</samp>, 
+                    <samp class="listingcharacter listingcharacter">Short</samp>, 
+                    <samp class="listingcharacter listingcharacter">Character</samp>, 
+                    <samp class="listingcharacter listingcharacter">Double</samp>, and 
+                    <samp class="listingcharacter listingcharacter">Float</samp> declare the constants 
+                    <samp class="listingcharacter listingcharacter">MAX_VALUE</samp> and 
+                    <samp class="listingcharacter listingcharacter">MIN_VALUE</samp>
+                , which specify the largest and smallest permissible values of the value range or the limits of the value ranges of each data type:</p>
+                
+                <div class="listing " id="l_none_2278"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Byte</span><span class="">.</span><span class="">MIN_VALUE </span><span class="">);</span><span class="">      </span><span class=""> // -128</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Byte</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">);</span><span class="">      </span><span class=""> // 127</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Character</span><span class="">.</span><span class="">MIN_VALUE </span><span class="">);</span><span class=""> </span><span class=""> // '\u0000'</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Character</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">);</span><span class=""> </span><span class=""> // '\uFFFF'</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Double</span><span class="">.</span><span class="">MIN_VALUE </span><span class="">);</span><span class="">    </span><span class=""> // 4.9E-324</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Double</span><span class="">.</span><span class="">MAX_VALUE </span><span class="">);</span><span class="">    </span><span class=""> // 1.7976931348623157E308</span><span class=""/></pre></div>
+                
+                <p class="standard last">A separate class for each primitive data type with helper methods exists around that data type. For more information on these special classes, refer to 
+                    <span class="crossreference "><a href="11_001.html#h11">Chapter 11</a></span>, 
+                    <span class="crossreference "><a href="11_005.html#h11.5">Section 11.5</a></span>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.3.2">2.3.2    Variable Declarations</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i02_81"/>Variables can be used to store data that can be read and written by the program. To use variables, they must first be declared (defined
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_15" id="fn02_15">[ 47 ]</a></span>). The notation of a variable declaration 
+                <a id="p107"/>
+            is always the same: The type name is followed by the name of the variable. The declaration is a statement and must therefore end with a semicolon. In Java, the compiler knows exactly the type of each variable and expression.</p>
+            
+            <p class="standard">Let’s declare a few (local) variables in the 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>
+             method to store the properties common to candies.</p>
+            
+            <div class="listing " id="l2.6"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> FirstVariable </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                <span class="bold"><span class="">String</span><span class="">  name; </span><br/>    <span class="">int</span><span class="">     quantity;</span></span><br/>
+                <span class="bold">    <span class="">double</span><span class="">  price;</span></span><br/>
+                <span class="bold">    <span class="">boolean</span><span class=""> sticky;</span></span><br/>    <span class="">boolean</span><span class=""> chewy;</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 2.6</b>    
+            src/main/java/FirstVariable.java</p>
+            
+            <p class="standard">On the left, either a primitive type (like 
+                <samp class="listingcharacter listingcharacter">int</samp>) or a reference type (like 
+                <samp class="listingcharacter listingcharacter">string</samp>) is used. A declaration is not much more difficult since cryptic specifications common in C don’t exist in Java.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_16" id="fn02_16">[ 48 ]</a></span>
+             A variable name (which is then an identifier) can contain all the letters and digits of the Unicode character set, except no digit should start the identifier. Also, the identifier name cannot be identical to any reserved keyword.</p>
+            
+            
+                
+                <h4 class="t4" id="h2.3.2.1">Declaring Multiple Variables Compactly</h4>
+                
+                <p class="standard">In the preceding listing, two variables (
+                    <samp class="listingcharacter listingcharacter">sticky </samp>and
+                    <samp class="listingcharacter listingcharacter"> chewy</samp>
+                ) are of the same type. Whenever the variable type is the same, the declaration can be shortened with the variables separated by commas, as in the following example:</p>
+                
+                <div class="listing " id="l_none_2286"><pre><span class="">boolean</span><span class=""> sticky</span>
+                    <span class="bold"><span class="">, </span></span>chewy; <span class=""/></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.3.2.2">Variable Declaration with Value Initialization</h4>
+                
+                <p class="standard">In a declaration, a variable can be initialized with an initial value. The equal sign is followed by the value, which is often a literal. </p>
+                
+                <div class="listing " id="l2.7"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Lollipop </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">String</span><span class="">  name     </span><span class="">=</span><span class=""> </span><span class="">"Lollipop"</span><span class="">;</span><span class=""><br/></span>    <span class="">int</span><span class="">     quantity </span><span class="">=</span><span class=""> </span><span class="">12</span><span class="">;</span><span class=""><br/></span>    <span class="">double</span><span class="">  price    </span><span class="">=</span><span class=""> </span><span class="">0.99</span><span class="">;</span><span class=""><br/></span>
+                    <a id="p108"/>    <span class="">boolean</span><span class=""> sticky   </span><span class="">=</span><span class=""> </span><span class="">false;</span><span class=""><br/></span>    <span class="">boolean</span><span class=""> chewy    </span><span class="">=</span><span class=""> </span><span class="">false;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 2.7</b>    
+            src/main/java/Lollipop.java</p>
+                
+                <p class="standard">As before, note that, when multiple variables of the same type are declared, a comma separates the identifiers. How you declare these variables also affects the initialization. For example, consider the following code:</p>
+                
+                <div class="listing " id="l_none_2324"><pre><span class="">boolean</span><span class=""> sticky     </span><span class="">=</span><span class=""> </span><span class="">true,</span><span class=""><br/></span>        chewy      <span class="">=</span><span class=""> </span><span class="">true;</span><span class=""><br/></span><span class="">String</span><span class="">  person1    </span><span class="">=</span><span class=""> </span><span class="">"Silvio"</span><span class="">,</span><span class=""><br/></span>        person2    <span class="">=</span><span class=""> </span><span class="">"Ruby"</span><span class="">;</span><span class=""><br/></span><span class="">double</span><span class="">  x</span><span class="">,</span><span class=""> y,</span><br/>        bodyHeight <span class="">=</span><span class=""> </span><span class="">165</span><span class=""> /* cm */</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The lines declare several variables at once. The variables 
+                    <samp class="listingcharacter listingcharacter">x</samp> and 
+                    <samp class="listingcharacter listingcharacter">y</samp>
+                 at the end remain uninitialized.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.3.2.3">Calculating Interest: An Example of Variable Declaration, Initialization, and Output</h4>
+                
+                <p class="standard">Using the console output, we can now program a simple interest calculator. This program is supposed to output the interest on a given principal, at a given interest rate, after 1 year.</p>
+                
+                <div class="listing " id="l2.8"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> InterestRates </span><span class="">{</span><span class=""/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""/><br/>    <span class="">double</span><span class=""> capital      </span><span class="">=</span><span class=""> </span><span class="">20000</span><span class=""> </span><span class="">/* Euro */</span><span class="">;</span><span class=""/><br/><span class="">    </span><span class="">double</span><span class=""> interestRate = </span><span class="">3.6</span><span class="">   </span><span class="">/* percent */</span><span class="">;</span><span class=""/><br/><span class="">    </span><span class="">double</span><span class=""> totalInterestRate = capital * interestRate / </span><span class="">100</span><span class="">; </span><span class="">// Year 1</span><span class=""/><br/><span class="">    System.out.</span><span class="">print</span><span class="">( </span><span class="">"Interest: "</span><span class=""> );</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( totalInterestRate );  </span><span class="">// 720.0</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 2.8</b>    
+            src/main/java/InterestRates.java</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first">Strings can be attached to each other with a plus sign. If a segment isn’t a string, it will be converted to a string and then appended.</p>
+                    
+                    <div class="listing " id="l_none_2326"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Interest: "</span><span class=""> </span><span class="">+</span><span class=""> totalInterestRate </span><span class="">);</span><span class="">  </span><span class=""> // Interest: 720.0</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">More examples follow in 
+                        <span class="crossreference "><a href="02_004.html#h2.4.11">Section 2.4.11</a></span>
+                    .</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.3.3">2.3.3    
+                <a id="p109"/>
+            Automatic Type Detection with var</h3>
+            
+            <p class="standard">When variables are declared, the variable type can be replaced by 
+                <samp class="listingcharacter listingcharacter">var</samp>
+             in some cases.</p>
+            
+            <div class="listing " id="l2.9"><pre>var name <span class="">=</span><span class=""> </span><span class="">"Lollipop"</span><span class="">;</span><span class=""><br/></span>var quantity <span class="">=</span><span class=""> </span><span class="">12</span><span class="">;</span><span class=""><br/></span>var price <span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span>var sticky <span class="">=</span><span class=""> </span><span class="">false;</span><span class=""><br/></span>var chewy <span class="">=</span><span class=""> </span><span class="">false;</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 2.9</b>    
+            src/main/java/VarLollipop.java (Snippet)</p>
+            
+            <p class="standard">Note that, unlike our previous example, variable types such as 
+                <samp class="listingcharacter listingcharacter">string</samp> or 
+                <samp class="listingcharacter listingcharacter">int</samp> are no longer explicit in the code when declaring variables, only 
+                <samp class="listingcharacter listingcharacter">var</samp>. However, this omission doesn’t mean that the compiler leaves the types open! The compiler absolutely needs information to the right of the equal sign to determine the type. This scenario is called 
+                <span class="italic">local-variable type inference</span>
+            . </p>
+            
+            <p class="standard">For this reason, a discrepancy exists in our program, namely, at 
+                <samp class="listingcharacter listingcharacter">var price = 1</samp>, which clearly demonstrates a problem with 
+                <samp class="listingcharacter listingcharacter">var</samp>. The variable is no longer a 
+                <samp class="listingcharacter listingcharacter">double</samp> as before, but 
+                <samp class="listingcharacter listingcharacter">1</samp> is an integer literal, so the Java compiler gives the variable 
+                <samp class="listingcharacter listingcharacter">price </samp>the type 
+                <samp class="listingcharacter listingcharacter">int</samp>
+            .</p>
+            
+            <p class="standard">The use of 
+                <samp class="listingcharacter listingcharacter">var</samp> is intended to help developers write shorter code, especially when the variable name already clearly indicates the type. If we find a 
+                <samp class="listingcharacter listingcharacter">text</samp> variable, the 
+                <samp class="listingcharacter listingcharacter">string</samp> type is obvious, just as 
+                <samp class="listingcharacter listingcharacter">length</samp> or 
+                <samp class="listingcharacter listingcharacter">size</samp> is an 
+                <samp class="listingcharacter listingcharacter">int</samp> or a prefix like 
+                <samp class="listingcharacter listingcharacter">is</samp> or 
+                <samp class="listingcharacter listingcharacter">has</samp> indicates a 
+                <samp class="listingcharacter listingcharacter">boolean</samp>
+             variable. </p>
+            
+            <p class="standard">But if 
+                <samp class="listingcharacter listingcharacter">var</samp>
+             is used at the expense of comprehensibility, the abbreviation should not be used. The Java compiler also provides the following barriers:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">var</samp> is only possible if an initialization specifies a type. A declaration of the type 
+                        <samp class="listingcharacter listingcharacter">var age;</samp>
+                     without initialization is not possible and leads to a compiler error.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">var</samp> can only be used with local variables. But variables can be declared in Java in other places, for instance, where using 
+                        <samp class="listingcharacter listingcharacter">var</samp>
+                     isn’t possible.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Language Comparison</h6>
+                
+                <p class="standard first last">Java is relatively late with 
+                    <samp class="listingcharacter listingcharacter">var</samp>.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_17" id="fn02_17">[ 49 ]</a></span> Other statically typed languages have provided this option for a long time, for example, C++ with 
+                    <samp class="listingcharacter listingcharacter">auto</samp> or C# with 
+                    <samp class="listingcharacter listingcharacter">var</samp>. JavaScript also uses 
+                    <samp class="listingcharacter listingcharacter">var</samp>, but in a completely different context: In JavaScript, variables aren’t typed until runtime, and all operations aren’t checked until execution time, whereas Java doesn’t abandon type safety with 
+                    <samp class="listingcharacter listingcharacter">var</samp>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.3.4">2.3.4    
+                <a id="p110"/>
+            Final Variables and the final Modifier</h3>
+            
+            <p class="standard">Variables can be declared with the 
+                <samp class="listingcharacter listingcharacter">final</samp>
+                <a class="indexanchor" id="i02_82"/>
+             modifier so that exactly one assignment is possible. This additional keyword consequently prohibits further assignment to this variable, so that it can no longer be changed. A common use case for this modifier is to define constants, as in the following example:</p>
+            
+            <div class="listing " id="l_none_2353"><pre><span class="">int</span><span class=""> width </span><span class="">=</span><span class=""> </span><span class="">40</span><span class="">,</span><span class=""> height </span><span class="">=</span><span class=""> </span><span class="">12</span><span class="">;</span><span class=""><br/></span>
+                <span class="bold"><span class="">final</span></span><span class=""> </span><span class="">int</span><span class=""> area = width * height;</span><br/>
+                <span class="bold"><span class="">final</span></span><span class=""> </span><span class="">int</span><span class=""> perimeter;</span><br/>
+                <span class="bold"><span class="">final</span></span><span class=""> var random = Math.</span><span class="">random</span><span class="">() * </span><span class="">100</span><span class="">;</span><br/>perimeter = width * <span class="">2</span><span class=""> + height * </span><span class="">2</span><span class="">;</span><br/>area = <span class="">200</span><span class="">;        </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Compiler error</span><span class=""><br/></span>perimeter = <span class="">100</span><span class="">;   </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Compiler error</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="standard">In the case of an attempted second assignment, compiler errors will occur.</p>
+            
+            <p class="standard">Java allows 
+                <span class="italic">deferred initialization</span> for final values
+                <a class="indexanchor" id="i02_83"/>
+                <a class="indexanchor" id="i02_84"/>. Thus, assigning a value at the time of variable declaration isn’t mandatory, as shown in our example, with the 
+                <samp class="listingcharacter listingcharacter">perimeter</samp>
+             variable.</p>
+            
+            <p class="standard">If variables are declared and initialized, 
+                <samp class="listingcharacter listingcharacter">final</samp> and 
+                <samp class="listingcharacter listingcharacter">var</samp> can be used together. Some programming languages provide their own keyword for this case (e.g., 
+                <samp class="listingcharacter listingcharacter">val</samp>
+            ), but Java doesn’t.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Outlook</h6>
+                
+                <p class="standard first">Object variables and class variables can also be final. However, the variables must then either be assigned in the declaration or in a deferred initialization in the constructor. We’ll cover this topic in more detail in 
+                    <span class="crossreference "><a href="06_001.html#h6">Chapter 6</a></span>, 
+                    <span class="crossreference "><a href="06_004.html#h6.4.1">Section 6.4.1</a></span>
+                . If final variables are inherited, subclasses can no longer overwrite this value either (which could be a problem, but perhaps also an advantage, for some constants).</p>
+                
+                <p class="standard last">The 
+                    <samp class="listingcharacter listingcharacter">final</samp> keyword has additional meanings in the context of inheritance. We’ll look at that later in 
+                    <span class="crossreference "><a href="02_007.html#h2.7.2">Section 2.7.2</a></span>
+                 as well.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.3.5">2.3.5    Console Inputs</h3>
+            
+            <p class="standard">So far, you’ve learned about methods for output and 
+                <samp class="listingcharacter listingcharacter">random()</samp>. The 
+                <samp class="listingcharacter listingcharacter">println(...)</samp> methods “hang” on the 
+                <samp class="listingcharacter listingcharacter">System.out</samp> or 
+                <samp class="listingcharacter listingcharacter">System.err </samp>object, and 
+                <samp class="listingcharacter listingcharacter">random()</samp> “hangs” on the 
+                <samp class="listingcharacter listingcharacter">Math</samp>
+             object.</p>
+            
+            <p class="standard">The counterpart to 
+                <samp class="listingcharacter listingcharacter">print*(...)</samp> is a console input, with several different variants. The simplest variant involves the 
+                <samp class="listingcharacter listingcharacter">java.util.Scanner</samp> class. In 
+                <span class="crossreference "><a href="05_001.html#h5">Chapter 5</a></span>, 
+                <span class="crossreference "><a href="05_010.html#h5.10.2">Section 5.10.2</a></span>
+            , we’ll examine this class in much more detail. However, at this point, we just want to emphasize how strings, integers, and floats are read.</p>
+            
+            <table class="standardtable" id="t2.7">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a id="p111"/>
+                            Reading Input of Type</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Statement</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">String</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">String s = new java.util.Scanner(System.in).nextLine();</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int i = new java.util.Scanner(System.in).nextInt();</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double d = new java.util.Scanner(System.in).nextDouble();</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 2.7</b>    
+            Reading a String or Integer and Float from the Console</p>
+            
+            <p class="standard">Let’s combine the three possibilities into one example. The next program will first read a string, then an integer, and finally a float.</p>
+            
+            <div class="listing " id="l2.10"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> SmallConversation </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Hey! What’s your favorite candy?"</span><span class=""> </span><span class="">);</span><br/>    <span class="">String</span><span class=""> name = </span><span class="">new</span><span class=""> java.util.</span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">nextLine</span><span class="">();</span><br/><br/>    System.out.<span class="">printf</span><span class="">( </span><span class="">"How many %s candy can you eat?%n"</span><span class="">, name );</span><br/>    <span class="">int</span><span class=""> quantity = </span><span class="">new</span><span class=""> java.util.</span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">nextInt</span><span class="">();</span><br/><br/>    System.out.<span class="">printf</span><span class="">( </span><span class="">"I see, %s. And how much did that cost?%n"</span><span class="">, quantity );</span><br/>    <span class="">double</span><span class=""> value = </span><span class="">new</span><span class=""> java.util.</span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">nextDouble</span><span class="">();</span><br/><br/>    System.out.<span class="">printf</span><span class="">( </span><span class="">"%s? I see, I was guessing %s.%n"</span><span class="">,</span><br/>                       value, value * <span class="">2</span><span class=""> / </span><span class="">3</span><span class=""> );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 2.10</b>    
+            src/main/java/SmallConversation.java</p>
+            
+            <p class="standard">The conversation thus looks something like this:</p>
+            
+            <div class="listing " id="l_none_2380"><pre>Hey! What's your favorite candy?<br/>Tootsie Roll<br/>How many Tootsie Roll candy can you eat?<br/>9<br/>I see, 9. And how much did that cost?<br/>6.90<br/>6.9? I see, I was guessing 4.6000000000000005 </pre></div>
+            
+            <p class="standard">The float must be entered in a localized manner. Floats often can’t be represented quite precisely, hence the strange output.</p>
+            
+            <p class="standard">The output via 
+                <samp class="listingcharacter listingcharacter">printf(...)</samp> can also write localized floats, with the format specifier 
+                <samp class="listingcharacter listingcharacter">%f</samp> and 
+                <samp class="listingcharacter listingcharacter">%g</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>
+                    <a id="p112"/>
+                Dialog Input</h6>
+                
+                <p class="standard first">If the input doesn’t originate from the console, but from a separate dialog instead, a class from the 
+                    <samp class="listingcharacter listingcharacter">Swing</samp>
+                 package can be helpful, as shown in the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_2400"><pre><span class="">String</span><span class=""> input </span><span class="">=</span><span class=""> javax</span><span class="">.</span><span class="">swing</span><span class="">.</span><span class="">JOptionPane</span><span class="">.</span><span class="">showInputDialog</span><span class="">(</span><span class=""> </span><span class="">"Input"</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.3.6">2.3.6    Truth Values</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">boolean</samp> data type describes a truth value that’s either 
+                <samp class="listingcharacter listingcharacter">true</samp> or 
+                <samp class="listingcharacter listingcharacter">false</samp>. The strings 
+                <samp class="listingcharacter listingcharacter">true</samp> and 
+                <samp class="listingcharacter listingcharacter">false</samp>
+             are reserved words and form literals along with constant strings and primitive data types. No other value is possible for truth values; in particular, numeric values aren’t interpreted as truth values.</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">boolean</samp>
+             type is needed for conditions, branches, and loops, for example. As a rule, a truth value results from comparisons.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.3.7">2.3.7    Integer Data Types</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i02_85"/>Java provides five integer data types: 
+                <samp class="listingcharacter listingcharacter">byte</samp>
+                <a class="indexanchor" id="i02_86"/>, 
+                <samp class="listingcharacter listingcharacter">short</samp>
+                <a class="indexanchor" id="i02_87"/>, 
+                <samp class="listingcharacter listingcharacter">char</samp>
+                <a class="indexanchor" id="i02_88"/>, 
+                <samp class="listingcharacter listingcharacter">int</samp>,
+                <a class="indexanchor" id="i02_89"/> and 
+                <samp class="listingcharacter listingcharacter">long</samp>
+                <a class="indexanchor" id="i02_90"/>, with
+                <samp class="listingcharacter listingcharacter"> </samp>fixed lengths of 1, 2, 4, and 8 bytes, respectively, which is an essential feature of Java. Integer types are always signed in Java (with the exception of 
+                <samp class="listingcharacter listingcharacter">char</samp>); no 
+                <samp class="listingcharacter listingcharacter">unsigned</samp> modifier exists, as in C(++).
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_18" id="fn02_18">[ 50 ]</a></span> Negative numbers are formed by prefixing them with a minus sign. A plus sign for positive characters is possible. 
+                <samp class="listingcharacter listingcharacter">int</samp> and 
+                <samp class="listingcharacter listingcharacter">long</samp> are the preferred types. 
+                <samp class="listingcharacter listingcharacter">byte</samp> rarely occurs, and 
+                <samp class="listingcharacter listingcharacter">short</samp>
+             only in really rare cases, such as arrays with image data.</p>
+            
+            
+                
+                <h4 class="t4" id="h2.3.7.1">Integers Are by Default of the int Type</h4>
+                
+                <p class="standard">Looking at following code line, no error is seen on first sight:</p>
+                
+                <div class="listing " id="l_none_2407"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">123456789012345</span><span class=""> </span><span class="">);</span><span class="">     </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                    </span><span class=""> </span></pre></div>
+                
+                <p class="standard">Nevertheless, the compiler won’t translate the line because it assumes an integer literal without explicit size specification as a 32-bit 
+                    <samp class="listingcharacter listingcharacter">int</samp>. The line therefore results in a compiler error since our number isn’t within the valid 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                 value range of –2,147,483,648 to +2,147,483,647, but instead far outside (2,147,483,647 &lt; 123,456,789,012,345). Thus, Java doesn’t reserve as many bits as needed and doesn’t automatically select the appropriate range of values.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.3.7.2">Larger Integer Values with long</h4>
+                
+                <p class="standard">The Java compiler automatically considers any integer literal as 
+                    <samp class="listingcharacter listingcharacter">int</samp>. If the value range of about +/–2 billion isn’t sufficient, developers resort to the next higher data type, the 
+                    <samp class="listingcharacter listingcharacter">
+                        <a id="p113"/>
+                    long</samp> data type. The fact that a number is 
+                    <samp class="listingcharacter listingcharacter">long</samp> must be explicitly stated. For this purpose, an 
+                    <samp class="listingcharacter listingcharacter">l</samp> or 
+                    <samp class="listingcharacter listingcharacter">L</samp> is placed at the end of integer literals of the 
+                    <samp class="listingcharacter listingcharacter">long</samp> type. To make the output of the number 
+                    <samp class="listingcharacter listingcharacter">123456789012345</samp>
+                 valid, you must write the following:</p>
+                
+                <div class="listing " id="l_none_2405"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> 123456789012345</span>
+                    <span class="bold"><span class="">L</span></span> ); <span class=""/></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first last">The lowercase “l” looks similar to the number one. For this reason, an uppercase “L” should always be used in length specifications.</p>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Question</h6>
+                    
+                    <p class="standard first">What will the following statement output?</p>
+                    
+                    <div class="listing  last_item" id="l_none_2418"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">123456789</span><span class=""> </span><span class="">+</span><span class=""> 5432l </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.3.7.3">The byte Data Type</h4>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">byte</samp>
+                 is a data type with a value range from –128 to +127. An initialization like</p>
+                
+                <div class="listing " id="l_none_2421"><pre><span class="">byte</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">200</span><span class="">;</span><span class="">                </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                    </span><span class=""> </span></pre></div>
+                
+                <p class="standard">is therefore not allowed, since 200 &gt; 127. Thus, all numbers from 128 to 255 (hexadecimal 
+                    <samp class="listingcharacter listingcharacter">0x80</samp> to 
+                    <samp class="listingcharacter listingcharacter">0xFF</samp>) are dropped. In data processing, the Java 
+                    <samp class="listingcharacter listingcharacter">byte</samp>
+                 isn’t really useful because it has a sign, and especially in file processing, value ranges from 0 to 255 are required.</p>
+                
+                <p class="standard">Java doesn’t permit unsigned integers, but with an explicit type conversion number like 200 can be stored in a 
+                    <samp class="listingcharacter listingcharacter">byte</samp>
+                , for example, in the following code:</p>
+                
+                <div class="listing " id="l_none_2433"><pre><span class="">byte</span><span class=""> b </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">(</span><span class="">byte</span><span class="">)</span></span> <span class="">200</span><span class="">; </span><span class=""/></pre></div>
+                
+                <p class="standard">The Java compiler simply takes the bit assignment of 200 (
+                    <samp class="listingcharacter listingcharacter">0b00000000_00000000_00000000_</samp>
+                    <span class="bold">
+                        <samp class="listingcharacter listingcharacter">1</samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">1001000</samp>
+                ), cuts off the upper 3 bytes during type conversion and interprets the uppermost bit then set as a sign bit, as shown in the following output:</p>
+                
+                <div class="listing " id="l_none_2462"><pre><span class="">byte</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)</span><span class=""> </span><span class="">200</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> b </span><span class="">);</span><span class="">     </span><span class=""> // -56</span><span class=""> </span></pre></div>
+                
+                <p class="standard">More information about type conversion will follow in 
+                    <span class="crossreference "><a href="02_004.html#h2.4.10">Section 2.4.10</a></span>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.3.7.4">The short * Data Type</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">short</samp> data type is rarely encountered. With its 2 bytes, this data type can represent a value range from –32,768 to +32,767. The sign “costs” 1 bit as with the other integers. 
+                    <a id="p114"/>Thus, this data type has 16 bits, but only 15 bits are available for numbers. However, as with 
+                    <samp class="listingcharacter listingcharacter">byte</samp>, an unsigned 
+                    <samp class="listingcharacter listingcharacter">short</samp>
+                 can also be initialized in two ways:</p>
+                
+                <div class="listing " id="l_none_2458"><pre><span class="">short</span><span class=""> s </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">(</span><span class="">short</span><span class="">)</span></span> <span class="">33000</span><span class="">;</span><br/>System.out.<span class="">println</span><span class="">( s );     </span><span class=""> // -32536</span><span class=""> </span><span class=""/></pre></div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.3.8">2.3.8    Underscores in Numbers
+                <a class="indexanchor" id="i02_91"/>
+            </h3>
+            
+            <p class="standard">In some areas of application, numbers can get large rather quickly, for example, in the context of conversions. For instance, the 
+                <samp class="listingcharacter listingcharacter">System.currentTimeMillis()</samp>
+             method returns the milliseconds that have passed since 1/1/1970, 00:00 according to the system clock. At 12:26:40 (UTC) on September 13, 2020, that’s 1,600,000,000,000 milliseconds. How can we convert this number to days?</p>
+            
+            <p class="standard">To convert a number of milliseconds into days, a division operation can be made. To convert milliseconds to seconds, we’ll divide by 1,000; from seconds to minutes, divide by 60; from minutes to hours, divide by 60; and then for hours to days, the final division by 24. The product of 24 * 60 * 1,000 is 86,400,000. Let’s write that down to make a calculation from the current time with the following code:</p>
+            
+            <div class="listing " id="l_none_2469"><pre><span class="">long</span><span class=""> currentMillis </span><span class="">=</span><span class=""> System</span><span class="">.</span><span class="">currentTimeMillis</span><span class="">();</span><span class=""><br/></span><span class="">long</span><span class=""> days </span><span class="">=</span><span class=""> currentMillis</span><span class=""> / 86400000L;</span><br/>System.out.println( days );  <span class=""> // 18530</span><span class=""> </span></pre></div>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">86400000L</samp> is not particularly readable. Java provides the solution to make numeric literals more readable by means of an underscore. Instead of 
+                <samp class="listingcharacter listingcharacter">86400000L</samp>
+            , we can write:</p>
+            
+            <div class="listing " id="l_none_2479"><pre><span class="">long</span><span class=""> days </span><span class="">=</span><span class=""> currentMillis </span><span class="">/</span><span class=""> 86_400_000L</span><span class="">;</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The underscores make the blocks of 1,000 easy to read.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_19" id="fn02_19">[ 51 ]</a></span>
+            </p>
+            
+            <p class="standard">Another solution is avoid using such a number at all and build it up by 
+                <samp class="listingcharacter listingcharacter">24 * 60 * 60 * 1000L</samp>
+            —this approach doesn’t cost more runtime since this constant expression is fixed at translation time. In this case, building up the number is the better approach.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The underscore notation is also helpful for literals in binary and hexadecimal representation since the underscores can also set off blocks, as in the following examples:</p>
+                
+                <div class="listing " id="l_none_2500"><pre><span class="">int</span><span class="">  i </span><span class="">=</span><span class=""> 0b01101001_01001101_11100101_01011110</span><span class="">;</span><span class=""><br/></span><span class="">long</span><span class=""> l </span><span class="">=</span><span class=""> 0x7fff_ffff_ffff_ffffL;</span></pre></div>
+                
+                <p class="standard last">A literal starts with 
+                    <samp class="listingcharacter listingcharacter">0b</samp> in binary notation, with 
+                    <samp class="listingcharacter listingcharacter">0x</samp> in hexadecimal notation. More details follow in 
+                    <span class="crossreference "><a href="21_001.html#h21">Chapter 21</a></span>, 
+                    <span class="crossreference "><a href="21_001.html#h21.1.3">Section 21.1.3</a></span>
+                .</p>
+            
+            </div>
+            
+            <p class="standard">
+                <a id="p115"/>
+            The underscore can be used in any numeric literal, but two consecutive underscores aren’t allowed, and it must not be located at the beginning.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The underscores in literals are just an aid like spaces for indentation and won’t be translated into the bytecode. In the class file, 
+                    <samp class="listingcharacter listingcharacter">0b01101001_01001101_11100101_01011110</samp> and 
+                    <samp class="listingcharacter listingcharacter">0b01101001010011011110010101011110</samp> look identical, especially because they are stored as the integer 
+                    <samp class="listingcharacter listingcharacter">1766712670</samp>
+                 anyway.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.3.9">2.3.9    Alphanumeric Characters</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i02_92"/>The alphanumeric data type 
+                <samp class="listingcharacter listingcharacter">char</samp>
+                <a class="indexanchor" id="i02_93"/> (from 
+                <span class="italic">character</span>) is 2 bytes in size and holds one Unicode character. A 
+                <samp class="listingcharacter listingcharacter">char</samp> is unsigned. The literals for characters are placed in single quotation marks. Language beginners often confuse the single quotation marks
+                <a class="indexanchor" id="i02_94"/>
+                <a class="indexanchor" id="i02_95"/> with the quotation marks
+                <a class="indexanchor" id="i02_96"/>
+             of strings. The simple mnemonic rule is: one character—one quotation mark; several characters—two quotation marks.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The correct quotation marks for characters and strings are shown in the following examples:</p>
+                
+                <div class="listing " id="l_none_2504"><pre><span class="">char</span><span class="">   c </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">'</span></span>a
+                    <span class="bold">'</span><span class="">;</span><br/><span class="">String</span><span class=""> s = </span>
+                    <span class="bold"><span class="">"</span></span>Already barked today?
+                    <span class="bold">"</span><span class="">;</span><span class=""/></pre></div>
+                
+                <p class="standard last">Since the compiler can automatically convert a 
+                    <samp class="listingcharacter listingcharacter">char</samp> to an 
+                    <samp class="listingcharacter listingcharacter">int</samp>, the expression 
+                    <samp class="listingcharacter listingcharacter">int c = 'a';</samp>
+                 is also valid.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.3.10">2.3.10    The float and double Data Types</h3>
+            
+            <p class="standard">For floats
+                <a class="indexanchor" id="i02_97"/> (also called 
+                <span class="italic">floating point numbers</span>) of simple and increased precision, Java provides the data types 
+                <samp class="listingcharacter listingcharacter">float</samp> and 
+                <samp class="listingcharacter listingcharacter">double</samp>. These data types are described in the IEEE-754 standard
+                <a class="indexanchor" id="i02_98"/> and have a length of 4 bytes for 
+                <samp class="listingcharacter listingcharacter">float</samp> and 8 bytes for 
+                <samp class="listingcharacter listingcharacter">double</samp>
+            . Float literals can have a pre-decimal part and a post-decimal part separated by a decimal point (no comma). A float literal doesn’t require any digits before or after the decimal point, so the following code is also valid:</p>
+            
+            <div class="listing " id="l_none_2507"><pre><span class="">double</span><span class=""> d </span><span class="">=</span><span class=""> </span><span class="">10.0</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">20</span><span class="">.</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">.</span><span class="">11</span><span class="">;</span><span class=""> </span></pre></div>
+            
+            <p class="standard">Using only the dot is of course nonsense, whereas 
+                <samp class="listingcharacter listingcharacter">.0</samp>
+             is certainly allowed.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The 
+                    <samp class="listingcharacter listingcharacter">float</samp> data type is a bad joke with 4 bytes (i.e., 32 bits). The 
+                    <samp class="listingcharacter listingcharacter">double</samp>
+                 data type is just fine with 64 bits. The IA32, x86-64, and Itanium processors support a “double extended” mode with 80 bits and thus offer better precision.</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p116"/>
+                Note</h6>
+                
+                <p class="standard first">The compiler doesn’t report an error if a float can’t be read precisely. No mistake exists in writing the following:</p>
+                
+                <div class="listing  last_item" id="l_none_2534"><pre><span class="">double</span><span class=""> pi </span><span class="">=</span><span class=""> </span><span class="">3.141592653589793238462643383279502884197169399375105820974944592</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h2.3.10.1">The float * Data Type</h4>
+                
+                <p class="standard">By default, float literals are of the 
+                    <samp class="listingcharacter listingcharacter">double</samp> type. A trailing 
+                    <samp class="listingcharacter listingcharacter">f</samp> (or 
+                    <samp class="listingcharacter listingcharacter">F</samp>) indicates to the compiler that the value is a 
+                    <samp class="listingcharacter listingcharacter">float</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Valid assignments for floats of the 
+                        <samp class="listingcharacter listingcharacter">double</samp> and 
+                        <samp class="listingcharacter listingcharacter">float</samp>
+                     types include the following:</p>
+                    
+                    <div class="listing  last_item" id="l_none_2533"><pre><span class="">double</span><span class=""> pi </span><span class="">=</span><span class=""> </span><span class="">3.1415</span><span class="">,</span><span class=""> delta </span><span class="">=</span><span class=""> </span><span class="">.</span><span class="">001</span><span class="">;</span><span class=""><br/></span><span class="">float</span><span class="">  ratio  </span><span class="">=</span><span class=""> </span><span class="">4</span><span class="">.</span><span class="">33F;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">d</samp> (or 
+                    <samp class="listingcharacter listingcharacter">D</samp>) can also be added for the 
+                    <samp class="listingcharacter listingcharacter">double</samp> data type, but this addition isn’t necessary if literals for decimal numbers are in the source code; numbers like 
+                    <samp class="listingcharacter listingcharacter">3.1415</samp> are automatically of the 
+                    <samp class="listingcharacter listingcharacter">double</samp> type. However, while 
+                    <samp class="listingcharacter listingcharacter">1 + 2 + 4.0</samp> first adds 
+                    <samp class="listingcharacter listingcharacter">1</samp> and 
+                    <samp class="listingcharacter listingcharacter">2</samp> as 
+                    <samp class="listingcharacter listingcharacter">int</samp>, then converts the event to 
+                    <samp class="listingcharacter listingcharacter">double</samp>, and then adds 
+                    <samp class="listingcharacter listingcharacter">4.0</samp>, the expression 
+                    <samp class="listingcharacter listingcharacter">1D + 2 + 4.0</samp> would start right away with the float 
+                    <samp class="listingcharacter listingcharacter">1</samp>. Thus, 
+                    <samp class="listingcharacter listingcharacter">1D</samp> is also equal to 
+                    <samp class="listingcharacter listingcharacter">1.</samp> or 
+                    <samp class="listingcharacter listingcharacter">1.0</samp>.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_20" id="fn02_20">[ 52 ]</a></span>
+                </p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Question</h6>
+                    
+                    <p class="standard first">What’s the resulting output of the following lines of code?</p>
+                    
+                    <div class="listing  last_item" id="l_none_2544"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> 20000000000F </span><span class="">==</span><span class=""> 20000000000F</span><span class="">+</span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> 20000000000D </span><span class="">==</span><span class=""> 20000000000D</span><span class="">+</span><span class="">1</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first last">What are the value ranges of 
+                        <samp class="listingcharacter listingcharacter">float</samp> and 
+                        <samp class="listingcharacter listingcharacter">double</samp>?
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_21" id="fn02_21">[ 53 ]</a></span>
+                    </p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.3.10.2">
+                    <a id="p117"/>
+                Even More Precise Resolution for Floats*</h4>
+                
+                <p class="standard">No higher resolution or more precise data type for floats exists than 
+                    <samp class="listingcharacter listingcharacter">double</samp>. The standard library provides the 
+                    <samp class="listingcharacter listingcharacter">BigDecimal</samp> class for this task in 
+                    <samp class="listingcharacter listingcharacter">java.math</samp>, which is described in more detail in 
+                    <span class="crossreference "><a href="21_001.html#h21">Chapter 21</a></span>, 
+                    <span class="crossreference "><a href="21_006.html#h21.6">Section 21.6</a></span>. This class is useful for data that should have particularly good accuracy, such as currencies.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_22" id="fn02_22">[ 54 ]</a></span>
+                </p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Language Comparison</h6>
+                    
+                    <p class="standard first last">In C#, the 
+                        <samp class="listingcharacter listingcharacter">decimal</samp>
+                     data type has 128 bits (i.e., 16 bytes) and thus also offers enough precision to express a number like 0.000000000000000000000000001.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.3.11">2.3.11    Good Names, Bad Names</h3>
+            
+            <p class="standard">For optimal readability and comprehensibility in the code, developers should consider some points when writing code:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">A consistent naming schema is important <br/></span>Is a numerator called 
+                        <samp class="listingcharacter listingcharacter">nu</samp>, 
+                        <samp class="listingcharacter listingcharacter">num</samp>, 
+                        <samp class="listingcharacter listingcharacter">nur</samp>, or 
+                        <samp class="listingcharacter listingcharacter">numerator</samp>? Also, we should write correct text and pay attention to spelling mistakes; otherwise, 
+                        <samp class="listingcharacter listingcharacter">necessaryConnection</samp> easily becomes 
+                        <samp class="listingcharacter listingcharacter">nesesarryConnection</samp>. Variables of similar notation, such as 
+                        <samp class="listingcharacter listingcharacter">counter</samp> and 
+                        <samp class="listingcharacter listingcharacter">counters</samp>
+                    , should be avoided.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Abstract identifiers should also be avoided <br/></span>The declaration 
+                        <samp class="listingcharacter listingcharacter">int TEN = 10;</samp> is absurd. A nonsensical idea is also the following: 
+                        <samp class="listingcharacter listingcharacter">boolean FALSE = true, TRUE = false;</samp>. The program code would then work with 
+                        <samp class="listingcharacter listingcharacter">FALSE</samp> and 
+                        <samp class="listingcharacter listingcharacter">TRUE</samp>
+                    . Code written in this way would win top place in a contest for the most botched Java program.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Some Unicode characters can be included in identifiers, but they should be avoided <br/></span>The statements 
+                        <samp class="listingcharacter listingcharacter">int Ⅳ = 4; int Ⅴ = 5; double λ = Ⅳ + Ⅴ;</samp>
+                     are however correct.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">0 and O and 1 and l are easily confused <br/></span>The combination “rn” is difficult to read and, depending on the character set, easily confused with “m.”
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_23" id="fn02_23">[ 55 ]</a></span> Also valid—but bad—is: 
+                        <samp class="listingcharacter listingcharacter">int ínt, ìnt, înt; boolean bôõleañ</samp>
+                    ;.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Remark</h6>
+                
+                <p class="standard first last">Using unique names for your variables is vital. When vague names like 
+                    <samp class="listingcharacter listingcharacter">temp1</samp>, 
+                    <samp class="listingcharacter listingcharacter">temp2</samp>
+                , etc. are used, how can you tell the difference between them?</p>
+            
+            </div>
+            
+            <p class="standard">
+                <a id="p118"/>If a designator name is chosen in an unfortunate way (
+                <samp class="listingcharacter listingcharacter">pneumonoultramicroscopicsilicovolcanoconiosis</samp> is indeed a bit long), consistent renaming is still possible. Select 
+                <span class="screenelement">Refactor</span> • 
+                <span class="screenelement">Rename…</span> or press 
+                <span class="keyboard">(Shift)</span>+
+                <span class="keyboard">(F6)</span>
+            ; the cursor must be on the identifier. At the same time, all references to the variable will change along with it.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.3.12">2.3.12    No Automatic Initialization of Local Variables</h3>
+            
+            <p class="standard">The runtime environment—or the compiler—doesn’t automatically initialize local variables with a null value or truth variants with 
+                <samp class="listingcharacter listingcharacter">false</samp>. Before reading, local variables must be initialized manually; otherwise, a compiler error will occur.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_24" id="fn02_24">[ 56 ]</a></span>
+            </p>
+            
+            <p class="standard">In the following example, the two local variables 
+                <samp class="listingcharacter listingcharacter">quantity</samp> and 
+                <samp class="listingcharacter listingcharacter">chewy</samp> aren’t automatically initialized, and so a compiler error occurs when 
+                <samp class="listingcharacter listingcharacter">quantity</samp> and 
+                <samp class="listingcharacter listingcharacter">chewy</samp>
+             are attempted to be output. The reason is that initialization is necessary prior to the read access.</p>
+            
+            <div class="listing " id="l_none_2565"><pre><span class="">int</span><span class="">     </span>
+                <span class="bold"><span class="">quantity</span></span>;<br/><span class="">boolean</span><span class=""> </span>
+                <span class="bold">chewy</span>;<br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">quantity </span>);   <span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 </span><br/>// variable quantity might not have been initialized<span class=""><br/></span>quantity = <span class="">18</span><span class="">;</span><br/><span class="">if</span><span class=""> ( </span>
+                <span class="bold">quantity</span> &gt;= <span class="">10</span><span class=""> )             </span><span class=""> // case distinction: if-then</span><span class=""><br/></span>  
+                <span class="bold">chewy</span> = true;<br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">chewy</span> ); <span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 </span><br/>// variable chewy might not have been initialized<span class=""> </span><span class=""/></pre></div>
+            
+            <p class="standard">Because assignments in conditional statements might not be executed, the compiler also reports an error with 
+                <samp class="listingcharacter listingcharacter">System.out.println(chewy)</samp> because it determines a program flow without an assignment. Since 
+                <samp class="listingcharacter listingcharacter">chewy</samp> is only set to the value 
+                <samp class="listingcharacter listingcharacter">true</samp> after the 
+                <samp class="listingcharacter listingcharacter">if</samp> query, write access to 
+                <samp class="listingcharacter listingcharacter">chewy</samp> would only occur, and subsequent read access would only be possible under the condition that 
+                <samp class="listingcharacter listingcharacter">quantity</samp> is greater than or equal to 
+                <samp class="listingcharacter listingcharacter">10</samp>
+            . But since the compiler assumes that other cases might exist, accessing an uninitialized variable would be an error.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f2.4.html" id="f2.4"><img alt="IntelliJ Displaying Hints and Suggestions for Improvement When a Local Variable Isn’t Initialized but Is Accessed" id="img-f2.4" src="bilderklein/klein02_004.png"/></a></div>
+            
+            <p class="caption "><b>Figure 2.4</b>    
+            IntelliJ Displaying Hints and Suggestions for Improvement When a Local Variable Isn’t Initialized but Is Accessed</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

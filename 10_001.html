@@ -1,0 +1,173 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Nested Types" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Nested Types" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Nested Types</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h10">10    
+        <a id="p599"/>
+    Nested Types</h1><p class="introductorynote indent_chapter_double">“Utility is part of the beauty.”<br/>—Albrecht Dürer (1471–1528)</p><p class="standard">Java allows you to define a type declaration within another type declaration, creating a 
+        <span class="italic">nested type</span>
+    . In this chapter you’ll learn about nested types and how to use them.</p>
+        
+        <h2 class="t2" id="h10.1">10.1    Nested Classes, Interfaces, and Enumerations</h2>
+        
+        <p class="standard">So far, you’ve learned about classes, interfaces enumerations, and records that were declared either alone in the file or together with other types in a file (i.e., a compilation unit). In addition, however, you can include a type declaration in another type declaration. This option makes sense when the motivation is to hide even more details, for instance, local type declarations that don’t need more visibility.</p>
+        
+        <div class="imagebox figure-type"><a href="img-f_none_10_00.html" id="f_none_10_00"><img alt="" id="img-f_none_10_00" src="bilderklein/klein10_000_01.png"/></a></div>
+        
+        <p class="standard">This same principle applies for local variables: These variables are only visible to the method, not to the entire class. Nested types show a close dependency, and thus, a nested type is only useful in conjunction with the outer type.</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                <a id="p600"/>
+            Example</h6>
+            
+            <p class="standard first">A class declaration named 
+                <samp class="listingcharacter listingcharacter">In</samp> is placed in the class 
+                <samp class="listingcharacter listingcharacter">Out</samp>. Thus, 
+                <samp class="listingcharacter listingcharacter">In</samp> is a class nested in 
+                <samp class="listingcharacter listingcharacter">Out</samp>
+            , as shown in the following example: </p>
+            
+            <div class="listing  last_item" id="l_none_109"><pre><span class="">class</span><span class=""> Out </span><span class="">{</span><span class=""><br/></span>  <span class="">class</span><span class=""> In </span><span class="">{</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>}</pre></div>
+        
+        </div>
+        
+        <p class="standard">If a type declaration is placed inside another type declaration, we speak of a nested type
+            <a class="indexanchor" id="i10_00"/>
+            <a class="indexanchor" id="i10_01"/>
+        . Not only class declarations can be put in other class declarations: Interface declarations or enumeration types are allowed in class declarations as are class declarations in interface declarations; other combinations are valid. Nested types can be static or non-static.</p>
+        
+        <p class="standard">The Java Language Specification (JLS) describes four types of nested types.</p>
+        
+        <table class="standardtable" id="t10.1">
+            
+            <thead>
+                
+                <tr>
+                    
+                    <th class="tablehead tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">Type of Nesting</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">Example with Nested Classes</p>
+                    
+                    </th>
+                
+                </tr>
+            
+            </thead>
+            
+            <tbody>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">Static nested type</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last top_border_cell">
+                        
+                        <div class="listing " id="l_none_1020"><pre>class Out {<br/> 
+                            <span class="bold">static class In {}</span><br/>}</pre></div>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">Inner type (non-static nested type)</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <div class="listing " id="l_none_1036"><pre>class Out {<br/> 
+                            <span class="bold">class In { }</span><br/>}</pre></div>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">Local (inner) type</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <div class="listing " id="l_none_1034"><pre>class Out {<br/> Out() {<br/>  
+                            <span class="bold">class In { }</span><br/> }<br/>}</pre></div>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">Anonymous inner class</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <div class="listing " id="l_none_1050"><pre>class Out {<br/> Out() {<br/>  Runnable r = 
+                            <span class="bold">new Runnable(){<br/>   public void run() { }<br/>  };</span><br/> }<br/>}</pre></div>
+                    
+                    </td>
+                
+                </tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <p class="caption "><b>Table 10.1</b>    
+            The Four Types of Nested Types</p>
+        
+        <p class="standard">The non-static nested types are called 
+            <span class="italic">inner types</span>
+            <a class="indexanchor" id="i10_02"/>
+            <a class="indexanchor" id="i10_03"/>. The special thing about inner types is that they always have a reference to their outer types. A nested (non-)static class is also referred to as a 
+            <span class="italic">member class</span>
+            <a class="indexanchor" id="i10_04"/>
+        .</p>
+        
+        <p class="standard">
+            <a id="p601"/>The opposite of nested types are 
+            <span class="italic">top-level types</span>
+        , which is what we’ve been dealing with all along so far. The runtime environment knows only top-level types, and nested types eventually become just “normal” class files.</p>
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

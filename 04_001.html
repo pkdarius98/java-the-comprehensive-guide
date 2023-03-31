@@ -1,0 +1,761 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Arrays and Their Areas of Use" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Arrays and Their Areas of Use" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Arrays and Their Areas of Use</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h4">4    
+        <a id="p241"/>
+    Arrays and Their Areas of Use</h1><p class="introductorynote indent_chapter_single">“Those who fall out of line form the beginning of a new line.”<br/>—Erhard Horst Bellermann (1937–)
+        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn04_01" id="fn04_01">[ 101 ]</a></span>
+    </p><p class="standard">In the programs you saw in previous chapters, variables stored exactly one value. In this chapter, we will see that there can be a collection of values behind a variable. We call these simple collections 
+        <span class="italic">arrays</span>
+    .</p>
+        
+        <h2 class="t2" id="h4.1">4.1    Simple Field Work</h2>
+        
+        <p class="standard">An 
+            <span class="italic">array</span>
+            <a class="indexanchor" id="i04_00"/> is a special data type that combines several values into one unit, like a display case in which the compartments are numbered consecutively. The elements are addressed via an integer index
+            <a class="indexanchor" id="i04_01"/>
+        . Each compartment (for Smurfs, for example) always takes values of the same type (only Smurfs, no Pokémon). Normally, the compartments of an array (its elements) are located one after the other in memory, but this implementation detail on the virtual machine (VM) is not visible to programmers.</p>
+        
+        <div class="imagebox figure-type"><a href="img-f_none_04_00.html" id="f_none_04_00"><img alt="" id="img-f_none_04_00" src="bilderklein/klein04_000_01.png"/></a></div>
+        
+        <p class="standard">
+            <a id="p242"/>
+        Each array contains values of only one specific data type or basic type, namely, the following:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Elementary data types (like 
+                    <samp class="listingcharacter listingcharacter">int</samp>, 
+                    <samp class="listingcharacter listingcharacter">byte</samp>, 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                , etc.)</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Reference types</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Reference types of other arrays to form multidimensional arrays</p>
+            
+            </li>
+        
+        </ul>
+        
+        
+            
+            <h3 class="t3" id="h4.1.1">4.1.1    Basic Components</h3>
+            
+            <p class="standard">Working with arrays requires you to learn three new things:</p>
+            
+            <ol>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Declaring array variables</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Initializing array variables as well as allocating space</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Accessing arrays, with both read and write access</p>
+                
+                </li>
+            
+            </ol>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <ol>
+                    
+                    <li>
+                        
+                        <p class="standard first-item">Declare a variable named 
+                            <samp class="listingcharacter listingcharacter">prices</samp>
+                         that references an array:</p>
+                        
+                        <div class="listing " id="l_none_413"><pre><span class="">double</span><span class="">[]</span><span class=""> prices;</span></pre></div>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item">Initialize the variable with an array object of size 10:</p>
+                        
+                        <div class="listing " id="l_none_422"><pre>prices <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">double</span><span class="">[</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">]</span><span class="">;</span></pre></div>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item">Assign a random number to the first element and assign twice the value of the first element to the second element:</p>
+                        
+                        <div class="listing " id="l_none_437"><pre>prices<span class="">[</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> Math</span><span class="">.</span><span class="">random</span><span class="">();</span><span class=""><br/></span>prices<span class="">[</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> prices</span><span class="">[</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">*</span><span class=""> </span><span class="">2</span><span class="">;</span></pre></div>
+                    
+                    </li>
+                
+                </ol>
+            
+            </div>
+            
+            <p class="standard">Note how square brackets are used in several places: once to declare the type, then to build the array, then to write to arrays and to read from arrays. We’ll now describe these three elements in more detail.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f4.1.html" id="f4.1"><img alt="Terms of an Array" id="img-f4.1" src="bilderklein/klein04_001.png"/></a></div>
+            
+            <p class="caption "><b>Figure 4.1</b>    
+            Terms of an Array</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.1.2">4.1.2    
+                <a id="p243"/>
+            Declaring Array Variables</h3>
+            
+            <p class="standard">Declaring an array variable is similar to an ordinary declaration except that the characters 
+                <samp class="listingcharacter listingcharacter">[</samp> and 
+                <samp class="listingcharacter listingcharacter">]</samp> are placed after the data type. Let’s use the 
+                <samp class="listingcharacter listingcharacter">prices</samp>
+             variable again, which is intended to store prices, as defined in the following way:</p>
+            
+            <div class="listing " id="l_none_446"><pre><span class="">double</span><span class="">[]</span><span class=""> prices</span><span class="">;</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The declaration has two types of information at its core: that it “is an array” and that it will “store elements of type 
+                <samp class="listingcharacter listingcharacter">int</samp>
+            .”</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first">The square brackets are tokens, so whitespace isn’t mandatory for separation. Another valid example is the following:</p>
+                
+                <div class="listing " id="l_none_443"><pre><span class="">double</span><span class="">[]</span><span class="">prices;</span></pre></div>
+                
+                <p class="standard">Placing the square brackets before the variable is also syntactically valid but not at all recommended:</p>
+                
+                <div class="listing  last_item" id="l_none_454"><pre><span class="">double</span><span class=""> </span><span class="">[]</span><span class="">prices</span><span class="">;</span><span class=""> </span><span class=""> // Violation of the usual Java style guide</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">The square brackets can also be placed after the identifier name when declaring an array variable, but the declaration is slightly different in this case. This difference becomes apparent when more than one variable is declared, as in the following example:</p>
+                
+                <div class="listing " id="l_none_466"><pre><span class="">double</span><span class=""> </span><span class="">[]</span><span class="">prices</span><span class="">,</span><span class=""><br/></span>       matrix<span class="">[],</span><span class=""> threeDimMatrix</span><span class="">[][]</span><span class="">;</span></pre></div>
+                
+                <p class="standard">This code corresponds to the following declaration:</p>
+                
+                <div class="listing " id="l_none_477"><pre><span class="">double</span><span class=""> prices</span><span class="">[],</span><span class=""> matrix</span><span class="">[]</span>
+                    <span class="bold">[]</span>, threeDimMatrix[][]
+                    <span class="bold">[]</span>;<span class=""/></pre></div>
+                
+                <p class="standard">The following example is more neatly written:</p>
+                
+                <div class="listing " id="l_none_4105"><pre><span class="">double</span><span class="">[]</span><span class="">     prices</span><span class="">;</span><span class=""><br/></span><span class="">double</span><span class="">[][]</span><span class="">   matrix</span><span class="">;</span><span class=""><br/></span><span class="">double</span><span class="">[][][]</span><span class=""> threeDimMatrix;</span></pre></div>
+                
+                <p class="standard last">To avoid errors of this kind, each line should contain only one declaration of a type. In any case, according to pure Java doctrine, the brackets should be placed after the type identifier, as Java creator James Gosling intended.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h4.1.2.1">Arrays with Non-Primitive Elements</h4>
+                
+                <p class="standard">The data type of the array elements doesn’t have to be a primitive data type. An array of object references can also be declared. This array then only stores references to 
+                    <a id="p244"/>
+                actual objects. The size of the array in memory is therefore calculated from the length of the array multiplied by the memory requirement of a reference variable. Only the array object itself is created, not the objects the array will store simply because the compiler wouldn’t even know which constructor to call.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example declares two array variables:</p>
+                    
+                    <div class="listing  last_item" id="l_none_4115"><pre><span class="">String</span>
+                        <span class="bold"><span class="">[]</span></span> names;<br/>Point
+                        <span class="bold">[]</span>  locations;<span class=""/></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.1.3">4.1.3    Creating Array Objects with new</h3>
+            
+            <p class="standard">Creating the array reference variable alone doesn’t create an array of a specific length. In Java, the creation of the array is as dynamic as the nature of object creation. An array must be created using the 
+                <samp class="listingcharacter listingcharacter">new</samp> keyword because arrays are also objects.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn04_02" id="fn04_02">[ 102 ]</a></span>
+             The length of the array is specified in square brackets, which can be any integer value or even a variable. Even 0 is possible. Later, the size of the array cannot be changed.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example creates an array of ten elements:</p>
+                
+                <div class="listing " id="l_none_4105591515"><pre><span class="">double</span><span class="">[]</span><span class=""> prices</span><span class="">;</span><span class=""><br/></span>prices <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">double</span>
+                    <span class="bold"><span class="">[</span></span> <span class="">10</span>
+                    <span class="bold"><span class=""> ]</span></span>;<span class=""/></pre></div>
+                
+                <p class="standard">The array declaration can also occur together with the initialization, as in the following example:</p>
+                
+                <div class="listing " id="l_none_4127"><pre><span class="">double</span><span class="">[]</span><span class=""> prices </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">double</span>
+                    <span class="bold"><span class="">[</span></span> <span class="">10</span>
+                    <span class="bold"><span class=""> ]</span></span>;<span class=""/></pre></div>
+                
+                <p class="standard last">The Java virtual machine (JVM) initializes the arrays by default, for instance, with 
+                    <samp class="listingcharacter listingcharacter">0</samp>, 
+                    <samp class="listingcharacter listingcharacter">0.0</samp> or 
+                    <samp class="listingcharacter listingcharacter">false</samp> for primitive values and with 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 for references.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h4.1.3.1">Arrays Are Pretty Normal Objects</h4>
+                
+                <p class="standard">Several indications prove that arrays are objects, namely, the following:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A special type of the 
+                            <samp class="listingcharacter listingcharacter">new</samp> notation creates a copy of the array class; 
+                            <samp class="listingcharacter listingcharacter">new</samp>
+                         always reminds us that an object is being built at runtime.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">An array object has an object variable named 
+                            <samp class="listingcharacter listingcharacter">length</samp>, and methods are declared on the array object, such as 
+                            <samp class="listingcharacter listingcharacter">clone()</samp> and everything that 
+                            <samp class="listingcharacter listingcharacter">java.long.Object</samp>
+                         has.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <a id="p245"/>The 
+                            <samp class="listingcharacter listingcharacter">==</samp> and 
+                            <samp class="listingcharacter listingcharacter">!=</samp> operators follow their meaning as it relates to objects: These operators only compare whether two variables reference the same array object, but in no case do these operators evaluate the contents of the arrays (although 
+                            <samp class="listingcharacter listingcharacter">Arrays.equals(...)</samp>
+                         can).</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Access to array elements via the square brackets 
+                    <samp class="listingcharacter listingcharacter">[]</samp> can be understood as a hidden call via secret methods like 
+                    <samp class="listingcharacter listingcharacter">array.get(index)</samp>. The 
+                    <samp class="listingcharacter listingcharacter">[]</samp>
+                 operator isn’t provided for other objects.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.1.4">4.1.4    Arrays with { contents }</h3>
+            
+            <p class="standard">The previous declarations of array variables don’t create an array object that can store the individual array elements. However, if the entries are to be assigned values directly, a shortcut in Java can automatically create an array object and assign values to it at the same time.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Consider the following example of a value assignment of an array during its initialization:</p>
+                
+                <div class="listing  last_item" id="l_none_4132"><pre><span class="">double</span><span class="">[]</span><span class=""> prices  </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">2.99</span><span class="">,</span><span class=""> </span><span class="">3.10</span><span class="">,</span><span class=""> </span><span class="">4.40</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">0.90</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> names </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">"Caramellos,"</span><span class=""> </span><span class="">"Gummi Fish."</span><span class=""><br/></span>    <span class="">"Starbursts"</span><span class="">.</span><span class="">toUpperCase</span><span class="">(),</span><span class="">   </span><span class=""> // STARBURSTS</span><span class=""><br/></span>    <span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"M"</span><span class=""> </span><span class="">).</span><span class="">append</span><span class="">(</span><span class=""> </span><span class="">'&amp;'</span><span class=""> </span><span class="">).</span><span class="">append</span><span class="">(</span><span class=""> </span><span class="">'M'</span><span class=""> </span><span class="">).</span><span class="">toString</span><span class="">()</span><span class=""> // M&amp;M</span><span class=""><br/></span><span class="">}</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            <p class="standard">In this case, an array of suitable size is created, and the elements named in the enumeration are copied into the array. Dynamic calculations at runtime are possible because the values don’t need to be fixed.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">Empty arrays without contents are also allowed. The arrays are initialized but have no elements, and their 
+                    <samp class="listingcharacter listingcharacter">length</samp>
+                 is 0, as in the following examples:</p>
+                
+                <div class="listing " id="l_none_4152"><pre><span class="">String</span><span class="">[]</span><span class=""> names </span><span class="">=</span><span class=""> </span><span class="">{}</span><span class="">;</span></pre></div>
+                
+                <p class="standard">or</p>
+                
+                <div class="listing  last_item" id="l_none_4165"><pre><span class="">double</span><span class="">[]</span><span class=""> prices </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class="">0</span><span class="">]</span></pre></div>
+            
+            </div>
+            
+            <p class="standard">You can place a comma before the closing curly bracket, so that 
+                <samp class="listingcharacter listingcharacter">double[] prices = { 2, 3, };</samp> is valid. This syntax simplifies adding elements but doesn’t produce any empty element. Even the following is possible in Java: 
+                <samp class="listingcharacter listingcharacter">double[] prices = { , };</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p246"/>
+                Note</h6>
+                
+                <p class="standard first">The declaration of an array variable with initialization doesn’t work with 
+                    <samp class="listingcharacter listingcharacter">var</samp>
+                , as in the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_4177"><pre>var prices <span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">};</span><span class=""> </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Array initializer is not allowed here</span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.1.5">4.1.5    Reading the Length of an Array via the Object Variable Length</h3>
+            
+            <p class="standard">The number of elements an array can store is called its 
+                <span class="italic">size</span> or 
+                <span class="italic">length</span> and is stored for each array object in the freely accessible object variable 
+                <samp class="listingcharacter listingcharacter">length</samp>, which is a 
+                <samp class="listingcharacter listingcharacter">public</samp>-
+                <samp class="listingcharacter listingcharacter">final</samp>-
+                <samp class="listingcharacter listingcharacter">int</samp>
+             variable whose value is either positive or null. The size can’t be changed subsequently.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following code creates an array and then outputs its length:</p>
+                
+                <div class="listing  last_item" id="l_none_4186"><pre><span class="">int</span><span class="">[]</span><span class=""> prices </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">5</span><span class="">,</span><span class=""> </span><span class="">7</span><span class="">,</span><span class=""> </span><span class="">7</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">};</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">prices.length</span></span> );         <span class=""> // 5</span><span class=""/><span class=""/></pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h4.1.5.1">Array Lengths Are Final</h4>
+                
+                <p class="standard">The object variable attribute 
+                    <samp class="listingcharacter listingcharacter">length</samp> of an array isn’t only 
+                    <samp class="listingcharacter listingcharacter">public</samp> and of type 
+                    <samp class="listingcharacter listingcharacter">int</samp>, but of course also 
+                    <samp class="listingcharacter listingcharacter">final</samp>
+                . Write access isn’t allowed because a dynamic enlargement of an array isn’t possible; write access leads to a translation error.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Other containers also have a length, which is usually requested via a method. Beginners often are confused when, for example, the length of a string is queried via a 
+                        <samp class="listingcharacter listingcharacter">length()</samp> method, the number of elements in an array via the 
+                        <samp class="listingcharacter listingcharacter">length</samp> attribute, and in the 
+                        <samp class="listingcharacter listingcharacter">ArrayList</samp> data structure via 
+                        <samp class="listingcharacter listingcharacter">size()</samp>
+                    .</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.1.6">4.1.6    Accessing the Elements via the Index</h3>
+            
+            <p class="standard">The elements of an array are accessed using the square brackets 
+                <samp class="listingcharacter listingcharacter">[]</samp> placed after the reference to the array object. In Java, an array starts at index 0 (and not at a freely selectable lower limit as in Pascal). Since the elements of an array are numbered starting at 0, the last valid index is 1 less than the length of the array. Thus, for an array 
+                <samp class="listingcharacter listingcharacter">a</samp> of length 
+                <samp class="listingcharacter listingcharacter">n</samp>, the valid range is a 
+                <samp class="listingcharacter listingcharacter">[0]</samp> to 
+                <samp class="listingcharacter listingcharacter">a[n</samp> - 
+                <samp class="listingcharacter listingcharacter">1]</samp>
+            .</p>
+            
+            <p class="standard">Since the variables are accessed via an index, these variables are also called 
+                <span class="italic">indexed variables</span>
+                <a class="indexanchor" id="i04_02"/>
+                <a class="indexanchor" id="i04_03"/>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p247"/>
+                Example</h6>
+                
+                <p class="standard first">The following example accesses the first and last characters from the array:</p>
+                
+                <div class="listing  last_item" id="l_none_4194"><pre><span class="">char</span><span class="">[]</span><span class=""> name  </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">'C'</span><span class="">,</span><span class=""> </span><span class="">'h'</span><span class="">,</span><span class=""> </span><span class="">'r'</span><span class="">,</span><span class=""> </span><span class="">'i'</span><span class="">,</span><span class=""> </span><span class="">'s'</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">char</span><span class="">   first </span><span class="">=</span><span class=""> name</span>
+                    <span class="bold"><span class="">[ </span><span class="">0</span><span class=""> ]</span></span>;                      <span class=""> // C</span><span class=""><br/></span><span class="">char</span><span class="">   last  = name</span>
+                    <span class="bold">[ name.length - <span class="">1</span><span class=""> ]</span></span>;        <span class=""> // s</span><span class=""/><span class=""/></pre></div>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example runs the entire array with prices and outputs the positions starting at 1:</p>
+                
+                <div class="listing  last_item" id="l_none_4205"><pre><span class="">double</span><span class="">[]</span><span class=""> prices </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">5</span><span class="">,</span><span class=""> </span><span class="">7</span><span class="">,</span><span class=""> </span><span class="">11</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> i </span><span class="">&lt;</span><span class=""> prices</span><span class="">.</span><span class="">length</span><span class="">;</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">// Index: 0 &lt;= i &lt; 5 = </span><span class=""><br/></span><span class="">                                          </span><span class="">// prices.length</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%d %s%n"</span><span class="">,</span><span class=""> i </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> prices</span><span class="">[</span><span class=""> i </span><span class="">]</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h4.1.6.1">Calculating the Arithmetic Mean of Prices</h4>
+                
+                <p class="standard">Instead of just running an array and outputting the values, our next program will calculate and output the arithmetic mean of prices.</p>
+                
+                <div class="listing " id="l4.1"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> PrintTheAverage </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">double</span><span class="">[]</span><span class=""> numbers </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1.9</span><span class="">,</span><span class=""> </span><span class="">7.8</span><span class="">,</span><span class=""> </span><span class="">2.4</span><span class="">,</span><span class=""> </span><span class="">9.3</span><span class=""> </span><span class="">};</span><span class=""><br/></span><br/>    <span class="">double</span><span class=""> sum </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span><br/>    <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> i </span><span class="">&lt;</span><span class=""> numbers</span><span class="">.</span><span class="">length</span><span class="">;</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      sum <span class="">+=</span><span class=""> numbers</span><span class="">[</span><span class=""> i </span><span class="">];</span><span class=""><br/></span><br/>    <span class="">double</span><span class=""> avg </span><span class="">=</span><span class=""> sum</span><span class=""> / numbers.length;</span><br/><br/>    System.out.println( avg ); <span class=""> // 5.35</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 4.1</b>    
+            src/main/java/com/tutego/insel/array/PrintTheAverage.java</p>
+                
+                <p class="standard">The array must have at least one element; otherwise, an exception will occur when dividing by 0.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h4.1.6.2">
+                    <a id="p248"/>
+                On the Type of the Index*</h4>
+                
+                <p class="standard">
+                    <a class="indexanchor" id="i04_04"/>Inside the square brackets is a positive integer expression of type 
+                    <samp class="listingcharacter listingcharacter">int</samp>, which must be computable at runtime. 
+                    <samp class="listingcharacter listingcharacter">long</samp> values, 
+                    <samp class="listingcharacter listingcharacter">boolean</samp>, floats, or references aren’t possible; however, 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                 enables the use of more than two billion elements. With regard to floats, the question of the access technique would remain. In this case, we would have to reduce the value to an interval.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">The index of an array must be of type 
+                        <samp class="listingcharacter listingcharacter">int</samp>, and this also includes type conversions from 
+                        <samp class="listingcharacter listingcharacter">byte</samp>, 
+                        <samp class="listingcharacter listingcharacter">short</samp>, and 
+                        <samp class="listingcharacter listingcharacter">char</samp>. An index of type 
+                        <samp class="listingcharacter listingcharacter">char</samp>
+                     is favorable, for example, as a run variable, when arrays of characters are generated, as in the following example:</p>
+                    
+                    <div class="listing " id="l_none_4229"><pre><span class="">char</span><span class="">[]</span><span class=""> alphabet </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">char</span><span class="">[</span><span class=""> </span><span class="">'z'</span><span class=""> </span><span class="">-</span><span class=""> </span><span class="">'a'</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">];</span><span class=""> // 'a' equals 97 and 'z' 122</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">char</span><span class=""> c </span><span class="">=</span><span class=""> </span><span class="">'a'</span><span class="">;</span><span class=""> c </span><span class="">&lt;=</span><span class=""> </span><span class="">'z'</span><span class="">;</span><span class=""> c</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  alphabet<span class="">[</span><span class=""> c </span><span class="">-</span><span class=""> </span><span class="">'a'</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> c</span><span class="">;</span><span class="">         </span><span class=""> // alphabet[0]='a', alphabet[1]='b', etc.</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">Strictly speaking, in this case, we’re also dealing with index values of the type 
+                        <samp class="listingcharacter listingcharacter">int</samp> because the 
+                        <samp class="listingcharacter listingcharacter">char</samp>
+                     values are still calculated beforehand.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h4.1.6.3">Strings Are Not Arrays*</h4>
+                
+                <p class="standard">An array of 
+                    <samp class="listingcharacter listingcharacter">char</samp> characters has a completely different type than a 
+                    <samp class="listingcharacter listingcharacter">String</samp> object. While square brackets are allowed for arrays, the 
+                    <samp class="listingcharacter listingcharacter">String</samp> class doesn’t provide access to characters via 
+                    <samp class="listingcharacter listingcharacter">[]</samp>. However, the 
+                    <samp class="listingcharacter listingcharacter">String</samp> class provides a constructor so that a 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 object can be created from an array of characters. All characters of the array are copied, and then afterwards, the array and string have no more connection. Thus, if the array later changes, the string won’t automatically change with it. Nor can it since strings are immutable.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.1.7">4.1.7    Typical Array Errors</h3>
+            
+            <p class="standard">Errors may occur when accessing an element of an array. First, the array object may be missing, which means the referencing will fail.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The compiler doesn’t notice the following error, and the penalty is a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> at runtime.
+                    <a class="indexanchor" id="i04_05"/>
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn04_03" id="fn04_03">[ 103 ]</a></span>
+                 Consider the following example:</p>
+                
+                <div class="listing " id="l_none_4221"><pre><span class="">String</span><span class="">[]</span><span class=""> names </span><span class="">=</span><span class=""> null</span><span class="">;</span><span class=""><br/></span>names<span class="">[</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class="">    </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     NullPointerException</span><span class=""/></pre></div>
+                
+                <p class="standard last">
+                    <a id="p249"/>Other errors may be caused by the index. If the index is negative
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn04_04" id="fn04_04">[ 104 ]</a></span> or larger than the size of the array, then an 
+                    <samp class="listingcharacter listingcharacter">ArrayIndexOutOfBoundsException</samp>
+                    <a class="indexanchor" id="i04_06"/> will occur.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn04_05" id="fn04_05">[ 105 ]</a></span>
+                 Each access to the array is tested at runtime, although the compiler may well find some errors.</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">With the following access attempts, the compiler could theoretically sound an alarm, which the standard compiler wouldn’t do because accessing the elements is syntactically fine even with an invalid index. Consider the following examples:</p>
+                
+                <div class="listing  last_item" id="l_none_4241"><pre><span class="">int</span><span class="">[]</span><span class=""> array </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class=""> </span>
+                    <span class="bold"><span class="">100</span></span><span class=""> ];</span><br/>array[ 
+                    <span class="bold">-<span class="">10</span></span><span class=""> ] = </span><span class="">1</span><span class="">;  </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     error at runtime, not at compile time</span><span class=""><br/></span>array[ 
+                    <span class="bold"><span class="">100</span></span><span class=""> ] = </span><span class="">1</span><span class="">;  </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     error at runtime, not at compile time</span><span class=""/><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i04_07"/>If the 
+                <samp class="listingcharacter listingcharacter">IndexOutOfBoundsException</samp>
+             isn’t caught, the runtime system aborts the program with an error message. The fact that the array boundaries are checked is part of Java’s security concept and can’t be turned off. However, this check is no longer a major performance issue today since the runtime environment doesn’t need to check every index to ensure that a block with array access is correct.</p>
+            
+            
+                
+                <h4 class="t4" id="h4.1.7.1">Gimmick: The Index and the Increment*</h4>
+                
+                <p class="standard">In 
+                    <span class="crossreference "><a href="02_001.html#h2">Chapter 2</a></span>, we looked at using 
+                    <samp class="listingcharacter listingcharacter">i = i++</samp>
+                 as an increment. The statement is treated the same way for an array access, as in the following example:</p>
+                
+                <div class="listing " id="l_none_4263"><pre>array<span class="">[</span><span class=""> </span>
+                    <span class="bold"><span class="">i</span></span> ] = 
+                    <span class="bold">i++</span>; <span class=""/></pre></div>
+                
+                <p class="standard">At position 
+                    <samp class="listingcharacter listingcharacter">array[i]</samp>, the value of 
+                    <samp class="listingcharacter listingcharacter">i</samp>
+                 is saved, and then the assignment is made. When you construct a loop around an array, you can extend it during initialization, as in the following example:</p>
+                
+                <div class="listing " id="l_none_4254"><pre><span class="">int</span><span class="">[]</span><span class=""> array </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">];</span><span class=""><br/></span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span><span class="">while</span><span class=""> </span><span class="">(</span><span class=""> i </span><span class="">&lt;</span><span class=""> array</span><span class="">.</span><span class="">length </span><span class="">)</span><span class=""><br/></span>  array<span class="">[</span><span class=""> i </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> i</span><span class="">++;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The initialization results in 0, 1, 2, and 3. This use isn’t recommended due to a lack of clarity.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.1.8">4.1.8    
+                <a id="p250"/>
+            Passing Arrays to Methods</h3>
+            
+            <p class="standard">References to arrays can be passed to methods in the same way as references to normal objects. Earlier in 
+                <span class="crossreference "><a href="04_001.html#h4.1.6">Section 4.1.6</a></span>
+            , we determined the mean value of a number series. The logic for this calculation can be perfectly swapped out to a method, as in the following example:</p>
+            
+            <div class="listing " id="l4.2"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Avg1 </span><span class="">{</span><span class=""/><br/><br/>  
+                <span class="bold"><span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">avg</span><span class="">( </span><span class="">double</span><span class="">[] numbers )</span></span> {<span class=""/><br/><span class="">    </span><span class="">double</span><span class=""> sum = </span><span class="">0</span><span class="">;</span><span class=""/><br/><br/><span class="">    </span><span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> i = </span><span class="">0</span><span class="">; i &lt; numbers.length; i++ )</span><span class=""/><br/><span class="">      sum += numbers[ i ];</span><span class=""/><br/><br/><span class="">    </span><span class="">return</span><span class=""> sum / numbers.length;</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><span class=""/><br/><span class="">    </span><span class="">double</span><span class="">[] prices = { </span><span class="">2</span><span class="">, </span><span class="">3</span><span class="">, </span><span class="">4</span><span class=""> };</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span>
+                <span class="bold"><span class="">avg</span><span class="">( prices )</span></span> );            <span class="">// 3.0</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 4.2</b>    
+            src/main/java/com/tutego/insel/array/Avg1.java</p>
+            
+            
+                
+                <h4 class="t4" id="h4.1.8.1">Checking null References</h4>
+                
+                <p class="standard">References always entail the problem that they can be 
+                    <samp class="listingcharacter listingcharacter">null</samp>. A call of 
+                    <samp class="listingcharacter listingcharacter">avg(null)</samp> is syntactically valid. Therefore, an implementation should check for 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 and report a false argument, as in the following example:</p>
+                
+                <div class="listing " id="l_none_4289"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> numbers </span><span class="">==</span><span class=""> null </span><span class="">||</span><span class=""> numbers</span><span class="">.</span><span class="">length </span><span class="">==</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IllegalArgumentException</span><span class="">(</span><span class=""> </span><span class="">"Array null or empty"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">For further details on this topic, refer to 
+                    <span class="crossreference "><a href="09_001.html#h9">Chapter 9</a></span>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.1.9">4.1.9    Multiple Return Values*</h3>
+            
+            <p class="standard">When we write methods in Java, they can’t have more than one return value when 
+                <samp class="listingcharacter listingcharacter">return</samp>
+                <a class="indexanchor" id="i04_08"/>
+             is used. But if you need to return more than one value, you’ll need another solution. Two possible options can be useful in these cases:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Containers, such as arrays or other collections, can combine values and return them as return values.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Special containers are passed in which the method places return values; a 
+                        <samp class="listingcharacter listingcharacter">return</samp>
+                     statement is no longer necessary.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <a id="p251"/>
+            Let’s consider a static method that returns the sum and the product as an array for two numbers next.</p>
+            
+            <div class="listing " id="l4.3"><pre><span class="">static</span><span class=""> </span>
+                <span class="bold"><span class="">int</span><span class="">[]</span></span> <span class="">productAndSum</span><span class="">( </span><span class="">int</span><span class=""> a, </span><span class="">int</span><span class=""> b ) {</span><br/>  <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[]{ a * b, a + b };</span><br/>}<br/><br/><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>  System.out.<span class="">println</span><span class="">( </span><span class="">productAndSum</span><span class="">(</span><span class="">9</span><span class="">, </span><span class="">3</span><span class="">)[ </span><span class="">1</span><span class=""> ] );</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 4.3</b>    
+            src/main/java/com/tutego/insel/array/MultipleReturnValues.java (Snippet)</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.1.10">4.1.10    Preinitialized Arrays</h3>
+            
+            <p class="standard">If we want to create an array object in Java and initialize it with values right away, you can write something like the following code:</p>
+            
+            <div class="listing " id="l_none_4314"><pre><span class="">double</span><span class="">[]</span><span class=""> prices </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">};</span><span class=""> </span></pre></div>
+            
+            <p class="standard">Java doesn’t allow you to initialize array contents after the variable declaration or to use the array even without a variable as argument, as in the following examples:</p>
+            
+            <div class="listing " id="l_none_4321"><pre>prices <span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">2.2</span><span class="">,</span><span class=""> </span><span class="">3.9</span><span class=""> </span><span class="">};</span><span class="">           </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 compiler error</span><span class=""><br/></span><span class="">avg</span><span class="">(</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1.23</span><span class="">,</span><span class=""> </span><span class="">4.94</span><span class=""> </span><span class="">}</span><span class=""> </span><span class="">);</span>            <span class="">// 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 compiler error</span><span class=""> </span></pre></div>
+            
+            <p class="standard">An attempt like this example will fail and trigger the compiler message “Array initializer is not allowed here.”</p>
+            
+            <p class="standard">Two possible approaches can solve this problem. The first approach includes the introduction of a new variable, in the following example, 
+                <samp class="listingcharacter listingcharacter">tmpprices</samp>
+            :</p>
+            
+            <div class="listing " id="l_none_4329"><pre><span class="">double</span><span class="">[]</span><span class=""> prices</span><span class="">;</span><span class=""><br/></span><span class="">double</span><span class="">[]</span><span class=""> tmpprices </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">};</span><span class=""><br/></span>prices <span class="">=</span><span class=""> tmpprices</span><span class="">;</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The second approach represents a variant of the 
+                <samp class="listingcharacter listingcharacter">new</samp>
+             notation, which is extended by a pair of square brackets. The initial values of the array then follow in curly brackets. The size of the array corresponds exactly to the number of values. For the earlier examples, the notation would be the following:</p>
+            
+            <div class="listing " id="l_none_4332"><pre><span class="">double</span><span class="">[]</span><span class=""> prices</span><span class="">;</span><span class=""><br/></span>prices <span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">new</span><span class=""> </span><span class="">double</span><span class="">[]</span></span>{ <span class="">2</span><span class="">, </span><span class="">5</span><span class="">, </span><span class="">7</span><span class="">, </span><span class="">11</span><span class="">, </span><span class="">13</span><span class=""> }; </span><span class=""/></pre></div>
+            
+            <p class="standard">The following notation is also quite handy for method calls when arrays are passed:</p>
+            
+            <div class="listing " id="l_none_4344"><pre><span class="">avg</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">new</span><span class=""> </span><span class="">double</span><span class="">[]</span></span>{ <span class="">1.23</span><span class="">, </span><span class="">4.94</span><span class="">, </span><span class="">9.33</span><span class="">, </span><span class="">3.91</span><span class="">, </span><span class="">6.34</span><span class=""> } ); </span><span class=""/></pre></div>
+            
+            <p class="standard">
+                <a id="p252"/>Since in this case an initialized array with values is passed to the method right away and no additional variable is used, this type of array is referred to as an 
+                <span class="italic">anonymous array</span>. Actually, other kinds of anonymous arrays also exist, as shown by 
+                <samp class="listingcharacter listingcharacter">new int[2000].length</samp>
+            , but in this case, the array is not initialized with its own values.</p>
+            
+            
+                
+                <h4 class="t4" id="h4.1.10.1">The Truth about Array Initialization*</h4>
+                
+                <p class="standard">As nice as the compact initialization of array elements can be, this approach is also runtime and memory intensive. Since Java is a dynamic language, the concept of array initialization doesn’t quite fit into the picture. For this reason, the initialization is performed only at runtime.</p>
+                
+                <p class="standard">An array like</p>
+                
+                <div class="listing " id="l_none_4364"><pre><span class="">int</span><span class="">[]</span><span class=""> weights </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">5</span><span class="">,</span><span class=""> </span><span class="">7</span><span class=""> </span><span class="">};</span><span class=""> </span></pre></div>
+                
+                <p class="standard">is transformed by the Java compiler and treated in a similar way to the following:</p>
+                
+                <div class="listing " id="l_none_4375"><pre><span class="">int</span><span class="">[]</span><span class=""> weights </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">];</span><span class=""><br/></span>weights<span class="">[</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">2</span><span class="">;</span><span class=""><br/></span>weights<span class="">[</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">3</span><span class="">;</span><span class=""><br/></span>weights<span class="">[</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">5</span><span class="">;</span><span class=""><br/></span>weights<span class="">[</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">7</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Only after a moment’s reflection does the extent of the implementation become apparent: First, the methods will have memory requirements. If the 
+                    <samp class="listingcharacter listingcharacter">weights</samp>
+                 array is declared in a method and initialized with values, the assignment costs runtime because we have many access attempts, which are also all nicely secured by the index check. In addition, since the bytecode for a single method may only be of limited length due to various restrictions in the JVM, this space can quickly be exhausted for really large arrays. For this reason, we don’t advise storing images or large tables in the program code, for example. In C, a popular approach was to use a program that turned a file into a sequence of array declarations. If doing so is really necessary in Java, consider the following points:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">You can use a static array (a class variable) so that the array only needs to be initialized once during the program run.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If the values are in the byte range, you can convert these values to a string and then later convert the string into an array. This option is a clever way to easily accommodate binary data.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

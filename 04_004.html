@@ -1,0 +1,245 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Arrays and Their Areas of Use" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Arrays and Their Areas of Use" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Arrays and Their Areas of Use</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h4.4">4.4    Multidimensional Arrays*</h2>
+        
+        <p class="standard">
+            <a class="indexanchor" id="i04_19"/>
+            <a class="indexanchor" id="i04_20"/>
+        Java implements multidimensional arrays as arrays of arrays. Multidimensional arrays can be used, for example, for representing mathematical matrices or raster images. This section describes how you can initialize, build, and use objects for multidimensional arrays.</p>
+        
+        <p class="standard">The following code declares a two-dimensional array
+            <a class="indexanchor" id="i04_21"/>
+            <a class="indexanchor" id="i04_22"/>
+            <samp class="listingcharacter listingcharacter"> matrix</samp>
+         with space for a total of 32 cells, arranged in 4 rows and 8 columns:</p>
+        
+        <div class="listing " id="l_none_4544"><pre><span class="">int</span><span class="">[][]</span><span class=""> matrix </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">][</span><span class=""> </span><span class="">8</span><span class=""> </span><span class="">];</span><span class=""> </span></pre></div>
+        
+        <p class="standard">Multidimensional arrays are basically arrays with arrays as elements and can be easily declared.</p>
+        
+        <p class="standard">As with one-dimensional arrays, multidimensional arrays can be initialized immediately during their creation, as in the following example:</p>
+        
+        <div class="listing " id="l_none_4560"><pre><span class="">int</span><span class="">[][]</span><span class=""> matrix3x2 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">{</span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">},</span><span class=""> </span><span class="">{</span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">},</span><span class=""> </span><span class="">{</span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">4</span><span class="">}</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">int</span><span class="">[][]</span><span class=""> triangle  </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">{</span><span class="">1</span><span class="">},</span><span class=""> </span><span class="">{</span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">},</span><span class=""> </span><span class="">{</span><span class="">4</span><span class="">,</span><span class=""> </span><span class="">5</span><span class="">,</span><span class=""> </span><span class="">6</span><span class="">}</span><span class=""> </span><span class="">};</span><span class=""> </span></pre></div>
+        
+        <p class="standard">The second case suggests that the array doesn’t have to be rectangular. More on this topic in 
+            <span class="crossreference "><a href="04_004.html#h4.4.1">Section 4.4.1</a></span>
+        .</p>
+        
+        <p class="standard">Individual elements are addressed by the expression 
+            <samp class="listingcharacter listingcharacter">matrix[i][j]</samp>.
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn04_06" id="fn04_06">[ 106 ]</a></span>
+         The access is achieved with as many pairs of parentheses as dimensions of the array.</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                <a id="p260"/>
+            Example</h6>
+            
+            <p class="standard first">The structure of two-dimensional arrays (and access to them) is comparable to a matrix or table. Then, the entry in the array 
+                <samp class="listingcharacter listingcharacter">a[x][y]</samp>
+             can be read in the following table:</p>
+            
+            <div class="listing  last_item" id="l_none_4557"><pre>a<span class="">[</span><span class="">0</span><span class="">][</span><span class="">0</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">0</span><span class="">][</span><span class="">1</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">0</span><span class="">][</span><span class="">2</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">0</span><span class="">][</span><span class="">3</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">0</span><span class="">][</span><span class="">4</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">0</span><span class="">][</span><span class="">5</span><span class="">]</span><span class="">  …</span><br/>a<span class="">[</span><span class="">1</span><span class="">][</span><span class="">0</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">1</span><span class="">][</span><span class="">1</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">1</span><span class="">][</span><span class="">2</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">1</span><span class="">][</span><span class="">3</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">1</span><span class="">][</span><span class="">4</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">1</span><span class="">][</span><span class="">5</span><span class="">]</span><span class=""><br/></span>a<span class="">[</span><span class="">2</span><span class="">][</span><span class="">0</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">2</span><span class="">][</span><span class="">1</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">2</span><span class="">][</span><span class="">2</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">2</span><span class="">][</span><span class="">3</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">2</span><span class="">][</span><span class="">4</span><span class="">]</span><span class="">  a</span><span class="">[</span><span class="">2</span><span class="">][</span><span class="">5</span><span class="">]</span><span class=""><br/></span>…</pre></div>
+        
+        </div>
+        
+        <p class="standard">Next, let’s take a letter definition like the following:</p>
+        
+        <div class="listing " id="l_none_4576"><pre><span class="">char</span><span class="">[][]</span><span class=""> letter </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class="">,</span><span class=""> </span><span class="">' '</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                    <span class="">{</span><span class=""> </span><span class="">'#'</span><span class="">,</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                    <span class="">{</span><span class=""> </span><span class="">'#'</span><span class="">,</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                    <span class="">{</span><span class=""> </span><span class="">'#'</span><span class="">,</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                    <span class="">{</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class="">,</span><span class=""> </span><span class="">' '</span><span class=""> </span><span class="">}</span><span class=""> </span><span class="">};</span><span class=""> </span></pre></div>
+        
+        <p class="standard">In this case, we can apply 
+            <samp class="listingcharacter listingcharacter">length</samp>
+         in two different ways:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">letter.length</samp>
+                 results in 5 because there are five lines.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">letter[0].length</samp> results in 3—just like 
+                    <samp class="listingcharacter listingcharacter">letter[1].length</samp>
+                 and so on—because each sub-array has a size of 3.</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">To output the letters of our example multidimensional array to the screen, you can use two nested loops, as in the following example:</p>
+        
+        <div class="listing " id="l_none_4582"><pre><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> line </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> line </span><span class="">&lt;</span><span class=""> </span>
+            <span class="bold"><span class="">letter.length</span></span>; line++ ) {<br/>  <span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> column = </span><span class="">0</span><span class="">; column &lt; </span>
+            <span class="bold">letter[line].length</span>; column++ )<br/>    System.out.<span class="">print</span><span class="">( letter[line][column] );</span><br/>  System.out.<span class="">println</span><span class="">();</span><br/>} <span class=""/></pre></div>
+        
+        <p class="standard">Let’s summarize our knowledge into a program that asks a user for a number and then outputs this number in binary representation. The digits 0 and 1 are made up of several symbols and are rotated 90 degrees clockwise and placed one below the other so we don’t have to deal with placing the letters horizontally next to each other.</p>
+        
+        <div class="listing " id="l4.8"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">array</span><span class="">;</span><span class=""> </span><br/><br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Scanner</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> BinaryBanner </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">printLetter</span><span class="">(</span><span class=""> </span><span class="">char</span><span class="">[][]</span><span class=""> letter </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> column </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> column </span><span class="">&lt;</span><span class=""> letter</span><span class="">[</span><span class="">0</span><span class="">].</span><span class="">length</span><span class="">;</span><span class=""> column</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>
+            <a id="p261"/>      <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> line </span><span class="">=</span><span class=""> letter</span><span class="">.</span><span class="">length </span><span class="">-</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""> line </span><span class="">&gt;=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> line</span><span class="">--</span><span class=""> </span><span class="">)</span><span class=""><br/></span>        System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> letter</span><span class="">[</span><span class="">line</span><span class="">][</span><span class="">column</span><span class="">]</span><span class=""> </span><span class="">);</span><span class=""><br/></span>      System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">();</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">();</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">printZero</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">char</span><span class="">[][]</span><span class=""> zero </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class="">,</span><span class=""> </span><span class="">' '</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                      <span class="">{</span><span class=""> </span><span class="">'#'</span><span class="">,</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                      <span class="">{</span><span class=""> </span><span class="">'#'</span><span class="">,</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                      <span class="">{</span><span class=""> </span><span class="">'#'</span><span class="">,</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                      <span class="">{</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class="">,</span><span class=""> </span><span class="">' '</span><span class=""> </span><span class="">}</span><span class=""> </span><span class="">};</span><span class=""><br/></span>    <span class="">printLetter</span><span class="">(</span><span class=""> zero </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">printOne</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">char</span><span class="">[][]</span><span class=""> one </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                     <span class="">{</span><span class=""> </span><span class="">'#'</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                     <span class="">{</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                     <span class="">{</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">},</span><span class=""><br/></span>                     <span class="">{</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">}</span><span class=""> </span><span class="">};</span><span class=""><br/></span>    <span class="">printLetter</span><span class="">(</span><span class=""> one </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">int</span><span class=""> input  </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">nextInt</span><span class="">();</span><span class=""><br/></span>    <span class="">String</span><span class=""> bin </span><span class="">=</span><span class=""> Integer</span><span class="">.</span><span class="">toBinaryString</span><span class="">(</span><span class=""> input </span><span class="">);</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"Banner for %s (binary %s):%n"</span><span class="">,</span><span class=""> input</span><span class="">,</span><span class=""> bin </span><span class="">);</span><span class=""><br/></span>    <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> i </span><span class="">&lt;</span><span class=""> bin</span><span class="">.</span><span class="">length</span><span class="">();</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> bin</span><span class="">.</span><span class="">charAt</span><span class="">(</span><span class=""> i </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>        <span class="">case</span><span class=""> </span><span class="">'0'</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">printZero</span><span class="">();</span><span class=""><br/></span>        <span class="">case</span><span class=""> </span><span class="">'1'</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">printOne</span><span class="">();</span><span class=""><br/></span>      <span class="">}</span><span class=""> </span><br/>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+        
+        <p class="caption "><b>Listing 4.8</b>    
+            src/main/java/com/tutego/insel/array/BinaryBanner.java</p>
+        
+        <p class="standard">The 
+            <samp class="listingcharacter listingcharacter">printLetter(char[][])</samp>
+         method gets the two-dimensional array as its argument and runs differently than in the first case to implement the rotation. The input “2” results in the following output:</p>
+        
+        <div class="listing " id="l_none_4604"><pre>
+            <a id="p262"/>Banner for 2 (binary 10):<br/>   #<br/>#####<br/><br/> ###<br/>#   #<br/> ### </pre></div>
+        
+        
+            
+            <h3 class="t3" id="h4.4.1">4.4.1    Nonrectangular Arrays*</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i04_23"/>
+            Since multidimensional arrays are implemented as arrays of arrays in Java, these arrays don’t necessarily have to be rectangular. Each row in the array can have its own size.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example creates a triangular array with rows of length 1, 2, and 3:</p>
+                
+                <div class="listing  last_item" id="l_none_4611"><pre><span class="">int</span><span class="">[][]</span><span class=""> triangle </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">][];</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> i </span><span class="">&lt;</span><span class=""> </span><span class="">3</span><span class="">;</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  triangle<span class="">[</span><span class=""> i </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class=""> i </span><span class="">+</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">]</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h4.4.1.1">Initializing the Sub-Arrays</h4>
+                
+                <p class="standard">When you declare a multidimensional array, hidden loops automatically create the inner arrays. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_4622"><pre><span class="">int</span><span class="">[][]</span><span class=""> a </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">][</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">];</span><span class=""> </span></pre></div>
+                
+                <p class="standard">In this case, the runtime environment creates the appropriate sub-arrays automatically. However, this creation does not occur with the following code:</p>
+                
+                <div class="listing " id="l_none_4646"><pre><span class="">int</span><span class="">[][]</span><span class=""> a </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">][];</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Instead, you must initialize the sub-arrays yourself before accessing the elements, as in the following example:</p>
+                
+                <div class="listing " id="l_none_4651"><pre><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> i </span><span class="">&lt;</span><span class=""> a</span><span class="">.</span><span class="">length</span><span class="">;</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  a<span class="">[</span><span class=""> i </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">];</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Note that 
+                    <samp class="listingcharacter listingcharacter">int[][] m = new int[][4];</samp>
+                 doesn’t work, of course!</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">You can initialize a multidimensional array in several ways:</p>
+                    
+                    <div class="listing " id="l_none_4655"><pre><span class="">int</span><span class="">[][]</span><span class=""> matrix3x2 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">{</span><span class="">1</span><span class="">,</span><span class="">2</span><span class="">},</span><span class=""> </span><span class="">{</span><span class="">2</span><span class="">,</span><span class="">3</span><span class="">},</span><span class=""> </span><span class="">{</span><span class="">3</span><span class="">,</span><span class="">4</span><span class="">}</span><span class=""> </span><span class="">}</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard">or</p>
+                    
+                    <div class="listing " id="l_none_4679"><pre><span class="">
+                            <a id="p263"/>
+                        int</span><span class="">[][]</span><span class=""> matrix3x2 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[][]{</span><span class=""> </span><span class="">{</span><span class="">1</span><span class="">,</span><span class="">2</span><span class="">},</span><span class=""> </span><span class="">{</span><span class="">2</span><span class="">,</span><span class="">3</span><span class="">},</span><span class=""> </span><span class="">{</span><span class="">3</span><span class="">,</span><span class="">4</span><span class="">}</span><span class=""> </span><span class="">}</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard">or</p>
+                    
+                    <div class="listing  last_item" id="l_none_4676"><pre><span class="">int</span><span class="">[][]</span><span class=""> matrix3x2 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[][]{</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[]{</span><span class="">1</span><span class="">,</span><span class="">2</span><span class="">},</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[]{</span><span class="">2</span><span class="">,</span><span class="">3</span><span class="">},</span><span class=""> <br/>  </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[]{</span><span class="">3</span><span class="">,</span><span class="">4</span><span class="">}</span><span class=""> </span><span class="">}</span><span class="">;</span></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h4.4.1.2">Pascal’s Triangle</h4>
+                
+                <p class="standard">The following example shows another application of non-rectangular arrays, in which Pascal’s triangle is emulated. The triangle is structured in such a way that the elements under a number form exactly the sum of the two numbers directly above it. The edges are filled with ones.</p>
+                
+                <div class="listing " id="l4.9"><pre>            <span class="">1</span><span class=""><br/></span>          <span class="">1</span><span class="">   </span><span class="">1</span><span class=""><br/></span>        <span class="">1</span><span class="">   </span><span class="">2</span><span class="">   </span><span class="">1</span><span class=""><br/></span>      <span class="">1</span><span class="">   </span><span class="">3</span><span class="">   </span><span class="">3</span><span class="">   </span><span class="">1</span><span class=""><br/></span>    <span class="">1</span><span class="">   </span><span class="">4</span><span class="">   </span><span class="">6</span><span class="">   </span><span class="">4</span><span class="">   </span><span class="">1</span><span class=""><br/></span>  <span class="">1</span><span class="">   </span><span class="">5</span><span class="">  </span><span class="">10</span><span class="">  </span><span class="">10</span><span class="">   </span><span class="">5</span><span class="">   </span><span class="">1</span><span class=""><br/></span><span class="">1</span><span class="">   </span><span class="">6</span><span class="">  </span><span class="">15</span><span class="">  </span><span class="">20</span><span class="">  </span><span class="">15</span><span class="">   </span><span class="">6</span><span class="">   </span><span class="">1</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 4.9</b>    
+            Pascal’s Triangle</p>
+                
+                <p class="standard">In the following implementation, an array with the appropriate length is dynamically requested for each level:</p>
+                
+                <div class="listing " id="l4.10"><pre><span class="">class</span><span class=""> PascalsTriangle </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">int</span><span class="">[][]</span><span class=""> triangle </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class="">7</span><span class="">][];</span><span class=""><br/></span><br/>    <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> row </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> row </span><span class="">&lt;</span><span class=""> triangle</span><span class="">.</span><span class="">length</span><span class="">;</span><span class=""> row</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> </span><span class="">" "</span><span class="">.</span><span class="">repeat</span><span class="">(</span><span class=""> </span><span class="">14</span><span class=""> </span><span class="">-</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">*</span><span class=""> row</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>      triangle<span class="">[</span><span class="">row</span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[</span><span class="">row </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">];</span><span class=""><br/></span><br/>      <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> col </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> col </span><span class="">&lt;=</span><span class=""> row</span><span class="">;</span><span class=""> col</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>        <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">col </span><span class="">==</span><span class=""> </span><span class="">0</span><span class="">)</span><span class=""> </span><span class="">||</span><span class=""> </span><span class="">(</span><span class="">col </span><span class="">==</span><span class=""> row</span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>           triangle<span class="">[</span><span class="">row</span><span class="">][</span><span class="">col</span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span>        <span class="">else</span><span class=""><br/></span>           triangle<span class="">[</span><span class="">row</span><span class="">][</span><span class="">col</span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> triangle</span><span class="">[</span><span class="">row </span><span class="">-</span><span class=""> </span><span class="">1</span><span class="">][</span><span class="">col </span><span class="">-</span><span class=""> </span><span class="">1</span><span class="">]</span><span class=""> </span><span class="">+</span><span class=""><br/></span>                                triangle<span class="">[</span><span class="">row </span><span class="">-</span><span class=""> </span><span class="">1</span><span class="">][</span><span class="">col</span><span class="">];</span><span class=""><br/></span><br/>        System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%3d "</span><span class="">,</span><span class=""> triangle</span><span class="">[</span><span class="">row</span><span class="">][</span><span class="">col</span><span class="">]</span><span class=""> </span><span class="">);</span><span class=""><br/></span>      <span class="">}</span><span class=""><br/></span>      System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">();</span><span class=""><br/></span>
+                    <a id="p264"/>    <span class="">}</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 4.10</b>    
+            src/main/java/com/tutego/insel/array/PascalsTriangle.java, main()</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">String</samp> method 
+                    <samp class="listingcharacter listingcharacter">repeat(...)</samp>
+                 generates the leading spaces so that the triangle is centered.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h4.4.1.3">Other Areas of Use</h4>
+                
+                <p class="standard">With two-dimensional arrays, the management of symmetric matrices is simple since these matrices contain elements that are symmetric to the diagonal. Thus, either the upper or the lower triangular matrix can be omitted.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn04_07" id="fn04_07">[ 107 ]</a></span>
+                </p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">An unusual syntax in Java allows you to place the pair of square brackets after the method header for array returns, in contrast to the following code:</p>
+                    
+                    <div class="listing " id="l_none_4714"><pre><span class="">static</span><span class=""> </span><span class="">int</span>
+                        <span class="bold"><span class="">[]</span></span> <span class="">productAndSum</span><span class="">( </span><span class="">int</span><span class=""> a, </span><span class="">int</span><span class=""> b )</span><span class=""/></pre></div>
+                    
+                    <p class="standard">Alternatively, you can write the following code:</p>
+                    
+                    <div class="listing " id="l_none_4723"><pre><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">productAndSum</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> a</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> b </span><span class="">)</span>
+                        <span class="bold">[]</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">The latter approach is not recommended. Even something like 
+                        <samp class="listingcharacter listingcharacter">int[] transposeMatrix(int[][] m)</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">[]</samp>
+                        </span> is possible but should be written as 
+                        <samp class="listingcharacter listingcharacter">int[]</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">[] </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">transposeMatrix(int[][] matrix)</samp>
+                    .</p>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

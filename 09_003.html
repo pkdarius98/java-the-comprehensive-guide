@@ -1,0 +1,639 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    There Must Be Exceptions" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    There Must Be Exceptions" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    There Must Be Exceptions</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h9.3">9.3    The Class Hierarchy of Exceptions</h2>
+        
+        <p class="standard">An exception is an object whose type is directly or indirectly derived from 
+            <samp class="listingcharacter listingcharacter">java.lang.Throwable</samp>
+            <a class="indexanchor" id="i09_16"/>. (The naming with -
+            <samp class="listingcharacter listingcharacter">able</samp> suggests an interface, but 
+            <samp class="listingcharacter listingcharacter">Throwable</samp> is a non-abstract class.) You’ll have direct little interaction with 
+            <samp class="listingcharacter listingcharacter">Throwable</samp>
+            <a class="indexanchor" id="i09_17"/> but rather will interact with the direct subclass 
+            <samp class="listingcharacter listingcharacter">Exception</samp> or the exception classes derived from 
+            <samp class="listingcharacter listingcharacter">Exception</samp>
+        .</p>
+        
+        
+            
+            <h3 class="t3" id="h9.3.1">9.3.1    Members of the Exception Object</h3>
+            
+            <p class="standard">The exception object passed to you in the 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             clause is rich with information. In this way, you can find out which exception is actually involved and what error message is called. The stack trace can also be queried and output, as in the following example:</p>
+            
+            <div class="listing " id="l9.8"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""/><br/>  Integer<span class="">.</span><span class="">parseInt</span><span class="">(</span><span class=""> </span><span class="">"19%"</span><span class=""> </span><span class="">);</span><span class=""/><br/><span class="">}</span><span class=""/><br/><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> NumberFormatException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""/><br/>  <span class="">String</span><span class=""> name </span><span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">e.</span><span class="">getClass</span><span class="">().</span><span class="">getName</span><span class="">()</span></span>;<span class=""/><br/><span class="">  </span><span class="">String</span><span class=""> msg  = </span>
+                <span class="bold">e.<span class="">getMessage</span><span class="">()</span></span>;<span class=""/><br/><span class="">  </span><span class="">String</span><span class=""> s    = </span>
+                <span class="bold">e.<span class="">toString</span><span class="">()</span></span>;<span class=""/><br/><br/><span class="">  System.out.</span><span class="">println</span><span class="">( name )</span><span class="">;// java.lang.NumberFormatException</span><span class=""/><br/><span class="">  System.out.</span><span class="">println</span><span class="">( msg );</span><span class=""> // For input string: "19%"</span><span class=""/><br/><span class="">  System.out.</span><span class="">println</span><span class="">( s );</span><span class=""> // java.lang.NumberFormatException: For input </span><span class=""/><br/><span class="">                          </span><span class=""> // string: "19%"</span><span class=""/><br/><br/><span class="">  e.</span><span class="">printStackTrace</span><span class="">();</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.8</b>    
+            src/main/java/com/tutego/insel/exception/ NumberFormatExceptionElements.java, main()</p>
+            
+            <p class="standard">In the last case, with
+                <a class="indexanchor" id="i09_18"/>
+                <samp class="listingcharacter listingcharacter"> e.printStackTrace()</samp>, in the 
+                <samp class="listingcharacter listingcharacter">System.err</samp>
+                <a class="indexanchor" id="i09_19"/>
+             error channel, you’ll get the same output as the one the virtual machine raises if the exception isn’t caught. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_9177"><pre>java.lang.NumberFormatException<br/>For input string: "19%"<br/>java.lang.NumberFormatException: For input string: "19%"<br/>
+                <a id="p551"/>java.lang.NumberFormatException: For input string: "19%"<br/> at java.base/java.lang.NumberFormatException.forInputString(<br/>   NumberFormatException.java:65)<br/> at java.base/java.lang.Integer.parseInt(Integer.java:652)<br/> at java.base/java.lang.Integer.parseInt(Integer.java:770)<br/> at c.t.i.e.NumberFormatExceptionElements.main(NumberFormatExceptionElements.java:7) </pre></div>
+            
+            <p class="standard">The output consists of the class name of the exception, the message, and the stack trace. 
+                <samp class="listingcharacter listingcharacter">printStackTrace(...)</samp>
+             is parameterized and can also be sent to an output channel.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.3.2">9.3.2    Base Type Throwable</h3>
+            
+            <p class="standard">All exceptions are subclasses of 
+                <samp class="listingcharacter listingcharacter">Throwable</samp>. From 
+                <samp class="listingcharacter listingcharacter">Throwable</samp>, the hierarchy of exception types branches to 
+                <samp class="listingcharacter listingcharacter">java.lang.Exception</samp>
+                <a class="indexanchor" id="i09_20"/> and 
+                <samp class="listingcharacter listingcharacter">java.lang.Error</samp>
+                <a class="indexanchor" id="i09_21"/>. The classes that emerge from 
+                <samp class="listingcharacter listingcharacter">Error</samp> won’t be pursued further in this book since these exceptions are so serious that they usually aren’t caught and handled by programmers. 
+                <samp class="listingcharacter listingcharacter">Throwable</samp> inherits a number of useful methods that are shown in 
+                <span class="crossreference "><a href="09_003.html#f9.4">Figure 9.4</a></span>
+            , which also summarizes the inheritance relationships once again.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f9.4.html" id="f9.4"><img alt="Unified Modeling Language (UML) Diagram of the Important Throwable Superclass" id="img-f9.4" src="bilderklein/klein09_004.png"/></a></div>
+            
+            <p class="caption "><b>Figure 9.4</b>    
+            Unified Modeling Language (UML) Diagram of the Important Throwable Superclass</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.3.3">9.3.3    
+                <a id="p552"/>
+            The Exception Hierarchy</h3>
+            
+            <p class="standard">In the library, all exception classes are derived from 
+                <samp class="listingcharacter listingcharacter">java.lang.Exception</samp>. Exceptions are errors
+                <a class="indexanchor" id="i09_22"/> or exceptional situations that you should handle. The 
+                <samp class="listingcharacter listingcharacter">Exception</samp> class then divides again into further subclasses or subhierarchies. 
+                <span class="crossreference "><a href="09_003.html#f9.5">Figure 9.5</a></span> shows some subclasses of the 
+                <samp class="listingcharacter listingcharacter">Exception</samp>
+             class.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f9.5.html" id="f9.5"><img alt="Selected Subclasses of the Exception Class" id="img-f9.5" src="bilderklein/klein09_005.png"/></a></div>
+            
+            <p class="caption "><b>Figure 9.5</b>    
+            Selected Subclasses of the Exception Class</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.3.4">9.3.4    Catching Super-Exceptions</h3>
+            
+            <p class="standard">One consequence of hierarchies is that catching an exception of the superclass is generally sufficient. For example, if a 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp>
+                <a class="indexanchor" id="i09_23"/> occurs, this class is derived from 
+                <samp class="listingcharacter listingcharacter">IOException</samp>
+                <a class="indexanchor" id="i09_24"/>, which means that 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> is a specialization. If you catch every 
+                <samp class="listingcharacter listingcharacter">IOException</samp>, you also handle the 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> at the same time, as shown in 
+                <span class="crossreference "><a href="09_003.html#f9.6">Figure 9.6</a></span>
+            . </p>
+            
+            <p class="standard">Let’s assume the following handling:</p>
+            
+            <div class="listing " id="l_none_9190"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  …<br/><span class="">}</span><span class=""><br/></span>
+                <span class="bold"><span class="">catch</span><span class=""> ( FileNotFoundException e ) {</span><br/>  e.<span class="">printStackTrace</span><span class="">();</span><br/>}<br/><span class="">catch</span><span class=""> ( IOException e ) {</span><br/>  e.<span class="">printStackTrace</span><span class="">();</span><br/>}</span> <span class=""/></pre></div>
+            
+            <p class="standard">
+                <a id="p553"/>Since the handling in the 
+                <samp class="listingcharacter listingcharacter">catch</samp> blocks is identical, 
+                <samp class="listingcharacter listingcharacter">catch (IOException e)</samp> can catch the 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp>
+             at the same time, as in the following example:</p>
+            
+            <div class="listing " id="l_none_9180"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  …<br/><span class="">}</span><span class=""><br/></span>
+                <span class="bold"><span class="">catch</span><span class=""> ( IOException e ) {</span><br/>  e.<span class="">printStackTrace</span><span class="">();</span></span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">Even if the exception is caught via a superclass, the exception can basically be identified again later via 
+                <samp class="listingcharacter listingcharacter">instanceof</samp>
+            . For instance, you could write the following code:</p>
+            
+            <div class="listing " id="l_none_9192"><pre><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">IOException e</span></span> ) {<br/>  <span class="">if</span><span class=""> ( </span>
+                <span class="bold">e <span class="">instanceof</span><span class=""> FileNotFoundException</span></span> )<br/>    System.err.<span class="">println</span><span class="">( </span><span class="">"File does not exist!"</span><span class=""> );</span><br/>  <span class="">else</span><span class=""><br/></span>    System.err.<span class="">println</span><span class="">( </span><span class="">"General input/output error!"</span><span class=""> );</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">However, for reasons of clarity, this technique shouldn’t be used often.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f9.6.html" id="f9.6"><img alt="IOException in the Class Diagram" id="img-f9.6" src="bilderklein/klein09_006.png"/></a></div>
+            
+            <p class="caption "><b>Figure 9.6</b>    
+            IOException in the Class Diagram</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.3.5">9.3.5    
+                <a id="p554"/>
+            Already Caught?</h3>
+            
+            <p class="standard">The Java compiler checks whether exceptions may have already been caught in the chain and reports an error if 
+                <samp class="listingcharacter listingcharacter">catch</samp> blocks aren’t reachable. As mentioned earlier, 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> is a special 
+                <samp class="listingcharacter listingcharacter">IOException</samp>, and a 
+                <samp class="listingcharacter listingcharacter">catch(IOException e)</samp> can catch exceptions of type 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp>
+             right away. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_9219"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  …<br/><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IOException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> // catch IOException and all subclasses</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">Of course, a 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> can still be caught as its own type, but you must note the order of the 
+                <samp class="listingcharacter listingcharacter">catch</samp> blocks. The order is absolutely relevant; the type tests start at the top and then continue through to the bottom. If an early 
+                <samp class="listingcharacter listingcharacter">catch</samp> already catches exceptions of a certain type, for example, a 
+                <samp class="listingcharacter listingcharacter">catch</samp> on 
+                <samp class="listingcharacter listingcharacter">IOException</samp> catches all input/output errors, a subsequent 
+                <samp class="listingcharacter listingcharacter">catch</samp> on the 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp>
+             is false.</p>
+            
+            <p class="standard">Let’s suppose a 
+                <samp class="listingcharacter listingcharacter">try</samp> block can throw a 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> and an 
+                <samp class="listingcharacter listingcharacter">IOException</samp>. Then, the handling shown on the left in 
+                <span class="crossreference "><a href="09_003.html#t9.1">Table 9.1</a></span>
+             is correct, but the example on the right is incorrect.</p>
+            
+            <table class="standardtable" id="t9.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Correct</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">With Compiler Error</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">try {<br/> …<br/>}<br/>catch ( FileNotFoundException e ) {<br/>}<br/>catch ( IOException e ) {<br/>}</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">try {<br/> …<br/>}<br/>catch ( IOException e ) {<br/>}<br/>catch ( FileNotFoundException e ) { // 
+                                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/><br/>}</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 9.1</b>    
+            The Order of the Catch Blocks Matters</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">The following example using 
+                    <span class="italic">multi-catch</span>
+                 is incorrect:</p>
+                
+                <div class="listing " id="l_none_9218"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">new</span><span class=""> </span><span class="">RandomAccessFile</span><span class="">(</span><span class=""> </span><span class="">""</span><span class="">,</span><span class=""> </span><span class="">""</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span>
+                    <span class="bold"><span class="">catch</span><span class=""> ( FileNotFoundException | IOException | Exception e )</span></span> { }<span class=""/></pre></div>
+                
+                <p class="standard">The Java compiler reports an error of the type “Alternatives in a multi-catch statement cannot be related by subclassing” and terminates.</p>
+                
+                <p class="standard">
+                    <a id="p555"/>Set checks are performed by the compiler even without 
+                    <span class="italic">multi-catch</span>
+                , and thus the following example is also incorrect for the same reasons:</p>
+                
+                <div class="listing " id="l_none_9229"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">RandomAccessFile</span><span class="">(</span><span class=""> </span><span class="">""</span><span class="">,</span><span class=""> </span><span class="">""</span><span class=""> </span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> Exception e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IOException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> FileNotFoundException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> }</span></pre></div>
+                
+                <p class="standard last">While reordering these lines will correct the errors, the order doesn’t matter with multi-catch.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.3.6">9.3.6    Procedure of an Exceptional Situation</h3>
+            
+            <p class="standard">The runtime system generates an exception object if an error is to be displayed via an exception. Then, the processing of the program lines is immediately interrupted, and the runtime system independently moves to the first 
+                <samp class="listingcharacter listingcharacter">catch</samp> clause (or jumps further to the caller in case of a 
+                <samp class="listingcharacter listingcharacter">throws</samp> or an unchecked exception). If the first 
+                <samp class="listingcharacter listingcharacter">catch</samp> clause doesn’t match the type of exception encountered, all remaining 
+                <samp class="listingcharacter listingcharacter">catch</samp> clauses will be checked one after another, and the first matching clause is jumped to (or selected). First, something is tried (that’s why it’s called 
+                <span class="italic">try</span>), and if an 
+                <samp class="listingcharacter listingcharacter">Exception</samp> object is 
+                <span class="italic">thrown</span> in the program section because of an error, the object can be 
+                <span class="italic">caught</span> at some point. Since the first matching 
+                <samp class="listingcharacter listingcharacter">catch</samp> clause is always selected, the last 
+                <samp class="listingcharacter listingcharacter">catch</samp> clause must never be first in the example since it matches any 
+                <samp class="listingcharacter listingcharacter">IOException</samp>, and 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> is a subclass of 
+                <samp class="listingcharacter listingcharacter">IOException</samp>. All other statements in the 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             blocks would then not be executed; the compiler would recognize this problem and issue an error.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.3.7">9.3.7    No General Catching!</h3>
+            
+            <p class="standard">If a program block throws an 
+                <samp class="listingcharacter listingcharacter">IOException</samp>, a 
+                <samp class="listingcharacter listingcharacter">MalformedURLException</samp>, and a 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> and the three exceptions should be handled in the same way, a 
+                <samp class="listingcharacter listingcharacter">catch (IOException e)</samp> catches both the 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> and the 
+                <samp class="listingcharacter listingcharacter">MalformedURLException</samp> type at the same time since both are subclasses of 
+                <samp class="listingcharacter listingcharacter">IOException</samp>
+            . Thus, one block handles all three exception types, which is pretty useful.</p>
+            
+            <p class="standard">Now, however, some exceptions may coexist in an inheritance relationship, such as 
+                <samp class="listingcharacter listingcharacter">InputMismatchException</samp> and 
+                <samp class="listingcharacter listingcharacter">IOException</samp>. Let’s recall again the example of the 
+                <samp class="listingcharacter listingcharacter">UserInputTimestampWriterMultiCatch</samp> class, shown in 
+                <span class="crossreference "><a href="09_003.html#f9.6">Figure 9.6</a></span>
+            , where we used the following multi-catch:</p>
+            
+            <div class="listing " id="l_none_9234"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  …<br/><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">InputMismatchException | IOException e</span></span> ) {<br/>  …<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">
+                <a id="p556"/>Since 
+                <samp class="listingcharacter listingcharacter">InputMismatchException</samp> and 
+                <samp class="listingcharacter listingcharacter">IOException</samp> are subclasses of 
+                <samp class="listingcharacter listingcharacter">Exception</samp>
+            , you can also write the following code:</p>
+            
+            <div class="listing " id="l_none_9253"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  …<br/><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">Exception e</span></span> ) {<br/>  …<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">The solution chosen in this case, to run up the exception hierarchy until a common superclass is found, isn’t ideal. For what works well for exception types that are as well in the hierarchy (like 
+                <samp class="listingcharacter listingcharacter">MalformedURLException</samp>, which is an 
+                <samp class="listingcharacter listingcharacter">IOException</samp>), 
+                <samp class="listingcharacter listingcharacter">catch(Exception e)</samp> is dangerous because it catches much more and handles everything in its exception handling. If, for example, a 
+                <samp class="listingcharacter listingcharacter">null</samp> reference appears through an uninitialized variable with reference type and a 
+                <samp class="listingcharacter listingcharacter">NullPointerException</samp> occurs, this reference would also be caught by mistake, although the program error has nothing to do with the 
+                <samp class="listingcharacter listingcharacter">InputMismatchException</samp> or 
+                <samp class="listingcharacter listingcharacter">IOException</samp>
+            . Consider the following example:</p>
+            
+            <div class="listing " id="l_none_9268"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  Point p <span class="">=</span><span class=""> null</span><span class="">;</span><span class=""><br/></span>  p<span class="">.</span><span class="">x </span><span class="">=</span><span class=""> </span><span class="">2</span><span class="">;</span><span class="">         </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 NullPointerException</span><span class=""><br/></span>  <span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class=""> x </span><span class="">=</span><span class=""> </span><span class="">12</span><span class=""> / i;  </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Integer division by 0</span><span class=""><br/></span><br/>  
+                <span class="italic"><span class="">something can </span><span class="">throw</span><span class=""> InputMismatchException...</span><br/>  something can <span class="">throw</span><span class=""> IOException...</span></span><br/>}<br/>
+                <span class="bold"><span class="">catch</span><span class=""> ( Exception e ) { </span></span>
+                <span class="italic">Handling </span>
+                <span class="bold">}</span> <span class=""/></pre></div>
+            
+            <p class="standard">A 
+                <samp class="listingcharacter listingcharacter">NullPointerException</samp> and the 
+                <samp class="listingcharacter listingcharacter">ArithmeticException</samp> shouldn’t be handled. The central problem in this case is that these exceptions are unchecked exceptions of type 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>, and 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp> is a subclass of 
+                <samp class="listingcharacter listingcharacter">Exception</samp>. If you catch all 
+                <samp class="listingcharacter listingcharacter">Exception</samp> types, everything will be caught—including 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp> as well. You cannot always catch all non-runtime exceptions, which would work if 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp> wasn’t a subclass of 
+                <samp class="listingcharacter listingcharacter">Exception</samp>, such as a 
+                <samp class="listingcharacter listingcharacter">Throwable</samp>
+            , but designers of the Java language did not model it that way.</p>
+            
+            
+                
+                <h4 class="t4" id="h9.3.7.1">If main(String[]) Redirects Everything</h4>
+                
+                <p class="standard">If exception handling in a main program doesn’t matter at all, you can also redirect all exceptions to the runtime environment, which will then terminate the program—terminate the thread, to be precise—in the event of an error.</p>
+                
+                <div class="listing " id="l9.9"><pre><span class="">
+                        <a id="p557"/>
+                    public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> Exception </span><span class="">{</span><span class=""><br/></span>  Files<span class="">.</span><span class="">writeString</span><span class="">(</span><span class=""> Path</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"timestamps.txt"</span><span class=""> </span><span class="">),</span><span class=""><br/></span>                     LocalDateTime<span class="">.</span><span class="">now</span><span class="">()</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">"\n"</span><span class="">,</span><span class=""><br/></span>                     StandardOpenOption<span class="">.</span><span class="">APPEND </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 9.9</b>    
+            src/main/java/com/tutego/insel/exception/IDontCare.java, main()</p>
+                
+                <p class="standard">This approach works because all exceptions are derived from the 
+                    <samp class="listingcharacter listingcharacter">Exception</samp>
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn09_03" id="fn09_03">[ 162 ]</a></span> class. If the exception isn’t caught anywhere else, a runtime error message will be issued because the 
+                    <samp class="listingcharacter listingcharacter">Exception</samp>
+                 object has landed at the interpreter (i.e., at the virtual machine) at the outermost call level. Of course, this style isn’t recommended (although used in this book to keep programs short) because exceptions should be handled in any case.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.3.8">9.3.8    Known RuntimeException Classes</h3>
+            
+            <p class="standard">The Java API as a whole provides a large number of 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp> classes, and more are coming. 
+                <span class="crossreference "><a href="09_003.html#t9.2">Table 9.2</a></span>
+             lists some known exception types and shows which operations throw which exceptions. In this collection of exceptions, we’re anticipating several special APIs we’ll introduce later in this book.</p>
+            
+            <table class="standardtable" id="t9.2">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Subclass of RuntimeException</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">What Triggers the Error</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ArithmeticException</samp>
+                                <a class="indexanchor" id="i09_25"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Integer division by 0.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ArrayIndexOutOfBoundsException</samp>
+                                <a class="indexanchor" id="i09_26"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Index bounds were disregarded, for example, by 
+                                <samp class="listingcharacter listingcharacter">(new int[0])[1]</samp>. An 
+                                <samp class="listingcharacter listingcharacter">ArrayIndexOutOfBoundsException</samp> is a subclass of 
+                                <samp class="listingcharacter listingcharacter">IndexOutOfBoundsException</samp> along with 
+                                <samp class="listingcharacter listingcharacter">StringIndexOutOfBoundsException</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ClassCastException</samp>
+                                <a class="indexanchor" id="i09_27"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Typecasting isn’t possible at runtime. Thus, 
+                                <samp class="listingcharacter listingcharacter">String s = (String) new Object();</samp> throws a 
+                                <samp class="listingcharacter listingcharacter">ClassCastException</samp>
+                             with the message “java.lang. Object cannot be cast to java.lang.String.”</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">EmptyStackException</samp>
+                                <a class="indexanchor" id="i09_28"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">The stack is empty. 
+                                <samp class="listingcharacter listingcharacter">new java.util.Stack(). pop()</samp>
+                             provokes the error.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>
+                                <a class="indexanchor" id="i09_29"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">A commonly used exception used by methods to report false arguments. 
+                                <samp class="listingcharacter listingcharacter">Integer.parseInt("tutego")</samp> throws a 
+                                <samp class="listingcharacter listingcharacter">NumberFormatException</samp>, a subclass of 
+                                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">
+                                    <a id="p558"/>
+                                IllegalMonitorStateException</samp>
+                                <a class="indexanchor" id="i09_30"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">A thread wants to wait but doesn’t have the monitor, for example, 
+                                <samp class="listingcharacter listingcharacter">new String().wait();</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                                <a class="indexanchor" id="i09_31"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Reports one of the most common programming errors, for example, by 
+                                <samp class="listingcharacter listingcharacter">((String) null).length()</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">UnsupportedOperationException</samp>
+                                <a class="indexanchor" id="i09_32"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Operations aren’t permitted, for example, by 
+                                <samp class="listingcharacter listingcharacter">java.util.Arrays.asList(args).add("jv")</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 9.2</b>    
+            RuntimeException Classes</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.3.9">9.3.9    Interception Is Possible, but Not Mandatory</h3>
+            
+            <p class="standard">A 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp> can be caught in the code but doesn’t have to be. Since the compiler doesn’t insist on interception, exceptions thrown from 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp> are also called 
+                <span class="italic">unchecked exceptions</span>
+                <a class="indexanchor" id="i09_33"/>
+                <a class="indexanchor" id="i09_34"/>, while all others are referred to as 
+                <span class="italic">checked exceptions</span>
+                <a class="indexanchor" id="i09_35"/>
+                <a class="indexanchor" id="i09_36"/>. Also, a 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp> doesn’t necessarily need to be specified on 
+                <samp class="listingcharacter listingcharacter">throws</samp>
+             in the method signature, although some authors do for documentation purposes.</p>
+            
+            <p class="standard">Conveniently, an unchecked exception can surface like a 
+                <span class="italic">bubble</span> along the chain of method calls and eventually be caught by a block that takes care of it. If a 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp> occurs at runtime and a 
+                <samp class="listingcharacter listingcharacter">try</samp>-
+                <samp class="listingcharacter listingcharacter">catch</samp> doesn’t occur at some point in the call hierarchy, the JVM terminates the executing thread. So, if an action called in 
+                <samp class="listingcharacter listingcharacter">main(...)</samp> throws a 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+            , that’s the end for this main program.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Style</h6>
+                
+                <p class="standard first last">You don’t specify a 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+                 in the method header, which should be documented in the Javadoc.</p>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

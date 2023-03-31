@@ -1,0 +1,2510 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Bits and Bytes, Mathematics and Money" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Bits and Bytes, Mathematics and Money" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Bits and Bytes, Mathematics and Money</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h21">21    
+        <a id="p1011"/>
+    Bits and Bytes, Mathematics and Money</h1><p class="introductorynote indent_chapter_double">“There are only 10 types of people in the world. <br/>Those who understand binary code and those who don’t.”</p><p class="standard">This chapter takes a closer look at the representation of the numbers and explains how binary operators operate on these values. Once we’ve examined integers in more detail, a detailed presentation of floats will follow, in turn followed by basic mathematical functions such as 
+        <samp class="listingcharacter listingcharacter">max(...)</samp>, 
+        <samp class="listingcharacter listingcharacter">sin(...)</samp>, and 
+        <samp class="listingcharacter listingcharacter">abs(...)</samp>, which are implemented in Java by the 
+        <samp class="listingcharacter listingcharacter">Math</samp>
+     class.</p>
+        
+        <h2 class="t2" id="h21.1">21.1    Bits and Bytes</h2>
+        
+        <p class="standard">A 
+            <span class="italic">bit</span> is an information carrier for the statement “true or false” and thus has two states. By combining individual bits, larger sequences are created such as the 
+            <span class="italic">byte</span>
+            <a class="indexanchor" id="i21_00"/>, which consists of 8 bits, for example, 00010011
+            <sub>bin</sub>. Since the number mentioned could well be a decimal number due to the digits 0 and 1, we place a small 
+            <sub>bin</sub>
+         after the number to avoid misunderstanding.</p>
+        
+        <p class="standard">If 8 bits = 1 byte is used as a basis, 256 different numbers can be formed by different assignments. If no bit of the byte is set, the number is 0; if every bit is set, the number is 255. Each bit at a position in the byte can be 0 or 1, and this results in a value at which position 0 or 1 appears in the sequence. In this case, we’re focused on what’s called 
+            <span class="italic">positional notation</span> (or 
+            <span class="italic">place-value notation</span>, or 
+            <span class="italic">positional numeral system</span>), where the position of a digit is crucial because 12 is not equal to 21 and 10
+            <sub>bin</sub> is not equal to 01
+            <sub>bin</sub>
+        . Now, the only question is how bit numbering is done because the bit with the lowest place value could be on the left or on the right—usually, it’s on the right, and the bit with the highest place value is on the left.</p>
+        
+        <p class="standard">In the 
+            <span class="italic">binary system</span>, we have the digits 0 and 1. The value of a binary number is obtained by adding the digits 0 or 1, each of which is previously multiplied by its place value 2
+            <sup>i</sup>. The value assignment for the number 19 is calculated from 16 + 2 + 1 since it’s composed of terms of the sum of the form 2
+            <sup>i</sup>: 19
+            <sub>dec</sub> = 16 + 2 + 1 = 1 × 2
+            <sup>4</sup> + 0 × 2
+            <sup>3</sup> + 0 × 2
+            <sup>2</sup> + 1 × 2
+            <sup>1</sup> + 1 × 2
+            <sup>0</sup> = 10011
+            <sub>bin</sub>
+        .</p>
+        
+        <table class="standardtable" id="t21.1">
+            
+            <thead>
+                
+                <tr>
+                    
+                    <th class="tablehead tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <a id="p1012"/>
+                        Bit</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">7</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">6</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">5</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">4</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">3</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">2</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">1</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">0</p>
+                    
+                    </th>
+                
+                </tr>
+            
+            </thead>
+            
+            <tbody>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">Value</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">2
+                            <sup>7</sup>
+                        =128</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">2
+                            <sup>6</sup>
+                        =64</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">2
+                            <sup>5</sup>
+                        =32</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">2
+                            <sup>4</sup>
+                        =16</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">2
+                            <sup>3</sup>
+                        =8</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">2
+                            <sup>2</sup>
+                        =4</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">2
+                            <sup>1</sup>
+                        =2</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">2
+                            <sup>0</sup>
+                        =1</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">Assignment for 19</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">0</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">0</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">0</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">1</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">0</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">0</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">1</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">1</p>
+                    
+                    </td>
+                
+                </tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <p class="caption "><b>Table 21.1</b>    
+            Value Assignment</p>
+        
+        <p class="standard">To modify bits, Java provides two kinds of tools:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Bitwise operators</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Bitwise shift operations</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">We’ll now look at these tools next.</p>
+        
+        
+            
+            <h3 class="t3" id="h21.1.1">21.1.1    The Bit Operators: Complement, AND, OR, and XOR</h3>
+            
+            <p class="standard">Bit operators can be used to perform binary operations on operands, for example, to set a bit of a byte. Bit operations include the complement of an operand and links to other values. These bitwise operators allow individual bits to be queried and manipulated.</p>
+            
+            <table class="standardtable" id="t21.2">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Operator</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Name</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Task</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">~</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i21_01"/>Complement <br/>(bitwise NOT
+                                <a class="indexanchor" id="i21_02"/>
+                                <a class="indexanchor" id="i21_03"/>
+                            )</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Inverts each bit: 0 becomes 1, and 1 becomes 0.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">|</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i21_04"/>
+                                <a class="indexanchor" id="i21_05"/>
+                            Bitwise OR</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">For 
+                                <samp class="listingcharacter listingcharacter">a | b</samp>, each bit of 
+                                <samp class="listingcharacter listingcharacter">a</samp> and 
+                                <samp class="listingcharacter listingcharacter">b</samp>
+                             is individually linked via OR.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">&amp;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i21_06"/>
+                            Bitwise AND</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">For 
+                                <samp class="listingcharacter listingcharacter">a &amp; b</samp>, each bit of 
+                                <samp class="listingcharacter listingcharacter">a</samp> and 
+                                <samp class="listingcharacter listingcharacter">b</samp> is individually<br/>linked via AND.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">^</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i21_07"/>
+                                <a class="indexanchor" id="i21_08"/>Bitwise exclusive <br/>OR (XOR)</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">For 
+                                <samp class="listingcharacter listingcharacter">a ^ b</samp>, each bit of 
+                                <samp class="listingcharacter listingcharacter">a</samp> and 
+                                <samp class="listingcharacter listingcharacter">b</samp> is individually<br/>linked via XOR; do not confuse this construction with 
+                                <samp class="listingcharacter listingcharacter">a</samp> to the power of 
+                                <samp class="listingcharacter listingcharacter">b</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 21.2</b>    
+            Bit Operators in Java</p>
+            
+            <p class="standard">The complement is a unary operator; the others are binary operators. Let’s generally consider the binary link 
+                <samp class="listingcharacter listingcharacter">a # b</samp>. With the binary bitwise AND operation with 
+                <samp class="listingcharacter listingcharacter">&amp;</samp>, the following applies to each bit: If any bit is set in the operand 
+                <samp class="listingcharacter listingcharacter">a</samp> and at the same position also in the operand 
+                <samp class="listingcharacter listingcharacter">b</samp>, then the bit is also set at the position in the result. With the OR operation with 
+                <samp class="listingcharacter listingcharacter">|</samp>, only one of the operands must be set, so that the bit in the result is set. With an exclusive OR (XOR), the result is 1 if only exactly one of the operands is 1. If both are 0 or 1, the result is 0, which corresponds to a binary addition or subtraction.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn21_01" id="fn21_01">[ 228 ]</a></span>
+            </p>
+            
+            <p class="standard">
+                <a id="p1013"/>
+            Let’s summarize the result once again in a table:</p>
+            
+            <table class="standardtable" id="t21.3">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Bit 1</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Bit 2</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">~Bit 1</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Bit 1 &amp; Bit 2</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Bit 1 | Bit 2</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Bit 1 ^ Bit 2</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 21.3</b>    
+            The Bit Operators in a Truth Table</p>
+            
+            <p class="standard">Let’s consider two integers, for example:</p>
+            
+            <table class="standardtable" id="t21.4">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell"/>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Binary</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Decimal</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">Number 1</span>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">010011</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">16 + 2 + 1 = 19</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">Number 2</span>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">100010</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">32 + 2 = 34</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">Number 1 &amp; Number 2</span>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">000010</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">19 &amp; 34 = 2</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">Number 1 | Number 2</span>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">110011</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">19 | 34 = 51</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">Number 1 ^ Number 2</span>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">110001</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">19 ^ 34 = 49</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 21.4</b>    
+            Binary Operation of Two Integers</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.1.2">21.1.2    Representation of Integers in Java: Two’s Complement</h3>
+            
+            <p class="standard">The computer stores data in the states 0 and 1 and must be able to represent positive as well as negative numbers. For this purpose, different encodings exist, such as one’s complement or two’s complement, the latter being common for modern programming languages. The nature of 
+                <span class="italic">two’s complement</span>
+                <a class="indexanchor" id="i21_09"/>
+             defines the following encoding for positive and negative integers:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The sign of a number determines a bit that is 1 for negative numbers and 0 for positive numbers.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">To represent a 0, no bit is set.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">For negative numbers, you must take the absolute value of the number, invert the bit pattern, and add 1 to the result.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first last">Let’s test this scenario on the number –1: The absolute value is 1, the bit pattern (for 16 bits) is 
+                    <samp class="listingcharacter listingcharacter">0000 0000 0000 0001</samp>. The negation results in 
+                    <samp class="listingcharacter listingcharacter">1111 1111 1111 1110</samp>. If we add 1, 
+                    <samp class="listingcharacter listingcharacter">1111 1111 1111 1111</samp>
+                 will follow.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h21.1.2.1">
+                    <a id="p1014"/>
+                Java Integer Data Types in Two’s Complement</h4>
+                
+                <p class="standard">Java always encodes the integer data types 
+                    <samp class="listingcharacter listingcharacter">byte</samp>
+                    <a class="indexanchor" id="i21_10"/>, 
+                    <samp class="listingcharacter listingcharacter">short</samp>
+                    <a class="indexanchor" id="i21_11"/>, 
+                    <samp class="listingcharacter listingcharacter">int</samp>,
+                    <a class="indexanchor" id="i21_12"/> and 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                    <a class="indexanchor" id="i21_13"/> in the two’s complement (the data type 
+                    <samp class="listingcharacter listingcharacter">char</samp>
+                    <a class="indexanchor" id="i21_14"/> doesn’t define negative numbers). With this encoding, there exists one more negative number than positive number because no positive or negative 0 exist in the two’s complement, only a “positive” 1 with the bit mask 
+                    <samp class="listingcharacter listingcharacter">0000...0000</samp>
+                .</p>
+                
+                <table class="standardtable" id="t21.5">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Decimal</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">Binary</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Hexadecimal 0</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">–32,768</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">1000 0000 0000 0000</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">80 00</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">–32,767</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">1000 0000 0000 0001</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">80 01</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">–32,766</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">1000 0000 0000 0010</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">80 02</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first"/>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">…</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last"/>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">–2</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">1111 1111 1111 1110</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">FF FE</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">–1</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">1111 1111 1111 1111</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">FF FF</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">0</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">0000 0000 0000 0000</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">00 00</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">1</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">0000 0000 0000 0001</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">00 01</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">2</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">0000 0000 0000 0010</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">00 02</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first"/>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">…</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last"/>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">32,766</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">0111 1111 1111 1110</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">7F FE</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">32,767</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">0111 1111 1111 1111</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">7F FF</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 21.5</b>    
+            Representations of Two’s Complement in the short Data Type</p>
+                
+                <p class="standard">So, for all negative integers, the top bit is set to 1.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Two’s complement and complement (bitwise NOT) have an interesting relationship. 
+                        <samp class="listingcharacter listingcharacter">~0</samp> inverts all bits, which results in 
+                        <samp class="listingcharacter listingcharacter">-1</samp>. In general, 
+                        <samp class="listingcharacter listingcharacter">~a</samp> is equal to 
+                        <samp class="listingcharacter listingcharacter">-(a+1)</samp>. So, for example, 
+                        <samp class="listingcharacter listingcharacter">~5</samp> is equal to 
+                        <samp class="listingcharacter listingcharacter">-(5+1) = -6</samp>. This rule is also true when negated: 
+                        <samp class="listingcharacter listingcharacter">~-5</samp> is equal to 
+                        <samp class="listingcharacter listingcharacter">-(-5+1) = 4</samp>. And 
+                        <samp class="listingcharacter listingcharacter">~-~-~-~-5</samp> is 
+                        <samp class="listingcharacter listingcharacter">1</samp>
+                    .</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.1.3">21.1.3    The Binary, Octal, and Hexadecimal Place Value Systems</h3>
+            
+            <p class="standard">The literals for integers can be specified in four different place value systems
+                <a class="indexanchor" id="i21_15"/>. The most natural value system is the 
+                <span class="italic">decimal system</span>
+                <a class="indexanchor" id="i21_16"/> (also called the 
+                <span class="italic">base-ten system</span>
+                <a class="indexanchor" id="i21_17"/>), where the literals consist of the digits 
+                <samp class="listingcharacter listingcharacter">0</samp> to 
+                <samp class="listingcharacter listingcharacter">9</samp>. Additionally, the 
+                <span class="italic">binary</span>
+                <a class="indexanchor" id="i21_18"/>, 
+                <span class="italic">octal</span>,
+                <a class="indexanchor" id="i21_19"/> and 
+                <a class="indexanchor" id="i21_20"/>
+                <span class="italic">hexadecimal systems  </span>
+            write the numbers in base 2, 8, and 16, respectively. Except for decimal numbers, numbers in other formats begin with a special prefix.</p>
+            
+            <table class="standardtable" id="t21.6">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a id="p1015"/>
+                            Prefix</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Place Value System</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Base</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Representation of 1</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">0b</samp> or 
+                                <samp class="listingcharacter listingcharacter">0B</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Binary</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">2</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">0b1</samp> or 
+                                <samp class="listingcharacter listingcharacter">0B1</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">0</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Octal</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">8</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">01</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">None</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Decimal</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">10</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">1</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">0x</samp> or 
+                                <samp class="listingcharacter listingcharacter">0X</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Hexadecimal</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">16</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">0x1</samp> or 
+                                <samp class="listingcharacter listingcharacter">0X1</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 21.6</b>    
+            The Place Value Systems and Their Notation</p>
+            
+            <p class="standard">A hexadecimal value starts with 
+                <samp class="listingcharacter listingcharacter">0x</samp> or 
+                <samp class="listingcharacter listingcharacter">0X</samp>. Since 10 digits aren’t sufficient for 16 hexadecimal numbers
+                <a class="indexanchor" id="i21_21"/>
+                <a class="indexanchor" id="i21_22"/>, a number for base 16 additionally consists of the letters 
+                <samp class="listingcharacter listingcharacter">a</samp> to 
+                <samp class="listingcharacter listingcharacter">f</samp> (or 
+                <samp class="listingcharacter listingcharacter">A</samp> to 
+                <samp class="listingcharacter listingcharacter">F</samp>). The hexadecimal system is also referred to as the 
+                <span class="italic">sexadecimal system</span>
+                <a class="indexanchor" id="i21_23"/>.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn21_02" id="fn21_02">[ 229 ]</a></span>
+            </p>
+            
+            <p class="standard">An octal value starts with the prefix 
+                <samp class="listingcharacter listingcharacter">0</samp>. With base 8, only the digits 
+                <samp class="listingcharacter listingcharacter">0</samp> to 
+                <samp class="listingcharacter listingcharacter">7</samp> are needed for octal values. The name comes from the Latin 
+                <span class="italic">octo</span>
+            , which means “eight” in English. The octal system was a common representation choice since individual bits no longer had to be considered separately, but 3 bits were combined into a group—with 3 bits you can express numbers from 0 to 7. The octal system is still popular in communications electronics but doesn’t play any role elsewhere.</p>
+            
+            <p class="standard">For binary numbers (i.e., numbers with base 2), you’ll use the prefix 
+                <samp class="listingcharacter listingcharacter">0b</samp> or 
+                <samp class="listingcharacter listingcharacter">0B</samp>. Only the digits 
+                <samp class="listingcharacter listingcharacter">0</samp> and 
+                <samp class="listingcharacter listingcharacter">1</samp>
+             are permitted.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following examples output decimal, binary, octal, and hexadecimal numbers:</p>
+                
+                <div class="listing " id="l_none_213"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">1243</span><span class=""> </span><span class="">);</span><span class="">        </span><span class=""> // 1243</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">0b10111011</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // 187</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">01230</span><span class=""> </span><span class="">);</span><span class="">       </span><span class=""> // 664</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">0xcafebabe</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // -889275714</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> 0xC0B0</span>
+                    <span class="bold"><span class="">L</span></span> );     <span class=""> // 49328</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">In Java programs, octal numbers should be used with caution. If you fill a number left-justified with the 0 for reasons of readability, you’ll experience a surprise:</p>
+                
+                <div class="listing  last_item" id="l_none_2118"><pre><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">118</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class=""> j </span><span class="">=</span><span class=""> </span><span class="">012</span><span class="">;</span><span class="">                       </span><span class=""> // Octal 012 is decimal 10</span> </pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.1.4">21.1.4    
+                <a id="p1016"/>
+            Effect of Typecasting on Bit Patterns</h3>
+            
+            <p class="standard">Typecasting sometimes results in the upper bits of integers being simply cut off. When adjusting floats to integers, rounding is performed. This section will demonstrate what exactly happens.</p>
+            
+            
+                
+                <h4 class="t4" id="h21.1.4.1">Explicit Typecasting for Integers</h4>
+                
+                <p class="standard">When converting a larger integer type to a smaller one, the upper bits are truncated. An adjustment of the sign does 
+                    <span class="italic">not</span>
+                 take place. The representation in bits shows this scenario clearly:</p>
+                
+                <div class="listing " id="l21.1"><pre><span class="">int</span><span class="">   ii </span><span class="">=</span><span class=""> </span><span class="">123456789</span><span class="">;</span><span class="">    </span><span class=""> // 0000011101011011_</span>
+                    <span class="bold">1</span>1001101_00010101<span class=""><br/></span><span class="">int</span><span class="">   ij =   -</span><span class="">123456</span><span class="">;    </span><span class=""> // 1111111111111110_</span>
+                    <span class="bold">0</span>0011101_11000000<span class=""><br/></span><br/><span class="">short</span><span class=""> si = (</span><span class="">short</span><span class="">) ii;   </span><span class=""> //                  </span>
+                    <span class="bold">1</span>1001101_00010101<span class=""><br/></span><span class="">short</span><span class=""> sj = (</span><span class="">short</span><span class="">) ij;   </span><span class=""> //                  </span>
+                    <span class="bold">0</span>0011101_11000000<span class=""><br/></span><br/>System.out.<span class="">println</span><span class="">( si );</span><span class=""> // -13035</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( sj );</span><span class=""> //   7616</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 21.1</b>    
+            src/main/java/com/tutego/insel/math/TypecastDemo.java, main()</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">si</samp> becomes a negative number because the 16th bit at 
+                    <samp class="listingcharacter listingcharacter">int ii</samp> was set and now shows the negative sign at 
+                    <samp class="listingcharacter listingcharacter">short</samp>. The number after 
+                    <samp class="listingcharacter listingcharacter">ij</samp> doesn’t have a 16th bit set, and so, the 
+                    <samp class="listingcharacter listingcharacter">short sj</samp>
+                 becomes positive.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.1.4.2">Converting short and char</h4>
+                
+                <p class="standard">Like 
+                    <samp class="listingcharacter listingcharacter">char</samp>, 
+                    <samp class="listingcharacter listingcharacter">short</samp> has a length of 16 bits. But this conversion is not possible without explicit casting. because of the sign of 
+                    <samp class="listingcharacter listingcharacter">short</samp>. Characters are by definition always unsigned. If a 
+                    <samp class="listingcharacter listingcharacter">char</samp> with a last set bit of the highest value were converted to a 
+                    <samp class="listingcharacter listingcharacter">short</samp>, the result would be a negative number. Likewise, if a 
+                    <samp class="listingcharacter listingcharacter">short</samp> denotes a negative number, the top bit in the 
+                    <samp class="listingcharacter listingcharacter">char</samp>
+                 would be set, which is undesirable. The explicit conversion always produces only positive numbers.</p>
+                
+                <p class="standard">The loss in typecasting from 
+                    <samp class="listingcharacter listingcharacter">char</samp> to 
+                    <samp class="listingcharacter listingcharacter">short</samp> occurs, for example, in the character encodings for Chinese, Japanese, or Korean characters because, in these cases, the first bit is set in Unicode, which must give way to the unset sign bit when converting to a 
+                    <samp class="listingcharacter listingcharacter">short</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.1.4.3">Typecastings of int and char</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">print*(...)</samp> method is overloaded with the types 
+                    <samp class="listingcharacter listingcharacter">char</samp> and 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                , and typecasting results in the desired output, as shown in the following examples:</p>
+                
+                <div class="listing " id="l_none_2148"><pre><span class="">int</span><span class="">  c1 </span><span class="">=</span><span class=""> </span><span class="">65</span><span class="">;</span><span class=""><br/></span><span class="">char</span><span class=""> c2 </span><span class="">=</span><span class=""> </span><span class="">'A'</span><span class="">;</span><span class=""><br/></span>
+                    <a id="p1017"/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> c1 </span><span class="">);</span><span class="">             </span><span class=""> // 65</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)</span><span class="">c2 </span><span class="">);</span><span class="">        </span><span class=""> // 65</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">char</span><span class="">)</span><span class="">c1 </span><span class="">);</span><span class="">       </span><span class=""> // A</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> c2 </span><span class="">);</span><span class="">             </span><span class=""> // A</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">char</span><span class="">)(</span><span class="">c1 </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // B</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> c2 </span><span class="">+</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class="">         </span><span class=""> // 66</span><span class=""> </span></pre></div>
+                
+                <p class="standard">You can output an integer value in an 
+                    <samp class="listingcharacter listingcharacter">int</samp> as a character, just as you can output a 
+                    <samp class="listingcharacter listingcharacter">char</samp> variable as a numeric value. Note that an arithmetic operation on 
+                    <samp class="listingcharacter listingcharacter">char</samp> types results in an 
+                    <samp class="listingcharacter listingcharacter">int</samp>. For this reason, the following expression doesn’t work for 
+                    <samp class="listingcharacter listingcharacter">char c</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_2145"><pre>c <span class="">=</span><span class=""> c </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The correct version would be the following example:</p>
+                
+                <div class="listing " id="l_none_2174"><pre>c <span class="">=</span><span class=""> </span><span class="">(</span><span class="">char</span><span class="">)(</span><span class="">c </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">)</span><span class=""> </span></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.1.4.4">Different Value Ranges for Floats and Integers</h4>
+                
+                <p class="standard">Of course, the conversion between 
+                    <samp class="listingcharacter listingcharacter">double</samp> 
+                    <img alt="inline image" class="inline_image" src="bilder/2way-arrow.png"/> 
+                    <samp class="listingcharacter listingcharacter">long</samp> can’t be without loss of information. How could that be possible? While both a 
+                    <samp class="listingcharacter listingcharacter">long</samp> and a 
+                    <samp class="listingcharacter listingcharacter">double</samp> have 64 bits for data storage, a 
+                    <samp class="listingcharacter listingcharacter">double</samp> can’t store an integer as efficiently as a 
+                    <samp class="listingcharacter listingcharacter">long</samp> and has some “overhead” for large exponents. When implicitly converting a 
+                    <samp class="listingcharacter listingcharacter">long</samp> to a 
+                    <samp class="listingcharacter listingcharacter">double</samp>
+                , some information-carrying bits may be missed, as illustrated by the following example:</p>
+                
+                <div class="listing " id="l_none_2165"><pre><span class="">long</span><span class="">   l </span><span class="">=</span><span class=""> 1111111111111111111L</span><span class="">;</span><span class=""> // 1111111111111111111</span><span class=""><br/></span><span class="">double</span><span class=""> </span>
+                    <span class="bold"><span class="">d = l</span></span>;                   <span class=""> // 1111111111111111170 (1.11111111111111117E18)</span><span class=""><br/></span><span class="">long</span><span class="">   m = (</span><span class="">long</span><span class="">) d;            </span><span class=""> // 1111111111111111168</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">Java permits the conversion of a 
+                    <samp class="listingcharacter listingcharacter">long</samp> into a 
+                    <samp class="listingcharacter listingcharacter">double</samp> without explicit adaptation and also into an even smaller 
+                    <samp class="listingcharacter listingcharacter">float</samp>, which is perhaps even stranger since 
+                    <samp class="listingcharacter listingcharacter">float</samp> has a precision of only 6 to 7 digits, while 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                 has 18 digits. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_2193"><pre><span class="">long</span><span class="">  l </span><span class="">=</span><span class=""> 1000000000000000000L</span><span class="">;</span><span class=""><br/></span><span class="">float</span><span class=""> </span>
+                    <span class="bold"><span class="">f = l</span></span>;<br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%f"</span><span class="">, f );   </span><span class=""> // 999999984306749440,000000</span><span class=""> </span><span class=""/></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.1.4.5">Loss of Material Due to Overflows*</h4>
+                
+                <p class="standard">Overflows in calculations can lead to serious errors, as in the crash of Ariane 5
+                    <a class="indexanchor" id="i21_24"/> on June 4, 1996, exactly 36.7 seconds after launch. The European Space Agency (ESA) had launched the unmanned rocket, which carried four satellites, from French Guiana. Fortunately, no lives were lost, but the material damage amounted to about $500 million. The project also involved development costs of around $7 billion. The reason for the crash was a rounding error in the Ada program when converting a 64-bit float (the horizontal velocity) to a signed 16-bit integer. Unfortunately, the number was larger than 2
+                    <sup>15</sup> – 1 and the conversion wasn’t secured because the programmers hadn’t assumed 
+                    <a id="p1018"/>this range of numbers. An exception occurred, and, as a consequence, the guidance system broke down, and the self-destruct mechanism was triggered as the engines threatened to stall. The really stupid thing about this story is that the software wasn’t essential for the flight and only served for launch preparations. In the event of an interruption during the countdown, the program could have been quickly terminated. Some program parts had been copied, unchanged, from the Ariane 4 software via copy/paste
+                    <a class="indexanchor" id="i21_25"/>
+                , but the Ariane 5 flew faster.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f_none_21_00.html" id="f_none_21_00"><img alt="" id="img-f_none_21_00" src="bilderklein/klein21_000_01.png"/></a></div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.1.5">21.1.5    Working without Signs</h3>
+            
+            <p class="standard">Except for 
+                <samp class="listingcharacter listingcharacter">char</samp>, all integral data types in Java are signed and encoded in the two’s complement. With a 
+                <samp class="listingcharacter listingcharacter">byte</samp>
+            , 8 bits are available for the coding of a value; however, actually only 7 bits are available because 1 bit is used for encoding the sign. The value range is from –128 to +127. A workaround enables you to exhaust the full range of values and pretend that Java has unsigned data types.</p>
+            
+            
+                
+                <h4 class="t4" id="h21.1.5.1">Using Byte as an Unsigned Data Type</h4>
+                
+                <p class="standard">An important property of explicit typecasting for integer types is that the excess bytes are simply truncated. Let’s look at typecasting in this case with an example:</p>
+                
+                <div class="listing " id="l_none_2191"><pre><span class="">int</span><span class="">  l </span><span class="">=</span><span class="">        0xABCD6F</span><span class="">;</span><span class=""><br/></span><span class="">byte</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)</span><span class=""> 0xABCD</span>
+                    <span class="bold"><span class="">6F</span></span>;<br/>System.out.<span class="">println</span><span class="">( Integer.</span><span class="">toBinaryString</span><span class="">( l ) );</span><span class=""> // 101010111100110101101111</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Integer.</span><span class="">toBinaryString</span><span class="">( b ) );</span><span class=""> //                  1101111</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">If a number is in the range from 0 to 255, a 
+                    <samp class="listingcharacter listingcharacter">byte</samp> can basically store it by its 8 bits. However, Java must be forced, by explicit typecasting, to ignore the sign bit. Only then will 
+                    <a id="p1019"/>the number 255 correspond to 8 set bits because assigning it with 
+                    <samp class="listingcharacter listingcharacter">byte b = 255;</samp>
+                 doesn’t work.</p>
+                
+                <p class="standard">For further processing to be successful, another property must be taken into account. Let’s look at the following example:</p>
+                
+                <div class="listing " id="l_none_2198"><pre><span class="">byte</span><span class=""> b1 </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)</span><span class=""> </span><span class="">255</span><span class="">;</span><span class=""><br/></span><span class="">byte</span><span class=""> b2 </span><span class="">=</span><span class=""> </span><span class="">-</span><span class="">1</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> b1 </span><span class="">);</span><span class=""> </span><span class=""> // -1</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> b2 </span><span class="">);</span><span class=""> </span><span class=""> // -1</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The bit pattern is the same in both cases, and all bits are set. But the fact that the console output is negative involves another Java feature: Java converts the signed byte to an 
+                    <samp class="listingcharacter listingcharacter">int</samp> during further processing (the parameter type in the method is 
+                    <samp class="listingcharacter listingcharacter">toBinaryString(int)</samp>). In this conversion process, the sign moves on from the 
+                    <samp class="listingcharacter listingcharacter">byte</samp> to the 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                . The following example illustrates this conversion process with a binary output:</p>
+                
+                <div class="listing " id="l_none_21110"><pre><span class="">byte</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)</span><span class=""> </span><span class="">255</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class="">  i </span><span class="">=</span><span class=""> </span><span class="">255</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%d %s%n"</span><span class="">,</span><span class=""> b</span><span class="">,</span><span class=""> Integer</span><span class="">.</span><span class="">toBinaryString</span><span class="">(</span><span class="">b</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>// -1  11111111111111111111111111111111<span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%d %s%n"</span><span class="">,</span><span class=""> i</span><span class="">,</span><span class=""> Integer</span><span class="">.</span><span class="">toBinaryString</span><span class="">(</span><span class="">i</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>// 255                         11111111<span class=""> </span></pre></div>
+                
+                <p class="standard">The assignment of the lower 8 bits of 
+                    <samp class="listingcharacter listingcharacter">byte b</samp> and 
+                    <samp class="listingcharacter listingcharacter">int i</samp> is identical. But whereas with 
+                    <samp class="listingcharacter listingcharacter">int</samp> the top 3 bytes are really zero, Java also fills up the top 3 bytes with 255 by automatically adjusting the sign when converting from 
+                    <samp class="listingcharacter listingcharacter">byte</samp> to 
+                    <samp class="listingcharacter listingcharacter">int</samp> in the two’s complement. If the calculation is to be continued without a sign, this conversion is disruptive. Java always makes this automatic adjustment when calculating with 
+                    <samp class="listingcharacter listingcharacter">byte</samp>/
+                    <samp class="listingcharacter listingcharacter">short</samp>, not just when a method requires the data type 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                , in our example. </p>
+                
+                <p class="standard">To get a data value between 0 and 255 during further processing (i.e., to see the byte of an 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                 unsigned), we’ll cut out the lower 8 bits with the AND operation—all other bits thus remain excluded:</p>
+                
+                <div class="listing " id="l_none_21128"><pre><span class="">byte</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)</span><span class=""> </span><span class="">255</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> b </span><span class="">);</span><span class="">         </span><span class=""> // -1</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> b </span><span class="">&amp;</span><span class=""> </span><span class="">0xff</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // 255</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Note that the AND operation leads to the target type 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.1.5.2">Library Methods for Unsigned Treatments</h4>
+                
+                <p class="standard">Always putting a 
+                    <samp class="listingcharacter listingcharacter">&amp; 0xff</samp> to an expression to hide the top bytes isn’t much work, but it’s not pretty either. Methods like 
+                    <samp class="listingcharacter listingcharacter">toUnsignedInt(byte)</samp>
+                 are much nicer since their names clearly document what’s actually happening.</p>
+                
+                <p class="standard">
+                    <a id="p1020"/>The following methods in 
+                    <samp class="listingcharacter listingcharacter">Byte</samp>
+                 may be useful:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int toUnsignedInt(byte x)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long toUnsignedLong(byte x)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Similarly, the following methods in 
+                    <samp class="listingcharacter listingcharacter">Integer </samp>
+                may be useful:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long toUnsignedLong(int x)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String toUnsignedString(int i, int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String toUnsignedString(int i)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int parseUnsignedInt(String s, int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int compareUnsigned(int x, int y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int divideUnsigned(int dividend, int divisor)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int remainderUnsigned(int dividend, int divisor)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The following methods in 
+                    <samp class="listingcharacter listingcharacter">Long</samp>
+                 may be useful:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String toUnsignedString(long i, int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String toUnsignedString(long i)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long parseUnsignedLong(String s, int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int compareUnsigned(long x, long y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long divideUnsigned(long dividend, long divisor)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long remainderUnsigned(long dividend, long divisor)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Finally, the following methods in 
+                    <samp class="listingcharacter listingcharacter">Short </samp>
+                may be useful:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int toUnsignedInt(short x)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long toUnsignedLong(short x)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">In addition to simple 
+                    <samp class="listingcharacter listingcharacter">toUnsigned*(...)</samp> methods in wrapper classes, methods can be added that also allow the conversion of numbers to a string and the parsing of a string. New methods can also be read for 
+                    <samp class="listingcharacter listingcharacter">integer</samp> and 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                , which perform unsigned comparisons, division, and residual value calculation.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.1.5.3">Conversions from byte to char</h4>
+                
+                <p class="standard">With a similar way of working, you can also solve the question of how to convert a byte whose 
+                    <samp class="listingcharacter listingcharacter">int</samp> value is in the minus range into a 
+                    <samp class="listingcharacter listingcharacter">char</samp>. The first approach via typecasting 
+                    <samp class="listingcharacter listingcharacter">(char) byte</samp>
+                 is wrong, and only a rectangular box or a question mark will appear in the output, as shown in the following example:</p>
+                
+                <div class="listing " id="l_none_21134"><pre><span class="">byte</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)</span><span class=""> </span><span class="">'ß'</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">char</span><span class="">)</span><span class=""> b </span><span class="">);</span><span class="">        </span><span class=""> // Output is  ?</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Again, the dilemma is the incorrect sign matching. When the byte is used, it’s first converted to an 
+                    <samp class="listingcharacter listingcharacter">int</samp>. The character 
+                    <samp class="listingcharacter listingcharacter">ß</samp> then becomes –33. In the next step, this –33 is then 
+                    <a id="p1021"/>converted into a 
+                    <samp class="listingcharacter listingcharacter">char</samp>. That results in 65,503 and is beyond what we wanted. The problem can be solved by considering only the lower 8 bits of 
+                    <samp class="listingcharacter listingcharacter">b</samp>
+                , performed again by hiding some bits via the AND operator. The following notation is correct:</p>
+                
+                <div class="listing " id="l_none_21156"><pre><span class="">char</span><span class=""> c </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">char</span><span class="">)</span><span class=""> </span><span class="">(</span><span class="">b </span><span class="">&amp;</span><span class=""> </span><span class="">0x00ff</span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> c </span><span class="">);</span><span class="">               </span><span class=""> // Output is ß</span><span class=""> </span></pre></div>
+                
+                <p class="standard">As a rule, such an explicit adaptation will rarely occur in the code because Java provides extra classes for the conversion of character encodings.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.1.6">21.1.6    The Shift Operators</h3>
+            
+            <p class="standard">In Java, three
+                <a class="indexanchor" id="i21_26"/> 
+                <span class="italic">shift operators</span>
+                <a class="indexanchor" id="i21_27"/>
+             can be used to shift the bits of a value by a certain number of positions:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">n &lt;&lt; s</samp>: Left shifting of the bits of 
+                        <samp class="listingcharacter listingcharacter">n</samp> by 
+                        <samp class="listingcharacter listingcharacter">s</samp>
+                     positions</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">n &gt;&gt; s</samp>: Arithmetic right shifting by 
+                        <samp class="listingcharacter listingcharacter">s</samp>
+                     positions with signs</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">n &gt;&gt;&gt; s</samp>: Logical right shifting by 
+                        <samp class="listingcharacter listingcharacter">s</samp>
+                     positions without signs</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">These binary shift operators move all bits of a data word (the bit pattern) to the right or left. In the case of the shift, the number of positions by which the shift takes place is written after the binary operator (i.e., in the right operand). Although only two directions are possible, you still must consider whether or not the sign is observed when shifting to the right. This decision is referred to as 
+                <span class="italic">arithmetic shift</span> (sign remains) or 
+                <span class="italic">logical shift</span>
+             (sign is filled with 0).</p>
+            
+            
+                
+                <h4 class="t4" id="h21.1.6.1">n &lt;&lt; s</h4>
+                
+                <p class="standard">The bits of the operand 
+                    <samp class="listingcharacter listingcharacter">n</samp> are shifted 
+                    <samp class="listingcharacter listingcharacter">s</samp> times to the left, taking the sign into account (multiplied by 2 at each step), which results in 
+                    <samp class="listingcharacter listingcharacter">2</samp> to the power of 
+                    <samp class="listingcharacter listingcharacter">s</samp>. The bit space that becomes free on the right is always filled with 0. However, the sign changes as soon as a 1 is shifted from position 
+                    <span class="italic">MSB</span> – 
+                    <span class="italic">1</span> to 
+                    <span class="italic">MSB</span>. (MSB stands for 
+                    <span class="italic">Most Significant Bit</span>
+                , that is, the bit with the highest significance in the binary representation.)</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">Although the data type of the right operand is first an 
+                        <samp class="listingcharacter listingcharacter">int</samp> or 
+                        <samp class="listingcharacter listingcharacter">long</samp> with full value range, only values up to 31 are meaningful for 
+                        <samp class="listingcharacter listingcharacter">int</samp> and up to 63 bits for 
+                        <samp class="listingcharacter listingcharacter">long</samp> as shift positions (width) because only the last 5 or 6 bits are considered. Otherwise, the shift is always performed by the value that results from dividing by 32 or 64 as the remainder, so that 
+                        <samp class="listingcharacter listingcharacter">x &lt;&lt; 32</samp> and 
+                        <samp class="listingcharacter listingcharacter">x &lt;&lt; 0</samp>
+                     are also equal. Consider the following examples:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21167"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">&lt;&lt;</span><span class=""> </span><span class="">30</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 1073741824</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">&lt;&lt;</span><span class=""> </span><span class="">31</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // -2147483648</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">&lt;&lt;</span><span class=""> </span><span class="">32</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 1</span><span class=""> </span></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.1.6.2">
+                    <a id="p1022"/>
+                n &gt;&gt; s (Arithmetic Right Shift)</h4>
+                
+                <p class="standard">When shifting to the right, a 1 or a 0 is inserted from the left, depending on whether the sign bit is set or not. So, the left sign bit remains untouched.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Observe how the bits are shifted to the right:</p>
+                    
+                    <div class="listing " id="l_none_21166"><pre>Consumer<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> printBinary </span><span class="">=</span><span class=""> value </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">format</span><span class="">(</span><span class=""> </span><span class="">"%32s"</span><span class="">,</span><span class=""> Integer</span><span class="">.</span><span class="">toBinaryString</span><span class="">(</span><span class=""> value </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">replace</span><span class="">(</span><span class=""> </span><span class="">' '</span><span class="">,</span><span class=""> </span><span class="">'0'</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">};</span><span class=""><br/></span>printBinary<span class="">.</span><span class="">accept</span><span class="">(</span><span class=""> 0b10000000_00000000__00000000_00000000 </span><span class="">&gt;&gt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>printBinary<span class="">.</span><span class="">accept</span><span class="">(</span><span class=""> 0b10000000_00000000__00000000_00000000 </span><span class="">&gt;&gt;</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span>printBinary<span class="">.</span><span class="">accept</span><span class="">(</span><span class=""> 0b10000000_00000000__00000000_00000000 </span><span class="">&gt;&gt;</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>printBinary<span class="">.</span><span class="">accept</span><span class="">(</span><span class=""> 0b10000000_00000000__00000000_00000000 </span><span class="">&gt;&gt;&gt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>printBinary<span class="">.</span><span class="">accept</span><span class="">(</span><span class=""> 0b10000000_00000000__00000000_00000000 </span><span class="">&gt;&gt;&gt;</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span>printBinary<span class="">.</span><span class="">accept</span><span class="">(</span><span class=""> 0b10000000_00000000__00000000_00000000 </span><span class="">&gt;&gt;&gt;</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard">The result is the following output:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21184"><pre>10000000000000000000000000000000<br/>11000000000000000000000000000000<br/>11100000000000000000000000000000<br/>10000000000000000000000000000000<br/>01000000000000000000000000000000<br/>00100000000000000000000000000000</pre></div>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">A bit that has been pushed out is lost forever! Consider the following examples:</p>
+                    
+                    <div class="listing " id="l_none_21192"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">65535</span><span class=""> </span><span class="">&gt;&gt;</span><span class=""> </span><span class="">8</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 255</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class="">   </span><span class="">255</span><span class=""> </span><span class="">&lt;&lt;</span><span class=""> </span><span class="">8</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 65280</span><span class=""> </span></pre></div>
+                    
+                    <p class="standard last">In this case, 65,535 = 0xFFFF, but after right shifting 65,535 &gt;&gt; 8, we get 0x00FF = 255. If we now shift to the left again (i.e., 0x00FF &lt;&lt; 8), the result is 0xFF00 = 65,280.</p>
+                
+                </div>
+                
+                <p class="standard">For the integer data types, taking into account the always present sign, a signed integer division by 2 follows for normal right-shifts.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.1.6.3">n &gt;&gt;&gt; s (Logical Right Shift)</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">&gt;&gt;&gt;</samp>
+                 operator doesn’t take into account the sign of the variable, so an unsigned right-shift is performed. Thus, only zeros are inserted on the left, at the place of the most significant bit; the sign is also shifted.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p1023"/>
+                    Example</h6>
+                    
+                    <p class="standard first">You can use shift operators to easily extract the individual bytes of a larger data type, such as a 4-byte 
+                        <samp class="listingcharacter listingcharacter">int</samp>
+                    , as in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21207"><pre><span class="">byte</span><span class=""> b1 </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)(</span><span class="">v </span><span class="">&gt;&gt;&gt;</span><span class=""> </span><span class="">24</span><span class="">),</span><span class=""><br/></span>     b2 <span class="">=</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)(</span><span class="">v </span><span class="">&gt;&gt;&gt;</span><span class=""> </span><span class="">16</span><span class="">),</span><span class=""><br/></span>     b3 <span class="">=</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)(</span><span class="">v </span><span class="">&gt;&gt;&gt;</span><span class="">  </span><span class="">8</span><span class="">),</span><span class=""><br/></span>     b4 <span class="">=</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)(</span><span class="">v       </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">For a positive number, this shift has no effect, and the behavior is the same as for the 
+                    <samp class="listingcharacter listingcharacter">&gt;&gt; </samp>
+                operator.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">For negative operands, the following output is particularly exciting:</p>
+                    
+                    <div class="listing  last_item" id="l_none_212079515148"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class="">  </span><span class="">64</span><span class=""> </span><span class="">&gt;&gt;&gt;</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 32</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">-</span><span class="">64</span><span class=""> </span><span class="">&gt;&gt;&gt;</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 2147483616</span><span class=""> </span></pre></div>
+                
+                </div>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">&lt;&lt;&lt;</samp>
+                 operator makes no sense since the left-shift only inserts zeros to the right anyway.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.1.7">21.1.7    Setting, Clearing, Reversing, and Testing a Bit</h3>
+            
+            <p class="standard">You can use bit operators together with shift operators to set a bit or to determine whether a bit has been set. Let’s consider the following methods that set, query, invert, and clear a particular bit:</p>
+            
+            <div class="listing " id="l_none_21223"><pre><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">setBit</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> n</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> pos </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> n </span><span class="">|</span><span class=""> </span><span class="">(</span><span class="">1</span><span class=""> </span><span class="">&lt;&lt;</span><span class=""> pos</span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><br/><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">clearBit</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> n</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> pos </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> n </span><span class="">&amp;</span><span class=""> </span><span class="">~(</span><span class="">1</span><span class=""> </span><span class="">&lt;&lt;</span><span class=""> pos</span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><br/><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">flipBit</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> n</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> pos </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> n </span><span class="">^</span><span class=""> </span><span class="">(</span><span class="">1</span><span class=""> </span><span class="">&lt;&lt;</span><span class=""> pos</span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><br/><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">testBit</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> n</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> pos </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> mask </span><span class="">=</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">&lt;&lt;</span><span class=""> pos</span><span class="">;</span><span class=""><br/></span><br/>
+                <a id="p1024"/>  <span class="">return</span><span class=""> </span><span class="">(</span><span class="">n </span><span class="">&amp;</span><span class=""> mask</span><span class="">)</span><span class=""> </span><span class="">==</span><span class=""> mask</span><span class="">;</span><span class=""><br/></span> <span class=""> // alternativ: return (n &amp; 1&lt;&lt;pos) != 0;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.1.8">21.1.8    Bit Methods of the Integer and Long Classes</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Integer</samp> and 
+                <samp class="listingcharacter listingcharacter">Long</samp> classes provide a set of static methods for bit manipulation and for querying various bit states of integers. The notation 
+                <samp class="listingcharacter listingcharacter">int|long</samp> indicates by 
+                <samp class="listingcharacter listingcharacter">int</samp> the static methods of the 
+                <samp class="listingcharacter listingcharacter">Integer</samp> class and by 
+                <samp class="listingcharacter listingcharacter">long</samp> the static methods of the 
+                <samp class="listingcharacter listingcharacter">Long</samp>
+             class.</p>
+            
+            <div class="listing " id="l_none_21224"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Integer</span>|
+                <span class="bold">Long</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;Integer|Long&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int Integer.bitCount(long i)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int Long.bitCount(long i)</samp><br/>Returns the number of set bits.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int Integer.reverse(int i)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long Long.reverse(long i)</samp><br/>Reverses the order of the bits.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int Integer.reverseBytes(int i)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long Long.reverseBytes(long i)</samp><br/>Sets the bytes in the reverse order (i.e., the first byte to the last position, the second byte to the penultimate position, and so on).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int Integer.rotateLeft(int i, int distance)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long Long.rotateLeft(long i, int distance)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int Integer.rotateRight(int i, int distance)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long Long.rotateRight(long i, int distance)</samp><br/>Rotates the bits by 
+                        <samp class="listingcharacter listingcharacter">distance</samp>
+                     positions to the left or to the right.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int Integer.highestOneBit(int i)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long Long.highestOneBit(long i)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int Integer.lowestOneBit(int i)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long lowestOneBit(long i)</samp><br/>The result is 
+                        <samp class="listingcharacter listingcharacter">i</samp>
+                    , where all bits are cleared except the bit with the highest/lowest value. In other words, they return a value where only the highest (leftmost) or lowest (rightmost) bit is set. So, only 1 bit is set at most; of course, no bit is set with argument 0, and the result is also 0.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int Integer.numberOfLeadingZeros(int i)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long Long.numberOfLeadingZeros(long i)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p1025"/>
+                        static int Integer.numberOfTrailingZeros(int i)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long Long.numberOfTrailingZeros(long i)</samp><br/>Returns the number of zero bits before the highest or after the lowest set bit.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">As an example, 
+                <span class="crossreference "><a href="21_001.html#t21.7">Table 21.7</a></span> shows some applications of the static bit methods on the 
+                <samp class="listingcharacter listingcharacter">Long</samp>
+             class.</p>
+            
+            <table class="standardtable" id="t21.7">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Static Method of the Long Class</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Method Result</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">highestOneBit(0b00011000 )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">16</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">lowestOneBit(0b00011000)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">8</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">numberOfLeadingZeros( Long.MAX_VALUE )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">numberOfLeadingZeros( Long.MIN_VALUE )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">numberOfTrailingZeros( 16 )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">4</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">numberOfTrailingZeros( 3 )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">0</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">bitCount( 8 + 4 + 1 )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">3</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">rotateLeft( 12, 1 )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">24</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">rotateRight( 12, 1 )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">6</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">reverse( 0x00FF00FFF0FF000FL )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">f000ff0fff00ff00</samp>
+                                <sub>16</sub>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">reverseBytes( 0xFEDCBA9876543210L )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">1032547698badcfe</samp>
+                                <sub>16</sub>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">reverse( Long.MAX_VALUE )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">–2</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 21.7</b>    
+            Static Methods of the Long Class</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,115 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Nested Types" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Nested Types" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Nested Types</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h10.2">10.2    Static Nested Types
+            <a class="indexanchor" id="i10_05"/>
+            <a class="indexanchor" id="i10_06"/>
+            <a class="indexanchor" id="i10_07"/>
+        </h2>
+        
+        <p class="standard">The simplest variant of a nested class or interface is placed in the type like a static property and is called a 
+            <span class="italic">static nested type</span>
+            <a class="indexanchor" id="i10_08"/>
+            <a class="indexanchor" id="i10_09"/>
+        . These nested types can do the same as “normal” types, but they form a small subpackage with its own namespace. In particular, no outer class objects are needed to create instances of static nested classes following this pattern. (The other inner types we’ll get to know are all non-static and need a reference to the outer object.)</p>
+        
+        <p class="standard">Let’s declare 
+            <samp class="listingcharacter listingcharacter">SquirrelNutCaramel</samp> as an outer class and 
+            <samp class="listingcharacter listingcharacter">Peanut</samp>
+         as a static nested class.</p>
+        
+        <div class="listing " id="l10.1"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> SquirrelNutCaramel </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">String</span><span class=""> name </span><span class="">=</span><span class=""> </span><span class="">"Squirrel Nut Caramel"</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class=""> invented </span><span class="">=</span><span class=""> </span><span class="">1890</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">class</span><span class=""> Peanut </span><span class="">{</span><span class=""><br/></span>    <span class="">void</span><span class=""> </span><span class="">print</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> name </span><span class="">);</span><span class=""><br/></span>     <span class=""> // System.out.println( invented );</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    Peanut peanut <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Peanut</span><span class="">();</span><span class=""> </span><span class=""> // or SquirrelNutCaramel.Peanut peanut = …</span><span class=""><br/></span>    peanut<span class="">.</span><span class="">print</span><span class="">();</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+        
+        <p class="caption "><b>Listing 10.1</b>    
+            src/main/java/com/tutego/insel/nested/Lamp.java, Lamp</p>
+        
+        <p class="standard">The static nested class 
+            <samp class="listingcharacter listingcharacter">Peanut</samp> has access to all other static members of the outer class 
+            <samp class="listingcharacter listingcharacter">SquirrelNutCaramel</samp> (in our case, to the 
+            <samp class="listingcharacter listingcharacter">name</samp>
+         variable). Access to object variables isn’t possible from the static nested class because the nested class is considered a separate class that’s located in the same package, and this access wouldn’t be possible in the construction. For example, if you write the following code: </p>
+        
+        <div class="listing " id="l_none_1082"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> invented </span><span class="">);</span><span class=""> </span></pre></div>
+        
+        <p class="standard">The compiler will answer this access attempt with an error message: “Non-static field ’invented’ cannot be referenced from a static context.”</p>
+        
+        <p class="standard">
+            <a id="p602"/>Access from outside to static nested classes can succeed with the notation 
+            <samp class="listingcharacter listingcharacter">OuterType.NestedType</samp>
+        ; the dot is thus used in the same way access to static members is formed, using packages as namespaces. A static nested class must have a different name than its outer class.</p>
+        
+        
+            
+            <h3 class="t3" id="h10.2.1">10.2.1    Modifiers and Visibility</h3>
+            
+            <p class="standard">The allowed modifiers include 
+                <samp class="listingcharacter listingcharacter">abstract</samp>, 
+                <samp class="listingcharacter listingcharacter">final</samp>, and some visibility modifiers. Normal top-level classes may be package-visible or 
+                <samp class="listingcharacter listingcharacter">public</samp>; nested classes may also be 
+                <samp class="listingcharacter listingcharacter">public</samp> or package-visible, or alternatively 
+                <samp class="listingcharacter listingcharacter">protected</samp> or 
+                <samp class="listingcharacter listingcharacter">private</samp>. A private static nested class should be understood like a normal private static variable: This class be seen by the enclosing outer class but cannot be seen by other top-level classes. 
+                <samp class="listingcharacter listingcharacter">protected</samp>
+             with static nested types allows for slightly more efficient bytecode for the compiler but is otherwise not in use.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h10.2.2">10.2.2    Records as Containers</h3>
+            
+            <p class="standard">In Java, if a method should have more than one return value, you must use a data structure. In this regard, records are quite suitable to act as small containers. Consider the following example:</p>
+            
+            <div class="listing " id="l10.2"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> MinMaxDemo </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">public</span><span class=""> record </span><span class="">MinMax</span><span class="">(</span><span class="">int</span><span class=""> min, </span><span class="">int</span><span class=""> max) {}</span><br/> </span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                <span class="bold">MinMax</span> <span class="">minMax</span><span class="">( </span><span class="">int</span><span class="">... values ) {</span><br/>    IntSummaryStatistics stats = IntStream.<span class="">of</span><span class="">( values ).</span><span class="">summaryStatistics</span><span class="">();</span><br/>    <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">MinMax</span><span class="">( stats.</span><span class="">getMin</span><span class="">(), stats.</span><span class="">getMax</span><span class="">() );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 10.2</b>    
+            src/main/java/com/tutego/insel/nested/MinMaxDemo.java, MinMaxDemo</p>
+            
+            <p class="standard">The implementation of the actual functionality is moved to a Java method. (More information on streams follows in 
+                <span class="crossreference "><a href="18_001.html#h18">Chapter 18</a></span>, 
+                <span class="crossreference "><a href="18_004.html#h18.4">Section 18.4</a></span>
+            .)</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h10.2.3">10.2.3    Implementing Static Nested Types*</h3>
+            
+            <p class="standard">The compiler generates normal class files from nested types, but these class files are equipped with what’s called 
+                <span class="italic">synthetic methods</span>
+                <a class="indexanchor" id="i10_10"/>
+                <a class="indexanchor" id="i10_11"/>. For nested types, the compiler generates new names according to the pattern
+                <a class="indexanchor" id="i10_12"/>
+                <samp class="listingcharacter listingcharacter"> OuterType$NestedType</samp>. Note how the dollar sign separates the names of outer tape and nested type. The corresponding 
+                <span class="italic">.class</span> file on your hard drive will then use this name, which is also called the 
+                <span class="italic">binary name</span> of the nested type.
+                <a class="indexanchor" id="i10_13"/>
+             Using this name is important, for example, when loading manually.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

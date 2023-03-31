@@ -1,0 +1,410 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    The Class Library" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    The Class Library" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    The Class Library</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h16.5">16.5    The Languages of Different Countries</h2>
+        
+        <p class="standard">When developers start with console or GUI output, they often hardwire the output to a local language. If the language changes, the software can’t handle other country-specific rules, for example, when formatting floats. Developing “multilingual” programs that provide localized outputs in different languages is not too difficult. Basically, you’ll replace all language-dependent strings and formatting of data with code that takes into account country-specific output formats and rules. Java offers a solution for these cases: on one hand, you can define a language that then specifies rules according to which the Java API can automatically format data, and on the other hand, you can allow language-dependent parts to be swapped out to resource files.</p>
+        
+        
+            
+            <h3 class="t3" id="h16.5.1">16.5.1    Regional Languages via Locale Objects</h3>
+            
+            <p class="standard">In Java, 
+                <samp class="listingcharacter listingcharacter">Locale</samp>
+                <a class="indexanchor" id="i16_32"/> objects represent languages in geographic, political, or cultural regions. The language and the region must be separated because a region or a country doesn’t always clearly specify the language. For Canada, in the province of Quebec, the French edition is relevant, which, of course, differs from the English edition. Each of these language-specific properties can be encapsulated in a special object. These 
+                <samp class="listingcharacter listingcharacter">Locale</samp> objects are then passed to a 
+                <samp class="listingcharacter listingcharacter">Formatter</samp> that’s located behind 
+                <samp class="listingcharacter listingcharacter">String.format(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">printf(...)</samp> or passed to a 
+                <samp class="listingcharacter listingcharacter">Scanner</samp>. These outputs are referred to as 
+                <span class="italic">locale sensitive</span>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h16.5.1.1">
+                    <a id="p854"/>
+                Building Locale Objects</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">Locale</samp> objects are always created with the name of the language and optionally with the name of the country or a region and variant. The 
+                    <samp class="listingcharacter listingcharacter">Locale</samp>
+                 class provides three ways to build the objects:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Using the 
+                            <samp class="listingcharacter listingcharacter">Locale</samp>
+                         constructor (deprecated in Java 19)</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Using the nested 
+                            <samp class="listingcharacter listingcharacter">Builder</samp> class of 
+                            <samp class="listingcharacter listingcharacter">Locale</samp> uses the builder pattern to build new 
+                            <samp class="listingcharacter listingcharacter">Locale</samp>
+                         objects</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Using the 
+                            <samp class="listingcharacter listingcharacter">Locale</samp> method 
+                            <samp class="listingcharacter listingcharacter">forLanguageTag(...)</samp>
+                         and a string identifier</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Country abbreviations are specified in the constructor of the 
+                        <samp class="listingcharacter listingcharacter">Locale</samp>
+                     class, for example, for a language object for Great Britain or France. Consider the following examples:</p>
+                    
+                    <div class="listing " id="l_none_16198"><pre>Locale greatBritain <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Locale</span><span class="">(</span><span class=""> </span><span class="">"en"</span><span class="">,</span><span class=""> </span><span class="">"GB"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Locale french       <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Locale</span><span class="">(</span><span class=""> </span><span class="">"fr"</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">In the second example, we don’t care about the country. We’re simply choosing French as the language, no matter what part of the world.</p>
+                
+                </div>
+                
+                <p class="standard">Languages are identified by 2-letter abbreviations from the ISO 639 code
+                    <a class="indexanchor" id="i16_33"/>
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn16_04" id="fn16_04">[ 210 ]</a></span> (
+                    <span class="italic">ISO Language Code</span>
+                    <a class="indexanchor" id="i16_34"/>), and country names are 2-letter abbreviations described in ISO 3166
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn16_05" id="fn16_05">[ 211 ]</a></span> (
+                    <span class="italic">ISO Country Code</span>
+                    <a class="indexanchor" id="i16_35"/>
+                ).</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first last">Three variants for building 
+                        <samp class="listingcharacter listingcharacter">Locale.JAPANESE</samp>
+                     are found in the following example:</p>
+                
+                </div>
+                
+                <div class="listing " id="l_none_16209"><pre>Locale loc1 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Locale</span><span class="">(</span><span class=""> </span><span class="">"ja"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Locale loc2 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Locale</span><span class="">.</span><span class="">Builder</span><span class="">().</span><span class="">setLanguage</span><span class="">(</span><span class=""> </span><span class="">"ja"</span><span class=""> </span><span class="">).</span><span class="">build</span><span class="">();</span><span class=""><br/></span>Locale loc3 <span class="">=</span><span class=""> Locale</span><span class="">.</span><span class="">forLanguageTag</span><span class="">(</span><span class=""> </span><span class="">"ja"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Locale</span><br/><span class="">implements</span><span class=""> Cloneable, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Locale(String language)</samp><br/>Creates a new 
+                            <samp class="listingcharacter listingcharacter">Locale</samp> object for the 
+                            <samp class="listingcharacter listingcharacter">language</samp>
+                         given by the ISO-693 standard. Invalid identifiers aren’t recognized.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Locale(String language, String country)</samp><br/>Creates a 
+                            <samp class="listingcharacter listingcharacter">Locale</samp> object for a 
+                            <samp class="listingcharacter listingcharacter">language</samp> according to ISO 693 and a 
+                            <samp class="listingcharacter listingcharacter">country</samp>
+                         according to the ISO 3166 standard.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p855"/>
+                            Locale(String language, String country, String variant)</samp><br/>Creates a 
+                            <samp class="listingcharacter listingcharacter">Locale</samp> object for a language, a country, and a variant. 
+                            <samp class="listingcharacter listingcharacter">variant</samp>
+                         is a vendor-dependent specification like “WIN” or “MAC.”</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The static 
+                    <samp class="listingcharacter listingcharacter">Locale.getDefault()</samp> method returns the currently set language. For the running JVM, 
+                    <samp class="listingcharacter listingcharacter">Locale.setDefault(Locale)</samp>
+                 can change the language.</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Locale</samp> class has more methods; developers should study the Javadoc for the 
+                    <samp class="listingcharacter listingcharacter">Builder</samp>, for 
+                    <samp class="listingcharacter listingcharacter">forLanguageTag(...)</samp> and the new extensions and filter methods.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn16_06" id="fn16_06">[ 212 ]</a></span>
+                </p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h16.5.1.2">Constants for Some Languages</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Locale</samp> class has constants for commonly occurring languages, with an option for specifying countries. The constants for countries and languages include, for example, 
+                    <samp class="listingcharacter listingcharacter">CANADA</samp>, 
+                    <samp class="listingcharacter listingcharacter">CHINA</samp>, 
+                    <samp class="listingcharacter listingcharacter">FRENCH</samp>
+                    <a class="indexanchor" id="i16_36"/>, 
+                    <samp class="listingcharacter listingcharacter">GERMAN</samp>
+                    <a class="indexanchor" id="i16_37"/>, 
+                    <samp class="listingcharacter listingcharacter">ITALIAN</samp>
+                    <a class="indexanchor" id="i16_38"/>, 
+                    <samp class="listingcharacter listingcharacter">KOREAN</samp>
+                    <a class="indexanchor" id="i16_39"/>, 
+                    <samp class="listingcharacter listingcharacter">TAIWAN</samp>
+                    <a class="indexanchor" id="i16_40"/>
+                    <a class="indexanchor" id="i16_41"/>, 
+                    <samp class="listingcharacter listingcharacter">UK</samp>
+                    <a class="indexanchor" id="i16_42"/> and 
+                    <samp class="listingcharacter listingcharacter">US</samp>
+                    <a class="indexanchor" id="i16_43"/>. Behind an abbreviation like 
+                    <samp class="listingcharacter listingcharacter">Locale.UK</samp>, nothing else exists except for the initialization with 
+                    <samp class="listingcharacter listingcharacter">new Locale("en", "GB")</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h16.5.1.3">Methods That Accept Instances of Locale</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">Locale</samp> objects are actually not interesting as objects—they do have methods, but more exciting is its use as a type for the identification of a language. Dozens of methods in the Java library accept 
+                    <samp class="listingcharacter listingcharacter">Locale</samp> objects and adjust their behaviors based on them. Examples include 
+                    <samp class="listingcharacter listingcharacter">printf(Locale, ...)</samp>, 
+                    <samp class="listingcharacter listingcharacter">format(Locale, ...)</samp>, and 
+                    <samp class="listingcharacter listingcharacter">toLowerCase(Locale)</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first last">If no variant of a format or parse method exists with a 
+                        <samp class="listingcharacter listingcharacter">Locale</samp> object; the method usually doesn’t support language-dependent behavior. The same limitation applies to objects that don’t accept a 
+                        <samp class="listingcharacter listingcharacter">Locale</samp> via a constructor or setter. 
+                        <samp class="listingcharacter listingcharacter">Double.toString(...)</samp> is one such example, as is 
+                        <samp class="listingcharacter listingcharacter">Double.parseDouble(...)</samp>. In internationalized applications, these methods will rarely be found. Also, string concatenation with, for example, a float isn’t permitted (because a 
+                        <samp class="listingcharacter listingcharacter">Double</samp> method is called internally), and using 
+                        <samp class="listingcharacter listingcharacter">String.format(...)</samp>
+                     is definitely a better option.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h16.5.1.4">Methods of Locale*</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">Locale</samp>
+                 objects provide a number of methods that reveal the ISO-639 code of the country, for example.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example outputs the 
+                        <samp class="listingcharacter listingcharacter">Locale</samp> information accessible for languages in selected countries. The objects 
+                        <samp class="listingcharacter listingcharacter">System</samp>.
+                        <samp class="listingcharacter listingcharacter">out</samp> and 
+                        <samp class="listingcharacter listingcharacter">Locale.*</samp>
+                     are imported statically:</p>
+                    
+                    <div class="listing " id="l16.3"><pre>
+                        <a id="p856"/>out<span class="">.</span><span class="">println</span><span class="">(</span><span class="">GERMANY</span><span class="">.</span><span class="">getCountry</span><span class="">());</span><span class="">          </span><span class=""> // DE</span><span class=""><br/></span>out<span class="">.</span><span class="">println</span><span class="">(</span><span class="">GERMANY</span><span class="">.</span><span class="">getLanguage</span><span class="">());</span><span class="">         </span><span class=""> // de</span><span class=""><br/></span>out<span class="">.</span><span class="">println</span><span class="">(</span><span class="">GERMANY</span><span class="">.</span><span class="">getVariant</span><span class="">());</span><span class="">          </span><span class=""> //</span><br/>out<span class="">.</span><span class="">println</span><span class="">(</span><span class="">GERMANY</span><span class="">.</span><span class="">getISO3Country</span><span class="">());</span><span class="">      </span><span class=""> // DEU</span><span class=""><br/></span>out<span class="">.</span><span class="">println</span><span class="">(</span><span class="">GERMANY</span><span class="">.</span><span class="">getISO3Language</span><span class="">());</span><span class="">     </span><span class=""> // deu</span><span class=""><br/></span>out<span class="">.</span><span class="">println</span><span class="">(</span><span class="">CANADA</span><span class="">.</span><span class="">getDisplayCountry</span><span class="">());</span><span class="">    </span><span class=""> // Canada</span><span class=""><br/></span>out<span class="">.</span><span class="">println</span><span class="">(</span><span class="">GERMANY</span><span class="">.</span><span class="">getDisplayLanguage</span><span class="">());</span><span class="">  </span><span class=""> // German</span><span class=""><br/></span>out<span class="">.</span><span class="">println</span><span class="">(</span><span class="">GERMANY</span><span class="">.</span><span class="">getDisplayName</span><span class="">());</span><span class="">      </span><span class=""> // German (Germany)</span><span class=""><br/></span>out<span class="">.</span><span class="">println</span><span class="">(</span><span class="">CANADA</span><span class="">.</span><span class="">getDisplayName</span><span class="">());</span><span class="">       </span><span class=""> // English (Canada)</span><span class=""><br/></span>out<span class="">.</span><span class="">println</span><span class="">(</span><span class="">GERMANY</span><span class="">.</span><span class="">getDisplayName</span><span class="">(</span><span class="">FRENCH</span><span class="">));</span><span class=""> // allemand (Allemagne)</span><span class=""><br/></span>out<span class="">.</span><span class="">println</span><span class="">(</span><span class="">CANADA</span><span class="">.</span><span class="">getDisplayName</span><span class="">(</span><span class="">FRENCH</span><span class="">));</span><span class=""> </span><span class=""> // anglais (Canada)</span><span class=""> </span></pre></div>
+                    
+                    <p class="caption last"><b>Listing 16.3</b>    
+            src/main/java/com/tutego/insel/locale/GermanyLocal.java, main()</p>
+                
+                </div>
+                
+                <p class="standard">Static methods also exist for querying 
+                    <samp class="listingcharacter listingcharacter">Locale</samp>
+                 objects:</p>
+                
+                <div class="listing " id="l_none_16238"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Locale</span><br/><span class="">implements</span><span class=""> Cloneable, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static Locale getDefault()</samp><br/>Returns the language preset by the JVM, which defaults to the operating system.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static Locale[] getAvailableLocales()</samp><br/>Returns a list of all installed 
+                            <samp class="listingcharacter listingcharacter">Locale</samp> objects. The field contains at least 
+                            <samp class="listingcharacter listingcharacter">Locale.US</samp>
+                         and about 160 entries.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String[] getISOCountries()</samp><br/>Returns an array of all 2-letter ISO-3166 country codes.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static Set&lt;String&gt; getISOCountries(Locale.IsoCountryCode type)</samp><br/>Returns a set with all ISO-3166 country codes, where the 
+                            <samp class="listingcharacter listingcharacter">IsoCountryCode</samp> list determines the following: 
+                            <samp class="listingcharacter listingcharacter">PART1_ALPHA2</samp> returns the code of 2 letters, 
+                            <samp class="listingcharacter listingcharacter">PART1_ALPHA3</samp> of 3 letters, 
+                            <samp class="listingcharacter listingcharacter">PART3</samp>
+                         of 4 letters.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">On the other hand, other methods provide abbreviations according to ISO standards:</p>
+                
+                <div class="listing " id="l_none_16248"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Locale</span><br/><span class="">implements</span><span class=""> Cloneable, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String getCountry()</samp><br/>Returns the country abbreviation according to the ISO-3166 2-letter code.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String getLanguage()</samp><br/>Returns the abbreviation of the language in ISO-639 code.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String getISO3Country()</samp><br/>Returns the ISO abbreviation
+                            <a class="indexanchor" id="i16_44"/> of the country of these settings and throws a 
+                            <samp class="listingcharacter listingcharacter">MissingResourceException</samp>
+                         if the ISO abbreviation isn’t available.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p857"/>
+                            String getISO3Language()</samp><br/>Returns the ISO abbreviation of the language of these settings and throws a 
+                            <samp class="listingcharacter listingcharacter">MissingResourceException</samp>
+                         if the ISO abbreviation isn’t available.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String getVariant()</samp><br/>Returns the abbreviation of the variant or an empty string.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">These methods provide abbreviations, but they aren’t intended for human-readable output. For various 
+                    <samp class="listingcharacter listingcharacter">get*()</samp> methods, therefore, corresponding 
+                    <samp class="listingcharacter listingcharacter">getDisplay*()</samp>
+                 methods exist:</p>
+                
+                <div class="listing " id="l_none_16243"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Locale</span><br/><span class="">implements</span><span class=""> Cloneable, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String getDisplayCountry(Locale inLocale)<br/>final String getDisplayCountry()</samp><br/>Returns the name of the country for screen outputs for a language or 
+                            <samp class="listingcharacter listingcharacter">Loacale.getDefault()</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String getDisplayLanguage(Locale inLocale)<br/>String getDisplayLanguage()</samp><br/>Returns the name of the screen output language for a given 
+                            <samp class="listingcharacter listingcharacter">Locale</samp> or 
+                            <samp class="listingcharacter listingcharacter">Locale.getDefault()</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String getDisplayName(Locale inLocale)<br/>final String getDisplayName()</samp><br/>Returns the name of the settings for a language or 
+                            <samp class="listingcharacter listingcharacter">Locale.getDefault()</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String getDisplayVariant(Locale inLocale)<br/>final String getDisplayVariant()</samp><br/>Returns the name of the variant for a language or 
+                            <samp class="listingcharacter listingcharacter">Locale.getDefault()</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

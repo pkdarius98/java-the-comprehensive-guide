@@ -1,0 +1,1821 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Special Types of Java SE" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Special Types of Java SE" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Special Types of Java SE</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h11">11    
+        <a id="p615"/>
+    Special Types of Java SE</h1><p class="introductorynote indent_chapter_double">“Following advice means shifting responsibility.”<br/>– Johannes Urzidil (1896–1970)</p><p class="standard">When we program with Java Platform, Standard Edition (Java SE), we often unconsciously use types from the standard library. This connection often goes entirely unnoticed because, for instance, the 
+        <samp class="listingcharacter listingcharacter">java.lang</samp> package is imported automatically—and thus types like 
+        <samp class="listingcharacter listingcharacter">String</samp> or 
+        <samp class="listingcharacter listingcharacter">Object</samp>
+     are always included. On the other hand, some things happen behind the scenes, such as the following behaviors:</p><ul>
+        
+        <li>
+            
+            <p class="standard first-item last-item">If a superclass doesn’t extend its own class, it automatically inherits from 
+                <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+            .</p>
+        
+        </li>
+        
+        <li>
+            
+            <p class="standard first-item last-item">If a primitive data type is given but an object type is desired, the compiler converts the simple data type to a wrapper object in a process is referred to as 
+                <span class="italic">boxing</span>
+                <a class="indexanchor" id="i11_00"/>
+            .</p>
+        
+        </li>
+        
+        <li>
+            
+            <p class="standard first-item last-item">If you concatenate strings using 
+                <samp class="listingcharacter listingcharacter">+</samp>, the compiler—at least up to Java 8—automatically creates a 
+                <samp class="listingcharacter listingcharacter">java.lang.StringBuilder</samp>, concatenates the segments using 
+                <samp class="listingcharacter listingcharacter">append(...)</samp>, and then returns a new 
+                <samp class="listingcharacter listingcharacter">String</samp> with 
+                <samp class="listingcharacter listingcharacter">toString()</samp>. With no other reference type does the compiler allow “addition,” only comparisons with 
+                <samp class="listingcharacter listingcharacter">==</samp> or 
+                <samp class="listingcharacter listingcharacter">!=</samp>
+            .</p>
+        
+        </li>
+        
+        <li>
+            
+            <p class="standard first-item last-item">With extended 
+                <samp class="listingcharacter listingcharacter">for</samp> loops, the compiler expects either an array or something of type 
+                <samp class="listingcharacter listingcharacter">Iterable</samp>. From these objects, the compiler queries the 
+                <samp class="listingcharacter listingcharacter">iterator</samp>
+             and independently walks through the collection.</p>
+        
+        </li>
+        
+        <li>
+            
+            <p class="standard first-item last-item">For 
+                <samp class="listingcharacter listingcharacter">try</samp> with resources, the compiler expects an 
+                <samp class="listingcharacter listingcharacter">AutoCloseable</samp> and calls the 
+                <samp class="listingcharacter listingcharacter">close()</samp> method on these objects in the 
+                <samp class="listingcharacter listingcharacter">finally</samp>
+             block.</p>
+        
+        </li>
+        
+        <li>
+            
+            <p class="standard first-item last-item">When declaring an enumeration type with 
+                <samp class="listingcharacter listingcharacter">enum</samp>, the compiler generates a class derived from 
+                <samp class="listingcharacter listingcharacter">java.lang.Enum</samp>. For records, the Java compiler automatically extends a 
+                <samp class="listingcharacter listingcharacter">java.lang.Record</samp> superclass. You aren’t allowed to create subclasses of 
+                <samp class="listingcharacter listingcharacter">Enum</samp> or 
+                <samp class="listingcharacter listingcharacter">Record</samp>
+             since the compiler forbids it.</p>
+        
+        </li>
+    
+    </ul><p class="standard">This chapter introduces different types that are favored in some way or have a special position in Java because they are ubiquitous, such as the following:</p><ul>
+        
+        <li>
+            
+            <p class="standard first-item last-item">The 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+             base class</p>
+        
+        </li>
+        
+        <li>
+            
+            <p class="standard first-item last-item">Comparison objects</p>
+        
+        </li>
+        
+        <li>
+            
+            <p class="standard first-item last-item">Wrapper classes</p>
+        
+        </li>
+        
+        <li>
+            
+            <p class="standard first-item last-item">Enumerations and the 
+                <samp class="listingcharacter listingcharacter">Iterable</samp> and 
+                <samp class="listingcharacter listingcharacter">Iterator</samp>
+             interfaces</p>
+        
+        </li>
+        
+        <li>
+            
+            <p class="standard first-item last-item">Enumeration types (
+                <samp class="listingcharacter listingcharacter">enum</samp>) and the special class 
+                <samp class="listingcharacter listingcharacter">Enum</samp>
+            </p>
+        
+        </li>
+    
+    </ul><p class="standard">Some types are included in the 
+        <samp class="listingcharacter listingcharacter">java.lang</samp>
+     package since these types are so elementary.</p>
+        
+        <h2 class="t2" id="h11.1">11.1    
+            <a id="p616"/>
+        Object Is the Mother of All Classes</h2>
+        
+        <p class="standard">As shown in 
+            <span class="crossreference "><a href="11_001.html#f11.1">Figure 11.1</a></span>, 
+            <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+            <a class="indexanchor" id="i11_01"/>
+         is the topmost of all parent classes. Consequently, this class plays a special role since all other classes are automatically subclasses and inherit or overwrite the methods.</p>
+        
+        <div class="imagebox figure-type"><a href="img-f11.1.html" id="f11.1"><img alt="Unified Modeling Language (UML) Diagram of Object, the Absolute Base Class" id="img-f11.1" src="bilderklein/klein11_001.png"/></a></div>
+        
+        <p class="caption "><b>Figure 11.1</b>    
+            Unified Modeling Language (UML) Diagram of Object, the Absolute Base Class</p>
+        
+        
+            
+            <h3 class="t3" id="h11.1.1">11.1.1    Class Objects</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i11_02"/>While it’s true that every object is an instance of a class, what is a class really? In a language like C++, classes don’t exist at runtime, and the compiler translates the class structure into an executable program. An absolute contrast to this approach is Smalltalk: This runtime environment manages classes as objects. The idea of representing classes as objects is also adopted by Java—classes are objects of type 
+                <samp class="listingcharacter listingcharacter">java.lang.Class</samp>
+                <a class="indexanchor" id="i11_03"/>
+            .</p>
+            
+            <div class="listing " id="l_none_113"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Object</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final Class&lt;? extends Object&gt; getClass()</samp><br/>Returns the reference to the class object that created the object. The 
+                        <samp class="listingcharacter listingcharacter">Class</samp> object is always unique in the Java virtual machine (JVM). Thus, a call of 
+                        <samp class="listingcharacter listingcharacter">x.getClass()</samp> from different instances 
+                        <samp class="listingcharacter listingcharacter">x</samp> of type 
+                        <samp class="listingcharacter listingcharacter">X</samp> always returns the same 
+                        <samp class="listingcharacter listingcharacter">Class&lt;X&gt;</samp> object, and the instance of the 
+                        <samp class="listingcharacter listingcharacter">Class</samp> can be safely checked using 
+                        <samp class="listingcharacter listingcharacter">==</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The 
+                    <samp class="listingcharacter listingcharacter">getName()</samp> object method of a 
+                    <samp class="listingcharacter listingcharacter">Class</samp>
+                 object returns the name of the class, as in the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_1125"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Klaviklack"</span><span class="">.</span><span class="">getClass</span><span class="">().</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // java.lang.String</span><span class=""/></pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h11.1.1.1">Class Literals</h4>
+                
+                <p class="standard">A 
+                    <span class="italic">class literal</span>
+                    <a class="indexanchor" id="i11_04"/> is an expression with the structure 
+                    <span class="italic">
+                        <samp class="listingcharacter listingcharacter">datatype</samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">.class</samp>, where 
+                    <samp class="listingcharacter listingcharacter">datatype</samp>
+                 is a class, interface, array, or primitive type. Consider the following examples:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p617"/>
+                            String.class</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Integer.class</samp>
+                            <a class="indexanchor" id="i11_05"/>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int.class</samp> (which isn’t identical to 
+                            <samp class="listingcharacter listingcharacter">Integer.class</samp>
+                         )</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The type of the expression is always 
+                    <samp class="listingcharacter listingcharacter">Class</samp>. For primitive types, writing 
+                    <span class="italic">
+                        <samp class="listingcharacter listingcharacter">primitiveType</samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">.class</samp> returns the same result as 
+                    <span class="italic">
+                        <samp class="listingcharacter listingcharacter">wrapperType</samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">.TYPE</samp>. For instance, 
+                    <samp class="listingcharacter listingcharacter">Integer.TYPE</samp>
+                    <a class="indexanchor" id="i11_06"/> is therefore identical with 
+                    <samp class="listingcharacter listingcharacter">int.class</samp>. 
+                    <samp class="listingcharacter listingcharacter">Class</samp> objects play a role especially in dynamic queries via 
+                    <span class="italic">reflection</span>
+                . At runtime, any classes can be loaded, objects can be created, and methods can be called.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.1.2">11.1.2    
+                <a class="indexanchor" id="i11_07"/>
+            Object Identification with toString()</h3>
+            
+            <p class="standard">Each object should identify itself with a string via the 
+                <samp class="listingcharacter listingcharacter">toString()</samp>
+                <a class="indexanchor" id="i11_08"/>
+             method and return the content of the relevant object variable as a string.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The 
+                    <samp class="listingcharacter listingcharacter">Point</samp> class implements 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                 so that the return string contains the coordinates. Consider the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_1142"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // java.awt.Point[x=0,y=0]</span><span class=""> </span></pre></div>
+            
+            </div>
+            
+            <p class="standard">One nice thing is that 
+                <samp class="listingcharacter listingcharacter">toString()</samp> is automatically called when the 
+                <samp class="listingcharacter listingcharacter">print*(...)</samp> methods are called with an object reference as argument. Similarly, this is also true for the string operator 
+                <samp class="listingcharacter listingcharacter">+</samp>
+             with an object reference as operand, as in the following example:</p>
+            
+            <div class="listing " id="l11.1"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Player </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    age</span><span class="">;</span><span class=""><br/></span><br/>  
+                <span class="bold"><span class="">@Override</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> </span><span class="">getClass</span><span class="">().</span><span class="">getName</span><span class="">() + </span><span class="">"[name="</span><span class=""> + name + </span><span class="">",age="</span><span class=""> + age + </span><span class="">"]"</span><span class="">;</span><br/>  }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 11.1</b>    
+            src/main/java/com/tutego/insel/object/tostring/Player.java, Player</p>
+            
+            <p class="standard">The result is the following output:</p>
+            
+            <div class="listing " id="l11.2"><pre>Player tinkerbelle <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">();</span><span class=""><br/></span>tinkerbelle<span class="">.</span><span class="">name   </span><span class="">=</span><span class=""> </span><span class="">"Tinkerbelle"</span><span class="">;</span><span class=""><br/></span>tinkerbelle<span class="">.</span><span class="">age    </span><span class="">=</span><span class=""> </span><span class="">32</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> tinkerbelle</span><span class="">.</span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> tinkerbelle </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 11.2</b>    
+            src/main/java/com/tutego/insel/object/tostring/PlayerToStringDemo.java, main()</p>
+            
+            <p class="standard">
+                <a id="p618"/>
+            is thus:</p>
+            
+            <div class="listing " id="l_none_1166"><pre>com.tutego.insel.object.tostring.Player[name=Tinkerbelle,age=32]<br/>com.tutego.insel.object.tostring.Player[name=Tinkerbelle,age=32] </pre></div>
+            
+            <p class="standard">In your own implementations, you must ensure that the visibility is 
+                <samp class="listingcharacter listingcharacter">public</samp> because 
+                <samp class="listingcharacter listingcharacter">toString()</samp> is publicly specified in the 
+                <samp class="listingcharacter listingcharacter">Object</samp> superclass and you can’t restrict visibility in the subclass. Although the specification doesn’t clearly state that 
+                <samp class="listingcharacter listingcharacter">toString()</samp> must not return 
+                <samp class="listingcharacter listingcharacter">null</samp>, the empty string 
+                <samp class="listingcharacter listingcharacter">""</samp> is definitely better. The 
+                <samp class="listingcharacter listingcharacter">@Override</samp>
+                <a class="indexanchor" id="i11_09"/>
+             annotation makes the override clear.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[ ! ]  </span>Warning</h6>
+                
+                <p class="standard first last">Some creative programmers use the 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> representation for object comparisons. For instance, if you have two 
+                    <samp class="listingcharacter listingcharacter">Point</samp> objects (
+                    <samp class="listingcharacter listingcharacter">p</samp> and 
+                    <samp class="listingcharacter listingcharacter">q</samp>) and 
+                    <samp class="listingcharacter listingcharacter">p.toString().equals(q.toString())</samp>, then both points are equal. But relying on the return of 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> for this comparison is highly dangerous for several reasons: Obviously, 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> doesn’t need to be overridden. Second, 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> doesn’t necessarily need to represent all elements, and the output could be abbreviated. Third, of course, objects can be equal even if their string representations aren’t equal, which is the case with 
+                    <samp class="listingcharacter listingcharacter">URL </samp>objects, for example. The only permitted case for such a construction would be 
+                    <samp class="listingcharacter listingcharacter">String</samp>/
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp>/
+                    <samp class="listingcharacter listingcharacter">StringBuffer</samp>/
+                    <samp class="listingcharacter listingcharacter">CharSequence</samp>, which explicitly deals with strings. In addition to erroneous behavior, often a massive performance problem arises. 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> usually takes shortcuts, so that, for example, 
+                    <samp class="listingcharacter listingcharacter">obj.equals(obj)</samp> immediately returns 
+                    <samp class="listingcharacter listingcharacter">true</samp>
+                 or that, in the case of data structures, the objects are first tested for the same length before elements are compared.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h11.1.2.1">JDK Standard Implementation</h4>
+                
+                <p class="standard">New classes should override 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>. If not, the program will arrive at the default implementation in 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                , where only the class name and the less meaningful hash value are bound together hexadecimally, as in the following example:</p>
+                
+                <div class="listing " id="l_none_1167"><pre><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">getClass</span><span class="">().</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">"@"</span><span class=""> </span><span class="">+</span><span class=""> Integer</span><span class="">.</span><span class="">toHexString</span><span class="">(</span><span class="">hashCode</span><span class="">());</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Let’s learn more about the method:</p>
+                
+                <div class="listing " id="l_none_1177"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Object</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String toString()</samp><br/>Returns a string representation of the object consisting of class name and hash value.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">
+                    <a id="p619"/>While the hash value itself says little, for classes that don’t override 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> and 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                 methods, a difference in the hash value is a first indication that the two references aren’t identical.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In the following example, an object of 
+                        <samp class="listingcharacter listingcharacter">class A {}</samp> is created, and 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>
+                     returns its ID:</p>
+                    
+                    <div class="listing " id="l_none_1199"><pre><span class="">class</span><span class=""> A </span><span class="">{}</span><span class=""><br/></span>A a <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">A</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"1. "</span><span class=""> </span><span class="">+</span><span class=""> a </span><span class="">+</span><span class=""> </span><span class="">", 2. "</span><span class=""> </span><span class="">+</span><span class=""> a </span><span class="">+</span><span class=""> </span><span class="">", 3. "</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">A</span><span class="">()</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard">The output could be as follows:</p>
+                    
+                    <div class="listing " id="l_none_11107"><pre>1. Main$1A@
+                        <span class="bold">4554617c</span>, 2. Main$1A@
+                        <span class="bold">4554617c</span>, 3. Main$1A@
+                        <span class="bold">74a14482</span>
+                    </pre></div>
+                    
+                    <p class="standard last">With multiple calls of 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>
+                     on one instance (output 1 and 2), the return remains constant. When the program is restarted, the hash value may look different.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.2.2">Having the toString() Method Generated</h4>
+                
+                <p class="standard">While the 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> method is good for debugging, typing the methods manually is rather annoying. Two solutions simplify the implementation of the 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                 method:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">By default, IntelliJ can generate a 
+                            <samp class="listingcharacter listingcharacter">toString()</samp> method for selected object variables via the context menu. By the way, the same is true for 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp> and 
+                            <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The states are read automatically via reflection. In this case, Apache Commons Lang
+                            <a class="indexanchor" id="i11_10"/> (<span class="url"><a href="https://commons.apache.org/proper/commons-lang/">https://commons.apache.org/proper/commons-lang/</a></span>) leads onto the right path.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.1.3">11.1.3    
+                <a class="indexanchor" id="i11_11"/>Object Equivalence with equals(...)
+                <a class="indexanchor" id="i11_12"/>
+             and Identity</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i11_13"/>Whether two references represent the same object is determined by the comparison operator 
+                <samp class="listingcharacter listingcharacter">==</samp>
+                <a class="indexanchor" id="i11_14"/>, while 
+                <samp class="listingcharacter listingcharacter">!=</samp> checks the opposite. The operators test against identity but know nothing of possible content equivalence. Our earlier example with strings illustrates this fact quite well: A comparison with 
+                <samp class="listingcharacter listingcharacter">firstname == "Christian"</samp> generally has an incorrect, unintended effect, although the expression is syntactically correct. At this point, the comparison of content should take place, evaluating whether all characters of the string match. An 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                <a class="indexanchor" id="i11_15"/> method should check objects for equivalence. Thus, the 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             object has an implementation that compares strings character by character, as in the following example:</p>
+            
+            <div class="listing " id="l_none_11126"><pre><span class="">String</span><span class=""> firstname </span><span class="">=</span><span class=""> </span><span class="">"Christian"</span><span class="">;</span><span class=""><br/></span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">"Christian"</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> firstname </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  …<br/><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Object</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p620"/>
+                        boolean equals(Object o)</samp><br/>Tests if the other object is the same as your own. Equivalence is defined differently by each class, but the base class compares only the references 
+                        <samp class="listingcharacter listingcharacter">o == this</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h11.1.3.1">equals(...) Implementation from Object and Subclasses</h4>
+                
+                <p class="standard">The default implementation from the absolute superclass 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 can’t know anything about the equivalence of special objects and only tests the references.</p>
+                
+                <div class="listing " id="l11.3"><pre><span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">equals</span><span class="">(</span><span class=""> Object obj </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class="">  </span><span class="">this</span><span class=""> </span><span class="">==</span><span class=""> obj</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.3</b>    
+            java/lang/Object.java, equals()</p>
+                
+                <p class="standard">If a class doesn’t override 
+                    <samp class="listingcharacter listingcharacter">equals(Object)</samp>, the result of 
+                    <samp class="listingcharacter listingcharacter">o1.equals(o2)</samp> is equivalent to 
+                    <samp class="listingcharacter listingcharacter">o1 == o2</samp>
+                . Subclasses override this method to make a content comparison with their states. The method is well-served in subclasses because each class needs different logic to determine when an object is equal to another object.</p>
+                
+                <p class="standard">Not every class implements its own 
+                    <samp class="listingcharacter listingcharacter">equals(Object)</samp> method, so the runtime environment may inadvertently end up with 
+                    <samp class="listingcharacter listingcharacter">Object</samp> and its reference comparison. This scenario has unexpected consequences, and this misconception unfortunately occurs with instances of the 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> and 
+                    <samp class="listingcharacter listingcharacter">StringBuffer</samp> classes that don’t implement their own 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>. (We described this issue in detail in 
+                    <span class="crossreference "><a href="05_001.html#h5">Chapter 5</a></span>, 
+                    <span class="crossreference "><a href="05_005.html#h5.5.8">Section 5.5.8</a></span>
+                .)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.3.2">Overriding the equals(…) Method</h4>
+                
+                <p class="standard">You must be careful when using self-declared methods because the signature is important in this context. The method must accept an 
+                    <samp class="listingcharacter listingcharacter">Object</samp> and return 
+                    <samp class="listingcharacter listingcharacter">boolean</samp>. If this signature is used incorrectly, overloading will occur (instead of the overriding of the method), and if the return isn’t equal to 
+                    <samp class="listingcharacter listingcharacter">boolean</samp>, a second method with the same signature will be created, which isn’t permitted in Java (because Java doesn’t permit covariant parameter types yet). To minimize the problem, the 
+                    <samp class="listingcharacter listingcharacter">@Override</samp> annotation should be appended to 
+                    <samp class="listingcharacter listingcharacter">equals(Object)</samp>
+                .</p>
+                
+                <p class="standard">The use of the 
+                    <samp class="listingcharacter listingcharacter">equals(Object)</samp>
+                 method has some requirements, such as the following:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If the comparison is called 
+                            <samp class="listingcharacter listingcharacter">equals(null)</samp>, the result is always 
+                            <samp class="listingcharacter listingcharacter">false.</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If a 
+                            <samp class="listingcharacter listingcharacter">this</samp> is involved, a shortcut can be used, and 
+                            <samp class="listingcharacter listingcharacter">true</samp>
+                         can be returned.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The argument may be of type 
+                            <samp class="listingcharacter listingcharacter">Object</samp>, but nevertheless, we’re always comparing concrete types. The 
+                            <samp class="listingcharacter listingcharacter">equals(Object)</samp> method of a class 
+                            <samp class="listingcharacter listingcharacter">X</samp> will therefore only compare objects of type 
+                            <samp class="listingcharacter listingcharacter">X</samp>. An intriguing question is whether 
+                            <samp class="listingcharacter listingcharacter">equals(Object)</samp> in class 
+                            <samp class="listingcharacter listingcharacter">X </samp>should also take subclasses of 
+                            <samp class="listingcharacter listingcharacter">X</samp>
+                         into consideration.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">An implementation of 
+                            <samp class="listingcharacter listingcharacter">equals(Object)</samp> should always involve an implementation of 
+                            <samp class="listingcharacter listingcharacter">hashCode()</samp> because if two objects are equal according to 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp>, the hash values 
+                            <a id="p621"/>must also be equal. However, with an inherited 
+                            <samp class="listingcharacter listingcharacter">hashCode()</samp> method from 
+                            <samp class="listingcharacter listingcharacter">Object</samp> this is not fulfilled in all cases, since presumably with equal objects 
+                            <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                         nevertheless returns different results.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">The data type for the parameter in the 
+                        <samp class="listingcharacter listingcharacter">equals(Object)</samp> method is always 
+                        <samp class="listingcharacter listingcharacter">Object</samp> and never anything else; otherwise, 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> won’t be overridden but instead overloaded. Thus, the following notation for a class named 
+                        <samp class="listingcharacter listingcharacter">Candy</samp>
+                     is incorrect:</p>
+                    
+                    <div class="listing " id="l_none_11148"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">int</span><span class=""> price</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">equals</span><span class="">(</span><span class=""> </span>
+                        <span class="bold"><span class="">Candy </span></span>that ) { <span class="">return</span><span class=""> </span><span class="">this</span><span class="">.price == that.price; }</span><br/>}<span class=""/></pre></div>
+                    
+                    <p class="standard last">In the words of computer scientists, Java doesn’t yet support covariant parameter types, but it does support covariant return types. For this reason, a good practice is to set the 
+                        <samp class="listingcharacter listingcharacter">@Override</samp>
+                     annotation because it raises an alarm if we think we’re overriding a method but actually aren’t.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.3.3">Basic Structure of the equals(...) Method</h4>
+                
+                <p class="standard">The previous list only captures the preliminary work until the actual comparison starts. Then, the comparison is a matter of comparing the state of one’s own object with the state of another object. In general, we can distinguish between 
+                    <span class="italic">tests of primitive values</span>, 
+                    <span class="italic">tests of arrays</span>, and 
+                    <span class="italic">tests of reference types</span>
+                :</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">For 
+                            <samp class="listingcharacter listingcharacter">boolean</samp> and all primitive integer values, a simple 
+                            <samp class="listingcharacter listingcharacter">==</samp> comparison is possible. In a 
+                            <samp class="listingcharacter listingcharacter">==</samp> comparison of floats, a problem occurs due to the special value: not a number (NaN). This value bypasses the conversion to an integer bit pattern. Basically, a test using the static 
+                            <samp class="listingcharacter listingcharacter">compareTo(...)</samp> methods in the wrapper classes could also help in this case, in which 
+                            <samp class="listingcharacter listingcharacter">compareTo(...) == 0</samp>
+                         is used to check for equality.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">For the comparison of arrays, 
+                            <samp class="listingcharacter listingcharacter">Arrays.equals(array1, array2)</samp>
+                         is a good choice.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">For the comparison of references, the comparison is passed to the objects, making sure that the reference variables are 
+                            <samp class="listingcharacter listingcharacter">null</samp>. The useful helper method 
+                            <samp class="listingcharacter listingcharacter">Objects.equals(obj1, obj2)</samp>
+                         takes care of this comparison.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first last">Of course, you could fall back on the object method 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> from the numeric wrapper classes, but doing so would involve the constant creation of new objects for each primitive comparison. This approach costs an unnecessary amount of time because 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> and also 
+                        <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                     methods must be fast since they are often called during operations in data structures.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.3.4">
+                    <a id="p622"/>
+                Example of a custom equals(...) Method</h4>
+                
+                <p class="standard">The first two requirements are easy to meet, and an example of 
+                    <samp class="listingcharacter listingcharacter">Candy </samp>with the object variables 
+                    <samp class="listingcharacter listingcharacter">price</samp> and 
+                    <samp class="listingcharacter listingcharacter">quantity </samp>
+                can be quickly implemented:</p>
+                
+                <div class="listing " id="l_none_11138"><pre><span class="">@Override</span><span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">equals</span><span class="">(</span><span class=""> Object o </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> o </span><span class="">==</span><span class=""> null </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">false;</span><span class=""><br/></span><br/>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> o </span><span class="">==</span><span class=""> </span><span class="">this</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">true;</span><span class=""><br/></span><br/>  Candy that <span class="">=</span><span class=""> </span><span class="">(</span><span class="">Candy</span><span class="">)</span><span class=""> o</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">return</span><span class="">    </span><span class="">this</span><span class="">.</span><span class="">price </span><span class="">==</span><span class=""> that</span><span class="">.</span><span class="">price</span><br/>         <span class="">&amp;&amp;</span><span class=""> </span><span class="">this</span><span class="">.</span><span class="">quantity </span><span class="">==</span><span class=""> that</span><span class="">.</span><span class="">quantity</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">This solution seems obvious but leads to a 
+                    <samp class="listingcharacter listingcharacter">ClassCastException</samp> at least for a non-
+                    <samp class="listingcharacter listingcharacter">Candy</samp>
+                 object. The problem can be solved quickly in the following way:</p>
+                
+                <div class="listing " id="l_none_11159"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">!</span><span class=""> </span><span class="">(</span><span class="">o </span><span class="">instanceof</span><span class=""> Candy</span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">false;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Now, we are on the safe side, but has the goal been achieved?</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">The 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> method always returns 
+                        <samp class="listingcharacter listingcharacter">false</samp>
+                     for non-matching types and doesn’t throw an exception.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.3.5">The Problem of Symmetry
+                    <a class="indexanchor" id="i11_16"/>
+                *</h4>
+                
+                <p class="standard">While the listed implementation works well for final classes, the symmetry is broken for subclasses. Why? Quite simply, 
+                    <samp class="listingcharacter listingcharacter">instanceof</samp> tests types in the hierarchy and will return 
+                    <samp class="listingcharacter listingcharacter">true</samp> even if the argument passed to 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> is a subclass of 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>. This subclass will have the same object variables as the superclass; thus, from the point of view of 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>, everything is fine. Let’s assume two variables (
+                    <samp class="listingcharacter listingcharacter">candy</samp> and 
+                    <samp class="listingcharacter listingcharacter">toxicWaste</samp>) have the types 
+                    <samp class="listingcharacter listingcharacter">Candy</samp> and 
+                    <samp class="listingcharacter listingcharacter">ToxicWaste</samp> (a fictitious subclass of 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>), respectively. If both objects are equal, 
+                    <samp class="listingcharacter listingcharacter">candy.equals(toxicWaste)</samp> returns 
+                    <samp class="listingcharacter listingcharacter">true</samp>. Let’s turn the tables and ask what 
+                    <samp class="listingcharacter listingcharacter">toxicWaste.equals(candy)</samp> will return. While we haven’t implemented 
+                    <samp class="listingcharacter listingcharacter">ToxicWaste</samp>, we assume that there’s an 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method there, implemented using the same 
+                    <samp class="listingcharacter listingcharacter">instanceof</samp> schema as 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>. Then, a test will run 
+                    <samp class="listingcharacter listingcharacter">o instanceof ToxicWaste</samp> and result in 
+                    <samp class="listingcharacter listingcharacter">false</samp>. However, this terminates the case distinction with 
+                    <samp class="listingcharacter listingcharacter">return false</samp>
+                 . Let’s summarize:</p>
+                
+                <div class="listing " id="l_none_11163"><pre>
+                    <a id="p623"/>candy<span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> toxicWaste </span><span class="">)</span><span class=""> </span><span class="">==</span><span class=""> </span><span class="">true</span><span class=""><br/></span>toxicWaste<span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> candy </span><span class="">)</span><span class=""> </span><span class="">==</span><span class=""> </span><span class="">false</span><span class=""> </span></pre></div>
+                
+                <p class="standard">This inconsistency is not acceptable, and to resolve it, you must not use 
+                    <samp class="listingcharacter listingcharacter">instanceof</samp> but instead should ask if the type is exact. This check can be done via 
+                    <samp class="listingcharacter listingcharacter">getClass()</samp> and a simple reference comparison.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn11_01" id="fn11_01">[ 172 ]</a></span>
+                 As a result, the following code is correct:</p>
+                
+                <div class="listing " id="l11.4"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">int</span><span class=""> price</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class=""> quantity</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">@Override</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">equals</span><span class="">(</span><span class=""> Object o </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> o </span><span class="">==</span><span class=""> null </span><span class="">)</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">false;</span><span class=""><br/></span><br/>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> o </span><span class="">==</span><span class=""> </span><span class="">this</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">true;</span><span class=""><br/></span><br/>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> o</span><span class="">.</span><span class="">getClass</span><span class="">()</span><span class=""> </span><span class="">!=</span><span class=""> </span><span class="">getClass</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">false;</span><span class=""><br/></span><br/>    Candy that <span class="">=</span><span class=""> </span><span class="">(</span><span class="">Candy</span><span class="">)</span><span class=""> o</span><span class="">;</span><span class=""><br/></span><br/>    <span class="">return</span><span class="">    </span><span class="">this</span><span class="">.</span><span class="">price </span><span class="">==</span><span class=""> that</span><span class="">.</span><span class="">price</span><br/>           <span class="">&amp;&amp;</span><span class=""> </span><span class="">this</span><span class="">.</span><span class="">quantity </span><span class="">==</span><span class=""> that</span><span class="">.</span><span class="">quantity</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">@Override</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">hashCode</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">31</span><span class=""> </span><span class="">*</span><span class=""> price </span><span class="">+</span><span class=""> quantity</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.4</b>    
+            src/main/java/com/tutego/insel/object/Candy.java, Candy</p>
+                
+                <p class="standard">You’ll learn more about the 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp> method in 
+                    <span class="crossreference "><a href="11_001.html#h11.1.5">Section 11.1.5</a></span>. We’ve only included it here for the sake of completeness since 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                 should always go hand in hand.</p>
+                
+                <p class="standard">
+                    <a id="p624"/>Specifying a new 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> for extended classes makes sense so that the new object variables will also be included in the test. For 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                 methods, you’ll need to use a similar strategy.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.3.6">Records and equals(…)/hashCode()</h4>
+                
+                <p class="standard">Records have an automatically implemented 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method. Primitive elements are implemented using the static 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> methods of the appropriate wrapper classes, and for references, the automatic implementation falls back on 
+                    <samp class="listingcharacter listingcharacter">Objects.equals(...)</samp>. For 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp>, the vararg method 
+                    <samp class="listingcharacter listingcharacter">Objects.hash(...)</samp>
+                 returns the hashcode across all record components.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.3.7">Once the Same, Always the Same*</h4>
+                
+                <p class="standard">Another aspect of 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn11_02" id="fn11_02">[ 173 ]</a></span> should be noted: If the object is never changed, the result must remain the same throughout the lifecycle of the object. One small problem arises in 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                    <a class="indexanchor" id="i11_17"/> of the 
+                    <samp class="listingcharacter listingcharacter">URL</samp>
+                 class, which compares whether two URL addresses that point to the same resource. According to the documentation:</p>
+                
+                <blockquote><p>“Two URL objects are equal if they have the same protocol, reference equivalent hosts, have the same port number on the host, and the same file and fragment of the file.”</p></blockquote>
+                
+                <p class="standard">Host names are considered equal if either both point to the same IP address or, if an IP address can’t be resolved, both host names are equal (case-insensitive) or 
+                    <samp class="listingcharacter listingcharacter">null</samp>. However, since behind the URLs <span class="url"><a href="http://tutego.com/">http://tutego.com/</a></span> and <span class="url"><a href="http://www.tutego.com/">http://www.tutego.com/</a></span> ultimately exists <span class="url"><a href="http://www.tutego.de/">http://www.tutego.de/</a></span>, 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> will return 
+                    <samp class="listingcharacter listingcharacter">true</samp>
+                 in the following example:</p>
+                
+                <div class="listing " id="l11.5"><pre>URL url1 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">URL</span><span class="">(</span><span class=""> </span><span class="">"http://tutego.com/"</span><span class=""> );</span><br/>URL url2 = new URL( <span class="">"http://www.tutego.com/"</span><span class=""> );</span><br/>System.out.println( url1.equals( url2 ) );              <span class=""> // true</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.5</b>    
+            src/main/java/com/tutego/insel/object/UrlEquals.java, main()</p>
+                
+                <p class="standard">Dynamically mapping host names to IP address of computers can be problematic for several reasons:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The (human) reader intuitively expects something else.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If no network connection is available, no name resolution can be performed, and the comparison will return 
+                            <samp class="listingcharacter listingcharacter">false</samp>
+                        . However, the return shouldn’t depend on whether or not a network connection exists.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The fact that the two URLs point to the same server could change at runtime.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.1.4">11.1.4    
+                <a id="p625"/>Cloning an Object Using clone()*
+                <a class="indexanchor" id="i11_18"/>
+            </h3>
+            
+            <p class="standard">Two ways to replicate an object are available:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A constructor (also called a 
+                        <span class="italic">copy constructor</span>
+                        <a class="indexanchor" id="i11_19"/>
+                    ) that takes an existing object as a template, creates a new object, and copies the states</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A public 
+                        <samp class="listingcharacter listingcharacter">clone()</samp>
+                        <a class="indexanchor" id="i11_20"/>
+                     method</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The application programming interface (API) documentation describes what each class can provide.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example creates a 
+                    <samp class="listingcharacter listingcharacter">Point</samp>
+                 object and then clones it:</p>
+                
+                <div class="listing " id="l_none_11212"><pre>java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point p </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">12</span><span class="">,</span><span class=""> </span><span class="">23</span><span class=""> </span><span class="">);</span><span class=""><br/></span>java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point q </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">)</span><span class=""> </span>
+                    <span class="bold"><span class="">p.</span><span class="">clone</span><span class="">()</span></span>;<br/>System.out.<span class="">println</span><span class="">( q );               </span><span class=""> // java.awt.Point[x=12,y=23]</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard last">More than 300 classes in the Java library support a 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> method that returns a new instance with the same state. An overridden method can customize the return type thanks to covariant return types. However, the 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> method at 
+                    <samp class="listingcharacter listingcharacter">java.awt.Point</samp> use just the return type 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                .</p>
+            
+            </div>
+            
+            <p class="standard">Array objects provide 
+                <samp class="listingcharacter listingcharacter">clone()</samp> by default. However, if the arrays store non-primitive values, 
+                <samp class="listingcharacter listingcharacter">clone()</samp>
+             will return only a flat copy, which means that the new array object (the clone) references the exact same objects as the original and doesn’t clone the entries themselves.</p>
+            
+            
+                
+                <h4 class="t4" id="h11.1.4.1">clone() from java.lang.Object</h4>
+                
+                <p class="standard">Since 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> isn’t automatically supported, the question is how you can implement 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> for your classes with the least effort. Simply calling 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> doesn’t work, however, because the method is 
+                    <samp class="listingcharacter listingcharacter">protected</samp>
+                , so the method is not visible for now.</p>
+                
+                <div class="listing " id="l_none_11206"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Object</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">protected Object clone() throws CloneNotSupportedException</samp><br/>Returns a copy of the object.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.4.2">A Custom clone() Method</h4>
+                
+                <p class="standard">Custom classes override the 
+                    <samp class="listingcharacter listingcharacter">protected</samp> method 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> of the 
+                    <samp class="listingcharacter listingcharacter">Object</samp> superclass and make it 
+                    <samp class="listingcharacter listingcharacter">public</samp>
+                . Two options can be considered for implementation:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">You could manually create a new object, copy all object variables, and return the reference to the new object.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <a id="p626"/>
+                        The runtime system should create a copy by itself, and we return that copy. The second solution shortens development time and is also more exciting.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">To get the system to clone an object, two tasks must be performed:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A 
+                            <samp class="listingcharacter listingcharacter">super.clone()</samp> call triggers the 
+                            <samp class="listingcharacter listingcharacter">clone()</samp> method from 
+                            <samp class="listingcharacter listingcharacter">Object</samp>, causing the runtime environment to create a new object and copy the object variables. The method copies the data of the current object element by element into the new one. The method is 
+                            <samp class="listingcharacter listingcharacter">protected</samp> in the superclass, but that’s the trick: Only subclasses can call 
+                            <samp class="listingcharacter listingcharacter">clone()</samp>
+                        ; classes outside the inheritance hierarchy cannot.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The class implements the marker interface 
+                            <samp class="listingcharacter listingcharacter">Cloneable</samp>. If a 
+                            <samp class="listingcharacter listingcharacter">clone()</samp> is called externally on an object whose class doesn’t implement 
+                            <samp class="listingcharacter listingcharacter">Cloneable</samp>
+                            <a class="indexanchor" id="i11_21"/>, the result is a 
+                            <samp class="listingcharacter listingcharacter">CloneNotSupportedException</samp>
+                            <a class="indexanchor" id="i11_22"/>. Of course, 
+                            <samp class="listingcharacter listingcharacter">Object</samp> does 
+                            <span class="italic">not</span> implement the 
+                            <samp class="listingcharacter listingcharacter">Cloneable </samp>
+                        interface itself because otherwise classes would already have this type automatically, which would be pointless.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">clone()</samp> returns a reference to the new object, but if no free memory is available, an 
+                    <samp class="listingcharacter listingcharacter">OutOfMemoryError</samp>
+                    <a class="indexanchor" id="i11_23"/>
+                 is thrown.</p>
+                
+                <p class="standard">Let’s say that 
+                    <samp class="listingcharacter listingcharacter">players</samp>
+                 need to be cloned for a game. You could write the following code:</p>
+                
+                <div class="listing " id="l11.6"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">object</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Player </span>
+                    <span class="bold"><span class="">implements</span><span class=""> Cloneable</span></span> {<br/><br/>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> name;</span><br/>  <span class="">public</span><span class=""> </span><span class="">int</span><span class="">    age;</span><br/><br/>  
+                    <span class="bold"><span class="">@Override</span><span class=""><br/></span>  <span class="">public</span><span class=""> Player </span><span class="">clone</span><span class="">() {</span><br/>    <span class="">try</span><span class=""> {</span><br/>      <span class="">return</span><span class=""> (Player) </span><span class="">super</span><span class="">.</span><span class="">clone</span><span class="">();</span><br/>    }<br/>    <span class="">catch</span><span class=""> ( CloneNotSupportedException e ) {</span><br/>     <span class=""> // Can't really happen due to Cloneable</span><span class=""><br/></span>      <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">InternalError</span><span class="">();</span><br/>    }<br/>  }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 11.6</b>    
+            src/main/java/com/tutego/insel/object/Player.java</p>
+                
+                <p class="standard">Since covariant return types are possible in Java, 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> returns not just 
+                    <samp class="listingcharacter listingcharacter">Object</samp>, but the 
+                    <samp class="listingcharacter listingcharacter">Player</samp> subtype, as shown in 
+                    <span class="crossreference "><a href="11_001.html#f11.2">Figure 11.2</a></span>
+                . Let’s test the class in the following way:</p>
+                
+                <div class="listing " id="l11.7"><pre>
+                    <a id="p627"/>Player susi <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">();</span><span class=""><br/></span>susi<span class="">.</span><span class="">age  </span><span class="">=</span><span class=""> </span><span class="">29</span><span class="">;</span><span class=""><br/></span>susi<span class="">.</span><span class="">name </span><span class="">=</span><span class=""> </span><span class="">"Susi"</span><span class="">;</span><span class=""><br/></span>Player dolly <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">susi.</span><span class="">clone</span><span class="">()</span></span>;<br/>System.out.<span class="">println</span><span class="">( dolly.name + </span><span class="">" is "</span><span class=""> + dolly.age );</span><span class=""> // Susi is 29</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 11.7</b>    
+            src/main/java/com/tutego/insel/object/PlayerCloneDemo.java, main()</p>
+                
+                <div class="imagebox figure-type"><a href="img-f11.2.html" id="f11.2"><img alt="Player Extends Object and Implements Cloneable" id="img-f11.2" src="bilderklein/klein11_002.png"/></a></div>
+                
+                <p class="caption "><b>Figure 11.2</b>    
+            Player Extends Object and Implements Cloneable</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">If you inherit from a class with an implemented 
+                        <samp class="listingcharacter listingcharacter">clone()</samp> method, which itself works with 
+                        <samp class="listingcharacter listingcharacter">super.clone()</samp>
+                    , you’ll also get your own states copied.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.4.3">clone() and equals(...)</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> method and the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method are related, as are the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp> methods. If the 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> method is overridden, 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> should also be 
+                    <a id="p628"/>adjusted because, without an overridden 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>, the following code will be inherited from 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                :</p>
+                
+                <div class="listing " id="l11.8"><pre><span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">equals</span><span class="">(</span><span class=""> Object obj </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class="">  </span><span class="">this</span><span class=""> </span><span class="">==</span><span class=""> obj</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.8</b>    
+            java/lang/Object.java, equals()</p>
+                
+                <p class="standard">However, as a result, a cloned object, which in general is a new object, is no longer 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>-equal to its creator because of its new object identity. Formally, this results in 
+                    <samp class="listingcharacter listingcharacter">o.clone().equals(o) == false</samp>
+                . These semantics are probably undesirable.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.4.4">Shallow or Deep?</h4>
+                
+                <p class="standard">By default, the 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> method of the system creates a 
+                    <span class="italic">shallow copy</span>
+                    <a class="indexanchor" id="i11_24"/>
+                    <a class="indexanchor" id="i11_25"/>
+                    <a class="indexanchor" id="i11_26"/>
+                    <a class="indexanchor" id="i11_27"/>. For child objects, only the references are copied, and the original object and the copy subsequently refer to the same child objects (they actually share them). For example, if an employee has an object variable for an employer and a copy of an employee is created, the clone will reference the same employer. With an employer, this copying may still be coherent, but for data structures, a 
+                    <span class="italic">deep copy</span>
+                    <a class="indexanchor" id="i11_28"/>
+                    <a class="indexanchor" id="i11_29"/> is sometimes preferred. In this variant, all subobjects are also cloned recursively. The library implementation behind 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 can’t do that.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.4.5">No Clones, Please!</h4>
+                
+                <p class="standard">If you don’t want either a shallow or a deep copy, but instead want to inherit a 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> implementation from the superclass, you can prevent cloning. In this case, you would override 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> but throw a 
+                    <samp class="listingcharacter listingcharacter">CloneNotSupportedException</samp>
+                    <a class="indexanchor" id="i11_30"/> signaling that you don’t want the object to be cloned. However, a problem will arise if a class already overrides the 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> method and changes the signature in the process. In 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                , the method head is written in the following way:</p>
+                
+                <div class="listing " id="l11.9"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Object </span><span class="">{</span><span class=""><br/></span>  …<br/>  <span class="">protected</span><span class=""> </span><span class="">native</span><span class=""> Object </span><span class="">clone</span><span class="">()</span><span class=""> </span>
+                    <span class="bold"><span class="">throws</span><span class=""> CloneNotSupportedException;</span></span><br/>  …<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 11.9</b>    
+            java/lang/Object.java (Snippet)</p>
+                
+                <p class="standard">The method is 
+                    <samp class="listingcharacter listingcharacter">native</samp>
+                    <a class="indexanchor" id="i11_31"/>, which means the method not implemented in Java, but in the system language. The visibility is 
+                    <samp class="listingcharacter listingcharacter">protected</samp> because only subclasses should see the methods. A subclass overrides 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> and usually omits the 
+                    <samp class="listingcharacter listingcharacter">throws CloneNotSupportedException</samp>. Visibility is usually raised to 
+                    <samp class="listingcharacter listingcharacter">public</samp>
+                .</p>
+                
+                <p class="standard">
+                    <a id="p629"/>For 
+                    <samp class="listingcharacter listingcharacter">Point2D</samp> (from which 
+                    <samp class="listingcharacter listingcharacter">Point</samp> inherits the 
+                    <samp class="listingcharacter listingcharacter">clone()</samp>
+                 method), we can write the following:</p>
+                
+                <div class="listing " id="l11.10"><pre><span class="">public</span><span class=""> </span><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> Point2D </span><span class="">implements</span><span class=""> Cloneable </span><span class="">{</span><span class=""><br/></span>  …<br/>  
+                    <span class="bold"><span class="">public</span><span class=""> Object </span><span class="">clone</span><span class="">()</span><br/></span>  …<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 11.10</b>    
+            java/awt/geom/Point2D.java (Snippet)</p>
+                
+                <div class="listing " id="l11.11"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Point </span><span class="">extends</span><span class=""> Point2D </span><span class="">implements</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span><span class="">Serializable </span><span class="">{</span><span class=""><br/></span>  …<br/><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.11</b>    
+            java/awt/Point.java (Snippet)</p>
+                
+                <p class="standard">If a class inherits a 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> method from which 
+                    <samp class="listingcharacter listingcharacter">throws CloneNotSupportedException</samp> has been removed, it can’t reintroduce the exception—subclasses can omit 
+                    <samp class="listingcharacter listingcharacter">throws</samp> clauses but can’t add them. The following code is therefore 
+                    <span class="italic">not</span>
+                 possible:</p>
+                
+                <div class="listing " id="l_none_11279"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> PointSubclass </span>
+                    <span class="bold"><span class="">extends</span><span class=""> java.awt.Point</span></span> {<br/>  <span class="">@Override</span><span class=""> // from Point2D</span><span class=""><br/></span>  <span class="">public</span><span class=""> Object </span><span class="">clone</span><span class="">() </span>
+                    <span class="bold"><span class="">throws</span><span class=""> CloneNotSupportedException</span></span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error!</span><span class=""><br/></span>  …<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">Since the signature can no longer store an exception clause, you must use a trick and wrap the 
+                    <samp class="listingcharacter listingcharacter">CloneNotSupportedException</samp>
+                 in a runtime exception, as in the following example:</p>
+                
+                <div class="listing " id="l11.12"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> ColoredPoint </span><span class="">extends</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">int</span><span class=""> rgb</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">@Override</span><span class="">             </span><span class=""> // from Point2D</span><span class=""><br/></span>  <span class="">public</span><span class=""> Object </span><span class="">clone</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">RuntimeException</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">CloneNotSupportedException</span><span class="">() );</span></span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 11.12</b>    
+            src/main/java/com/tutego/insel/object/ColoredPoint.java, ColoredPoint</p>
+                
+                <p class="standard">An attempt at cloning leads to something like the following output:</p>
+                
+                <div class="listing " id="l_none_11295"><pre>Exception in thread "main" java.lang.RuntimeException:<br/>java.lang.CloneNotSupportedException<br/>  at com.tutego.insel.object.ColoredPoint.clone(ColoredPoint.java:10)<br/>
+                    <a id="p630"/>  at …<br/>Caused by: java.lang.CloneNotSupportedException<br/>  ... 2 more </pre></div>
+                
+                <p class="standard">Technically, wrapping the 
+                    <samp class="listingcharacter listingcharacter">CloneNotSupportedException</samp> in a 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+                 solves our problem; however, you should be aware that you’re now “disabling” a behavior that was previously permitted. Subclasses shouldn’t take away any behaviors.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.1.5">11.1.5    Returning Hash Values via hashCode()*</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp> method 
+                <a class="indexanchor" id="i11_32"/>is supposed to return an integer number (both positive and negative) for each object that is unique and identifies the object. The integer is called a 
+                <span class="italic">hashcode</span>
+                <a class="indexanchor" id="i11_33"/> or a 
+                <span class="italic">hash value</span>
+                <a class="indexanchor" id="i11_34"/>, and 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp> is the implementation of a 
+                <span class="italic">hash function</span>
+                <a class="indexanchor" id="i11_35"/>. Hash values are necessary if the objects are placed in special data structures that work according to the hashing procedure. Data structures with hashing algorithms provide efficient access to their elements. The 
+                <samp class="listingcharacter listingcharacter">java.util.HashMap</samp>
+             class implements such a data structure.</p>
+            
+            <div class="listing " id="l_none_11324"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Object</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int hashCode()</samp><br/>Returns the hash value of an object. The base class 
+                        <samp class="listingcharacter listingcharacter">Object</samp>
+                     implements the method natively.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h11.1.5.1">Player with Hash Function</h4>
+                
+                <p class="standard">In the following example, the 
+                    <samp class="listingcharacter listingcharacter">Player</samp> class is supposed to override the 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp> method from 
+                    <samp class="listingcharacter listingcharacter">Object</samp>. To successfully store the objects in an associative memory, 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> is also required, which is also implemented by the 
+                    <samp class="listingcharacter listingcharacter">Player</samp>
+                 class in the following example:</p>
+                
+                <div class="listing " id="l11.13"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">object</span><span class="">.</span><span class="">hashcode</span><span class="">;</span><span class=""/><br/><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Player </span><span class="">{</span><span class=""/><br/><br/>  <span class="">String</span><span class=""> name</span><span class="">;</span><span class=""/><br/>  <span class="">int</span><span class="">    age</span><span class="">;</span><span class=""/><br/>  <span class="">double</span><span class=""> weight</span><span class="">;</span><span class=""/><br/><br/>  <span class="">/**</span><span class=""/><br/><span class="">   * Returns a hash code value for this {@code Player} object.</span><span class=""/><br/><span class="">   *</span><span class=""/><br/><span class="">   * @return A hash code value for this object.</span><span class=""/><br/><span class="">   *</span><span class=""/><br/><span class="">
+                        <a id="p631"/>
+                       * @see java.lang.Object#equals(java.lang.Object)</span><span class=""/><br/><span class="">   * @see java.util.HashMap</span><span class=""/><br/><span class="">   */</span><span class=""/><br/><span class="">  </span>
+                    <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">hashCode</span><span class="">() {</span><span class=""/><br/><span class="">    </span><span class="">int</span><span class=""> result = </span><span class="">31</span><span class=""> + age;</span><span class=""/><br/><span class="">    result = </span><span class="">31</span><span class=""> * result + ((name == null) ? </span><span class="">0</span><span class=""> : name.</span><span class="">hashCode</span><span class="">());</span><span class=""/><br/><span class="">    </span><span class="">long</span><span class=""> temp = Double.</span><span class="">doubleToLongBits</span><span class="">( weight );</span><span class=""/><br/><span class="">    result = </span><span class="">31</span><span class=""> * result + (</span><span class="">int</span><span class="">) (temp ^ (temp &gt;&gt;&gt; </span><span class="">32</span><span class="">));</span><span class=""/><br/><br/><span class="">    </span><span class="">return</span><span class=""> result;</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class=""/></span><span class=""/><br/><span class="">  </span><span class="">/**</span><span class=""/><br/><span class="">   * Determines whether two players are equal. Two instances of</span><span class=""/><br/><span class="">   * {@code Player} are equal if the values of their {@code name}, {@code age}</span><span class=""/><br/><span class="">   * and {@code weight} member fields are the same.</span><span class=""/><br/><span class="">   *</span><span class=""/><br/><span class="">   * @param that   an object to be compared with this {@code Player}</span><span class=""/><br/><span class="">   *</span><span class=""/><br/><span class="">   * @return {@code true} if the object to be compared is an instance of</span><span class=""/><br/><span class="">   *         {@code Player} and has the same values; {@code false} otherwise.</span><span class=""/><br/><span class="">   */</span><span class=""/><br/><span class="">  </span><span class="">@Override</span><span class=""/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">equals</span><span class="">( Object that ) {</span><span class=""/><br/><span class="">    </span><span class="">if</span><span class=""> ( </span><span class="">this</span><span class=""> == that )</span><span class=""/><br/><span class="">      </span><span class="">return</span><span class=""> true;</span><span class=""/><br/><span class=""> </span><span class=""/><br/><span class="">    </span><span class="">if</span><span class=""> ( that == null )</span><span class=""/><br/><span class="">      </span><span class="">return</span><span class=""> false;</span><span class=""/><br/><span class=""> </span><span class=""/><br/><span class="">    </span><span class="">if</span><span class=""> ( </span><span class="">getClass</span><span class="">() != that.</span><span class="">getClass</span><span class="">() )</span><span class=""/><br/><span class="">      </span><span class="">return</span><span class=""> false;</span><span class=""/><br/><span class=""> </span><span class=""/><br/><span class="">    Player other = (Player) that;</span><span class=""/><br/><span class=""> </span><span class=""/><br/><span class="">    </span><span class="">if</span><span class=""> ( age != other.age )</span><span class=""/><br/><span class="">      </span><span class="">return</span><span class=""> false;</span><span class=""/><br/><span class=""> </span><span class=""/><br/><span class="">    </span><span class="">if</span><span class=""> ( Double.</span><span class="">compare</span><span class="">( weight, other.weight ) != </span><span class="">0</span><span class=""> )</span><span class=""/><br/><span class="">      </span><span class="">return</span><span class=""> false;</span><span class=""/><br/><span class=""> </span><span class=""/><br/><span class="">    </span><span class="">if</span><span class=""> ( ! Objects.</span><span class="">equals</span><span class="">( name, other.name ) )</span><span class=""/><br/><span class="">      </span><span class="">return</span><span class=""> false;</span><span class=""/><br/><span class=""> </span><span class=""/><br/><span class="">
+                        <a id="p632"/>
+                        </span><span class="">return</span><span class=""> true;</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 11.13</b>    
+            src/main/java/com/tutego/insel/object/hashcode/Player.java</p>
+                
+                <p class="standard">We can test the class with something like the following lines:</p>
+                
+                <div class="listing " id="l11.14"><pre>Player bruceWants <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">();</span><span class=""><br/></span>bruceWants<span class="">.</span><span class="">name </span><span class="">=</span><span class=""> </span><span class="">"Bruce Wants"</span><span class="">;</span><span class=""><br/></span>bruceWants<span class="">.</span><span class="">age </span><span class="">=</span><span class=""> </span><span class="">32</span><span class="">;</span><span class=""><br/></span>bruceWants<span class="">.</span><span class="">weight </span><span class="">=</span><span class=""> </span><span class="">70.3</span><span class="">;</span><span class=""><br/></span><br/>Player bruceLii <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">();</span><span class=""><br/></span>bruceLii<span class="">.</span><span class="">name </span><span class="">=</span><span class=""> </span><span class="">"Bruce Lii"</span><span class="">;</span><span class=""><br/></span>bruceLii<span class="">.</span><span class="">age </span><span class="">=</span><span class=""> </span><span class="">32</span><span class="">;</span><span class=""><br/></span>bruceLii<span class="">.</span><span class="">weight </span><span class="">=</span><span class=""> </span><span class="">70.3</span><span class="">;</span><span class=""><br/></span><br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> bruceWants</span><span class="">.</span><span class="">hashCode</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">                </span><span class=""> // -340931147</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> bruceLii</span><span class="">.</span><span class="">hashCode</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">                  </span><span class=""> // 301931244</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">identityHashCode</span><span class="">(</span><span class=""> bruceWants </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // 1671711</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">identityHashCode</span><span class="">(</span><span class=""> bruceLii </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // 11394033</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> bruceLii</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> bruceWants </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">        </span><span class=""> // false</span><span class=""><br/></span><br/>bruceWants<span class="">.</span><span class="">name </span><span class="">=</span><span class=""> </span><span class="">"Bruce Lii"</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> bruceWants</span><span class="">.</span><span class="">hashCode</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">                </span><span class=""> // 301931244</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> bruceLii</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> bruceWants </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">        </span><span class=""> // true</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.14</b>    
+            src/main/java/com/tutego/insel/object/hashcode/PlayerHashcodeDemo.java, main()</p>
+                
+                <p class="standard">The static method 
+                    <samp class="listingcharacter listingcharacter">System.identityHashCode(...)</samp>
+                    <a class="indexanchor" id="i11_36"/> returns the hashcode for an object as it would be returned by the default implementation of 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 if we hadn’t overridden it.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Since the hashcode can be negative, expressions like 
+                        <samp class="listingcharacter listingcharacter">array[o.hashCode() % array. length()]</samp> are problematic. If 
+                        <samp class="listingcharacter listingcharacter">o.hashCode()</samp> is negative, the result of the remainder is also negative, and the consequence is an 
+                        <samp class="listingcharacter listingcharacter">ArrayIndexOutOfBoundsException</samp>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">IntelliJ can automatically generate the 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp> and 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 methods, so you don’t need to write them by hand.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.5.2">
+                    <a id="p633"/>
+                Deep or Shallow Comparisons/Hash Values</h4>
+                
+                <p class="standard">If an object references subobjects, for example, a person references a 
+                    <samp class="listingcharacter listingcharacter">String</samp> object for the name (no primitive data types), the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp> methods pass the comparison and calculation of the hashcode to the referenced subobject (provided the reference isn’t 
+                    <samp class="listingcharacter listingcharacter">null</samp> ). The following snippet of our 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 method illustrates this point:</p>
+                
+                <div class="listing " id="l11.15"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> name </span><span class="">==</span><span class=""> null </span><span class="">)</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">((</span><span class="">Player</span><span class="">)</span><span class="">that</span><span class="">).</span><span class="">name </span><span class="">!=</span><span class=""> null </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">false;</span><span class=""><br/></span><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">!</span>
+                    <span class="bold">name.<span class="">equals</span><span class="">( ((Player)that).name</span></span> ) )<br/>  <span class="">return</span><span class=""> false; </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 11.15</b>    
+            src/main/java/com/tutego/insel/object/hashcode/Player.java, equals() (Snippet)</p>
+                
+                <p class="standard">Accordingly, one task of the 
+                    <samp class="listingcharacter listingcharacter">String</samp> class (
+                    <samp class="listingcharacter listingcharacter">name</samp> is of type 
+                    <samp class="listingcharacter listingcharacter">String</samp>) is to perform the equivalence test. Thus, two individuals can be 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>-equal without any problem, even if they reference two non-identical but 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>-equal 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 objects.</p>
+                
+                <p class="standard">This delegation to the referenced subobject can be read with 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                 too, as in the following example:</p>
+                
+                <div class="listing " id="l11.16"><pre>result <span class="">=</span><span class=""> </span><span class="">31</span><span class=""> </span><span class="">*</span><span class=""> result </span><span class="">+</span><span class=""> </span><span class="">((</span><span class="">name </span><span class="">==</span><span class=""> null</span><span class="">)</span><span class=""> </span><span class="">?</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">:</span><span class=""> </span>
+                    <span class="bold"><span class="">name.</span><span class="">hashCode</span><span class="">()</span></span>); <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 11.16</b>    
+            src/main/java/com/tutego/insel/object/hashcode/Player.java, hashCode() (Snippet)</p>
+                
+                <p class="standard">In rare cases, an 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method or 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                 method of a class doesn’t delegate the comparison or hashcode calculation to the child objects but instead implements the comparison or calculation operation itself.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.5.3">hashCode() Methods of the Wrapper Classes</h4>
+                
+                <p class="standard">Each wrapper class declares a static 
+                    <samp class="listingcharacter listingcharacter">hashCode(...)</samp> method that you can use to compute the hash value of a primitive element. (
+                    <span class="crossreference "><a href="11_005.html#h11.5">Section 11.5</a></span>
+                 provides further details about this topic.) Consequently, to calculate the hash value of an entire object, all the individual hash values must be calculated and then concatenated to form an integer, in the following way:</p>
+                
+                <div class="listing " id="l_none_11375"><pre><span class="">int</span><span class=""> h1 </span><span class="">=</span><span class=""> </span>
+                    <span class="italic"><span class="">WrapperClass</span></span>.<span class="">hashCode</span><span class="">( value1 );</span><br/><span class="">int</span><span class=""> h2 = </span>
+                    <span class="italic">WrapperClass</span>.<span class="">hashCode</span><span class="">( value2 );</span><br/><span class="">int</span><span class=""> h3 = </span>
+                    <span class="italic">WrapperClass</span>.<span class="">hashCode</span><span class="">( value3 );</span><br/>… <span class=""/></pre></div>
+                
+                <p class="standard">Generators often use the following pattern to link the hash values, which is a good starting point:</p>
+                
+                <div class="listing " id="l_none_11389"><pre><span class="">
+                        <a id="p634"/>
+                    int</span><span class=""> result </span><span class="">=</span><span class=""> h1</span><span class="">;</span><span class=""><br/></span>result <span class="">=</span><span class=""> </span><span class="">31</span><span class=""> </span><span class="">*</span><span class=""> result </span><span class="">+</span><span class=""> h2</span><span class="">;</span><span class=""><br/></span>result <span class="">=</span><span class=""> </span><span class="">31</span><span class=""> </span><span class="">*</span><span class=""> result </span><span class="">+</span><span class=""> h3</span><span class="">;</span><span class=""><br/></span>… </pre></div>
+                
+                <p class="standard">If you use the static 
+                    <samp class="listingcharacter listingcharacter">hashCode(...)</samp> methods of the wrapper classes, you only need to work with the data type 
+                    <samp class="listingcharacter listingcharacter">int</samp> and don’t need to know how the hash value is calculated from a 
+                    <samp class="listingcharacter listingcharacter">double</samp>
+                , for example. However, calculating a hash value may come up, so here’s the implementation:</p>
+                
+                <table class="standardtable" id="t11.1">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Class</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">Class Method, Static int</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Implementation</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Boolean</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">hashCode(boolean value)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">value ? 1231 : 1237</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Byte</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">hashCode(byte value)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(int)value</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Short</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">hashCode(short value)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(int)value</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Integer</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">hashCode(int value)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">value</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Long</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">hashCode(long value)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(int)(value ^ (value &gt;&gt;&gt; 32))</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Float</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">hashCode(float value)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">floatToIntBits(value)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Double</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">hashCode(double value)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(int)(doubleToLongBits(value) ^ <br/>(doubleToLongBits(value) &gt;&gt;&gt; 32));</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Character</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">hashCode(char value)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">(int)value</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 11.1</b>    
+            Static hashCode(...) Methods and Their Implementations</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.5.4">equals(...) and hashCode() Calculation for (Multidimensional) Arrays</h4>
+                
+                <p class="standard">Multidimensional arrays represent a special case with regard to 
+                    <samp class="listingcharacter listingcharacter">equals(…)</samp>/
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp>. Multidimensional arrays are nothing more than arrays of arrays. The first array for the first dimension references sub-arrays for the second dimension. This implementation becomes important when a question arises as to how these references of the first dimension should be considered with regard to 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>. In this case, the question is whether the sub-arrays of two arrays are only identical or are also the same. (We addressed this issue in more detail in 
+                    <span class="crossreference "><a href="04_001.html#h4">Chapter 4</a></span>, 
+                    <span class="crossreference "><a href="04_006.html#h4.6">Section 4.6</a></span>
+                .)</p>
+                
+                <p class="standard">If your class contains an array and that should be considered in an 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>, then three variants are possible for handling this array. Comparing arrays yourself via 
+                    <samp class="listingcharacter listingcharacter">==</samp> as if they were primitive values is fine if the identity of the arrays is desired in the comparison. While many classes override the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method of 
+                    <samp class="listingcharacter listingcharacter">Object</samp>, arrays are objects too but they don’t provide their own 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method. The result of an 
+                    <samp class="listingcharacter listingcharacter">arrays1.equals (arrays2)</samp> call would therefore be an identity comparison. A real content comparison is possible with methods of the 
+                    <samp class="listingcharacter listingcharacter">Arrays</samp>
+                 utility class. However, two methods could be used in this case:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p635"/>
+                            Arrays.equals(Object[] a, Object[] a2)</samp>
+                            <a class="indexanchor" id="i11_37"/> goes through each element of 
+                            <samp class="listingcharacter listingcharacter">a</samp>. In the case of multidimensional arrays, each reference to a sub-array is considered and tested to determine whether it’s identical to the second array 
+                            <samp class="listingcharacter listingcharacter">a2</samp>. Thus, if two equal but non-identical main arrays have identical sub-arrays, 
+                            <samp class="listingcharacter listingcharacter">Arrays.equals(...)</samp> will return 
+                            <samp class="listingcharacter listingcharacter">true</samp>. However, it will retur 
+                            <samp class="listingcharacter listingcharacter">false</samp>
+                         if the sub-arrays are not identical.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If the equality of the sub-arrays plays a role, 
+                            <samp class="listingcharacter listingcharacter">Arrays.deepEquals(...)</samp>
+                            <a class="indexanchor" id="i11_38"/> is the appropriate method because this method always queries the sub-arrays with 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">A comparable issue exists when you calculate the hash value. The 
+                    <samp class="listingcharacter listingcharacter">Arrays</samp> class provides the 
+                    <samp class="listingcharacter listingcharacter">Arrays.hashCode(...)</samp>
+                    <a class="indexanchor" id="i11_39"/> and 
+                    <samp class="listingcharacter listingcharacter">Arrays.deepHashCode(...)</samp>
+                    <a class="indexanchor" id="i11_40"/> methods to calculate the hash value of an entire array. The first method asks each sub-element for the 
+                    <samp class="listingcharacter listingcharacter">hash</samp> value via the 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp> method provided by 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                .</p>
+                
+                <p class="standard">Let’s assume we have a multidimensional array. Then, the sub-element is also an array. 
+                    <samp class="listingcharacter listingcharacter">Arrays.hashCode(...)</samp> will then, as mentioned, only call the 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp> method on the array object, while 
+                    <samp class="listingcharacter listingcharacter">Arrays.deepHashCode(...)</samp> will also descend into the sub-array and call 
+                    <samp class="listingcharacter listingcharacter">Arrays.deepHashCode(...)</samp> on all sub-arrays until an 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 comparison is possible on a non-array.</p>
+                
+                <p class="standard">What does this mean for our 
+                    <samp class="listingcharacter listingcharacter">equals(…)</samp>/
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp> method? The IntelliJ IDE generates the following code for a two-dimensional 
+                    <samp class="listingcharacter listingcharacter">char</samp> array, which uses 
+                    <samp class="listingcharacter listingcharacter">Arrays.deep*(...)</samp>
+                :</p>
+                
+                <div class="listing " id="l11.17"><pre><span class="">char</span><span class="">[][]</span><span class=""> chessboard </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">char</span><span class="">[</span><span class="">8</span><span class="">][</span><span class="">8</span><span class="">];</span><span class=""><br/></span><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">equals</span><span class="">(</span><span class=""> Object o </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">this</span><span class=""> </span><span class="">==</span><span class=""> o </span><span class="">)</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">true;</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">!(</span><span class="">o </span><span class="">instanceof</span><span class=""> Chess</span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">false;</span><span class=""><br/></span><br/>    Chess chess <span class="">=</span><span class=""> </span><span class="">(</span><span class="">Chess</span><span class="">)</span><span class=""> o</span><span class="">;</span><span class=""><br/></span><br/>    <span class="">return</span><span class=""> Arrays</span><span class="">.</span><span class="">deepEquals</span><span class="">(</span><span class=""> chessboard</span><span class="">,</span><span class=""> chess</span><span class="">.</span><span class="">chessboard </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">hashCode</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> Arrays</span><span class="">.</span><span class="">deepHashCode</span><span class="">(</span><span class=""> chessboard </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.17</b>    
+            src/main/java/com/tutego/insel/object/hashcode/Chess.java, Chess</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.5.5">Hash Value of a float</h4>
+                
+                <p class="standard">Depending on the data types, the calculations always look slightly different. While integers can be put directly into an integer expression for the hash value, in the case of 
+                    <samp class="listingcharacter listingcharacter">
+                        <a id="p636"/>
+                    double</samp>, the static conversion methods 
+                    <samp class="listingcharacter listingcharacter">Double.doubleToLongBits(double)</samp>
+                    <a class="indexanchor" id="i11_41"/> and 
+                    <samp class="listingcharacter listingcharacter">Float.floatToIntBits(float)</samp>
+                    <a class="indexanchor" id="i11_42"/>
+                 are in use.</p>
+                
+                <p class="standard">The data types 
+                    <samp class="listingcharacter listingcharacter">double</samp> and 
+                    <samp class="listingcharacter listingcharacter">float</samp> have another specialty since 
+                    <samp class="listingcharacter listingcharacter">Double.NaN</samp> and 
+                    <samp class="listingcharacter listingcharacter">Float.NaN</samp> and the sign of 0 have to be considered (as described in detail in 
+                    <span class="crossreference "><a href="21_001.html#h21">Chapter 21</a></span>, 
+                    <span class="crossreference "><a href="21_002.html#h21.2.1">Section 21.2.1</a></span>
+                ). </p>
+                
+                <p class="standard">In conclusion, if 
+                    <samp class="listingcharacter listingcharacter">x = +0.0</samp> and 
+                    <samp class="listingcharacter listingcharacter">y = –0.0</samp>, then 
+                    <samp class="listingcharacter listingcharacter">x </samp>
+                    <span class="bold">
+                        <samp class="listingcharacter listingcharacter">== </samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">y</samp>, but 
+                    <samp class="listingcharacter listingcharacter">Double.doubleToLongBits(x) </samp>
+                    <span class="bold">
+                        <samp class="listingcharacter listingcharacter">!= </samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">Double.doubleToLongBits(y)</samp>
+                . </p>
+                
+                <p class="standard">If 
+                    <samp class="listingcharacter listingcharacter">x = y = Double.NaN</samp>, then 
+                    <samp class="listingcharacter listingcharacter">x </samp>
+                    <span class="bold">
+                        <samp class="listingcharacter listingcharacter">!= </samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">y</samp>, but 
+                    <samp class="listingcharacter listingcharacter">Double.doubleToLongBits(x) </samp>
+                    <span class="bold">
+                        <samp class="listingcharacter listingcharacter">== </samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">Double.doubleToLongBits(y)</samp>
+                . </p>
+                
+                <p class="standard">If we 
+                    <span class="italic">don’t</span>
+                 want to treat the two zeros differently, but instead want to value them as the same, the following is a common idiom:</p>
+                
+                <div class="listing " id="l_none_11410"><pre>x <span class="">==</span><span class=""> </span><span class="">0.0</span><span class=""> </span><span class="">?</span><span class=""> 0L </span><span class="">:</span><span class=""> Double</span><span class="">.</span><span class="">doubleToLongBits</span><span class="">(</span><span class=""> x </span><span class="">)</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">Double.doubleToLongBits(0.0)</samp> returns “0,” but calling 
+                    <samp class="listingcharacter listingcharacter">Double.doubleToLongBits(-0.0)</samp>
+                 returns “–9.223.372.036.854.775.808.”</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.1.5.6">Equals, the Zero, and Hashing</h4>
+                
+                <p class="standard">Objects with equivalent contents according to the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 method must get the same hash value.</p>
+                
+                <p class="standard">The two methods 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp> and 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 are related. Usually when one method is implemented, an implementation of the other method is also necessary because, in the case of equivalence, the hash values must of course also match, which can be written formally in the following way:</p>
+                
+                <div class="listing " id="l_none_11401"><pre>x<span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> y </span><span class="">)</span><span class=""> </span><span class="">=&gt;</span><span class=""> x</span><span class="">.</span><span class="">hashCode</span><span class="">()</span><span class=""> </span><span class="">==</span><span class=""> y</span><span class="">.</span><span class="">hashCode</span><span class="">()</span><span class=""> </span></pre></div>
+                
+                <p class="standard">This statement captures how the hash value for 
+                    <samp class="listingcharacter listingcharacter">Point</samp>
+                 objects should be calculated from their coordinates. Two point objects that are identical in content have the same coordinates and thus have the same hash value.</p>
+                
+                <p class="standard">If objects have the same hash value but aren’t the same (called a 
+                    <span class="italic">collision</span>
+                ), we have a case where equivalence does not hold in the equation. In other words, don’t assume that, if the hash values of two objects are equal, that the objects are also equal. The probability of equivalence may be high, but this scenario doesn’t necessarily guarantee that the two objects are truly equal.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.1.6">11.1.6    System.identityHashCode(...) and the Problem of Non-Unique Object References*</h3>
+            
+            <p class="standard">The equality of objects can be redefined with the 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> method. If 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> is newly implemented, then this implementation usually also applies to the 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp>
+             method, which should also be overwritten.</p>
+            
+            <p class="standard">
+                <a id="p637"/>The default implementation of 
+                <samp class="listingcharacter listingcharacter">Object</samp> now operates in the following way: Different hash values are calculated even for objects that take the same values, which is another reason why you should override 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp>. But what does 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp> of 
+                <samp class="listingcharacter listingcharacter">Object</samp> actually return? This object ID uniquely identifies the object. The original ID is lost when 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp> is reimplemented. But if you’re interested in the original 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp> value, you can use 
+                <samp class="listingcharacter listingcharacter">System.identityHashCode(...)</samp>
+                <a class="indexanchor" id="i11_43"/>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">Although the hash values for two 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>-equals objects are the same, 
+                    <samp class="listingcharacter listingcharacter">identityHashCode()</samp>
+                 usually returns different values:</p>
+                
+                <div class="listing  last_item" id="l_none_11422"><pre>Point p <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Point q <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">identityHashCode</span><span class="">(</span><span class="">p</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // e. g. 16032330</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">identityHashCode</span><span class="">(</span><span class="">q</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // e. g. 13288040</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> p</span><span class="">.</span><span class="">hashCode</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">              </span><span class=""> // 0</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> q</span><span class="">.</span><span class="">hashCode</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">              </span><span class=""> // 0</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">If 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp> isn’t overridden, then the hash value matches the 
+                <samp class="listingcharacter listingcharacter">identityHashCode(...)</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Some classes don’t override 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp>, and thus, 
+                    <samp class="listingcharacter listingcharacter">identityHashCode(...)</samp> is equal to the hash value. This scenario arises, for example, with the 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                 class, as shown in the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_11438"><pre>StringBuilder sb1 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(),</span><span class=""> sb2 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%d %d%n"</span><span class="">,</span><span class=""> System</span><span class="">.</span><span class="">identityHashCode</span><span class="">(</span><span class="">sb1</span><span class="">),</span><span class=""> sb1</span><span class="">.</span><span class="">hashCode</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>// for example 1829164700 1829164700<span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%d %d%n"</span><span class="">,</span><span class=""> System</span><span class="">.</span><span class="">identityHashCode</span><span class="">(</span><span class="">sb2</span><span class="">),</span><span class=""> sb2</span><span class="">.</span><span class="">hashCode</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>// for example 460141958 460141958<span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">This static method 
+                <samp class="listingcharacter listingcharacter">identityHashCode(...)</samp> returns the original identifier of the objects. At first glance, these identifiers may look like unique IDs, but may not be. You may indeed have two different objects in the memory for which the result of 
+                <samp class="listingcharacter listingcharacter">System.identityHashCode(...)</samp>
+             is the same.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.1.7">11.1.7    Synchronization*</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i11_44"/>Threads can communicate with each other and share data in the process. Threads can also wait for certain conditions to occur, for example, new input data. The 
+                <samp class="listingcharacter listingcharacter">Object</samp> class declares a total of five versions of the 
+                <samp class="listingcharacter listingcharacter">wait(...)</samp>, 
+                <samp class="listingcharacter listingcharacter">notify()</samp>, and 
+                <samp class="listingcharacter listingcharacter">notifyAll()</samp>
+             methods for thread termination synchronization.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

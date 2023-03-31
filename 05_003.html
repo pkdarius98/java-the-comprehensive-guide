@@ -1,0 +1,525 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Handling Characters and Strings" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Handling Characters and Strings" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Handling Characters and Strings</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h5.3">5.3    The Character Class</h2>
+        
+        <p class="standard">
+            <samp class="listingcharacter listingcharacter">char</samp> is a primitive data type and has no methods. For this reason, the 
+            <samp class="listingcharacter listingcharacter">Character</samp> class in the 
+            <samp class="listingcharacter listingcharacter">java.lang</samp>
+         core package includes a large number of methods that are useful for dealing with single characters; many of these methods are static. This class includes methods for testing, such as whether a character is a digit, a letter, or a special character.</p>
+        
+        
+            
+            <h3 class="t3" id="h5.3.1">5.3.1    Is That So?</h3>
+            
+            <p class="standard">What all test methods have in common is that they start with the prefix 
+                <samp class="listingcharacter listingcharacter">is</samp> and return a 
+                <samp class="listingcharacter listingcharacter">boolean</samp>
+            . In addition, methods are available for converting, for example, to uppercase or lowercase. The following list includes a few examples:</p>
+            
+            <table class="standardtable" id="t5.5">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Expression</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Result</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Character.isDigit( '0' )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">true</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Character.isDigit( '-' )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">false</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Character.isLetter( 'ß' )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">true</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Character.isLetter( '0' )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">false</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Character.isWhitespace( ' ' )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">true</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Character.isWhitespace( '-' )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">false</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 5.5</b>    
+            Results of Some is*() Methods</p>
+            
+            <p class="standard">All these methods “know” about the properties of each Unicode character. Furthermore, the code point of each Unicode character is always the same, no matter whether a program is executed in Germany or Mongolia.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The term “letter” not only describes well-known letters like “a” or “α.” Unicode contains more than 100,000 characters, including hundreds of letters and numbers.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h5.3.1.1">
+                    <a id="p297"/>
+                Testing Whether a String Consists Only of Digits</h4>
+                
+                <p class="standard">In the following example, we’ll declare a method that will run through a string and test if the string consists only of digits. Although such functionality is useful in practice, Java Platform, Standard Edition (Java SE) doesn’t provide a simple method for it.</p>
+                
+                <div class="listing " id="l5.1"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> IsNumeric </span><span class="">{</span><span class=""/><br/><br/>  <span class="">/**</span><span class=""/><br/><span class="">   * Returns {@code true} if the String contains only Unicode digits.</span><span class=""/><br/><span class="">   * An empty string or {@code null} leads to {@code false}.</span><span class=""/><br/><span class="">   *</span><span class=""/><br/><span class="">   * @param  string Input String.</span><span class=""/><br/><span class="">   * @return {@code true} if string is numeric, {@code false} otherwise.</span><span class=""/><br/><span class="">   */</span><span class=""/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isNumeric</span><span class="">( </span><span class="">String</span><span class=""> string ) {</span><span class=""/><br/><span class="">    </span><span class="">if</span><span class=""> ( string == null || string.</span><span class="">length</span><span class="">() == </span><span class="">0</span><span class=""> )</span><span class=""/><br/><span class="">      </span><span class="">return</span><span class=""> false;</span><span class=""/><br/><br/><span class="">    </span><span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> i = </span><span class="">0</span><span class="">; i &lt; string.</span><span class="">length</span><span class="">(); i++ )</span><span class=""/><br/><span class="">      </span><span class="">if</span><span class=""> ( ! </span>
+                    <span class="bold">Character.<span class="">isDigit</span><span class="">( string.</span><span class="">charAt</span><span class="">( i )</span></span> ) )<span class=""/><br/><span class="">        </span><span class="">return</span><span class=""> false;</span><span class=""/><br/><span class="">    </span><span class="">return</span><span class=""> true;</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span><span class="">isNumeric</span><span class="">( </span><span class="">"1234"</span><span class=""> ) );  </span><span class="">// true</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span><span class="">isNumeric</span><span class="">( </span><span class="">"12.4"</span><span class=""> ) );  </span><span class="">// false</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span><span class="">isNumeric</span><span class="">( </span><span class="">"-123"</span><span class=""> ) );  </span><span class="">// false</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 5.1</b>    
+            src/main/java/com/tutego/insel/string/IsNumeric.java (Snippet)</p>
+                
+                <p class="standard">Our method defines that 
+                    <samp class="listingcharacter listingcharacter">null</samp> and an empty string aren’t considered numeric. You can also specify that 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 should lead to an exception and that an empty string is definitely numeric. Conventions like these are up to the author of the library, and different utility libraries with such helper functions have different uses.</p>
+                
+                <p class="standard">Our example uses two 
+                    <samp class="listingcharacter listingcharacter">String</samp> methods: 
+                    <samp class="listingcharacter listingcharacter">length()</samp> returns the length of a string, and 
+                    <samp class="listingcharacter listingcharacter">charAt(int)</samp> returns the character at the desired position. A loop iterates over the string and tests each character with 
+                    <samp class="listingcharacter listingcharacter">isDigit(...)</samp>. If a character is not a digit, 
+                    <samp class="listingcharacter listingcharacter">return false</samp> automatically exits the loop. If the loop runs successfully, a 
+                    <samp class="listingcharacter listingcharacter">return true</samp>
+                 can report that each character was a digit.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.3.1.2">
+                    <a id="p298"/>
+                Overview of the Most Important is*(...) Methods</h4>
+                
+                <div class="listing " id="l_none_559"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Character</span><br/><span class="">implements</span><span class=""> Serializable, Comparable&lt;Character&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static boolean isDigit(char ch)</samp><br/>Is it a digit between 0 and 9?</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static boolean isLetter(char ch)</samp><br/>Is it a letter?</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static boolean isLetterOrDigit(char ch)</samp><br/>Is it an alphanumeric character?</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static boolean isLowerCase(char ch)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static boolean isUpperCase(char ch)</samp><br/>Is it a lowercase letter or an uppercase letter?</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static boolean isWhiteSpace(char ch)</samp><br/>Is it a space, line feed, return, or tab (i.e., 
+                            <span class="italic">whitespace</span>
+                            <a class="indexanchor" id="i05_26"/>
+                            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_02" id="fn05_02">[ 112 ]</a></span>
+                        )?</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Choice of Words</h6>
+                    
+                    <p class="standard first last">In this book, 
+                        <span class="italic">space</span>
+                        <a class="indexanchor" id="i05_27"/> only refers to the “ ” character, which is generated by the 
+                        <span class="italic">space bar</span>
+                        <a class="indexanchor" id="i05_28"/>. This space is ASCII code 32, which in Unicode is 
+                        <samp class="listingcharacter listingcharacter">\u0020</samp>. The term 
+                        <span class="italic">whitespace</span>
+                        <a class="indexanchor" id="i05_29"/>
+                    , on the other hand, stands for anything that creates whitespace (i.e., spaces, tabs, returns, etc.).</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.3.2">5.3.2    Converting Characters to Uppercase/Lowercase</h3>
+            
+            <p class="standard">To convert a character to uppercase/lowercase, the 
+                <samp class="listingcharacter listingcharacter">Character</samp> class declares the methods 
+                <samp class="listingcharacter listingcharacter">toUpperCase(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">toLowerCase(...)</samp>. The 
+                <samp class="listingcharacter listingcharacter">is*(...)</samp>
+             methods that carry out the testing are often used when a string is traversed.</p>
+            
+            <p class="standard">Our next example asks a user to enter a string. Valid letters should be converted to uppercase, and any whitespace should be replaced with an underscore. To run the input, we’ll again use the 
+                <samp class="listingcharacter listingcharacter">String</samp> methods 
+                <samp class="listingcharacter listingcharacter">length()</samp> and 
+                <samp class="listingcharacter listingcharacter">charAt(int)</samp>
+            .</p>
+            
+            <div class="listing " id="l5.2"><pre><span class="">String</span><span class=""> input </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">nextLine</span><span class="">();</span><span class=""><br/></span><br/><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> i </span><span class="">&lt;</span><span class=""> input</span><span class="">.</span><span class="">length</span><span class="">();</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">char</span><span class=""> c </span><span class="">=</span><span class=""> input</span><span class="">.</span><span class="">charAt</span><span class="">(</span><span class=""> i </span><span class="">);</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> Character</span><span class="">.</span><span class="">isWhitespace</span><span class="">(</span><span class=""> c </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> </span><span class="">'_'</span><span class=""> </span><span class="">);</span><span class=""><br/></span>
+                <a id="p299"/>  <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> Character</span><span class="">.</span><span class="">isLetter</span><span class="">(</span><span class=""> c </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">Character.</span><span class="">toUpperCase</span><span class="">( c )</span></span> );<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 5.2</b>    
+            src/main/java/com/tutego/insel/string/UppercaseWriter.java (Snippet)</p>
+            
+            <p class="standard">For example, for the input “honiara brotherhood guesthouse1,” the output is “HONIARA_BROTHERHOOD_GUESTHOUSE.” The “1” disappears because it’s neither whitespace nor a letter.</p>
+            
+            <div class="listing " id="l_none_585"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Character</span><br/><span class="">implements</span><span class=""> Serializable, Comparable&lt;Character&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static char toUpperCase(char ch)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static char toLowerCase(char ch)</samp><br/>The static methods return the matching uppercase or lowercase letter.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">The methods 
+                    <samp class="listingcharacter listingcharacter">toUpperCase(...)</samp>
+                    <a class="indexanchor" id="i05_30"/> and 
+                    <samp class="listingcharacter listingcharacter">toLowerCase(...)</samp>
+                    <a class="indexanchor" id="i05_31"/> exist twice: once as static methods on 
+                    <samp class="listingcharacter listingcharacter">Character</samp>—in which case, they accept exactly one 
+                    <samp class="listingcharacter listingcharacter">char</samp> as argument—and once as object methods on 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 objects.</p>
+                
+                <p class="standard last">Care should be taken with 
+                    <samp class="listingcharacter listingcharacter">Character.toUpperCase('ß')</samp> because the result is “ß,” unlike the 
+                    <samp class="listingcharacter listingcharacter">String</samp> method 
+                    <samp class="listingcharacter listingcharacter">"ß".toUpperCase()</samp>, returns the result “SS,” that is, a string extended by one. Even though there’s now an uppercase “ß” (Unicode U+00DF), Java still returns Unicode U+00DF, not U+1E9E, for 
+                    <samp class="listingcharacter listingcharacter">Character.toUpperCase('ß')</samp>.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_03" id="fn05_03">[ 113 ]</a></span>
+                </p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.3.3">5.3.3    From Character to String</h3>
+            
+            <p class="standard">To convert a Unicode character to a string, you can use the overloaded static 
+                <samp class="listingcharacter listingcharacter">String</samp> method 
+                <samp class="listingcharacter listingcharacter">valueOf(char)</samp>. A comparable method also exists in 
+                <samp class="listingcharacter listingcharacter">Character</samp>, namely, the static method 
+                <samp class="listingcharacter listingcharacter">toString(char)</samp>. Both methods are limited in that the Unicode character can be only 2 bytes long. The static method 
+                <samp class="listingcharacter listingcharacter">Character.toString(int)</samp> creates a string for any Unicode character, and so, 
+                <samp class="listingcharacter listingcharacter">Character.toString(128123)</samp>
+             results in a string with a ghost.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.3.4">5.3.4    From char to int: From Character to Number*</h3>
+            
+            <p class="standard">When characters come from a user input, you are often required to convert them to numbers. The digit 
+                <samp class="listingcharacter listingcharacter">'5'</samp> is to become the numeric value 5. According to old hacker traditions, 
+                <a id="p300"/>the solution was always to subtract the value of 
+                <samp class="listingcharacter listingcharacter">'0'</samp>. The ASCII zero 
+                <samp class="listingcharacter listingcharacter">'0'</samp> has the 
+                <samp class="listingcharacter listingcharacter">char</samp> value 48, and 
+                <samp class="listingcharacter listingcharacter">'1'</samp> then has the value 49, until 
+                <samp class="listingcharacter listingcharacter">'9'</samp> finally reaches 57. Logically, 
+                <samp class="listingcharacter listingcharacter">'5' - '0'</samp>
+             = 53 - 48 = 5. The solution has the disadvantage of only working for ASCII digits.</p>
+            
+            <p class="standard">For example, a neat Java solution is to convert a 
+                <samp class="listingcharacter listingcharacter">char</samp> to a 
+                <samp class="listingcharacter listingcharacter">string</samp> and then convert it via an 
+                <samp class="listingcharacter listingcharacter">Integer</samp>
+             method, for example, in the following way:</p>
+            
+            <div class="listing " id="l_none_596"><pre><span class="">char</span><span class=""> c </span><span class="">=</span><span class=""> </span><span class="">'5'</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class="">  i </span><span class="">=</span><span class=""> Integer</span><span class="">.</span><span class="">parseInt</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class="">c</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 5</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">parseInt(...)</samp>
+             method is fully internationalized and also converts decimal numbers from other scripts, such as Hindi/Sanskrit:</p>
+            
+            <div class="listing " id="l_none_586"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Integer</span><span class="">.</span><span class="">parseInt</span><span class="">(</span><span class=""> </span><span class="">"
+                    <img alt="inline image" class="inline_image" src="bilder/u96b.png"/>
+                "</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // 5</span><span class=""> </span></pre></div>
+            
+            <p class="standard">This method works but isn’t efficient for single characters in loops. Two other ways, using static methods from the 
+                <samp class="listingcharacter listingcharacter">Character</samp>
+             class, are available.</p>
+            
+            
+                
+                <h4 class="t4" id="h5.3.4.1">The getNumericValue(…) Method</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Character</samp> method
+                    <a class="indexanchor" id="i05_32"/>
+                    <samp class="listingcharacter listingcharacter"> getNumericValue(char)</samp>
+                 returns the numeric value of a digit. Of course, this method has been internationalized too. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_5102"><pre><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> Character</span><span class="">.</span><span class="">getNumericValue</span><span class="">(</span><span class=""> </span><span class="">'5'</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> i </span><span class="">);</span><span class="">                         </span><span class=""> // 5</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Integer</span><span class="">.</span><span class="">parseInt</span><span class="">(</span><span class=""> </span><span class="">"
+                        <img alt="inline image" class="inline_image" src="bilder/u96b.png"/>
+                    "</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // 5</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The method is much more powerful because it knows the actual “value” of all Unicode characters, including, for example, also Roman numerals (I, II, III, IV, V, VI, VII, VIII, IX, X, XI, XII, L, C, D, and M), which are placed in the Unicode alphabet starting from 
+                    <samp class="listingcharacter listingcharacter">\u2160</samp>
+                : </p>
+                
+                <div class="listing " id="l_none_5113"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Character</span><span class="">.</span><span class="">getNumericValue</span><span class="">(</span><span class=""> </span><span class="">'\u216f'</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // 1000</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Integer.parseInt(...)</samp> method can’t handle 
+                    <samp class="listingcharacter listingcharacter">\u216f,</samp> thus 
+                    <samp class="listingcharacter listingcharacter">Integer.parseInt("\u216f")</samp>
+                 throws an exception.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.3.4.2">The *digit(...) Methods</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Character</samp>
+                 class also has conversion methods for digits with respect to any base, and vice versa.</p>
+                
+                <div class="listing " id="l_none_5136"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Character</span><br/><span class="">implements</span><span class=""> Serializable, Comparable&lt;Character&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int digit(char ch, int radix)</samp>
+                            <a class="indexanchor" id="i05_33"/><br/>Returns the numeric value that the character 
+                            <samp class="listingcharacter listingcharacter">ch</samp> has under the base 
+                            <samp class="listingcharacter listingcharacter">radix</samp>; common is base 10. For example, 
+                            <samp class="listingcharacter listingcharacter">Character.digit('f', 16)</samp> is equal to 15. Any number system 
+                            <a id="p301"/>with a base between 
+                            <samp class="listingcharacter listingcharacter">Character.MIN_RADIX</samp>
+                            <a class="indexanchor" id="i05_34"/> (2) and 
+                            <samp class="listingcharacter listingcharacter">Character.MAX_RADIX</samp> (36)
+                            <a class="indexanchor" id="i05_35"/>
+                         is allowed. If no conversion is possible, the return value is -1.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static char forDigit(int digit, int radix)</samp>
+                            <a class="indexanchor" id="i05_36"/> <br/>Converts a numeric value to a character. For example, 
+                            <samp class="listingcharacter listingcharacter">Character.forDigit(6, 8)</samp> is “6,” and 
+                            <samp class="listingcharacter listingcharacter">Character.forDigit(12, 16)</samp>
+                         is “c.”</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example converts a string of digits into an integer:</p>
+                    
+                    <div class="listing " id="l_none_5129"><pre><span class="">char</span><span class="">[]</span><span class=""> chars </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">'3'</span><span class="">,</span><span class=""> </span><span class="">'4'</span><span class="">,</span><span class=""> </span><span class="">'0'</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">int</span><span class=""> result </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">char</span><span class=""> c </span><span class="">:</span><span class=""> chars </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  result <span class="">=</span><span class=""> result </span><span class="">*</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">+</span><span class=""> </span>
+                        <span class="bold"><span class="">Character.</span><span class="">digit</span><span class="">( c, </span><span class="">10</span><span class=""> )</span></span>;<br/>  System.out.<span class="">println</span><span class="">( result );</span><br/>}<span class=""/></pre></div>
+                    
+                    <p class="standard last">The output is 3, 34, and 340.</p>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

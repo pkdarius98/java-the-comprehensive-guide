@@ -1,0 +1,883 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Object-Oriented Relationship" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Object-Oriented Relationship" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Object-Oriented Relationship</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h7.2">7.2    Inheritance</h2>
+        
+        <p class="standard">From childhood, we’ve learned to relate objects with each other. Associations map the “has” relationship between objects: A teddy bear has two arms, a table has four legs, and a dog has fur.</p>
+        
+        <p class="standard">
+            <a id="p437"/>
+        Besides the association of objects, another kind of relationship exists: the is-a-kind-of relationship. This relationship is also familiar from everyday life, such as in the following cases:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Apples and pears are types of fruit.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">People and seagulls are living beings.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Humans and bats are mammals.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Airwaves and Wrigley’s are chewing gum brands.</p>
+            
+            </li>
+        
+        </ul>
+        
+        <div class="imagebox figure-type"><a href="img-f7.7.html" id="f7.7"><img alt="Examples of Inheritance&#10;            &#10;                Inheritance&#10;            &#10;         and Association" id="img-f7.7" src="bilderklein/klein07_007.png"/></a></div>
+        
+        <p class="caption "><b>Figure 7.7</b>    
+            Examples of Inheritance
+            <a class="indexanchor" id="i07_11"/>
+         and Association</p>
+        
+        <p class="standard">What is special about the is-a-kind-of relationship is the fact that the group specifies certain characteristics for all elements of the group.
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn07_02" id="fn07_02">[ 137 ]</a></span> Fruit can be eaten raw, buildings have a surface, mammals are warm-blooded animals, and so on. What we’re talking about is generalization
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn07_03" id="fn07_03">[ 138 ]</a></span> and specialization.
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn07_04" id="fn07_04">[ 139 ]</a></span>
+        </p>
+        
+        <p class="standard">Programming languages express grouping and hierarchy formation via inheritance. Inheritance is based on the idea that parents pass on traits to their children. Inheritance binds classes tightly together. By means of this close connection, you can see that classes are in a sense interchangeable. A program can express, “Give me any piece of fruit” and then might return an apple or a pear.</p>
+        
+        
+            
+            <h3 class="t3" id="h7.2.1">7.2.1    Inheritance in Java</h3>
+            
+            <p class="standard">Java arranges types in hierarchical relations in which they form is-a-kind-of relationships. A newly declared class extends another class via the
+                <a class="indexanchor" id="i07_12"/>
+                <samp class="listingcharacter listingcharacter"> extends</samp> keyword. The former class then becomes the 
+                <span class="italic">subclass</span>
+                <a class="indexanchor" id="i07_13"/> (also called
+                <a class="indexanchor" id="i07_14"/>
+                <span class="italic"> a child class</span> or 
+                <span class="italic">extension class</span>
+                <a class="indexanchor" id="i07_15"/>)
+                <a class="indexanchor" id="i07_16"/>. The class 
+                <a id="p438"/>from which the subclass inherits is called the 
+                <span class="italic">superclass</span>
+                <a class="indexanchor" id="i07_17"/> (also called the 
+                <span class="italic">parent class</span>
+                <a class="indexanchor" id="i07_18"/>). The terms 
+                <span class="italic">ancestor</span>
+                <a class="indexanchor" id="i07_19"/> and 
+                <span class="italic">descendant</span>
+                <a class="indexanchor" id="i07_20"/>
+             are also used by some authors.</p>
+            
+            <p class="standard">The inheritance mechanism transfers all visible members of the superclass to the subclass. Thus, a superclass transmits members, and the subclass inherits them.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">In Java, only subtypes of classes can be declared. Restrictions on primitive types—for example, in the value range or in the number of decimal places—aren’t possible. The Ada programming language allows subtypes of primitive types, for example, and subtypes are common in XML schema, where 
+                    <samp class="listingcharacter listingcharacter">xs:short</samp> or 
+                    <samp class="listingcharacter listingcharacter">xs:unsignedByte</samp>, for example, are subtypes of 
+                    <samp class="listingcharacter listingcharacter">xs:integer</samp>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.2.2">7.2.2    Modeling Events</h3>
+            
+            <p class="standard">In our game, a player should be able to travel to another city, and something should happen randomly. We’ll build these event types in a 
+                <span class="italic">class hierarchy</span>
+                <a class="indexanchor" id="i07_21"/>
+            , where a general superclass defines an event—which we can also call an “activity”—and then various subclasses exist for defining special activities.</p>
+            
+            
+                
+                <h4 class="t4" id="h7.2.2.1">Base Class for All Commonalities</h4>
+                
+                <p class="standard">The base class (superclass) will be called 
+                    <samp class="listingcharacter listingcharacter">Event</samp>, and since each event has an identifier and a duration, the class receives the object variables 
+                    <samp class="listingcharacter listingcharacter">about</samp> and 
+                    <samp class="listingcharacter listingcharacter">duration</samp>
+                .</p>
+                
+                <div class="listing " id="l7.11"><pre><span class="">class</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> about</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    duration</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.11</b>    
+            src/main/java/com/tutego/insel/game/c/vl/Event.java, Event</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.2.2.2">Two Subclasses</h4>
+                
+                <p class="standard">An example of an event might be a nap, which should be modeled as a subclass. The 
+                    <samp class="listingcharacter listingcharacter">Nap</samp> class extends 
+                    <samp class="listingcharacter listingcharacter">Event</samp>
+                 and doesn’t add anything.</p>
+                
+                <div class="listing " id="l7.12"><pre><span class="">class</span><span class=""> </span>
+                    <span class="bold"><span class="">Nap </span><span class="">extends</span><span class=""> Event</span></span> { } <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.12</b>    
+            src/main/java/com/tutego/insel/game/c/vl/Nap.java, Nap</p>
+                
+                <p class="standard">Syntactically, inheritance is described by the 
+                    <samp class="listingcharacter listingcharacter">extends</samp> keyword. The declaration of the 
+                    <samp class="listingcharacter listingcharacter">Nap</samp> class carries the appendix 
+                    <samp class="listingcharacter listingcharacter">extends Event</samp>
+                .</p>
+                
+                <p class="standard">Besides 
+                    <samp class="listingcharacter listingcharacter">Nap</samp>, let’s create another subclass of 
+                    <samp class="listingcharacter listingcharacter">Event</samp>: 
+                    <samp class="listingcharacter listingcharacter">Workout</samp>
+                . A separate object variable is added to this class.</p>
+                
+                <div class="listing " id="l7.13"><pre><span class="">
+                        <a id="p439"/>
+                    public</span><span class=""> </span><span class="">class</span><span class=""> </span>
+                    <span class="bold"><span class="">Workout </span><span class="">extends</span><span class=""> Event</span></span> {<br/>  <span class="">int</span><span class=""> caloriesBurned;</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.13</b>    
+            src/main/java/com/tutego/insel/game/c/vl/Workout.java, Workout</p>
+                
+                <p class="standard">The three classes 
+                    <samp class="listingcharacter listingcharacter">Event</samp>, 
+                    <samp class="listingcharacter listingcharacter">Nap</samp>, and 
+                    <samp class="listingcharacter listingcharacter">Workout</samp>
+                 can be represented in a UML diagram, where inheritance is indicated by an arrow pointing towards the superclass.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f7.8.html" id="f7.8"><img alt="Nap and Workout Classes as Two Subclasses of the Event Class" id="img-f7.8" src="bilderklein/klein07_008.png"/></a></div>
+                
+                <p class="caption "><b>Figure 7.8</b>    
+            Nap and Workout Classes as Two Subclasses of the Event Class</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.2.2.3">Subclasses Inherit Members and Have Tight Coupling</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Nap</samp> and 
+                    <samp class="listingcharacter listingcharacter">Workout</samp> classes inherit the 
+                    <samp class="listingcharacter listingcharacter">about</samp> and 
+                    <samp class="listingcharacter listingcharacter">duration</samp> object variables from the superclass and can easily access them in their own methods and constructors. The inherited members retain their visibility, so a 
+                    <samp class="listingcharacter listingcharacter">public</samp> member remains 
+                    <samp class="listingcharacter listingcharacter">public</samp>
+                . Private members aren’t visible to other classes, so they aren’t visible to subclasses either; thus, they don’t inherit private members. If the type of variables or the implementation of a method changes in the superclass, the subclass will also receive this change. For this reason, coupling by means of inheritance is tight because the subclasses are at the mercy of changes of the superclasses since superclasses know nothing about subclasses.</p>
+                
+                <p class="standard">Our small sample program shows that the client basically doesn’t know why a type “has” something and from which (base) class the members originate.</p>
+                
+                <div class="listing " id="l7.14"><pre>Workout walking <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><span class=""><br/></span>walking<span class="">.</span><span class="">about </span><span class="">=</span><span class=""> </span><span class="">"Go for a run"</span><span class="">;</span><span class="">     </span><span class=""> // Access inherited object variable</span><span class=""><br/></span>walking<span class="">.</span><span class="">duration </span><span class="">=</span><span class=""> </span><span class="">30</span><span class="">;</span><span class="">              </span><span class=""> // Access inherited object variable</span><span class=""><br/></span>walking<span class="">.</span><span class="">caloriesBurned </span><span class="">=</span><span class=""> </span><span class="">200</span><span class="">;</span><span class="">       </span><span class=""> // Access own object variable</span><span class=""><br/></span> <br/>
+                    <a id="p440"/>Nap sleeping <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">();</span><span class=""><br/></span>sleeping<span class="">.</span><span class="">about </span><span class="">=</span><span class=""> </span><span class="">"Recreational sleep"</span><span class="">;</span><span class=""> </span><span class=""> // Access inherited object variable</span><span class=""><br/></span>sleeping<span class="">.</span><span class="">duration </span><span class="">=</span><span class=""> </span><span class="">60</span><span class="">;</span><span class="">             </span><span class=""> // Access inherited object variable</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.14</b>    
+            src/main/java/com/tutego/insel/game/c/vl/Application.java, main</p>
+                
+                <p class="standard">The is-a-kind-of-hierarchy doesn’t need to stop at one level. You could also imagine a subclass named 
+                    <samp class="listingcharacter listingcharacter">PowerNap</samp> under 
+                    <samp class="listingcharacter listingcharacter">Nap</samp>, to define specialization of 
+                    <samp class="listingcharacter listingcharacter">Nap</samp>. 
+                    <samp class="listingcharacter listingcharacter">PowerNap</samp> may perhaps additionally contain things that normal sleep doesn’t. And since 
+                    <samp class="listingcharacter listingcharacter">Nap</samp> is an 
+                    <samp class="listingcharacter listingcharacter">Event</samp>, and since 
+                    <samp class="listingcharacter listingcharacter">PowerNap</samp> is a subclass of 
+                    <samp class="listingcharacter listingcharacter">Nap</samp>, a 
+                    <samp class="listingcharacter listingcharacter">PowerNap</samp> is also a type of 
+                    <samp class="listingcharacter listingcharacter">Event</samp>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.2.3">7.2.3    The Implicit Base Class java.lang.Object</h3>
+            
+            <p class="standard">If no explicit 
+                <samp class="listingcharacter listingcharacter">extends</samp> keyword is added after a class name—as in the 
+                <samp class="listingcharacter listingcharacter">Event</samp> example—the class automatically inherits from 
+                <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+            , which is an implicit base class. Thus, without an explicit superclass, the following two declarations are equivalent:</p>
+            
+            <div class="listing " id="l_none_72451695156"><pre><span class="">class</span><span class=""> Event</span><br/><span class="">class</span><span class=""> Event </span>
+                <span class="bold"><span class="">extends</span><span class=""> Object</span></span> <span class=""/></pre></div>
+            
+            <p class="standard">All classes thus directly or indirectly have the 
+                <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+                <a class="indexanchor" id="i07_22"/> class as their base class and inherit a number of methods, such as 
+                <samp class="listingcharacter listingcharacter">toString()</samp>. For this reason, methods that don’t originate from the own classes always appear in the keyboard completion of an integrated development environment (IDE), as shown in 
+                <span class="crossreference "><a href="07_002.html#f7.9">Figure 7.9</a></span>
+            .</p>
+            
+            <div class="imagebox figure-type"><a href="img-f7.9.html" id="f7.9"><img alt="Methods from the Absolute Superclass java.lang.Object" id="img-f7.9" src="bilderklein/klein07_009.png"/></a></div>
+            
+            <p class="caption "><b>Figure 7.9</b>    
+            Methods from the Absolute Superclass java.lang.Object</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.2.4">7.2.4    Single and Multiple Inheritance*</h3>
+            
+            <p class="standard">In Java, only 
+                <a class="indexanchor" id="i07_23"/>
+                <span class="italic">single inheritance</span> is allowed in a direct way. So, after the 
+                <samp class="listingcharacter listingcharacter">extends</samp> keyword, only one class can be placed. Other object-oriented programming (OOP) languages 
+                <a id="p441"/>(such as C++,
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn07_05" id="fn07_05">[ 140 ]</a></span>
+             Python, Perl, or Eiffel) allow multiple inheritance and can combine several classes into a new class. But why does Java (along with some other languages such as C#, Objective-C, Simula, Ruby, or Delphi) not offer multiple inheritance at the class level?</p>
+            
+            <p class="standard">Let’s suppose the classes 
+                <samp class="listingcharacter listingcharacter">O1</samp> and 
+                <samp class="listingcharacter listingcharacter">O2</samp> both declare a public method 
+                <samp class="listingcharacter listingcharacter">f()</samp>, and 
+                <samp class="listingcharacter listingcharacter">U</samp> is a class that inherits from 
+                <samp class="listingcharacter listingcharacter">O1</samp> and 
+                <samp class="listingcharacter listingcharacter">O2</samp>. If the method call 
+                <samp class="listingcharacter listingcharacter">f()</samp> exists in 
+                <samp class="listingcharacter listingcharacter">U</samp>, which of the two methods is meant won’t be clear. In C++, the scope operator (
+                <samp class="listingcharacter listingcharacter">::</samp>
+            ) solves this problem in such a way that the developer always specifies from which superclass the function is to be addressed.</p>
+            
+            <p class="standard">An additional problem is called the 
+                <span class="italic">diamond problem</span> (also referred to as the 
+                <span class="italic">rhombus problem</span>). Two classes, 
+                <samp class="listingcharacter listingcharacter">K1</samp> and 
+                <samp class="listingcharacter listingcharacter">K2</samp>, inherit a field 
+                <samp class="listingcharacter listingcharacter">x</samp> from a superclass 
+                <samp class="listingcharacter listingcharacter">O</samp>. A subclass 
+                <samp class="listingcharacter listingcharacter">U</samp> inherits from classes 
+                <samp class="listingcharacter listingcharacter">K1</samp> and 
+                <samp class="listingcharacter listingcharacter">K2</samp>. Can the field 
+                <samp class="listingcharacter listingcharacter">x</samp> be accessed in 
+                <samp class="listingcharacter listingcharacter">U</samp>? Actually, the field exists only once, and thus, you have no reason to worry. Nevertheless, this scenario poses a problem because the compiler has “forgotten” that 
+                <samp class="listingcharacter listingcharacter">x</samp> hasn’t changed in the subclasses 
+                <samp class="listingcharacter listingcharacter">K1</samp> and 
+                <samp class="listingcharacter listingcharacter">K2</samp>
+            . With single inheritance, this dilemma doesn’t even arise.</p>
+            
+            <p class="standard">Debate continues about whether the lack of multiple inheritance limits Java. No, this lack doesn’t really limit Java. Although Java doesn’t allow multiple superclasses, you can still implement multiple interfaces and thus adopt different types. (We’ll deal with interfaces in more detail in 
+                <span class="crossreference "><a href="08_001.html#h8">Chapter 8</a></span>, 
+                <span class="crossreference "><a href="08_001.html#h8.1">Section 8.1</a></span>
+            .)</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.2.5">7.2.5    Do Children See Everything? The Protected Visibility</h3>
+            
+            <p class="standard">A subclass inherits all visible members. We already know 
+                <samp class="listingcharacter listingcharacter">public</samp>, package-visible, and 
+                <samp class="listingcharacter listingcharacter">private</samp>
+            . The result is:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If the members are 
+                        <samp class="listingcharacter listingcharacter">public</samp>
+                     in the superclass, the subclasses will also see the members. In general, everyone sees them.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If the superclass has package-visible members, the subclass sees the members only if the classes are in the same package. Thus, package-visible members remain private for subclasses even if the classes are in a different package.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Inheritance can be restricted by 
+                        <samp class="listingcharacter listingcharacter">private</samp>
+                    . Then, no other class sees the members: neither foreign classes nor subclasses.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Thus, for public, package-visible, and private members, subclasses have no special status; they don’t see “more” as a result. Only 
+                <samp class="listingcharacter listingcharacter">protected</samp>
+             gives subclasses “more.”</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Language Comparison</h6>
+                
+                <p class="standard first last">The Eiffel programming language has an interesting feature: If a new class has 
+                    <samp class="listingcharacter listingcharacter">inherit {NONE} </samp>
+                    <span class="italic">
+                        <samp class="listingcharacter listingcharacter">superclass</samp>
+                    </span>
+                , the class inherits from the named superclass, but the members are private in the new class and aren’t available to other subclasses of this new class.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h7.2.5.1">
+                    <a id="p442"/>
+                The protected Keyword</h4>
+                
+                <p class="standard">In addition to these three visibilities, a fourth visibility option is added: 
+                    <samp class="listingcharacter listingcharacter">protected</samp>
+                    <a class="indexanchor" id="i07_24"/>
+                . This visibility includes (strangely enough) two members:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">protected</samp>
+                         members are inherited by all subclasses.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Classes that are in the same package can see all 
+                            <samp class="listingcharacter listingcharacter">protected</samp> members because 
+                            <samp class="listingcharacter listingcharacter">protected</samp>
+                         is an extension of package visibility.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Thus, if other classes are in the same package and members are 
+                    <samp class="listingcharacter listingcharacter">protected</samp>, the visibility for them is 
+                    <samp class="listingcharacter listingcharacter">public</samp>. For other non-subclasses in other packages, the 
+                    <samp class="listingcharacter listingcharacter">protected</samp> members are 
+                    <samp class="listingcharacter listingcharacter">private</samp>
+                . Thus, the order of visibility can be described in the following way:</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">public</samp> &gt; 
+                    <samp class="listingcharacter listingcharacter">protected</samp> &gt; package-visible &gt; 
+                    <samp class="listingcharacter listingcharacter">private</samp>
+                </p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Design Tip</h6>
+                    
+                    <p class="standard first last">If a member is 
+                        <samp class="listingcharacter listingcharacter">protected</samp> in a class, that member is visible in all subclasses, regardless of which package the subclass is in. For example, if 
+                        <samp class="listingcharacter listingcharacter">A</samp> has a 
+                        <samp class="listingcharacter listingcharacter">protected</samp> variable and 
+                        <samp class="listingcharacter listingcharacter">B</samp> inherits from 
+                        <samp class="listingcharacter listingcharacter">A</samp> and 
+                        <samp class="listingcharacter listingcharacter">C</samp> inherits from 
+                        <samp class="listingcharacter listingcharacter">B</samp>, then 
+                        <samp class="listingcharacter listingcharacter">C</samp> will also see the 
+                        <samp class="listingcharacter listingcharacter">protected</samp> variable. This scenario is usually a problem for object variables because an implementation detail can quickly leak out, and the code becomes fragile. Consequently, 
+                        <samp class="listingcharacter listingcharacter">protected</samp>
+                     variables should be omitted.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.2.6">7.2.6    Constructors in Inheritance and super(...)
+                <a class="indexanchor" id="i07_25"/>
+            </h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i07_26"/>
+            Although constructors have some similarities with methods (i.e., they can be overloaded or throw exceptions), constructors aren’t inherited, unlike methods. Thus, a subclass must specify entirely new constructors because the constructors of the superclass can’t be used to create an object of the subclass. Whether this scenario is pure object orientation is debatable; in the Python scripting language, for example, constructors are also inherited. In Java, constructors actually belong to the static part of a class.</p>
+            
+            <p class="standard">In Java, a subclass automatically collects all visible members of the superclass, but the initialization of the individual members in a hierarchy is still the task of the constructors in the hierarchy. To ensure this initialization, Java automatically calls the parameterless constructor of the superclass in the constructor of any class (except 
+                <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+            ) so that the superclass can initialize “its” object variables. Whether the constructor in the subclass is parameterized or not doesn’t matter; any constructor in the subclass must call a constructor in the superclass.</p>
+            
+            
+                
+                <h4 class="t4" id="h7.2.6.1">An Example with Constructor Redirection</h4>
+                
+                <p class="standard">
+                    <a class="indexanchor" id="i07_27"/>
+                Let’s take another look at constructor chaining with the following example:</p>
+                
+                <div class="listing " id="l_none_7245"><pre><span class="">class</span><span class=""> Event </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">class</span><span class=""> Nap </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <a id="p443"/>Since we don’t have explicit constructors, the compiler inserts them, and since 
+                    <samp class="listingcharacter listingcharacter">Event</samp> inherits from 
+                    <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+                , the runtime environment sees the classes in the following way:</p>
+                
+                <div class="listing " id="l_none_7258"><pre><span class="">class</span><span class=""> </span>
+                    <span class="bold"><span class="">Event</span></span> {<br/>  
+                    <span class="bold"><span class="">Event</span><span class="">()</span></span> { }<br/>}<br/><br/><span class="">class</span><span class=""> </span>
+                    <span class="bold">Nap</span> <span class="">extends</span><span class=""> Event {</span><br/>  
+                    <span class="bold"><span class="">Nap</span><span class="">()</span></span> { }<br/>} <span class=""/></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.2.6.2">Looking for the super Call</h4>
+                
+                <p class="standard">The fact that every constructor of a class automatically calls the parameterless constructor of the superclass can also be formulated explicitly—the necessary keyword is 
+                    <samp class="listingcharacter listingcharacter">super</samp> and forms the 
+                    <samp class="listingcharacter listingcharacter">super()</samp> call; the parentheses are reminiscent of a method call. Since the compiler automatically inserts 
+                    <samp class="listingcharacter listingcharacter">super()</samp> as the first statement in the constructor, you don’t need to write this statement manually. So, whether you place 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp>
+                 in the constructor manually or let the compiler put one in, for the runtime environment, the preceding notation and the following notation are completely the same:</p>
+                
+                <div class="listing " id="l_none_7277"><pre><span class="">class</span><span class=""> Event </span><span class="">extends</span><span class=""> Object </span><span class="">{</span><span class=""><br/></span>  <span class="">Event</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">super</span><span class="">()</span></span>;      <span class=""> // Calls parameterless constructor of Object</span><span class=""><br/></span>  }<br/>}<br/><br/><span class="">class</span><span class=""> Nap </span><span class="">extends</span><span class=""> Event {</span><br/>  <span class="">Nap</span><span class="">() {</span><br/>    
+                    <span class="bold"><span class="">super</span><span class="">()</span></span>;      <span class=""> // Calls parameterless constructor of Event</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">
+                        <samp class="listingcharacter listingcharacter">super(...)</samp> must always be the first statement in the constructor. When building new objects, the runtime environment in the constructor therefore first runs through the hierarchy to 
+                        <samp class="listingcharacter listingcharacter">java.lang.Object</samp> and starts the initialization process there from top to bottom. If the Java virtual machine (JVM) returns to its own constructor after initializing the superclass by calling 
+                        <samp class="listingcharacter listingcharacter">super()</samp>
+                    , all superclass constructors have already initialized their states. Thus, you can later assume fully initialized variables of all base types in your own constructor.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.2.6.3">
+                    <a id="p444"/>
+                super() Also for Parameterized Constructors</h4>
+                
+                <p class="standard">All constructors (both parameterless and parameterized) call the parameterless constructor of the superclass via 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp>
+                 by default. Let’s look at a class for making music that assumes the musical instrument in the parameterized constructor.</p>
+                
+                <div class="listing " id="l7.15"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> MusicMaking </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">String</span><span class=""> instrument</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">MusicMaking</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> instrument </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">this</span><span class="">.</span><span class="">instrument </span><span class="">=</span><span class=""> instrument</span><span class="">;</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.15</b>    
+            src/main/java/com/tutego/insel/game/c/vl/MusicMaking.java, MusicMaking</p>
+                
+                <p class="standard">A parameterless constructor does not exist, only a parameterized one, which also automatically calls the parameterless constructor of the base class 
+                    <samp class="listingcharacter listingcharacter">Event</samp>. This 
+                    <samp class="listingcharacter listingcharacter">superI(…)</samp>
+                -call can be explicitly written out in the following way:</p>
+                
+                <div class="listing " id="l_none_7294"><pre><span class="">public</span><span class=""> </span><span class="">MusicMaking</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> instrument </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">super</span><span class="">();</span></span>  <span class=""> // Automatically calls the parameterless constructor of Event</span><span class=""><br/></span>  <span class="">this</span><span class="">.instrument = instrument;</span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">Of course, 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp>
+                 must be first again.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.2.6.4">Filling super(...)
+                    <a class="indexanchor" id="i07_28"/>
+                 with Arguments</h4>
+                
+                <p class="standard">Sometimes, not only do you need to address the parameterless constructor from the subclass, but you may need to address another (parameterized) constructor of the superclass. For this purpose, you can use 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp> with arguments. In other words, the call of 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp>
+                 can be parameterized, so that a parameterized constructor is called instead of the parameterless constructor. Reasons for this option include the following:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A parameterized constructor of the subclass passes the arguments to the superclass; the parameterless constructor shouldn’t be called because the superclass constructor should accept and process the object variables.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If you don’t find a parameterless constructor in the superclass, you must call a special parameterized constructor in the subclass using 
+                            <samp class="listingcharacter listingcharacter">super(argument)</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Let’s go through an inheritance hierarchy step by step so that we can understand why a 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp>
+                 with parameter is necessary.</p>
+                
+                <p class="standard">First, let’s return to the 
+                    <samp class="listingcharacter listingcharacter">MusicMaking</samp>
+                 class and its parameterized constructor.</p>
+                
+                <div class="listing " id="l7.16"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> MusicMaking </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">String</span><span class=""> instrument</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">MusicMaking</span><span class="">( </span><span class="">String</span><span class=""> instrument )</span></span> { <span class="">this</span><span class="">.instrument = instrument; }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.16</b>    
+            src/main/java/com/tutego/insel/game/c/vl/MusicMaking.java, MusicMaking</p>
+                
+                <p class="standard">
+                    <a id="p445"/>If a 
+                    <samp class="listingcharacter listingcharacter">MusicMakingAndRecording</samp> class extends the 
+                    <samp class="listingcharacter listingcharacter">MusicMaking</samp>
+                 class for a special kind of music jam, the following compiler error will be thrown:</p>
+                
+                <div class="listing " id="l_none_7314"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> MusicMakingAndRecording </span><span class="">extends</span><span class=""> MusicMaking </span><span class="">{}</span><span class="">// 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                    </span><br/><span class="">                                                           // Compiler error</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The error message of the compiler is “There is no default constructor available in ’com.tutego.insel.game.vl.MusicMaking’.”</p>
+                
+                <p class="standard">The reason is simple: 
+                    <samp class="listingcharacter listingcharacter">MusicMakingAndRecording</samp> contains a default constructor generated by the compiler that looks for a parameterless constructor in 
+                    <samp class="listingcharacter listingcharacter">MusicMaking</samp> with 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp>
+                —but that constructor doesn’t exist. </p>
+                
+                <p class="standard">You must therefore either create a parameterless constructor in the superclass (which of course isn’t possible for non-modifiable classes) or use 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp> in 
+                    <samp class="listingcharacter listingcharacter">MusicMakingAndRecording</samp>
+                 in such a way that it calls the parameterized constructor of the superclass with a single argument, which might look like the following example:</p>
+                
+                <div class="listing " id="l7.17"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> MusicMakingAndRecording </span><span class="">extends</span><span class=""> MusicMaking </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">MusicMakingAndRecording</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">super</span><span class="">( </span><span class="">"Guitar"</span><span class=""> );</span></span><br/>  }<br/>  …<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.17</b>    
+            src/main/java/com/tutego/insel/game/c/vl/MusicMakingAndRecording.java (Snippet)</p>
+                
+                <p class="standard">Whether 
+                    <samp class="listingcharacter listingcharacter">MusicMakingAndRecording</samp> has a parameterless or a parameterized constructor doesn’t matter: In both cases, you must pass a value to the constructor of the direct superclass with 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp>
+                . </p>
+                
+                <p class="standard">Often, subclasses simply pass the passed constructor argument to the superclass constructor, as in the following example:</p>
+                
+                <div class="listing " id="l7.18"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> MusicMakingAndRecording </span><span class="">extends</span><span class=""> MusicMaking </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">MusicMakingAndRecording</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">super</span><span class="">(</span><span class=""> </span><span class="">"Guitar"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span> <br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">MusicMakingAndRecording</span><span class="">( </span><span class="">String</span><span class=""> instrument ) {</span><br/>    <span class="">super</span><span class="">( instrument );</span><br/>  }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.18</b>    
+            src/main/java/com/tutego/insel/game/c/vl/MusicMakingAndRecording.java, MusicMakingAndRecording</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.2.6.5">
+                    <a id="p446"/>
+                The this(...)-and-super(...) Conflict*</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">this(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp> have one thing in common: Both want to be the first statement of a constructor. Sometimes, a parameterized call of the constructor of the base class occurs with 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp>, and at the same time, a 
+                    <samp class="listingcharacter listingcharacter">this(...)</samp> with parameters tries to perform all the initializations in a central constructor. But unfortunately, doing both isn’t possible. The solution is to dispense with 
+                    <samp class="listingcharacter listingcharacter">this(...)</samp> and put the common program code in a private method, which is then called after the 
+                    <samp class="listingcharacter listingcharacter">super</samp>
+                 call.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.2.6.6">Summary: Constructors and Methods</h4>
+                
+                <p class="standard">Methods and constructors have some signature similarities, but also have some important differences, such as the return value or the use of 
+                    <samp class="listingcharacter listingcharacter">this</samp> and 
+                    <samp class="listingcharacter listingcharacter">super</samp>. 
+                    <span class="crossreference "><a href="07_002.html#t7.1">Table 7.1</a></span> summarizes the differences and similarities:
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn07_06" id="fn07_06">[ 141 ]</a></span>
+                </p>
+                
+                <table class="standardtable" id="t7.1">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Usage</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">Constructors</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Methods</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Modifier</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">Visibility 
+                                    <samp class="listingcharacter listingcharacter">public</samp>, 
+                                    <samp class="listingcharacter listingcharacter">protected</samp>, package-visible, and 
+                                    <samp class="listingcharacter listingcharacter">private</samp>. 
+                                    <span class="italic">Cannot </span>be 
+                                    <samp class="listingcharacter listingcharacter">abstract</samp>, 
+                                    <samp class="listingcharacter listingcharacter">final</samp>, 
+                                    <samp class="listingcharacter listingcharacter">native</samp>, 
+                                    <samp class="listingcharacter listingcharacter">static</samp>, or 
+                                    <samp class="listingcharacter listingcharacter">synchronized</samp>
+                                .</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Visibility 
+                                    <samp class="listingcharacter listingcharacter">public</samp>, 
+                                    <samp class="listingcharacter listingcharacter">protected</samp>, package-visible, and 
+                                    <samp class="listingcharacter listingcharacter">private</samp>. Can be 
+                                    <samp class="listingcharacter listingcharacter">abstract</samp>, 
+                                    <samp class="listingcharacter listingcharacter">final</samp>, 
+                                    <samp class="listingcharacter listingcharacter">native</samp>, 
+                                    <samp class="listingcharacter listingcharacter">static</samp>, or 
+                                    <samp class="listingcharacter listingcharacter">synchronized</samp>
+                                .</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">Return</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">No return type, not even 
+                                    <samp class="listingcharacter listingcharacter">void</samp>
+                                .</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Return type or 
+                                    <samp class="listingcharacter listingcharacter">void</samp>
+                                .</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">Identifier name</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Same name as the class. Starts with an uppercase letter by convention.</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Any. Starts with a lowercase letter by convention.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">this</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last tablecell_has_colspan" colspan="2">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">this</samp>
+                                 is a reference in object methods and constructors that references the current instance.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">this(…)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <a class="indexanchor" id="i07_29"/>
+                                    <samp class="listingcharacter listingcharacter">this(...)</samp>
+                                    <a class="indexanchor" id="i07_30"/> references another constructor of the same class. If 
+                                    <samp class="listingcharacter listingcharacter">this(...)</samp>
+                                 is used, it must be in the first line.</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Not allowed in methods.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">super</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last tablecell_has_colspan" colspan="2">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">super</samp>
+                                 is a reference with the namespace of the superclass and can be used to call overridden object methods.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">super(…)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">super(...)</samp>
+                                    <a class="indexanchor" id="i07_31"/>
+                                 calls a constructor of the superclass. If used, it must be the first statement.</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Not allowed in methods.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">Inheritance</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Constructors aren’t inherited.</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Visible methods are inherited.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 7.1</b>    
+            Constructors and Methods Compared</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

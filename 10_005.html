@@ -1,0 +1,334 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Nested Types" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Nested Types" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Nested Types</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h10.5">10.5    Anonymous Inner Classes</h2>
+        
+        <p class="standard">
+            <a class="indexanchor" id="i10_19"/>
+            <a class="indexanchor" id="i10_20"/>
+        Anonymous classes go one step further than local classes: These inner classes have no names and always automatically create an object; class declaration and object creation are combined into one language construct. The general notation is as follows:</p>
+        
+        <div class="listing " id="l_none_10192"><pre><span class="">new</span><span class=""> </span>
+            <span class="italic"><span class="">ClassOrInterface</span></span><span class="">() {</span><span class=""> /* Members of the inner class */</span><span class=""> } </span><span class=""/></pre></div>
+        
+        <p class="standard">New methods and object variables can be declared, and methods can be overridden in the block of curly brackets. 
+            <samp class="listingcharacter listingcharacter">new</samp>
+         is followed by the name of a class or interface, with the following options:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">new </samp>
+                    <span class="italic">Class name</span>
+                    <samp class="listingcharacter listingcharacter">(</samp>
+                    <span class="italic">Optional Arguments</span>
+                    <samp class="listingcharacter listingcharacter">) { ... }</samp>: If 
+                    <samp class="listingcharacter listingcharacter">new</samp> is followed by a class type, then the anonymous class is a subclass of 
+                    <samp class="listingcharacter listingcharacter">Class name</samp>
+                . Possible arguments for the constructor of the base class can be specified (which might be necessary, for example, if the superclass doesn’t declare a parameterless constructor).</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">new </samp>
+                    <span class="italic">Interface name</span>
+                    <samp class="listingcharacter listingcharacter">() { ... }</samp>: If 
+                    <samp class="listingcharacter listingcharacter">new</samp> is followed by the name of an interface, then the anonymous class inherits from 
+                    <samp class="listingcharacter listingcharacter">Object</samp> and implements the given interface. If the anonymous class doesn’t implement the operations of the interface, then you have 
+                    <a id="p608"/>
+                an error. This situation wouldn’t help us at all because then you’d have an abstract inner class from which no object can be created.</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">For anonymous inner classes, one restriction is that no additional 
+            <samp class="listingcharacter listingcharacter">extends</samp> or 
+            <samp class="listingcharacter listingcharacter">implements</samp>
+         specifications are possible. Likewise, custom constructors are not possible (but instance initializers are), and only object methods and final static variables are allowed.</p>
+        
+        
+            
+            <h3 class="t3" id="h10.5.1">10.5.1    Using an Anonymous Inner Class for the Timer</h3>
+            
+            <p class="standard">In 
+                <span class="crossreference "><a href="10_004.html#l10.7">Listing 10.7</a></span>, we declared a new local class for the timer, but strictly speaking, we only had to use the class once, namely, to create an instance and pass 
+                <samp class="listingcharacter listingcharacter">scheduleAtFixedRate(...)</samp>
+            . This scenario is perfect for anonymous inner classes. For instance, you could write the following code:</p>
+            
+            <div class="listing " id="l_none_10212"><pre><span class="">class</span><span class=""> SportReminderTask </span><span class="">extends</span><span class=""> TimerTask </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">run</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> … </span><span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">new</span><span class=""> </span><span class="">Timer</span><span class="">().</span><span class="">scheduleAtFixedRate</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">SportReminderTask</span><span class="">(),</span><span class=""> … </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">These statements would be changed into the following code:</p>
+            
+            <div class="listing " id="l10.8"><pre><span class="">new</span><span class=""> </span><span class="">Timer</span><span class="">().</span><span class="">scheduleAtFixedRate</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">TimerTask</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>                                   <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">run</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>                                     System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Come on, you candy-ass"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>                                   <span class="">}</span><span class=""><br/></span>                                 <span class="">},</span><span class=""><br/></span>                                 <span class="">0</span><span class=""> </span><span class="">/* ms delay */</span><span class="">,</span><br/>                                 <span class="">1000</span><span class=""> </span><span class="">/* ms period */</span><span class="">); </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 10.8</b>    
+            src/main/java/com/tutego/insel/nested/ShorterSportReminder.java, main()</p>
+            
+            <p class="standard">So, in essence, we’ve converted 
+                <samp class="listingcharacter listingcharacter">new SportReminderTask()</samp> to 
+                <samp class="listingcharacter listingcharacter">new TimerTask() { ... }</samp>. Nothing is left of the 
+                <samp class="listingcharacter listingcharacter">SportReminderTask</samp>
+             class name; the object is anonymous.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">An anonymous class can override methods of the superclass, implement operations from interfaces, and even provide new members. Consider the following example:</p>
+                
+                <div class="listing " id="l10.9"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Object</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> </span><span class="">quote</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> s </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">format</span><span class="">(</span><span class=""> "</span><span class="">'%s'", s );</span><br/>  }<br/>}.quote( "<span class="">Cora" </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s </span><span class="">);</span><span class=""> </span><span class=""> // 'Cora'</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 10.9</b>    
+            src/main/java/com/tutego/insel/nested/ObjectWithQuote.java, main()</p>
+                
+                <p class="standard last">
+                    <a id="p609"/>The newly declared anonymous type has a 
+                    <samp class="listingcharacter listingcharacter">quote(String)</samp> method that can be called directly. Without this direct call, however, the 
+                    <samp class="listingcharacter listingcharacter">quote(...)</samp> method is invisible because the type is anonymous, and so only the methods of the superclass (
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                , in our case) or the interface are known.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h10.5.2">10.5.2    Implementing Anonymous Inner Classes*</h3>
+            
+            <p class="standard">The compiler also generates a normal class file for anonymous inner classes. As you’ve seen for a “normal” nested class, the Java compiler chooses the notation
+                <a class="indexanchor" id="i10_21"/>
+                <samp class="listingcharacter listingcharacter"> OuterClass$InnerClass</samp>. Of course, this notation doesn’t work for anonymous inner classes because we lack the name of the inner class. The compiler therefore chooses the following notation for class names: 
+                <samp class="listingcharacter listingcharacter">InnerToStringDate$1</samp>. If you have more than one inner class, 
+                <samp class="listingcharacter listingcharacter">$2</samp>, 
+                <samp class="listingcharacter listingcharacter">$3</samp>
+            , and so on will follow accordingly.</p>
+            
+            
+                
+                <h4 class="t4" id="h10.5.2.1">Exceptions in Anonymous Inner Classes</h4>
+                
+                <p class="standard">In a stack trace, the generated class name appears in case of an exception. Let’s say, for example, that the declaration is embedded in a 
+                    <samp class="listingcharacter listingcharacter">main(...)</samp> method of class 
+                    <samp class="listingcharacter listingcharacter">T</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_10237"><pre><span class="">new</span><span class=""> </span><span class="">Object</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">nuro</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IllegalStateException</span><span class="">();</span><span class=""> </span><span class="">}</span><span class=""> </span><span class="">}.</span><span class="">nuro</span><span class="">();</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Thus, in the execution, you’ll see the following output:</p>
+                
+                <div class="listing " id="l_none_10245"><pre>Exception in thread "main" java.lang.IllegalStateException<br/>  at T$1.nuro(T.java:6)<br/>  at T.main(T.java:6) </pre></div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h10.5.3">10.5.3    Constructors of Anonymous Inner Classes</h3>
+            
+            <p class="standard">The compiler converts anonymous classes into normal class files. Each class can declare its own constructor, and even for anonymous classes, you should be able to put initialization code in there.</p>
+            
+            <p class="standard">Let’s write an inner class that is a subclass of 
+                <samp class="listingcharacter listingcharacter">java.awt.Point</samp>. This inner class is supposed to override the 
+                <samp class="listingcharacter listingcharacter">toString()</samp>
+             method.</p>
+            
+            <div class="listing " id="l10.10"><pre>Point p <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">12</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> </span><span class="">"("</span><span class=""> + x + </span><span class="">","</span><span class=""> + y + </span><span class="">")"</span><span class="">;</span><br/>  }</span><br/>};<br/><br/>System.out.<span class="">println</span><span class="">( p );   </span><span class=""> // (10,12)</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 10.10</b>    
+            src/main/java/com/tutego/insel/nested/InnerToStringPoint.java, main()</p>
+            
+            <p class="standard">
+                <a id="p610"/>Thus, the anonymous subclass is initialized by the normal constructor of 
+                <samp class="listingcharacter listingcharacter">Point</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h10.5.3.1">Instance Initialization Blocks for Anonymous Inner Classes</h4>
+                
+                <p class="standard">However, since anonymous classes have no name, we’ll need to find some way for constructors to address them. In this case, 
+                    <span class="italic">instance initialization blocks</span>
+                    <a class="indexanchor" id="i10_22"/> (i.e., blocks in curly brackets directly within a class) can help, as described in 
+                    <span class="crossreference "><a href="06_001.html#h6">Chapter 6</a></span>, 
+                    <span class="crossreference "><a href="06_006.html#h6.6.5">Section 6.6.5</a></span>
+                . Instance initializers don’t actually exist in the bytecode, but the compiler automatically puts the program code into each constructor. Although anonymous classes can’t have a direct constructor, program code does get into the constructor of the bytecode file via the instance initializer.</p>
+                
+                <p class="standard">Let’s look at an example: The anonymous class is a subclass of 
+                    <samp class="listingcharacter listingcharacter">Point</samp>
+                 and initializes a point with random coordinates in the constructor. From this special point object, we can then read the coordinates again.</p>
+                
+                <div class="listing " id="l10.11"><pre>java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point p </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">{</span><br/>    x = (<span class="">int</span><span class="">)(Math.</span><span class="">random</span><span class="">() * </span><span class="">1000</span><span class="">); y = (</span><span class="">int</span><span class="">)(Math.</span><span class="">random</span><span class="">() * </span><span class="">1000</span><span class="">);</span><br/>  }</span><br/>};<br/><br/>System.out.<span class="">println</span><span class="">( p.</span><span class="">getLocation</span><span class="">() ); </span><span class=""> // java.awt.Point[…}</span><span class=""><br/></span><br/>System.out.<span class="">println</span><span class="">( </span><span class="">new</span><span class=""> java.awt.</span><span class="">Point</span><span class="">( -</span><span class="">1</span><span class="">, </span><span class="">0</span><span class=""> ) {{</span><br/>  y = (<span class="">int</span><span class="">)(Math.</span><span class="">random</span><span class="">() * </span><span class="">1000</span><span class="">);</span><br/>}}.<span class="">getLocation</span><span class="">() );                    </span><span class=""> // java.awt.Point[x=-1,y=…]</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 10.11</b>    
+            src/main/java/com/tutego/insel/nested/AnonymousAndInside.java, main()</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Language</h6>
+                    
+                    <p class="standard first last">Because of the two curly brackets, this variant is also called 
+                        <span class="italic">double brace initialization</span>
+                        <a class="indexanchor" id="i10_23"/>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">The double brace initialization is compact if, for example, data structures or hierarchical objects are to be initialized.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example*</h6>
+                    
+                    <p class="standard first">Let’s create a nested 
+                        <samp class="listingcharacter listingcharacter">map</samp>
+                    —that’s an associative memory. This map again contains another associative memory at one point, as shown in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_10267"><pre>Map<span class="">&lt;</span><span class="">String</span><span class="">,</span><span class="">Object</span><span class="">&gt;</span><span class=""> map </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> HashMap</span><span class="">&lt;</span><span class="">String</span><span class="">,</span><span class="">Object</span><span class="">&gt;()</span><span class=""> </span><span class="">{{</span><span class=""><br/></span>  <span class="">put</span><span class="">(</span><span class=""> </span><span class="">"name"</span><span class="">,</span><span class=""> </span><span class="">"Donald"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">put</span><span class="">(</span><span class=""> </span><span class="">"address"</span><span class="">,</span><span class=""> </span><span class="">new</span><span class=""> HashMap</span><span class="">&lt;</span><span class="">String</span><span class="">,</span><span class="">Object</span><span class="">&gt;()</span><span class=""> </span><span class="">{{</span><span class=""><br/></span>    <span class="">put</span><span class="">(</span><span class=""> </span><span class="">"street"</span><span class="">,</span><span class=""> </span><span class="">"1313 Webfoot Street"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>
+                        <a id="p611"/>    <span class="">put</span><span class="">(</span><span class=""> </span><span class="">"city"</span><span class="">,</span><span class=""> </span><span class="">"</span>
+                        <span class="underlined">Duckburg</span>"<span class=""> );</span><br/>  }} );<br/>}};<span class=""/></pre></div>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[ ! ]  </span>Warning</h6>
+                    
+                    <p class="standard first last">The double brace initialization is not quite “cheap” since an additional class file is generated in the file system for the subclass. In addition, the inner class holds a reference to the outer class. Furthermore, some problems may arise with 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> because, with the double brace initialization, you’re creating a subclass that may no longer be validly compared with 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp>. The 
+                        <samp class="listingcharacter listingcharacter">Class</samp> objects are now no longer identical.) All in all, this rather speaks against using this design. The 
+                        <samp class="listingcharacter listingcharacter">Map</samp> type provides a better option with the use of static 
+                        <samp class="listingcharacter listingcharacter">of(…)</samp>/
+                        <samp class="listingcharacter listingcharacter">entry(…)</samp>
+                     methods.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h10.5.3.2">Not at All super()*</h4>
+                
+                <p class="standard">Inside an “anonymous constructor,” 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp> can’t be used to call the superclass constructor. This limitation is because a 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp>
+                 is automatically inserted into the initialization block. The parameters for the desired variant of the (overloaded) superclass constructor are specified at the beginning of the declaration of the anonymous class, as demonstrated by the following example:</p>
+                
+                <div class="listing " id="l_none_10293"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">-</span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{{</span><span class=""><br/></span>  y <span class="">=</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)(</span><span class="">Math</span><span class="">.</span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">*</span><span class=""> </span><span class="">1000</span><span class="">);</span><span class=""><br/></span><span class="">}}.</span><span class="">getLocation</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">                    </span><span class=""> // java.awt.Point[x=-1,y=…]</span><span class=""> </span></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Let’s initialize a 
+                        <samp class="listingcharacter listingcharacter">BigDecimal</samp> object that can store integers of any size. In the constructor of the anonymous subclass, you can then output the value using the inherited 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>
+                     method, as shown in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_10285"><pre><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">math</span><span class="">.</span><span class="">BigDecimal</span><span class="">(</span><span class=""> </span><span class="">"12345678901234567890"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{{</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}}</span><span class="">;</span></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h10.5.4">10.5.4    Accessing Local Variables from Local and Anonymous Classes*</h3>
+            
+            <p class="standard">Local and anonymous classes can have read access to the local variables and parameters of the enclosing method, but only if the variable is 
+                <samp class="listingcharacter listingcharacter">final</samp>. Of course, local and inner classes can’t change these variables because 
+                <samp class="listingcharacter listingcharacter">final</samp>
+             prohibits a second write access.</p>
+            
+            <p class="standard">
+                <a id="p612"/>
+            If a change is necessary, two tricks might be pretty useful:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Using a final array of length 1 to store the result</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Using 
+                        <samp class="listingcharacter listingcharacter">Atomic*</samp> classes from the 
+                        <samp class="listingcharacter listingcharacter">java.util.concurrent.atomic </samp>
+                    package to store elements of a primitive type or a reference</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Consider the following example:</p>
+            
+            <div class="listing " id="l10.12"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">final</span><span class=""> </span><span class="">int</span><span class="">[] result1 = { </span><span class="">0</span><span class=""> };</span><br/>  <span class="">final</span><span class=""> </span><span class="">String</span><span class="">[] result2 = { null };</span><br/>  <span class="">final</span><span class=""> AtomicInteger result3 = </span><span class="">new</span><span class=""> </span><span class="">AtomicInteger</span><span class="">();</span><br/>  <span class="">final</span><span class=""> AtomicReference&lt;</span><span class="">String</span><span class="">&gt; result4 = </span><span class="">new</span><span class=""> AtomicReference&lt;&gt;();</span><br/></span><br/>  System.out.<span class="">println</span><span class="">( result1[</span><span class="">0</span><span class="">] );    </span><span class=""> // 0</span><span class=""><br/></span>  System.out.<span class="">println</span><span class="">( result2[</span><span class="">0</span><span class="">] );    </span><span class=""> // null</span><span class=""><br/></span>  System.out.<span class="">println</span><span class="">( result3.</span><span class="">get</span><span class="">() ); </span><span class=""> // 0</span><span class=""><br/></span>  System.out.<span class="">println</span><span class="">( result4.</span><span class="">get</span><span class="">() ); </span><span class=""> // null</span><span class=""><br/></span><br/>  <span class="">new</span><span class=""> </span><span class="">Object</span><span class="">() {{</span><br/>      result1[<span class="">0</span><span class="">] = </span><span class="">1</span><span class="">;</span><br/>      result2[<span class="">0</span><span class="">] = </span><span class="">"snort wasabi hot sauce"</span><span class="">;</span><br/>      result3.<span class="">set</span><span class="">( </span><span class="">1</span><span class=""> );</span><br/>      result4.<span class="">set</span><span class="">( </span><span class="">"skateboard in bowling lanes"</span><span class=""> );</span><br/>  }};<br/><br/>  System.out.<span class="">println</span><span class="">( result1[</span><span class="">0</span><span class="">] );    </span><span class=""> // 1</span><span class=""><br/></span>  System.out.<span class="">println</span><span class="">( result2[</span><span class="">0</span><span class="">] );    </span><span class=""> // snort wasabi hot sauce</span><span class=""><br/></span>  System.out.<span class="">println</span><span class="">( result3.</span><span class="">get</span><span class="">() ); </span><span class=""> // 1</span><span class=""><br/></span>  System.out.<span class="">println</span><span class="">( result4.</span><span class="">get</span><span class="">() ); </span><span class=""> // skateboard in bowling lanes</span><span class=""><br/></span>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 10.12</b>    
+            src/main/java/com/tutego/insel/nested/ModifyLocalVariable.java, main()</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Atomic*</samp>
+             classes are actually designed for performing atomic write and change operations but can be useful in this scenario.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h10.5.5">10.5.5    Nested Classes Access Private Members</h3>
+            
+            <p class="standard">The outer enclosing class can access private members of the nested class, as shown in the following example:</p>
+            
+            <div class="listing " id="l10.13"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> NotSoPrivate </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">private</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">class</span><span class=""> Family </span><span class="">{</span><span class=""> </span>
+                <span class="bold"><span class="">private</span></span><span class=""> </span><span class="">String</span><span class=""> dad, mom; }</span><br/><br/>
+                <a id="p613"/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">class</span><span class=""> Node { </span>
+                <span class="bold"><span class="">private</span></span><span class=""> Node next; }</span><br/><br/>    Node n = <span class="">new</span><span class=""> </span><span class="">Node</span><span class="">();</span><br/>    n.next = <span class="">new</span><span class=""> </span><span class="">Node</span><span class="">();</span><br/><br/>    Family ullenboom = <span class="">new</span><span class=""> </span><span class="">Family</span><span class="">();</span><br/>    ullenboom.dad = <span class="">"Heinz"</span><span class="">;</span><br/>    ullenboom.mom = <span class="">"Eva"</span><span class="">;</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 10.13</b>    
+            src/main/java/com/tutego/insel/nested/NotSoPrivate.java, NotSoPrivate</p>
+            
+            <p class="standard">An 
+                <samp class="listingcharacter listingcharacter">Outsider</samp> class defined in the same compilation unit (i.e., the same file) can’t access 
+                <samp class="listingcharacter listingcharacter">NotSoPrivate.Family</samp>
+            , and of course, no class from another compilation unit has access either.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

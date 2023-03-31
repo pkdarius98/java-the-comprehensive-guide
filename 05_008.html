@@ -1,0 +1,1326 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Handling Characters and Strings" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Handling Characters and Strings" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Handling Characters and Strings</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h5.8">5.8    Converting Primitives and Strings</h2>
+        
+        <p class="standard">Before a data type can be output to the screen, sent to the printer, or stored in an ASCII file, the Java program must convert it to a string. For example, if we output the number 7 without conversion, we wouldn’t see a “7” on the screen, but your computer may beep, depending on the implementation. Conversion is also important the other way round: If a user specifies his or her age in a dialog, this value is always a string at first. In a second step, the application must convert this value to an integer to implement an age query, for example.</p>
+        
+        
+            
+            <h3 class="t3" id="h5.8.1">5.8.1    Converting Different Types to String Representations</h3>
+            
+            <p class="standard">Overloaded static 
+                <samp class="listingcharacter listingcharacter">String.valueOf(...)</samp> methods
+                <a class="indexanchor" id="i05_100"/>
+             return the string representation of a primitive value or object.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example shows some conversions of data types to strings:</p>
+                
+                <div class="listing  last_item" id="l_none_51202"><pre><span class="">
+                        <a id="p346"/>
+                    String</span><span class=""> s1 </span><span class="">=</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">);</span><span class="">               </span><span class=""> // 10</span><span class=""><br/></span><span class="">String</span><span class=""> s2 </span><span class="">=</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">PI </span><span class="">);</span><span class="">          </span><span class=""> // 3.141592653589793</span><span class=""><br/></span><span class="">String</span><span class=""> s3 </span><span class="">=</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">&lt;</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">);</span><span class="">            </span><span class=""> // true</span><span class=""> </span></pre></div>
+            
+            </div>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">valueOf(...)</samp>
+             method is overloaded, and in total, an implementation exists for each primitive data type:</p>
+            
+            <div class="listing " id="l_none_51222"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span>
+                <span class="bold"><span class="">.</span><span class="">String</span></span><span class=""><br/></span><span class="">implements</span><span class=""> CharSequence, Comparable&lt;</span><span class="">String</span><span class="">&gt;, Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String valueOf(boolean b)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String valueOf(char c)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String valueOf(double d)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String valueOf(float f)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String valueOf(int i)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String valueOf(long l)</samp><br/>Returns the string representation of the primitive elements.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String valueOf(char[] data)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String valueOf(char[] data, int offset, int count)</samp><br/>Returns a 
+                        <samp class="listingcharacter listingcharacter">String</samp> object from the 
+                        <samp class="listingcharacter listingcharacter">char</samp> array or a section of the 
+                        <samp class="listingcharacter listingcharacter">char</samp>
+                     array.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h5.8.1.1">The valueOf(Object) Method</h4>
+                
+                <p class="standard">You can pass any object to the 
+                    <samp class="listingcharacter listingcharacter">valueOf(Object)</samp>
+                 method.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example shows some conversions of objects to strings:</p>
+                    
+                    <div class="listing  last_item" id="l_none_51241"><pre><span class="">String</span><span class=""> r </span><span class="">=</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // java.awt.Point[x=0,y=0]</span><span class=""><br/></span><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> java</span><span class="">.</span><span class="">nio</span><span class="">.</span><span class="">file</span><span class="">.</span><span class="">Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"."</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // .</span><span class=""><br/></span><span class="">String</span><span class=""> t </span><span class="">=</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> java</span><span class="">.</span><span class="">time</span><span class="">.</span><span class="">LocalTime</span><span class="">.</span><span class="">now</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // 09:48:28.047834</span><span class=""> </span></pre></div>
+                
+                </div>
+                
+                <p class="standard">Since each object has a 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> method, 
+                    <samp class="listingcharacter listingcharacter">valueOf(Object)</samp>
+                 simply delegates to it.</p>
+                
+                <div class="listing " id="l5.9"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">valueOf</span><span class="">(</span><span class=""> Object obj </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">(</span><span class="">obj </span><span class="">==</span><span class=""> null</span><span class="">)</span><span class=""> </span><span class="">?</span><span class=""> </span><span class="">"null"</span><span class=""> </span><span class="">:</span><span class=""> obj</span><span class="">.</span><span class="">toString</span><span class="">();}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 5.9</b>    
+            java/lang/String.java, valueOf()</p>
+                
+                <p class="standard">The implementation of 
+                    <samp class="listingcharacter listingcharacter">valueOf(Object obj)</samp> simply asks the 
+                    <samp class="listingcharacter listingcharacter">obj</samp> object itself for the string conversion. The special handling tests whether 
+                    <samp class="listingcharacter listingcharacter">null</samp> was passed and then returns 
+                    <a id="p347"/>a valid string with the content 
+                    <samp class="listingcharacter listingcharacter">"null"</samp>. Since 
+                    <samp class="listingcharacter listingcharacter">String.valueOf(null)</samp> returns “null,” an output like 
+                    <samp class="listingcharacter listingcharacter">System.out.println(null)</samp> also outputs the string 
+                    <samp class="listingcharacter listingcharacter">null</samp> to the console because 
+                    <samp class="listingcharacter listingcharacter">println(Object)</samp> internally calls 
+                    <samp class="listingcharacter listingcharacter">String</samp>.
+                    <samp class="listingcharacter listingcharacter">valueOf(…)</samp>. Likewise, 
+                    <samp class="listingcharacter listingcharacter">System.out. println(null + "0")</samp> produces the output 
+                    <samp class="listingcharacter listingcharacter">"null0"</samp> since 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 is a link in the addition chain.</p>
+                
+                <div class="listing " id="l_none_51259"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span>
+                    <span class="bold"><span class="">.</span><span class="">String</span></span><span class=""><br/></span><span class="">implements</span><span class=""> CharSequence, Comparable&lt;</span><span class="">String</span><span class="">&gt;, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String valueOf(Object obj)</samp><br/>If 
+                            <samp class="listingcharacter listingcharacter">obj</samp> is not equal to 
+                            <samp class="listingcharacter listingcharacter">bull</samp>, the 
+                            <samp class="listingcharacter listingcharacter">obj.toString()</samp>
+                         method returns, otherwise it returns “null.”</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.8.2">5.8.2    Converting String Contents to a Primitive Value</h3>
+            
+            <p class="standard">Parsing a string—for example, 
+                <samp class="listingcharacter listingcharacter">"123"</samp> from a user input for the integer 123—isn’t the responsibility of the 
+                <samp class="listingcharacter listingcharacter">String</samp> class, but of special classes that exist for each primitive data type. The classes listed in 
+                <span class="crossreference "><a href="05_008.html#t5.9">Table 5.9</a></span> declare static 
+                <samp class="listingcharacter listingcharacter">parse*(string)</samp>
+             methods.</p>
+            
+            <table class="standardtable" id="t5.9">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Class</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Conversion Method</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Return Type</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">java.lang.Boolean</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i05_101"/>
+                                <samp class="listingcharacter listingcharacter">parseBoolean( String s )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">boolean</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">java.lang.Byte</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i05_102"/>
+                                <samp class="listingcharacter listingcharacter">parseByte( String s )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">byte</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">java.lang.Short</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i05_103"/>
+                                <samp class="listingcharacter listingcharacter">parseShort( String s )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">short</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">java.lang.Integer</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i05_104"/>
+                                <samp class="listingcharacter listingcharacter">parseInt(  String s )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">java.lang.Long</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i05_105"/>
+                                <samp class="listingcharacter listingcharacter">parseLong( String s )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">long</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">java.lang.Double</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i05_106"/>
+                                <samp class="listingcharacter listingcharacter">parseDouble( String s )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">java.lang.Float</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i05_107"/>
+                                <samp class="listingcharacter listingcharacter">parseFloat( String s )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">float</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 5.9</b>    
+            Methods for Converting a String to a Primitive Type</p>
+            
+            <p class="standard">For each primitive type, what’s called a 
+                <span class="italic">wrapper class</span>
+                <a class="indexanchor" id="i05_108"/> is available with 
+                <samp class="listingcharacter listingcharacter">parse*(string)</samp> conversion methods. 
+                <span class="crossreference "><a href="11_001.html#h11">Chapter 11</a></span>, 
+                <span class="crossreference "><a href="11_005.html#h11.5">Section 11.5</a></span>
+            , explains the meaning of these classes in more detail. At this point, we only briefly consider the conversion functionality.</p>
+            
+            
+                
+                <h4 class="t4" id="h5.8.2.1">Example with Double.parseDouble(String)</h4>
+                
+                <p class="standard">Let’s use the 
+                    <samp class="listingcharacter listingcharacter">Double.parseDouble(String)</samp>
+                 method in an example. The user is asked for a float in a graphical dialog box, and the sine and cosine of this number should then be output to the screen.</p>
+                
+                <div class="listing " id="l5.10"><pre><span class="">
+                        <a id="p348"/>
+                    String</span><span class=""> s </span><span class="">=</span><span class=""> javax</span><span class="">.</span><span class="">swing</span><span class="">.</span><span class="">JOptionPane</span><span class="">.</span><span class="">showInputDialog</span><span class="">(</span><span class=""> </span><span class="">"Input floating decimal"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">double</span><span class=""> value </span><span class="">=</span><span class=""> Double</span><span class="">.</span><span class="">parseDouble</span><span class="">(</span><span class=""> s </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Sine:   "</span><span class=""> </span><span class="">+</span><span class=""> Math</span><span class="">.</span><span class="">sin</span><span class="">(</span><span class=""> value </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Cosine: "</span><span class=""> </span><span class="">+</span><span class=""> Math</span><span class="">.</span><span class="">cos</span><span class="">(</span><span class=""> value </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 5.10</b>    
+            src/main/java/com/tutego/insel/string/SineAndCosine.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.8.2.2">parse*(String) and Potential NumberFormatException
+                    <a class="indexanchor" id="i05_109"/>
+                 Errors</h4>
+                
+                <p class="standard">If a 
+                    <samp class="listingcharacter listingcharacter">parse*(String)</samp> method can’t perform a conversion because a string like 
+                    <samp class="listingcharacter listingcharacter">"1lala2lö"</samp> cannot be converted, it throws a 
+                    <samp class="listingcharacter listingcharacter">NumberFormatException</samp>. This problem also arises when 
+                    <samp class="listingcharacter listingcharacter">parseDouble(String)</samp> receives a comma instead of a period as decimal separator. For the static method 
+                    <samp class="listingcharacter listingcharacter">parseBoolean(String)</samp>
+                , case is irrelevant.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">This 
+                        <samp class="listingcharacter listingcharacter">NumberFormatException</samp> error can serve as a test to determine whether a string contains a number or not, because 
+                        <span class="italic">no</span> check method like 
+                        <samp class="listingcharacter listingcharacter">Integer.isInteger(String)</samp>
+                     is available. An alternative is to use a regular expression and test against it, for instance, in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_51279"><pre>stringWithNumber<span class="">.</span><span class="">matches</span><span class="">(</span><span class="">"\\p{Digit}+"</span><span class="">)</span></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.8.2.3">parse*(...) and the Behavior with Plus, Minus, and Space Characters</h4>
+                
+                <p class="standard">If a string represents negative numbers, the string starts with a “-”; positive numbers may also start with a “+.” The static conversion method 
+                    <samp class="listingcharacter listingcharacter">Integer.parseInt(String)</samp> doesn’t truncate spaces and would report a parser error if, for example, the string ended with a space. (The creator of the Java library, however, thought differently with 
+                    <samp class="listingcharacter listingcharacter">Float.parseFloat(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">Double.parseDouble(...)</samp>
+                , because the string is automatically trimmed before parsing.)</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example truncates spaces from the string and converts it to an integer:</p>
+                    
+                    <div class="listing  last_item" id="l_none_51285"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">" 1234    "</span><span class="">.</span>
+                        <span class="bold"><span class="">trim</span><span class="">()</span></span>;           <span class=""> // s = "1234"</span><span class=""><br/></span><span class="">int</span><span class=""> i = Integer.</span><span class="">parseInt</span><span class="">( s );           </span><span class=""> // i = 1234</span><span class=""> </span><span class=""/></pre></div>
+                
+                </div>
+                
+                <p class="standard">What appears as the result in a 
+                    <samp class="listingcharacter listingcharacter">String.valueOf(...)</samp>—and this is also what 
+                    <samp class="listingcharacter listingcharacter">System.out.print*(...)</samp> is based on, for example—can 
+                    <samp class="listingcharacter listingcharacter">parse*(...)</samp>
+                 back into the same value.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.8.2.4">Localized parse*(String)</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">parse*(...)</samp> methods aren’t localized, so they can only convert English formatted strings into primitive values. With integers, this method is no problem, but with floats, 
+                    <a id="p349"/>a big problem arises because 
+                    <samp class="listingcharacter listingcharacter">parseDouble("1,3")</samp> leads to 
+                    <samp class="listingcharacter listingcharacter">NumberFormatException</samp>, while 
+                    <samp class="listingcharacter listingcharacter">parseDouble("1.3")</samp>
+                 doesn’t. Two approaches to solving this problem are available. One is to convert the decimal separator to a point beforehand, as in the following example:</p>
+                
+                <div class="listing " id="l_none_51300"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"3,1"</span><span class="">;</span><span class=""><br/></span><span class="">double</span><span class=""> d </span><span class="">=</span><span class=""> Double</span><span class="">.</span><span class="">parseDouble</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">s.</span><span class="">replace</span><span class="">( </span><span class="">','</span><span class="">, </span><span class="">'.'</span><span class=""> )</span></span> );              <span class=""> // 3.1</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">However, this solution isn’t good. Rather, a much better approach is to draw on classes that allow localized parsing, such as 
+                    <samp class="listingcharacter listingcharacter">scanners</samp> (we’ll return to this class in 
+                    <span class="crossreference "><a href="05_010.html#h5.10.2">Section 5.10.2</a></span>
+                ):</p>
+                
+                <div class="listing " id="l_none_51305"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"3,1"</span><span class="">;</span><span class=""><br/></span><span class="">double</span><span class=""> d </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">( s ).</span><span class="">useLocale</span><span class="">( Locale.GERMANY ).</span><span class="">nextDouble</span><span class="">()</span></span>;<span class=""> // 3.1</span><span class=""> </span><span class=""/></pre></div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.8.3">5.8.3    String Representation in Binary, Hex, and Octal Formats*</h3>
+            
+            <p class="standard">In addition to the overloaded static 
+                <samp class="listingcharacter listingcharacter">String.valueOf(primitive)</samp> methods, which return a number from a string representation in the familiar decimal system, and the reverse 
+                <samp class="listingcharacter listingcharacter">parse*(...)</samp>
+             methods of the wrapper classes, other methods can convert and parse strings into the following number systems:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Binary (base 2)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Octals (base 8)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Hexadecimal (base 16)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Any base (up to 36)</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The methods aren’t found in the 
+                <samp class="listingcharacter listingcharacter">String</samp> class, but together with methods for parsing in the 
+                <samp class="listingcharacter listingcharacter">Integer</samp> and 
+                <samp class="listingcharacter listingcharacter">Long</samp>
+             classes. </p>
+            
+            
+                
+                <h4 class="t4" id="h5.8.3.1">Building String Representations</h4>
+                
+                <p class="standard">On one hand, general class methods 
+                    <samp class="listingcharacter listingcharacter">toString(int i, int radix)</samp> are available for any radix in the classes 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> and 
+                    <samp class="listingcharacter listingcharacter">Long</samp>
+                . On the other hand, special methods exist for the radixes 2, 8, and 16.</p>
+                
+                <div class="listing " id="l_none_51320"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Integer</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;Integer&gt;, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <a class="indexanchor" id="i05_110"/>
+                            <samp class="listingcharacter listingcharacter">static  String toBinaryString(int i)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <a class="indexanchor" id="i05_111"/>
+                            <samp class="listingcharacter listingcharacter">static  String toOctalString(int i)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <a class="indexanchor" id="i05_112"/>
+                            <samp class="listingcharacter listingcharacter">static  String toHexString(int i)</samp><br/>Creates a binary representation
+                            <a class="indexanchor" id="i05_113"/> (base 2), octal number representation
+                            <a class="indexanchor" id="i05_114"/> (base 8), or hexadecimal representation
+                            <a class="indexanchor" id="i05_115"/>
+                         (base 16) of the unsigned number.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String toString(int i, int radix)</samp><br/>Creates a string representation of the number to the specified base.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="listing " id="l_none_51327"><pre><span class="">
+                        <a id="p350"/>
+                    final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Long</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;Long&gt;, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String toBinaryString(long i)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String toOctalString(long i)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String toHexString(long i)</samp><br/>Creates a binary representation (base 2), octal number representation (base 8), or hexadecimal representation (base 16) of the unsigned number.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String toString(long i, int radix)</samp><br/>Creates a string representation of the number to the specified base.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Negative numbers get a negative sign with the 
+                    <samp class="listingcharacter listingcharacter">toString(...)</samp>
+                 methods, which isn’t true for the other methods mentioned.</p>
+                
+                <p class="standard">The parameter type is 
+                    <samp class="listingcharacter listingcharacter">int</samp> or 
+                    <samp class="listingcharacter listingcharacter">long</samp> and not 
+                    <samp class="listingcharacter listingcharacter">byte</samp>
+                , which leads to outputs that must be taken into consideration. In the same way, leading zeros aren’t output.</p>
+                
+                <table class="standardtable" id="t5.10">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Statement</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Result</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Integer.toHexString(15)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">f</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Integer.toHexString(16)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">10</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Integer.toHexString(127)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">7f</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Integer.toHexString(128)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">80</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Integer.toHexString(255)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">ff</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Integer.toHexString(256)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">100</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Integer.toHexString(-1)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">ffffffff</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Long.toHexString(-1)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">ffffffffffffffff</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 5.10</b>    
+            Examples of the toHexString() Method</p>
+                
+                <p class="standard">If the number is negative, it’s treated unsigned, and 2
+                    <sup>32</sup> (for 
+                    <samp class="listingcharacter listingcharacter">integer</samp>) and 2
+                    <sup>64</sup> (for 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                ) are added.</p>
+                
+                <p class="standard">Output with 
+                    <samp class="listingcharacter listingcharacter">printf(...)</samp>—or formatting with 
+                    <samp class="listingcharacter listingcharacter">String.format(...)</samp>—provides an alternative, as described in detail in 
+                    <span class="crossreference "><a href="05_011.html#h5.11.1">Section 5.11.1</a></span>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">A conversion with 
+                        <samp class="listingcharacter listingcharacter">toHexString(x)</samp> isn’t the same with negative numbers as with 
+                        <samp class="listingcharacter listingcharacter">toString(x, 16)</samp>
+                    , as shown in the following example:</p>
+                    
+                    <div class="listing " id="l_none_51345"><pre>
+                        <a id="p351"/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Integer</span><span class="">.</span><span class="">toHexString</span><span class="">(</span><span class=""> </span><span class="">-</span><span class="">10</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // fffffff6</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Integer</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> </span><span class="">-</span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">16</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // -a</span><span class=""/> </pre></div>
+                    
+                    <p class="standard last">In this case, 
+                        <samp class="listingcharacter listingcharacter">toHexString(...)</samp> applies what is given as a remark in the Java documentation, namely, that for negative numbers the unsigned number is taken (i.e., 10) and then 2
+                        <sup>32</sup> is added, which isn’t the case with 
+                        <samp class="listingcharacter listingcharacter">toString(...)</samp>
+                     and an arbitrary radix.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.8.3.2">Parsing Strings with radix</h4>
+                
+                <p class="standard">A method for converting a string to an integer for a given base can be found in the 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> and 
+                    <samp class="listingcharacter listingcharacter">Long</samp> classes. Only the 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> and 
+                    <samp class="listingcharacter listingcharacter">Long</samp>
+                 classes contain support for a base that is also not equal to 10:</p>
+                
+                <div class="listing " id="l_none_51346"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Integer</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;Integer&gt;, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <a class="indexanchor" id="i05_116"/>
+                            <samp class="listingcharacter listingcharacter">static  int parseInt(String s)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int parseInt(String s, int radix)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="listing " id="l_none_51361"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Long</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;Long&gt;, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <a class="indexanchor" id="i05_117"/>
+                            <samp class="listingcharacter listingcharacter">static  long parseLong(String s)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long parseLong(String s, int radix)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Some use cases include the following:</p>
+                
+                <table class="standardtable" id="t5.11">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Conversion Call</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Result</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">parseInt("0", 10)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">0</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">parseInt("473", 10)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">473</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">parseInt("-0", 10)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">0</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">parseInt("-FF", 16)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">-255</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">parseInt("1100110", 2)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">102</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">parseInt("2147483647", 10)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">2147483647</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">parseInt("-2147483648", 10)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">-2147483648</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">parseInt("2147483648", 10)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter"><img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/> throws NumberFormatException</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter"><a id="p352"/>parseInt("99", 8)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter"><img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/> throws NumberFormatException</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">parseInt("Papa", 10)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter"><img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/> throws NumberFormatException</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">parseInt("Papa", 27)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">500050</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 5.11</b>    
+            Examples of Integer.parseInt(...) with Different Number Bases</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The radix goes up to 36 (that is, 10 digits and 26 lowercase letters). With radix 36, for example, integer IDs can be represented more compactly as text than if they were decimal. Consider the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_51357"><pre><span class="">String</span><span class=""> string </span><span class="">=</span><span class=""> Long</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> 2656437647773L</span><span class="">,</span><span class=""> </span><span class="">36</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> string </span><span class="">);</span><span class="">  </span><span class=""> // xwcmdz8d</span><span class=""><br/></span><span class="">long</span><span class=""> l </span><span class="">=</span><span class=""> </span>
+                        <span class="bold"><span class="">Long.</span><span class="">parseLong</span><span class="">( string, </span><span class="">36</span><span class=""> )</span></span>;<br/>System.out.<span class="">println</span><span class="">( l );</span><span class=""> // 2656437647773</span><span class=""/><span class=""/> </pre></div>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Puzzle</h6>
+                    
+                    <p class="standard first last">What is the result of the expression 
+                        <samp class="listingcharacter listingcharacter">Long.parseLong( "" + 1 / 0., 35 )</samp>
+                    ?</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.8.3.3">Parsing Binary, Octal, and Hexadecimal Numbers</h4>
+                
+                <p class="standard">In the case of string conversions, special methods like 
+                    <samp class="listingcharacter listingcharacter">toHexString(...)</samp> exist for the standard bases 2, 8, and 16, but they don’t exist for parsing. A hexadecimal number is processed by 
+                    <samp class="listingcharacter listingcharacter">parseInt(s, 16)</samp> because a method like 
+                    <samp class="listingcharacter listingcharacter">parseHex(String)</samp>
+                 isn’t available.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">The 
+                        <samp class="listingcharacter listingcharacter">parseInt(...)</samp> and 
+                        <samp class="listingcharacter listingcharacter">parseLong(...)</samp>
+                     methods don’t behave as expected with string representations of negative numbers. Consider the following example:</p>
+                    
+                    <div class="listing " id="l_none_51388"><pre><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> Integer</span><span class="">.</span><span class="">parseInt</span><span class="">(</span><span class=""> </span><span class="">"7fffffff"</span><span class="">,</span><span class=""> </span><span class="">16</span><span class=""> </span><span class="">);</span><span class=""> // 2147483647</span><span class=""><br/></span><span class="">int</span><span class=""> j </span><span class="">=</span><span class=""> Integer</span><span class="">.</span><span class="">parseInt</span><span class="">(</span><span class=""> </span><span class="">"80000000"</span><span class="">,</span><span class=""> </span><span class="">16</span><span class=""> </span><span class="">);</span><span class=""> // 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                         NumberFormatException</span><span class=""> </span></pre></div>
+                    
+                    <p class="standard">0x7fffffff is the largest positive 
+                        <samp class="listingcharacter listingcharacter">int</samp> number that can be represented. However, instead of returning the value -2,147,483,648 at 0x80000000, it returns a 
+                        <samp class="listingcharacter listingcharacter">NumberFormatException</samp>. The Java API documentation also provides this example but doesn’t make this behavior particularly clear. With negative numbers and 
+                        <samp class="listingcharacter listingcharacter">parseInt(…)</samp>/
+                        <samp class="listingcharacter listingcharacter">parseLong(…)</samp>, a minus must also be specified as a sign. So, the 
+                        <samp class="listingcharacter listingcharacter">parse*(...)</samp> methods aren’t reverse methods to, say, 
+                        <samp class="listingcharacter listingcharacter">toHexString(...)</samp>, but always to 
+                        <samp class="listingcharacter listingcharacter">toString(</samp>
+                    ...). Consider the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_51394"><pre>
+                        <a id="p353"/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Integer</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> </span><span class="">-</span><span class="">2147483648</span><span class="">,</span><span class=""> </span><span class="">16</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // -80000000</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Integer</span><span class="">.</span><span class="">parseInt</span><span class="">(</span><span class=""> </span><span class="">"-80000000"</span><span class="">,</span><span class=""> </span><span class="">16</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // -2147483648</span><span class=""> </span></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.8.4">5.8.4    parse*(...) and print*() Methods in DatatypeConverter*</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">java.util.HexFormat</samp>
+                <a class="indexanchor" id="i05_118"/>
+             class helps with the task of producing and parsing hexadecimal strings.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Convert a byte array to a hexadecimal string representation.</p>
+                
+                <div class="listing  last_item" id="l_none_5139484165156"><pre><span class="">byte</span><span class="">[]</span><span class=""> bytes </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)</span><span class=""> </span><span class="">254</span><span class="">,</span><span class=""> </span><span class="">(</span><span class="">byte</span><span class="">)</span><span class=""> </span><span class="">255</span><span class=""> </span><span class="">};</span><span class=""><br/></span>HexFormat <span class="">=</span><span class=""> HexFormat</span><span class="">.</span><span class="">ofDelimiter</span><span class="">(</span><span class=""> </span><span class="">" "</span><span class=""> </span><span class="">).</span><span class="">withPrefix</span><span class="">(</span><span class=""> </span><span class="">"#"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">String</span><span class=""> hex </span><span class="">=</span><span class=""> hexFormat</span><span class="">.</span><span class="">formatHex</span><span class="">(</span><span class=""> bytes </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> hex </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

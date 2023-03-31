@@ -1,0 +1,1305 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Imperative Language Concepts" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Imperative Language Concepts" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Imperative Language Concepts</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h2.5">2.5    Conditional Statements or Case Distinctions</h2>
+        
+        <p class="standard">
+            <span class="italic">Control structures</span>
+            <a class="indexanchor" id="i02_209"/> are used in a programming language to execute specific program parts under certain conditions. Java provides the 
+            <samp class="listingcharacter listingcharacter">if</samp> and 
+            <samp class="listingcharacter listingcharacter">if</samp>-
+            <samp class="listingcharacter listingcharacter">else</samp> statements as well as the 
+            <samp class="listingcharacter listingcharacter">switch</samp> statement for executing various parts of the program. Besides branching, loops are used to execute program parts multiple times. The significant part in the phrase “control structures” is the word “structure” because the structure should be obvious by just looking at it. Without loops and “high-level” control structures, only if/thens and jumps, the logic of the program was not obvious, and the result was called 
+            <span class="italic">spaghetti code</span>. Although a general jump via 
+            <samp class="listingcharacter listingcharacter">goto</samp> isn’t possible in Java, the language still has a special jump variant. In loops, 
+            <samp class="listingcharacter listingcharacter">continue</samp> and 
+            <samp class="listingcharacter listingcharacter">break</samp>
+         allow defined jump destinations.</p>
+        
+        
+            
+            <h3 class="t3" id="h2.5.1">2.5.1    Branching with the if
+                <a class="indexanchor" id="i02_210"/>
+             Statement</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">if</samp> statement consists of the keyword 
+                <samp class="listingcharacter listingcharacter">if</samp>, which is necessarily followed by an expression of the type 
+                <samp class="listingcharacter listingcharacter">boolean</samp>
+             in parentheses. This expression is followed by a statement, which is often a block statement.</p>
+            
+            <p class="standard">For example, let’s use an 
+                <samp class="listingcharacter listingcharacter">if</samp>
+             statement to test if a user has guessed a random number correctly:</p>
+            
+            <div class="listing " id="l2.17"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> WhatsYourNumber </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">int</span><span class=""> number </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)</span><span class=""> </span><span class="">(</span><span class="">Math</span><span class="">.</span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">*</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">);</span><span class=""><br/></span><br/>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"What number do I have in mind between 1 and 5?"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    <span class="">int</span><span class=""> guess </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">nextInt</span><span class="">();</span><span class=""><br/></span><br/>    
+                <span class="bold"><span class="">if</span><span class=""> ( number == guess ) {</span><br/>      System.out.<span class="">println</span><span class="">( </span><span class="">"Good guess!"</span><span class=""> );</span><br/>    }<br/></span><br/>
+                <a id="p143"/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Restart the program and guess again!"</span><span class=""> );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 2.17</b>    
+            src/main/java/WhatsYourNumber.java</p>
+            
+            <p class="standard">The processing of the output statement depends on the expression in 
+                <samp class="listingcharacter listingcharacter">if</samp>
+            , in the following ways:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If the result of the expression is true (
+                        <samp class="listingcharacter listingcharacter">number == guess</samp> evaluates to 
+                        <samp class="listingcharacter listingcharacter">true</samp>), the following statement (i.e., the console output with 
+                        <samp class="listingcharacter listingcharacter">"Good guess!"</samp>
+                    ) is executed.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If the result of the expression is false (
+                        <samp class="listingcharacter listingcharacter">number == guess</samp> evaluates to 
+                        <samp class="listingcharacter listingcharacter">false</samp>), the statement is skipped, and the program continues with the first statement after the 
+                        <samp class="listingcharacter listingcharacter">if</samp>
+                     statement.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Comparison of Programming Languages</h6>
+                
+                <p class="standard first last">In Java, the test expression for the condition of the 
+                    <samp class="listingcharacter listingcharacter">if</samp> statement must always be of the 
+                    <samp class="listingcharacter listingcharacter">boolean</samp> type. The same applies to loop conditions. Other programming languages such as JavaScript, C(++), or PHP evaluate a numeric expression to true if the result of the expression is not 0. Thus, 
+                    <samp class="listingcharacter listingcharacter">if (10)</samp> is also valid in those languages, which would correspond to 
+                    <samp class="listingcharacter listingcharacter">if (true)</samp>
+                 in Java. In PHP or JavaScript, an empty string or array is also “falsy.”</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h2.5.1.1">if Queries and Blocks</h4>
+                
+                <p class="standard">After the 
+                    <samp class="listingcharacter listingcharacter">if</samp> and the condition, the compiler expects a statement. A 
+                    <samp class="listingcharacter listingcharacter">{}</samp>
+                 block is a special statement, as in our example. If only one statement is to be executed depending on the condition, the statement can be set directly without a block. The following variants are therefore identical:</p>
+                
+                <table class="standardtable" id="t_none_02_13">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Explicit Parenthesizing of the Statement</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Without Parenthesizing the Statement</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">if ( number == guess ) {<br/> System.out.println( "Super!" );<br/>}</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">if ( number == guess )<br/> System.out.println( "Super!" );</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="standard">A program error occurs when the 
+                    <samp class="listingcharacter listingcharacter">{}</samp> block is missing, but several statements still need to be evaluated depending on the condition. Let’s look at an example: An 
+                    <samp class="listingcharacter listingcharacter">if</samp> statement is supposed to test whether the guessed number was equal to the random number, and then if it was, assign a new random number to the 
+                    <samp class="listingcharacter listingcharacter">number</samp>
+                 variable and return an output. First, let’s consider the semantically incorrect variant:</p>
+                
+                <div class="listing " id="l_none_2983"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> number </span><span class="">==</span><span class=""> guess </span><span class="">)</span><span class=""><br/></span>  number <span class="">=</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)(</span><span class="">Math</span><span class="">.</span><span class="">random</span><span class="">()*</span><span class="">5</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">);</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Good guess!"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <a id="p144"/>The implementation is semantically incorrect since the output always appears regardless of the test. The compiler assigns only the next statement to the case distinction, even if the appearance suggests otherwise.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_37" id="fn02_37">[ 69 ]</a></span>
+                 This is a great risk for programmers who want to visually create relationships that don’t exist in reality. The compiler interprets the statements in the following context, where the indentation reflects the actual execution:</p>
+                
+                <div class="listing " id="l_none_21001"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> number </span><span class="">==</span><span class=""> guess </span><span class="">)</span><span class=""><br/></span>  number <span class="">=</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)</span><span class=""> </span><span class="">(</span><span class="">Math</span><span class="">.</span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">*</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Good guess!"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">For our desired logic of executing both statements together depending on the condition, you’ll need to use a block, as in the following example:</p>
+                
+                <div class="listing " id="l_none_21012"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> number </span><span class="">==</span><span class=""> guess </span><span class="">)</span><span class=""> </span>
+                    <span class="bold"><span class="">{</span></span><br/>  number = (<span class="">int</span><span class="">) (Math.</span><span class="">random</span><span class="">() * </span><span class="">5</span><span class=""> + </span><span class="">1</span><span class="">);</span><br/>  System.out.<span class="">println</span><span class="">( </span><span class="">"Good guess!"</span><span class=""> );</span><br/>
+                    <span class="bold">}</span> <span class=""/></pre></div>
+                
+                <p class="standard">Basically, putting statements in blocks—even if there is only one statement in the block—is therefore not wrong.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first last">Indentations don’t change the semantics of the program! Indentations can only severely disrupt comprehension. For the program to be correct, you must use a block and put the statements together. Developers should consistently use indentation to clarify dependencies, and furthermore, only one statement should exist in a line.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.5.1.2">Compound Conditions
+                    <a class="indexanchor" id="i02_211"/>
+                </h4>
+                
+                <p class="standard">The previous queries were quite simple, but much more complex conditions will occur in practice. Commonly used logical operators include 
+                    <samp class="listingcharacter listingcharacter">&amp;&amp;</samp> (AND), 
+                    <samp class="listingcharacter listingcharacter">||</samp> (OR), and 
+                    <samp class="listingcharacter listingcharacter">!</samp>
+                 (NOT).</p>
+                
+                <p class="standard">For example, to test whether</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">a guessed number is either equal to the random number 
+                            <samp class="listingcharacter listingcharacter">guess</samp>
+                         OR</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">a certain number of trials has already been exceeded (
+                            <samp class="listingcharacter listingcharacter">trials</samp>
+                         greater than 10),</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">then we would write the compound condition in the following way:</p>
+                
+                <div class="listing " id="l_none_21027"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> number </span><span class="">==</span><span class=""> guess </span><span class="">||</span><span class=""> trials </span><span class="">&gt;</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">)</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If the logically linked expressions are more complex, the individual conditions should be placed in parentheses to support readability since not everyone immediately has access to the precedence rules for the operators found in Table 2.11.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.5.2">2.5.2    
+                <a id="p145"/>
+            Choosing the Alternative with an if-else Statement</h3>
+            
+            <p class="standard">If the condition is met, the 
+                <samp class="listingcharacter listingcharacter">if</samp>
+             branch is run through. But how can it be programmed that, in the reverse case (i.e., if the condition isn’t true), program code is also executed?</p>
+            
+            <p class="standard">One solution is to write a second 
+                <samp class="listingcharacter listingcharacter">if</samp>
+             statement with a negated condition:</p>
+            
+            <div class="listing " id="l_none_21029"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">number == guess</span></span> )<br/>  System.out.<span class="">println</span><span class="">( </span><span class="">"Good guess!"</span><span class=""> );</span><br/><span class="">if</span><span class=""> ( </span>
+                <span class="bold">number != guess</span> )<br/>  System.out.<span class="">printf</span><span class="">( </span><span class="">"Well, not true, I thought %s!"</span><span class="">, number ); </span><span class=""/></pre></div>
+            
+            <p class="standard">However, a better solution is available: In addition to the one-sided alternative, a two-sided approach can be used. The optional keyword 
+                <samp class="listingcharacter listingcharacter">else</samp>
+                <a class="indexanchor" id="i02_212"/> with the appended statement causes the alternative to be executed if the 
+                <samp class="listingcharacter listingcharacter">if</samp>
+             test is false.</p>
+            
+            <p class="standard">If the user in our little game doesn’t guess the number correctly, we want to output the random number to the user.</p>
+            
+            <div class="listing " id="l2.18"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> GuessTheNumber </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">int</span><span class=""> number </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)</span><span class=""> </span><span class="">(</span><span class="">Math</span><span class="">.</span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">*</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">);</span><span class=""><br/></span><br/>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"What number do I have in mind between 1 and 5?"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    <span class="">int</span><span class=""> guess </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">nextInt</span><span class="">();</span><span class=""><br/></span><br/>    
+                <span class="bold"><span class="">if</span><span class=""> ( number == guess )</span><br/></span>      System.out.<span class="">println</span><span class="">( </span><span class="">"Good guess!"</span><span class=""> );</span><br/>    
+                <span class="bold"><span class="">else</span></span><span class=""><br/></span>      System.out.<span class="">printf</span><span class="">( </span><span class="">"Well, not true, I thought %d!"</span><span class="">, number );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 2.18</b>    
+            src/main/java/GuessTheNumber.java</p>
+            
+            <p class="standard">If the expression 
+                <samp class="listingcharacter listingcharacter">number == guess</samp>
+             is true, the first statement is executed; otherwise, the second statement is executed. In this way, you can assure that a statement will be executed in every case.</p>
+            
+            
+                
+                <h4 class="t4" id="h2.5.2.1">The Dangling else Problem</h4>
+                
+                <p class="standard">
+                    <a class="indexanchor" id="i02_213"/>For branches with 
+                    <samp class="listingcharacter listingcharacter">else</samp>, a well-known problem is called the 
+                    <span class="italic">dangling-else problem</span>. Which statement does the 
+                    <samp class="listingcharacter listingcharacter">else</samp>
+                 belong to?</p>
+                
+                <div class="listing " id="l_none_21050"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                    <span class="italic"><span class="">expression1</span></span> )<br/>  <span class="">if</span><span class=""> ( </span>
+                    <span class="italic">expression2</span> )<br/>    
+                    <span class="italic">statement1</span>;<br/><span class="">
+                        <a id="p146"/>
+                    else</span><span class=""><br/></span>  
+                    <span class="italic">statement2</span>; <span class=""/></pre></div>
+                
+                <p class="standard">The indentation suggests that 
+                    <samp class="listingcharacter listingcharacter">else</samp> is the alternative to the first 
+                    <samp class="listingcharacter listingcharacter">if</samp> statement, which is, however, incorrect. The semantics of Java (and also almost all other programming languages) is defined in such a way that 
+                    <samp class="listingcharacter listingcharacter">else</samp> belongs to the innermost 
+                    <samp class="listingcharacter listingcharacter">if</samp>. Therefore, the only programming tip for this case is to parenthesize the 
+                    <samp class="listingcharacter listingcharacter">if</samp>
+                 statements:</p>
+                
+                <div class="listing " id="l_none_21064"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                    <span class="italic"><span class="">expression1</span></span> ) {<br/>  <span class="">if</span><span class=""> ( </span>
+                    <span class="italic">expression2</span> ) {<br/>    
+                    <span class="italic">statement1</span>;<br/>  }<br/>}<br/><span class="">else</span><span class=""> {</span><br/>  
+                    <span class="italic">statement2</span>;<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">These parentheses prevent confusion from arising in the first place. If 
+                    <samp class="listingcharacter listingcharacter">else</samp> always belongs to the innermost 
+                    <samp class="listingcharacter listingcharacter">if</samp> but this is not what you want, use curly brackets as shown earlier or add an empty statement in the 
+                    <samp class="listingcharacter listingcharacter">else</samp>
+                 branch:</p>
+                
+                <div class="listing " id="l_none_21074"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> x </span><span class="">&gt;=</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> x </span><span class="">!=</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"x really greater than zero"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">else</span><span class=""><br/></span>    <span class="">;</span><span class=""> // x is equal to zero</span><span class=""><br/></span><span class="">else</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"x really less than zero"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <div class="imagebox figure-type"><a href="img-f2.7.html" id="f2.7"><img alt="Pressing Ctrl+Space after the if Allows You to Create an if Statement with a Block" id="img-f2.7" src="bilderklein/klein02_007.png"/></a></div>
+                
+                <p class="caption "><b>Figure 2.7</b>    
+            Pressing Ctrl+Space after the if Allows You to Create an if Statement with a Block</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.5.2.2">The Evil Semicolon</h4>
+                
+                <p class="standard">At this point, note that a novice programmer will probably write a semicolon after the closing parenthesis of the 
+                    <samp class="listingcharacter listingcharacter">if</samp>
+                 statement. However, doing so results in a completely different execution sequence. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_21079"><pre><span class="">
+                        <a id="p147"/>
+                    int</span><span class=""> age </span><span class="">=</span><span class=""> </span><span class="">29</span><span class="">;</span><span class=""><br/></span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> age </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">;</span><span class="">             </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     logical error</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Alright, still in the womb"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> age </span><span class="">&gt;</span><span class=""> </span><span class="">150</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">;</span><span class="">           </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     logical error</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"I see, a new Moses"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The semicolon causes the empty statement to be executed depending on the condition and always produces the output “Alright, still in the womb” and “I see, a new Moses” regardless of the content of the 
+                    <samp class="listingcharacter listingcharacter">age</samp>
+                 variable. This result is certainly not our intention. The example should be regarded as a caution against writing only more than one statement in each line; the empty statement with the semicolon is a statement in itself.</p>
+                
+                <p class="standard">If an 
+                    <samp class="listingcharacter listingcharacter">if</samp> statement is followed by two statements that aren’t combined by a block statement, then the one following 
+                    <samp class="listingcharacter listingcharacter">else</samp> statement is reported as an error because the associated 
+                    <samp class="listingcharacter listingcharacter">if</samp> branch is missing because the 
+                    <samp class="listingcharacter listingcharacter">if</samp> branch ends after the first statement without 
+                    <samp class="listingcharacter listingcharacter">else</samp>
+                . Consider the following example:</p>
+                
+                <div class="listing " id="l_none_21103"><pre><span class="">int</span><span class=""> age </span><span class="">=</span><span class=""> </span><span class="">29</span><span class="">;</span><span class=""><br/></span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> age </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  <span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Alright, still in the womb"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> age </span><span class="">&gt;</span><span class=""> </span><span class="">150</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">;</span><span class="">      </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error message: 'else' without 'if'</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"I see, a new Moses"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.5.2.3">Multiple Branching
+                    <a class="indexanchor" id="i02_214"/>
+                 or Nested Alternatives</h4>
+                
+                <p class="standard">
+                    <a class="indexanchor" id="i02_215"/>
+                    <samp class="listingcharacter listingcharacter">if</samp> statements for program guidance occur quite often in programs, even more often than for checking a variable for a certain value. For this purpose, 
+                    <samp class="listingcharacter listingcharacter">if</samp> and 
+                    <samp class="listingcharacter listingcharacter">if</samp>-
+                    <samp class="listingcharacter listingcharacter">else</samp>
+                 statements are often nested (cascaded). If a variable matches a value, then a statement is executed; otherwise, the variable is tested with a different value, and so on.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Cascaded 
+                        <samp class="listingcharacter listingcharacter">if</samp> statements help you assign, for example, a 
+                        <samp class="listingcharacter listingcharacter">days</samp> variable matching the month (preassigned 
+                        <samp class="listingcharacter listingcharacter">month</samp> variable) and the information if the year is a leap year (preassigned 
+                        <samp class="listingcharacter listingcharacter">boolean</samp> variable 
+                        <samp class="listingcharacter listingcharacter">isLeapYear</samp>
+                    ):</p>
+                    
+                    <div class="listing " id="l_none_21097"><pre><span class="">int</span><span class=""> month </span><span class="">=</span><span class=""> </span><span class="">2</span><span class="">;</span><span class=""> </span><span class="">boolean</span><span class=""> isLeapYear </span><span class="">=</span><span class=""> </span><span class="">false;</span><span class=""> </span><span class="">int</span><span class=""> days</span><span class="">;</span><span class=""><br/></span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> month </span><span class="">==</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  days <span class="">=</span><span class=""> </span><span class="">30</span><span class="">;</span><span class=""><br/></span><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> month </span><span class="">==</span><span class=""> </span><span class="">6</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  days <span class="">=</span><span class=""> </span><span class="">30</span><span class="">;</span><span class=""><br/></span><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> month </span><span class="">==</span><span class=""> </span><span class="">9</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  days <span class="">=</span><span class=""> </span><span class="">30</span><span class="">;</span><span class=""><br/></span><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> month </span><span class="">==</span><span class=""> </span><span class="">11</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  days <span class="">=</span><span class=""> </span><span class="">30</span><span class="">;</span><span class=""><br/></span><span class="">
+                            <a id="p148"/>
+                        else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> month </span><span class="">==</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> isLeapYear </span><span class="">)</span><span class="">     </span><span class=""> // Special treatment in case of leap year</span><span class=""><br/></span>    days <span class="">=</span><span class=""> </span><span class="">29</span><span class="">;</span><span class=""><br/></span>  <span class="">else</span><span class=""><br/></span>    days <span class="">=</span><span class=""> </span><span class="">28</span><span class="">;</span><span class=""><br/></span><span class="">else</span><span class=""><br/></span>  days <span class="">=</span><span class=""> </span><span class="">31</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">In this small program, semantic indentations are used; actually, the statements would move further and further to the right with each 
+                        <samp class="listingcharacter listingcharacter">else</samp>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">The indented branches are also called 
+                    <span class="italic">accumulated if statements</span>
+                    <a class="indexanchor" id="i02_216"/> (or an 
+                    <span class="italic">if cascade</span>
+                    <a class="indexanchor" id="i02_217"/>) because each 
+                    <samp class="listingcharacter listingcharacter">else</samp> statement in turn contains other 
+                    <samp class="listingcharacter listingcharacter">if</samp>
+                 statements until all queries have been made.</p>
+                
+                <p class="standard">Let’s apply this principle to our number guessing game. Perhaps, we want to give the user a hint whether the entered number was smaller or larger than the target number.</p>
+                
+                <div class="listing " id="l2.19"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> GuessTheNumber2 </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">int</span><span class=""> number </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)</span><span class=""> </span><span class="">(</span><span class="">Math</span><span class="">.</span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">*</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">);</span><span class=""><br/></span><br/>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"What number do I have in mind between 1 and 5?"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    <span class="">int</span><span class=""> guess </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">nextInt</span><span class="">();</span><span class=""><br/></span><br/>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> number </span><span class="">==</span><span class=""> guess </span><span class="">)</span><span class=""><br/></span>      System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Good guess!"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( number &gt; guess )</span><br/>      System.out.<span class="">println</span><span class="">( </span><span class="">"Nope, my number is larger than yours!"</span><span class=""> );</span><br/>    <span class="">else</span><span class=""> // number &lt; guess</span><span class=""><br/></span>      System.out.<span class="">println</span><span class="">( </span><span class="">"Nope, my number is smaller than yours!"</span><span class=""> );</span></span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 2.19</b>    
+            src/main/java/GuessTheNumber2.java</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.5.3">2.5.3    The
+                <a class="indexanchor" id="i02_218"/>
+             Condition Operator</h3>
+            
+            <p class="standard">In Java, a single operator can use three operands, called the 
+                <span class="italic">conditional operator</span>
+                <a class="indexanchor" id="i02_219"/>. This operator allows you to make the value of an expression dependent on a condition without the use of an 
+                <samp class="listingcharacter listingcharacter">if</samp> statement. Operands are separated by 
+                <samp class="listingcharacter listingcharacter">?</samp> and 
+                <samp class="listingcharacter listingcharacter">:</samp>
+             and use the following syntax:</p>
+            
+            <div class="listing " id="l_none_21130"><pre>
+                <span class="italic">Condition </span>
+                <span class="bold">? </span>
+                <span class="italic">Expression if condition is true </span>
+                <span class="bold">: </span>
+                <span class="italic">Expression if condition is false</span>
+             </pre></div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p149"/>
+                Example</h6>
+                
+                <p class="standard first">Determining the maximum is a good way to illustrate the use of the condition operator:</p>
+                
+                <div class="listing " id="l_none_21142"><pre>max <span class="">=</span><span class=""> </span><span class="">(</span><span class=""> a </span><span class="">&gt;</span><span class=""> b </span><span class="">)</span><span class=""> </span>
+                    <span class="bold"><span class="">?</span></span> a 
+                    <span class="bold">:</span> b;<span class=""/></pre></div>
+                
+                <p class="standard">The value of the 
+                    <samp class="listingcharacter listingcharacter">max</samp> variable is set depending on the condition 
+                    <samp class="listingcharacter listingcharacter">a &gt; b</samp>. The expression corresponds to the following 
+                    <samp class="listingcharacter listingcharacter">if</samp>
+                 statement:</p>
+                
+                <div class="listing  last_item" id="l_none_21146"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> a </span><span class="">&gt;</span><span class=""> b </span><span class="">)</span><span class=""> max </span><span class="">=</span><span class=""> a</span><span class="">;</span><span class=""> </span><span class="">else</span><span class=""> max </span><span class="">=</span><span class=""> b;</span></pre></div>
+            
+            </div>
+            
+            <p class="standard">Three expressions occur in the conditional operator, which makes it a ternary operator
+                <a class="indexanchor" id="i02_220"/>
+                <a class="indexanchor" id="i02_221"/>—from the Latin 
+                <span class="italic">ternarius</span> (“consisting of three”).
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_38" id="fn02_38">[ 70 ]</a></span> The first expression (in our case, the comparison 
+                <samp class="listingcharacter listingcharacter">a &gt; b</samp>) must be of the 
+                <samp class="listingcharacter listingcharacter">boolean</samp> type. If the condition is met, then the variable is assigned the value of the second expression; otherwise, the 
+                <samp class="listingcharacter listingcharacter">max</samp>
+             variable will be assigned the value of the third expression.</p>
+            
+            <p class="standard">The condition operator can be used if the second and third operands are of a numeric type, Boolean type, or reference type. Calling methods that return 
+                <samp class="listingcharacter listingcharacter">void</samp> isn’t allowed. So, it’s not a compact syntax to simply call any two methods depending on a condition without 
+                <samp class="listingcharacter listingcharacter">if</samp>
+             because there’s always a result with the condition operator. We can do all sorts of things with it, such as outputting it directly.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">To output the maximum of 
+                    <samp class="listingcharacter listingcharacter">a</samp> and 
+                    <samp class="listingcharacter listingcharacter">b</samp>
+                 directly, you would use the following code:</p>
+                
+                <div class="listing " id="l_none_21155"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">(</span><span class=""> a </span><span class="">&gt;</span><span class=""> b </span><span class="">)</span><span class=""> </span><span class="">?</span><span class=""> a </span><span class="">:</span><span class=""> b </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard last">With 
+                    <samp class="listingcharacter listingcharacter">if</samp>-
+                    <samp class="listingcharacter listingcharacter">else</samp>, this case is only possible with temporary variables or with two 
+                    <samp class="listingcharacter listingcharacter">println(...)</samp>
+                 statements.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h2.5.3.1">Examples</h4>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The
+                            <a class="indexanchor" id="i02_222"/> maximum or
+                            <a class="indexanchor" id="i02_223"/> minimum of two numbers is given by the expressions 
+                            <samp class="listingcharacter listingcharacter">a &gt; b ? a : b</samp> or 
+                            <samp class="listingcharacter listingcharacter">a &lt; b ? a : b</samp>
+                        , respectively.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The
+                            <a class="indexanchor" id="i02_224"/> absolute value of a number returns 
+                            <samp class="listingcharacter listingcharacter">x &gt;= 0 ? x : -x</samp>.
+                            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_39" id="fn02_39">[ 71 ]</a></span>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">An expression is supposed to convert a number 
+                            <samp class="listingcharacter listingcharacter">n</samp>, which lies between 0 and 15, into a hexadecimal number: 
+                            <samp class="listingcharacter listingcharacter">(char)((n &lt; 10) ? ('0' + n) : ('a'</samp> – 
+                            <samp class="listingcharacter listingcharacter">10 + n ))</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.5.3.2">
+                    <a id="p150"/>
+                Nested Application of the Condition Operator*</h4>
+                
+                <p class="standard">Using the condition operator can quickly lead to unreadable programs, and therefore, you should use it with care.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_40" id="fn02_40">[ 72 ]</a></span>
+                 You must use sufficient parenthesizing to make sure that the expressions are also evaluated in the intended order. Unlike most operators, the condition operator is right-associative (the assignment is also right-associative).</p>
+                
+                <p class="standard">The following two expressions are therefore equivalent:</p>
+                
+                <div class="listing " id="l_none_21159"><pre>b1 <span class="">?</span><span class=""> a1 </span><span class="">:</span><span class=""> b2 </span><span class="">?</span><span class=""> a2 </span><span class="">:</span><span class=""> a3</span><br/>b1 <span class="">?</span><span class=""> a1 </span><span class="">:</span><span class=""> </span><span class="">(</span><span class=""> b2 </span><span class="">?</span><span class=""> a2 </span><span class="">:</span><span class=""> a3 </span><span class="">)</span><span class=""> </span></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">To write an expression that returns –1, 0, or 1 for a number 
+                        <samp class="listingcharacter listingcharacter">n</samp>
+                     depending on the sign, you can use a nested condition operator, for example, in the following code:</p>
+                    
+                    <div class="listing " id="l_none_21184"><pre><span class="">int</span><span class=""> sign </span><span class="">=</span><span class=""> </span>
+                        <span class="bold"><span class="">(n &lt; </span><span class="">0</span><span class="">) ?</span></span> -
+                        <span class="bold"><span class="">1</span><span class=""> : </span></span>
+                        <span class="italic">(n &gt;</span> <span class="">0</span><span class="">) ? </span><span class="">1</span><span class=""> : </span><span class="">0</span><span class="">;</span><span class=""/></pre></div>
+                    
+                    <p class="standard">However, line breaks after the colons make sense and clarify the nested conditional expressions:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21193"><pre><span class="">int</span><span class=""> sign </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">n </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class="">)</span><span class=""> </span><span class="">?</span><span class=""> </span><span class="">-</span><span class="">1</span><span class=""> </span><span class="">:</span><span class=""><br/></span>           <span class="">(</span><span class="">n </span><span class="">&gt;</span><span class=""> </span><span class="">0</span><span class="">)</span><span class=""> </span><span class="">?</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">:</span><span class=""><br/></span>            <span class="">0</span><span class="">;</span></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.5.3.3">The Condition Operator Is Not an L-Value*</h4>
+                
+                <p class="standard">The condition operator returns an expression as a result, which can be then used on the right side of an assignment. Since the resulting expression occurs on the right, it’s called the 
+                    <span class="italic">R-Value</span>. It can’t be used on the left-hand side of an assignment (L-Value) in such a way that it selects a variable to which a value is assigned.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_41" id="fn02_41">[ 73 ]</a></span>
+                </p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following application of the condition operator isn’t possible in Java:</p>
+                    
+                    <div class="listing " id="l_none_21201"><pre><span class="">boolean</span><span class=""> up </span><span class="">=</span><span class=""> </span><span class="">false,</span><span class=""> down </span><span class="">=</span><span class=""> </span><span class="">false;</span><span class=""><br/></span><span class="">int</span><span class=""> direction </span><span class="">=</span><span class=""> </span><span class="">12</span><span class="">;</span><span class=""><br/></span><span class="">((</span><span class="">direction </span><span class="">&gt;=</span><span class=""> </span><span class="">0</span><span class="">)</span><span class=""> </span><span class="">?</span><span class=""> up </span><span class="">:</span><span class=""> down</span><span class="">)</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">true;</span><span class=""> // 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                         Compiler error</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">However, the condition operator can select a reference, and then a method call is valid.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.5.4">2.5.4    
+                <a id="p151"/>The Switch Statement
+                <a class="indexanchor" id="i02_225"/>
+             Provides an Alternative</h3>
+            
+            <p class="standard">A shorthand form for specially constructed, accumulated 
+                <samp class="listingcharacter listingcharacter">if</samp> statements is provided by 
+                <samp class="listingcharacter listingcharacter">switch</samp>. In a 
+                <samp class="listingcharacter listingcharacter">switch</samp> block, a number of different jump targets are each marked with 
+                <samp class="listingcharacter listingcharacter">case</samp>. The 
+                <samp class="listingcharacter listingcharacter">switch</samp>
+             statement allows the selection of the following elements:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Integers</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Wrapper types (for more information, refer to 
+                        <span class="crossreference "><a href="11_001.html#h11">Chapter 11</a></span>, 
+                        <span class="crossreference "><a href="11_005.html#h11.5">Section 11.5</a></span>
+                    )</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Enumerations (
+                        <samp class="listingcharacter listingcharacter">enum</samp>
+                    )</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Strings</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Internal Affairs</h6>
+                
+                <p class="standard first last">The bytecode contains only one 
+                    <samp class="listingcharacter listingcharacter">switch</samp> variant for integers. For strings, enumerations, and wrapper objects, the compiler applies tricks to reduce them to integer-based 
+                    <samp class="listingcharacter listingcharacter">switch</samp>
+                 constructions.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h2.5.4.1">switch for Integers (and Also chars)</h4>
+                
+                <p class="standard">A simple calculator for four binary operators can be quickly implemented with 
+                    <samp class="listingcharacter listingcharacter">switch</samp>. We’ll use the 
+                    <samp class="listingcharacter listingcharacter">charAt(0)</samp> method to access the first character from a string input to get a 
+                    <samp class="listingcharacter listingcharacter">char</samp>
+                .</p>
+                
+                <div class="listing " id="l2.20"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Calculator </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">double</span><span class=""> x </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">nextDouble</span><span class="">();</span><span class=""><br/></span>    <span class="">char</span><span class=""> operator </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">nextLine</span><span class="">().</span><span class="">charAt</span><span class="">(</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    <span class="">double</span><span class=""> y </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">nextDouble</span><span class="">();</span><span class=""><br/></span><br/>    
+                    <span class="bold"><span class="">switch</span><span class=""> ( operator ) {</span><br/>      <span class="">case</span><span class=""> </span><span class="">'+'</span><span class="">:</span><br/>        System.out.<span class="">println</span><span class="">( x + y );</span><br/>        <span class="">break</span><span class="">;</span><br/>      <span class="">case</span><span class=""> </span><span class="">'-'</span><span class="">:</span><br/>        System.out.<span class="">println</span><span class="">( x - y );</span><br/>        <span class="">break</span><span class="">;</span><br/>      <span class="">case</span><span class=""> </span><span class="">'*'</span><span class="">:</span><br/>        System.out.<span class="">println</span><span class="">( x * y );</span><br/>        <span class="">break</span><span class="">;</span><br/>      <span class="">case</span><span class=""> </span><span class="">'/'</span><span class="">:</span><br/>        System.out.println( x /<span class=""> y );</span><br/>        <span class="">break</span><span class="">;</span><br/>    }</span><br/>
+                    <a id="p152"/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 2.20</b>    
+            src/main/java/Calculator.java</p>
+                
+                <p class="standard">The runtime environment searches for a 
+                    <span class="italic">jump label</span>
+                    <a class="indexanchor" id="i02_226"/> (also called a 
+                    <span class="italic">jump target</span>
+                    <a class="indexanchor" id="i02_227"/>), which is a constant that matches the expression specified in 
+                    <samp class="listingcharacter listingcharacter">switch.</samp> If a hit is made, all statements following 
+                    <samp class="listingcharacter listingcharacter">case</samp> are executed until an (optional) 
+                    <samp class="listingcharacter listingcharacter">break</samp> terminates the execution. (Without 
+                    <samp class="listingcharacter listingcharacter">break</samp>, the execution continues automatically in the next 
+                    <samp class="listingcharacter listingcharacter">case block</samp>; more on this topic later in this section, when we discuss fall-through without a break.) If no constant of a 
+                    <samp class="listingcharacter listingcharacter">case</samp> block matches the 
+                    <samp class="listingcharacter listingcharacter">switch</samp> expression, no statements in the 
+                    <samp class="listingcharacter listingcharacter">switch</samp> block will be executed for the time being. The 
+                    <samp class="listingcharacter listingcharacter">case</samp>
+                 constants must be different; otherwise, a compiler error will arise.</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">switch</samp>
+                 statement has some limitations, such as the following:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The JVM can execute 
+                            <samp class="listingcharacter listingcharacter">switch</samp> only on expressions of the 
+                            <samp class="listingcharacter listingcharacter">int</samp> data type. Elements of data type 
+                            <samp class="listingcharacter listingcharacter">byte</samp>, 
+                            <samp class="listingcharacter listingcharacter">char</samp>, and 
+                            <samp class="listingcharacter listingcharacter">short</samp> are thus allowed since the compiler automatically adjusts the type to 
+                            <samp class="listingcharacter listingcharacter">int</samp>. Likewise, the enumerations and the wrapper objects 
+                            <samp class="listingcharacter listingcharacter">Character</samp>, 
+                            <samp class="listingcharacter listingcharacter">Byte</samp>, 
+                            <samp class="listingcharacter listingcharacter">Short</samp>, and 
+                            <samp class="listingcharacter listingcharacter">Integer</samp> are possible since Java automatically takes the values. More on this topic will follow in 
+                            <span class="crossreference "><a href="11_001.html#h11">Chapter 11</a></span>, 
+                            <span class="crossreference "><a href="11_005.html#h11.5">Section 11.5</a></span>. The data types 
+                            <samp class="listingcharacter listingcharacter">boolean</samp>, 
+                            <samp class="listingcharacter listingcharacter">long</samp>, 
+                            <samp class="listingcharacter listingcharacter">float</samp>, and 
+                            <samp class="listingcharacter listingcharacter">double</samp> can’t be used. Although enumerations and strings are also possible as 
+                            <samp class="listingcharacter listingcharacter">switch</samp>
+                         expression types, internally, they are mapped to integers. Apart from that, general objects aren’t allowed.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The values listed after 
+                            <samp class="listingcharacter listingcharacter">case</samp>
+                         must be constant. Dynamic expressions, such as returns from method calls, aren’t possible.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">No range specifications are possible, which would be useful for ages, for example, to define the ranges 0-18, 19-60, 61-99. The only solution in this context would be accumulated 
+                            <samp class="listingcharacter listingcharacter">if</samp>
+                         statements.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">The specification for 
+                        <samp class="listingcharacter listingcharacter">case</samp>
+                     must be constant but may well come from a constant (final variable):</p>
+                    
+                    <div class="listing  last_item" id="l_none_21224"><pre><span class="">final</span><span class=""> </span><span class="">char</span><span class=""> </span>
+                        <span class="bold"><span class="">PLUS</span></span> = <span class="">'+'</span><span class="">;</span><br/><span class="">switch</span><span class=""> ( operator ) {</span><br/>   <span class="">case</span><span class=""> </span>
+                        <span class="bold">PLUS</span>:<br/>   …<br/>}<span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.5.4.2">Covering Everything Else with default</h4>
+                
+                <p class="standard">If a program part should be processed only when no match with any other 
+                    <samp class="listingcharacter listingcharacter">case</samp> constant is made, you can use the special jump label 
+                    <samp class="listingcharacter listingcharacter">default</samp>
+                    <a class="indexanchor" id="i02_228"/>. For example, in the case of an 
+                    <a id="p153"/>
+                unknown operator, if your program should output an error message, you would write the following code:</p>
+                
+                <div class="listing " id="l_none_21230"><pre><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> operator </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">'+'</span><span class="">:</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> x </span><span class="">+</span><span class=""> y </span><span class="">);</span><span class=""><br/></span>    <span class="">break</span><span class="">;</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">'-'</span><span class="">:</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> x </span><span class="">-</span><span class=""> y </span><span class="">);</span><span class=""><br/></span>    <span class="">break</span><span class="">;</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">'*'</span><span class="">:</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> x </span><span class="">*</span><span class=""> y </span><span class="">);</span><span class=""><br/></span>    <span class="">break</span><span class="">;</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">'/'</span><span class="">:</span><br/>    System.out.println( x /<span class=""> y </span><span class="">);</span><span class=""><br/></span>    <span class="">break</span><span class="">;</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">default</span><span class="">:</span><br/>    System.err.<span class="">println</span><span class="">( </span><span class="">"Unknown operator "</span><span class=""> + operator );</span></span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">The use of 
+                    <samp class="listingcharacter listingcharacter">default</samp> is to detect incorrectly entered operators because the statements after 
+                    <samp class="listingcharacter listingcharacter">default</samp> are always executed if no 
+                    <samp class="listingcharacter listingcharacter">case</samp> constant was equal to the 
+                    <samp class="listingcharacter listingcharacter">switch</samp> expression. 
+                    <samp class="listingcharacter listingcharacter">default</samp> can also appear between the 
+                    <samp class="listingcharacter listingcharacter">case</samp> blocks, but this is less clear and thus not recommended for general applications. Thus, the 
+                    <samp class="listingcharacter listingcharacter">default</samp> program part would be processed even if a 
+                    <samp class="listingcharacter listingcharacter">case</samp> part preceding the 
+                    <samp class="listingcharacter listingcharacter">default</samp> has no 
+                    <samp class="listingcharacter listingcharacter">break</samp>. Only one 
+                    <samp class="listingcharacter listingcharacter">default</samp>
+                 is allowed.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">Of course, the compiler can’t know whether all the values you use are covered by a 
+                        <samp class="listingcharacter listingcharacter">case</samp> block. A 
+                        <samp class="listingcharacter listingcharacter">default</samp> can help to find errors faster if a number arrives at 
+                        <samp class="listingcharacter listingcharacter">switch</samp> for which the program doesn’t store any operations. If you don’t use 
+                        <samp class="listingcharacter listingcharacter">default</samp>
+                    , an unhandled value will otherwise remain without consequences.</p>
+                    
+                    <p class="standard last">With enumerations, the situation is different again because, in this case, the quantity is countable. Code analysis can determine if as many 
+                        <samp class="listingcharacter listingcharacter">case</samp>
+                     blocks exist as constants. IntelliJ, for example, can report on this metric.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.5.4.3">switch Has Fall-Through without a Break</h4>
+                
+                <p class="standard">Up to now, we’ve put a 
+                    <samp class="listingcharacter listingcharacter">break</samp> statement in the last line. Without a 
+                    <samp class="listingcharacter listingcharacter">break</samp>, all subsequent statements would be executed after a match. They would thus run into a new section until a 
+                    <samp class="listingcharacter listingcharacter">break</samp> or the end of 
+                    <samp class="listingcharacter listingcharacter">switch</samp> has been reached. This scenario is comparable to a toy ball falling through from top to bottom and this thus referred to as 
+                    <span class="italic">fall-through</span>
+                    <a class="indexanchor" id="i02_229"/>. A com
+                    <a id="p154"/>mon programming error is to forget the 
+                    <samp class="listingcharacter listingcharacter">break</samp>
+                , which is why an intended fall-through should always be specified as a comment.</p>
+                
+                <p class="standard">This fall-through enables you to always execute the same instruction for different values. The following example implements a small parser for simple date values. The parser should handle three different dates, for example:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">"18 12"</samp>
+                        : Year in short form and month</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">"2018 12"</samp>
+                        : Year and month</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">"12"</samp>
+                        : Month only (The current year should be applied implicitly.)</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="listing " id="l2.21"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> SimpleYearMonthParser </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span><br/>    <span class="">String</span><span class=""> date </span><span class="">=</span><span class=""> </span><span class="">"17 12"</span><span class="">;</span><span class=""><br/></span> <br/>    <span class="">int</span><span class=""> month </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> year </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span>    java<span class="">.</span><span class="">util</span><span class="">.</span><span class="">Scanner scanner </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Scanner</span><span class="">(</span><span class=""> date </span><span class="">);</span><span class=""><br/></span> <br/>    <span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> date</span><span class="">.</span><span class="">length</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      
+                    <span class="bold"><span class="">case</span><span class=""> </span><span class="">5</span></span><span class="">: </span><span class=""> // YY MM</span><span class=""><br/></span>        year = <span class="">2000</span><span class="">;</span><br/>       <span class=""> // Fall-through</span><span class=""><br/></span>      
+                    <span class="bold"><span class="">case</span><span class=""> </span><span class="">7</span></span><span class="">:</span><span class=""> // YYYY MM</span><span class=""><br/></span>        year += scanner.<span class="">nextInt</span><span class="">();</span><br/>       <span class=""> // Fall-through</span><span class=""><br/></span>      
+                    <span class="bold"><span class="">case</span><span class=""> </span><span class="">2</span></span><span class="">:</span><span class=""> // MM</span><span class=""><br/></span>        month = scanner.<span class="">nextInt</span><span class="">();</span><br/>        <span class="">if</span><span class=""> ( year == </span><span class="">0</span><span class=""> )</span><br/>          year = java.time.Year.<span class="">now</span><span class="">().</span><span class="">getValue</span><span class="">();</span><br/>        <span class="">break</span><span class="">;</span><br/>      <span class="">default</span><span class=""> : </span><br/>        System.err.<span class="">println</span><span class="">( </span><span class="">"Wrong format"</span><span class=""> );</span><br/>    }<br/> <br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"month="</span><span class=""> + month + </span><span class="">", year="</span><span class=""> + year );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 2.21</b>    
+            src/main/java/SimpleYearMonthParser.java</p>
+                
+                <p class="standard">In this example, a 
+                    <samp class="listingcharacter listingcharacter">case</samp> statement determines the structure via the length. If the length is 5, the year is shortened, and we initialize the year with 
+                    <samp class="listingcharacter listingcharacter">2000</samp> to read the year in the following step with the help of the 
+                    <samp class="listingcharacter listingcharacter">scanner</samp>. We also would come to this step directly if the 
+                    <a id="p155"/>length of the input had been 7 (i.e., if the year had been 4 digits long). This section of code clarifies the year portion, but we still need to parse the months. If we come directly over a string of length 2, and no year is set before, we’ll retrieve the current year via 
+                    <samp class="listingcharacter listingcharacter">java.time.Year.now().getValue()</samp>
+                ; otherwise, we won’t overwrite the variable.</p>
+                
+                <p class="standard">What should the reader take away from this example? Actually, nothing but shake your head because the solution is hard to understand. Fall-through is really only useful for summarizing multiple 
+                    <samp class="listingcharacter listingcharacter">case</samp>
+                 blocks.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Language Comparison*</h6>
+                    
+                    <p class="standard first last">Although a missing 
+                        <samp class="listingcharacter listingcharacter">break</samp> can lead to annoying programming errors, the developers of Java adopted this behavior from its syntactic predecessor, C. An interesting alternative solution would be to turn the behavior around exactly and explicitly require the fall-through, for example, with a keyword. An interesting development in this regard is available: Java inherits this property from C(++), and C(++) in turn inherits fall-through from the programming language B. One of the “inventors” of B is Ken Thompson, who now works at Google and is involved in the new programming language Go. In Go, developers must explicitly use a 
+                        <samp class="listingcharacter listingcharacter">fallthrough</samp> statement when forwarding one 
+                        <samp class="listingcharacter listingcharacter">case</samp> block to the next. The same applies to the new Swift programming language; in this case, too, you can find 
+                        <samp class="listingcharacter listingcharacter">fallthrough</samp> statements. Even in C++, since the C++17 standard, the standard 
+                        <samp class="listingcharacter listingcharacter">[[fallthrough]]</samp> attribute
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_42" id="fn02_42">[ 74 ]</a></span>
+                     instructs a compiler not to display a warning if fall-through occurs.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.5.4.4">Stack Case Labels</h4>
+                
+                <p class="standard">If several 
+                    <samp class="listingcharacter listingcharacter">case</samp> blocks are placed one below the other to map areas, we call them 
+                    <span class="italic">stack case labels</span>
+                    <a class="indexanchor" id="i02_230"/>. Let’s say a variable 
+                    <samp class="listingcharacter listingcharacter">hour</samp>
+                 stands for an hour in the day, and we want to determine if it’s now afternoon rest time, evening rest time, or working time. Consider the following example:</p>
+                
+                <div class="listing " id="l2.22"><pre><span class="">int</span><span class=""> hour </span><span class="">=</span><span class=""> </span><span class="">12</span><span class="">;</span><span class=""><br/></span><br/><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> hour </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span> <span class=""> // Night rest from 10 p.m. to 6 a.m.</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">case</span><span class=""> </span><span class="">10</span><span class="">:</span><br/>  <span class="">case</span><span class=""> </span><span class="">11</span><span class="">:</span><br/>  <span class="">case</span><span class=""> </span><span class="">12</span><span class="">: </span><span class="">case</span><span class=""> </span><span class="">0</span><span class="">:</span><br/>  <span class="">case</span><span class=""> </span><span class="">1</span><span class="">: </span><br/>  <span class="">case</span><span class=""> </span><span class="">2</span><span class="">: </span><br/>  <span class="">case</span><span class=""> </span><span class="">3</span><span class="">: </span><br/>  <span class="">case</span><span class=""> </span><span class="">4</span><span class="">:</span><br/>  <span class="">case</span><span class=""> </span><span class="">5</span><span class="">: </span></span><br/>
+                    <a id="p156"/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Night rest"</span><span class=""> );</span><br/>    <span class="">break</span><span class="">;</span><br/><br/> <span class=""> // Afternoon rest from 1 to 3 p.m.</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">case</span><span class=""> </span><span class="">1</span><span class="">:</span><br/>  <span class="">case</span><span class=""> </span><span class="">2</span><span class="">: </span></span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Afternoon rest"</span><span class=""> );</span><br/>    <span class="">break</span><span class="">;</span><br/><br/>  <span class="">default</span><span class=""> :</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Work"</span><span class=""> );</span><br/>    <span class="">break</span><span class="">;</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 2.22</b>    
+            src/main/java/RestOrWork.java (Snippet)</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">case</samp>
+                 blocks can be summarized even more compactly and separated with commas. For instance, the example can be rewritten in the following way:</p>
+                
+                <div class="listing " id="l_none_21272"><pre><span class="">int</span><span class=""> hour </span><span class="">=</span><span class=""> </span><span class="">12</span><span class="">;</span><span class=""><br/></span><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> hour </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span> <span class=""> // Night rest from 10 p.m. to 6 a.m.</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">11</span><span class="">,</span><span class=""> </span><span class="">12</span><span class="">,</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">4</span><span class="">,</span><span class=""> </span><span class="">5</span><span class="">:</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Night rest"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    <span class="">break</span><span class="">;</span><span class=""><br/></span> <br/> <span class=""> // Afternoon rest from 1 to 3 p.m.</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">:</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Afternoon rest"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    <span class="">break</span><span class="">;</span><span class=""><br/></span> <br/>  <span class="">default</span><span class="">:</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Work"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    <span class="">break</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Single or multiple range specifications, such as 
+                    <samp class="listingcharacter listingcharacter">22 - 24</samp>, or 
+                    <samp class="listingcharacter listingcharacter">22 - 24, 0 - 5</samp>
+                , are not permitted in Java!</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.5.4.5">switch on Strings</h4>
+                
+                <p class="standard">Besides the option to use 
+                    <samp class="listingcharacter listingcharacter">switch</samp> on integers, a 
+                    <samp class="listingcharacter listingcharacter">switch</samp> statement on 
+                    <samp class="listingcharacter listingcharacter">string</samp>
+                 objects is also possible.</p>
+                
+                <div class="listing " id="l2.23"><pre>
+                    <span class="bold"><span class="">
+                            <a id="p157"/>
+                        String</span><span class=""> input</span></span> = javax.swing.JOptionPane.<span class="">showInputDialog</span><span class="">( </span><span class="">"Input"</span><span class=""> );</span><br/><br/><span class="">switch</span><span class=""> ( input.</span><span class="">toLowerCase</span><span class="">() ) {</span><br/>  <span class="">case</span><span class=""> </span><span class="">"cookies"</span><span class="">:</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"I like cookies."</span><span class=""> );</span><br/>    <span class="">break</span><span class="">;</span><br/>  <span class="">case</span><span class=""> </span><span class="">"cake"</span><span class="">:</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"I like cake."</span><span class=""> );</span><br/>    <span class="">break</span><span class="">;</span><br/>  <span class="">case</span><span class=""> </span><span class="">"chocolate"</span><span class="">:</span><br/>  <span class="">case</span><span class=""> </span><span class="">"liquorice"</span><span class="">:</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Hm. Yummy too."</span><span class=""> );</span><br/>    <span class="">break</span><span class="">;</span><br/>  <span class="">default</span><span class="">:</span><br/>    System.out.<span class="">printf</span><span class="">( </span><span class="">"Can you really eat %s?"</span><span class="">, input );</span><br/>    <span class="">break</span><span class="">;</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 2.23</b>    
+            src/main/java/SweetsLover.java, main()</p>
+                
+                <p class="standard">Although direct string comparisons are possible, regular expression checks unfortunately aren’t, something that’s provided in particular by scripting languages like Ruby or Perl.</p>
+                
+                <p class="standard">As with 
+                    <samp class="listingcharacter listingcharacter">switch</samp> with integers, the strings in the 
+                    <samp class="listingcharacter listingcharacter">String</samp>-
+                    <samp class="listingcharacter listingcharacter">case</samp> branch can come from final variables. For example, if 
+                    <samp class="listingcharacter listingcharacter">string COOKIES = "cookies";</samp> is predefined, 
+                    <samp class="listingcharacter listingcharacter">case COOKIES</samp>
+                 is allowed.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.5.5">2.5.5    Switch Expressions</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">switch</samp> keyword can be used in Java for statements and expressions. In total, 
+                <samp class="listingcharacter listingcharacter">switch</samp>
+             can appear in four forms.</p>
+            
+            <table class="standardtable" id="t2.14">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Statement/Expression</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Java Version</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Syntax</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Fall-Through</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Complete Coverage</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Statement</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">1.0</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">:</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">No</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Statement</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">14</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">No</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">No</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Expression</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">14</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">:</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Expression</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">14</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">No</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 2.14</b>    
+            Four Types of Switch</p>
+            
+            <p class="standard">We’ve already looked at the first type extensively, so let’s look at the other variants now.</p>
+            
+            
+                
+                <h4 class="t4" id="h2.5.5.1">
+                    <a id="p158"/>
+                Simplified switch Statement, No Fall-Through, No Full Coverage</h4>
+                
+                <p class="standard">In the simplified 
+                    <samp class="listingcharacter listingcharacter">switch</samp> statement, no colon exists after the label or 
+                    <samp class="listingcharacter listingcharacter">default</samp>, but instead, you would use a 
+                    <samp class="listingcharacter listingcharacter">-&gt;</samp>. This use of 
+                    <samp class="listingcharacter listingcharacter">-&gt; </samp>has nothing to do with lambda expressions, even if the symbols are the same. The arrow is either followed by an expression, a block in curly brackets, or a 
+                    <samp class="listingcharacter listingcharacter">throw</samp> statement that throws an exception. Implicitly, a 
+                    <samp class="listingcharacter listingcharacter">break</samp>
+                 terminates each branch, so no more fall-through occurs.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">A variable 
+                        <samp class="listingcharacter listingcharacter">operator</samp> is assigned with an operator character. A 
+                        <samp class="listingcharacter listingcharacter">switch</samp> statement with arrow notation is to give an output for 
+                        <samp class="listingcharacter listingcharacter">+</samp> and 
+                        <samp class="listingcharacter listingcharacter">-</samp>
+                    . </p>
+                    
+                    <div class="listing  last_item" id="l_none_21274"><pre><span class="">String</span><span class=""> operator </span><span class="">=</span><span class=""> </span><span class="">"+"</span><span class="">;</span><span class=""><br/></span><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> operator </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"+"</span><span class=""> </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Plus"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"-"</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">String</span><span class=""> minus </span><span class="">=</span><span class=""> </span><span class="">"Minus"</span><span class="">;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> minus </span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span>}</pre></div>
+                
+                </div>
+                
+                <p class="standard">Because blocks must always be set for multiple statements, a local variable also doesn’t step out of scope. A 
+                    <samp class="listingcharacter listingcharacter">default</samp> can be set but isn’t mandatory. The 
+                    <samp class="listingcharacter listingcharacter">switch</samp> doesn’t need to cover every possibility, which doesn’t work for 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                -numbers and strings anyway.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">A variable 
+                        <samp class="listingcharacter listingcharacter">operator</samp> is assigned with an operator character. A 
+                        <samp class="listingcharacter listingcharacter">switch</samp>
+                     statement with arrow notation should always provide an output.</p>
+                    
+                    <div class="listing  last_item" id="l_none_21288"><pre><span class="">String</span><span class=""> operator </span><span class="">=</span><span class=""> </span><span class="">"+"</span><span class="">;</span><span class=""><br/></span><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> operator </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"+"</span><span class=""> </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Plus"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"-"</span><span class=""> </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Minus"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">default</span><span class="">  </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Unknown operator"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>}</pre></div>
+                
+                </div>
+                
+                <p class="standard">With simplified 
+                    <samp class="listingcharacter listingcharacter">switch</samp>
+                 statements, multiple labels that have the same handling are possible. Commas separate the labels.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The operators 
+                        <samp class="listingcharacter listingcharacter">*</samp> and 
+                        <samp class="listingcharacter listingcharacter">×</samp>
+                     are treated in the same way:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21303"><pre><span class="">String</span><span class=""> operator </span><span class="">=</span><span class=""> </span><span class="">"+"</span><span class="">;</span><span class=""><br/></span><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> operator </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"+"</span><span class="">      </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Plus"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  
+                        <span class="bold"><span class="">case</span><span class=""> </span><span class="">"*"</span><span class="">, </span><span class="">"×"</span></span><span class=""> -&gt; System.out.</span><span class="">println</span><span class="">( </span><span class="">"Multiplied by"</span><span class=""> );</span><br/>}<span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.5.5.2">
+                    <a id="p159"/>
+                Switch Expressions, No Fall-Through, Full Coverage</h4>
+                
+                <p class="standard">Traditionally, case distinctions are found with 
+                    <samp class="listingcharacter listingcharacter">switch</samp>
+                 as a statement, and statements return nothing.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">A string 
+                        <samp class="listingcharacter listingcharacter">writtenOperator</samp> will be initialized directly with an expression determined by the 
+                        <samp class="listingcharacter listingcharacter">switch</samp>
+                     expression.</p>
+                    
+                    <div class="listing  last_item" id="l_none_21318"><pre><span class="">String</span><span class=""> operator </span><span class="">=</span><span class=""> </span><span class="">"+"</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> writtenOperator </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> operator </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"+"</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">"Plus"</span><span class="">;</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"-"</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">"Minus"</span><span class="">;</span><span class=""><br/></span>  <span class="">default</span><span class="">  </span><span class="">-&gt;</span><span class=""> </span><span class="">"Unknown operator"</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span><span class="">).</span><span class="">toUpperCase</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> writtenOperator </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">Expressions must always return results, and consequently, 
+                    <samp class="listingcharacter listingcharacter">switch</samp> must always make a path to a value. The usual case is 
+                    <samp class="listingcharacter listingcharacter">default</samp>
+                 as shown, but in some special cases (e.g., with enumerations), the compiler can check that all possibilities have been covered.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In the case of enumerations, such as the days of the week in the 
+                        <samp class="listingcharacter listingcharacter">DayOfWeek enum</samp>
+                    , the compiler can check for complete coverage:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21326"><pre>DayOfWeek today <span class="">=</span><span class=""> LocalDate</span><span class="">.</span><span class="">now</span><span class="">().</span><span class="">getDayOfWeek</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> today </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">case</span><span class=""> MONDAY</span><span class="">,</span><span class=""> TUESDAY</span><span class="">,</span><span class=""> WEDNESDAY</span><span class="">,</span><span class=""> THURSDAY</span><span class="">,</span><span class=""> FRIDAY </span><span class="">-&gt;</span><span class=""> </span><span class="">"Work"</span><span class="">;</span><span class=""><br/></span>  <span class="">case</span><span class=""> SATURDAY</span><span class="">,</span><span class=""> SUNDAY </span><span class="">-&gt;</span><span class=""> </span><span class="">"Party"</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">If no simple expression exists to the right of the arrow, but instead you write a block, this block must also return a result. For this purpose, the new keyword 
+                    <samp class="listingcharacter listingcharacter">yield</samp> is used, followed by an expression. A block must have a 
+                    <samp class="listingcharacter listingcharacter">yield</samp>
+                 or throw an unchecked exception.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In a block, 
+                        <samp class="listingcharacter listingcharacter">yield</samp> returns an expression for the 
+                        <samp class="listingcharacter listingcharacter">switch</samp>
+                     expression:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21327"><pre><span class="">String</span><span class=""> operator </span><span class="">=</span><span class=""> </span><span class="">"+"</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> operator </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"+"</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">"Plus"</span><span class="">;</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"-"</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">String</span><span class=""> minus </span><span class="">=</span><span class=""> </span><span class="">"Minus"</span><span class="">;</span><span class=""> </span>
+                        <span class="bold"><span class="">yield</span></span> minus; }<br/>  <span class="">default</span><span class="">  -&gt; </span><span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IllegalArgumentException</span><span class="">( </span><span class="">"Unknown operator"</span><span class=""> );</span><br/>} );<span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.5.5.3">
+                    <a id="p160"/>
+                Switch Expression with the Colon Syntax, with Fall-Through, Full Coverage</h4>
+                
+                <p class="standard">The colon syntax can also be used as an expression. With a colon, fall-through is also possible again. A 
+                    <samp class="listingcharacter listingcharacter">yield</samp>
+                 is mandatory; otherwise, an unchecked exception must be triggered. The syntax contains a source of error with fall-through, so this variant is perhaps the worst.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Traditional colon 
+                        <samp class="listingcharacter listingcharacter">switch</samp> syntax as an expression with 
+                        <samp class="listingcharacter listingcharacter">yield</samp>
+                    .</p>
+                    
+                    <div class="listing  last_item" id="l_none_21342"><pre><span class="">String</span><span class=""> operator </span><span class="">=</span><span class=""> </span><span class="">"+"</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> operator </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"+"</span><span class=""> </span><span class="">:</span><span class=""> yield </span><span class="">"Plus"</span><span class="">;</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"*"</span><span class=""> </span><span class="">:</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Asterisk"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">case</span><span class=""> </span><span class="">"×"</span><span class=""> </span><span class="">:</span><span class=""> yield </span><span class="">"Multiplied by"</span><span class="">;</span><span class=""><br/></span>  <span class="">default</span><span class="">  </span><span class="">:</span><span class=""> </span><span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IllegalArgumentException</span><span class="">(</span><span class=""> </span><span class="">"Unknown operator"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,415 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Java Platform Module System" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Java Platform Module System" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Java Platform Module System</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h15.2">15.2    Importing Modules</h2>
+        
+        <p class="standard">To import modules, Java provides the 
+            <span class="italic">Java Platform Module System (JPMS</span>)
+            <a class="indexanchor" id="i15_17"/>
+            <a class="indexanchor" id="i15_18"/>, known also by its project name 
+            <span class="italic">Jigsaw</span>
+            <a class="indexanchor" id="i15_19"/>.
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn15_04" id="fn15_04">[ 204 ]</a></span>
+         Its focus is on strong encapsulation: Implementation details can keep a module secret. Even helper code within the module, even if public, must not leak out. Second, there’s an abstraction of behavior via interfaces can implement internal classes from the module, whereby the concrete classes aren’t known to the user. As a third point, explicit dependencies can make interactions with other modules clear. A graphical representation can help you keep track of usage relationships even in large architectures.</p>
+        
+        
+            
+            <h3 class="t3" id="h15.2.1">15.2.1    Who Sees Whom?</h3>
+            
+            <p class="standard">Classes, packages, and modules can be viewed as containers with different visibilities in the following ways:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A type, whether a class or an interface, contains class/object variables and methods.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A package contains types.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <a id="p820"/>
+                    A module contains packages.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Private members in a type aren’t visible in other types.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Non-public types aren’t visible in other packages.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Non-exported packages aren’t visible outside a module.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">A module is defined by several elements:</p>
+            
+            <ol>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">By a name</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">By the specification of what it exports</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">By the specification of which modules it needs for its own job </p>
+                
+                </li>
+            
+            </ol>
+            
+            <p class="standard">A second aspect is interesting: A module should export something. If nothing is exported, nothing is visible to the outside. Everything you want outsiders to see must be listed in the module description because not all public types of the module are public by default; if they were, modules would have no advantages over JAR files. Thus, with the new modular system, you have an entirely different visibility. From the gang of four (
+                <samp class="listingcharacter listingcharacter">public</samp>, 
+                <samp class="listingcharacter listingcharacter">private</samp>, package-visible, and 
+                <samp class="listingcharacter listingcharacter">protected</samp>), 
+                <samp class="listingcharacter listingcharacter">public</samp> has much finer grades because what is 
+                <samp class="listingcharacter listingcharacter">public</samp>
+             is determined by the module. This visibility thus applies for the following items:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Types the module exports for all</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Types for explicitly enumerated modules</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">All types in the same module</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The compiler and the JVM take care of visibility compliance, and even tricks with reflection are no longer possible if a module hasn’t granted clearance.</p>
+            
+            
+                
+                <h4 class="t4" id="h15.2.1.1">Module Types</h4>
+                
+                <p class="standard">In this section, we’ll take a closer look at three types of modules. When you write new modules, they are 
+                    <span class="italic">named modules</span>. In addition, for compatibility reasons, 
+                    <span class="italic">automatic modules</span> and 
+                    <span class="italic">unnamed modules</span> can be used to integrate existing JAR files. The Java SE library is itself divided into modules that we call 
+                    <span class="italic">platform modules</span>. The runtime environment displays all platform modules with a 
+                    <samp class="listingcharacter listingcharacter">--list-modules</samp>
+                 switch. Using the switch before Java 9 will result in an error.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example will list approximately 70 modules:</p>
+                    
+                    <div class="listing  last_item" id="l_none_1579"><pre>$ 
+                        <span class="bold">java --list-modules</span><br/>java.base@17<br/>java.compiler@17<br/>java.datatransfer@17<br/>java.desktop@17<br/>java.instrument@17<br/>
+                        <a id="p821"/>java.logging@17<br/>java.management@17<br/>java.management.rmi@17<br/>java.naming@17<br/>…<br/>jdk.unsupported.desktop@17<br/>jdk.xml.dom@17<br/>jdk.zipfs@17</pre></div>
+                
+                </div>
+                
+                <p class="standard">The folder 
+                    <span class="italic">C:\Program Files\Java\jdk-17\jmods</span>
+                 contains JMOD files.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.2.2">15.2.2    Platform Modules and a JMOD Example</h3>
+            
+            <p class="standard">The command-line tool 
+                <samp class="listingcharacter listingcharacter">jmod</samp> shows what a module exports and needs. Let’s take the Java Database Connectivity (JDBC) API for database connections as an example: The types are located in a separate module called 
+                <samp class="listingcharacter listingcharacter">java.sql</samp>
+            . Consider the following example:</p>
+            
+            <div class="listing " id="l_none_1584"><pre>C:\Program Files\Java\jdk-17\bin&gt;
+                <span class="bold">jmod describe ..\jmods\java.sql.jmod</span><br/>java.sql@17<br/>exports java.sql<br/>exports javax.sql<br/>requires java.base mandated<br/>requires java.logging transitive<br/>requires java.transaction.xa transitive<br/>requires java.xml transitive<br/>uses java.sql.Driver<br/>platform windows-amd64 </pre></div>
+            
+            <p class="standard">From this code, we can read the following information:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The name.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The packages that the module exports, namely, 
+                        <samp class="listingcharacter listingcharacter">java.sql</samp> and 
+                        <samp class="listingcharacter listingcharacter">javax.sql</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The modules that 
+                        <samp class="listingcharacter listingcharacter">java.sql</samp> needs. 
+                        <samp class="listingcharacter listingcharacter">java.base</samp>
+                     is always included; in addition, other modules may be required.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The message with 
+                        <samp class="listingcharacter listingcharacter">uses</samp>
+                     is related to the service locator, which we can ignore for now.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Information about the platform (
+                        <samp class="listingcharacter listingcharacter">windows-amd64</samp>) in which 
+                        <samp class="listingcharacter listingcharacter">jmod</samp> is written (i.e., the assignment of the system property 
+                        <samp class="listingcharacter listingcharacter">os.arch</samp>
+                     on the build server).</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.2.3">15.2.3    Using Internal Platform Features: --add-exports</h3>
+            
+            <p class="standard">When Sun started developing the Java libraries in the last century, a number of internal helper classes came along with the library. Many of these internal helper classes started with the package prefixes 
+                <samp class="listingcharacter listingcharacter">com.sun</samp> and 
+                <samp class="listingcharacter listingcharacter">sun</samp>. The types were always communicated as 
+                <a id="p822"/>internal types, but among some developers, curiosity and interest were so great that the warnings from Sun/Oracle were ignored. The big bang happened in Java 9 because, since then, 
+                <samp class="listingcharacter listingcharacter">public</samp> is no longer automatically 
+                <samp class="listingcharacter listingcharacter">public</samp>
+             for all classes outside the module. The internal classes are no longer exported, and thus, they are no longer usable.</p>
+            
+            
+                
+                <h4 class="t4" id="h15.2.3.1">Act 1: The Source Code</h4>
+                
+                <p class="standard">A compiler error occurs in the following example:</p>
+                
+                <div class="listing " id="l15.1"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">tool</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> ShowRuntimeArguments </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> Exception </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> </span><br/>                          jdk<span class="">.</span><span class="">internal</span><span class="">.</span><span class="">misc</span><span class="">.</span><span class="">VM</span><span class="">.</span><span class="">getRuntimeArguments</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 15.1</b>    
+            com/tutego/insel/tools/ShowRuntimeArguments.java</p>
+                
+                <p class="standard">Our program draws on the 
+                    <samp class="listingcharacter listingcharacter">VM class</samp> to query the actual occupancy of the command line. What we receive in the 
+                    <samp class="listingcharacter listingcharacter">main(String[] args)</samp> method via 
+                    <samp class="listingcharacter listingcharacter">args</samp>
+                 doesn’t contain any JVM arguments.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h15.2.3.2">Act 2: The Compiler Error</h4>
+                
+                <p class="standard">In the following example, the program can no longer be interpreted without compiler errors:</p>
+                
+                <div class="listing " id="l_none_1595"><pre>$ 
+                    <span class="bold">javac com/tutego/insel/tool/ShowRuntimeArguments.java</span><br/>com\tutego\insel\tool\ShowRuntimeArguments.java:6: error: package jdk.internal.misc is not visible<br/>      jdk.internal.misc.VM.getRuntimeArguments() ) );<br/>                  ^<br/>  (package jdk.internal.misc is declared in module java.base, which does not export <br/>it to the unnamed module)<br/>1 error </pre></div>
+                
+                <p class="standard">The problem is documented by the compiler: 
+                    <samp class="listingcharacter listingcharacter">jdk.internal.misc</samp>
+                 is not accessible for our program.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h15.2.3.3">Act 3: The Magic Compiler Switch</h4>
+                
+                <p class="standard">Although the 
+                    <samp class="listingcharacter listingcharacter">VM</samp> class itself is 
+                    <samp class="listingcharacter listingcharacter">public</samp> and the 
+                    <samp class="listingcharacter listingcharacter">getRuntimeArguments()</samp> method is also 
+                    <samp class="listingcharacter listingcharacter">public</samp>, 
+                    <samp class="listingcharacter listingcharacter">jdk.internal.misc</samp> hasn’t been exported. As a result, access from our program isn’t 
+                    <a id="p823"/>possible because the JVM implements access control. However, we can turn that control off. With the 
+                    <samp class="listingcharacter listingcharacter">--add-exports</samp>
+                    <a class="indexanchor" id="i15_20"/> switch, we provide the package 
+                    <samp class="listingcharacter listingcharacter">jdk.internal.misc</samp> of our class from the 
+                    <samp class="listingcharacter listingcharacter">java.base</samp>
+                 module. The general syntax is shown in the following example:</p>
+                
+                <div class="listing " id="l_none_15123"><pre>--add-exports &lt;source-module&gt;/&lt;package&gt;=&lt;target-module&gt;(,&lt;target-module&gt;)* </pre></div>
+                
+                <p class="standard">The specification must be set for the compiler and for the runtime environment. For our example, therefore, you would write the following code:</p>
+                
+                <div class="listing " id="l_none_15130"><pre>$ 
+                    <span class="bold">javac --add-exports java.base/jdk.internal.misc=ALL-UNNAMED com/tutego/insel/tool/ShowRuntimeArguments.java</span>
+                 </pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h15.2.3.4">Act 4: The Cranky Java Virtual Machine</h4>
+                
+                <p class="standard">The program has been compiled, so let’s run it. The result is the following output:</p>
+                
+                <div class="listing " id="l_none_15148"><pre>$ 
+                    <span class="bold">java com/tutego/insel/tool/ShowRuntimeArguments</span><br/>Exception in thread "main" java.lang.IllegalAccessError: class com.tutego.insel.tool.ShowRuntimeArguments (in unnamed module @0x4d591d15) cannot access class jdk.internal.misc.VM (in module java.base) because module java.base does not export jdk.internal.misc to unnamed module @0x4d591d15<br/>  at com.tutego.insel.tool.ShowRuntimeArguments.main(ShowRuntimeArguments.java:6) </pre></div>
+                
+                <p class="standard">Our program doesn’t work! But the error message looks familiar.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h15.2.3.5">Act 5: The Java Virtual Machine Wants What the Compiler Wants (The End)</h4>
+                
+                <p class="standard">To resolve this issue, we must set the same switch as for the compiler:</p>
+                
+                <div class="listing " id="l_none_15137"><pre>$ 
+                    <span class="bold">java --add-exports java.base/jdk.internal.misc=ALL-UNNAMED com/tutego/insel/tool/ShowRuntimeArguments</span>
+                 </pre></div>
+                
+                <p class="standard">The program is running, and the output is:</p>
+                
+                <div class="listing " id="l_none_15169"><pre>[--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED] </pre></div>
+                
+                <p class="standard">A specification like 
+                    <samp class="listingcharacter listingcharacter">java.base/jdk.internal.misc</samp>, where the module is in front and the package name is behind the 
+                    <samp class="listingcharacter listingcharacter">/</samp>, can be encountered rather frequently. Behind the equal sign, either our package exists, which can see the types in 
+                    <samp class="listingcharacter listingcharacter">jdk.internal.misc</samp>, or (as in our case) 
+                    <samp class="listingcharacter listingcharacter">ALL-UNNAMED</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h15.2.3.6">Finding Internal Types with jdeps</h4>
+                
+                <p class="standard">To determine if a program uses internal types, you can use the command-line program 
+                    <samp class="listingcharacter listingcharacter">jdeps</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_15179"><pre>
+                    <a id="p824"/>$ 
+                    <span class="bold">jdeps com/tutego/insel/tool/ShowRuntimeArguments.class</span><br/>ShowRuntimeArguments.class -&gt; java.base<br/> com.tutego.insel.tool  -&gt; java.io             java.base<br/> com.tutego.insel.tool  -&gt; java.lang           java.base<br/> com.tutego.insel.tool  -&gt; java.util           java.base<br/> com.tutego.insel.tool  -&gt; jdk.internal.misc   JDK internal API (java.base) </pre></div>
+                
+                <p class="standard">Unlike the Java compiler, the full file name (i.e., including 
+                    <span class="italic">.class</span>
+                ) is necessary in this case. The “JDK internal API” message prepares you for the fact that trouble lies ahead.</p>
+                
+                <p class="standard">In this way, you can examine a large codebase relatively easy, and developers can proactively get to the bottom of parts that have problematic dependencies.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h15.2.4">15.2.4    Integrating New Modules</h3>
+            
+            <p class="standard">Every Java SE project is based on the 
+                <samp class="listingcharacter listingcharacter">java.se</samp> module, which entails various module dependencies, as shown in 
+                <span class="crossreference "><a href="15_002.html#f15.2">Figure 15.2</a></span>
+            .</p>
+            
+            <div class="imagebox figure-type"><a href="img-f15.2.html" id="f15.2"><img alt="Module Dependencies of the java.se Module" id="img-f15.2" src="bilderklein/klein15_002.png"/></a></div>
+            
+            <p class="caption "><b>Figure 15.2</b>    
+            Module Dependencies of the java.se Module</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">Not all installed modules are included in the 
+                    <samp class="listingcharacter listingcharacter">java.se</samp> module, such as the JDK modules and 
+                    <samp class="listingcharacter listingcharacter">java.smartcardio</samp>
+                . However, these modules are referenced in the module path by default, as the following “one-liner” shows:</p>
+                
+                <div class="listing " id="l_none_15187"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""><br/></span>    ModuleLayer<span class="">.</span><span class="">boot</span><span class="">().</span><span class="">modules</span><span class="">().</span><span class="">stream</span><span class="">()</span><span class=""><br/></span>        <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> Module</span><span class="">::</span><span class="">getName </span><span class="">).</span><span class="">sorted</span><span class="">().</span><span class="">collect</span><span class="">(</span><span class=""> Collectors</span><span class="">.</span><span class="">joining</span><span class="">(</span><span class=""> </span><span class="">", "</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">The result lists the following modules:</p>
+                
+                <div class="listing " id="l_none_15193"><pre>java.base, java.compiler, java.datatransfer, java.desktop, java.instrument, java.logging, java.management, java.management.rmi, java.naming, java.net.http, java.prefs, java.rmi, java.scripting, java.security.jgss, java.security.sasl, java.smartcardio, java.sql, java.sql.rowset, java.transaction.xa, java.xml, java.xml.crypto, jdk.accessibility, jdk.attach, jdk.charsets, jdk.compiler,
+                    <a id="p825"/>
+                 jdk.crypto.cryptoki, jdk.crypto.ec, jdk.crypto.mscapi, jdk.dynalink, jdk.editpad, jdk.httpserver, jdk.internal.ed, jdk.internal.jvmstat, jdk.internal.le, jdk.internal.opt, jdk.jartool, jdk.javadoc, jdk.jconsole, jdk.jdeps, jdk.jdi, jdk.jdwp.agent, jdk.jfr, jdk.jlink, jdk.jpackage, jdk.jshell, jdk.jsobject, jdk.jstatd, jdk.localedata, jdk.management, jdk.management.agent, jdk.management.jfr, jdk.naming.dns, jdk.naming.rmi, jdk.net, jdk.nio.mapmode, jdk.random, jdk.sctp, jdk.security.auth, jdk.security.jgss, jdk.unsupported, jdk.unsupported.desktop, jdk.xml.dom, jdk.zipfs</pre></div>
+                
+                <p class="standard last">All these modules can be used directly without switches.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h15.2.4.1">Adding and Opening New Modules to the Core Modules</h4>
+                
+                <p class="standard">If external modules must be added to core modules, you can use the 
+                    <samp class="listingcharacter listingcharacter">--add-modules</samp> switch
+                    <a class="indexanchor" id="i15_21"/>. Another switch is 
+                    <samp class="listingcharacter listingcharacter">--add-exports</samp>
+                    <a class="indexanchor" id="i15_22"/>
+                , which opens all public types and members at translation or runtime.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

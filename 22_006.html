@@ -1,0 +1,105 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Testing with JUnit" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Testing with JUnit" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Testing with JUnit</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h22.6">22.6    Dummy, Fake, Stub, and Mock</h2>
+        
+        <p class="standard">Systems with a design based on good object orientation are characterized by high interaction with other objects. Ideally, a class decomposes a problem only to the point where it can make use of another class that solves the simpler problem. Where things get tricky is when a custom class references another complex class, and the object only works meaningfully if the referenced object is there and responds in a way that makes sense. This dependency is unfavorable because the goal of a good test is to be local (i.e., to test the actual class and not all referenced classes around it at the same time).</p>
+        
+        <p class="standard">In practice, three helper constructs can enable the locality of tests:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <a class="indexanchor" id="i22_32"/>
+                    <span class="bold">Fake objects<br/></span>These objects are a valid implementation of an interface. For example, if a repository goes to the database, a fake implementation can store records in a data structure. The behavior is replicated and simplified, but functional. Thus, instead of customers from the database, a fake repository always provides the same 
+                    <span class="italic">n</span> prebuilt customers. Fake objects are also useful when, for example, a graphical user interface (GUI) application is programmed that’s developed with the fake objects instead of real database data, thus displaying only demo data. If one team builds the GUI and another team 
+                    <a id="p1088"/>
+                builds the service, both groups can work independently, and the GUI team doesn’t need to wait for the implementation first.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <a class="indexanchor" id="i22_33"/>
+                    <span class="bold">Stub objects</span><br/>Stub objects implement a specific protocol so that they can always give the same answers for the test case. For example, if an email service provides an 
+                    <samp class="listingcharacter listingcharacter">isTransmitted()</samp> method, the stub can always return 
+                    <samp class="listingcharacter listingcharacter">true</samp>
+                . Stubs therefore have no behavior, but the body of the methods is quasi-empty and minimal. These objects exist only for test cases.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <a class="indexanchor" id="i22_34"/>
+                    <span class="bold">Mock objects</span><br/>Mock objects are “charged” by a test case and then show the desired behavior—so they don’t always return the same result as stubs. Usually, mock objects are created automatically at runtime by libraries such as 
+                    <span class="italic">Mockito</span>
+                    <a class="indexanchor" id="i22_35"/> (<span class="url"><a href="https://site.mockito.org">https://site.mockito.org</a></span>) or 
+                    <span class="italic">EasyMock</span>
+                    <a class="indexanchor" id="i22_36"/> (<span class="url"><a href="https://easymock.org/">https://easymock.org/</a></span>).</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">We can summarize these three types under the generic term 
+            <span class="italic">dummy object</span>
+            <a class="indexanchor" id="i22_37"/>. In general, however, the four terms aren’t used in a uniform manner.
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn22_03" id="fn22_03">[ 242 ]</a></span>
+        </p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[eg]  </span>Mockito Example</h6>
+            
+            <p class="standard first">Let’s assume everything from 
+                <samp class="listingcharacter listingcharacter">org.mockito.Mockito.*</samp> is statically imported, and we want to create a 
+                <samp class="listingcharacter listingcharacter">java.util.List</samp>. For this goal, Mockito must first build something that behaves like 
+                <samp class="listingcharacter listingcharacter">List</samp>
+            , as in the following example:</p>
+            
+            <div class="listing " id="l_none_22339"><pre>List&lt;?&gt; mockedList = mock( List.class );</pre></div>
+            
+            <p class="standard">The next step is to determine the behavior of the special list, as in the following example:</p>
+            
+            <div class="listing " id="l_none_22347"><pre>when( mockedList.get(0) ).thenReturn( "tutego" );</pre></div>
+            
+            <p class="standard">Now, the list is ready for use, so let’s display it with the following code:</p>
+            
+            <div class="listing " id="l_none_22367"><pre>System.out.println( mockedList.get(0) ); // tutego</pre></div>
+            
+            <p class="standard">To avoid having to call the 
+                <samp class="listingcharacter listingcharacter">mock(...)</samp> method manually, a JUnit 5 test case can be annotated with 
+                <samp class="listingcharacter listingcharacter">@ExtendWith</samp>. Then, all object variables provided with 
+                <samp class="listingcharacter listingcharacter">@Mock</samp>
+             can be initialized automatically. Consider the following example:</p>
+            
+            <div class="listing  last_item" id="l_none_22387"><pre><span class="">@ExtendWith</span><span class="">(</span><span class=""> MockitoExtension</span><span class="">.</span><span class="">class</span><span class=""> </span><span class="">)</span><span class=""><br/></span><span class="">class</span><span class=""> MyTest </span><span class="">{</span><span class=""><br/></span>  <span class="">@Mock</span><span class=""> </span><span class="">private</span><span class=""> MyType mock</span><span class="">;</span><span class=""><br/></span>  <span class="">@BeforeEach</span><span class=""> </span><span class="">private</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setUp</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">when</span><span class="">(</span><span class=""> mock</span><span class="">.</span><span class="">… </span><span class="">).</span><span class="">thenReturn</span><span class="">(</span><span class=""> … </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>}</pre></div>
+        
+        </div>
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

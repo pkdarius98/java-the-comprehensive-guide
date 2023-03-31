@@ -1,0 +1,100 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Testing with JUnit" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Testing with JUnit" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Testing with JUnit</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h22.5">22.5    Good Design Enables Effective Testing</h2>
+        
+        <p class="standard">Static methods with the pattern “parameter provides the input, return value provides the result” are easy to test. These methods don’t change any environment, and states don’t exist. The test case merely examines the return, which is easy. Testing gets more complex when the thing to be tested entails extensive system changes: Has a file been created? Are things in the database as desired? Has the cluster mirrored the data to other servers? Does an external program provide the expected return? Does a native method really return what it promises, without crashing the JVM?</p>
+        
+        <p class="standard">If things suddenly become untestable, then a bad design has been revealed. This problem often happens because a class has too many responsibilities. As an example, let’s look at a class that writes business cards in the vCard format (file extension 
+            <span class="italic">.vcf</span>).
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn22_02" id="fn22_02">[ 241 ]</a></span> To keep the source code lean, the 
+            <samp class="listingcharacter listingcharacter">VCard</samp>
+         class doesn’t use setters and getters.</p>
+        
+        <div class="listing " id="l22.13"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> VCard </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> formattedName</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> email</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">export</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> filename </span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> IOException </span><span class="">{</span><span class=""><br/></span>    StringBuilder result <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"BEGIN:VCARD\n"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> formattedName </span><span class="">!=</span><span class=""> null </span><span class="">&amp;&amp;</span><span class=""> </span><span class="">!</span><span class=""> formattedName</span><span class="">.</span><span class="">isEmpty</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      result<span class="">.</span><span class="">append</span><span class="">(</span><span class=""> </span><span class="">"FN:"</span><span class=""> </span><span class="">).</span><span class="">append</span><span class="">(</span><span class=""> formattedName </span><span class="">).</span><span class="">append</span><span class="">(</span><span class=""> </span><span class="">"\n"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> email </span><span class="">!=</span><span class=""> null </span><span class="">&amp;&amp;</span><span class=""> </span><span class="">!</span><span class=""> email</span><span class="">.</span><span class="">isEmpty</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      result<span class="">.</span><span class="">append</span><span class="">(</span><span class=""> </span><span class="">"EMAIL:"</span><span class=""> </span><span class="">).</span><span class="">append</span><span class="">(</span><span class=""> email </span><span class="">).</span><span class="">append</span><span class="">(</span><span class=""> </span><span class="">"\n"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    Files<span class="">.</span><span class="">write</span><span class="">(</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> filename </span><span class="">),</span><span class=""><br/></span>                 Collections<span class="">.</span><span class="">singleton</span><span class="">(</span><span class=""> result</span><span class="">.</span><span class="">append</span><span class="">(</span><span class=""> </span><span class="">"END:VCARD"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+        
+        <p class="caption "><b>Listing 22.13</b>    
+            com/tutego/insel/junit/util/vcf/v1/VCard.java, VCard</p>
+        
+        <p class="standard">
+            <a id="p1086"/>For example, if the application set the variable 
+            <samp class="listingcharacter listingcharacter">formattedName</samp> to 
+            <samp class="listingcharacter listingcharacter">Powerpuff Girls</samp> and 
+            <samp class="listingcharacter listingcharacter">email</samp> to 
+            <samp class="listingcharacter listingcharacter">powerpuff@townsville.com</samp>, then the 
+            <samp class="listingcharacter listingcharacter">export(...)</samp>
+         method would create a file with the following content:</p>
+        
+        <div class="listing " id="l_none_22318"><pre>BEGIN:VCARD<br/>FN:Powerpuff Girls<br/>EMAIL:powerpuff@townsville.com<br/>END:VCARD </pre></div>
+        
+        <p class="standard">The main task of the class is to correctly create the output format according to the vCard standard. The class can be tested in principle, but the test won’t be nice. First, different vCard properties would have to be set, then the vCard would be written to a file, then the file would be opened, the content would be read, and finally it would be checked for correctness—not a really pleasant method! The 
+            <samp class="listingcharacter listingcharacter">VCard</samp> class wasn’t designed to be test oriented. Why not? Besides the fact that such a test could take quite a long time because of the file access required, you can basically state that the 
+            <samp class="listingcharacter listingcharacter">export(...)</samp> method combines two responsibilities, namely, the output in the special vCard format and the output to a file. If the design had been based on the TDD principle, we would have separated the parts 
+            <span class="italic">Format</span> and 
+            <span class="italic">Output</span>
+        . By having a separate method for formatting the files, say in a string, the test would only need to call this method and would not need to write to a string. Let’s improve the class in the following way:</p>
+        
+        <div class="listing " id="l22.14"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> VCard </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> formattedName</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> email</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span>
+            <span class="bold"><span class="">void</span><span class=""> </span><span class="">export</span><span class="">( Writer out )</span></span> <span class="">throws</span><span class=""> IOException {</span><br/>    out.<span class="">write</span><span class="">( </span>
+            <span class="bold"><span class="">toString</span><span class="">()</span></span> );<br/>  }<br/><br/>  <span class="">public</span><span class=""> </span>
+            <span class="bold"><span class="">void</span><span class=""> </span><span class="">export</span><span class="">( </span><span class="">String</span><span class=""> filename )</span></span> <span class="">throws</span><span class=""> IOException {</span><br/>    <span class="">try</span><span class=""> ( Writer writer = Files.</span><span class="">newBufferedWriter</span><span class="">( Paths.</span><span class="">get</span><span class="">( filename ) ) ) { </span><br/>      
+            <span class="bold"><span class="">export</span><span class="">( writer )</span></span>;<br/>    }<br/>  }<br/><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span>
+            <span class="bold"><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span></span> {<br/>    StringBuilder result = <span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">( </span><span class="">"BEGIN:VCARD\n"</span><span class=""> );</span><br/>    <span class="">if</span><span class=""> ( formattedName != null &amp;&amp; ! formattedName.</span><span class="">isEmpty</span><span class="">() )</span><br/>      result.<span class="">append</span><span class="">( </span><span class="">"FN:"</span><span class=""> ).</span><span class="">append</span><span class="">( formattedName ).</span><span class="">append</span><span class="">( </span><span class="">"\n"</span><span class=""> );</span><br/>    <span class="">if</span><span class=""> ( email != null &amp;&amp; ! email.</span><span class="">isEmpty</span><span class="">() )</span><br/>      result.<span class="">append</span><span class="">( </span><span class="">"EMAIL:"</span><span class=""> ).</span><span class="">append</span><span class="">( email ).</span><span class="">append</span><span class="">( </span><span class="">"\n"</span><span class=""> );</span><br/>
+            <a id="p1087"/>    <span class="">return</span><span class=""> result.</span><span class="">append</span><span class="">( </span><span class="">"END:VCARD"</span><span class=""> ).</span><span class="">toString</span><span class="">();</span><br/>  }<br/>} <span class=""/></pre></div>
+        
+        <p class="caption "><b>Listing 22.14</b>    
+            com/tutego/insel/junit/util/vcf/v2/VCard.java, VCard</p>
+        
+        <p class="standard">This variant brings about two improvements at the same time:</p>
+        
+        <ol>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> method now returns the string prepared according to the vCard standard. The test now only must build a 
+                    <samp class="listingcharacter listingcharacter">VCard</samp> object, set the variables, call 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>, and test the string for correctness without any file operations. For the client, however, the API doesn’t change; it continues to write 
+                    <samp class="listingcharacter listingcharacter">export(...)</samp>
+                .</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Writing directly to files is no longer really up to date. This fact is taken into account by the class that provides an overloaded version of 
+                    <samp class="listingcharacter listingcharacter">export(...)</samp> with a generic 
+                    <samp class="listingcharacter listingcharacter">Writer</samp>. If, for example, a vCard is to be sent over the network, no problem arises. Only a suitable 
+                    <samp class="listingcharacter listingcharacter">Writer</samp>
+                 for the network target must be passed. Previously, this task would have been rather cumbersome (create file, read file, and send string).</p>
+            
+            </li>
+        
+        </ol>
+        
+        <p class="standard">The bottom line is that the payoff is big. The test is more performant, and the design leads to better source code—a win-win situation.</p>
+        
+        <p class="standard">This approach shows how to proceed with implementations that communicate with external resources in particular. These resources must be extracted as far as possible, if necessary also using a new type, which can then be injected as a test implementation.</p>
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

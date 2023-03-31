@@ -1,0 +1,267 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Object-Oriented Relationship" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Object-Oriented Relationship" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Object-Oriented Relationship</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h7.8">7.8    Further Information on Overriding and Dynamic Binding</h2>
+        
+        <p class="standard">After those basics, let’s now look at some special features and other terms.</p>
+        
+        
+            
+            <h3 class="t3" id="h7.8.1">7.8.1    No Dynamic Binding for Private, Static, and final Methods</h3>
+            
+            <p class="standard">When a private, static, or final method is not overridden, such a method is excluded from dynamic binding. If a method in the subclass has the same name as a private method in the superclass, this doesn’t matter to the compiler, which is good because private implementations are secret and hidden anyway. The subclass shouldn’t know anything about the private methods in the superclass. Instead of 
+                <span class="italic">overriding</span> a method, we call this 
+                <span class="italic">covering</span>
+                <a class="indexanchor" id="i07_72"/>
+                <a class="indexanchor" id="i07_73"/> or 
+                <span class="italic">concealing</span>
+                <a class="indexanchor" id="i07_74"/>
+                <a class="indexanchor" id="i07_75"/>
+             in this context.</p>
+            
+            <p class="standard">The fact that private, static, and final methods aren’t overridden is an important contribution to security. Indeed, if subclasses could override internal private methods, we would violate the inner workings of the superclass. In other words, private methods aren’t visible in the subclasses and are therefore not overridden. Otherwise, private implementations could be changed subsequently, and superclasses would no longer be sure to use only their own methods.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.8.2">7.8.2    Covariant Return Types</h3>
+            
+            <p class="standard">If a method with a reference type overrides another as a return, the overriding method can use, as its return type, any subtype of the return type of the overridden method. This explanation sounds more complicated than it is, so let’s consider a quick example.</p>
+            
+            <div class="listing " id="l7.52"><pre><span class="">class</span><span class=""> Event </span><span class="">{}</span><span class=""><br/></span><span class="">class</span><span class=""> Workout </span><span class="">extends</span><span class=""> Event </span><span class="">{}</span><span class=""><br/></span> <br/><span class="">class</span><span class=""> Calendar </span><span class="">{</span><span class=""><br/></span>  Event <span class="">first</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Event</span><span class="">();</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span> <br/><span class="">class</span><span class=""> WorkoutCalendar </span><span class="">extends</span><span class=""> Calendar </span><span class="">{</span><span class=""><br/></span>
+                <a id="p477"/>//  @Override Event first() {<span class=""><br/></span>  <span class="">@Override</span><span class=""> </span>
+                <span class="bold"><span class="">Workout</span></span> <span class="">first</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.52</b>    
+            src/main/java/com/tutego/insel/game/c/vr/Application.java, main</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Calendar</samp> class declares the 
+                <samp class="listingcharacter listingcharacter">first()</samp> method and returns an 
+                <samp class="listingcharacter listingcharacter">Event</samp>. The 
+                <samp class="listingcharacter listingcharacter">Calendar</samp> subclass 
+                <samp class="listingcharacter listingcharacter">WorkoutCalendar</samp> overrides the 
+                <samp class="listingcharacter listingcharacter">first()</samp> method and could of course use the 
+                <samp class="listingcharacter listingcharacter">Event</samp> return type, but it returns a subtype of 
+                <samp class="listingcharacter listingcharacter">Event</samp>, namely, 
+                <samp class="listingcharacter listingcharacter">Workout</samp>. Referred to as 
+                <span class="italic">covariant return type</span>
+                <a class="indexanchor" id="i07_76"/>
+                <a class="indexanchor" id="i07_77"/>
+            , this option can be quite convenient because developers can often do without explicit typecasting.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">What is strange in this context is that modified access rights have always existed in Java. A subclass can extend visibility. Also, for exceptions, a subclass can create more specific exceptions or completely different exceptions than the superclass method.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.8.3">7.8.3    Array Types and Covariance*</h3>
+            
+            <p class="standard">The statement “If you want a little, you can get a lot” also applies to arrays because, if 
+                <samp class="listingcharacter listingcharacter">Sub</samp> class is a subclass of 
+                <samp class="listingcharacter listingcharacter">Super</samp> class, 
+                <samp class="listingcharacter listingcharacter">Sub[]</samp> is also a subtype of 
+                <samp class="listingcharacter listingcharacter">Super[]</samp>. This feature is called 
+                <span class="italic">covariance</span>
+                <a class="indexanchor" id="i07_78"/>. Since 
+                <samp class="listingcharacter listingcharacter">Object</samp> is the base class of all objects, an 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+             array can also store all other objects.</p>
+            
+            <p class="standard">Let’s explore covariance by building a static 
+                <samp class="listingcharacter listingcharacter">set(...)</samp>
+             method that simply places an element in the first position in the array.</p>
+            
+            <div class="listing " id="l7.53"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setFirst</span><span class="">(</span><span class=""> Object</span><span class="">[]</span><span class=""> array</span><span class="">,</span><span class=""> Object element </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  array<span class="">[</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> element</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 7.53</b>    
+            src/main/java/com/tutego/insel/oop/ArrayCovariance.java, set()</p>
+            
+            <p class="standard">Covariance isn’t a problem when reading state but is potentially dangerous when writing a state. Let’s see what happens with different array and element types in the following example:</p>
+            
+            <div class="listing " id="l7.54"><pre>Object<span class="">[]</span><span class=""> objectArray </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Object</span><span class="">[</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">];</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> stringArray </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">String</span><span class="">[</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">];</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> stringArray </span><span class="">instanceof</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> stringArray </span><span class="">instanceof</span><span class=""> Object</span><span class="">[]</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // true</span><span class=""><br/></span><br/><span class="">
+                    <a id="p478"/>
+                setFirst</span><span class="">(</span><span class=""> stringArray</span><span class="">,</span><span class=""> </span><span class="">"Life won’t wait"</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // 1</span><span class=""><br/></span><span class="">setFirst</span><span class="">(</span><span class=""> objectArray</span><span class="">,</span><span class=""> </span><span class="">"Yes you can"</span><span class=""> </span><span class="">);</span><span class="">      </span><span class=""> // 2</span><span class=""><br/></span><br/><span class="">setFirst</span><span class="">(</span><span class=""> stringArray</span><span class="">,</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Object</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">       </span><span class=""> // 3 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                </span><br/>// Exception in thread "main" java.lang.ArrayStoreException: java.lang.Object<span class=""><br/></span><span class="">setFirst</span><span class="">(</span><span class=""> stringArray</span><span class="">,</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"Set clear targets"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // 4 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                </span><br/>// Exception in thread "main" java.lang.ArrayStoreException: java.lang.StringBuilder<span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 7.54</b>    
+            src/main/java/com/tutego/insel/oop/ArrayCovariance.java, main</p>
+            
+            <p class="standard">Let’s recap: In line 1, the string can be stored in a 
+                <samp class="listingcharacter listingcharacter">String</samp> array. The call in line 2 also works because a 
+                <samp class="listingcharacter listingcharacter">String</samp> can also be stored in an 
+                <samp class="listingcharacter listingcharacter">Object</samp> array since 
+                <samp class="listingcharacter listingcharacter">String</samp> is a subclass of 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+            .</p>
+            
+            <p class="standard">Now, we face a dilemma: The array needs to store a reference whose type isn’t compatible. This problem is shown by lines 3 and 4 in the 
+                <samp class="listingcharacter listingcharacter">setFirst(...)</samp> call. At compile time, everything seemed fine, but during runtime, an 
+                <samp class="listingcharacter listingcharacter">ArrayStoreException</samp> is thrown, with the following message
+                <a class="indexanchor" id="i07_79"/>
+            :</p>
+            
+            <div class="listing " id="l_none_71020"><pre>Exception in thread <span class="">"main"</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span><span class="">ArrayStoreException</span><span class="">:</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span><span class="">Object</span><span class="">/</span><span class="">StringBuilder </span></pre></div>
+            
+            <p class="standard">We deserve this punishment, however, because a pure 
+                <samp class="listingcharacter listingcharacter">Object</samp> or 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> object can’t be stored in a 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             array.</p>
+            
+            <p class="standard">To summarize, Java’s type system can’t check this subtlety at translation time. Only at runtime is a test possible, with the bitter result of an 
+                <samp class="listingcharacter listingcharacter">ArrayStoreException</samp>
+            . This scenario is somewhat different with generics where comparable constructs are forbidden in inheritance relationships.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.8.4">7.8.4    Dynamic Binding even with Constructor Calls*</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i07_80"/>
+            The fact that a subclass constructor calls the superclass constructor can interfere with the initialization of variables in the subclass. Let’s first consider the following code:</p>
+            
+            <div class="listing " id="l_none_7102095159156"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> KingOfDenmark </span><span class="">extends</span><span class=""> HardCandy </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> type </span><span class="">=</span><span class=""> </span><span class="">"I am King of Denmark"</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">Now, where does the 
+                <samp class="listingcharacter listingcharacter">type</samp> variable get initialized? We know that initializations are always done in the constructor, but we have a 
+                <samp class="listingcharacter listingcharacter">super()</samp> in the constructor at the same time. Since the Java Language Specification (JLS) prohibits code before 
+                <samp class="listingcharacter listingcharacter">super()</samp>, the assignment must follow after the superclass call. The problem now is that a superclass constructor is called before variables in the subclass are initialized. If the superclass now manages to access the subclass variables, the value that gets set later will be miss
+                <a id="p479"/>ing. The access actually succeeds, but only by trickery because a superclass (say 
+                <samp class="listingcharacter listingcharacter">HardCandy</samp>
+            ) can’t access the variables of the subclass. However, within the superclass, you can call exactly that method of the subclass that overrides the subclass from the superclass. Since method calls are dynamically bound, a method can read the value, as in the following example:</p>
+            
+            <div class="listing " id="l7.55"><pre><span class="">class</span><span class=""> HardCandy </span><span class="">{</span><span class=""><br/></span>  <span class="">HardCandy</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">printType</span><span class="">();</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">printType</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"I do not know yet :-("</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> KingOfDenmark </span><span class="">extends</span><span class=""> HardCandy </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">String</span><span class=""> type </span><span class="">=</span><span class=""> </span><span class="">"I am King of Denmark"</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">@Override</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">printType</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> type </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    HardCandy candy <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">HardCandy</span><span class="">();</span><span class=""><br/></span>    candy<span class="">.</span><span class="">printType</span><span class="">();</span><span class=""><br/></span><br/>    KingOfDenmark <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">KingOfDenmark</span><span class="">();</span><span class=""><br/></span>    kingOfDenmark<span class="">.</span><span class="">printType</span><span class="">();</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 7.55</b>    
+            src/main/java/com/tutego/insel/oop/KingOfDenmark.java</p>
+            
+            <p class="standard">The result is the following output:</p>
+            
+            <div class="listing " id="l_none_71037"><pre>I do not know yet :-(<br/>I do not know yet :-(<br/>null<br/>I am King of Denmark </pre></div>
+            
+            <p class="standard">A special characteristic of this program is the fact that overridden methods—here 
+                <samp class="listingcharacter listingcharacter">printType()</samp>—are bound dynamically. This binding already exists even if the object hasn’t been fully initialized. Therefore, the constructor of the 
+                <samp class="listingcharacter listingcharacter">HardCandy</samp> superclass 
+                <a id="p480"/>doesn’t call the 
+                <samp class="listingcharacter listingcharacter">printType()</samp> method of 
+                <samp class="listingcharacter listingcharacter">HardCandy</samp>, but instead calls the 
+                <samp class="listingcharacter listingcharacter">printType()</samp> method of 
+                <samp class="listingcharacter listingcharacter">KingOfDenmark</samp>
+            . </p>
+            
+            <p class="standard">In this example, when a 
+                <samp class="listingcharacter listingcharacter">KingOfDenmark</samp> object is created, 
+                <samp class="listingcharacter listingcharacter">KingOfDenmark</samp> calls the constructor of 
+                <samp class="listingcharacter listingcharacter">HardCandy</samp> via 
+                <samp class="listingcharacter listingcharacter">super()</samp>. This constructor in turn calls the 
+                <samp class="listingcharacter listingcharacter">printType()</samp> method in 
+                <samp class="listingcharacter listingcharacter">KingOfDenmark</samp> but doesn’t find a string because this data won’t be set until after 
+                <samp class="listingcharacter listingcharacter">super()</samp>. Let’s write a constructor for 
+                <samp class="listingcharacter listingcharacter">KingOfDenmark</samp>
+             explicitly to clarify things:</p>
+            
+            <div class="listing " id="l_none_71047"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> KingOfDenmark </span><span class="">extends</span><span class=""> HardCandy </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">String</span><span class=""> type </span><span class="">=</span><span class=""> </span><span class="">"I am King of Denmark"</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">KingOfDenmark</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">super</span><span class="">();</span><span class=""><br/></span>    type <span class="">=</span><span class=""> </span><span class="">"I am King of Denmark"</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  …<br/><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">As a consequence, dynamically bound method calls via the 
+                <samp class="listingcharacter listingcharacter">this</samp>
+             reference are potentially harmful in constructors and should therefore be avoided by having the constructor call only private (or final) methods since these methods aren’t dynamically bound. If the constructor calls a private (final) method in its class, then the method stays that private (final).</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.8.5">7.8.5    No Dynamic Binding for Covered Object Variables*</h3>
+            
+            <p class="standard">Let’s say Canadian champion eater “Furious Pete”
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn07_10" id="fn07_10">[ 145 ]</a></span> eats everything in record time; let’s immortalize his pizza-eating feats in a Java program. The 
+                <samp class="listingcharacter listingcharacter">PizzaEater</samp> superclass represents the average eater, taking an estimated 900 seconds for a 12” pizza. 
+                <samp class="listingcharacter listingcharacter">FuriousPete</samp>
+             is a specialization and can eat a 12” pizza in 32 seconds.</p>
+            
+            <div class="listing " id="l7.56"><pre><span class="">class</span><span class=""> PizzaEater </span><span class="">{</span><span class=""/><br/><br/>  
+                <span class="bold"><span class="">int</span><span class=""> consumptionTime</span></span> = <span class="">900</span><span class=""> </span><span class="">/* Seconds */</span><span class="">;</span><span class=""/><br/><br/><span class="">  </span>
+                <span class="bold"><span class="">void</span><span class=""> </span><span class="">eat</span><span class="">()</span></span> {<span class=""/><br/><span class="">    System.out.</span><span class="">printf</span><span class="">( </span><span class="">"I eat a pizza in %d seconds%n"</span><span class="">, consumptionTime );</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">}</span><span class=""/><br/><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> FuriousPete </span><span class="">extends</span><span class=""> PizzaEater {</span><span class=""/><br/><span class=""> </span><span class=""/><br/><span class="">
+                    <a id="p481"/>
+                  </span>
+                <span class="bold"><span class="">int</span><span class=""> consumptionTime</span></span> = <span class="">32</span><span class=""> </span><span class="">/* Seconds */</span><span class="">;</span><span class=""/><br/><br/><span class="">  </span><span class="">@Override</span><span class=""> </span>
+                <span class="bold"><span class="">void</span><span class=""> </span><span class="">eat</span><span class="">()</span></span> {<span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span>
+                <span class="bold">consumptionTime</span> );                     <span class="">// 32</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span>
+                <span class="bold"><span class="">super</span><span class="">.consumptionTime</span></span> );               <span class="">// 900</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span>
+                <span class="bold"><span class="">this</span><span class="">.consumptionTime</span></span> );                <span class="">// 32</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span>
+                <span class="bold">((PizzaEater) <span class="">this</span><span class="">).consumptionTime</span></span> ); <span class="">// 900</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><span class=""/><br/><span class="">    </span><span class="">new</span><span class=""> </span><span class="">FuriousPete</span><span class="">().</span><span class="">eat</span><span class="">();</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.56</b>    
+            src/main/java/com/tutego/insel/oop/FuriousPete.java</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">PizzaEater</samp> superclass declares a 
+                <samp class="listingcharacter listingcharacter">consumptionTime</samp>
+             object variable, and the subclass also declares an object variable with the same name. (In Java, having the same name for an object variable enables it to shadow another object variable of the same name.)</p>
+            
+            <p class="standard">The subclass can come one level higher with 
+                <samp class="listingcharacter listingcharacter">super.consumptionTime</samp>. The reference 
+                <samp class="listingcharacter listingcharacter">super</samp>, like 
+                <samp class="listingcharacter listingcharacter">this</samp>, is a special reference and can be used in the same way, except that 
+                <samp class="listingcharacter listingcharacter">super</samp> goes into the namespace of the superclass. A concatenation of 
+                <samp class="listingcharacter listingcharacter">super</samp> keywords in a deeper inheritance hierarchy isn’t possible. 
+                <samp class="listingcharacter listingcharacter">super</samp> must be directly followed by an object member, and code like 
+                <samp class="listingcharacter listingcharacter">super.super.consumptionTime</samp>
+             are thus always invalid.</p>
+            
+            <p class="standard">For method calls, the runtime system always binds dynamically, which isn’t the case for access to object variables. In this case, the compiler determines the class from which the object variable should be taken. Our program achieves this behavior with the following statement:</p>
+            
+            <div class="listing " id="l_none_71080"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">((</span><span class="">PizzaEater</span><span class="">)</span><span class=""> </span><span class="">this</span><span class="">).</span><span class="">consumptionTime </span><span class="">);</span><span class="">    </span><span class=""> // 900</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The output 
+                <samp class="listingcharacter listingcharacter">900</samp> is identical to 
+                <samp class="listingcharacter listingcharacter">System.out.println(super.consumptionTime)</samp>. The 
+                <samp class="listingcharacter listingcharacter">this</samp> reference has the type 
+                <samp class="listingcharacter listingcharacter">FuriousPete</samp> in its context. But if we convert the type to the 
+                <samp class="listingcharacter listingcharacter">PizzaEater</samp> base type, we’ll get exactly the assignment of 
+                <samp class="listingcharacter listingcharacter">consumptionTime</samp> from the base class of our hierarchy. An explicit typecasting in the direction of a supertype is also never necessary for dynamically bound method calls; the runtime environment decides independently where the call goes. In the 
+                <samp class="listingcharacter listingcharacter">eat()</samp> methods of 
+                <samp class="listingcharacter listingcharacter">FuriousPete</samp>
+            , then, the following lines are identical:</p>
+            
+            <div class="listing " id="l_none_71075"><pre><span class="">((</span><span class="">PizzaEater</span><span class="">)</span><span class=""> </span><span class="">this</span><span class="">).</span><span class="">eat</span><span class="">();</span><span class=""><br/></span><span class="">eat</span><span class="">();</span><span class=""> </span></pre></div>
+            
+            <p class="standard">In this case, this scenario is a recursion.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,737 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Lambda Expressions and Functional Programming" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Lambda Expressions and Functional Programming" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Lambda Expressions and Functional Programming</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h13.4">13.4    Functional Programming</h2>
+        
+        <p class="standard">Functional programming makes it possible to parameterize a behavior—a sorting method always works the same, but its behavior during comparisons is different. This parameterization is on a different abstraction level than just passing simple values. 
+            <a class="indexanchor" id="i13_16"/>
+        </p>
+        
+        
+            
+            <h3 class="t3" id="h13.4.1">13.4.1    Code = Data</h3>
+            
+            <p class="standard">When you hear the term 
+                <span class="italic">data</span>
+            , you might first think of numbers, bytes, strings, or even complex objects with states. In this chapter, we’ll expand this view a little and direct it to program code. Java code, epitomized as a series of bytecodes, also consists of data. </p>
+            
+            <p class="standard">Once you buy into this view that code equals data, then code can also be passed like data and can thus be transferred from one point to another, stored, and later referenced. This ability to transfer code makes customizing the behavior of algorithms easy. </p>
+            
+            <p class="standard">
+                <a id="p763"/>
+            Let’s start with a few examples where program code is passed and accessed later:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A thread executes program code in the background. The program code that the Java thread should execute is wrapped into an object of type 
+                        <samp class="listingcharacter listingcharacter">Runnable</samp> (more precisely, set in a 
+                        <samp class="listingcharacter listingcharacter">run()</samp> method). When the thread’s turn arrives, the thread calls the 
+                        <samp class="listingcharacter listingcharacter">run()</samp>
+                     method.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Timer</samp> is a 
+                        <samp class="listingcharacter listingcharacter">java.util </samp>class that can execute program code at specific times. The object method 
+                        <samp class="listingcharacter listingcharacter">scheduleAtFixedRate(...)</samp> is passed an object of the type 
+                        <samp class="listingcharacter listingcharacter">TimerTask</samp>
+                    , which contains the program code.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">To sort data, you can define your own sort order, which can be passed to the sorter as a 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp>. The 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp>
+                     declares a comparison method to which the sorter turns to put two objects in the desired order.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If the user clicks a button on the interface, an action occurs. For example, in the graphical user interface (GUI) framework Swing—the program code in an object of the type 
+                        <samp class="listingcharacter listingcharacter">ActionListener</samp> and is attached to the button 
+                        <samp class="listingcharacter listingcharacter">JButton</samp> with 
+                        <samp class="listingcharacter listingcharacter">addActionListener(...)</samp>. If button activation occurs, the UI system processes the program code in the 
+                        <samp class="listingcharacter listingcharacter">actionPerformed(...)</samp> method of the stored 
+                        <samp class="listingcharacter listingcharacter">ActionListener</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">To move program code from one place to another, the same mechanism is always used in Java: A class implements a (usually non-static) method that contains the program code to be executed. An object of this class is passed to another location, and the interested party then accesses the program code via the method. The fact that an object can contain more than one implementation, such as variables, constants, and constructors, is not relevant in this context. Let’s now take a closer look at this mechanism by exploring its variants.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.4.2">13.4.2    Programming Paradigms: Imperative or Declarative</h3>
+            
+            <p class="standard">In some way, a developer must describe the problem at hand as a program that the computer can eventually execute. In this context, different types of problem description are available, referred to as 
+                <span class="italic">programming paradigms</span>
+                <a class="indexanchor" id="i13_17"/>
+            . So far, we’ve mostly dealt with imperative programming, which focuses on statements. In the English language, verbs have an imperative mood (i.e., the command form), which can be compared quite well with imperative programming because, in both cases, statements capture commands like “do this, do that.” These “commands,” through variables, case distinctions, and jumps, describe the program and the solution path.</p>
+            
+            <p class="standard">While imperative programming is technically the oldest form of describing programs, it’s not the only one. In contrast, declarative programming
+                <a class="indexanchor" id="i13_18"/>
+                <a class="indexanchor" id="i13_19"/>
+             describes not the how to solve the problem, but the what, (that is, what is actually required), without getting bogged down in exact procedures. At first glance, this kind of programming sounds abstract, but you’re already familiar with the principle if you’ve ever performed the following actions:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <a id="p764"/>
+                    Made a selection like “*.html” in the command line or in the File Explorer in Windows search field</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Written a database query with SQL</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Used an XML selection with XQuery</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Formulated a build script with Maven </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Described an XML transformation with Extensible Stylesheet Language Transformations (XSLT)</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Let’s stay with SQL for a moment to illustrate one point clearly. Of course, in the end, the CPU executes the processing of the tables and the evaluations of the results in a purely imperative way, but declarative programming is about the program description on a higher level of abstraction. Declarative programs are usually much shorter, and thus other advantages come into play, such as easier extensibility and comprehensibility. Since declarative programs often have a mathematical background, formally proving the correctness of the descriptions is also easier.</p>
+            
+            <p class="standard">Declarative programming is a programming style, and a declarative description needs some kind of “runtime environment” because SQL cannot directly control a CPU, for example. But instead of dealing only with special use cases (such as database or XML queries), typical algorithms can also be formulated declaratively, using functional programming. Thus, imperative programs and functional programs are equally powerful in their capabilities.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.4.3">13.4.3    Principles of Functional Programming</h3>
+            
+            <p class="standard">While imperative programming focuses on the sequence of statements and object-oriented programming (OOP) focuses on objects with states and behaviors, functional programming is characterized by other things.</p>
+            
+            
+                
+                <h4 class="t4" id="h13.4.3.1">Pure Functions without Side Effects</h4>
+                
+                <p class="standard">In mathematics, a 
+                    <span class="italic">function</span> is a mapping from elements of a definition set to exactly one element of a target set, for example, 
+                    <samp class="listingcharacter listingcharacter">double zero = Math.sin(Math.PI);</samp>. Similarly, 
+                    <samp class="listingcharacter listingcharacter">string JOHNANDEVE = "johnAndEve".toUpperCase()</samp>
+                 is another example from an object-oriented (OO) point of view: A value comes in, and a value comes out.</p>
+                
+                <p class="standard">Functions are called 
+                    <span class="italic">pure functions</span>
+                    <a class="indexanchor" id="i13_20"/>
+                    <a class="indexanchor" id="i13_21"/>
+                , if they fulfill the following two prerequisites:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">They always provide the same outputs for the same inputs.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">They have no side effects (i.e., don’t modify any external state).</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Consequently, 
+                    <samp class="listingcharacter listingcharacter">Math.sin(...)</samp> is a pure function, but 
+                    <samp class="listingcharacter listingcharacter">System.out.println()</samp> or 
+                    <samp class="listingcharacter listingcharacter">Math.random()</samp>
+                 aren’t. That their implementations do change states, for example, on the stack, and thus describe memory cells doesn’t matter—what’s important is the conceptual view. The API documentation should be good enough to name side effects.</p>
+                
+                <p class="standard">
+                    <a id="p765"/>An expression built from pure functions is called a 
+                    <span class="italic">pure expression</span>
+                    <a class="indexanchor" id="i13_22"/>
+                    <a class="indexanchor" id="i13_23"/>. This kind of expression has a feature called 
+                    <span class="italic">referential transparency</span>
+                    <a class="indexanchor" id="i13_24"/>
+                    <a class="indexanchor" id="i13_25"/> in computer sciences, namely, that the result of an expression can be substituted for the expression itself without the program exhibiting any different behavior. Instead of 
+                    <samp class="listingcharacter listingcharacter">Math.sin(Math.PI)</samp>, the compiler can substitute the expression with 
+                    <samp class="listingcharacter listingcharacter">0</samp>
+                , and the result would be the same. A compiler can perform various optimizations in the presence of referential transparency.</p>
+                
+                <p class="standard">In OOP, you’ll use methods to modify the states of objects. A radio should be louder? We can call 
+                    <samp class="listingcharacter listingcharacter">volumeUp()</samp>, and the internal state 
+                    <samp class="listingcharacter listingcharacter">volume</samp>
+                 is increased. Having states in objects is natural for OO software development.</p>
+                
+                <p class="standard">OO developers get a funny feeling when they hear “functional programming” because it sounds like no states exist, which is a misconception. Conditions still exist; it’s just that they are “elsewhere.” For this purpose, let’s look at 
+                    <samp class="listingcharacter listingcharacter">"john&amp;Eve".toUpperCase()</samp>. What is the condition in this case? Does 
+                    <samp class="listingcharacter listingcharacter">toUpperCase()</samp> modify a state? The 
+                    <samp class="listingcharacter listingcharacter">String</samp> method doesn’t change the state of an existing 
+                    <samp class="listingcharacter listingcharacter">String</samp> object. The basic gist is that the return of 
+                    <samp class="listingcharacter listingcharacter">toUpperCase()</samp> is a new 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 object with the desired states. At the core of functional programming, functions get an object and also return an object, but these objects aren’t changed and can (and even should) be immutable. To summarize, in object orientation, an operation with side effects results in a change to the object; in functional programming, an operation results in a new object with no change to the old object.</p>
+                
+                <p class="standard">Functional libraries can be easily recognized by the fact that they request objects and return objects. For this reason, any method that returns 
+                    <samp class="listingcharacter listingcharacter">void</samp>
+                 raises suspicion because the state must be obtained and stored somewhere else. This condition can cause problems when writing, so a backup is necessary for modern parallel access.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.4.3.2">Nested Calls Instead of Statement Sequences</h4>
+                
+                <p class="standard">While imperative programs distinguish between statements and expressions, in functional programming languages, everything is an expression. In the functional world, the focus is on evaluations of expressions rather than on the sequential processing of statements.</p>
+                
+                <p class="standard">Of course, developers of functional programs don’t write everything nested into a single line, but they use several lines. Many functional programming languages provide an operator reminiscent of a variable assignment, but this operator is just a name, a symbol, for the expression—the context is again referential transparency. This approach is quite different from imperative programming languages, where the variable represents a memory area. In functional programming languages, identifiers only make complex nested expressions more readable.</p>
+                
+                <p class="standard">In Java, only a few statements are also expressions, such as method calls with returns or assignments. Case distinctions and loops don’t return a result—one reason why neither exist in these forms in functional programming languages. Even with the condition operator in Java, case distinctions with alternatives can be implemented, 
+                    <a id="p766"/>which is an expression. Repetitions can be implemented in functional programming languages via recursions. A typical example is the calculation of the factorial. The formula is 
+                    <span class="italic">n! = 1 × 2 × 3 × ... × n</span>
+                , and with loops and variables. In the imperative way, you would write the following code:</p>
+                
+                <div class="listing " id="l_none_13791"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">factorial</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> n </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> result </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span>  <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""> i </span><span class="">&lt;=</span><span class=""> n</span><span class="">;</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    result <span class="">*=</span><span class=""> i</span><span class="">;</span><span class=""><br/></span>  <span class="">return</span><span class=""> result</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Clearly, the many assignments and the case distinction of the loop can be read, which are the typical indicators for imperative programs. The loop counter increases, so state comes into the program because the current index must be kept somewhere in the memory. The recursive variant is quite different. No assignments are made in the program, and the notation is reminiscent of a mathematical definition. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_13804"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">factorial</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> n </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> n </span><span class="">==</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">?</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">:</span><span class=""> n </span><span class="">*</span><span class=""> </span><span class="">factorial</span><span class="">(</span><span class=""> n </span><span class="">-</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Since the number of repetitions can be high and recursions traditionally use up the stack, optimizations are quite important. Many developers therefore look closely at optimizing 
+                    <span class="italic">end-recursive methods</span>
+                —the methods that ultimately call the method itself again. In this case, space can be saved on the stack. (The JVM can’t do this so far and for Oracle engineers it has little priority.)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.4.3.3">First-Order Functions and Higher-Order Functions</h4>
+                
+                <p class="standard">The two points mentioned so far can also be implemented in Java with discipline. However, one thing is not possible with Java that is common in functional programming languages: Functions have a completely different status—they are their own types.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example assigns and executes some functions in JavaScript:</p>
+                    
+                    <div class="listing  last_item" id="l_none_13819"><pre>function <span class="">printVodka</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> console</span><span class="">.</span><span class="">log</span><span class="">(</span><span class="">"Vodka"</span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span>function <span class="">printWhiskey</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> console</span><span class="">.</span><span class="">log</span><span class="">(</span><span class="">"Whiskey"</span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span>printDrink <span class="">=</span><span class=""> Math</span><span class="">.</span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">&gt;</span><span class=""> </span><span class="">0.5</span><span class=""> </span><span class="">?</span><span class=""> printVodka </span><span class="">:</span><span class=""> printWhiskey</span><span class="">;</span><span class=""><br/></span><span class="">printDrink</span><span class="">()</span><span class="">;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">
+                    <a id="p767"/>
+                In Java, only primitive types and reference types exist, and methods as such aren’t types. Functions are values in functional programming languages and thus the following actions are possible:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Functions can be assigned to variables.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Functions can be passed to other functions.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Functions can, in turn, return functions.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Thus, functional programming involves 
+                    <span class="italic">higher-order functions</span>
+                    <a class="indexanchor" id="i13_26"/>, which
+                    <span class="italic"> </span>
+                allows for the rather flexible composition of functions because functions can be easily passed on.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.4.4">13.4.4    Imperative Programming and Functional Programming</h3>
+            
+            <p class="standard">Functional programming is a real alternative to imperative programming. Languages that fall into this paradigm are LISP (first introduced in 1958) and derivatives such as Clojure, Erlang, ML (and OCaml), F#, and Haskell. Java is not a functional programming language because it lacks the ability to use higher-order functions, but you can compensate for this disadvantage with some tricks.</p>
+            
+            
+                
+                <h4 class="t4" id="h13.4.4.1">Why Functional Programming Has a Hard Time</h4>
+                
+                <p class="standard">A list of the most popular programming languages
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn13_06" id="fn13_06">[ 193 ]</a></span>
+                 would show that purely functional programming languages aren’t terribly popular. Functional programming is feared by many developers for several reasons:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <span class="bold">Readability</span><br/>Historically, LISP from 1958 represents the beginning of functional programming languages. This language is quite flexible, but awkward to read. Our factorial in LISP would be written as 
+                            <samp class="listingcharacter listingcharacter">(defun factorial (n) (if (= n 1) 1 (* n (factorial (- n 1)))))</samp>. All those parentheses make a program difficult to read, and the expressions are in the prefix notation 
+                            <samp class="listingcharacter listingcharacter">- n 1</samp> instead of the usual notation 
+                            <samp class="listingcharacter listingcharacter">n - 1</samp>
+                        . Other functional programming languages are different, but a certain prejudice persists that all functional programming languages are hard to read.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <span class="bold">Terminology</span><br/>Higher-order functions, idempotence, function, functor, predicate, arity, lambda, closure, currying, monoid, and monad—you might think that these terms from functional programming are only for mathematicians and computer scientists. These concepts scare many developers, who consequently don’t engage with the paradigm.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <span class="bold">Academic and mathematical</span><br/>Functional programming also has something academic about it because this programming paradigm is often associated only with mathematical functions in the 
+                            <a id="p768"/>
+                        minds of developers. Only a few will actually need to calculate factorials or Fibonacci numbers in programs, so programmers quickly put functional programming aside. But these prejudices are unfounded, and we recommend mentally detaching functional programming from mathematics because the vast majority of programs have nothing to do with mathematical functions in the true sense, but instead deal much more with formally described methods.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <span class="bold">Performance and memory consumption</span><br/>Without clever optimizations on the part of the compiler and the runtime environment, recursive calls in particular can lead to bulging stacks and poor runtimes.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <span class="bold">Purely functional</span><br/>Some functional programming languages called “pure” don’t permit state changes. The development of input/output operations or simple random numbers is thus a big deal, which is no longer comprehensible for developers.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.4.4.2">Functional Object-Oriented Languages Are Popular</h4>
+                
+                <p class="standard">In recent years, many OOP languages have gained support for functional programming, or new functional programming languages with pragmatic state changes have appeared. From our point of view today, a combination of both concepts looks promising for the future. Functional programming is a way of thinking that has certain advantages, especially in a world of parallel execution where state changes can quickly become a problem. Also, declarative programming shifts more responsibility to the framework, which can get better and better as it progresses through optimizations.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.4.4.3">How to Program Functionally with Java?</h4>
+                
+                <p class="standard">Java doesn’t allow you to pass methods as values—there are no values and no 
+                    <span class="italic">first-class functions</span>
+                    <a class="indexanchor" id="i13_27"/>
+                . Since we can’t pass functions, we must use a trick. Instead of passing functions, you would perform the following tasks:</p>
+                
+                <ol>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Set the functionality into a method.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Set the method into a class.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Create an object of this class.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Pass this object as a kind of wrapper for the function.</p>
+                    
+                    </li>
+                
+                </ol>
+                
+                <p class="standard">To prevent a receiver from getting any object with any method, an interface is added as an intermediary: One side implements the interface and adheres to a contract, and the receiver gets something of the desired type and can call the method.</p>
+                
+                <p class="standard">With this detour Java can also only go far, and the option has existed since Java 1.0. However, the code size is large, so the path was impractical. Now, however, lambda expressions are the perfect language tool because they make functional programs compact and easy to read, and the JVM has excellent optimization capabilities. Of 
+                    <a id="p769"/>
+                course, Java can never do 100% of what a functional programming language can do (and enforces), but these capabilities are quite sufficient for practical use.</p>
+                
+                <p class="standard">Thus, Java enables both OOP and functional programming, and developers can choose the path that’s best for solving a problem. Of course, this ambiguity can also create problems because, whenever several possible solutions exist, disputes may arise as to which variant is the best. Indeed, conflicting opinions can prevail from developer to developer. But a functional approach has some undeniable advantages, which we’ll focus on more closely next.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.4.5">13.4.5    Comparator as an Example of Higher-Order Functions</h3>
+            
+            <p class="standard">Let’s look again at our example from 
+                <span class="crossreference "><a href="13_001.html#h13.1">Section 13.1</a></span>, string sorting, but this time from the perspective of a functional programmer. A 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> is a simple “function” with two parameters and one return. This “function” (implemented as a method) is in turn passed to the 
+                <samp class="listingcharacter listingcharacter">sort(...)</samp> method. All these tasks are functionally programmed because we’re programming functions and then passing them. 
+                <span class="crossreference "><a href="13_004.html#t13.9">Table 13.9</a></span>
+             shows three examples (generics omitted).</p>
+            
+            <table class="standardtable" id="t13.9">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Code</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Meaning</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Comparator c1 = (s, t) -&gt; …</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Implements a function via a lambda expression</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Arrays.sort(array, c1);</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Takes a “function” as an argument</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Comparator c2 = Collections.reverseOrder(c1);</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Accepts a “function” and also returns a function</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 13.9</b>    
+            Examples of Functions in Transfer and as a Return</p>
+            
+            <p class="standard">We’ve already established that functions can’t be passed in Java, so we can help ourselves with the possibility of putting the functionality in a method, so that the function becomes an object with a method, which implements the logic. Lambda expressions or method/constructor references provide a compact syntax without the burden of having to write an extra class with a method.</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> type is a functional interface and represents a special function with two parameters of the same type and an integer return. Other functional interfaces are a bit more flexible than 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>, for example, interfaces that allow the return to be 
+                <samp class="listingcharacter listingcharacter">double</samp> or something else (instead of 
+                <samp class="listingcharacter listingcharacter">int</samp>
+            ).</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.4.6">13.4.6    Viewing Lambda Expressions as Mappings or Functions</h3>
+            
+            <p class="standard">Recall that lambda expressions can be formulated in the following general syntax:</p>
+            
+            <div class="listing " id="l_none_13835"><pre><span class="">(</span><span class=""> </span>
+                <span class="italic"><span class="">LambdaParameter</span></span> ) -&gt; { 
+                <span class="italic">Statements</span> } <span class=""/></pre></div>
+            
+            <p class="standard">
+                <a id="p770"/>The arrow clear shows that we’re dealing with a lambda expression with functions that map something else. In the case of the 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>, we have a mapping of two strings to an integer, which can be wrapped in a slightly more mathematical notation: 
+                <samp class="listingcharacter listingcharacter">(String, String) → int</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first last">Methods exist with and without returns and with and without parameters. The same is true with lambda expressions. shows a few examples in Java code with their mappings.</p>
+            
+            </div>
+            
+            <table class="standardtable" id="t13.10">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Lambda Expression</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Mapping</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(int a, int b) → a + b</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(int, int) → int</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(int a) → Math.abs( a )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(int) → int</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(String s) → s.isEmpty()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(String) → boolean</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(Collection c) → c.size()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(Collection) → int</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">() → Math.random()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">() → double</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(String s) → { System.out.print( s ); }</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(String) → void</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">() → {}</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">() → void</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 13.10</b>    
+            Lambda Expressions and How They Map as Functions</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Terminology: Function versus Method</h6>
+                
+                <p class="standard first last">The Java language definition doesn’t know the term 
+                    <span class="italic">function</span> and speaks only of 
+                    <span class="italic">methods</span>
+                . Methods are always bound to classes, which means that methods are always bound to a context. This binding is central to object orientation since methods have read and write access to object variables. Lambda expressions, on the other hand, implement functions that first obtain their working values purely from the parameters and don’t depend on classes or objects. The idea behind functional programming languages is to get along without states, that is, to use functions in such a way that they deliver a result. Functions always return the same result for a specific parameter combination, regardless of the state of the surrounding overall program.</p>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

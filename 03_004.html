@@ -1,0 +1,770 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Classes and Objects" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Classes and Objects" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Classes and Objects</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h3.4">3.4    Creating New Objects</h2>
+        
+        <p class="standard">A class describes what an object should look like. Expressed in a set or element relation, objects correspond to elements, and classes correspond to sets in which the objects are contained as elements. These objects have members that can be used. If a point represents coordinates, ways to query and change these states will be available.</p>
+        
+        <p class="standard">In the following sections, we’ll examine how instances of the 
+            <samp class="listingcharacter listingcharacter">Point</samp> class can be created at runtime and how the members of the 
+            <samp class="listingcharacter listingcharacter">Point</samp> objects
+            <a class="indexanchor" id="i03_24"/>
+         can be accessed.</p>
+        
+        
+            
+            <h3 class="t3" id="h3.4.1">3.4.1    Creating an Instance of a Class Using the new Keyword</h3>
+            
+            <p class="standard">Objects must always be explicitly created in Java. For this purpose, the language defines the 
+                <samp class="listingcharacter listingcharacter">new</samp> keyword
+                <a class="indexanchor" id="i03_25"/>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The Java library declares the 
+                    <samp class="listingcharacter listingcharacter">Point</samp> type for points. The following code will create a 
+                    <samp class="listingcharacter listingcharacter">Point </samp>
+                object:</p>
+                
+                <div class="listing  last_item" id="l_none_323"><pre>
+                    <span class="bold"><span class="">new</span></span><span class=""> java.awt.</span><span class="">Point</span><span class="">();</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">Basically, 
+                <samp class="listingcharacter listingcharacter">new</samp> is something like a unary operator. The 
+                <samp class="listingcharacter listingcharacter">new</samp> keyword is followed by the name of the class of which an instance is to be created. The class name is fully qualified here because 
+                <samp class="listingcharacter listingcharacter">Point</samp> is in a 
+                <samp class="listingcharacter listingcharacter">java.awt</samp> package. (A package is a group of related classes; in 
+                <span class="crossreference "><a href="03_006.html#h3.6.3">Section 3.6.3</a></span>
+                <a id="p207"/>, you’ll see how developers can also abbreviate this notation.) The class name is followed by a pair of parentheses for the 
+                <span class="italic">constructor call</span>
+                <a class="indexanchor" id="i03_26"/>
+            . This call is a kind of method call that can be used to pass values for the initialization of the fresh object.</p>
+            
+            <p class="standard">If Java’s memory management can reserve free memory for the object to be created and if the constructor can be passed through validly, the 
+                <samp class="listingcharacter listingcharacter">new</samp> expression subsequently returns a 
+                <span class="italic">reference</span>
+                <a class="indexanchor" id="i03_27"/>
+             to the fresh object to the program. If we don’t remember this reference, automatic garbage collection can release the object.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.4.2">3.4.2    Declaring Reference Variables</h3>
+            
+            <p class="standard">The result of 
+                <samp class="listingcharacter listingcharacter">new</samp> is a reference to the new object. The reference is usually held in a 
+                <span class="italic">reference variable</span>
+                <a class="indexanchor" id="i03_28"/>
+             in order to be able to access properties of the object later.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Let’s declare the variable 
+                    <samp class="listingcharacter listingcharacter">p</samp> of type 
+                    <samp class="listingcharacter listingcharacter">java.awt.Point</samp>. The 
+                    <samp class="listingcharacter listingcharacter">p</samp> variable then takes the reference from the new object created via 
+                    <samp class="listingcharacter listingcharacter">new</samp>
+                , as in the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_32319551951"><pre>java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point p</span><span class="">;</span><span class=""><br/></span>p <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">()</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            <p class="standard">The declaration and initialization of a reference variable can be combined (also a local reference variable is uninitialized at the beginning like a local variable of a primitive type) in the following example:</p>
+            
+            <div class="listing " id="l_none_340"><pre>java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point p </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The types must be compatible, of course, and a 
+                <samp class="listingcharacter listingcharacter">Point</samp> object won’t pass as a 
+                <samp class="listingcharacter listingcharacter">String</samp>. Thus, attempting to assign a point object to an 
+                <samp class="listingcharacter listingcharacter">int</samp> or 
+                <samp class="listingcharacter listingcharacter">string</samp>
+             variable will result in a compiler error. Consider the following examples:</p>
+            
+            <div class="listing " id="l_none_346"><pre>
+                <span class="bold"><span class="">int</span></span><span class="">    p = </span><span class="">new</span><span class=""> </span>
+                <span class="bold">java.awt.<span class="">Point</span></span><span class="">();</span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Type mismatch: cannot convert from</span><span class=""><br/></span>                                <span class=""> // Point to int</span><span class=""><br/></span>
+                <span class="bold"><span class="">String</span></span><span class=""> s = </span><span class="">new</span><span class=""> </span>
+                <span class="bold">java.awt.<span class="">Point</span></span><span class="">();</span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Type mismatch: cannot convert from</span><span class=""><br/></span>                                <span class=""> // Point to String</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="standard">So, a variable stores either a simple value (variable of type 
+                <samp class="listingcharacter listingcharacter">int</samp>, 
+                <samp class="listingcharacter listingcharacter">boolean</samp>, 
+                <samp class="listingcharacter listingcharacter">double</samp>
+            , etc.) or a reference to an object. Ultimately, the reference is internally a pointer to a memory area but isn’t visible to Java developers in this way.</p>
+            
+            <p class="standard">Reference types are available in four designs: 
+                <span class="italic">class types</span>
+                <a class="indexanchor" id="i03_29"/>, 
+                <span class="italic">interface types</span>
+                <a class="indexanchor" id="i03_30"/>, 
+                <span class="italic">array types</span>
+                <a class="indexanchor" id="i03_31"/> (also called 
+                <span class="italic">field types</span>
+                <a class="indexanchor" id="i03_32"/>), and 
+                <span class="italic">type variables</span>
+             (a special generic type). Our case represents an example of a class type.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f3.2.html" id="f3.2"><img alt="&#10;                &#10;            Pressing Ctrl+1 Allows You to Create Either a New Local Variable or an Object Variable for the Expression" id="img-f3.2" src="bilderklein/klein03_002.png"/></a></div>
+            
+            <p class="caption "><b>Figure 3.2</b>    
+            
+                <a id="p208"/>
+            Pressing Ctrl+1 Allows You to Create Either a New Local Variable or an Object Variable for the Expression</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.4.3">3.4.3    Let’s Get to the Point: Accessing Object Variables and Methods</h3>
+            
+            <p class="standard">The variables declared in a class are called 
+                <span class="italic">object variables</span>
+                <a class="indexanchor" id="i03_33"/> or 
+                <span class="italic">instance variables</span>
+                <a class="indexanchor" id="i03_34"/>
+                <a class="indexanchor" id="i03_35"/>. Each created object has its own set of object variables,
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_04" id="fn03_04">[ 91 ]</a></span>
+             which make up the state of the object.</p>
+            
+            <p class="standard">The dot operator
+                <a class="indexanchor" id="i03_36"/>
+             allows you to access the states or call methods on objects. The dot is located between an expression that provides a reference and the object member. The API documentation describes which members exactly are provided by a class—if an object doesn’t have a member, the compiler will prohibit its use.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f3.3.html" id="f3.3"><img alt="Ctrl+Space Displays the Possible Members of a Reference. Pressing Enter Selects the Member and, Especially for Methods, Places the Cursor between the Pair of Parentheses." id="img-f3.3" src="bilderklein/klein03_003.png"/></a></div>
+            
+            <p class="caption "><b>Figure 3.3</b>    
+            Ctrl+Space Displays the Possible Members of a Reference. Pressing Enter Selects the Member and, Especially for Methods, Places the Cursor between the Pair of Parentheses.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p209"/>
+                Example</h6>
+                
+                <p class="standard first">The 
+                    <samp class="listingcharacter listingcharacter">p</samp> variable references a 
+                    <samp class="listingcharacter listingcharacter">java.awt.Point</samp> object. The object variables 
+                    <samp class="listingcharacter listingcharacter">x</samp> and 
+                    <samp class="listingcharacter listingcharacter">y</samp>
+                 are supposed to be initialized, as in the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_361"><pre>java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point p </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>p
+                    <span class="bold"><span class="">.x</span></span> = <span class="">1</span><span class="">;</span><br/>p
+                    <span class="bold">.y</span> = <span class="">2</span><span class=""> + p</span>
+                    <span class="bold">.x</span>;<span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">A method call is just as simple as an access to class or object variables. The expression with the reference is followed by the method name after the dot.</p>
+            
+            
+                
+                <h4 class="t4" id="h3.4.3.1">Door and Playing Piece on the Game Board</h4>
+                
+                <p class="standard">At first glance, point objects appear to be mathematical constructs, but they can be used universally. Anything that has a position in two-dimensional space can be represented by a point object. The point stores 
+                    <samp class="listingcharacter listingcharacter">x</samp> and 
+                    <samp class="listingcharacter listingcharacter">y</samp> for us, and if we didn’t have any point objects, we’d always have to store 
+                    <samp class="listingcharacter listingcharacter">x</samp> and 
+                    <samp class="listingcharacter listingcharacter">y</samp>
+                 separately.</p>
+                
+                <p class="standard">Let’s now put a playing piece and a door on a game board. Of course, the two objects have positions. Without objects, the storage of these coordinates would perhaps look like the following example:</p>
+                
+                <div class="listing " id="l_none_375"><pre><span class="">int</span><span class=""> playerX</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class=""> playerY</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class=""> doorX</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class=""> doorY</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Modeling 
+                    <samp class="listingcharacter listingcharacter">x</samp> and 
+                    <samp class="listingcharacter listingcharacter">y</samp> separately isn’t ideal since a much better abstraction is available by using the 
+                    <samp class="listingcharacter listingcharacter">Point</samp>
+                 class, which also provides several useful methods.</p>
+                
+                <table class="standardtable" id="t3.2">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Without Abstraction, Only the Bare Data</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Encapsulation of the States in an Object</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">int playerX;<br/>int playerY;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">java.awt.Point player;</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">int doorX;<br/>int doorY;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">java.awt.Point door;</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 3.2</b>    
+            Objects Encapsulate States</p>
+                
+                <p class="standard">The following example creates two points representing the x/y coordinates of a playing piece and a door on a game board. Once the points have been created, the coordinates are set, and a test is carried out to see how far apart the playing piece and the door in the following example:</p>
+                
+                <div class="listing " id="l3.1"><pre><span class="">
+                        <a id="p210"/>
+                    class</span><span class=""> PlayerAndDoorAsPoints </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point player </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>    player
+                    <span class="bold"><span class="">.x</span></span> = player
+                    <span class="bold">.y</span> = <span class="">10</span><span class="">;</span><br/><br/>    java.awt.Point door = <span class="">new</span><span class=""> java.awt.</span><span class="">Point</span><span class="">();</span><br/>    door.
+                    <span class="bold"><span class="">setLocation</span><span class="">( </span><span class="">10</span><span class="">, </span><span class="">100</span><span class=""> )</span></span>;<br/><br/>    System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">player.<span class="">distance</span><span class="">( door )</span></span> ); <span class=""> // 90.0</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 3.1</b>    
+            PlayerAndDoorAsPoints.java</p>
+                
+                <p class="standard">In the first case, we are explicitly assigning the variables 
+                    <samp class="listingcharacter listingcharacter">x</samp> and 
+                    <samp class="listingcharacter listingcharacter">y</samp> of the game. In the second case, we won’t directly set the objects’ states via the variables but instead change these states via the 
+                    <samp class="listingcharacter listingcharacter">setLocation(...)</samp>
+                 method. The two objects have their own coordinates and won’t get in each other’s way.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f3.4.html" id="f3.4"><img alt="UML Diagram Showing the Dependency between a Class and java.awt.Point with a Dashed Line. Attributes and Operations of the Point Object Are Not Shown." id="img-f3.4" src="bilderklein/klein03_004.png"/></a></div>
+                
+                <p class="caption "><b>Figure 3.4</b>    
+            UML Diagram Showing the Dependency between a Class and java.awt.Point with a Dashed Line. Attributes and Operations of the Point Object Are Not Shown.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h3.4.3.2">toString()</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                    <a class="indexanchor" id="i03_37"/> method returns a 
+                    <samp class="listingcharacter listingcharacter">String</samp> object as the result to reveal the state of the point. This method is special in that every object has a 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                 method—however, the output is not useful in every case.</p>
+                
+                <div class="listing " id="l3.2"><pre><span class="">class</span><span class=""> PointToStringDemo </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point player </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point door   </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>    door<span class="">.</span><span class="">setLocation</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">100</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>    
+                    <span class="bold"><span class="">System.out.</span><span class="">println</span><span class="">( player.</span><span class="">toString</span><span class="">() );</span><span class=""> // java.awt.Point[x=0,y=0]</span><span class=""><br/></span>    System.out.<span class="">println</span><span class="">( door );             </span><span class=""> // java.awt.Point[x=10,y=100]</span></span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 3.2</b>    
+            PointToStringDemo.java</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>
+                        <a id="p211"/>
+                    Tip</h6>
+                    
+                    <p class="standard first last">Instead of explicitly calling 
+                        <samp class="listingcharacter listingcharacter">println(obj.toString())</samp> for the output, 
+                        <samp class="listingcharacter listingcharacter">println(obj)</samp> works as well. This method is useful because the signature 
+                        <samp class="listingcharacter listingcharacter">println(Object)</samp> accepts any object as an argument and automatically calls the 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>
+                     method on that object.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h3.4.3.3">After the Dot, Life Goes On</h4>
+                
+                <p class="standard">As you’ve seen, the 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                    <a class="indexanchor" id="i03_38"/> method returns a 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 object as a result, as in the following code:</p>
+                
+                <div class="listing " id="l_none_389"><pre>java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point  p </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span><span class="">String</span><span class="">          s </span><span class="">=</span><span class=""> p</span><span class="">.</span><span class="">toString</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s </span><span class="">);</span><span class="">                      </span><span class=""> // java.awt.Point[x=0,y=0]</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">String</samp> object itself has methods too. One 
+                    <samp class="listingcharacter listingcharacter">String</samp> object method is 
+                    <samp class="listingcharacter listingcharacter">length()</samp>
+                , which returns the length of the string, as in the following example:</p>
+                
+                <div class="listing " id="l_none_3101"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">length</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">             </span><span class=""> // 23</span><span class=""> </span></pre></div>
+                
+                <p class="standard">You can combine the request of the 
+                    <samp class="listingcharacter listingcharacter">String</samp> object and its length into a single expression, which is referred to as 
+                    <span class="italic">cascaded calls</span>
+                    <a class="indexanchor" id="i03_39"/>
+                    <a class="indexanchor" id="i03_40"/>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l_none_3118"><pre>java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point  p </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">p.</span><span class="">toString</span><span class="">().</span><span class="">length</span><span class="">()</span></span> ); <span class=""> // 23</span><span class=""> </span><span class=""/></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h3.4.3.4">Object Creation without Variable Assignment</h4>
+                
+                <p class="standard">When using object members, the type to the left of the point must always be a reference. Whether the reference comes from a variable or is created on-the-fly does not matter. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_3120"><pre>java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point  p </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">p.</span><span class="">toString</span><span class="">().</span><span class="">length</span><span class="">()</span></span> );                   <span class=""> // 23</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">The following code does exactly the same thing:</p>
+                
+                <div class="listing " id="l_none_3141"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">()</span>
+                    <span class="bold">.<span class="">toString</span><span class="">().</span><span class="">length</span><span class="">()</span></span> );<span class=""> // 23</span><span class=""> </span><span class=""/></pre></div>
+                
+                <div class="imagebox figure-type"><a href="img-f3.5.html" id="f3.5"><img alt="Each Nesting Results in a New Type" id="img-f3.5" src="bilderklein/klein03_005.png"/></a></div>
+                
+                <p class="caption "><b>Figure 3.5</b>    
+            Each Nesting Results in a New Type</p>
+                
+                <p class="standard">
+                    <a id="p212"/>
+                Basically, the following statement also works:</p>
+                
+                <div class="listing " id="l_none_3146"><pre><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">()</span>
+                    <span class="bold">.x</span> = <span class="">1</span><span class="">; </span><span class=""/></pre></div>
+                
+                <p class="standard">However, this last option doesn’t make sense in this context because, although the object is created and an object variable is set, the object is then fair game again for automatic garbage collection.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">You can use the 
+                        <samp class="listingcharacter listingcharacter">File</samp>
+                     object to determine the size of a file with the following code:</p>
+                    
+                    <div class="listing " id="l_none_3152"><pre><span class="">long</span><span class=""> size </span><span class="">=</span><span class=""> </span>
+                        <span class="bold"><span class="">new</span><span class=""> java.io.</span><span class="">File</span><span class="">( </span><span class="">"file.txt"</span><span class=""> )</span></span>.<span class="">length</span><span class="">();</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">The return value of the 
+                        <samp class="listingcharacter listingcharacter">File</samp> method 
+                        <samp class="listingcharacter listingcharacter">length()</samp>
+                     is the length of the file in bytes.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.4.4">3.4.4    The Connection between new, the Heap, and the Garbage Collector</h3>
+            
+            <p class="standard">If a runtime system receives a request to create an object via 
+                <samp class="listingcharacter listingcharacter">new</samp>, it reserves enough memory to accommodate all object members and management information. A 
+                <samp class="listingcharacter listingcharacter">Point</samp> object stores coordinates in two 
+                <samp class="listingcharacter listingcharacter">int</samp> values so at least 2 × 4 bytes are needed. The Java runtime environment obtains the memory space from the 
+                <span class="italic">heap</span>
+                <a class="indexanchor" id="i03_41"/>. The heap grows from a starting size to the maximum size allowed so that a Java program can’t grab arbitrary amounts of memory from the operating system, which would probably cause the machine to crash. In the HotSpot Java virtual machine (JVM), the heap is 
+                <sup>1</sup>/
+                <sub>64</sub> of main memory at startup and then grows to the maximum size of 
+                <sup>1</sup>/
+                <sub>4</sub> of main memory.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_05" id="fn03_05">[ 92 ]</a></span>
+            </p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Only a few special cases in Java exist where 
+                    <samp class="listingcharacter listingcharacter">new</samp> objects aren’t created via 
+                    <samp class="listingcharacter listingcharacter">new</samp>. Thus, the 
+                    <samp class="listingcharacter listingcharacter">newInstance()</samp> method, based on native code, creates a new object from the 
+                    <samp class="listingcharacter listingcharacter">Constructor</samp> object. Also, 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> can create a new object as a copy of another object. With string concatenation via 
+                    <samp class="listingcharacter listingcharacter">+</samp>, you don’t see a 
+                    <samp class="listingcharacter listingcharacter">new</samp>, but the compiler will build internal code to create a new 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 object.</p>
+            
+            </div>
+            
+            <p class="standard">If the system can’t provide enough memory for a new object, automatic garbage collection tries to clear away everything unused in a final rescue operation. If still not enough free memory is available, the runtime environment will generate an 
+                <samp class="listingcharacter listingcharacter">OutOfMemoryError</samp>
+                <a class="indexanchor" id="i03_42"/> and terminate the entire program.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_06" id="fn03_06">[ 93 ]</a></span>
+            </p>
+            
+            
+                
+                <h4 class="t4" id="h3.4.4.1">
+                    <a id="p213"/>
+                Heap and Stack</h4>
+                
+                <p class="standard">The JVM specification provides for five different 
+                    <span class="italic">runtime data areas</span>.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_07" id="fn03_07">[ 94 ]</a></span> In addition to 
+                    <span class="italic">heap memory</span>, let’s take a quick look at 
+                    <span class="italic">stack memory</span>
+                    <a class="indexanchor" id="i03_43"/>. The Java Runtime Environment (JRE) uses it for local variables, for example. Also, Java uses the stack when calling methods with parameters. The arguments go on the stack before the method call, and the called method can access the values by reading or writing through the stack. With endless recursive method calls, the maximum stack size will be reached at some point, and an exception of type 
+                    <samp class="listingcharacter listingcharacter">java.lang.StackOverflowError</samp>
+                 will occur. Since a JVM stack is associated with each thread, the end of the thread has come, with other threads continuing without impact.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h3.4.4.2">Automatic Garbage Collection: It’s Gone</h4>
+                
+                <p class="standard">Let’s consider the following scenario:</p>
+                
+                <div class="listing " id="l_none_3163"><pre>java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point binariumLocation</span><span class="">;</span><span class=""><br/></span>binariumLocation <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">50</span><span class="">,</span><span class=""> </span><span class="">9</span><span class=""> </span><span class="">);</span><span class=""><br/></span>binariumLocation <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">51</span><span class="">,</span><span class=""> </span><span class="">7</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">In this code, we’re declaring a 
+                    <samp class="listingcharacter listingcharacter">Point</samp> variable, building an instance, and assigning the variable. Then, we create a new 
+                    <samp class="listingcharacter listingcharacter">Point</samp>
+                 object and override the variable. But what about the first point?</p>
+                
+                <p class="standard">If the object is no longer referenced by the program, the automatic garbage collector notices and releases the reserved memory.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_08" id="fn03_08">[ 95 ]</a></span>
+                 Automatic garbage collection regularly tests whether the objects on the heap are still needed. If they aren’t needed, the object hunter deletes them. So, a kind of graveyard atmosphere always exists around the heap, and once the last reference has been taken from the object, it’s already dead. Several garbage collection algorithms exist, and each JVM vendor has its own procedures.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.4.5">3.4.5    Overview of Point Methods</h3>
+            
+            <p class="standard">A few methods of the 
+                <samp class="listingcharacter listingcharacter">Point</samp>
+             class have already been mentioned, and the API documentation naturally enumerates all methods: </p>
+            
+            <div class="listing " id="l_none_3176"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span>
+                <span class="bold">Point</span> <span class=""/></pre></div>
+            
+            <p class="standard">The more interesting methods include the following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">double getX()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">double getY()</samp><br/>Returns the 
+                        <span class="italic">x</span> or 
+                        <span class="italic">y</span>
+                     coordinate.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p214"/>
+                        void setLocation(double x, double y)</samp><br/>Sets the 
+                        <span class="italic">x</span> and the 
+                        <span class="italic">y</span>
+                     coordinates at the same time. The coordinates are rounded and stored in integers.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean equals(Object obj)</samp><br/>Checks if another point has the same coordinates. If so, the return is 
+                        <samp class="listingcharacter listingcharacter">true</samp>; otherwise, it’s 
+                        <samp class="listingcharacter listingcharacter">false.</samp> If something other than a 
+                        <samp class="listingcharacter listingcharacter">point</samp> is passed, the compiler won’t find fault with this, but the result will always be 
+                        <samp class="listingcharacter listingcharacter">false</samp>
+                    . </p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="imagebox figure-type"><a href="img-f3.6.html" id="f3.6"><img alt="Inheritance Hierarchy in Point2D" id="img-f3.6" src="bilderklein/klein03_006.png"/></a></div>
+            
+            <p class="caption "><b>Figure 3.6</b>    
+            Inheritance Hierarchy in Point2D</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p215"/>
+                Note</h6>
+                
+                <p class="standard first last">You may be surprised that a 
+                    <samp class="listingcharacter listingcharacter">Point</samp> stores the coordinates as 
+                    <samp class="listingcharacter listingcharacter">int</samp>, but the 
+                    <samp class="listingcharacter listingcharacter">getX()</samp> and 
+                    <samp class="listingcharacter listingcharacter">getY()</samp> methods return a 
+                    <samp class="listingcharacter listingcharacter">double</samp>, and 
+                    <samp class="listingcharacter listingcharacter">setLocation(double, double)</samp> takes the coordinates as 
+                    <samp class="listingcharacter listingcharacter">double</samp>, rounds them, and stores them as 
+                    <samp class="listingcharacter listingcharacter">int</samp>, thus losing precision. The reason relates to inheritance, which will be discussed in more detail in 
+                    <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>, 
+                    <span class="crossreference "><a href="07_002.html#h7.2">Section 7.2</a></span>. 
+                    <samp class="listingcharacter listingcharacter">Point</samp> inherits from 
+                    <samp class="listingcharacter listingcharacter">Point2D</samp>, and there’s already 
+                    <samp class="listingcharacter listingcharacter">double getX()</samp>, 
+                    <samp class="listingcharacter listingcharacter">double getY()</samp>, and 
+                    <samp class="listingcharacter listingcharacter">setLocation(double, double)</samp>; the 
+                    <samp class="listingcharacter listingcharacter">Point</samp> subclass can’t simply turn 
+                    <samp class="listingcharacter listingcharacter">double</samp> into 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                .</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h3.4.5.1">A Few Words about Inheritance and the API Documentation*</h4>
+                
+                <p class="standard">Not only does a class have its own members, it always inherits some members from its parents as well. In the case of 
+                    <samp class="listingcharacter listingcharacter">Point</samp>, the superclass is 
+                    <samp class="listingcharacter listingcharacter">Point2D</samp>—according to the API documentation. Even 
+                    <samp class="listingcharacter listingcharacter">Point2D</samp> inherits from 
+                    <samp class="listingcharacter listingcharacter">Object</samp>, the magic class that all Java classes have as a superclass. We’ll devote 
+                    <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>, 
+                    <span class="crossreference "><a href="07_002.html#h7.2">Section 7.2</a></span>, to inheritance
+                    <a class="indexanchor" id="i03_44"/> later, but right now, you must understand that the superclass passes object variables and methods to subclasses. Inherited object variables and methods are only briefly listed in the API documentation of a class in the block “Methods inherited from...” and are quickly forgotten. Therefore, developers must look not only at the methods of the class itself, but also at its inherited methods. So, for 
+                    <samp class="listingcharacter listingcharacter">Point</samp>, we need to not just understand the methods of 
+                    <samp class="listingcharacter listingcharacter">Point </samp>themselves, but also the methods from 
+                    <samp class="listingcharacter listingcharacter">Point2D</samp> and 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                .</p>
+                
+                <p class="standard">Let’s look at some methods of the superclass. The class declaration of 
+                    <samp class="listingcharacter listingcharacter">Point</samp> contains an 
+                    <samp class="listingcharacter listingcharacter">extends Point2D</samp>, which makes it explicitly clear that a superclass exists.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_09" id="fn03_09">[ 96 ]</a></span>
+                </p>
+                
+                <div class="listing " id="l_none_3195"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span>
+                    <span class="bold">Point</span><br/><span class="">extends</span><span class=""> Point2D </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static double distance(double x1, double y1, double x2, double y2)</samp><br/>Calculates the distance between the given points according to Euclidean distance.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">double distance(double x, double y)</samp><br/>Calculates the distance of the current point to the specified coordinates.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">double distance(Point2D pt)</samp><br/>Calculates the distance of the current point to the coordinates of the passed point.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h3.4.5.2">Are Two Points the Same?</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method tells you whether two points are equal, and its use is pretty simple. Let’s imagine managing the coordinates for a player, a door, and a snake and 
+                    <a id="p216"/>
+                then test whether the player is “on” the door and whether the snake is “on” the player’s position.</p>
+                
+                <div class="listing " id="l3.3"><pre><span class="">class</span><span class=""> PointEqualsDemo </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point player </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>    player<span class="">.</span><span class="">x </span><span class="">=</span><span class=""> player</span><span class="">.</span><span class="">y </span><span class="">=</span><span class=""> </span><span class="">10</span><span class="">;</span><span class=""><br/></span><br/>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point door </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>    door<span class="">.</span><span class="">setLocation</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">player.</span><span class="">equals</span><span class="">( door )</span></span> );  <span class=""> // true</span><span class=""><br/></span>    System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">door.<span class="">equals</span><span class="">( player )</span></span> );  <span class=""> // true</span><span class=""><br/></span><br/>    java.awt.Point snake = <span class="">new</span><span class=""> java.awt.</span><span class="">Point</span><span class="">();</span><br/>    snake.<span class="">setLocation</span><span class="">( </span><span class="">20</span><span class="">, </span><span class="">22</span><span class=""> );</span><br/><br/><br/>    System.out.<span class="">println</span><span class="">( snake.</span><span class="">equals</span><span class="">( door ) );  </span><span class=""> // false</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 3.3</b>    
+            PointEqualsDemo.java</p>
+                
+                <p class="standard">Since player and door have the same coordinates, 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> returns 
+                    <samp class="listingcharacter listingcharacter">true</samp>. Whether we have the distance from the player to the door calculated or the distance from the door to the player—the result with 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 should always be symmetrical.</p>
+                
+                <p class="standard">Another test option results from 
+                    <samp class="listingcharacter listingcharacter">distance(...)</samp>
+                 because, if the distance between points is zero, then the points naturally lie on top of each other and thus have no distance.</p>
+                
+                <div class="listing " id="l3.4"><pre><span class="">class</span><span class=""> Distances </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point player </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>    player<span class="">.</span><span class="">setLocation</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point door </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>    door<span class="">.</span><span class="">setLocation</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point snake </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>    snake<span class="">.</span><span class="">setLocation</span><span class="">(</span><span class=""> </span><span class="">20</span><span class="">,</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">player.</span><span class="">distance</span><span class="">( door )</span></span> );            <span class=""> // 0.0</span><span class=""><br/></span>    System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">player.<span class="">distance</span><span class="">( snake )</span></span> );           <span class=""> // 10.0</span><span class=""><br/></span>    System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">player.<span class="">distance</span><span class="">( snake.x, snake.y )</span></span> );<span class=""> // 10.0</span><span class=""><br/></span>
+                    <a id="p217"/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 3.4</b>    
+            Distances.java</p>
+                
+                <p class="standard">Player, door, and snake are again represented as 
+                    <samp class="listingcharacter listingcharacter">Point</samp> objects and preassigned with positions. For the 
+                    <samp class="listingcharacter listingcharacter">player</samp>, we then call the 
+                    <samp class="listingcharacter listingcharacter">distance(...)</samp>
+                 method and pass the reference to the door and the snake.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.4.6">3.4.6    Using Constructors</h3>
+            
+            <p class="standard">When objects are created with 
+                <samp class="listingcharacter listingcharacter">new</samp>, a constructor
+                <a class="indexanchor" id="i03_45"/>
+             gets called. A constructor has the task of putting an object into a start state, for example, initializing the object variables. A constructor is a good approach to initialization because a constructor is always called first, even before any other method is called. The initialization in the constructor makes sure that the new object has a meaningful initial state:</p>
+            
+            <div class="listing " id="l_none_3219"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span>
+                <span class="bold">Point</span><br/><span class="">extends</span><span class=""> Point2D </span><span class=""/></pre></div>
+            
+            <p class="standard">Three constructors can be found in the API documentation for 
+                <samp class="listingcharacter listingcharacter">Point</samp>
+            :</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Point()</samp><br/>Creates a point with the coordinates (0, 0).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Point(int x, int y)</samp><br/>Creates a new point and initializes it with the values from 
+                        <samp class="listingcharacter listingcharacter">x</samp> and 
+                        <samp class="listingcharacter listingcharacter">y</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Point(Point p)</samp><br/>Creates a new point and initializes it with the coordinates the passed point has as well. This kind of constructor is called a 
+                        <span class="italic">copy constructor</span>
+                        <a class="indexanchor" id="i03_46"/>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">A constructor without arguments is at 
+                <span class="italic">parameterless constructor</span>, sometimes also referred to as a 
+                <span class="italic">no-arg constructor</span>
+                <a class="indexanchor" id="i03_47"/>
+            . Each class can have at most one parameterless constructor. You can also have a class that doesn’t declare a parameterless constructor, only constructors with parameters (i.e., parameterized constructors).</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following three variants create a 
+                    <samp class="listingcharacter listingcharacter">Point</samp> object with the same coordinates 
+                    <samp class="listingcharacter listingcharacter">(1, 2)</samp>. Note that 
+                    <samp class="listingcharacter listingcharacter">java.awt.Point</samp> has been abbreviated to 
+                    <samp class="listingcharacter listingcharacter">Point</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_3221"><pre>Point p <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">();</span><span class=""> p</span><span class="">.</span><span class="">setLocation</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Point q <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Point r <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> q </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard last">The parameterless constructor is written first, while the second and third constructors are parameterized constructors.</p>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

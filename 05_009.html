@@ -1,0 +1,272 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Handling Characters and Strings" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Handling Characters and Strings" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Handling Characters and Strings</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h5.9">5.9    Concatenating Strings</h2>
+        
+        <p class="standard">To generate a new string from partial strings, Java provides the following options:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The plus operator for involved 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 objects</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The 
+                    <samp class="listingcharacter listingcharacter">concat(String)</samp> method of the 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 class</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> and 
+                    <samp class="listingcharacter listingcharacter">StringBuffer</samp> classes with their 
+                    <samp class="listingcharacter listingcharacter">append(...)</samp>
+                 methods</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">A 
+                    <samp class="listingcharacter listingcharacter">join(...)</samp> method for the 
+                    <samp class="listingcharacter listingcharacter">String</samp> class or the helper class 
+                    <samp class="listingcharacter listingcharacter">java.util.StringJoiner</samp>
+                 for joining parts with a common separator</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Using
+                    <samp class="listingcharacter listingcharacter"> format(...)</samp> of 
+                    <samp class="listingcharacter listingcharacter">String</samp> or the helper class 
+                    <samp class="listingcharacter listingcharacter">java.util.Formatter</samp>
+                </p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">In addition, a few methods and types can also be referred to as concatenations:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Two special 
+                    <samp class="listingcharacter listingcharacter">append*(...)</samp>
+                 methods for appending strings in the course of a replacement in the context of regular expressions</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">A special 
+                    <samp class="listingcharacter listingcharacter">StringWriter</samp> with 
+                    <samp class="listingcharacter listingcharacter">append(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">write(</samp>
+                ...) methods</p>
+            
+            </li>
+        
+        </ul>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+            
+            <p class="standard first last">The newly built 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+             should ideally get the appropriate buffer size in the constructor right away. However, the JVM itself also tries to optimize concatenation.</p>
+        
+        </div>
+        
+        
+            
+            <h3 class="t3" id="h5.9.1">5.9.1    Concatenating Strings with StringJoiner</h3>
+            
+            <p class="standard">To concatenate strings into one large result using a common separator, 
+                <samp class="listingcharacter listingcharacter">String</samp> provides the convenient helper method 
+                <samp class="listingcharacter listingcharacter">join(...)</samp>. This method is based on a small class named 
+                <samp class="listingcharacter listingcharacter">StringJoiner</samp>
+            , which can also be used directly.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p354"/>
+                Example</h6>
+                
+                <p class="standard first">Let’s say we have an array that contains prices that should be concatenated into one large string. The segments should be separated with semicolons and spaces, “USD” should be placed in front of each price, and prices should use 2 decimal places with a dot as the decimal separator. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_51405"><pre><span class="">double</span><span class="">[]</span><span class=""> prices </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1.90</span><span class="">,</span><span class=""> </span><span class="">2.49</span><span class=""> </span><span class="">};</span><span class=""><br/></span>StringJoiner joiner <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringJoiner</span><span class="">(</span><span class=""> </span><span class="">"; "</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> price </span><span class="">:</span><span class=""> prices </span><span class="">)</span><span class=""><br/></span>  joiner<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">format</span><span class="">(</span><span class=""> Locale</span><span class="">.</span><span class="">ENGLISH</span><span class="">,</span><span class=""> </span><span class="">"USD %.2f"</span><span class="">,</span><span class=""> price </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> joiner </span><span class="">);</span><span class="">                   </span><span class=""> // USD 1.90; USD 2.49</span><span class=""/> </pre></div>
+                
+                <p class="standard last">Note that the static 
+                    <samp class="listingcharacter listingcharacter">format(...)</samp>
+                 method is localized with English formatting.</p>
+            
+            </div>
+            
+            <p class="standard">The delimiter (which can of course also be an empty string 
+                <samp class="listingcharacter listingcharacter">""</samp>) is placed between each element that has been added. The 
+                <samp class="listingcharacter listingcharacter">add(CharSequence)</samp> method used in the example accepts a join string of type 
+                <samp class="listingcharacter listingcharacter">CharSequence</samp> and returns the current 
+                <samp class="listingcharacter listingcharacter">StringJoiner</samp>, so that the 
+                <samp class="listingcharacter listingcharacter">add(...)</samp> calls can be cascaded. The 
+                <samp class="listingcharacter listingcharacter">merge(StringJoiner)</samp> method can be used to integrate the content of another 
+                <samp class="listingcharacter listingcharacter">StringJoiner</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h5.9.1.1">Concatenating with Infixes, Prefixes, and Suffixes</h4>
+                
+                <p class="standard">Not only the separator itself can be specified, but also a start character and end character.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The output should start with a “{” and end with a “}” as in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_51427"><pre>StringJoiner joiner <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringJoiner</span><span class="">(</span><span class=""> </span><span class="">", "</span><span class="">,</span><span class=""> </span>
+                        <span class="bold"><span class="">"{"</span><span class="">, </span><span class="">"}"</span></span><span class=""> );</span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.9.1.2">Nothing Given to Concatenate</h4>
+                
+                <p class="standard">Sometimes, the 
+                    <samp class="listingcharacter listingcharacter">StringJoiner</samp>
+                 isn’t given anything to join. In this case, it will still use a prefix and suffix, as in the following example:</p>
+                
+                <div class="listing " id="l_none_51420"><pre>StringJoiner joiner <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringJoiner</span><span class="">(</span><span class=""> </span><span class="">", "</span><span class="">,</span><span class=""> </span><span class="">"{"</span><span class="">,</span><span class=""> </span><span class="">"}"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> joiner</span><span class="">.</span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // {}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If this behavior isn’t desirable, 
+                    <samp class="listingcharacter listingcharacter">setEmptyValue(CharSequence)</samp> specifies a substitute that comes into play exactly when no 
+                    <samp class="listingcharacter listingcharacter">add(...)</samp> has added anything to the 
+                    <samp class="listingcharacter listingcharacter">StringJoiner</samp>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l_none_51438"><pre>StringJoiner joiner <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringJoiner</span><span class="">(</span><span class=""> </span><span class="">", "</span><span class="">,</span><span class=""> </span><span class="">"{"</span><span class="">,</span><span class=""> </span><span class="">"}"</span><span class=""> </span><span class="">).</span><span class="">setEmptyValue</span><span class="">(</span><span class="">"-"</span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> joiner</span><span class="">.</span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // -</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <a id="p355"/>
+                In summary, the class provides two constructors and five methods:</p>
+                
+                <div class="listing " id="l_none_51445"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">StringJoiner</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringJoiner(CharSequence delimiter)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringJoiner(CharSequence delimiter, CharSequence prefix, CharSequence suffix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringJoiner add(CharSequence newElement)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringJoiner merge(StringJoiner other)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringJoiner setEmptyValue(CharSequence emptyValue)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int length()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String toString()</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Actually, the 
+                        <samp class="listingcharacter listingcharacter">StringJoiner</samp> class is quite weak, and even 
+                        <samp class="listingcharacter listingcharacter">String.join(...)</samp> allows to accept strings as a collection of type 
+                        <samp class="listingcharacter listingcharacter">Iterable</samp>, which 
+                        <samp class="listingcharacter listingcharacter">StringJoiner</samp>, the implementation of 
+                        <samp class="listingcharacter listingcharacter">String.join(…)</samp>
+                    , does not allow itself.</p>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

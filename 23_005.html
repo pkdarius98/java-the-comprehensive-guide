@@ -1,0 +1,147 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    The Tools of the JDK" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    The Tools of the JDK" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    The Tools of the JDK</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h23.5">23.5    The JAR Archive Format</h2>
+        
+        <p class="standard">
+            <a class="indexanchor" id="i23_41"/>The JAR file format is an archive format similar to ZIP. As usual for an archive format, JAR also packs several files together. However, “packed” doesn’t necessarily mean that files must be compressed; they can simply be bundled in a JAR. An unpacking program like 7-Zip can unpack JAR files. You may consider whether a program like 7-Zip should be associated with the 
+            <span class="italic">.jar</span> file extension or whether the default behavior should be retained with the JRE installed: On Windows, the 
+            <span class="italic">.jar</span>
+         file extension is associated with the JRE that launches the main class of the archive.</p>
+        
+        
+            
+            <h3 class="t3" id="h23.5.1">23.5.1    Using the jar Utility</h3>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">jar</samp>
+                <a class="indexanchor" id="i23_42"/>
+             is a command-line utility that provides several options to create, unpack, and view archives. Rarely, the jar tool is used on the command line or in a shell script. Usually, build tools like Maven or Gradle build a JAR file at the end of the compilation process. In a Maven project, the following command creates a Java file:</p>
+            
+            <div class="listing " id="l_none_23222"><pre>$ 
+                <span class="bold">mvn package</span>
+             </pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h23.5.2">23.5.2    The Manifest</h3>
+            
+            <p class="standard">Without the output showing it, 
+                <samp class="listingcharacter listingcharacter">jar</samp> automatically inserts a manifest file named 
+                <span class="italic">META-INF/MANIFEST.MF</span>
+                <a class="indexanchor" id="i23_43"/>
+                <a class="indexanchor" id="i23_44"/>
+             when creating an archive. A manifest contains important additional information for an archive, such as the signature listed for each file.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p1106"/>
+                Example</h6>
+                
+                <p class="standard first">Consider the following excerpt from a manifest file for the H2 database management system:
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn23_04" id="fn23_04">[ 246 ]</a></span>
+                </p>
+                
+                <div class="listing  last_item" id="l_none_23227"><pre>Manifest-Version: 1.0<br/>Implementation-Title: H2 Database Engine<br/>Implementation-URL: https://h2database.com<br/>Implementation-Version: 1.4.200<br/>Build-Jdk: 1.7<br/>Created-By: 1.7.0_80-b15 (Oracle Corporation)<br/>Main-Class: org.h2.tools.Console<br/>Automatic-Module-Name: com.h2database<br/>Bundle-Activator: org.h2.util.DbDriverActivator<br/>Bundle-ManifestVersion: 2<br/>Bundle-Name: H2 Database Engine<br/>Bundle-SymbolicName: com.h2database<br/>Bundle-Vendor: H2 Group<br/>Bundle-Version: 1.4.200<br/>…</pre></div>
+            
+            </div>
+            
+            <p class="standard">The entries in the manifest are reminiscent of a property file because in this case too are always keys and values separated by a colon.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h23.5.3">23.5.3    Launching Applications in Java Archives: Executable JAR Files</h3>
+            
+            <p class="standard">The fact that files are bundled together in one archive has an advantage in that developers no longer must deliver a whole bundle of class and resource files to a customer; only a single file needs to be sent. Another advantage is that an operating system like Windows or macOS associates the JRE
+                <a class="indexanchor" id="i23_45"/> with the 
+                <span class="italic">.jar</span>
+             extension by default, so double-clicking on a JAR file starts the program right away.</p>
+            
+            
+                
+                <h4 class="t4" id="h23.5.3.1">Main-Class in the Manifest</h4>
+                
+                <p class="standard">So that the runtime environment knows which class has the necessary 
+                    <samp class="listingcharacter listingcharacter">main(String[])</samp>, a small note with the 
+                    <samp class="listingcharacter listingcharacter">Main-Class</samp>
+                    <a class="indexanchor" id="i23_46"/>
+                 key in the manifest file is necessary, which you would write in the following way:</p>
+                
+                <div class="listing " id="l_none_23241"><pre>Main-Class: fully.qualified.class.name.of.class.with.main </pre></div>
+                
+                <p class="standard">Since the manifest file is generated, the entry must be generated by the build tool. For Maven, for example, this generation process is documented at <span class="url"><a href="https://maven.apache.org/shared/maven-archiver/examples/classpath.html#Make.">https://maven.apache.org/shared/maven-archiver/examples/classpath.html#Make.</a></span></p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h23.5.3.2">
+                    <a id="p1107"/>
+                Launching from the Command Line or via Double-Click</h4>
+                
+                <p class="standard">JAR files with the 
+                    <samp class="listingcharacter listingcharacter">Main-Class</samp>
+                 entry can also be easily launched from the command line via the JVM in the following way:</p>
+                
+                <div class="listing " id="l_none_23258"><pre>$ 
+                    <span class="bold">java -jar JarFile.jar</span>
+                 </pre></div>
+                
+                <p class="standard">If Java was brought to the hard drive via an installer, then executable JAR files can be launched with a double-click because the file extension 
+                    <span class="italic">.jar</span> causes 
+                    <samp class="listingcharacter listingcharacter">javaw -jar</samp>
+                    <a class="indexanchor" id="i23_47"/>
+                 to be executed with the file name. If you’ve only unpacked the ZIP archive for the Java “installation,” then simply launching it won’t work.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">
+                        <samp class="listingcharacter listingcharacter">java</samp> (or 
+                        <samp class="listingcharacter listingcharacter">javaw</samp>) ignores the information about 
+                        <samp class="listingcharacter listingcharacter">-cp</samp> or entries in the environment variable 
+                        <samp class="listingcharacter listingcharacter">CLASSPATH</samp>
+                        <a class="indexanchor" id="i23_48"/>, if a Java program is started with 
+                        <samp class="listingcharacter listingcharacter">-jar</samp>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">Instead of referencing many small JAR files, another option is to first unpack all the JAR files and then pack them back together into a new large JAR file that 
+                    <samp class="listingcharacter listingcharacter">java -jar</samp> can launch. With Maven, this process can be implemented via the 
+                    <span class="italic">Apache Maven Shade plugin</span>.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn23_05" id="fn23_05">[ 247 ]</a></span>
+                 The result is also called a Fat-JAR.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

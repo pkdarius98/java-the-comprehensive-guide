@@ -1,0 +1,119 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Introduction to Database Management with JDBC" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Introduction to Database Management with JDBC" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Introduction to Database Management with JDBC</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h20.2">20.2    
+            <a id="p1008"/>
+        A Sample Query</h2>
+        
+        <p class="standard">To become familiar with the JDBC API, let’s start with an example.</p>
+        
+        
+            
+            <h3 class="t3" id="h20.2.1">20.2.1    Steps to Query the Database
+                <a class="indexanchor" id="i20_09"/>
+            </h3>
+            
+            <p class="standard">The following steps are required to access a relational database with JDBC:</p>
+            
+            <ol>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Including the JDBC database drivers in the module path</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Possibly logging in the driver classes</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Connecting to the database</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Creating SQL statements</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Executing SQL statements</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Retrieving the result of the statement and possibly iterating over the result (in the case of result sets)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Closing the database connection</p>
+                
+                </li>
+            
+            </ol>
+            
+            <p class="standard">In the following sections, we’ll limit our work to establishing a connection to the free DBMS H2. Access for other relational database will be similar—except for the JDBC URL itself.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h20.2.2">20.2.2    Accessing the Relational Database
+                <a class="indexanchor" id="i20_10"/>
+             with Java</h3>
+            
+            <p class="standard">Our program needs to use a database called 
+                <span class="italic">TutegoDB</span>, which we’ll create as an empty database at the beginning. In JDBC, we’ll enter the name of this database in the JDBC URL, but the exact syntax is slightly different for each JDBC driver. H2 will try to locate the database as a file in the user directory, and so an example JDBC URL might look like 
+                <samp class="listingcharacter listingcharacter">jdbc:h2:</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">file</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">:~/TutegoDB</samp>. You can also specify absolute paths, such as 
+                <samp class="listingcharacter listingcharacter">jdbc:h2:file:</samp>
+                <span class="italic">
+                    <samp class="listingcharacter listingcharacter">C:/TutegoDB</samp>
+                </span>
+            . H2 reads the data from the file at the first start, manages it in the memory, and writes it back to a file at the end of the program. If the database as such hasn’t been created yet, H2 will create it automatically.</p>
+            
+            <div class="listing " id="l20.2"><pre><span class="">String</span><span class=""> url = </span><span class="">"jdbc:h2:file:~/TutegoDB"</span><span class="">;</span><span class=""/><br/><span class="">try</span><span class=""> ( Connection con = DriverManager.</span><span class="">getConnection</span><span class="">( url, </span><span class="">"sa"</span><span class="">, </span><span class="">""</span><span class=""> );</span><span class=""/><br/><span class="">section</span><span class=""/><br/><span class="">      Statement stmt = con.</span><span class="">createStatement</span><span class="">() ) {</span><span class=""/><br/><br/><span class="">  </span><span class="">// CUSTOMER table is missing? Then create</span><span class=""/><br/><span class="">  </span><span class="">if</span><span class=""> ( ! con.</span><span class="">getMetaData</span><span class="">().</span><span class="">getTables</span><span class="">( null, null, </span><span class="">"CUSTOMER"</span><span class="">, null ).</span><span class="">next</span><span class="">() ) {</span><span class=""/><br/><span class="">    </span><span class="">String</span><span class="">[] sqlStmts = {</span><span class=""/><br/><span class="">      </span><span class="">"CREATE TABLE CUSTOMER(ID INTEGER NOT NULL PRIMARY KEY,FIRSTNAME VARCHAR(255),"</span><span class=""/><br/><span class="">      + </span><span class="">"LASTNAME VARCHAR(255),STREET VARCHAR(255),CITY VARCHAR(255))"</span><span class="">,</span><span class=""/><br/><span class="">
+                    <a id="p1009"/>
+                      </span><span class="">"INSERT INTO CUSTOMER VALUES(0,'Laura','Steel','429 Seventh Av.','Dallas')"</span><span class="">,</span><span class=""/><br/><span class="">      </span><span class="">"INSERT INTO CUSTOMER VALUES(1,'Susanne','King','366 - 20th Ave.','Olten')"</span><span class="">,</span><span class=""/><br/><span class="">      </span><span class="">"INSERT INTO CUSTOMER VALUES(2,'Anne','Miller','20 Upland Pl.','Lyon')"</span><span class=""> };</span><span class=""/><br/><span class="">    </span><span class="">for</span><span class=""> ( </span><span class="">String</span><span class=""> sql : sqlStmts ) </span><span class=""/><br/><span class="">      stmt.</span><span class="">executeUpdate</span><span class="">( sql );</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span><span class="">"Table created and data inserted."</span><span class=""> );</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><br/><span class="">  </span><span class="">// Query table</span><span class=""/><br/><span class="">  </span><span class="">try</span><span class=""> ( ResultSet rs = stmt.</span><span class="">executeQuery</span><span class="">( </span><span class="">"SELECT * FROM CUSTOMER"</span><span class=""> ) ) {</span><span class=""/><br/><span class="">    </span><span class="">while</span><span class=""> ( rs.</span><span class="">next</span><span class="">() )</span><span class=""/><br/><span class="">      </span><span class="">// Access to FIRSTNAME, LASTNAME, STREET</span><span class=""/><br/><span class="">      System.out.</span><span class="">printf</span><span class="">( </span><span class="">"%s, %s %s%n"</span><span class="">, rs.</span><span class="">getString</span><span class="">( </span><span class="">1</span><span class=""> ),</span><span class=""/><br/><span class="">                         rs.</span><span class="">getString</span><span class="">( </span><span class="">2</span><span class=""> ), rs.</span><span class="">getString</span><span class="">( </span><span class="">3</span><span class=""> ) );</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">}</span><span class=""/><br/><span class="">catch</span><span class=""> ( SQLException e ) {</span><span class=""/><br/><span class="">  e.</span><span class="">printStackTrace</span><span class="">();</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 20.2</b>    
+            src/main/java/com/tutego/insel/jdbc/FirstSqlAccess.java, main()</p>
+            
+            <p class="standard">At the first start, the program checks if tables already exist in the database. If not, a new table is created, and three records are inserted.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

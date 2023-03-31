@@ -1,0 +1,80 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    There Must Be Exceptions" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    There Must Be Exceptions" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    There Must Be Exceptions</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h9.2">9.2    
+            <a id="p549"/>
+        Redirecting Exceptions and throws at the Head of Methods/Constructors</h2>
+        
+        <p class="standard">Besides “sectioning off” problematic blocks by means of a 
+            <samp class="listingcharacter listingcharacter">try</samp> block with an appended 
+            <samp class="listingcharacter listingcharacter">catch</samp>
+         block for handling, you can respond to exceptions in another way: redirecting them to the caller.</p>
+        
+        <p class="standard">Unchecked exceptions that haven’t been caught will automatically be passed to the caller, and if they aren’t caught, the thread will the end. If only the 
+            <samp class="listingcharacter listingcharacter">main</samp>
+         thread exists, the JVM will terminate the program.</p>
+        
+        
+            
+            <h3 class="t3" id="h9.2.1">9.2.1    throws in Constructors and Methods</h3>
+            
+            <p class="standard">To pass exceptions to the caller, a 
+                <samp class="listingcharacter listingcharacter">throws</samp>
+                <a class="indexanchor" id="i09_15"/>
+             clause is introduced in the head of the relevant method or constructor. This clause indicates that a particular exception isn’t handled by the method or constructor, but instead the exception is passed to the calling entity. If an exception occurs in the method or constructor, the processing ends, the exception isn’t handled locally, but the caller must take care of the exception.</p>
+            
+            <p class="standard">Let’s rewrite our 
+                <samp class="listingcharacter listingcharacter">writeTimestamp()</samp>
+             method so that it will no longer handle the exceptions itself, but instead pass them upwards.</p>
+            
+            <div class="listing " id="l9.7"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> TimestampWriter2 </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">writeTimestamp</span><span class="">()</span><span class=""> </span>
+                <span class="bold"><span class="">throws</span><span class=""> IOException</span></span> {<br/>    <span class="">String</span><span class=""> content = LocalDateTime.</span><span class="">now</span><span class="">() + </span><span class="">"\n"</span><span class="">;</span><br/>    Files.<span class="">writeString</span><span class="">( Path.</span><span class="">of</span><span class="">( </span><span class="">"timestamps.txt"</span><span class=""> ),</span><br/>                       content, StandardOpenOption.APPEND );<br/>  }<br/> <br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    
+                <span class="bold"><span class="">try</span><span class=""> {</span><br/>      </span><span class="">writeTimestamp</span><span class="">();</span><br/>    
+                <span class="bold">}<br/>    <span class="">catch</span><span class=""> ( IOException e ) { e.</span><span class="">printStackTrace</span><span class="">(); }</span></span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.7</b>    
+            src/main/java/com/tutego/insel/exception/TimestampWriter2.java (Snippet)</p>
+            
+            <p class="standard">Now, 
+                <samp class="listingcharacter listingcharacter">main(...)</samp> must deal with 
+                <samp class="listingcharacter listingcharacter">IOException</samp>. Note that 
+                <samp class="listingcharacter listingcharacter">main(...)</samp> could also have its own 
+                <samp class="listingcharacter listingcharacter">throws</samp>
+             clause; in that case, the JVM would pass the buck. Redirecting upwards is quite common because often a method or constructor can’t handle the exception at all and continue as if nothing had happened.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>
+                    <a id="p550"/>
+                Tip</h6>
+                
+                <p class="standard first last">Rarely are unchecked exceptions included in 
+                    <samp class="listingcharacter listingcharacter">throws</samp>
+                . However, deliberate unchecked exceptions should definitely show up in the Javadoc.</p>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

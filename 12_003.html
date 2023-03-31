@@ -1,0 +1,260 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Generics&lt;T&gt;" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Generics&lt;T&gt;" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Generics&lt;T&gt;</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h12.3">12.3    Restricting Types via Bounds</h2>
+        
+        <p class="standard">For generic specifications, the types can be further restricted. This limitation is useful because an arbitrary type is often too general. Our declaration of 
+            <samp class="listingcharacter listingcharacter">random(...)</samp>
+         didn’t impose any restrictions on the types:</p>
+        
+        <div class="listing " id="l_none_12719"><pre><span class="">
+                <a id="p707"/>
+            public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> T </span><span class="">random</span><span class="">(</span><span class=""> T m</span><span class="">,</span><span class=""> T n </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> Math</span><span class="">.</span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">&gt;</span><span class=""> </span><span class="">0.5</span><span class=""> </span><span class="">?</span><span class=""> m </span><span class="">:</span><span class=""> n</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+        
+        <p class="standard">Thus, the following is possible:</p>
+        
+        <div class="listing " id="l_none_12727"><pre>Object o1 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Object</span><span class="">();</span><span class=""><br/></span>Object o2 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">random</span><span class="">(</span><span class=""> o1</span><span class="">,</span><span class=""> o2 </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+        
+        <p class="standard">Since the type is arbitrary, objects can be passed that may make little sense, especially when they’re combined.</p>
+        
+        
+            
+            <h3 class="t3" id="h12.3.1">12.3.1    Simple Restrictions with extends</h3>
+            
+            <p class="standard">When you declare a generic type, you can specify that the later parameterized type extends a specific class or implements a concrete interface. For example, if our static 
+                <samp class="listingcharacter listingcharacter">random(...)</samp> method should accept only objects of type 
+                <samp class="listingcharacter listingcharacter">CharSequence</samp> (i.e., strings like 
+                <samp class="listingcharacter listingcharacter">String</samp> and 
+                <samp class="listingcharacter listingcharacter">StringBuffer</samp>/
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+            ), we must write that requirement into the declaration, as in the following example:</p>
+            
+            <div class="listing " id="l12.11"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Bounds </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                <span class="bold"><span class="">&lt;T </span><span class="">extends</span><span class=""> CharSequence&gt; T</span></span> <span class="">random</span><span class="">( </span>
+                <span class="bold">T</span> m, 
+                <span class="bold">T</span> n ) {<br/>    <span class="">return</span><span class=""> Math.</span><span class="">random</span><span class="">() &gt; </span><span class="">0.5</span><span class=""> ? m : n;</span><br/>  }<br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">String</span><span class=""> random1 = </span><span class="">random</span><span class="">( </span><span class="">"Shi"</span><span class="">, </span><span class="">"Kar"</span><span class=""> );</span><br/>    System.out.<span class="">println</span><span class="">( random1 );</span><br/><br/>    CharSequence random2 = <span class="">random</span><span class="">( </span><span class="">"Ushi"</span><span class="">, </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class="">"Taka"</span><span class="">) );</span><br/>    System.out.<span class="">println</span><span class="">( random2 );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 12.11</b>    
+            src/main/java/com/tutego/insel/generic/Bounds.java, Bounds</p>
+            
+            <p class="standard">A call with two strings is correctly let through by the compiler, just as with 
+                <samp class="listingcharacter listingcharacter">String</samp> and 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>, where the return type is then only 
+                <samp class="listingcharacter listingcharacter">CharSequence</samp>
+            .</p>
+            
+            <p class="standard">A mistake can be easily provoked because only one 
+                <samp class="listingcharacter listingcharacter">Point</samp> needs to be passed to the 
+                <samp class="listingcharacter listingcharacter">random(...)</samp> method, and 
+                <samp class="listingcharacter listingcharacter">Point</samp> is not of type 
+                <samp class="listingcharacter listingcharacter">CharSequence</samp>
+            . Thus, the following statement is incorrect:</p>
+            
+            <div class="listing " id="l_none_12739"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">random</span><span class="">(</span><span class=""> </span><span class="">""</span><span class="">,</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Compiler error</span><span class=""><br/></span>                                                <span class=""> // "Bound mismatch"</span><span class=""> </span></pre></div>
+            
+            <p class="standard">
+                <a id="p708"/>
+            This statement leads to the error message: “Bound mismatch: The generic method random(T, T) of type Bounds is not applicable for the arguments (String, Point). The inferred type Serializable is not a valid substitute for the bounded parameter &lt;T extends CharSequence&gt;.”</p>
+            
+            <p class="standard">The compiler engages in type inference; that is, it checks which types the 
+                <samp class="listingcharacter listingcharacter">""</samp> and 
+                <samp class="listingcharacter listingcharacter">Point</samp> arguments have in common and comes up with 
+                <samp class="listingcharacter listingcharacter">Serializable</samp>. However, the type doesn’t help because our intention was to use 
+                <samp class="listingcharacter listingcharacter">CharSequences</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h12.3.1.1">Type Restriction for Common Methods</h4>
+                
+                <p class="standard">A type restriction like 
+                    <samp class="listingcharacter listingcharacter">&lt;T extends CharSequence&gt;</samp> is interesting because you can see that a concrete actual type parameter (say 
+                    <samp class="listingcharacter listingcharacter">String</samp> or 
+                    <samp class="listingcharacter listingcharacter">StringBuffer</samp>) has at least the methods of the 
+                    <samp class="listingcharacter listingcharacter">CharSequence</samp>
+                 interface. This restriction is logical because, if the type is restricted, the compiler can ensure that the concrete types implement the prescribed interface (or extend the class), and in this way, the compiler can thus ensure that the methods exist.</p>
+                
+                <p class="standard">Let’s suppose we want to implement a type-safe 
+                    <samp class="listingcharacter listingcharacter">max(...)</samp> that should return the larger of two values. Comparisons are easy to make if the objects implement 
+                    <samp class="listingcharacter listingcharacter">Comparable</samp> because 
+                    <samp class="listingcharacter listingcharacter">compareTo(...)</samp>
+                 returns a value that indicates which object is smaller, larger, or equal according to the defined metric.</p>
+                
+                <div class="listing " id="l12.12"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">&lt;T </span><span class="">extends</span><span class=""> Comparable&lt;T&gt;&gt;</span></span> T <span class="">max</span><span class="">( T m, T n ) {</span><br/>  <span class="">return</span><span class=""> m.</span>
+                    <span class="bold"><span class="">compareTo</span></span><span class="">( n ) &gt; </span><span class="">0</span><span class=""> ? m : n;</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 12.12</b>    
+            src/main/java/com/tutego/insel/generic/BondageBounds.java, max()</p>
+                
+                <p class="standard">The use of this method is simple, as in the following example:</p>
+                
+                <div class="listing " id="l_none_12762"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">max</span><span class="">(</span><span class=""> </span><span class="">"cinema"</span><span class="">,</span><span class=""> </span><span class="">"reading"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">         </span><span class=""> // cinema/reading</span><span class=""><br/></span>System.out.println( max( 12, 100 ) );                     <span class=""> // 100</span><span class=""> </span></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">With the type not bound, you can only use the methods of 
+                        <samp class="listingcharacter listingcharacter">Object</samp>, that is, methods like 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp>, 
+                        <samp class="listingcharacter listingcharacter">hashCode( )</samp>, and 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">Let’s look at an error case. Intuitively, you can assume that anything of type 
+                    <samp class="listingcharacter listingcharacter">Comparable</samp> is a valid argument type for 
+                    <samp class="listingcharacter listingcharacter">max(...)</samp>. But this assumption is not precise because we’re writing 
+                    <samp class="listingcharacter listingcharacter">&lt;T extends Comparable&lt;T&gt;&gt; T max(T m, T n)</samp>, which means that the 
+                    <span class="italic">common</span> type for 
+                    <samp class="listingcharacter listingcharacter">m</samp> and 
+                    <samp class="listingcharacter listingcharacter">n</samp> must be 
+                    <samp class="listingcharacter listingcharacter">Comparable</samp> according to the type inference, instead of just 
+                    <span class="italic">either one of them</span>
+                . For instance, the compiler rejects the following statement with an error:</p>
+                
+                <div class="listing " id="l_none_12787"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">max</span><span class="">(</span><span class=""> 12</span>
+                    <span class="bold"><span class="">L</span></span>, 100
+                    <span class="bold">F</span> ) );<br/><span class="">// 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error "incompatible mismatch"</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">
+                    <a id="p709"/>After boxing, the compiler derives the common type 
+                    <samp class="listingcharacter listingcharacter">Number</samp> from 
+                    <samp class="listingcharacter listingcharacter">Long 12</samp> and 
+                    <samp class="listingcharacter listingcharacter">Float 100</samp>. (Remember: The compiler goes up the type hierarchy until a common type is found that can be used for 
+                    <samp class="listingcharacter listingcharacter">T</samp>, in this case, 
+                    <samp class="listingcharacter listingcharacter">Number</samp>.) But 
+                    <samp class="listingcharacter listingcharacter">Number</samp> isn’t of type 
+                    <samp class="listingcharacter listingcharacter">Comparable</samp>
+                , and so the following error message appears:</p>
+                
+                <div class="listing " id="l_none_12790"><pre>error<span class="">:</span><span class=""> method max in </span><span class="">class</span><span class=""> … cannot be applied to given types</span><span class="">;</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">max</span><span class="">(</span><span class=""> 12L</span><span class="">,</span><span class=""> 100F </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>                        <span class="">^</span><span class=""><br/></span>  required<span class="">:</span><span class=""> V</span><span class="">,</span><span class="">V</span><br/>  found<span class="">:</span><span class=""> </span><span class="">long</span><span class="">,</span><span class="">float</span><span class=""><br/></span>  reason<span class="">:</span><span class=""> inference variable V has incompatible bounds</span><br/>    equality constraints<span class="">:</span><span class=""> Long</span><span class="">,</span><span class="">Float</span><br/>    lower bounds<span class="">:</span><span class=""> Float</span><span class="">,</span><span class="">Long</span><br/>  where V is a type<span class="">-</span><span class="">variable</span><span class="">:</span><span class=""><br/></span>    V <span class="">extends</span><span class=""> Comparable</span><span class="">&lt;</span><span class="">V</span><span class="">&gt;</span><span class=""> declared in method </span><span class="">&lt;</span><span class="">V</span><span class="">&gt;</span><span class="">max</span><span class="">(</span><span class="">V</span><span class="">,</span><span class="">V</span><span class="">)</span><span class=""> </span></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">
+                        <samp class="listingcharacter listingcharacter">&lt;</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">T </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">extends Comparable&lt;</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">T&gt;&gt;</samp>
+                        </span> is a 
+                        <span class="italic">recursive type bound</span>
+                        <a class="indexanchor" id="i12_16"/>
+                        <a class="indexanchor" id="i12_17"/>. This construction rarely occurs and won’t be discussed further. If you’re interested in this topic, <span class="url"><a href="http://tutego.de/go/getthistrick">http://tutego.de/go/getthistrick</a></span> will provide further guidance. For example, the 
+                        <samp class="listingcharacter listingcharacter">max(...)</samp>
+                     method can be mistakenly called via the following expression:</p>
+                    
+                    <div class="listing " id="l_none_12807"><pre><span class="">static</span><span class=""> </span><span class="">&lt;</span><span class="">T </span><span class="">extends</span><span class=""> Comparabl</span><span class="">e/*Missing*/</span><span class="">&gt;</span><span class=""> T </span><span class="">max</span><span class="">(</span><span class=""> T m</span><span class="">,</span><span class=""> T n </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> … }</span></pre></div>
+                    
+                    <p class="standard last">The compiler will issue the warning “Comparable is a raw type. References to generic type Comparable&lt;T&gt; should be parameterized.” If you ignore this warning, 
+                        <samp class="listingcharacter listingcharacter">max(12L, 100F)</samp> can indeed be called, but also a 
+                        <samp class="listingcharacter listingcharacter">ClassCastException</samp>
+                     will be thrown with the error message “java.lang. Float cannot be cast to java.lang.Long.”</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.3.2">12.3.2    Other Supertypes with &amp;</h3>
+            
+            <p class="standard">If the concrete type should fit several types, further supertypes can be added using an ampersand (
+                <samp class="listingcharacter listingcharacter">&amp;</samp>)
+                <a class="indexanchor" id="i12_18"/>. However, note that only one class inheritance specification can take place. In other words, only one 
+                <samp class="listingcharacter listingcharacter">extends</samp> can be used since Java doesn’t support multiple inheritance (see 
+                <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>, 
+                <span class="crossreference "><a href="07_002.html#h7.2.4">Section 7.2.4</a></span>) at the class level. The rest must be implemented through interfaces. For a class 
+                <samp class="listingcharacter listingcharacter">C</samp> and interfaces 
+                <samp class="listingcharacter listingcharacter">I1</samp> to 
+                <samp class="listingcharacter listingcharacter">In</samp>, the general notation is 
+                <samp class="listingcharacter listingcharacter">T extends C &amp; I1 &amp; I2 &amp; … &amp; In</samp>
+            .</p>
+            
+            <p class="standard">Let’s assume a fictitious superclass 
+                <samp class="listingcharacter listingcharacter">Endeavour</samp> and the interfaces 
+                <samp class="listingcharacter listingcharacter">Serializable</samp> and 
+                <samp class="listingcharacter listingcharacter">Comparable</samp>.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn12_07" id="fn12_07">[ 186 ]</a></span>
+             Then, the following declarations are basically permitted:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;T extends Endeavour&gt;</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;T extends Serializable &amp; Comparable&gt;</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p710"/>
+                        &lt;T extends Endeavour &amp; Serializable&gt;</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;T extends Endeavour &amp; Comparable &amp; Serializable&gt;</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Syntactically wrong would be 
+                <samp class="listingcharacter listingcharacter">&lt;T extends Endeavour &amp; T extends Comparable&gt;</samp> because the 
+                <samp class="listingcharacter listingcharacter">extends</samp>
+             keyword may occur only once.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

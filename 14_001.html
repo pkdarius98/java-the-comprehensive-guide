@@ -1,0 +1,245 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Architecture, Design, and Applied Object Orientation" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Architecture, Design, and Applied Object Orientation" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Architecture, Design, and Applied Object Orientation</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h14">14    
+        <a id="p799"/>
+    Architecture, Design, and Applied Object Orientation</h1><p class="introductorynote indent_chapter_double">“One of the saddest things in life is that a man must do many good deeds to prove that he is capable, but need only commit one mistake to prove that he is no good.”<br/>—George Bernard Shaw (1856–1950)</p><p class="standard">While the examples from 
+        <span class="crossreference "><a href="02_001.html#h2">Chapter 2</a></span> through 
+        <span class="crossreference "><a href="13_001.html#h13">Chapter 13</a></span> essentially fit into a small 
+        <samp class="listingcharacter listingcharacter">main(...)</samp>
+     method, in this chapter, you’ll learn about a few best practices for decoupling types and mechanisms to distribute members among types.</p><div class="imagebox figure-type"><a href="img-f14.1.html" id="f14.1"><img alt="Professional Architecture and SOLID Modeling Ensure Resilience" id="img-f14.1" src="bilderklein/klein14_001.png"/></a></div><p class="caption "><b>Figure 14.1</b>    
+            Professional Architecture and SOLID Modeling Ensure Resilience</p>
+        
+        <h2 class="t2" id="h14.1">14.1    SOLID Modeling</h2>
+        
+        <p class="standard">If you want to write good object-oriented (OO) software, you should adhere to certain design principles. These best practices aren’t mandatory, of course, but usually improve the design.</p>
+        
+        
+            
+            <h3 class="t3" id="h14.1.1">14.1.1    
+                <a id="p800"/>
+            Three Rules</h3>
+            
+            <p class="standard">The first three rules are:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <a class="indexanchor" id="i14_00"/>
+                        <a class="indexanchor" id="i14_01"/>
+                        <span class="bold">Don’t Repeat Yourself (DRY)<br/></span>
+                    Code duplication should be avoided, and duplicate code should be outsourced to methods. Furthermore, existing code—from your own libraries, from Java Platform, Standard Edition (Java SE) or open-source libraries—should be used.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <a class="indexanchor" id="i14_02"/>
+                        <a class="indexanchor" id="i14_03"/>
+                        <span class="bold">Keep It Simple, Stupid (KISS)</span><br/>More precisely, “keep it simple and foolproof.” A problem should be solved in a simple and easy-to-understand way. For developers, this rule means you should write simple code, maybe only few lines of code, understandable at first sight.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <a class="indexanchor" id="i14_04"/>
+                        <a class="indexanchor" id="i14_05"/>
+                        <span class="bold">You Ain’t Gonna Need It (YAGNI)</span><br/>This principle should remind you to write simple code and to program only what is expected to fulfill the requirement of the moment. YAGNI is central to 
+                        <span class="italic">extreme programming (XP)</span>
+                     and the idea of “always implementing the simplest possible solution that works.” Something may be programmed that never goes live later, which is a waste of time and money, but the code still needs to be documented, maintained, and tested.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h14.1.2">14.1.2    SOLID</h3>
+            
+            <p class="standard">Michael Feathers used the acronym 
+                <span class="italic">SOLID</span>
+                <a class="indexanchor" id="i14_06"/>
+             to capture five points that make a good OO design. The individual criteria themselves come from various authors.</p>
+            
+            
+                
+                <h4 class="t4" id="h14.1.2.1">S: Single Responsibility Principle
+                    <a class="indexanchor" id="i14_07"/>
+                </h4>
+                
+                <p class="standard">In somewhat flippant terms, this principle stands for “Do exactly one thing, but do it right.” A type should have exactly one 
+                    <span class="italic">responsibility</span>, so that, when changes are made, in the best case, only one place must be adjusted and not many places. The opposite is referred to as 
+                    <span class="italic">God classes</span>, that is, classes that can do anything—an anti-pattern. Robert C. Martin, who describes the single responsibility principle in his book 
+                    <span class="italic">Agile Software Development: Principles, Patterns, and Practices</span>
+                , also says, “There should never be more than one reason to change a class.” So what does this principle mean in practical terms?</p>
+                
+                <p class="standard">Let’s assume a person class stores a name, zip code, and age. Some requirements exist for zip codes and ages: In the US, a postal code consists only of digits and is 5 digits long. In general, an age is never a negative number and is limited and finite. However, these two validations are two different things, so a person class takes on responsibilities that in themselves have nothing to do with a person. Accordingly, the class will need to be adjusted in two places when the validation is changed; two reasons are more than one reason and consequently break the single responsibility principle.</p>
+                
+                <p class="standard">
+                    <a id="p801"/>
+                If the modeling takes the single responsibility principle to an extreme, too many small types are created. This profusion of types doesn’t help other code developers if responsibilities are no longer understandable due to this confusion.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h14.1.2.2">O: Open–Closed Principle
+                    <a class="indexanchor" id="i14_08"/>
+                </h4>
+                
+                <p class="standard">Bertrand Meyer formulated in his 1988 book 
+                    <span class="italic">Object-Oriented Software Construction</span> that modules must be both 
+                    <span class="italic">open</span> (for extensions) and 
+                    <span class="italic">closed</span>
+                 (for modifications). Where others use the term “module,” Java developers should imagine a “type.” A conventional class is closed to modification, especially with private states, but a subclass allows new states to be added without code changes to the superclass. Additionally, methods can be overridden to customize an implementation. However, a subclass must not give methods different semantics, which would otherwise break the object’s cohesiveness.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h14.1.2.3">L: Liskov Substitution Principle
+                    <a class="indexanchor" id="i14_09"/>
+                    <a class="indexanchor" id="i14_10"/>
+                 (LSP)</h4>
+                
+                <p class="standard">Barbara Liskov gave the 1987 lecture “Data Abstraction and Hierarchy” about the fact that replacing objects in programs with objects of a subtype should be possible without sacrificing correctness. Of course, for the replacement to work, the subtype must know what is “correct” so that methods do not realize an incorrect implementation that breaks the behavior. In other words, children must inherit and respect the behavior of their parents. This rule is not easy in Java because syntactic constructs such as preconditions, postconditions, and invariants don’t exist; developers must therefore extract what is correct behavior purely from the Javadoc (i.e., the textual information).</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h14.1.2.4">I: Interface Segregation Principle
+                    <a class="indexanchor" id="i14_11"/>
+                    <a class="indexanchor" id="i14_12"/>
+                </h4>
+                
+                <p class="standard">The interface segregation principle is attributed to Robert Cecil Martin when he worked on the printer system for Xerox. The central statement of this principle is “Many client-specific interfaces are better than one general interface.” The 
+                    <span class="italic">client</span> is the user of a Java type, and the term 
+                    <span class="italic">interface</span>
+                 means the range of methods in general. In practical terms, some types have a lot of methods that thus make these types “general.” If such objects are passed around, then the program places always get the entire object with all methods. However, the complete range of methods isn’t always necessary, and sharing all the methods may even be dangerous. A better approach is to keep the application programming interface (API) small, allowing various entities only what is actually needed.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h14.1.2.5">D: Dependency Inversion Principle
+                    <a class="indexanchor" id="i14_13"/>
+                    <a class="indexanchor" id="i14_14"/>
+                </h4>
+                
+                <p class="standard">“Depend only on abstractions, not on specializations” is how Robert Cecil Martin put this principle.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn14_01" id="fn14_01">[ 199 ]</a></span> This principle is best illustrated by a layered architecture: An upper layer 
+                    <a id="p802"/>draws on services from a deeper layer. However, the upper layer shouldn’t cling to concrete types but instead should depend only on basic types, such as Java interfaces. In this context, the principle of 
+                    <span class="italic">programming against interfaces</span> fits well
+                    <a class="indexanchor" id="i14_15"/>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h14.1.2.6">The Big Picture</h4>
+                
+                <p class="standard">Like a Quentin Tarantino movie, everything is somehow connected in a grand design. However, design practices have focal points: The single responsibility principle takes on types and architecture at large. The open-closed principle is about types and their extensions. LSP is about inheritance and subtypes, and the interface segregation principle is about business logic and type dependencies.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h14.1.3">14.1.3    Don’t Be STUPID</h3>
+            
+            <p class="standard">Every “do” in SOLID is matched by a “don’t” in 
+                <span class="italic">STUPID</span>
+                <a class="indexanchor" id="i14_16"/>
+            . This acronym stands for the things you should avoid:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Singleton<br/></span>A singleton
+                        <a class="indexanchor" id="i14_17"/>
+                     is an object that can exist only once in the system. Such objects are always around, and they aren’t bad in themselves. However, a problem arises when many developers write the singleton itself as a class, and then an implementation is quickly created that’s difficult to test due to its global state. A better approach is to use frameworks that provide copies of objects for you to work with.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Tight coupling</span><br/>The goal of good design is to reduce dependencies; the fewer modules/packages/types a piece of code draws on, the better. Specifically, the fewer 
+                        <samp class="listingcharacter listingcharacter">import</samp>
+                     declarations are required, the better.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Untestability</span><br/>If testing isn’t thought through until after design and programming, it’s often already too late—the result then is code that’s difficult to test, especially if the coupling is too tight. A better approach is test-driven development (TDD), where testability affects the design. Designers and developers should consider in advance how a particular class and specific functionalities can be tested before moving on to intensive implementation.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Premature optimization</span><br/>Developers think they have a sense of which parts of the program eat up performance and which parts are fast. But often they’re wrong, wasting a lot of time optimizing the wrong spots. The best approach is to implement a simple solution according to KISS and then have a profiler—a software that measures the duration of code executions—show you exactly where rework is needed.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Undescriptive naming</span><br/>Variable names like 
+                        <samp class="listingcharacter listingcharacter">one</samp>, 
+                        <samp class="listingcharacter listingcharacter">z</samp>, 
+                        <samp class="listingcharacter listingcharacter">l</samp>, 
+                        <samp class="listingcharacter listingcharacter">myvariable</samp>, 
+                        <samp class="listingcharacter listingcharacter">var1</samp>, 
+                        <samp class="listingcharacter listingcharacter">val10, theInt, aDouble, _1bool</samp>, and 
+                        <samp class="listingcharacter listingcharacter">button123</samp>
+                     aren’t particularly meaningful and must be avoided. A future reader of your code should immediately understand what a variable is about.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">
+                            <a id="p803"/>
+                        Duplications</span><br/>Code copied exactly with minor changes must be avoided. Code duplicates can be found relatively well with the available tools and plugins for various integrated development environments (IDEs).</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,330 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    The Class Library" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    The Class Library" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    The Class Library</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h16.3">16.3    The Class Class</h2>
+        
+        <p class="standard">Let’s suppose we want to write a class browser. This program should display all classes belonging to the running program and furthermore additional information, such as variable assignment, declared methods, constructors, and some information about the inheritance hierarchy. For this purpose, you’ll need the library class, 
+            <samp class="listingcharacter listingcharacter">class</samp>
+            <a class="indexanchor" id="i16_11"/>. Instances of 
+            <samp class="listingcharacter listingcharacter">Class</samp>
+         are objects that, for example, represent a Java class, record or a Java interface.</p>
+        
+        <p class="standard">In this respect, Java differs from many conventional programming languages because the members of classes can be queried by the currently running program using the 
+            <samp class="listingcharacter listingcharacter">Class</samp> objects. The instances of 
+            <samp class="listingcharacter listingcharacter">Class</samp> are a restricted kind of meta-object
+            <a class="indexanchor" id="i16_12"/>
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn16_02" id="fn16_02">[ 208 ]</a></span>—containing the description of a Java type but revealing only selected information. Besides normal classes, interfaces are also represented by a 
+            <samp class="listingcharacter listingcharacter">Class</samp> object, and even arrays and primitive data types—instead of 
+            <samp class="listingcharacter listingcharacter">Class</samp>, the class name 
+            <samp class="listingcharacter listingcharacter">Type</samp>
+         would probably have been more appropriate.</p>
+        
+        
+            
+            <h3 class="t3" id="h16.3.1">16.3.1    Obtaining a Class Object</h3>
+            
+            <p class="standard">First, for a given class, you must identify the associated 
+                <samp class="listingcharacter listingcharacter">Class</samp> object. 
+                <samp class="listingcharacter listingcharacter">Class</samp> objects themselves can only be created by the JVM. (We can’t create instances because the constructor of 
+                <samp class="listingcharacter listingcharacter">Class</samp> is private.) To obtain a reference to a 
+                <samp class="listingcharacter listingcharacter">Class</samp>
+             object, the following solutions are available:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If an instance of the class is available, you can call the 
+                        <samp class="listingcharacter listingcharacter">getClass()</samp>
+                        <a class="indexanchor" id="i16_13"/> method of the object and get the 
+                        <samp class="listingcharacter listingcharacter">Class</samp>
+                     instance of the associated class.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Each type contains a static variable named 
+                        <samp class="listingcharacter listingcharacter">.class</samp>
+                        <a class="indexanchor" id="i16_14"/> of type 
+                        <samp class="listingcharacter listingcharacter">Class</samp>, which references the associated 
+                        <samp class="listingcharacter listingcharacter">Class</samp>
+                     instance.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The ending 
+                        <samp class="listingcharacter listingcharacter">.class</samp> is also permitted for primitive data types. The same 
+                        <samp class="listingcharacter listingcharacter">Class</samp> object returns the static variable 
+                        <samp class="listingcharacter listingcharacter">TYPE</samp> of the wrapper classes. Thus, 
+                        <samp class="listingcharacter listingcharacter">int.class == Integer.TYPE</samp>
+                        <a class="indexanchor" id="i16_15"/>
+                     is true.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <a id="p844"/>The class method
+                        <a class="indexanchor" id="i16_16"/>
+                        <samp class="listingcharacter listingcharacter"> Class.forName(String)</samp> can query a class, and you’ll obtain the associated 
+                        <samp class="listingcharacter listingcharacter">Class</samp> instance as a result. If the type hasn’t been loaded yet, 
+                        <samp class="listingcharacter listingcharacter">forName(String)</samp> searches for and binds the class. Because searching can go wrong, a 
+                        <samp class="listingcharacter listingcharacter">ClassNotFoundException</samp>
+                        <a class="indexanchor" id="i16_17"/>
+                     is possible.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If you already have a 
+                        <samp class="listingcharacter listingcharacter">Class</samp> object but are interested in its ancestors instead, you can simply get a 
+                        <samp class="listingcharacter listingcharacter">Class</samp> object for the superclass via 
+                        <samp class="listingcharacter listingcharacter">getSuperclass()</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The following example shows three ways to obtain a 
+                <samp class="listingcharacter listingcharacter">Class</samp> object for 
+                <samp class="listingcharacter listingcharacter">java.util.Date</samp>
+            :</p>
+            
+            <div class="listing " id="l16.1"><pre>Class<span class="">&lt;</span><span class="">Date</span><span class="">&gt;</span><span class=""> c1 </span><span class="">=</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Date</span>
+                <span class="bold"><span class="">.</span><span class="">class</span><span class="">;</span></span><br/>System.out.<span class="">println</span><span class="">( c1 );       </span><span class=""> // class java.util.Date</span><span class=""><br/></span>Class&lt;?&gt; c2 = <span class="">new</span><span class=""> java.util.</span><span class="">Date</span><span class="">()</span>
+                <span class="bold">.<span class="">getClass</span><span class="">()</span></span>;<br/><span class=""> // or Class&lt;? extends Date&gt; c2 = …</span><span class=""><br/></span><br/>System.out.<span class="">println</span><span class="">( c2 );       </span><span class=""> // class java.util.Date</span><span class=""><br/></span><span class="">try</span><span class=""> {</span><br/>  Class&lt;?&gt; c3 = 
+                <span class="bold">Class.<span class="">forName</span></span><span class="">( </span><span class="">"java.util.Date"</span><span class=""> );</span><br/>  System.out.<span class="">println</span><span class="">( c3 );     </span><span class=""> // class java.util.Date</span><span class=""><br/></span>}<br/><span class="">catch</span><span class=""> ( ClassNotFoundException e ) { e.</span><span class="">printStackTrace</span><span class="">(); } </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 16.1</b>    
+            src/main/java/com/tutego/insel/meta/GetClassObject.java, main()</p>
+            
+            <p class="standard">The variant with 
+                <samp class="listingcharacter listingcharacter">forName(String)</samp>
+             is useful if the name of the desired class wasn’t determined when the program was translated. </p>
+            
+            <p class="standard">Otherwise, the previous technique is more catchy, and the compiler can check if the type exists. A full qualification is needed: 
+                <samp class="listingcharacter listingcharacter">Class.forName("Date")</samp> would only search for 
+                <samp class="listingcharacter listingcharacter">Date</samp>
+             in the default package, and the return isn’t a collection after all.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first last">Note that class objects for primitive elements aren’t returned by 
+                    <samp class="listingcharacter listingcharacter">forName(String)</samp>. The two expressions 
+                    <samp class="listingcharacter listingcharacter">Class.forName("boolean")</samp> and 
+                    <samp class="listingcharacter listingcharacter">Class.forName(boolean.class.getName())</samp> lead to a 
+                    <samp class="listingcharacter listingcharacter">ClassNotFoundException</samp>
+                .</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_1641"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Object</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final Class&lt;? extends Object&gt; getClass()</samp><br/>Returns the 
+                        <samp class="listingcharacter listingcharacter">Class</samp>
+                     instance at runtime which represents the class of the object.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="listing " id="l_none_1644"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Class</span>&lt;T&gt;<br/><span class="">implements</span><span class=""> Serializable, GenericDeclaration, Type, AnnotatedElement </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p845"/>
+                        static Class&lt;?&gt; forName(String className) throws ClassNotFoundException</samp><br/>Returns the 
+                        <samp class="listingcharacter listingcharacter">Class</samp> instance for the class, record or interface with the specified fully qualified name. If the type hasn’t yet been required by the program, the class loader searches for and loads the class. The method never returns 
+                        <samp class="listingcharacter listingcharacter">null</samp>. If the class couldn’t be loaded and included, a 
+                        <samp class="listingcharacter listingcharacter">ClassNotFoundException</samp> will occur. The alternative method, 
+                        <samp class="listingcharacter listingcharacter">forName(String name, boolean initialize, ClassLoader loader)</samp>
+                    , also allows loading with a desired class loader. The class name must always be fully qualified.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h16.3.1.1">ClassNotFoundException and NoClassDefFoundError*</h4>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">ClassNotFoundException</samp>
+                    <a class="indexanchor" id="i16_18"/>
+                 can be thrown by any of the following methods:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">forName(...)</samp> from 
+                            <samp class="listingcharacter listingcharacter">Class</samp>
+                         </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">loadClass(String name [, boolean resolve])</samp> from 
+                            <samp class="listingcharacter listingcharacter">ClassLoader</samp>
+                         </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">findSystemClass(String name)</samp> from 
+                            <samp class="listingcharacter listingcharacter">ClassLoader</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">An exception occurs whenever the class loader can’t find the class by its class name. Thus, the trigger is when an application wants to load types dynamically, but those types aren’t present.</p>
+                
+                <p class="standard">In addition to 
+                    <samp class="listingcharacter listingcharacter">ClassNotFoundException</samp>
+                    <a class="indexanchor" id="i16_19"/>, the 
+                    <samp class="listingcharacter listingcharacter">NoClassDefFoundError</samp>
+                    <a class="indexanchor" id="i16_20"/> is a hard 
+                    <samp class="listingcharacter listingcharacter">LinkageError</samp> that the JVM raises whenever it can’t load a class referenced in the bytecode. For example, let’s consider an expression like 
+                    <samp class="listingcharacter listingcharacter">new MyClass()</samp>. When the JVM executes this code, it attempts to load the bytecode from 
+                    <samp class="listingcharacter listingcharacter">MyClass</samp>. If the bytecode for 
+                    <samp class="listingcharacter listingcharacter">MyClass</samp> has been removed after compilation, the JVM raises the 
+                    <samp class="listingcharacter listingcharacter">NoClassDefFoundError</samp> due to the unsuccessful load attempt. Also, the error occurs if the 
+                    <samp class="listingcharacter listingcharacter">MyClass</samp> class was found when loading the bytecode, but 
+                    <samp class="listingcharacter listingcharacter">MyClass</samp>
+                 has a static initialization block that in turn references a class for which no class file exists. </p>
+                
+                <p class="standard">While 
+                    <samp class="listingcharacter listingcharacter">ClassNotFoundException</samp> is more common than 
+                    <samp class="listingcharacter listingcharacter">NoClassDefFoundError</samp>
+                , the exception is generally an indication that a Java Archive file (JAR file) is missing in the module path.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h16.3.1.2">Problems after Applying an Obfuscator*</h4>
+                
+                <p class="standard">The fact that the compiler automatically generates bytecode according to this modified source code only leads to unexpected problems if you run an obfuscator
+                    <a class="indexanchor" id="i16_21"/> over the program text, which subsequently modifies the bytecode and thus obscures the meaning of the program or the bytecode and renames types in the process. Obviously, an obfuscator must not rename types whose 
+                    <samp class="listingcharacter listingcharacter">Class</samp>
+                 instances are requested. </p>
+                
+                <p class="standard">Otherwise, the obfuscator must correctly replace the corresponding strings as well (but of course not replace all strings that happen to match class names).</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.3.2">16.3.2    
+                <a id="p846"/>
+            A Class Is a Type</h3>
+            
+            <p class="standard">In Java, different types exist, and classes, records, interfaces, and enumeration types are represented by the JVM as 
+                <samp class="listingcharacter listingcharacter">Class</samp> objects. In the Reflection API, the 
+                <samp class="listingcharacter listingcharacter">Type</samp> interface
+                <a class="indexanchor" id="i16_22"/>
+             represents all types and the only implementing class is Class. Below Type there are some subinterfaces:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">ParameterizedType</samp> represents generic types like 
+                        <samp class="listingcharacter listingcharacter">List&lt;T&gt;</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">TypeVariable&lt;D&gt;</samp> represents, for example, 
+                        <samp class="listingcharacter listingcharacter">T extends Comparable&lt;? super T&gt;</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">WildcardType</samp> represents 
+                        <samp class="listingcharacter listingcharacter">? super T</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">GenericArrayType</samp> represents something like 
+                        <samp class="listingcharacter listingcharacter">T[]</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The only method of 
+                <samp class="listingcharacter listingcharacter">Type</samp> is 
+                <samp class="listingcharacter listingcharacter">getTypeName()</samp>, and this method is just a default method that calls 
+                <samp class="listingcharacter listingcharacter">toString()</samp>. 
+                <samp class="listingcharacter listingcharacter">Type</samp> is the return of various methods in the Reflection API, such as 
+                <samp class="listingcharacter listingcharacter">getGenericSuperclass()</samp> and 
+                <samp class="listingcharacter listingcharacter">getGenericInterfaces()</samp> of the 
+                <samp class="listingcharacter listingcharacter">Class</samp> class, and many other methods listed in the Javadoc under 
+                <span class="screenelement">USE</span>
+            .</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

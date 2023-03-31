@@ -1,0 +1,788 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Special Types of Java SE" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Special Types of Java SE" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Special Types of Java SE</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h11.4">11.4    
+            <a id="p643"/>
+        Comparing Objects and Establishing Order</h2>
+        
+        <p class="standard">The 
+            <samp class="listingcharacter listingcharacter">Object</samp> method 
+            <samp class="listingcharacter listingcharacter">equals(Object)</samp>
+         provides information about whether two objects have the same state but says nothing about which object is “bigger” or “smaller.” However, in many applications, the order of objects plays a role. This need is obvious in sorting operations, but also in simpler questions, such as finding the largest or smallest item in a collection. If objects are to be compared in Java, these objects must always be arranged in a certain order. The system can never decide on its own, and often, multiple criteria determine a sort order. For example, why is one candy “smaller” than another candy? Perhaps one candy has 20 calories and the other has 600 calories, or maybe because they have different weights?</p>
+        
+        
+            
+            <h3 class="t3" id="h11.4.1">11.4.1    Naturally Ordered or Not?</h3>
+            
+            <p class="standard">In Java, two different functional interfaces (in two different packages) for determining the order are available:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">Comparable</samp>
+                        </span>
+                        <a class="indexanchor" id="i11_57"/><br/>When a class implements 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp>, objects can compare themselves with other objects. Since the classes generally implement only one sorting criterion, 
+                        <span class="italic">natural ordering</span>
+                        <a class="indexanchor" id="i11_58"/>
+                        <a class="indexanchor" id="i11_59"/>
+                     is implemented in this case.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">Comparator</samp>
+                        </span>
+                        <a class="indexanchor" id="i11_60"/><br/>An implementing class called 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> takes two objects and compares them. A 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> for candy could, for example, compare according to calories or weight or use a completely different logic. The implementation of 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp> would not make sense because in this case only one criterion can be implemented (“natural” order), but candies follow no natural order.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn11_03" id="fn11_03">[ 174 ]</a></span>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">To summarize, while 
+                <samp class="listingcharacter listingcharacter">Comparable</samp> usually implements only one ordering criterion, many extra classes of the 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>
+             type may exist, each defining different orders.</p>
+            
+            
+                
+                <h4 class="t4" id="h11.4.1.1">Comparable and Comparator in the Java Application Programming Interface</h4>
+                
+                <p class="standard">An implementation of 
+                    <samp class="listingcharacter listingcharacter">Comparable</samp>
+                 can be found exactly where a natural ordering is obvious, such as with the following types:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal</samp>, 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>, 
+                            <samp class="listingcharacter listingcharacter">Byte</samp>, 
+                            <samp class="listingcharacter listingcharacter">Character</samp>, 
+                            <samp class="listingcharacter listingcharacter">Double</samp>, 
+                            <samp class="listingcharacter listingcharacter">Float</samp>, 
+                            <samp class="listingcharacter listingcharacter">Integer</samp>, 
+                            <samp class="listingcharacter listingcharacter">Long</samp>, and 
+                            <samp class="listingcharacter listingcharacter">Short</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Date</samp>, 
+                            <samp class="listingcharacter listingcharacter">Calendar</samp>, 
+                            <samp class="listingcharacter listingcharacter">LocalTime</samp>, and 
+                            <samp class="listingcharacter listingcharacter">LocalDate</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String</samp>, 
+                            <samp class="listingcharacter listingcharacter">StringBuilder</samp>, and 
+                            <samp class="listingcharacter listingcharacter">StringBuffer</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">File</samp> and 
+                            <samp class="listingcharacter listingcharacter">URI</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Enum</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">TimeUnit</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">
+                    <a id="p644"/>The API documentation contains only a little information on 
+                    <samp class="listingcharacter listingcharacter">java.text.Collator</samp>
+                    <a class="indexanchor" id="i11_61"/> and its subclass, 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>
+                .</p>
+                
+                <div class="imagebox figure-type"><a href="img-f11.3.html" id="f11.3"><img alt="Simplified UML Diagram of Comparator and Comparable" id="img-f11.3" src="bilderklein/klein11_003.png"/></a></div>
+                
+                <p class="caption "><b>Figure 11.3</b>    
+            Simplified UML Diagram of Comparator and Comparable</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Since two ways exist to define an ordering with 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> and 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp>, the Java API often provides two methods when an ordering is needed: one with a 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> (then no requirement is placed on the elements) and one without a 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> (but then the elements must implement the 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp> interface). If a variant with natural order is missing, a 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> can be queried at any time with 
+                        <samp class="listingcharacter listingcharacter">Comparator.naturalOrder()</samp>, which falls back on the 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp> method 
+                        <samp class="listingcharacter listingcharacter">compareTo(...)</samp>
+                    . </p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.4.2">11.4.2    compare*() Method of the Comparable and Comparator Interfaces</h3>
+            
+            <p class="standard">The functional interface 
+                <samp class="listingcharacter listingcharacter">Comparable</samp> originates from the 
+                <samp class="listingcharacter listingcharacter">java.lang </samp>package and declares a 
+                <samp class="listingcharacter listingcharacter">compareTo(...)</samp>
+             method:</p>
+            
+            <div class="listing " id="l_none_11555"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Comparable&lt;</span>T
+                <span class="bold">&gt;</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int compareTo(T o)</samp><br/>Compares itself with another object.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The functional interface 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> comes from the 
+                <samp class="listingcharacter listingcharacter">java.util</samp> package (not from 
+                <samp class="listingcharacter listingcharacter">java.lang</samp> like 
+                <samp class="listingcharacter listingcharacter">Comparable</samp>, shown in 
+                <span class="crossreference "><a href="11_004.html#f11.3">Figure 11.3</a></span>
+            ) and declares an abstract method:</p>
+            
+            <div class="listing " id="l_none_11551"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Comparator</span>&lt;T&gt; <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int compare(T o1, T o2)</samp><br/>Compares two arguments for their order.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note*</h6>
+                
+                <p class="standard first last">In addition to 
+                    <samp class="listingcharacter listingcharacter">compare(...)</samp>, 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> also declares the 
+                    <samp class="listingcharacter listingcharacter">boolean equals (object obj)</samp> known from 
+                    <samp class="listingcharacter listingcharacter">Object</samp>. This method doesn’t need to be implemented because 
+                    <samp class="listingcharacter listingcharacter">Object</samp> already provides an implementation. The method is in the interface only so that the API 
+                    <a id="p645"/>documentation explains that 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> only tests whether two 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>
+                 objects are equal.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.4.3">11.4.3    Return Values Encode the Order</h3>
+            
+            <p class="standard">The return value of 
+                <samp class="listingcharacter listingcharacter">compare(...)</samp>
+                <a class="indexanchor" id="i11_62"/> for 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> or 
+                <samp class="listingcharacter listingcharacter">compareTo(...)</samp>
+                <a class="indexanchor" id="i11_63"/> for 
+                <samp class="listingcharacter listingcharacter">Comparable</samp> may be less than 0 (negative), equal to 0, or greater than 0 (positive) and thus determines the order of the objects—referred to as a 
+                <span class="italic">three-way comparison</span>
+                <a class="indexanchor" id="i11_64"/>.
+                <a class="indexanchor" id="i11_65"/> Let’s assume you have two objects 
+                <samp class="listingcharacter listingcharacter">o1</samp> and 
+                <samp class="listingcharacter listingcharacter">o2</samp> whose classes implement 
+                <samp class="listingcharacter listingcharacter">Comparable</samp>
+            . Then, the following agreement rules apply:</p>
+            
+            <table class="standardtable" id="t_none_11_01">
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">o1.compareTo( o2 ) &lt; 0<br/>o1.compareTo( o2 ) == 0<br/>o1.compareTo( o2 ) &gt; 0</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item">
+                                <img alt="inline image" class="inline_image" src="bilder/2way-arrow.png"/>
+                            </p>
+                            
+                            <p class="standard middle-item">
+                                <img alt="inline image" class="inline_image" src="bilder/2way-arrow.png"/>
+                            </p>
+                            
+                            <p class="standard last-item">
+                                <img alt="inline image" class="inline_image" src="bilder/2way-arrow.png"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item">
+                                <samp class="listingcharacter listingcharacter">o1</samp> is “smaller than” 
+                                <samp class="listingcharacter listingcharacter">o2</samp>
+                            .</p>
+                            
+                            <p class="standard middle-item">
+                                <samp class="listingcharacter listingcharacter">o1</samp> is “equal to” 
+                                <samp class="listingcharacter listingcharacter">o2</samp>
+                            .</p>
+                            
+                            <p class="standard last-item">
+                                <samp class="listingcharacter listingcharacter">o1</samp> is “greater than” 
+                                <samp class="listingcharacter listingcharacter">o2</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="standard">An external 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> (symbolically called 
+                <samp class="listingcharacter listingcharacter">comp</samp>
+            ) behaves similarly:</p>
+            
+            <table class="standardtable" id="t_none_11_02">
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">comp.compare( o1, o2 ) &lt; 0<br/>comp.compare( o1, o2 ) == 0<br/>comp.compare( o1, o2 ) &gt; 0</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item">
+                                <img alt="inline image" class="inline_image" src="bilder/2way-arrow.png"/>
+                            </p>
+                            
+                            <p class="standard middle-item">
+                                <img alt="inline image" class="inline_image" src="bilder/2way-arrow.png"/>
+                            </p>
+                            
+                            <p class="standard last-item">
+                                <img alt="inline image" class="inline_image" src="bilder/2way-arrow.png"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item">
+                                <samp class="listingcharacter listingcharacter">o1</samp> is “smaller than” 
+                                <samp class="listingcharacter listingcharacter">o2</samp>
+                            .</p>
+                            
+                            <p class="standard middle-item">
+                                <samp class="listingcharacter listingcharacter">o1</samp> is “equal to” 
+                                <samp class="listingcharacter listingcharacter">o2</samp>
+                            .</p>
+                            
+                            <p class="standard last-item">
+                                <samp class="listingcharacter listingcharacter">o1</samp> is “greater than” 
+                                <samp class="listingcharacter listingcharacter">o2</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following example,
+                    <samp class="listingcharacter listingcharacter"> LocalTime</samp> represents time values, and the class implements 
+                    <samp class="listingcharacter listingcharacter">Comparable</samp>
+                :</p>
+                
+                <div class="listing  last_item" id="l_none_11572"><pre>LocalTime elevenses <span class="">=</span><span class=""> LocalTime</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">11</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>LocalTime lunchtime <span class="">=</span><span class=""> LocalTime</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">12</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> elevenses</span><span class="">.</span><span class="">compareTo</span><span class="">(</span><span class=""> lunchtime </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> //  -1</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> lunchtime</span><span class="">.</span><span class="">compareTo</span><span class="">(</span><span class=""> elevenses </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> //  1</span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.4.4">11.4.4    Sorting Candy by Calories Using a Sample Comparator</h3>
+            
+            <p class="standard">Let’s say we need to sort candies by their calories and thus need to write a 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> for this purpose—that candies are 
+                <samp class="listingcharacter listingcharacter">Comparable</samp>
+             isn’t appropriate because no natural order exists for candies. </p>
+            
+            <p class="standard">Therefore, an external 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> object should decide which 
+                <samp class="listingcharacter listingcharacter">Candy</samp>
+             object is “bigger” by the number of its calories. Fewer calories mean the candy is “smaller.”</p>
+            
+            <p class="standard">
+                <a id="p646"/>The following 
+                <samp class="listingcharacter listingcharacter">Candy</samp>
+             record stores calorie values:</p>
+            
+            <div class="listing " id="l11.20"><pre>public record Candy(int calories) <span class="">{</span><span class="">}</span></pre></div>
+            
+            <p class="caption "><b>numbering_unknown </b>    
+            Listing 11.20: src/main/java/com/tutego/insel/util/Candy.java, Candy</p>
+            
+            <p class="standard">A candy built by 
+                <samp class="listingcharacter listingcharacter">new Candy(100)</samp> should be “smaller” than 
+                <samp class="listingcharacter listingcharacter">new Candy(623)</samp>. For this purpose, the candy 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>
+             must use the calories, and no other criteria exist.</p>
+            
+            <div class="listing " id="l11.21"><pre><span class="">class</span><span class=""> CandyCaloriesComparator </span><span class="">implements</span><span class=""> Comparator</span><span class="">&lt;</span><span class="">Candy</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">compare</span><span class="">(</span><span class=""> Candy candy1</span><span class="">,</span><span class=""> Candy candy2 </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> Integer</span><span class="">.</span><span class="">compare</span><span class="">(</span><span class=""> candy1</span><span class="">.</span><span class="">calories</span><span class="">(),</span><span class=""> candy2</span><span class="">.</span><span class="">calories</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 11.21</b>    
+            src/main/java/com/tutego/insel/util/CandyCaloriesComparator.java, CandyKcalComparator</p>
+            
+            <p class="standard">All wrapper classes have 
+                <samp class="listingcharacter listingcharacter">compare(...)</samp>
+             methods for a three-way comparison. This construction is shorter than instructions like the following:</p>
+            
+            <div class="listing " id="l_none_11593"><pre><span class="">int</span><span class=""> v1 </span><span class="">=</span><span class=""> candy1</span><span class="">.</span><span class="">calories</span><span class="">(),</span><span class=""> v2 </span><span class="">=</span><span class=""> candy2</span><span class="">.</span><span class="">calories</span><span class="">();</span><span class=""><br/></span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> v1 </span><span class="">&lt;</span><span class=""> v2 </span><span class="">)</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">-</span><span class="">1</span><span class="">;</span><span class=""><br/></span><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> v1 </span><span class="">&gt;</span><span class=""> v2 </span><span class="">)</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span><span class="">return</span><span class=""> </span><span class="">0</span><span class="">;</span><span class="">  </span></pre></div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Design Tip</h6>
+                
+                <p class="standard first last">A comparator can basically have a state, for example for the language, if strings are included in the comparison. A stateless comparator can be programmed with an 
+                    <samp class="listingcharacter listingcharacter">enum</samp>
+                 or written compactly with a lambda expression.</p>
+            
+            </div>
+            
+            <p class="standard">Many places in libraries will require ordering, such as when searching for the maximum element or sorting a list. 
+                <samp class="listingcharacter listingcharacter">Collections.max(...)</samp>, for example, finds the largest element of a list, while 
+                <samp class="listingcharacter listingcharacter">Arrays.sort(...)</samp>
+             sorts an array.</p>
+            
+            <p class="standard">Let’s consider an example illustrating how the 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>
+             object can do many things, for example, find the largest or smallest element in a collection or sort a data structure. Let’s sort an array of candy. The candy with the fewest calories should be placed in front.</p>
+            
+            <div class="listing " id="l11.22"><pre>Candy<span class="">[]</span><span class=""> candies </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">100</span><span class=""> </span><span class="">),</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">623</span><span class=""> </span><span class="">),</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">123</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">};</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> candies</span><span class="">,</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">CandyCaloriesComparator</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> candies</span><span class="">[</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">].</span><span class="">calories</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">     </span><span class=""> // 100</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 11.22</b>    
+            src/main/java/com/tutego/insel/util/CandyCaloriesComparatorDemo.java (Snippet)</p>
+            
+            <div class="imagebox figure-type"><a href="img-f11.4.html" id="f11.4"><img alt="&#10;                &#10;            The Custom Comparator Must Merely Override compare(...) from the Interface" id="img-f11.4" src="bilderklein/klein11_004.png"/></a></div>
+            
+            <p class="caption "><b>Figure 11.4</b>    
+            
+                <a id="p647"/>
+            The Custom Comparator Must Merely Override compare(...) from the Interface</p>
+            
+            <p class="standard">The sorting method always draws on the 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> for the pairs to compare and then asks for the order. If you include a 
+                <samp class="listingcharacter listingcharacter">println(...)</samp> in your 
+                <samp class="listingcharacter listingcharacter">compare(...)</samp>
+             method, you can watch the sort algorithm at work.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.4.5">11.4.5    Tips for Comparator and Comparable Implementations</h3>
+            
+            <p class="standard">If objects should be compared with a 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>, but 
+                <samp class="listingcharacter listingcharacter">null</samp> values should be sorted out beforehand, the static method 
+                <samp class="listingcharacter listingcharacter">int compare(T a, T b, Comparator&lt;? super T&gt; c)</samp> from the 
+                <samp class="listingcharacter listingcharacter">Objects</samp> class is useful. The method returns 0 if 
+                <samp class="listingcharacter listingcharacter">a</samp> and 
+                <samp class="listingcharacter listingcharacter">b</samp> are both either 
+                <samp class="listingcharacter listingcharacter">null</samp> or the 
+                <samp class="listingcharacter listingcharacter">comparator</samp> declares the objects 
+                <samp class="listingcharacter listingcharacter">a</samp> and 
+                <samp class="listingcharacter listingcharacter">b</samp> to be equal. If 
+                <samp class="listingcharacter listingcharacter">a</samp> and 
+                <samp class="listingcharacter listingcharacter">b</samp> are both not 
+                <samp class="listingcharacter listingcharacter">null</samp>, the return is 
+                <samp class="listingcharacter listingcharacter">c.compare(a, b)</samp>. If only 
+                <samp class="listingcharacter listingcharacter">a</samp> or 
+                <samp class="listingcharacter listingcharacter">b</samp> is 
+                <samp class="listingcharacter listingcharacter">null</samp>, the return depends on the 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>
+             and the order of the parameters.</p>
+            
+            <p class="standard">For implementations of 
+                <samp class="listingcharacter listingcharacter">Comparable</samp>, in addition to an implementation of 
+                <samp class="listingcharacter listingcharacter">compareTo(...)</samp>, the appropriate implementation in 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> is also important. This implementation consistent only if 
+                <samp class="listingcharacter listingcharacter">e1.compareTo(e2) == 0</samp> returns the same result as 
+                <samp class="listingcharacter listingcharacter">
+                    <a id="p648"/>
+                e1.equals(e2)</samp>, where 
+                <samp class="listingcharacter listingcharacter">e1</samp> and 
+                <samp class="listingcharacter listingcharacter">e2</samp> have the same type. A violation of this rule can quickly cause problems with sorted sets; the API documentation provides an example. Also, the 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp> method should be implemented correctly because, if objects are equal, the hash values must also be equal. Finally, the equivalence is determined by 
+                <samp class="listingcharacter listingcharacter">equals(…)</samp>/
+                <samp class="listingcharacter listingcharacter">compareTo(…)</samp>
+            .</p>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">e.compareTo(null)</samp> should throw a 
+                <samp class="listingcharacter listingcharacter">NullPointerException</samp> even if 
+                <samp class="listingcharacter listingcharacter">e.equals(null)</samp> returns 
+                <samp class="listingcharacter listingcharacter">false</samp>. 
+                <samp class="listingcharacter listingcharacter">null</samp> is usually not greater than, less than, or equal to another value compared with 
+                <samp class="listingcharacter listingcharacter">compareTo(...)</samp>
+            so an exception is the only reasonable response.</p>
+            
+            <p class="standard">Java supports 
+                <span class="italic">serialization</span>, where the states of complex objects are written serially into a data stream. From this data, an object can be reconstructed later, through a process referred to as 
+                <span class="italic">deserialization</span>. Serializable objects implement the 
+                <samp class="listingcharacter listingcharacter">Serializable</samp> interface. If a 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> is connected to a data structure—such as a 
+                <samp class="listingcharacter listingcharacter">TreeSet</samp> or 
+                <samp class="listingcharacter listingcharacter">TreeMap</samp>—and the data structure is to be serialized. However, the 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> implementation must also implement 
+                <samp class="listingcharacter listingcharacter">Serializable</samp>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.4.6">11.4.6    Static and Default Methods in Comparator</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> interface provides a whole set of static and default methods. (By the way, no static or default methods exist in 
+                <samp class="listingcharacter listingcharacter">Comparable</samp>.) Particularly interesting are the options for linking several 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>
+            s together.</p>
+            
+            <p class="standard">Let’s start with the methods that are easy to understand:</p>
+            
+            <div class="listing " id="l_none_11626"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Comparator</span>&lt;T&gt; <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T extends Comparable&lt;? super T&gt;&gt; Comparator&lt;T&gt; naturalOrder()</samp><br/>Returns a 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> that uses the natural order of objects, which means 
+                        <samp class="listingcharacter listingcharacter">int compare(Comparable&lt;Object&gt; c1, Comparable&lt;Object&gt; c2)</samp> is implemented as 
+                        <samp class="listingcharacter listingcharacter">return c1.compareTo(c2);</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T extends Comparable&lt;? super T&gt;&gt; Comparator&lt;T&gt; reverseOrder()</samp><br/>The static method returns a 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> that uses the natural order like 
+                        <samp class="listingcharacter listingcharacter">naturalOrder()</samp> but reverses the order and thus corresponds to 
+                        <samp class="listingcharacter listingcharacter">Collections.reverseOrder()</samp>. Basically, this method is a 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> with a 
+                        <samp class="listingcharacter listingcharacter">compare(Comparable&lt;Object&gt; c1, Comparable&lt;Object&gt; c2)</samp> method that returns 
+                        <samp class="listingcharacter listingcharacter">c2.compareTo(c1)</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">default Comparator&lt;T&gt; reversed()</samp><br/>Returns a new 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> for this current 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> that reverses the order. Corresponds to 
+                        <samp class="listingcharacter listingcharacter">Collections.reverseOrder(this)</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; Comparator&lt;T&gt; nullsFirst(Comparator&lt;? super T&gt; comparator)</samp> and
+                        <samp class="listingcharacter listingcharacter"> static &lt;T&gt; Comparator&lt;T&gt; nullsLast(Comparator&lt;? super T&gt; comparator)</samp><br/>For a given 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp>, these methods return a new 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> for comparisons with 
+                        <samp class="listingcharacter listingcharacter">null</samp> and places 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                     either before or after the other values in order.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h11.4.6.1">
+                    <a id="p649"/>
+                Sequence of Comparators</h4>
+                
+                <p class="standard">Often, the ordering criterion is composed of several conditions, as the sorting in a phone book shows. First, you might sort by last name, then follows with sorting by first name. To achieve this goal with a 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> object, either all individual comparators must be packed into a new 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> object, or individual 
+                    <samp class="listingcharacter listingcharacter">Comparators</samp> must be bound together to form a “super”-
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>. The second solution is of course the recommended approach because it increases reusability, and individual 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>s can then be easily used for other contexts. A useful method is available in 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>
+                 for exactly such a stringing:</p>
+                
+                <div class="listing " id="l_none_11637"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Comparator</span>&lt;T&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default Comparator&lt;T&gt; thenComparing(Comparator&lt;? super T&gt; other)</samp><br/>First applies its own 
+                            <samp class="listingcharacter listingcharacter">Comparator</samp> and, if it shows states as being equal, then applies the other 
+                            <samp class="listingcharacter listingcharacter">Comparator</samp>, 
+                            <samp class="listingcharacter listingcharacter">other</samp>. In other words, if the current 
+                            <samp class="listingcharacter listingcharacter">Comparator</samp> returns the result 0, the second passed 
+                            <samp class="listingcharacter listingcharacter">Comparator</samp>
+                         must answer the question about the order.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Let’s now use these 
+                    <samp class="listingcharacter listingcharacter">thenComparing(...)</samp> methods from 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>
+                 in an example that sorts a list of names by last name and then by first name.</p>
+                
+                <div class="listing " id="l11.23"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> ComparatorThenComparingDemo </span><span class="">{</span><span class=""><br/></span><br/>  record <span class="">Candy</span><span class="">(</span><span class="">int</span><span class=""> calories</span><span class="">,</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">return</span><span class=""> name </span><span class="">+</span><span class=""> </span><span class="">"/"</span><span class=""> </span><span class="">+</span><span class=""> calories</span><span class="">;</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">final</span><span class=""> Comparator</span><span class="">&lt;</span><span class="">Candy</span><span class="">&gt;</span><span class=""> CANDY_CALORIES_COMPARATOR </span><span class="">=</span><span class=""><br/></span>      <span class="">new</span><span class=""> Comparator</span><span class="">&lt;</span><span class="">Candy</span><span class="">&gt;()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>        <span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">compare</span><span class="">(</span><span class=""> Candy c1</span><span class="">,</span><span class=""> Candy c2 </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>          <span class="">return</span><span class=""> Integer</span><span class="">.</span><span class="">compare</span><span class="">(</span><span class=""> c1</span><span class="">.</span><span class="">calories</span><span class="">(),</span><span class=""> c2</span><span class="">.</span><span class="">calories</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>        <span class="">}</span><span class=""><br/></span>      <span class="">};</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">final</span><span class=""> Comparator</span><span class="">&lt;</span><span class="">Candy</span><span class="">&gt;</span><span class=""> CANDY_NAME_COMPARATOR </span><span class="">=</span><span class=""><br/></span>      <span class="">new</span><span class=""> Comparator</span><span class="">&lt;</span><span class="">Candy</span><span class="">&gt;()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>        <span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">compare</span><span class="">(</span><span class=""> Candy p1</span><span class="">,</span><span class=""> Candy p2 </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>          <span class="">return</span><span class=""> p1</span><span class="">.</span><span class="">name</span><span class="">.</span><span class="">compareTo</span><span class="">(</span><span class=""> p2</span><span class="">.</span><span class="">name</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>        <span class="">}</span><span class=""><br/></span>      <span class="">};</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    List<span class="">&lt;</span><span class="">Candy</span><span class="">&gt;</span><span class=""> candies </span><span class="">=</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""><br/></span>
+                    <a id="p650"/>        <span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">230</span><span class="">,</span><span class=""> </span><span class="">"Special Dark Chocolate"</span><span class=""> </span><span class="">),</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">230</span><span class="">,</span><span class=""> </span><span class="">"Milk 
+Chocolate Bar"</span><span class=""> </span><span class="">),</span><span class=""><br/></span>        <span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">60</span><span class="">,</span><span class=""> </span><span class="">"Tootsie Pop"</span><span class=""> </span><span class="">),</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">280</span><span class="">,</span><span class=""> </span><span class="">"Snickers Bar"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>    candies<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> CANDY_CALORIES_COMPARATOR </span><span class="">);</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> candies </span><span class="">);</span><span class=""><br/></span><br/>    candies<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> CANDY_NAME_COMPARATOR </span><span class="">);</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> candies </span><span class="">);</span><span class=""><br/></span><br/>    candies<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> CANDY_CALORIES_COMPARATOR</span><span class="">.</span><span class="">thenComparing</span><span class="">(</span><span class=""> CANDY_NAME_COMPARATOR </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> candies </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.23</b>    
+            src/main/java/com/tutego/insel/util/ComparatorThenComparingDemo.java (Snippet)</p>
+                
+                <p class="standard">The result is the following output:</p>
+                
+                <div class="listing " id="l_none_11651"><pre>[Tootsie Pop/60, Special Dark Chocolate/230, Milk Chocolate Bar/230, Snickers Bar/280]<br/>[Milk Chocolate Bar/230, Snickers Bar/280, Special Dark Chocolate/230, Tootsie Pop/60]<br/>[Tootsie Pop/60, Milk Chocolate Bar/230, Special Dark Chocolate/230, Snickers Bar/280] </pre></div>
+                
+                <p class="standard">With lambda expressions, as described in 
+                    <span class="crossreference "><a href="13_001.html#h13">Chapter 13</a></span>
+                , the whole thing can be written in a slightly more compact way.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.4.6.2">Extracting a Comparison Value and Making Comparisons*</h4>
+                
+                <p class="standard">The remaining methods in 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> all provide the special capability of taking certain function objects that extract the “key” for the comparisons and then reference the key for the comparison. With the syntax of the method references, you can formulate quite compact 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>
+                 objects.</p>
+                
+                <p class="standard">Let’s look the related methods next:</p>
+                
+                <div class="listing " id="l_none_11666"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Comparator</span>&lt;T&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T,U&gt; Comparator&lt;T&gt; comparing(Function&lt;? super T,? extends U&gt; keyExtractor, Comparator&lt;? super U&gt; keyComparator)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p651"/>
+                            static &lt;T,U extends Comparable&lt;? super U&gt;&gt; Comparator&lt;T&gt; comparing(Function&lt;? super T, ? extends U&gt; keyExtractor)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T&gt; Comparator&lt;T&gt; comparingInt(ToIntFunction&lt;? super T&gt; keyExtractor)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T&gt; Comparator&lt;T&gt; comparingLong(ToLongFunction&lt;? super T&gt; keyExtractor)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static&lt;T&gt; Comparator&lt;T&gt; comparingDouble(ToDoubleFunction&lt;? super T&gt; keyExtractor)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default &lt;U extends Comparable&lt;? super U&gt;&gt; Comparator&lt;T&gt; thenComparing(Function&lt;? super T,? extends U&gt; keyExtractor)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default &lt;U&gt; Comparator&lt;T&gt; thenComparing(Function&lt;? super T,? extends U&gt; <br/>keyExtractor, Comparator&lt;? super U&gt; keyComparator)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default Comparator&lt;T&gt; thenComparingDouble(ToDoubleFunction&lt;? super T&gt; keyExtractor)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default Comparator&lt;T&gt; thenComparingInt(ToIntFunction&lt;? super T&gt; keyExtractor)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default Comparator&lt;T&gt; thenComparingLong(ToLongFunction&lt;? super T&gt; keyExtractor)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Our example to compare candies can be formulated in a different way: You can use lambda expression syntax or alternatively an even more compact method reference; we’ll return to this topic in detail in 
+                        <span class="crossreference "><a href="13_001.html#h13">Chapter 13</a></span>
+                    . Consider the following example:</p>
+                    
+                    <div class="listing " id="l11.24"><pre>Comparator<span class="">&lt;</span><span class="">Candy</span><span class="">&gt;</span><span class=""> comp </span><span class="">=</span><span class=""> Comparator</span><span class="">.</span><span class="">comparingInt</span><span class="">(</span><span class=""> candy </span><span class="">-&gt;</span><span class=""> candy</span><span class="">.</span><span class="">calories</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>// Comparator&lt;Candy&gt; comp = Comparator.comparingInt( Candy::calories );<span class=""><br/></span>candies<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> Comparator</span><span class="">.</span><span class="">comparingInt</span><span class="">(</span><span class=""> Candy</span><span class="">::</span><span class="">calories </span><span class="">)</span><span class=""><br/></span>                        <span class="">.</span><span class="">thenComparing</span><span class="">(</span><span class=""> Candy</span><span class="">::</span><span class="">name </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="caption last"><b>Listing 11.24</b>    
+            src/main/java/com/tutego/insel/util/ComparatorDemo.java (Snippet)</p>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

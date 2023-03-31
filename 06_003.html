@@ -1,0 +1,448 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Writing Custom Classes" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Writing Custom Classes" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Writing Custom Classes</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h6.3">6.3    One for All: Static Methods and Class Variables</h2>
+        
+        <p class="standard">Object variables
+            <a class="indexanchor" id="i06_21"/> are closely related to their objects. When an object is created, its own set of instance variables together represent the state of the object. If an object method changes the value of a instance variable in an object, this change has no effect on the data of the other objects; each object stores an individual assignment. However, in 
+            <a id="p391"/>
+        some situations, states or methods are not directly associated with an individual object, but instead with the class—the “blueprint” of the objects.</p>
+        
+        <p class="standard">Java supports this type of affiliation through 
+            <span class="italic">static members</span>
+            <a class="indexanchor" id="i06_22"/>
+            <a class="indexanchor" id="i06_23"/>. Since these members don’t belong to any object (thus unlike object members), you can also call them 
+            <span class="italic">class members</span>
+            <a class="indexanchor" id="i06_24"/>
+        . Static members have static methods and static variables, a few of which we’ve already encountered.</p>
+        
+        <table class="standardtable" id="t6.4">
+            
+            <thead>
+                
+                <tr>
+                    
+                    <th class="tablehead tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">Static Methods</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">Static Variables</p>
+                    
+                    </th>
+                
+                </tr>
+            
+            </thead>
+            
+            <tbody>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Math.random()</samp>
+                         returns a random number.</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">System.out</samp>
+                         references an output stream for standard console output.</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Math.sin(...)</samp>
+                         calculates the sine.</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Math.PI</samp>
+                         determines the number 3.1415...</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Integer.parseInt(...)</samp>
+                         converts a string to an integer.</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Integer.MAX_VALUE</samp> is the largest representable 
+                            <samp class="listingcharacter listingcharacter">int</samp>
+                         integer.</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">JOptionPane.showInputDialog(...)</samp>
+                         shows an input dialog box.</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Font.MONOSPACED</samp>
+                         stands for a font with a fixed width.</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Color.HSBtoRGB(...)</samp>
+                         converts colors from the HSB color space to the RGB color space.*</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">MediaSize.ISO.A4</samp>
+                         defines the size of an A4 page, namely, 210 mm × 297 mm.</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="2">
+                        
+                        <p class="standard first-item last-item">* Yes, the method starts with a capital letter, which is unusual.</p>
+                    
+                    </td>
+                
+                </tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <p class="caption "><b>Table 6.4</b>    
+            Examples of Static Methods and Static Variables</p>
+        
+        <p class="standard">These members aren’t assigned to a concrete object, but rather to the class. The sine method is an example of a static method of the 
+            <samp class="listingcharacter listingcharacter">Math class</samp>, and 
+            <samp class="listingcharacter listingcharacter">MAX_VALUE</samp> is a class variable of the 
+            <samp class="listingcharacter listingcharacter">Integer</samp> class, while 
+            <samp class="listingcharacter listingcharacter">out</samp> is a class variable of the 
+            <samp class="listingcharacter listingcharacter">System</samp>
+         class. None of these members are bound to any individual object but are, so to speak, “cross-object” members.</p>
+        
+        
+            
+            <h3 class="t3" id="h6.3.1">6.3.1    Why Static Members Are Useful</h3>
+            
+            <p class="standard">Static members have an advantage over object members in that the program they express won’t use any state of the object. Let’s look again at the static methods from the 
+                <samp class="listingcharacter listingcharacter">Math</samp> class. If they were object methods, they would usually use an object state. The static methods would have no parameters and take their working values not from the arguments, but from the internal state of the object. But no 
+                <samp class="listingcharacter listingcharacter">Math</samp> method does that. To calculate the sine of an angle, you don’t need a specific math object. On the other hand, a method like 
+                <samp class="listingcharacter listingcharacter">setPrice(int)</samp>
+             of a candy could be non-static since prices should be set individually for each candy and in no case will all candies always have the same price.</p>
+            
+            <p class="standard">Static methods are thus more common than static variables since static methods derive their working values exclusively from parameters. Static variables are primarily used as constants.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.3.2">6.3.2    
+                <a id="p392"/>
+            Static Members with static</h3>
+            
+            <p class="standard">To implement static members in Java, you must add the 
+                <samp class="listingcharacter listingcharacter">static</samp>
+                <a class="indexanchor" id="i06_25"/> keyword before declaring a variable or a method. For access, you’ll simply use the class name instead of the reference variable. Let’s declare a static method and a static variable for a new class called 
+                <samp class="listingcharacter listingcharacter">City</samp>
+            , with the following members:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The constant 
+                        <samp class="listingcharacter listingcharacter">KANDY_HERSHEY_DISTANCE</samp>
+                     represents the distance between two cities.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">distance(...)</samp>
+                     method returns the distance between two cities given by their city names.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="listing " id="l6.21"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> City </span><span class="">{</span><span class=""><br/></span> <br/>  
+                <span class="bold"><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> KANDY_HERSHEY_DISTANCE = </span><span class="">124</span><span class="">;</span><br/> </span><br/>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> name;</span><br/> <br/>  
+                <span class="bold"><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">distance</span><span class="">( </span><span class="">String</span><span class=""> cityName1, </span><span class="">String</span><span class=""> cityName2 )</span></span> {<br/>    <span class="">if</span><span class=""> ( cityName1.</span><span class="">equalsIgnoreCase</span><span class="">( cityName2 )) </span><span class="">return</span><span class=""> </span><span class="">0</span><span class="">;</span><br/>    <span class="">if</span><span class=""> ( (cityName1.</span><span class="">equalsIgnoreCase</span><span class="">( </span><span class="">"kandy"</span><span class=""> ) &amp;&amp;</span><br/>          cityName2.<span class="">equalsIgnoreCase</span><span class="">( </span><span class="">"hershey"</span><span class=""> )) ||</span><br/>         (cityName1.<span class="">equalsIgnoreCase</span><span class="">( </span><span class="">"hershey"</span><span class=""> ) &amp;&amp;</span><br/>          cityName2.<span class="">equalsIgnoreCase</span><span class="">( </span><span class="">"kandy"</span><span class=""> )) )</span><br/>      <span class="">return</span><span class=""> KANDY_HERSHEY_DISTANCE;</span><br/>    <span class="">return</span><span class=""> -</span><span class="">1</span><span class="">;</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.21</b>    
+            src/main/java/com/tutego/insel/game/c/v8/City.java (Snippet)</p>
+            
+            <div class="imagebox figure-type"><a href="img-f6.8.html" id="f6.8"><img alt="UML Diagram with Static Members Underlined" id="img-f6.8" src="bilderklein/klein06_008.png"/></a></div>
+            
+            <p class="caption "><b>Figure 6.8</b>    
+            UML Diagram with Static Members Underlined</p>
+            
+            <p class="standard">These static members are addressed with the class name 
+                <samp class="listingcharacter listingcharacter">City</samp>
+            , as in the following example:</p>
+            
+            <div class="listing " id="l6.22"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">City</span></span>.KANDY_HERSHEY_DISTANCE );            <span class=""> // 124</span><span class=""><br/></span>City.KANDY_HERSHEY_DISTANCE = <span class="">120</span><span class="">;</span><br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">City</span>.KANDY_HERSHEY_DISTANCE );            <span class=""> // 120</span><span class=""><br/></span>
+                <a id="p393"/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">City</span>.<span class="">distance</span><span class="">( </span><span class="">"Kandy"</span><span class="">, </span><span class="">"Hershey"</span><span class=""> ) );    </span><span class=""> // 124</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">City</span>.<span class="">distance</span><span class="">( </span><span class="">"Neijiangs"</span><span class="">, </span><span class="">"hershey"</span><span class=""> ) );</span><span class=""> // -1</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">City</span>.<span class="">distance</span><span class="">( </span><span class="">"kandy"</span><span class="">, </span><span class="">"kandy"</span><span class=""> ) );      </span><span class=""> // 0</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.22</b>    
+            src/main/java/com/tutego/insel/game/c/v8/Application.java (Snippet)</p>
+            
+            <p class="standard">IntelliJ displays static members in italics by default.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">If a class declares only static members, there’s nothing wrong with specifying a private constructor to prevent the external construction of objects. 
+                    <span class="crossreference "><a href="06_005.html#h6.5.1">Section 6.5.1</a></span>
+                 describes constructors in more detail and also explains other use cases for private constructors.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h6.3.2.1">Validity Range, Visibility, and Lifetime</h4>
+                
+                <p class="standard">For static and non-static variables, you can observe significant differences over their lifetimes. An object variable starts its life via 
+                    <samp class="listingcharacter listingcharacter">new</samp> and ends with automatic garbage collection
+                    <a class="indexanchor" id="i06_26"/>
+                    <a class="indexanchor" id="i06_27"/>
+                    <a class="indexanchor" id="i06_28"/>. A static variable, on the other hand, begins its life the moment the runtime environment loads and initializes the class. The life of static variables ends when the JVM removes and cleans up the class. Access to static variables is always permitted in all blocks since, in object methods, the static variable “was already there earlier” than the object itself because 
+                    <samp class="listingcharacter listingcharacter">new</samp>
+                 presupposes the loaded class definition, which prepares the static variables. Static variables can quickly cause memory problems when developers forget that they are referencing large object trees. And these variables stay in the memory as long as the class itself, which might be until the end of the application.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.3.3">6.3.3    Using Static Members via References?*</h3>
+            
+            <p class="standard">If a class has a class member, the member can also be addressed like an object variable by reference. Thus, two options are available if an object instance exists and the class has a class variable. Let’s stick to our example with the 
+                <samp class="listingcharacter listingcharacter">City</samp> class. To access 
+                <samp class="listingcharacter listingcharacter">KANDY_HERSHEY_DISTANCE</samp>
+            , we can write the following code:</p>
+            
+            <div class="listing " id="l_none_6332"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">City.KANDY_HERSHEY_DISTANCE</span></span> );   <span class=""> // good</span><span class=""><br/></span>City kandy = <span class="">new</span><span class=""> </span><span class="">City</span><span class="">();</span><br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">kandy.KANDY_HERSHEY_DISTANCE</span> );  <span class=""> // bad</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="standard">You should never write access to static members via an object reference because programmers won’t know whether the member is static or non-static. But knowing if a member is static or not is important. For this reason, you should always address static members by their class name.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p394"/>
+                Note</h6>
+                
+                <p class="standard first">For static access, the reference doesn’t matter and can be 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                . If competing in a contest for the worst Java program, you could write:</p>
+                
+                <div class="listing " id="l_none_6329"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">((City) null).KANDY_HERSHEY_DISTANCE</span></span> );<span class=""/></pre></div>
+                
+                <p class="standard last">Since 
+                    <samp class="listingcharacter listingcharacter">null</samp> is type-less, it can be converted to any other type. The constant can then then be accessed via the 
+                    <samp class="listingcharacter listingcharacter">City</samp> type. The expression 
+                    <samp class="listingcharacter listingcharacter">City.KANDY_HERSHEY_DISTANCE</samp>
+                 is not only shorter, but also cleaner.</p>
+            
+            </div>
+            
+            <div class="imagebox figure-type"><a href="img-f6.9.html" id="f6.9"><img alt="Figure 6.9: IntelliJ Message when Static Members Are Accessed by Reference with Refactoring" id="img-f6.9" src="bilderklein/klein06_009.png"/></a></div>
+            
+            <p class="caption "><b>Figure 6.9</b>    
+            Figure 6.9: IntelliJ Message when Static Members Are Accessed by Reference with Refactoring</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.3.4">6.3.4    Why Case Sensitivity Is Important*</h3>
+            
+            <p class="standard">The default naming convention suggests that class names should be assigned with uppercase letters, and variable/method names, with lowercase letters (unless the variable describes a constant). If you encounter a code fragment like 
+                <samp class="listingcharacter listingcharacter">Math.random()</samp>, you’ll immediately know that 
+                <samp class="listingcharacter listingcharacter">random()</samp>
+             must be a static method because it’s preceded by an identifier that is capitalized. This code therefore doesn’t indicate a reference but instead a class name. For this reason, you should avoid capitalizing the names of objects in your programs.</p>
+            
+            <p class="standard">The following example clearly demonstrates why reference variables should start with lowercase letters and why class names should start with uppercase letters:</p>
+            
+            <div class="listing " id="l_none_6346"><pre><span class="">String</span><span class=""> StringModifier </span><span class="">=</span><span class=""> </span><span class="">"What is the Matrix?"</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> t </span><span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">StringModifier</span></span>.<span class="">trim</span><span class="">(); </span><span class=""/></pre></div>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">trim()</samp>
+             method is non-static, as the code suggests by capitalizing the variables.</p>
+            
+            <p class="standard">The same problem arises if you name classes with lowercase letters, which can also be confusing. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_6365"><pre><span class="">class</span><span class=""> </span>
+                <span class="bold"><span class="">c</span></span>ity {<br/>  <span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">distance</span><span class="">() { }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">Now, someone could write 
+                <samp class="listingcharacter listingcharacter">city.distance()</samp>, and a programmer would assume that 
+                <samp class="listingcharacter listingcharacter">city</samp> was a reference variable because it’s lowercase and that 
+                <samp class="listingcharacter listingcharacter">distance()</samp> was an object 
+                <a id="p395"/>
+            method. This example clearly illustrates why sticking to these uppercase/lowercase conventions is important.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.3.5">6.3.5    Static Variables for Data Exchange*</h3>
+            
+            <p class="standard">Each instance of a class can access its static members. Since a static variable exists only once per class, multiple objects can share a variable. With this knowledge, you can allow the exchange of information beyond an object’s boundaries. In our next example, we’ll write a constructor to count the number of objects created; a static method later returns the number of instances built up to that point.</p>
+            
+            <div class="listing " id="l6.23"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Rollercoaster </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">private</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span>
+                <span class="bold"><span class="">numberOfInstances</span></span>;<br/><br/>  {<br/>    
+                <span class="bold">numberOfInstances++</span>;<br/>  }<br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">getNumberOfInstances</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> </span>
+                <span class="bold">numberOfInstances</span>;<br/>  }<br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">new</span><span class=""> </span><span class="">Rollercoaster</span><span class="">();</span><br/>    <span class="">new</span><span class=""> </span><span class="">Rollercoaster</span><span class="">();</span><br/><br/>    System.out.<span class="">println</span><span class="">( Rollercoaster.</span><span class="">getNumberOfInstances</span><span class="">() );</span><span class=""> // 2</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.23</b>    
+            src/main/java/com/tutego/insel/oop/Rollercoaster.java (Snippet)</p>
+            
+            <p class="standard">The static variable 
+                <samp class="listingcharacter listingcharacter">numberOfInstances</samp> is incremented for each new instance via the constructor. The constructor isn’t written out directly, but an instance initializer is used (
+                <span class="crossreference "><a href="06_006.html#h6.6.1">Section 6.6.1</a></span>) since the compiler automatically copies the code into each constructor. With this approach, developers can easily add new constructors for the 
+                <samp class="listingcharacter listingcharacter">Rollercoaster</samp>
+             later without always having to keep the increment of the static variables in mind.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Concurrent access to static variables can cause problems. For this reason, you must use special synchronization mechanisms—which aren’t used in this example, however. Static reference variables can also quickly lead to memory problems since they can store objects for a long time. Deployment must be well thought out.</p>
+            
+            </div>
+            
+            <div class="imagebox figure-type"><a href="img-f6.10.html" id="f6.10"><img alt="&#10;                &#10;            Synchronization Is Necessary: Don’t Grab Static Variables at the Same Time" id="img-f6.10" src="bilderklein/klein06_010.png"/></a></div>
+            
+            <p class="caption "><b>Figure 6.10</b>    
+            
+                <a id="p396"/>
+            Synchronization Is Necessary: Don’t Grab Static Variables at the Same Time</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.3.6">6.3.6    Static Members and Object Members*</h3>
+            
+            <p class="standard">As mentioned earlier, you can also use static members via an object reference. However, let’s review how object members and static members can be mixed. Remember that our first programs consisted of the static 
+                <samp class="listingcharacter listingcharacter">main(...)</samp> method, but our other methods also had to be 
+                <samp class="listingcharacter listingcharacter">static</samp>
+            . This inclusion makes sense because a static method—without an explicit specification of a calling object—can only call other static methods. Also, how should a static method call an object method if no associated object exists? Conversely, however, any object method can call any static method directly, which is the same with object variables. A static method can’t address its own object variables because no implicit object whose members could be accessed exists.</p>
+            
+            
+                
+                <h4 class="t4" id="h6.3.6.1">this References and Static Members</h4>
+                
+                <p class="standard">Also, using the 
+                    <samp class="listingcharacter listingcharacter">this</samp> reference isn’t possible for static members.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_07" id="fn06_07">[ 130 ]</a></span> So, if a static method cannot use a 
+                    <samp class="listingcharacter listingcharacter">this</samp> reference, what object should 
+                    <samp class="listingcharacter listingcharacter">this</samp>
+                 point to?</p>
+                
+                <div class="listing " id="l6.24"><pre><span class="">class</span><span class=""> InStaticNoThis </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">void</span><span class=""> </span><span class="">printName</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> name </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">static</span></span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    
+                    <span class="bold">name</span> = <span class="">"Amanda"</span><span class="">; </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Cannot make a static reference to the </span><span class=""><br/></span><span class="">                      // non-static field name</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">printName</span></span><span class="">(); </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Cannot make a static reference to the non-static method</span><span class=""><br/></span>
+                    <a id="p397"/>                 <span class=""> // printName() from the type InStaticNoThis</span><span class=""><br/></span>    System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold"><span class="">this</span></span><span class=""> );</span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Cannot use this in a static context</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.24</b>    
+            src/main/java/com/tutego/insel/oop/InStaticNoThis.java (Snippet)</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">this</samp> isn’t allowed in the static initialization block either (
+                    <span class="crossreference "><a href="06_006.html#h6.6.2">Section 6.6.2</a></span>
+                ).</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

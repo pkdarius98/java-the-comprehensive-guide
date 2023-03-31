@@ -1,0 +1,955 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    The Class Library" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    The Class Library" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    The Class Library</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h16.7">16.7    Date-Time API</h2>
+        
+        <p class="standard">The 
+            <samp class="listingcharacter listingcharacter">java.time</samp> package is based on the standardized calendar system of ISO-8601, and this covers how a date is represented, including time, date and time, UTC, time intervals (duration/time span), and time zones. The implementation is based on the Gregorian calendar, although other calendar types are also conceivable. Java’s calendar system can use other standards or implementations as well, including the 
+            <span class="italic">Unicode Common Locale Data Repository (CLDR)</span> for localizing days of the week or the 
+            <span class="italic">Time-Zone Database (TZDB)</span>
+        , which documents all time zone changes since 1970.</p>
+        
+        
+            
+            <h3 class="t3" id="h16.7.1">16.7.1    Initial Overview</h3>
+            
+            <p class="standard">The central temporal types from the Date-Time API can be quickly documented:</p>
+            
+            <table class="standardtable" id="t16.6">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Type</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Description</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Field(s)</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">LocalDate</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Represents a common date</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Years, months, and days</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">LocalTime</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Represents a common time</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Hours, minutes, seconds, and nanoseconds</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">LocalDateTime</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Combination of date and time</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Years, months, days, hours, minutes, seconds, and nanoseconds</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Period</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Duration between two 
+                                <samp class="listingcharacter listingcharacter">LocalDates</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Years, months, and days</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Year</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Year only</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Year</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Month</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Month only</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Month</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">MonthDay</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Month and day only</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Month, day</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">OffsetTime</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Time with time zone</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Hours, minutes, seconds, nanoseconds, and zone offset</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">OffsetDateTime</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Date and time with time zone as UTC offset</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Year, month, day, hours, minutes, seconds, nanoseconds, and zone offsets</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">
+                                    <a id="p861"/>
+                                ZonedDateTime</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Date and time with time zone as ID and offset</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Year, month, day, hours, minutes, seconds, nanoseconds, and zone info</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Instant</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Time (continuous machine time)</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Nanoseconds</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Duration</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Time interval between two 
+                                <samp class="listingcharacter listingcharacter">instants</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Seconds/nanoseconds</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 16.6</b>    
+            All Temporal Classes from java.time</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.7.2">16.7.2    Human Time and Machine Time</h3>
+            
+            <p class="standard">Date and time, which we as humans understand in units such as days and minutes, is referred to as 
+                <span class="italic">human time</span>
+                <a class="indexanchor" id="i16_57"/>, while the continuous time of the computer, which has a resolution in the nanosecond range, is called 
+                <span class="italic">machine time</span>
+                <a class="indexanchor" id="i16_58"/>. The machine time begins at a time we call an 
+                <span class="italic">epoch</span>
+            , namely, the Unix epoch.</p>
+            
+            <p class="standard">From 
+                <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>, 
+                <span class="crossreference "><a href="07_002.html#h7.2.5">Section 7.2.5</a></span>, you learned how most classes are made for humans and that only 
+                <samp class="listingcharacter listingcharacter">Instant</samp>/
+                <samp class="listingcharacter listingcharacter">Duration</samp> refers to machine time. 
+                <samp class="listingcharacter listingcharacter">LocalDate</samp>, 
+                <samp class="listingcharacter listingcharacter">LocalTime</samp>, and 
+                <samp class="listingcharacter listingcharacter">LocalDateTime</samp> represent human time without reference to a time zone, whereas 
+                <samp class="listingcharacter listingcharacter">ZonedDateTime</samp> does reference a time zone. When choosing the right time classes for a task, the first consideration is, of course, whether to represent human time or machine time. This choice is followed by questions about exactly which fields are needed and whether a time zone is relevant or not. For example, if the execution time is to be measured, you don’t need to know on which date the measurement started and ended; in this case, 
+                <samp class="listingcharacter listingcharacter">Duration</samp> would be correct, unlike 
+                <samp class="listingcharacter listingcharacter">Period</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Examples for explicit formatting and default formatting for the US locale:</p>
+                
+                <div class="listing " id="l_none_16276"><pre>LocalDate now <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">LocalDate.</span><span class="">now</span><span class="">()</span></span>;<br/>System.out.<span class="">println</span><span class="">( now );</span><span class=""> // e.g., 2023-01-31</span><span class=""><br/></span>System.out.<span class="">printf</span><span class="">( </span><span class="">"%d. %s %d%n"</span><span class="">,</span><br/>                   
+                    <span class="bold">now.<span class="">getDayOfMonth</span><span class="">(), now.</span><span class="">getMonth</span><span class="">(), now.</span><span class="">getYear</span><span class="">()</span></span> );<br/><span class=""/>// e.g., 31. JANUARY 2023<span class=""><br/></span>LocalDate bdayMLKing = 
+                    <span class="bold">LocalDate.<span class="">of</span><span class="">( </span><span class="">1929</span><span class="">, Month.JANUARY, </span><span class="">15</span><span class=""> )</span></span>;<br/>DateTimeFormatter formatter = DateTimeFormatter.<span class="">ofLocalizedDate</span><span class="">( FormatStyle.MEDIUM );</span><br/>System.out.<span class="">println</span><span class="">( bdayMLKing.</span><span class="">format</span><span class="">( formatter ) );</span><span class=""> // Jan 15, 1929</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard last">The 
+                    <samp class="listingcharacter listingcharacter">getMonth()</samp> method on a 
+                    <samp class="listingcharacter listingcharacter">LocalDate</samp> returns a 
+                    <samp class="listingcharacter listingcharacter">java.time.Month</samp> object as the result, and these are enumerations. The 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                 representation returns the constant in uppercase letters.</p>
+            
+            </div>
+            
+            <p class="standard">
+                <a id="p862"/>All classes are based on the ISO system by default. Other calendar systems, such as the Japanese calendar, are created using types from 
+                <samp class="listingcharacter listingcharacter">java.time.chrono</samp>
+            , and of course, entirely new systems are also possible.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Output for the Japanese calendar:</p>
+                
+                <div class="listing  last_item" id="l_none_16280"><pre>ChronoLocalDate now <span class="">=</span><span class=""> JapaneseChronology</span><span class="">.</span><span class="">INSTANCE</span><span class="">.</span><span class="">dateNow</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> now </span><span class="">);</span><span class="">               </span><span class=""> // Japanese Reiwa 4-01-31</span><span class=""> </span></pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h16.7.2.1">Package Overview</h4>
+                
+                <p class="standard">The types of the Date-Time API are distributed among different packages:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">java.time<br/></samp>Contains the standard classes like 
+                            <samp class="listingcharacter listingcharacter">LocalTime</samp> and 
+                            <samp class="listingcharacter listingcharacter">Instant</samp>. All types are based on the ISO-8601 calendar system, commonly known as the “Gregorian calendar.” This calendar is extended by the 
+                            <span class="italic">Proleptic Gregorian Calendar</span>
+                        . This calendar is also valid for the time before 1582 (the introduction of this calendar), so that a consistent timeline can be used.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">java.time.chrono</samp><br/>In this package, you’ll find predefined alternative (i.e., non-ISO) calendar systems, such as the Japanese calendar, the Thai-Buddhist calendar, the Islamic calendar, and a few others.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">java.time.format</samp><br/>Classes for formatting and parsing date and time, such as the 
+                            <samp class="listingcharacter listingcharacter">DateTimeFormatter</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">java.time.zone</samp><br/>Supporting classes for time zones, such as 
+                            <samp class="listingcharacter listingcharacter">ZonedDateTime</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">java.time.temporal</samp><br/>Deeper API that allows access and modification of individual fields of a date/time value.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h16.7.2.2">Design Principles</h4>
+                
+                <p class="standard">Before we get into the individual classes, let’s look at some design principles because all types of the Date-Time API follow recurring patterns. The first and most important property is that all objects are 
+                    <span class="italic">immutable</span>; that is, they can’t be changed. In contrast, with the “old” API, 
+                    <samp class="listingcharacter listingcharacter">Date</samp> and the 
+                    <samp class="listingcharacter listingcharacter">Calendar</samp> classes were mutable, with sometimes devastating consequences. If these objects are passed around and changed, incalculable side effects can occur. The classes of the new Date-Time API are immutable, and so the date/time classes like 
+                    <samp class="listingcharacter listingcharacter">LocalTime</samp> or 
+                    <samp class="listingcharacter listingcharacter">Instant</samp> are opposed to mutable types like 
+                    <samp class="listingcharacter listingcharacter">Date</samp> or 
+                    <samp class="listingcharacter listingcharacter">Calendar</samp>
+                . All methods that look as if they permitted changes now instead create new objects with the desired changes. Side effects are therefore absent, and all types are thread safe.</p>
+                
+                <p class="standard">
+                    <a id="p863"/>Immutability is a design property as is the fact that 
+                    <samp class="listingcharacter listingcharacter">null</samp> isn’t permitted as an argument. In the Java API, 
+                    <samp class="listingcharacter listingcharacter">null</samp> is often accepted because it expresses something optional, but the Date-Time API usually penalizes 
+                    <samp class="listingcharacter listingcharacter">null</samp> with a 
+                    <samp class="listingcharacter listingcharacter">NullPointerExcpetion</samp>. The fact that 
+                    <samp class="listingcharacter listingcharacter">null</samp> isn’t in use as an argument and not as a return benefits another property: The code can be mostly written with a fluent API (i.e., cascaded calls) since many methods return the 
+                    <samp class="listingcharacter listingcharacter">this</samp> reference, as is known from 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                .</p>
+                
+                <p class="standard">Added to these more technical features is a consistent naming that is different from the naming of the well-known JavaBeans. So, no constructors and no setters exist (immutable classes don’t need them), but instead, patterns adhere to many types from the Date-Time API:</p>
+                
+                <table class="standardtable" id="t16.7">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Method</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">Class/Instance Method</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Basic Meaning</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">now()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">Static</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Returns an object with current time/current date</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">of*()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Static</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Creates new objects</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">from</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Static</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Creates new objects from other representations</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">parse*()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Static</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Creates a new object from a string representation</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">format()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Instance</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Formats and returns a string</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">get*()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Instance</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Returns fields of an object</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">is*()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Instance</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Queries the status of an object</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">with*()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Instance</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Returns an instance of the object with a changed state</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">plus*()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Instance</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Returns an instance of the object with a totaled state</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">minus*()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Instance</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Returns an instance of the object with a reduced state</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">to*()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Instance</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Converts an object to a new type</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">at*()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Instance</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Combines this object with another object</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">*Into()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">Instance</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Combines an own object with another target object</p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 16.7</b>    
+            Name Patterns in the Date-Time API</p>
+                
+                <p class="standard">You’ve already used the 
+                    <samp class="listingcharacter listingcharacter">now()</samp> method in one of the first examples in this section, and this method returns the current date, for example. Other creator methods are prefixed with 
+                    <samp class="listingcharacter listingcharacter">of</samp>, 
+                    <samp class="listingcharacter listingcharacter">from</samp>, or 
+                    <samp class="listingcharacter listingcharacter">with</samp>; no constructors exist. The methods of the 
+                    <samp class="listingcharacter listingcharacter">with*()</samp>
+                 type assume the role of setters.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.7.3">16.7.3    The LocalDate Date Class</h3>
+            
+            <p class="standard">A date (without a time zone) is represented by the 
+                <samp class="listingcharacter listingcharacter">LocalDate</samp>
+             class. This class can be used to represent a birth date, for example.</p>
+            
+            <p class="standard">
+                <a id="p864"/>A temporal object can be created using the static 
+                <samp class="listingcharacter listingcharacter">of (...)</samp> factory methods and derived via 
+                <samp class="listingcharacter listingcharacter">ofInstant(Instant instant, ZoneId zone)</samp> or from another temporal object. Interesting are the methods that work with a 
+                <samp class="listingcharacter listingcharacter">TemporalAdjuster</samp>
+            .</p>
+            
+            <p class="standard">Equipped with these objects, you can use various getters and query individual fields, such as 
+                <samp class="listingcharacter listingcharacter">getDayOfMonth()</samp>; 
+                <samp class="listingcharacter listingcharacter">getDayOfYear()</samp> (return 
+                <samp class="listingcharacter listingcharacter">int</samp>); 
+                <samp class="listingcharacter listingcharacter">getDayOfWeek()</samp>, which returns an enumeration of type 
+                <samp class="listingcharacter listingcharacter">DayOfWeek</samp>; and 
+                <samp class="listingcharacter listingcharacter">getMonth()</samp>, which returns an enumeration of type 
+                <samp class="listingcharacter listingcharacter">Month</samp>. Furthermore, other methods include 
+                <samp class="listingcharacter listingcharacter">long toEpochDay()</samp> and 
+                <samp class="listingcharacter listingcharacter">long toEpochSecond(LocalTime time, ZoneOffset offset)</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Find the next Saturday from now:</p>
+                
+                <div class="listing  last_item" id="l_none_16298"><pre>LocalDate today <span class="">=</span><span class=""> LocalDate</span><span class="">.</span><span class="">now</span><span class="">();</span><span class=""><br/></span>LocalDate nextSaturday <span class="">=</span><span class=""> today</span><span class="">.</span><span class="">with</span><span class="">(</span><span class=""> TemporalAdjusters</span><span class="">.</span><span class="">next</span><span class="">(</span><span class="">DayOfWeek</span><span class="">.</span><span class="">SATURDAY</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"Today is %s, and next Saturday is %s"</span><span class="">,</span><span class=""><br/></span>                   today<span class="">,</span><span class=""> nextSaturday </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            <p class="standard">In addition, some methods return new 
+                <samp class="listingcharacter listingcharacter">LocalDate</samp> objects with 
+                <samp class="listingcharacter listingcharacter">minus*(...)</samp> or 
+                <samp class="listingcharacter listingcharacter">plus*(...)</samp> if, for example, a number of years should be returned with 
+                <samp class="listingcharacter listingcharacter">minusYear(long yearsToSubtract)</samp>. By negating the sign, the opposite method can also be used. In other words, 
+                <samp class="listingcharacter listingcharacter">LocalDate.now().minusMonths(1)</samp> provides the same result as 
+                <samp class="listingcharacter listingcharacter">LocalDate.now().plusMonths(-1)</samp>. The 
+                <samp class="listingcharacter listingcharacter">with*(...)</samp> methods reassign a field and return a modified new 
+                <samp class="listingcharacter listingcharacter">LocalDate</samp>
+             object.</p>
+            
+            <p class="standard">From a 
+                <samp class="listingcharacter listingcharacter">LocaleDate</samp> object, you can create other temporal objects: 
+                <samp class="listingcharacter listingcharacter">atTime(...)</samp>, for example, returns 
+                <samp class="listingcharacter listingcharacter">LocalDateTime</samp> objects in which certain time fields are assigned. 
+                <samp class="listingcharacter listingcharacter">atTime(int hour, int minute)</samp> is such an example. With 
+                <samp class="listingcharacter listingcharacter">until(...)</samp>, a time duration of the 
+                <samp class="listingcharacter listingcharacter">Period</samp> type can be returned. Two methods that provide a stream of 
+                <samp class="listingcharacter listingcharacter">LocalDate</samp>
+             objects up to an endpoint are also interesting:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Stream&lt;LocalDate&gt; datesUntil( LocalDate endExclusive )</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Stream&lt;LocalDate&gt; datesUntil( LocalDate endExclusive, Period step )</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

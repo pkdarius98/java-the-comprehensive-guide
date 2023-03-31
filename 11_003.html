@@ -1,0 +1,446 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Special Types of Java SE" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Special Types of Java SE" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Special Types of Java SE</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h11.3">11.3    The java.util.Objects Utility Class</h2>
+        
+        <p class="standard">The 
+            <samp class="listingcharacter listingcharacter">Objects</samp> class
+            <a class="indexanchor" id="i11_56"/> contains some static utility functions. These functions primarily perform 
+            <samp class="listingcharacter listingcharacter">null</samp> tests to avoid a subsequent 
+            <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+         when object methods are called.</p>
+        
+        
+            
+            <h3 class="t3" id="h11.3.1">11.3.1    Built-In Null Tests for equals(...)/hashCode()</h3>
+            
+            <p class="standard">For example, if the object variable 
+                <samp class="listingcharacter listingcharacter">name</samp> of a person is 
+                <samp class="listingcharacter listingcharacter">null</samp>, then 
+                <samp class="listingcharacter listingcharacter">name.hashCode()</samp> can’t simply be called without a 
+                <samp class="listingcharacter listingcharacter">NullPointerException</samp> following the call. Three methods of 
+                <samp class="listingcharacter listingcharacter">Objects</samp> perform 
+                <samp class="listingcharacter listingcharacter">null</samp> tests before being passed to the 
+                <samp class="listingcharacter listingcharacter">Object</samp> method: 
+                <samp class="listingcharacter listingcharacter">equals(…)</samp>, 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp>, and 
+                <samp class="listingcharacter listingcharacter">toString()</samp>. An additional helper method works with comparators, which you’ll learn more about in 
+                <span class="crossreference "><a href="11_004.html#h11.4">Section 11.4</a></span>
+            .</p>
+            
+            <div class="listing " id="l_none_11459"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Objects</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static boolean equals(Object a, Object b)</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">true</samp> if both arguments are either 
+                        <samp class="listingcharacter listingcharacter">null</samp> or if 
+                        <samp class="listingcharacter listingcharacter">a.equals(b)</samp> also returns 
+                        <samp class="listingcharacter listingcharacter">true</samp>; otherwise, this method returns 
+                        <samp class="listingcharacter listingcharacter">false</samp>. That 
+                        <samp class="listingcharacter listingcharacter">Objects.equals(null, null)</samp> returns 
+                        <samp class="listingcharacter listingcharacter">true</samp>
+                     makes sense, and thus, the method saves you from some manual testing.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int hashCode(Object o)</samp><br/>Returns 0 if 
+                        <samp class="listingcharacter listingcharacter">o</samp> is 
+                        <samp class="listingcharacter listingcharacter">null</samp>; otherwise, 
+                        <samp class="listingcharacter listingcharacter">o.hashCode()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int hash(Object… values)</samp><br/>Calls 
+                        <samp class="listingcharacter listingcharacter">hashCode()</samp> on each object in the 
+                        <samp class="listingcharacter listingcharacter">values</samp> collection and concatenates it to a new hash value. The implementation is simply a 
+                        <samp class="listingcharacter listingcharacter">return Arrays.hashCode(values)</samp>
+                    . Using the method is rather expensive due to the construction of the varargs array and possible boxing operations for primitive values.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; int compare(T a, T b, Comparator&lt;? super T&gt; c)</samp><br/>Returns 0 if 
+                        <samp class="listingcharacter listingcharacter">a</samp> and 
+                        <samp class="listingcharacter listingcharacter">b</samp> are both either 
+                        <samp class="listingcharacter listingcharacter">null</samp> or the 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> declares the objects 
+                        <samp class="listingcharacter listingcharacter">a</samp> and 
+                        <samp class="listingcharacter listingcharacter">b</samp> to be equal. If 
+                        <samp class="listingcharacter listingcharacter">a</samp> and 
+                        <samp class="listingcharacter listingcharacter">b</samp> are both not 
+                        <samp class="listingcharacter listingcharacter">null</samp>, the return is 
+                        <samp class="listingcharacter listingcharacter">c.compare(a, b)</samp>. If only 
+                        <samp class="listingcharacter listingcharacter">a</samp> or 
+                        <samp class="listingcharacter listingcharacter">b</samp> is 
+                        <samp class="listingcharacter listingcharacter">null</samp>, the result depends on the 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp>
+                     and the order of the parameters.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p640"/>
+                Example</h6>
+                
+                <p class="standard first">Let’s recall the overridden 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp> method for a player (described in 
+                    <span class="crossreference "><a href="11_001.html#h11.1.5">Section 11.1.5</a></span>
+                ), where the player name should go into the hash value.</p>
+                
+                <div class="listing " id="l11.19"><pre>result <span class="">=</span><span class=""> </span><span class="">31</span><span class=""> </span><span class="">*</span><span class=""> result </span><span class="">+</span><span class=""> </span><span class="">((</span><span class="">name </span><span class="">==</span><span class=""> null</span><span class="">)</span><span class=""> </span><span class="">?</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">:</span><span class=""> </span>
+                    <span class="bold"><span class="">name.</span><span class="">hashCode</span><span class="">()</span></span>);<span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 11.19</b>    
+            src/main/java/com/tutego/insel/object/hashcode/Player.java, hashCode() (Snippet)</p>
+                
+                <p class="standard">With 
+                    <samp class="listingcharacter listingcharacter">Objects.hashCode(Object)</samp>, the 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 test can be omitted because the static method already performs it. Consider the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_11479"><pre>result <span class="">=</span><span class=""> </span><span class="">31</span><span class=""> </span><span class="">*</span><span class=""> result </span><span class="">+</span><span class=""> Objects</span><span class="">.</span><span class="">hashCode</span><span class="">(</span><span class=""> name </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.3.2">11.3.2    Objects.toString(…)</h3>
+            
+            <p class="standard">Another static method is 
+                <samp class="listingcharacter listingcharacter">Objects.toString(Object)</samp>. This method exists in the class for symmetry reasons since 
+                <samp class="listingcharacter listingcharacter">toString()</samp> is one of the standard methods of the 
+                <samp class="listingcharacter listingcharacter">Object</samp> class. The method doesn’t need to be used because a corresponding method already exists with 
+                <samp class="listingcharacter listingcharacter">String.valueOf(...)</samp>
+            .</p>
+            
+            <div class="listing " id="l_none_11481"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Objects</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String toString(Object o)</samp><br/>Returns the string 
+                        <samp class="listingcharacter listingcharacter">"null"</samp> if the argument is 
+                        <samp class="listingcharacter listingcharacter">null</samp>; otherwise, 
+                        <samp class="listingcharacter listingcharacter">o.toString()</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The 
+                    <samp class="listingcharacter listingcharacter">String.valueOf(...)</samp> method is overloaded and better suited for primitive arguments than 
+                    <samp class="listingcharacter listingcharacter">Objects.toString(Object)</samp>, which always requires wrapper objects to be created first. Although 
+                    <samp class="listingcharacter listingcharacter">String.valueOf(3.14)</samp> and 
+                    <samp class="listingcharacter listingcharacter">Objects.toString(3.14)</samp> look the same, in the second case, a wrapper 
+                    <samp class="listingcharacter listingcharacter">double</samp>
+                 object comes into play.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.3.3">11.3.3    null Checks with Built-In Exception Handling</h3>
+            
+            <p class="standard">In the preceding methods, 
+                <samp class="listingcharacter listingcharacter">null</samp> is treated as a special case, and exceptions are avoided. For example, 
+                <samp class="listingcharacter listingcharacter">Objects.toString(null)</samp> or 
+                <samp class="listingcharacter listingcharacter">Objects.hashCode(null)</samp> are fine and “work around” 
+                <samp class="listingcharacter listingcharacter">null</samp>. This flexibility is not always useful, however, because traditionally you want to avoid 
+                <samp class="listingcharacter listingcharacter">null</samp> as an argument and in returns. Therefore, a good practice is to first test in a method body to determine whether the arguments are non-
+                <samp class="listingcharacter listingcharacter">null</samp>, unless 
+                <samp class="listingcharacter listingcharacter">null</samp>
+             is absolutely desired.</p>
+            
+            <p class="standard">For tests that check whether references are non-
+                <samp class="listingcharacter listingcharacter">null</samp>, 
+                <samp class="listingcharacter listingcharacter">Objects</samp> provides a couple of 
+                <samp class="listingcharacter listingcharacter">requireNonNull*(...)</samp> methods to carry out 
+                <samp class="listingcharacter listingcharacter">null</samp> checks and throw a 
+                <samp class="listingcharacter listingcharacter">NullPointerException</samp> if an error occurs. These tests are useful for constructors and setters that should initial
+                <a id="p641"/>ize values but want to prevent 
+                <samp class="listingcharacter listingcharacter">null</samp>
+             from being passed through.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The 
+                    <samp class="listingcharacter listingcharacter">setName(...)</samp> method is supposed to prohibit a 
+                    <samp class="listingcharacter listingcharacter">name</samp> argument equal to 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                . Consider the following example:</p>
+                
+                <div class="listing " id="l_none_11492"><pre><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setName</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">this</span><span class="">.</span><span class="">name </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">Objects.</span><span class="">requireNonNull</span><span class="">( name )</span></span>;<br/>}<span class=""/></pre></div>
+                
+                <p class="standard last">Alternatively, the following error message is possible:</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_11501"><pre><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setName</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">this</span><span class="">.</span><span class="">name </span><span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">Objects.</span><span class="">requireNonNull</span><span class="">( name, </span><span class="">"Name must not be null"</span><span class=""> )</span></span>;<br/>}<br/><span class="">class</span><span class=""> java.util.</span>
+                <span class="bold">Objects</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; T requireNonNull(T obj)</samp><br/>Throws a 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp> if 
+                        <samp class="listingcharacter listingcharacter">obj</samp> is 
+                        <samp class="listingcharacter listingcharacter">null</samp>. Otherwise, the 
+                        <samp class="listingcharacter listingcharacter">obj</samp>
+                     is the return. The declaration is generic and to be understood in such a way that the parameter type is the same as the return type.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; T requireNonNull(T obj, String message)</samp><br/>Like 
+                        <samp class="listingcharacter listingcharacter">requireNonNull(obj)</samp>, except that the 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                     message is determined.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; T requireNonNull(T obj, Supplier&lt;String&gt; messageSupplier)</samp><br/>Like 
+                        <samp class="listingcharacter listingcharacter">requireNonNull(obj, message)</samp>, but the message comes from 
+                        <samp class="listingcharacter listingcharacter">messageSupplier</samp>. This is useful for messages that are more expensive to build because the 
+                        <samp class="listingcharacter listingcharacter">Supplier</samp> defers the cost of creating the string until a 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                     actually occurs because only then is the message necessary.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; T requireNonNullElse(T obj, T defaultObj)</samp><br/>Returns the first object that’s not 
+                        <samp class="listingcharacter listingcharacter">null</samp>. 
+                        <samp class="listingcharacter listingcharacter">defaultObj</samp> must not be 
+                        <samp class="listingcharacter listingcharacter">null</samp>; otherwise, a 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp> will follow. Implemented as 
+                        <samp class="listingcharacter listingcharacter">return (obj != null) ? obj : requireNonNull (defaultObj, "defaultObj");</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; T requireNonNullElseGet(T obj, Supplier&lt;? extends T&gt; supplier)</samp><br/>Returns the first object that isn’t 
+                        <samp class="listingcharacter listingcharacter">null.</samp> If 
+                        <samp class="listingcharacter listingcharacter">obj</samp> is 
+                        <samp class="listingcharacter listingcharacter">null</samp>, the method gets the reference from the 
+                        <samp class="listingcharacter listingcharacter">supplier</samp>, which then must not return 
+                        <samp class="listingcharacter listingcharacter">null</samp>; otherwise, a 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                     will follow.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.3.4">11.3.4    Tests for null</h3>
+            
+            <p class="standard">Behind 
+                <samp class="listingcharacter listingcharacter">isNull(Object o)</samp> and 
+                <samp class="listingcharacter listingcharacter">nonNull(Object o)</samp>, a simple test is available for 
+                <samp class="listingcharacter listingcharacter">o == null</samp> or 
+                <samp class="listingcharacter listingcharacter">o != null</samp>
+            .</p>
+            
+            <div class="listing " id="l_none_11508"><pre><span class="">
+                    <a id="p642"/>
+                class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Objects</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static boolean isNull(Object obj)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static boolean nonNull(Object obj)</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">true</samp> if 
+                        <samp class="listingcharacter listingcharacter">obj</samp> is 
+                        <samp class="listingcharacter listingcharacter">null</samp> or non-
+                        <samp class="listingcharacter listingcharacter">null</samp>; otherwise, 
+                        <samp class="listingcharacter listingcharacter">false</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">In normal program code, developers won’t use these methods, but these methods are useful for method references so that, for example, 
+                <samp class="listingcharacter listingcharacter">stream.filter(Objects::nonNull)</samp> can be read. We’ll return to method references in 
+                <span class="crossreference "><a href="13_001.html#h13">Chapter 13</a></span>, 
+                <span class="crossreference "><a href="13_002.html#h13.2">Section 13.2</a></span>, and 
+                <span class="crossreference "><a href="18_001.html#h18">Chapter 18</a></span>, 
+                <span class="crossreference "><a href="18_004.html#h18.4">Section 18.4</a></span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.3.5">11.3.5    Checking Index-Related Program Arguments for Correctness</h3>
+            
+            <p class="standard">In 
+                <span class="crossreference "><a href="09_001.html#h9">Chapter 9</a></span>, 
+                <span class="crossreference "><a href="09_001.html#h9.1.2">Section 9.1.2</a></span>, we highlighted the need to check value ranges and throw exceptions, such as 
+                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> or 
+                <samp class="listingcharacter listingcharacter">IndexOutOfBoundsException</samp>
+            , in case of errors to prevent incorrect values from sneaking into the object.</p>
+            
+            <p class="standard">Other methods from 
+                <samp class="listingcharacter listingcharacter">Objects</samp> check valid value ranges of index-based methods and throw an 
+                <samp class="listingcharacter listingcharacter">IndexOutOfBoundsException</samp>
+             in case of an error.</p>
+            
+            <div class="listing " id="l_none_11537"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Objects</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int checkIndex(int index, int length)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long checkIndex(long index, long length)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int checkFromToIndex(int fromIndex, int toIndex, int length)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long checkFromToIndex(long fromIndex, long toIndex, long length)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int checkFromIndexSize(int fromIndex, int size, int length)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long checkFromIndexSize(long fromIndex, long size, long length)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example is an implementation of the 
+                    <samp class="listingcharacter listingcharacter">get(int)</samp> method in 
+                    <samp class="listingcharacter listingcharacter">java.util.ArrayList</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_11529"><pre><span class="">public</span><span class=""> E </span><span class="">get</span><span class="">(</span><span class="">int</span><span class=""> index</span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  Objects<span class="">.</span><span class="">checkIndex</span><span class="">(</span><span class="">index</span><span class="">,</span><span class=""> size</span><span class="">);</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">elementData</span><span class="">(</span><span class="">index</span><span class="">);</span><span class=""><br/></span>}</pre></div>
+                
+                <p class="standard last">The private 
+                    <samp class="listingcharacter listingcharacter">elementData(int index)</samp> method directly accesses the internal array with 
+                    <samp class="listingcharacter listingcharacter">elementData[index]</samp>, which could be larger, however, because the implementation of 
+                    <samp class="listingcharacter listingcharacter">ArrayList</samp>
+                 has a certain buffer size. Therefore, prior index-verification is necessary.</p>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

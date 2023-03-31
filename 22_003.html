@@ -1,0 +1,190 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Testing with JUnit" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Testing with JUnit" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Testing with JUnit</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h22.3">22.3    
+            <a id="p1081"/>
+        Java Assertion Libraries and AssertJ</h2>
+        
+        <p class="standard">The problem with the simple tests is that they always end up being simple truth tests. Let’s construct an example. Suppose we want to check whether a collection contains two desired elements. We could write the following test:</p>
+        
+        <div class="listing " id="l_none_22241"><pre><span class="">assertTrue</span><span class="">(</span><span class=""> collection</span><span class="">.</span><span class="">contains</span><span class="">(</span><span class="">elem1</span><span class="">)</span><span class=""> </span><span class="">&amp;&amp;</span><span class=""> collection</span><span class="">.</span><span class="">contains</span><span class="">(</span><span class="">elem2</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+        
+        <p class="standard">If the test fails, some questions will remain unanswered:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Was the first or the second element not in the collection? So, which was present, and which was missing?</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">What’s in the collection in total?</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">Of course, these questions can be answered by your own implementation, but various JUnit supplements can help, including 
+            <span class="italic">AssertJ</span> (<span class="url"><a href="https://assertj.github.io/doc">https://assertj.github.io/doc</a></span>), 
+            <span class="italic">Truth</span> (<span class="url"><a href="https://truth.dev/">https://truth.dev/</a></span>), or 
+            <span class="italic">Hamcrest</span>
+            <a class="indexanchor" id="i22_25"/> (<span class="url"><a href="http://hamcrest.org/JavaHamcrest">http://hamcrest.org/JavaHamcrest</a></span>). These supplements allow tests to be written more declaratively, so that they be read almost like English sentences.</p>
+        
+        
+            
+            <h3 class="t3" id="h22.3.1">22.3.1    AssertJ</h3>
+            
+            <p class="standard">AssertJ
+                <a class="indexanchor" id="i22_26"/> is a popular add-on to JUnit. Let’s briefly contrast the API for AssertJ with JUnit’s API. JUnit uses simple 
+                <samp class="listingcharacter listingcharacter">assert*(...)</samp> methods with one, two, or three parameters for a test. In AssertJ, 
+                <samp class="listingcharacter listingcharacter">assertThat(xxx)</samp> forms the basis for a property 
+                <samp class="listingcharacter listingcharacter">xxx</samp> to be tested. This property can be a primitive type, a collection, a file, a database connection, or anything else. After 
+                <samp class="listingcharacter listingcharacter">assertThat(…)</samp>
+             follows an assertion of the desired properties via the fluent API.</p>
+            
+            <table class="standardtable" id="t22.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">assert*(…) in JUnit</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">assertThat(...) in AssertJ</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Object o = new Object();<br/>assertNotNull(o);</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Object o = new Object();<br/>assertThat(o).isNotNull();</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">assertEquals("",   Strings.reverse(""));</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">assertThat(Strings.reverse("")). isEqualTo("");</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 22.1</b>    
+            Comparison of the assert*(...) and assertThat(...) Methods</p>
+            
+            <p class="standard">The essential difference can be seen in the table: In the 
+                <samp class="listingcharacter listingcharacter">assertThat(...)</samp> methods of AssertJ, the argument always contains the value that should be examined for characteristics. With the 
+                <samp class="listingcharacter listingcharacter">assert*(...)</samp>
+             methods of JUnit, the first argument is what JUnit should expect as correct and then the query for the page effect.</p>
+            
+            
+                
+                <h4 class="t4" id="h22.3.1.1">
+                    <samp class="listingcharacter listingcharacter"/>
+                    <a id="p1082"/>
+                Including AssertJ</h4>
+                
+                <p class="standard">JUnit doesn’t include AssertJ, so the first step is to include a Java archive in the classpath. Maven users would write the following code:</p>
+                
+                <div class="listing " id="l22.11"><pre><span class="">&lt;dependency&gt;</span><span class=""/><br/>  <span class="">&lt;groupId&gt;</span><span class="">org.assertj</span><span class="">&lt;/groupId&gt;</span><span class=""/><br/>  <span class="">&lt;artifactId&gt;</span><span class="">assertj-core</span><span class="">&lt;/artifactId&gt;</span><span class=""/><br/>  <span class="">&lt;version&gt;</span><span class="">3.21.0</span><span class="">&lt;/version&gt;</span><span class=""/><br/>  <span class="">&lt;scope&gt;</span><span class="">test</span><span class="">&lt;/scope&gt;</span><span class=""/><br/><span class="">&lt;/dependency&gt;</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>numbering_unknown </b>    
+            pom.xml (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h22.3.1.2">Sample Program</h4>
+                
+                <p class="standard">Let’s return to our opening example: testing whether certain elements are contained in a collection and others aren’t. Let’s start with the following setup:</p>
+                
+                <div class="listing " id="l_none_22246"><pre>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> letters </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""><br/></span>Collections<span class="">.</span><span class="">addAll</span><span class="">(</span><span class=""> letters</span><span class="">,</span><span class=""> </span><span class="">"a"</span><span class="">,</span><span class=""> </span><span class="">"b"</span><span class="">,</span><span class=""> </span><span class="">"c"</span><span class="">,</span><span class=""> </span><span class="">"d"</span><span class="">,</span><span class=""> </span><span class="">"e"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>letters<span class="">.</span><span class="">removeAll</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">"b"</span><span class="">,</span><span class=""> </span><span class="">"d"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The list first contains the letters “a” to “e,” then “b” and “d” leave the list. AssertJ allows us to check different things, as shown in the following example:</p>
+                
+                <div class="listing " id="l_none_22254"><pre><span class="">assertThat</span><span class="">(</span><span class=""> letters </span><span class="">).</span><span class="">hasSize</span><span class="">(</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">assertThat</span><span class="">(</span><span class=""> letters </span><span class="">).</span><span class="">contains</span><span class="">(</span><span class=""> </span><span class="">"a"</span><span class=""> </span><span class="">).</span><span class="">contains</span><span class="">(</span><span class=""> </span><span class="">"c"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">assertThat</span><span class="">(</span><span class=""> letters </span><span class="">).</span><span class="">contains</span><span class="">(</span><span class=""> </span><span class="">"a"</span><span class="">,</span><span class=""> </span><span class="">"c"</span><span class="">,</span><span class=""> </span><span class="">"e"</span><span class=""> </span><span class="">).</span><span class="">doesNotContain</span><span class="">(</span><span class=""> </span><span class="">"b"</span><span class="">,</span><span class=""> </span><span class="">"d"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">You can clearly recognize the fluent API because of the cascading of method calls. Different parameter types of 
+                    <samp class="listingcharacter listingcharacter">assertThat(…)</samp> lead to different return types. For our list, 
+                    <samp class="listingcharacter listingcharacter">assertThat(letters)</samp> returns type 
+                    <samp class="listingcharacter listingcharacter">org.assertj.core.api.ListAssert</samp>. If we had the parameter type 
+                    <samp class="listingcharacter listingcharacter">int</samp>, the return type would be 
+                    <samp class="listingcharacter listingcharacter">org.assertj.core.api.AbstractIntegerAssert</samp>; if a string, the return type would be 
+                    <samp class="listingcharacter listingcharacter">org.assertj.core.api.AbstractStringAssert</samp>
+                .</p>
+                
+                <p class="standard">Let’s change the collection a bit and create an error by removing “b” and “e” instead of “b” and “d.” The output message is meaningful:</p>
+                
+                <div class="listing " id="l_none_22267"><pre>java<span class="">.</span><span class="">lang</span><span class="">.</span><span class="">AssertionError</span><span class="">:</span><span class=""> </span><br/>Expecting<span class="">:</span><span class=""><br/></span> <span class="">&lt;[</span><span class="">"a"</span><span class="">,</span><span class=""> </span><span class="">"c"</span><span class="">,</span><span class=""> </span><span class="">"d"</span><span class="">]&gt;</span><span class=""><br/></span>to contain<span class="">:</span><span class=""><br/></span> <span class="">&lt;[</span><span class="">"a"</span><span class="">,</span><span class=""> </span><span class="">"c"</span><span class="">,</span><span class=""> </span><span class="">"e"</span><span class="">]&gt;</span><span class=""><br/></span>but could not find<span class="">:</span><span class=""><br/></span> <span class="">&lt;[</span><span class="">"e"</span><span class="">]&gt;</span><span class=""> </span></pre></div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

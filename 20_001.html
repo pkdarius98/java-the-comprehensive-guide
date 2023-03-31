@@ -1,0 +1,341 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Introduction to Database Management with JDBC" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Introduction to Database Management with JDBC" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Introduction to Database Management with JDBC</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h20">20    
+        <a id="p1005"/>
+    Introduction to Database Management with JDBC</h1><p class="introductorynote indent_chapter_double">“What can be stored? Anything you’d like to extract.”<br/>—National Security Agency presentation on the XKeyscore system (2008)</p><p class="standard">Collecting, accessing, and managing information is a central pillar for any business in the “information age.” Whereas information had been written on paper, information technology (IT) provides 
+        <span class="italic">databases</span> for this purpose. A database is managed by a 
+        <span class="italic">database management system (DBMS)</span>
+    .</p><p class="standard">A database model determines the structure in which the 
+        <span class="italic">data</span> (i.e., information units) are related and organized. Different models of databases exist, the most common being the relational database, which is based on tables. In addition to relational databases, document-oriented databases, graph databases, and key-value databases may also be encountered. These kinds of databases are generally grouped under the term 
+        <span class="italic">NoSQL databases</span>
+    . For Java, application programming interfaces (APIs) are available for all kinds of databases.</p>
+        
+        <h2 class="t2" id="h20.1">20.1    Relational Databases
+            <a class="indexanchor" id="i20_00"/>
+         and Java Access</h2>
+        
+        <p class="standard">Relational databases have been around since the 1970s. The theoretical foundations were laid by Edgar F. Codd as early as the 1960s.</p>
+        
+        
+            
+            <h3 class="t3" id="h20.1.1">20.1.1    The Relational Model</h3>
+            
+            <p class="standard">The basis for relational databases are tables (also called 
+                <span class="italic">relations</span>
+                <a class="indexanchor" id="i20_01"/>) with columns and rows, which assign properties to what is called 
+                <span class="italic">entities</span>
+                <a class="indexanchor" id="i20_02"/>. Columns are indicated vertically; the rows, horizontally. A 
+                <span class="italic">row</span> (also referred to as a 
+                <span class="italic">tuple</span>
+                <a class="indexanchor" id="i20_03"/>) corresponds to an entry of a table, while a 
+                <span class="italic">column</span> (also referred to as an 
+                <span class="italic">attribute</span>
+            ) refers to an element of a table.</p>
+            
+            <table class="standardtable" id="t20.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">ID</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Name</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Address</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Place of Residence</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">004</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Prescott J. G.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">4490 Oak Drive</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Quincy</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">009</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Home M.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">4312 Wood Road</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">New York</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a id="p1006"/>
+                            011</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Rheinwerk Publishing, Inc.</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">2 Heritage Drive</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Quincy</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">013</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Walters</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">145 Pearl Street</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Albany</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">…</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">…</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">…</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">…</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 20.1</b>    
+            A Sample Table</p>
+            
+            <p class="standard">Each table corresponds to a logical view of the user. The rows of a relation represent the
+                <a class="indexanchor" id="i20_04"/>
+                <span class="italic"> database specification</span>, while the
+                <a class="indexanchor" id="i20_05"/>
+                <span class="italic"> database schema</span>
+             describes the structure of the tables (i.e., the number, name, and type of columns).</p>
+            
+            <p class="standard">To access to these tables to determine the characteristics of a database, you’ll need to use several query options.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h20.1.2">20.1.2    Java Application Programming Interfaces for Accessing Relational Databases</h3>
+            
+            <p class="standard">Let’s imagine our database system is on one side, and our Java program is on the other side but wants to access the data. What you need is a uniform programming interface so that the functions of different databases can be used in the same way.</p>
+            
+            <p class="standard">Different APIs at different levels are in operation here. At the lowest level, you’ll encounter the following APIs:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">Java Database Connectivity (JDBC)</span>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">Reactive Relational Database Connectivity (R2DBC)</span>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">JDBC and R2DBC abstract from relational databases through an API. As a result, as a developer, you don’t need to learn different access methods for the databases of various manufacturers. Java developers are thus provided with methods that establish connections to databases, read data records, and compose new data records. Additionally, tables can be updated, and procedures can be executed on the server side.</p>
+            
+            <p class="standard">Based on these concepts, more abstract APIs such as the 
+                <span class="italic">Jakarta Persistence API (JPA)</span> or 
+                <span class="italic">jOOQ</span>
+             can make access more convenient and less error prone. We won’t go into further details about these extensions, however.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h20.1.3">20.1.3    The JDBC API and Implementations: The JDBC Driver</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i20_06"/>JDBC refers to a set of interfaces that can be used to address
+                <a class="indexanchor" id="i20_07"/> relational database systems from within Java. The API has been part of the standard API for 20 years, and the types are distributed between the 
+                <samp class="listingcharacter listingcharacter">java.sql</samp> and 
+                <samp class="listingcharacter listingcharacter">javax.sql</samp>
+             packages.</p>
+            
+            <p class="standard">
+                <a id="p1007"/>
+            To access a database via JDBC, you must install a driver that implements the JDBC API and mediates between the Java program and the database. Each driver is usually implemented differently because it must transfer the database-independent JDBC API to the database. Each database has its own protocol (and possibly its own network protocol), but the implementation is known only to the database driver.</p>
+            
+            <p class="standard">JDBC has an advantage in that access to databases always looks the same, and every relational database can be accessed by Java. What’s required is only a corresponding driver. The manufacturers of DBMSs usually deliver a JDBC driver themselves, which you would include as a JAR file in the module path. In this case, a search engine offers quick help. With the right driver, even CSV files (see <span class="url"><a href="https://github.com/simoc/csvjdbc)">https://github.com/simoc/csvjdbc)</a></span> or Excel files can be addressed via JDBC.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h20.1.4">20.1.4    H2
+                <a class="indexanchor" id="i20_08"/>
+             Is the Tool in Java</h3>
+            
+            <p class="standard">Before you can address a database with Java, you must start up the database system (in this chapter, the most difficult part). A large number of commercial, free, and open-source DBMS are available, but for simplicity, this tutorial is limited to H2.</p>
+            
+            
+                
+                <h4 class="t4" id="h20.1.4.1">The H2 Database</h4>
+                
+                <p class="standard">The sample query from 
+                    <span class="crossreference "><a href="20_002.html#h20.2">Section 20.2</a></span> is based on H2 (<span class="url"><a href="https://www.h2database.com">https://www.h2database.com</a></span>) because the DBMS is nice and simple and doesn’t require administrator rights. H2 can run in standalone mode or embedded and has several nice features. H2 has a web interface for configuration and queries and supports all major SQL features, such as triggers and joins, as well as secured connections and a full text search. H2 also keeps memory consumption low. In addition, an Open Database Connectivity (ODBC) driver (from PostgreSQL) can use H2 as a database for Windows programs (such as Microsoft Access).</p>
+                
+                <p class="standard">Since JDBC abstracts from databases, the Java program code can basically run on any database, and you are welcome to use other databases.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h20.1.4.2">The H2 Database and the JDBC Driver</h4>
+                
+                <p class="standard">With H2, the DBMS and the driver are bundled together in a single Java archive. Thus, you can easily put a dependency in our Maven Project Object Model (POM) file and reference H2, as shown in the following example:</p>
+                
+                <div class="listing " id="l20.1"><pre><span class="">&lt;!-- https://mvnrepository.com/artifact/com.h2database/h2 --&gt;</span><span class=""><br/></span><span class="">&lt;dependency&gt;</span><span class=""/><br/>  <span class="">&lt;groupId&gt;</span><span class="">com.h2database</span><span class="">&lt;/groupId&gt;</span><span class=""/><br/>  <span class="">&lt;artifactId&gt;</span><span class="">h2</span><span class="">&lt;/artifactId&gt;</span><span class=""/><br/>  <span class="">&lt;version&gt;</span><span class="">2.1.214</span><span class="">&lt;/version&gt;</span><span class=""> </span><br/><span class="">&lt;/dependency&gt;</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 20.1</b>    
+            pom.xml (Supplement)</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

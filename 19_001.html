@@ -1,0 +1,163 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Files and Data Streams" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Files and Data Streams" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Files and Data Streams</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h19">19    
+        <a id="p969"/>
+    Files and Data Streams</h1><p class="introductorynote indent_chapter_double">“Quick-wittedness is any answer that is so clever <br/>that the listener wishes he had given it.”<br/>—Elbert Green Hubbard (1856–1915)</p><p class="standard">Computers are so useful to us because they process data. The processing cycle begins with the 
+        <span class="italic">reading</span> of the data, includes 
+        <span class="italic">processing</span>, and ends with the 
+        <span class="italic">output</span> of the data. This is called the 
+        <span class="italic">IPO model</span> (input-process-output) in data processing systems. In the early days of IPO, inputs consisted of punch cards entered by system operators. Fortunately, those days are over. Nowadays, we store our data in 
+        <span class="italic">files</span>
+        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn19_01" id="fn19_01">[ 224 ]</a></span>
+     and databases. Note that a file is only interesting in its context; otherwise, it contains no information, and therefore, the view of a file is important. A program also consists of data and is often represented as a file.</p>
+        
+        <h2 class="t2" id="h19.1">19.1    Old and New Worlds in java.io and java.nio</h2>
+        
+        <p class="standard">Whenever an application programming interface (API) doesn’t behave as desired, we often say that it’s “historically grown.” This characterization is exactly what can be seen in file operations.</p>
+        
+        
+            
+            <h3 class="t3" id="h19.1.1">19.1.1    java.io Package with the File Class</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">java.io package</samp> declares a central 
+                <samp class="listingcharacter listingcharacter">File</samp> class since Java 1.0, which stands for a file or directory in the current file system. 
+                <samp class="listingcharacter listingcharacter">File</samp>
+             offers numerous file-oriented operations, such as creating, deleting, and renaming files; listing directories; and more.</p>
+            
+            
+                
+                <h4 class="t4" id="h19.1.1.1">File Problems</h4>
+                
+                <p class="standard">With 
+                    <samp class="listingcharacter listingcharacter">File</samp>
+                , everything is focused on one class, and that class can’t really solve everyday problems. The following questions will remain:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">How can we copy a file easily and quickly?</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">How can we move a file while keeping the semantics the same on different platforms?</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <a id="p970"/>
+                        How can we respond to a change in the file system so that a callback informs us immediately that file has changed?</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">How can we simply traverse a directory recursively?</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">How can we create and track a symbolic link?</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The 
+                            <samp class="listingcharacter listingcharacter">File</samp>
+                         class has become a catch-all for all possible query methods like readability, modification dates, and so on. One problem with this development is that certain things aren’t really identical on every system, such as file permissions, for example.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">How can we implement 
+                            <samp class="listingcharacter listingcharacter">File</samp>
+                         operations that are abstracted and not only based on the local file system? Abstraction is desirable so that the same API also addresses a virtual file system in the main memory, addresses remote file systems such as FTP, or addresses a repository.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.1.2">19.1.2    NIO.2 and the java.nio Package</h3>
+            
+            <p class="standard">An alternative to the 
+                <samp class="listingcharacter listingcharacter">java.io</samp> package, with its 
+                <samp class="listingcharacter listingcharacter">File</samp> class, is the 
+                <samp class="listingcharacter listingcharacter">java.nio.file</samp> package
+                <a class="indexanchor" id="i19_00"/> with further types, like the 
+                <samp class="listingcharacter listingcharacter">Path</samp>, 
+                <samp class="listingcharacter listingcharacter">Paths</samp>, 
+                <samp class="listingcharacter listingcharacter">Files</samp>, and 
+                <samp class="listingcharacter listingcharacter">FileSystem</samp>
+             types. Those types are called NIO.2 types.</p>
+            
+            
+                
+                <h4 class="t4" id="h19.1.2.1">java.io.File or java.nio.* Types?</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">File</samp>
+                 class is needed in only a few places these days and actually only for two reasons:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Old APIs expect 
+                            <samp class="listingcharacter listingcharacter">File</samp> objects as parameters. Bridges are available for linking APIs in this case, but the new NIO.2 types basically replace the 
+                            <samp class="listingcharacter listingcharacter">File</samp> class entirely. In the long run, the 
+                            <samp class="listingcharacter listingcharacter">File</samp>
+                         object should no longer be expected.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">File</samp> objects are still necessary if files are really to be represented on your own local file system and not independently of the file system like a ZIP file. A good example is 
+                            <samp class="listingcharacter listingcharacter">Desktop</samp> with the 
+                            <samp class="listingcharacter listingcharacter">open(File)</samp>
+                         method.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

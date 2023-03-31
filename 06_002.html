@@ -1,0 +1,897 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Writing Custom Classes" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Writing Custom Classes" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Writing Custom Classes</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h6.2">6.2    Privacy and Visibility
+            <a class="indexanchor" id="i06_08"/>
+        </h2>
+        
+        <p class="standard">
+            <a class="indexanchor" id="i06_09"/>
+        Within a class, all methods and object/class variables are visible to the methods. You must ensure that the data and methods of a class are protected from external access or explicitly marked as publicly visible to others in turn. Different kinds of visibilities include the following:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Public</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Protected</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <a id="p381"/>
+                Package-visible</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Private</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">Keywords are available for three visibilities, called 
+            <span class="italic">visibility modifiers</span>
+            <a class="indexanchor" id="i06_10"/>. In this section, we’ll describe the visibilities 
+            <samp class="listingcharacter listingcharacter">public</samp>, 
+            <samp class="listingcharacter listingcharacter">private</samp>, and package-visible (without modifiers, also called 
+            <span class="italic">package-private</span>
+            <a class="indexanchor" id="i06_11"/>); we’ll return to 
+            <samp class="listingcharacter listingcharacter">protected</samp> in 
+            <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>, 
+            <span class="crossreference "><a href="07_002.html#h7.2">Section 7.2</a></span>
+        .</p>
+        
+        
+            
+            <h3 class="t3" id="h6.2.1">6.2.1    For the Public: public</h3>
+            
+            <p class="standard">The visibility modifier 
+                <samp class="listingcharacter listingcharacter">public</samp>
+                <a class="indexanchor" id="i06_12"/>
+             on classes, constructors, methods, and other class parts specifies that all these distinguished elements are externally visible to everyone. Whether the user is in the same or in a different package doesn’t matter.</p>
+            
+            <p class="standard">If the class is 
+                <samp class="listingcharacter listingcharacter">public</samp> but a member is private, a foreign class still can’t access the member. And if a member is 
+                <samp class="listingcharacter listingcharacter">public</samp>
+             but the class is private, then another class can’t “get” that member in the first place.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.2.2">6.2.2    Not Public: Passwords Are private</h3>
+            
+            <p class="standard">The visibility modifier
+                <a class="indexanchor" id="i06_13"/>
+                <samp class="listingcharacter listingcharacter"> private</samp> prohibits all externally accessing classes from accessing members. This control would be important for a class that wants to store passwords, for example. For this task, you would declare a public 
+                <samp class="listingcharacter listingcharacter">Password</samp> class with a private object variable, named 
+                <samp class="listingcharacter listingcharacter">password</samp>. A public 
+                <samp class="listingcharacter listingcharacter">assign(String, String)</samp> method allows you to change the password (i.e., if the old password becomes known), and another public method 
+                <samp class="listingcharacter listingcharacter">check(String)</samp>
+             checks the password. At the beginning, the password is the empty string.</p>
+            
+            <div class="listing " id="l6.13"><pre>
+                <span class="bold"><span class="">public</span></span><span class=""> </span><span class="">class</span><span class=""> Password {</span><br/><br/>  
+                <span class="bold"><span class="">private</span></span><span class=""> </span><span class="">String</span><span class=""> password = </span><span class="">""</span><span class="">;</span><br/><br/>  
+                <span class="bold"><span class="">public</span></span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">assign</span><span class="">( </span><span class="">String</span><span class=""> oldPassword, </span><span class="">String</span><span class=""> newPassword ) {</span><br/>    <span class="">if</span><span class=""> ( password.</span><span class="">equals</span><span class="">(oldPassword) &amp;&amp; newPassword != null ) {</span><br/>      password = newPassword;<br/><br/>      System.out.<span class="">println</span><span class="">( </span><span class="">"Password set"</span><span class=""> );</span><br/>    }<br/>    <span class="">else</span><span class=""><br/></span>      System.out.<span class="">println</span><span class="">( </span><span class="">"Password could not be set"</span><span class=""> );</span><br/>  }<br/><br/>  
+                <span class="bold"><span class="">public</span></span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">check</span><span class="">( </span><span class="">String</span><span class=""> passwordToCheck ) {</span><br/>    <span class="">return</span><span class=""> password.</span><span class="">equals</span><span class="">( passwordToCheck );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.13</b>    
+            src/main/java/com/tutego/insel/oop/Password.java (Snippet)</p>
+            
+            <p class="standard">
+                <a id="p382"/>Notice how public object methods can access the 
+                <samp class="listingcharacter listingcharacter">private</samp>
+             element of their class quite naturally.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f6.6.html" id="f6.6"><img alt="UML Diagram Showing Private Members (Minus Signs) and Public Members (Plus Signs)" id="img-f6.6" src="bilderklein/klein06_006.png"/></a></div>
+            
+            <p class="caption "><b>Figure 6.6</b>    
+            UML Diagram Showing Private Members (Minus Signs) and Public Members (Plus Signs)</p>
+            
+            <p class="standard">A second class, 
+                <samp class="listingcharacter listingcharacter">PasswordDemo</samp>
+            , now wants to access the password from outside.</p>
+            
+            <div class="listing " id="l6.14"><pre>Password pwd <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Password</span><span class="">();</span><span class=""/><br/>pwd<span class="">.</span><span class="">assign</span><span class="">(</span><span class=""> </span><span class="">""</span><span class="">,</span><span class=""> </span><span class="">"earlyAlzheimers"</span><span class=""> </span><span class="">);</span><span class=""/><br/>pwd<span class="">.</span><span class="">assign</span><span class="">(</span><span class=""> </span><span class="">"earlyAlzheimers"</span><span class="">,</span><span class=""> </span><span class="">"Z1ON0101"</span><span class=""> </span><span class="">);</span><span class=""/><br/>pwd<span class="">.</span><span class="">assign</span><span class="">(</span><span class=""> </span><span class="">"Z1ON0101"</span><span class="">,</span><span class=""> </span><span class="">"P@$$w0rd"</span><span class=""> </span><span class="">);</span><span class=""/><br/><span class="">// System.out.println( pwd.password );  </span><span class=""/><br/><span class="">// The field Password.password is not visible</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.14</b>    
+            src/main/java/com/tutego/insel/oop/PasswordDemo.java (Snippet)</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Password</samp> class contains the private string 
+                <samp class="listingcharacter listingcharacter">password</samp>
+            , which can’t be referenced. The compiler detects and reports violations at translation or during runtime.</p>
+            
+            <p class="standard">However, sometimes, a better approach would be if the compiler didn’t tell you that the element was private, but instead simply reported that the specific element doesn’t exist.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f6.7.html" id="f6.7"><img alt="With an Error Caused by the Wrong Visibility, IntelliJ Can Change Visibility via Ctrl+Enter" id="img-f6.7" src="bilderklein/klein06_007.png"/></a></div>
+            
+            <p class="caption "><b>Figure 6.7</b>    
+            With an Error Caused by the Wrong Visibility, IntelliJ Can Change Visibility via Ctrl+Enter</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.2.3">6.2.3    
+                <a id="p383"/>
+            Why Not Free Methods and Variables for All?</h3>
+            
+            <p class="standard">Private methods and variables are primarily used to provide classes with modularization options that don’t need to be visible from the outside. For structuring purposes, subtasks are divided into methods, which, however, must never be called from the outside alone. Since the implementation is hidden and the programmer can see only one access method, this approach is sometimes called 
+                <span class="italic">data hiding</span>. Who would give a stranger their credit card PIN, for example? Or let’s consider a radio playing music: From the outside, the radio perhaps provides methods like 
+                <samp class="listingcharacter listingcharacter">on()</samp>, 
+                <samp class="listingcharacter listingcharacter">off()</samp>, 
+                <samp class="listingcharacter listingcharacter">volumeUp()</samp>, and 
+                <samp class="listingcharacter listingcharacter">playMusic()</samp>
+            , but the physical processes that make a radio play music at all are a completely different matter that ordinary users of a radio aren’t interested in.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.2.4">6.2.4    private Is Not Quite Private: It Depends on Who Sees It*</h3>
+            
+            <p class="standard">Private members are private only to other classes, but not to their own, even if the objects are different. Thus, this special case enables access to a private member of another object via a reference variable, as in the following example:</p>
+            
+            <div class="listing " id="l6.15"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setName</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">this</span><span class="">.</span><span class="">name </span><span class="">=</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasSameName</span><span class="">(</span><span class=""> Candy that </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span>
+                <span class="bold"><span class="">this</span><span class="">.name.</span><span class="">equals</span><span class="">( that.name )</span></span>;<br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.15</b>    
+            src/main/java/com/tutego/insel/game/c/v6/Candy (Snippet)</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">hasSameName(Candy)</samp> method of the 
+                <samp class="listingcharacter listingcharacter">Candy</samp> class is passed a reference to another candy in 
+                <samp class="listingcharacter listingcharacter">that</samp>. 
+                <samp class="listingcharacter listingcharacter">hasSameName(...)</samp> compares the string of its own object variable (
+                <samp class="listingcharacter listingcharacter">this.name</samp>) with that of the object variable (
+                <samp class="listingcharacter listingcharacter">that.name</samp>). Although 
+                <samp class="listingcharacter listingcharacter">this</samp> wouldn’t be necessary, its use nicely illustrates the distinction between the current object (the own object) and the foreign object. At this point, note that access to 
+                <samp class="listingcharacter listingcharacter">that.name</samp> is allowed even though 
+                <samp class="listingcharacter listingcharacter">name</samp> is private. However, this access is allowed because the 
+                <samp class="listingcharacter listingcharacter">hasSameName(Candy)</samp> method is declared in the 
+                <samp class="listingcharacter listingcharacter">Candy</samp> class and the parameter is also of type 
+                <samp class="listingcharacter listingcharacter">Candy</samp>. However, with subclasses (see 
+                <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>, 
+                <span class="crossreference "><a href="07_002.html#h7.2.1">Section 7.2.1</a></span>
+            ), this access doesn’t work. Private states and methods are thus protected against attacks from outside the declaring class.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.2.5">6.2.5    
+                <a id="p384"/>
+            Declaring Access Methods for Object Variables</h3>
+            
+            <p class="standard">Object variables are a great and necessary thing. However, you should always consider whether the user of an object should access the object’s states directly or whether this access is a problem. For instance, consider the following points concerning access:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">For some variables, value ranges
+                        <a class="indexanchor" id="i06_14"/> exist that must be adhered to. The age of a player can’t be less than zero, and people more than 200 years old are found only in the Bible. When making age private, an access method like 
+                        <samp class="listingcharacter listingcharacter">setAge(int)</samp> can use a range check to transfer only certain values to the object variable and reject the rest. The public method 
+                        <samp class="listingcharacter listingcharacter">getAge()</samp>
+                     then gives access to the variable.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Dependencies associated with some variables exist. For example, if a player has an age, the player class can simultaneously declare a truth variable for the age of majority. Of course, now a dependency exists. If the player is older than 18, the truth variable should be set to 
+                        <samp class="listingcharacter listingcharacter">true</samp>. This dependency can’t really be enforced with two public variables. However, a 
+                        <samp class="listingcharacter listingcharacter">setAge(int)</samp>
+                     method can maintain this consistency for private object variables.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If access methods are available, debug breakpoints can easily be set in those methods. Also, the methods can be extended to log the access or to check the rights of the caller.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The secrecy principle applies to classes. Their internal operations should be kept secret by private (helper) methods, which also applies to variables and variable types. For example, if developers wanted to change their internal object variable from 
+                        <samp class="listingcharacter listingcharacter">char</samp> to 
+                        <samp class="listingcharacter listingcharacter">string</samp> and thus manage strings of any length, a major problem arises since an object would need to be inserted at each occurrence. If we wanted to introduce two variables—a 
+                        <samp class="listingcharacter listingcharacter">char</samp> so that the old software currently in use can get by without changing it and a new 
+                        <samp class="listingcharacter listingcharacter">string</samp>
+                    —we’d have a consistency problem.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The caller doesn’t always need to be provided with all the features in detail. Let’s say a user would like to have 
+                        <span class="italic">higher-order services</span>
+                     provided by the object, so that access to the lower object variables may not be necessary at all.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.2.6">6.2.6    Setters and Getters according to the JavaBeans Specification</h3>
+            
+            <p class="standard">From these examples, we hope you see the good reasons for privatizing object variables and providing public methods for reading and writing. Because these methods access object variables, they’re also called 
+                <span class="italic">access methods</span>
+                <a class="indexanchor" id="i06_15"/>. For each object variable, a write and a read method is declared, for which a fixed naming scheme (according to JavaBeans conventions) is followed. Access methods make a 
+                <span class="italic">property</span>
+                <a class="indexanchor" id="i06_16"/> accessible. For example, the following applies to a 
+                <samp class="listingcharacter listingcharacter">name</samp> property and a 
+                <samp class="listingcharacter listingcharacter">string</samp>
+             type:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">String getName()</samp>: The method has no parameter list, and the return type is 
+                        <samp class="listingcharacter listingcharacter">String</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void setName(String name)</samp>
+                    : The method has no return, but exactly one parameter.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <a id="p385"/>The 
+                <samp class="listingcharacter listingcharacter">get*()</samp> methods are referred to as 
+                <span class="italic">getter</span>s
+                <a class="indexanchor" id="i06_17"/>; the 
+                <samp class="listingcharacter listingcharacter">set*(...)</samp> methods, as 
+                <span class="italic">setter</span>s
+                <a class="indexanchor" id="i06_18"/>
+            . The methods are public, and the type of the getter return must be the same as the parameter type of the setter.</p>
+            
+            <p class="standard">For 
+                <samp class="listingcharacter listingcharacter">boolean</samp> object variables, instead of 
+                <samp class="listingcharacter listingcharacter">get*()</samp>, you may (and in some cases must) use 
+                <samp class="listingcharacter listingcharacter">is*()</samp>
+                <a class="indexanchor" id="i06_19"/>. Since program development is usually done with English identifier names, unattractive identifier names such as 
+                <samp class="listingcharacter listingcharacter">getLiebe()</samp>, 
+                <samp class="listingcharacter listingcharacter">isGlücklich()</samp>, or 
+                <samp class="listingcharacter listingcharacter">set 
+                    <img alt="inline image" class="inline_image" src="bilder/japanese-characters.png"/> (String 
+                    <img alt="inline image" class="inline_image" src="bilder/japanese-characters.png"/>
+                )</samp>
+             don’t appear.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Language Comparison</h6>
+                
+                <p class="standard first last">In Java, methods that return a 
+                    <samp class="listingcharacter listingcharacter">boolean</samp> always begin with the prefix 
+                    <samp class="listingcharacter listingcharacter">is</samp>, while in Ruby a question mark concludes the method name. Thus, 
+                    <samp class="listingcharacter listingcharacter">"".empty?</samp> returns true and 
+                    <samp class="listingcharacter listingcharacter">"java".equal? "ruby"</samp> returns false.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_05" id="fn06_05">[ 128 ]</a></span>
+                 This common convention in Ruby shows that other programming languages might be more generous with the allowed identifiers.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h6.2.6.1">Access Methods for the Candy</h4>
+                
+                <p class="standard">The following example declares a setter and getter for each of three members (
+                    <samp class="listingcharacter listingcharacter">name</samp>, 
+                    <samp class="listingcharacter listingcharacter">price</samp>, and 
+                    <samp class="listingcharacter listingcharacter">quantity</samp>). The object variables are private, and the setters contain validation tests, for example, to check that the name of a candy isn’t 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 or empty.</p>
+                
+                <div class="listing " id="l6.16"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">int</span><span class=""> price</span><span class="">;</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">int</span><span class=""> quantity </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span> <br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setName</span><span class="">( </span><span class="">String</span><span class=""> name )</span></span> {<br/>    <span class="">if</span><span class=""> ( name != null &amp;&amp; !name.</span><span class="">trim</span><span class="">().</span><span class="">isEmpty</span><span class="">() )</span><br/>      <span class="">this</span><span class="">.name = name;</span><br/>  }<br/> <br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">getName</span><span class="">()</span></span> {<br/>    <span class="">return</span><span class=""> name;</span><br/>  }<br/> <br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setPrice</span><span class="">( </span><span class="">int</span><span class=""> price )</span></span> {<br/>    <span class="">if</span><span class=""> ( price &gt; </span><span class="">0</span><span class=""> )</span><br/>      <span class="">this</span><span class="">.price = price;</span><br/>  }<br/> <br/>
+                    <a id="p386"/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">getPrice</span><span class="">()</span></span> {<br/>    <span class="">return</span><span class=""> price;</span><br/>  }<br/> <br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setQuantity</span><span class="">( </span><span class="">int</span><span class=""> quantity )</span></span> {<br/>    <span class="">if</span><span class=""> ( quantity &gt;= </span><span class="">1</span><span class=""> )</span><br/>      <span class="">this</span><span class="">.quantity = quantity;</span><br/>  }<br/> <br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">getQuantity</span><span class="">()</span></span> {<br/>    <span class="">return</span><span class=""> quantity;</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.16</b>    
+            src/main/java/com/tutego/insel/game/c/v7/Candy (Snippet)</p>
+                
+                <p class="standard">Instead of turning a deaf ear to invalid values, you can alternatively log or report unwanted values as exceptions, for example.</p>
+                
+                <p class="standard">Let’s write a little more code because of the method calls:</p>
+                
+                <div class="listing " id="l6.17"><pre>Candy lollipop <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><span class=""><br/></span>lollipop<span class="">.</span><span class="">setPrice</span><span class="">(</span><span class=""> </span><span class="">12</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> lollipop</span><span class="">.</span><span class="">getPrice</span><span class="">()</span><span class=""> </span><span class="">*</span><span class=""> lollipop</span><span class="">.</span><span class="">getQuantity</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // 12</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.17</b>    
+            src/main/java/com/tutego/insel/game/c/v7/Application.java (Snippet)</p>
+                
+                <p class="standard">If a change is necessary during later development of the program, for example, if the price should now be stored internally as a 
+                    <samp class="listingcharacter listingcharacter">double</samp>
+                 after all, only the internal implementation of the getters and setters must be adapted, not the API (i.e., the “interface”).</p>
+                
+                <p class="standard">Any modern development environment can generate setters and getters automatically. In IntelliJ, you can press 
+                    <span class="keyboard">(Alt)</span>+
+                    <span class="keyboard">(Insert)</span> and then select 
+                    <span class="screenelement">Getter or Setter</span> or 
+                    <span class="screenelement">Getter and Setter</span> in the context menu. The second option works only for exactly one object variable: If your cursor is positioned on the variable, selecting 
+                    <span class="screenelement">Refactor</span> • 
+                    <span class="screenelement">Encapsulate Field</span>
+                … from the context menu enables you to generate setters and getters and also to convert the direct access to an object variable into method calls.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.2.7">6.2.7    Package-Visibility</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">public</samp> and 
+                <samp class="listingcharacter listingcharacter">private</samp> visibilities are extremes along the spectrum of visibility. If no explicit visibility modifier is stated, 
+                <span class="italic">package-visibility</span> applies
+                <a class="indexanchor" id="i06_20"/>
+            . With this level of visibility, classes can be seen only by other classes in the same package. The same rule applies to the members: Only types in the same package can see each other’s package-visible members.</p>
+            
+            <p class="standard">
+                <a id="p387"/>
+            Let’s look at some examples using four classes distributed over two packages:</p>
+            
+            <div class="listing " id="l_none_6246"><pre>com.tutego.insel.protected
+                <span class="bold">a</span>.Sugar<br/>com.tutego.insel.protected
+                <span class="bold">b</span>.Caramels<br/>com.tutego.insel.protected
+                <span class="bold">a</span>.Milk<br/>com.tutego.insel.protected
+                <span class="bold">b</span>
+            .Cholocate </pre></div>
+            
+            
+                
+                <h4 class="t4" id="h6.2.7.1">Example 1</h4>
+                
+                <p class="standard">Two classes (
+                    <samp class="listingcharacter listingcharacter">Sugar</samp> and 
+                    <samp class="listingcharacter listingcharacter">Caramels</samp>) are in different packages. The 
+                    <samp class="listingcharacter listingcharacter">Sugar</samp>
+                 class is non-public and, without a visibility modifier, is thus only package-visible:</p>
+                
+                <div class="listing " id="l_none_6261"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span>
+                    <span class="bold">protecteda</span>;<br/><span class="">class</span><span class=""> Sugar { }  </span><span class=""/></pre></div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Caramels</samp> class wants to reference 
+                    <samp class="listingcharacter listingcharacter">Sugar</samp> but cannot because of the “invisibility” of 
+                    <samp class="listingcharacter listingcharacter">Sugar</samp>
+                . A compiler error is the result.</p>
+                
+                <div class="listing " id="l6.18"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span>
+                    <span class="bold">protectedb</span>;<br/><span class="">class</span><span class=""> Caramels {</span><br/>  com.tutego.insel.protecteda.Sugar sugar;<br/> <span class=""> // 'com.tutego.insel.protecteda.Sugar' is not public in</span><span class=""><br/></span> <span class=""> // 'com.tutego.insel.protecteda'. Cannot be accessed from outside package</span><span class=""><br/></span>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.18</b>    
+            src/main/java/com/tutego/insel/protectedb/Caramels.java</p>
+                
+                <p class="standard">Of course, an 
+                    <samp class="listingcharacter listingcharacter">import</samp>
+                 declaration wouldn’t work either.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.2.7.2">Example 2</h4>
+                
+                <p class="standard">For example, if the 
+                    <samp class="listingcharacter listingcharacter">Milk</samp> class is public, but one of its members is a type from another package that is only package-visible. Thus, access won’t be possible. The same limitation applies to the static 
+                    <samp class="listingcharacter listingcharacter">CALORIES</samp> variable in the 
+                    <samp class="listingcharacter listingcharacter">Milk</samp>
+                 class, which isn’t public.</p>
+                
+                <div class="listing " id="l6.19"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Milk </span><span class="">{</span><span class=""><br/></span>  <span class="">static</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">int</span><span class=""> CALORIES </span><span class="">=</span><span class=""> </span><span class="">122</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.19</b>    
+            src/main/java/com/tutego/insel/protecteda/Milk.java</p>
+                
+                <p class="standard">And, finally, let’s look at the 
+                    <samp class="listingcharacter listingcharacter">Chocolate</samp>
+                 class.</p>
+                
+                <div class="listing " id="l6.20"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">protectedb</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">protecteda</span><span class="">.</span><span class="">Milk</span><span class="">;</span><span class=""><br/></span><span class="">class</span><span class=""> Chocolate </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> calories </span><span class="">=</span><span class=""> Milk</span><span class="">.</span><span class="">CALORIES</span><span class="">;</span><span class=""><br/></span><span class="">
+                        <a id="p388"/>
+                      //  'CALORIES' is not public in 'com.tutego.insel.protecteda.Milk'.</span><span class=""><br/></span><span class="">  // Cannot be accessed from outside package</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.20</b>    
+            src/main/java/com/tutego/insel/protectedb/Chocolate.java</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Chocolate</samp> class “sees” the 
+                    <samp class="listingcharacter listingcharacter">Milk</samp> class but doesn’t “see” the package-visible variable because 
+                    <samp class="listingcharacter listingcharacter">com.tutego.insel.protecteda</samp> and
+                    <samp class="listingcharacter listingcharacter"> com.tutego.insel.protectedb</samp>
+                 are two different packages.</p>
+                
+                <p class="standard">In other words, to go to a specific room (type) of a house (package), finding a way to the house isn’t sufficient because the room must also be accessible. If the house can’t be found at all, you don’t need to think about the room in that house in the first place.</p>
+                
+                <p class="standard">Package-visible members are particularly useful because you can use them to form groups of types that know parts of each other’s inner workings. Access to these parts from outside the package is then prohibited, similar to 
+                    <samp class="listingcharacter listingcharacter">private</samp>. Let’s look an example with our 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>
+                 class: If this class uses a helper class internally with database access for valid product names, this package-visible helper class remains invisible outside of the package.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.2.8">6.2.8    Visibility Summary</h3>
+            
+            <p class="standard">In Java, four visibilities are available, and three visibility modifiers exist for them:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Public types and members are declared by the 
+                        <samp class="listingcharacter listingcharacter">public</samp> modifier. The types are visible everywhere, so any class and subclass from any other package can access public members. The methods and variables declared with 
+                        <samp class="listingcharacter listingcharacter">public</samp>
+                     are visible wherever the class is visible. With an invisible class, the members are also invisible. In Java, however, because of the Java Platform Module System (JPMS), one restriction is that public types must also be exported; otherwise, they’ll still be invisible to other modules.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">private</samp> modifier is more rare in type declarations since it can only be used when multiple types are declared in a compilation unit (i.e., a file). The type that determines the file name can’t be private, but other types (and cascaded classes) are allowed to be invisible—only the visible type can then use them. The methods and variables declared with 
+                        <samp class="listingcharacter listingcharacter">private</samp>
+                     are only visible within their own class. An exception is cascaded classes, which can also access private members of the outer class. When a class is extended, the private elements aren’t visible to subclasses.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">While 
+                        <samp class="listingcharacter listingcharacter">private</samp> and 
+                        <samp class="listingcharacter listingcharacter">public</samp>
+                     represent extremes, package visibility lies in between. This default visibility comes without modifiers. Package-visible types and members are visible only to classes from the same package, that is, neither to classes nor to subclasses of other packages.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The visibility modifier 
+                        <samp class="listingcharacter listingcharacter">protected</samp> has a dual function: First, this modifier has the same meaning as package visibility, and second, it frees the elements for subclasses. Whether the subclasses come from your own package (in which case the default vis
+                        <a id="p389"/>ibility would be sufficient) or from another package doesn’t matter. A combination of 
+                        <samp class="listingcharacter listingcharacter">private protected</samp> can be used to make the members visible only to the subclasses and not immediately to the classes from the same package.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_06" id="fn06_06">[ 129 ]</a></span>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <table class="standardtable" id="t6.2">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Member</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Sees Own Class</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Sees Class in the Same Package</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Sees Subclass in Other Package</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Sees Class in Other Package</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">public</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">protected</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">No</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Package-visible</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">No</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">No</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">private</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Yes</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">No</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">No</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">No</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 6.2</b>    
+            Who Sees Which Members at Which Visibility?</p>
+            
+            <p class="standard">The use of visibility levels via the keywords 
+                <samp class="listingcharacter listingcharacter">public</samp>, 
+                <samp class="listingcharacter listingcharacter">private</samp>, and 
+                <samp class="listingcharacter listingcharacter">protected</samp>
+             and the default “package-visible” without an explicit keyword should be done thoughtfully. OOP is characterized by thoughtful use of classes and their relationships. The most restrictive description is best; that is, never more publicity than is necessary should be provided. This approach helps to minimize dependencies and makes later changes to internal elements more easy.</p>
+            
+            
+                
+                <h4 class="t4" id="h6.2.8.1">Visibility in the Unified Modeling Language*</h4>
+                
+                <p class="standard">For the visibility of attributes and operations, UML provides various symbols that are placed in front of the respective member.</p>
+                
+                <table class="standardtable" id="t6.3">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Symbol</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Visibility</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">+</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Public</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">–</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Private</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">#</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Protected</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">~</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Package-visible</p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 6.3</b>    
+            UML Symbols for the Visibility of Attributes and Operations</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p390"/>
+                    Note</h6>
+                    
+                    <p class="standard first last">The lack of a visibility modifier in a UML diagram doesn’t mean that it’s “package-visible,” just that the visibility hasn’t been defined yet.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.2.8.2">Order of Members in Classes*</h4>
+                
+                <p class="standard">The various elements of a class must be placed in one class. While the order doesn’t matter, a common convention is to divide a class into the following order:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Class variables</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Object variables</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Constructors</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Static methods</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Setters/getters</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Any object methods</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Within a block, the information is often sorted with respect to its access rights. At the beginning, you’ll see visible members, and then further down, private ones. The public part is placed at the beginning to provide a quick overview. The second part is then only interesting for the inheriting classes, and the last part describes protected information for developers alone. However, the order can be easily broken up by placing private methods before or after public ones to keep related parts together as well.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Code Style</h6>
+                    
+                    <p class="standard first last">Source code should always be indented with spaces instead of tabs. Two or four spaces are often encountered. Many developers like to put the opening curly bracket for the beginning of a block at the end of the line or put it alone in the next line. In all modern development environments, a code formatter can automatically correct the source code.</p>
+                
+                </div>
+                
+                <p class="standard">The 
+                    <span class="keyboard">(Ctrl)</span>+
+                    <span class="keyboard">(Alt)</span>+
+                    <span class="keyboard">(L)</span> shortcut activates autoformatting. Minute details like indentations or the placement of spaces can be set under 
+                    <span class="screenelement">File</span> • 
+                    <span class="screenelement">Settings…</span>, then in the dialog box under 
+                    <span class="screenelement">Editor</span> • 
+                    <span class="screenelement">Code Style</span> • 
+                    <span class="screenelement">Java</span>
+                .</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

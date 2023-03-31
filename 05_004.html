@@ -1,0 +1,215 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Handling Characters and Strings" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Handling Characters and Strings" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Handling Characters and Strings</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h5.4">5.4    Strings</h2>
+        
+        <p class="standard">A string is a collection of characters (data type 
+            <samp class="listingcharacter listingcharacter">char</samp>
+        ) that the runtime environment stores in the memory in an orderly fashion. The characters are taken from a character set that corresponds to the 16-bit Unicode standard in Java—with some workarounds, Unicode 4 with 32-bit characters is also possible.</p>
+        
+        <p class="standard">Strings can be structured as 
+            <samp class="listingcharacter listingcharacter">char</samp>
+         arrays, but arrays are not flexible. For this reason, Java provides three central classes that conveniently manage strings. These classes differ in two respects:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">If the strings are 
+                    <span class="italic">immutable</span>, then they can’t be changed after they have been created. In general, objects with unchangeable states are referred to as 
+                    <span class="italic">immutable</span>
+                    <a class="indexanchor" id="i05_37"/>. Alternatively, should the strings be permanently 
+                    <span class="italic">mutable</span>
+                ?</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Are the operations on the strings secured against concurrent access from multiple threads?</p>
+            
+            </li>
+        
+        </ul>
+        
+        <table class="standardtable" id="t5.6">
+            
+            <thead>
+                
+                <tr>
+                    
+                    <th class="tablehead tablecell_first top_border_cell"/>
+                    
+                    <th class="tablehead tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">Manages Immutable <br/>Strings</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">Manages Mutable <br/>Strings</p>
+                    
+                    </th>
+                
+                </tr>
+            
+            </thead>
+            
+            <tbody>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">Thread safe</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuffer</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">Not thread safe</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">–</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <p class="caption "><b>Table 5.6</b>    
+            Three Classes that Manage Strings</p>
+        
+        <p class="standard">
+            <a id="p302"/>The 
+            <samp class="listingcharacter listingcharacter">String</samp> class represents 
+            <span class="italic">immutable </span>strings. Therefore, a 
+            <samp class="listingcharacter listingcharacter">String</samp> is always thread-safe because synchronization is only necessary if there can be changes to the state. Objects of type 
+            <samp class="listingcharacter listingcharacter">String</samp> can be used to search for characters or substrings, and a string can be compared to another string, but characters in the string can’t be modified. There are some methods that appear to make changes to strings, but they actually create new 
+            <samp class="listingcharacter listingcharacter">String</samp> objects that represent the modified strings. Thus, when two 
+            <samp class="listingcharacter listingcharacter">String</samp> objects are concatenated, the result is a third 
+            <samp class="listingcharacter listingcharacter">String</samp>
+         object for the concatenated string.</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+            
+            <p class="standard first">
+                <samp class="listingcharacter listingcharacter">String</samp> objects themselves can’t be modified, but of course, a reference can be set to another 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             object, as in the following example:</p>
+            
+            <div class="listing " id="l_none_5150"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> “tutego”</span><span class="">;</span><span class=""><br/></span>s <span class="">=</span><span class=""> “TUTEGO”;</span></pre></div>
+            
+            <p class="standard last">By “modify,” we mean that statements can modify the state of an object, for example, by deleting the first character. Modifying the reference doesn’t change the state of the object being referenced.</p>
+        
+        </div>
+        
+        <p class="standard">In contrast to 
+            <samp class="listingcharacter listingcharacter">String</samp>, the 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+            <a class="indexanchor" id="i05_38"/> and 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp>
+            <a class="indexanchor" id="i05_39"/> classes represent dynamic, arbitrarily changeable character strings. The difference between these API-like classes is only that 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> is protected from concurrent operations, whereas 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp> isn’t. This distinction isn’t necessary for 
+            <samp class="listingcharacter listingcharacter">String</samp>
+        s because, if objects can’t be subsequently modified, parallel read access won’t cause any problems.</p>
+        
+        <p class="standard">
+            <samp class="listingcharacter listingcharacter">CharSequence</samp>
+            <a class="indexanchor" id="i05_40"/> is the common interface of 
+            <samp class="listingcharacter listingcharacter">String</samp>, 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>, and 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> and is used multiple times in the library. Let’s look at an example: The 
+            <samp class="listingcharacter listingcharacter">String</samp> class declares a 
+            <samp class="listingcharacter listingcharacter">contains(CharSequence s)</samp> method that tests whether the substring 
+            <samp class="listingcharacter listingcharacter">s</samp> occurs in the string. Now, what is the type of the variable 
+            <samp class="listingcharacter listingcharacter">s</samp>? We can pass instances of, say, 
+            <samp class="listingcharacter listingcharacter">String</samp>, 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>, or 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> because these instances are all of type 
+            <samp class="listingcharacter listingcharacter">CharSequences</samp>. We’ll get into the type in a little more detail later in 
+            <span class="crossreference "><a href="05_005.html#h5.5">Section 5.5</a></span>. At this point, it’s sufficient to know that, wherever 
+            <samp class="listingcharacter listingcharacter">CharSequence</samp> is written, you can think of 
+            <samp class="listingcharacter listingcharacter">String</samp>, 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>, or 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp>
+        .</p>
+        
+        <p class="standard">The three classes 
+            <samp class="listingcharacter listingcharacter">String</samp>, 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>, and 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> correspond to the ideal implementation of the object-oriented (OO) idea (we’ll cover extensively in 
+            <span class="crossreference "><a href="06_001.html#h6">Chapter 6</a></span>, 
+            <span class="crossreference "><a href="06_001.html#h6.1.2">Section 6.1.2</a></span>): How exactly the strings are stored isn’t revealed to the outside world. The OpenJDK implementation performs 
+            <span class="italic">string compression</span> by default for the 
+            <samp class="listingcharacter listingcharacter">String</samp>/
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>/
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> types.
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_04" id="fn05_04">[ 114 ]</a></span> In this process, the implementation creates a 
+            <samp class="listingcharacter listingcharacter">byte</samp>
+         array containing the string in either Latin-1 or UTF-16 encoding, using one byte in the exclusive case of Latin-1 characters, thus reducing the memory requirement in half.</p>
+        
+        <p class="standard">
+            <a id="p303"/>
+        So, the nice thing is that classes can relieve you from the tedious work of managing strings in arrays yourself, and you won’t notice all the internal optimizations.</p>
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,503 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Object-Oriented Relationship" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Object-Oriented Relationship" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Object-Oriented Relationship</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h7">7    
+        <a id="p427"/>
+    Object-Oriented Relationship</h1><p class="introductorynote indent_chapter_single">“It’s harder to get out of a bad relationship than a good one.”<br/>—Whitney Houston (1963–2012)</p><p class="standard">Objects don’t live in isolation but exist in relationships with other objects. In this chapter, we’ll look at the object relationships and type relationships that objects and classes/interfaces can have. Basically, two simple types of relationships exist: An object is related to another object by reference, or a class inherits from another class so that the objects can inherit members from the superclass. In this respect, this chapter considers associations for object links and inheritance relationships. In addition, this chapter describes abstract classes and interfaces, which are special inheritance relationships because they can prescribe behaviors for subclasses.</p>
+        
+        <h2 class="t2" id="h7.1">7.1    Associations between Objects</h2>
+        
+        <p class="standard">An important feature of object-oriented (OO) systems is collaboration because an object should do only one thing really well and, if necessary, call in another object that specializes in a different task. For this purpose, an object “knows” other objects and can pass on requests. This connection is called an 
+            <span class="italic">association</span>
+            <a class="indexanchor" id="i07_00"/>
+         and is the most important tool in the construction of object associations.</p>
+        
+        
+            
+            <h3 class="t3" id="h7.1.1">7.1.1    Association Types</h3>
+            
+            <p class="standard">In the case of associations, a distinction must be made between whether only one side is aware of the other or whether navigation is possible in both directions:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A 
+                        <span class="italic">unidirectional relationship</span>
+                        <a class="indexanchor" id="i07_01"/>
+                     goes only one way (a person has an address, but the address doesn’t “know” the person).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A 
+                        <span class="italic">bidirectional relationship</span>
+                        <a class="indexanchor" id="i07_02"/>
+                        <a class="indexanchor" id="i07_03"/>
+                     goes both ways (a company knows its employees, and the employees know their company). A bidirectional relationship is obviously a great advantage since the application can traverse the association in any direction.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">In addition, relationships can be defined by their 
+                <span class="italic">multiplicity</span>
+                <a class="indexanchor" id="i07_04"/>, which indicates with how many objects one side has or can have a relationship. This corresponds to the concept of 
+                <span class="italic">cardinality</span>
+                <a class="indexanchor" id="i07_05"/> in databases. Common relationships are 1-to-1 relationships and 1-to-
+                <span class="italic">n</span>
+             relationships. Furthermore, you can describe whether a part is existence-dependent or can exist on its own.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f7.1.html" id="f7.1"><img alt="&#10;                &#10;            Unidirectional Relationship" id="img-f7.1" src="bilderklein/klein07_001.png"/></a></div>
+            
+            <p class="caption "><b>Figure 7.1</b>    
+            
+                <a id="p428"/>
+            Unidirectional Relationship</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.1.2">7.1.2    Unidirectional 1-to-1 Relationship</h3>
+            
+            <p class="standard">In this section, we’ll introduce a new class for a player (
+                <samp class="listingcharacter listingcharacter">Player</samp>
+            ); the player should be located in a city and also be able to travel to a new city.</p>
+            
+            <div class="listing " id="l7.1"><pre><span class="">class</span><span class=""> Player </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span>
+                <span class="bold"><span class="">City location</span></span>;<br/>  <span class="">void</span><span class=""> </span><span class="">travelTo</span><span class="">( City newLocation ) { </span><span class="">this</span><span class="">.location = newLocation; }</span><br/>  City <span class="">currentLocation</span><span class="">() { </span><span class="">return</span><span class=""> location; }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.1</b>    
+            src/main/java/com/tutego/insel/game/c/vi/Player.java, Player</p>
+            
+            <p class="standard">To allow a player to reference the current location, the 
+                <samp class="listingcharacter listingcharacter">Player</samp> class has a private object variable of type 
+                <samp class="listingcharacter listingcharacter">City</samp>
+            . The city has only one name.</p>
+            
+            <div class="listing " id="l7.2"><pre><span class="">class</span><span class=""> City </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">City</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">this</span><span class="">.</span><span class="">name </span><span class="">=</span><span class=""> name</span><span class="">;</span><span class=""> </span><span class="">}</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> name</span><span class="">;</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 7.2</b>    
+            src/main/java/com/tutego/insel/game/c/vi/City.java, Player</p>
+            
+            <p class="standard">The following references must be set at runtime:</p>
+            
+            <div class="listing " id="l7.3"><pre>City candyTown  <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">City</span><span class="">(</span><span class=""> </span><span class="">"Candy Town"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Player pillLady <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">();</span><span class=""><br/></span>
+                <span class="bold"><span class="">pillLady.</span><span class="">travelTo</span><span class="">( candyTown )</span></span>;<br/>
+                <a id="p429"/>System.out.<span class="">println</span><span class="">( pillLady.</span><span class="">currentLocation</span><span class="">() );</span><span class=""> // Candy Town</span><span class=""><br/></span>
+                <span class="bold">pillLady.<span class="">travelTo</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">City</span><span class="">( </span><span class="">"Giant City"</span><span class=""> ) )</span></span>;<br/>System.out.<span class="">println</span><span class="">( pillLady.</span><span class="">currentLocation</span><span class="">() );</span><span class=""> // Giant City</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.3</b>    
+            src/main/java/com/tutego/insel/game/c/vi/Application.java, main</p>
+            
+            
+                
+                <h4 class="t4" id="h7.1.2.1">Associations in the Unified Modeling Language</h4>
+                
+                <p class="standard">Unified Modeling Language (UML) represents associations by means of a line between the involved classes. If an association has a direction, an arrow at the end of the association indicates the direction of this flow, as shown in 
+                    <span class="crossreference "><a href="07_001.html#f7.2">Figure 7.2</a></span>
+                . If no arrows exist, the direction hasn’t yet been specified more precisely and doesn’t automatically mean that the relationship is bidirectional.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f7.2.html" id="f7.2"><img alt="UML Diagram of Association via Attributes" id="img-f7.2" src="bilderklein/klein07_002.png"/></a></div>
+                
+                <p class="caption "><b>Figure 7.2</b>    
+            UML Diagram of Association via Attributes</p>
+                
+                <div class="imagebox figure-type"><a href="img-f7.3.html" id="f7.3"><img alt="UML Diagram of Directed Association" id="img-f7.3" src="bilderklein/klein07_003.png"/></a></div>
+                
+                <p class="caption "><b>Figure 7.3</b>    
+            UML Diagram of Directed Association</p>
+                
+                <p class="standard">The multiplicity is specified as “lower limit..upper limit,” such as “1..4,” for example. In addition, in UML, a role can specify which task the relationship has for one side. Roles are important for 
+                    <span class="italic">reflexive associations</span>
+                    <a class="indexanchor" id="i07_06"/> (also referred to as 
+                    <span class="italic">circular</span> or 
+                    <span class="italic">recursive associations</span>
+                    <a class="indexanchor" id="i07_07"/>
+                    <a class="indexanchor" id="i07_08"/> ) when a type points to itself. A popular example is the 
+                    <samp class="listingcharacter listingcharacter">person</samp> type with the 
+                    <samp class="listingcharacter listingcharacter">boss</samp> and 
+                    <samp class="listingcharacter listingcharacter">employee</samp>
+                 roles.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.1.3">7.1.3    Becoming Friends: Bidirectional 1-to-1 Relationships</h3>
+            
+            <p class="standard">Directed associations are quite easy to implement in Java, as shown in our earlier example. Two-sided associations also appear simple at first glance since only the opposite side must be extended by a reference variable. Let’s start with a scenario where the player has a candy and the candy “knows” which player is eating it, as shown in 
+                <span class="crossreference "><a href="07_001.html#f7.3">Figure 7.3</a></span>
+            .</p>
+            
+            <div class="listing " id="l7.4"><pre><span class="">
+                    <a id="p430"/>
+                class</span><span class=""> Player </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">Candy candy;</span></span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.4</b>    
+            src/main/java/com/tutego/insel/game/c/vj/Player.java, Player</p>
+            
+            <div class="listing " id="l7.5"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">Player player;</span></span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.5</b>    
+            src/main/java/com/tutego/insel/game/c/vj/Candy.java, Candy</p>
+            
+            <div class="imagebox figure-type"><a href="img-f7.4.html" id="f7.4"><img alt="UML Diagram Showing Bidirectional Relationships with Two Arrowheads" id="img-f7.4" src="bilderklein/klein07_004.png"/></a></div>
+            
+            <p class="caption "><b>Figure 7.4</b>    
+            UML Diagram Showing Bidirectional Relationships with Two Arrowheads</p>
+            
+            <p class="standard">Let’s now connect these two classes, as shown in 
+                <span class="crossreference "><a href="07_001.html#f7.4">Figure 7.4</a></span>
+            .</p>
+            
+            <div class="listing " id="l7.6"><pre>Candy cottonCandy  <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><span class=""><br/></span>Player pillLady    <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">();</span><span class=""><br/></span>
+                <span class="bold"><span class="">pillLady.candy     = cottonCandy;</span><br/>cottonCandy.player = pillLady;</span> <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.6</b>    
+            src/main/java/com/tutego/insel/game/c/vj/Application.java (Snippet)</p>
+            
+            
+                
+                <h4 class="t4" id="h7.1.3.1">Ensuring the Accuracy of the Connections</h4>
+                
+                <p class="standard">Bidirectional relationships require a bit more programming effort since you must ensure that both sides have a valid reference. This requirement is important because, if the association is broken on one side, for example, by setting the reference to 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                , the other side must also break the reference. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_776"><pre>
+                    <span class="bold"><span class="">player.candy = null;</span></span><span class=""> // player doesn't want any more candy</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">If the player chooses a new candy, then the old candy must also “forget” the player, and vice versa. If the candy changes players, the former player must also delete the candy.</p>
+                
+                <div class="listing " id="l7.7"><pre>Candy cottonCandy  <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><span class=""><br/></span>Player pillLady    <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">();</span><span class=""><br/></span>pillLady<span class="">.</span><span class="">candy     </span><span class="">=</span><span class=""> cottonCandy</span><span class="">;</span><span class=""><br/></span>cottonCandy<span class="">.</span><span class="">player </span><span class="">=</span><span class=""> pillLady</span><span class="">;</span><span class=""><br/></span> <br/>
+                    <span class="bold"><span class="">Candy babyRuth  = </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><br/>pillLady.candy  = babyRuth;</span> <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.7</b>    
+            src/main/java/com/tutego/insel/game/c/vj/Application.java (Snippet)</p>
+                
+                <p class="standard">
+                    <a id="p431"/>In this scenario, we have a problem: The player has chosen a new candy, but if we asked the candy 
+                    <samp class="listingcharacter listingcharacter">cottonCandy</samp>, it would still point to 
+                    <samp class="listingcharacter listingcharacter">pillLady</samp>
+                . However, this scenario isn’t not acceptable in 1-to-1 relationships.</p>
+                
+                <p class="standard">The root of the evil lies in the directly accessible variables. Variables can’t maintain consistency conditions so you must implement consistency through methods. Methods can perform multiple operations, as in a transaction and can transition from one correct state to the next. For this reason, resolving or resetting relationships is best done with methods, such as 
+                    <samp class="listingcharacter listingcharacter">setCandy(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">setPlayer(</samp>...
+                    <samp class="listingcharacter listingcharacter">)</samp>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.1.4">7.1.4    Unidirectional 1-to-n Relationships</h3>
+            
+            <p class="standard">Whenever an object needs to reference multiple other objects, a simple reference variable of the other side’s type is no longer sufficient. Several approaches enable an object to reference more than one other object.</p>
+            
+            
+                
+                <h4 class="t4" id="h7.1.4.1">Relationship to a Small Manageable Number of Objects</h4>
+                
+                <p class="standard">If the number of associated objects is fixed and manageable, then multiple variables can be used.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">A player has a candy in his left and right pocket in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_7105"><pre><span class="">class</span><span class=""> Player </span><span class="">{</span><span class=""><br/></span>  Candy candyLeftPocket<span class="">,</span><span class=""> candyRightPocket</span><span class="">;</span><span class=""><br/></span>}</pre></div>
+                
+                </div>
+                
+                <p class="standard">If an object is meant to store more than a fixed number of references, the solution using multiple variables is no longer viable, especially if the referenced objects have no special status. What makes sense is to consider the person’s right and left arms separately, but if a player has 10 pockets for candy, the variables should certainly not be called 
+                    <samp class="listingcharacter listingcharacter">pocketCandy1</samp>, 
+                    <samp class="listingcharacter listingcharacter">pocketCandy2</samp>, 
+                    <samp class="listingcharacter listingcharacter">pocketCandy3</samp>
+                , and so on.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.1.4.2">Data Structures (Containers)</h4>
+                
+                <p class="standard">For example, if a player is carrying any number of candies, 
+                    <span class="italic">data structures</span>
+                 take center stage. We’ll use a special container on the first side that stores the references. This key step hands over the responsibility of who stores the references.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.1.4.3">Relationship to a Large Known Number of Objects</h4>
+                
+                <p class="standard">The keyboard of a cell phone has a fixed number of keys, and a table has a fixed number of legs. For collections of this type, an array is well suited especially because the number of elements is known in advance, and thus, elements can be addressed via an index.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p432"/>
+                    Example</h6>
+                    
+                    <p class="standard first">One player can store 10 candies in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_7101"><pre><span class="">class</span><span class=""> Player </span><span class="">{</span><span class=""><br/></span>  Candy<span class="">[]</span><span class=""> candies </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Candy</span><span class="">[</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">];</span><span class=""><br/></span>}</pre></div>
+                
+                </div>
+                
+                <p class="standard">For other relationships, where the number of referenced objects is dynamic, an array is not an elegant solution because manual enlargements or reductions of the array are laborious.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f7.5.html" id="f7.5"><img alt="The Player Takes over Storage or an Array" id="img-f7.5" src="bilderklein/klein07_005.png"/></a></div>
+                
+                <p class="caption "><b>Figure 7.5</b>    
+            The Player Takes over Storage or an Array</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.1.4.4">Relationship to an Unknown Number of Objects with the Dynamic Data Structure ArrayList</h4>
+                
+                <p class="standard">For example, if a player should be able to carry multiple pieces of candy or you want any number of players in a city, arrays are impractical. Instead, a dynamic data structure like 
+                    <samp class="listingcharacter listingcharacter">java.util.ArrayList</samp>
+                    <a class="indexanchor" id="i07_09"/> makes more sense. We’ll deal with these data structures and algorithms in more detail in 
+                    <span class="crossreference "><a href="18_001.html#h18">Chapter 18</a></span>, 
+                    <span class="crossreference "><a href="18_001.html#h18.1">Section 18.1</a></span>, but four methods of the 
+                    <samp class="listingcharacter listingcharacter">ArrayList</samp>, which stores elements of type 
+                    <samp class="listingcharacter listingcharacter">E</samp>
+                 in a list (sequence), can be introduced at this point:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean add(E e)</samp> adds an object 
+                            <samp class="listingcharacter listingcharacter">e</samp>
+                         of type E to the list.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">E get(int index)</samp> returns the element at position 
+                            <samp class="listingcharacter listingcharacter">index</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">E remove(int index)</samp> deletes the element at position 
+                            <samp class="listingcharacter listingcharacter">index</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int size()</samp>
+                         returns the number of elements in the list.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Furthermore, a 
+                    <samp class="listingcharacter listingcharacter">list</samp> can be placed to the right of the colon of the augmented 
+                    <samp class="listingcharacter listingcharacter">for</samp>
+                 loop so that the list can be easily run through.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.1.4.5">
+                    <a id="p433"/>
+                The Player Is Hungry for Many Sweets</h4>
+                
+                <p class="standard">When a player should only have one candy, the following code is sufficient:</p>
+                
+                <div class="listing " id="l_none_7118"><pre><span class="">class</span><span class=""> Player </span><span class="">{</span><span class=""><br/></span>  Candy candy<span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">With a data structure, the player can easily store multiple candies, as in the following example:</p>
+                
+                <div class="listing " id="l_none_7137"><pre><span class="">class</span><span class=""> Player </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">ArrayList candies = </span><span class="">new</span><span class=""> </span><span class="">ArrayList</span><span class="">()</span></span>;<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">Previously, the player had a reference variable of type 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>; now, the player has a reference variable of type 
+                    <samp class="listingcharacter listingcharacter">ArrayList</samp>. Interestingly, no direct 1-to-
+                    <span class="italic">n</span> relationship exists in the 
+                    <samp class="listingcharacter listingcharacter">Player</samp> because the player still stores only one reference. This reference no longer points to 
+                    <span class="italic">a</span> candy, but to 
+                    <span class="italic">a</span>
+                 container, and the one container can store any number of candies for the player.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Quick Start in Generics</h6>
+                    
+                    <p class="standard first">Java is a typed programming language, which means that every variable and expression has a type that the compiler knows and that doesn’t change at runtime. For example, a count variable is of type 
+                        <samp class="listingcharacter listingcharacter">int</samp>, a distance between two points could be of type 
+                        <samp class="listingcharacter listingcharacter">double</samp>, and a coordinate pair could be of type 
+                        <samp class="listingcharacter listingcharacter">Point</samp>
+                    . However, some gaps in typing exist. Take, for example, a list of candies, declared in the following way:</p>
+                    
+                    <div class="listing " id="l_none_7138"><pre>List candies;</pre></div>
+                    
+                    <p class="standard">Although the variable 
+                        <samp class="listingcharacter listingcharacter">candies</samp> is now typed with 
+                        <samp class="listingcharacter listingcharacter">List</samp>, which is better than nothing, what kind of objects the list stores exactly is unclear. Does the container hold candies, unicorns, or rusty boats? A useful approach is to not only have the list itself as the type, but to go inside the list, so to speak, and look closely at what the list actually references. This visibility is exactly the task of 
+                        <span class="italic">generics</span>
+                        <a class="indexanchor" id="i07_10"/>. An 
+                        <samp class="listingcharacter listingcharacter">ArrayList</samp> is a 
+                        <span class="italic">generic</span>
+                     type and can carry additional type information, which is placed in angle brackets after the type name, the actual “main type,” as in the following example:</p>
+                    
+                    <div class="listing " id="l_none_7149"><pre>ArrayList
+                        <span class="bold"><span class="">&lt;Candy&gt;</span></span> candies = <span class="">new</span><span class=""> ArrayList</span>
+                        <span class="bold">&lt;Candy&gt;</span>();<span class=""/></pre></div>
+                    
+                    <p class="standard">The information in angle brackets says that the 
+                        <samp class="listingcharacter listingcharacter">ArrayList</samp> should only store 
+                        <samp class="listingcharacter listingcharacter">Candy</samp> instances instead of other things like sausages or vaccination certificates.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn07_01" id="fn07_01">[ 136 ]</a></span>
+                    </p>
+                    
+                    <p class="standard">With generics, application programming interface (API) designers have a tool for prescribing types even more precisely. The developers of the 
+                        <samp class="listingcharacter listingcharacter">List</samp> type can thus require the user to specify the element type. This requirement allows developers to tell the 
+                        <a id="p434"/>
+                    compiler more precisely what types they are using and allows the compiler to perform more accurate tests. You can opt not to specify this “secondary type,” but omitting this secondary type would lead to a compiler warning and therefore isn’t recommended. The more accurate your type specifications are, the better for everyone.</p>
+                    
+                    <p class="standard last">Generic types will appear sporadically in the following chapters, such as 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp>, for example, which helps to compare objects. The details of generics are the subject of 
+                        <span class="crossreference "><a href="12_001.html#h12">Chapter 12</a></span>
+                    , but we just want to emphasize that a list enable the player to correctly store any number of candies. At this point, we simply want to point out that users must enter a type in angle brackets. </p>
+                
+                </div>
+                
+                <p class="standard">Let’s expand our program a little more. The player should be able to buy and eat the candies. So, let’s first look at the declaration of 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>
+                , which has a name and a calorie count.</p>
+                
+                <div class="listing " id="l7.8"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">int</span><span class=""> calories</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> calories </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">this</span><span class="">.</span><span class="">name     </span><span class="">=</span><span class=""> Objects</span><span class="">.</span><span class="">requireNonNull</span><span class="">(</span><span class=""> name </span><span class="">);</span><span class=""><br/></span>    <span class="">this</span><span class="">.</span><span class="">calories </span><span class="">=</span><span class=""> calories</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> name </span><span class="">+</span><span class=""> </span><span class="">", "</span><span class=""> </span><span class="">+</span><span class=""> calories</span><span class="">;</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.8</b>    
+            src/main/java/com/tutego/insel/game/c/vk/Candy.java, Candy</p>
+                
+                <p class="standard">The player can buy a candy, eat it, and output a list of all the candies. The three methods all access the private variable, 
+                    <samp class="listingcharacter listingcharacter">candies</samp>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l7.9"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Player </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> </span>
+                    <span class="bold"><span class="">ArrayList&lt;Candy&gt; candies = </span><span class="">new</span><span class=""> ArrayList&lt;Candy&gt;()</span></span>;<br/> <br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">buy</span><span class="">( Candy newCandy ) {</span><br/>    
+                    <span class="bold">candies.<span class="">add</span><span class="">( Objects.</span><span class="">requireNonNull</span><span class="">( newCandy ) )</span></span>;<br/>  }<br/> <br/>  <span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">eat</span><span class="">( </span><span class="">String</span><span class=""> name ) {</span><br/>    <span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> i = </span><span class="">0</span><span class="">; i &lt; </span>
+                    <span class="bold">candies.<span class="">size</span><span class="">()</span></span>; i++ )<br/>      <span class="">if</span><span class=""> ( </span>
+                    <span class="bold">candies.<span class="">get</span><span class="">( i ).name.</span><span class="">equals</span><span class="">( name )</span></span> ) {<br/>        
+                    <span class="bold">candies.<span class="">remove</span><span class="">( i )</span></span>;<br/>        <span class="">return</span><span class=""> true;</span><br/>      }<br/>    <span class="">return</span><span class=""> false;</span><br/>  }<br/> <br/>
+                    <a id="p435"/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">listCandies</span><span class="">() {</span><br/>    <span class="">int</span><span class=""> sum = </span><span class="">0</span><span class="">;</span><br/>    
+                    <span class="bold"><span class="">for</span><span class=""> ( Candy candy : candies )</span></span> {<br/>      System.out.<span class="">println</span><span class="">( candy );</span><br/>      sum += candy.calories;<br/>    }<br/>    System.out.<span class="">printf</span><span class="">( </span><span class="">"Total calories: %d%n"</span><span class="">, sum );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.9</b>    
+            src/main/java/com/tutego/insel/game/c/vk/Player.java, Player</p>
+                
+                <div class="imagebox figure-type"><a href="img-f7.6.html" id="f7.6"><img alt="UML Diagram where the Player References Any Number of Candies" id="img-f7.6" src="bilderklein/klein07_006.png"/></a></div>
+                
+                <p class="caption "><b>Figure 7.6</b>    
+            UML Diagram where the Player References Any Number of Candies</p>
+                
+                <p class="standard">The data structure itself is private, and no access is possible from the outside. Only methods can access the data structure. Let’s look more closely at our three methods next:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">buy(Candy)</samp> inserts a new candy into the 
+                            <samp class="listingcharacter listingcharacter">ArrayList</samp>. The test method 
+                            <samp class="listingcharacter listingcharacter">Objects.requireNonNull(...)</samp> will throw a 
+                            <samp class="listingcharacter listingcharacter">NullPointerException</samp> if 
+                            <samp class="listingcharacter listingcharacter">buy(null)</samp> is called by mistake because 
+                            <samp class="listingcharacter listingcharacter">null</samp>
+                         is not a valid choice from the list.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The 
+                            <samp class="listingcharacter listingcharacter">eat(String)</samp> method runs over the list with an index, searches the list to see if a candy with the same name occurs, and uses the list method 
+                            <samp class="listingcharacter listingcharacter">remove(int)</samp> to delete the candy at that point. If a candy could be found and deleted, 
+                            <samp class="listingcharacter listingcharacter">eat(...)</samp> returns 
+                            <samp class="listingcharacter listingcharacter">true</samp>; otherwise, 
+                            <samp class="listingcharacter listingcharacter">false</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">listCandies()</samp> uses a nice language feature: the extended 
+                            <samp class="listingcharacter listingcharacter">for</samp> loop to run through all the candies in the list. In the extended 
+                            <samp class="listingcharacter listingcharacter">for</samp> loop, not only an array is allowed to the right of the colon, but also a data structure such as an 
+                            <samp class="listingcharacter listingcharacter">ArrayList</samp>. In the body of our loop, the 
+                            <samp class="listingcharacter listingcharacter">toString()</samp> representation of each 
+                            <samp class="listingcharacter listingcharacter">Candy</samp>
+                         object is output to the screen, the calories extracted and totaled. After the loop, the total calories are also displayed on the screen.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Our small sample program can be thus programmed in the following way:</p>
+                
+                <div class="listing " id="l7.10"><pre>Player reese <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">();</span><span class=""><br/></span>reese<span class="">.</span><span class="">buy</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">"Kitty Katty"</span><span class="">,</span><span class=""> </span><span class="">200</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>reese<span class="">.</span><span class="">buy</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">"P&amp;Ps"</span><span class="">,</span><span class=""> </span><span class="">250</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>
+                    <a id="p436"/>reese<span class="">.</span><span class="">buy</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">"Snackers"</span><span class="">,</span><span class=""> </span><span class="">300</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>reese<span class="">.</span><span class="">buy</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">"Snackers"</span><span class="">,</span><span class=""> </span><span class="">300</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>reese<span class="">.</span><span class="">buy</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">"Bubba Hubba"</span><span class="">,</span><span class=""> </span><span class="">350</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>reese<span class="">.</span><span class="">listCandies</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> reese</span><span class="">.</span><span class="">eat</span><span class="">(</span><span class=""> </span><span class="">"Chick-o-Stick"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> reese</span><span class="">.</span><span class="">eat</span><span class="">(</span><span class=""> </span><span class="">"Kitty Katty"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>reese<span class="">.</span><span class="">listCandies</span><span class="">();</span><span class=""><br/></span>reese<span class="">.</span><span class="">buy</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">"Kitty Katty"</span><span class="">,</span><span class=""> </span><span class="">200</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>reese<span class="">.</span><span class="">buy</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> </span><span class="">"Kitty Katty"</span><span class="">,</span><span class=""> </span><span class="">200</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> reese</span><span class="">.</span><span class="">eat</span><span class="">(</span><span class=""> </span><span class="">"Kitty Katty"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>reese<span class="">.</span><span class="">listCandies</span><span class="">();</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.10</b>    
+            src/main/java/com/tutego/insel/game/c/vk/Application.java, main</p>
+                
+                <p class="standard">This program returns the following screen output:</p>
+                
+                <div class="listing " id="l_none_7184"><pre>Kitty Katty, 200<br/>P&amp;Ps, 250<br/>Snackers, 300<br/>Snackers, 300<br/>Bubba Hubba, 350<br/>Total calories: 1400<br/>false<br/>true<br/>P&amp;Ps, 250<br/>Snackers, 300<br/>Snackers, 300<br/>Bubba Hubba, 350<br/>Total calories: 1200<br/>true<br/>P&amp;Ps, 250<br/>Snackers, 300<br/>Snackers, 300<br/>Bubba Hubba, 350<br/>Kitty Katty, 200<br/>Total calories: 1400 </pre></div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

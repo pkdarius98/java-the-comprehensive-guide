@@ -1,0 +1,130 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Special Types of Java SE" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Special Types of Java SE" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Special Types of Java SE</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h11.2">11.2    
+            <a id="p638"/>
+        Weak References and Cleaners</h2>
+        
+        <p class="standard">References to objects around us in everyday life are called 
+            <span class="italic">strong references</span>
+            <a class="indexanchor" id="i11_45"/>
+            <a class="indexanchor" id="i11_46"/> because automatic garbage collection would never release a used object. However, in addition to strong references, with 
+            <span class="italic">weak references</span>
+            <a class="indexanchor" id="i11_47"/>
+            <a class="indexanchor" id="i11_48"/>
+        , the garbage collector will remove the objects. What sounds crazy at first becomes interesting when implementing caching data structures: If an object is in the cache, that’s fine and access is fast; if the object is not in the cache, that’s fine too, but access takes a little longer. Thus, you can use weak references to create cached objects that automatic garbage collection is allowed to clear up when memory is running low.</p>
+        
+        <p class="standard">Thus, weak references interact with automatic garbage collection in a simple way, through a few types for in the 
+            <samp class="listingcharacter listingcharacter">java.base </samp>module in the 
+            <samp class="listingcharacter listingcharacter">java.lang.ref</samp>
+            <a class="indexanchor" id="i11_49"/>
+         package. Special containers can reference an object but still can be emptied by automatic garbage collection, such as the following:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <a class="indexanchor" id="i11_50"/>
+                    <samp class="listingcharacter listingcharacter">SoftReference&lt;T&gt;</samp>: A container for 
+                    <span class="italic">softly reachable</span> objects. These objects are released late by the garbage collector when the JVM approaches an 
+                    <samp class="listingcharacter listingcharacter">OutOfMemoryError</samp>
+                .</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <a class="indexanchor" id="i11_51"/>
+                    <samp class="listingcharacter listingcharacter">WeakReference&lt;T&gt;</samp>: A container for 
+                    <span class="italic">weakly reachable</span>
+                 objects. These objects are released by the garbage collector relatively early in the first garbage collection.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <a class="indexanchor" id="i11_52"/>
+                    <samp class="listingcharacter listingcharacter">PhantomReference&lt;T&gt;</samp>
+                : A container that’s always empty but is used to keep track of when the garbage collector separates from an object.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <a class="indexanchor" id="i11_53"/>
+                    <samp class="listingcharacter listingcharacter">Reference&lt;T&gt;</samp>: Abstract base class for “reference objects” of 
+                    <samp class="listingcharacter listingcharacter">PhantomReference</samp>, 
+                    <samp class="listingcharacter listingcharacter">SoftReference</samp>, and 
+                    <samp class="listingcharacter listingcharacter">WeakReference</samp>
+                .</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">The containers themselves aren’t removed by the garbage collector and end up in a 
+            <samp class="listingcharacter listingcharacter">ReferenceQueue&lt;T&gt;</samp>. The queue can be used to determine which 
+            <samp class="listingcharacter listingcharacter">Reference</samp>
+         containers are empty and can be removed from a data structure, for example. Empty containers are useless and can’t be recycled.</p>
+        
+        <p class="standard">Another type in the package is 
+            <samp class="listingcharacter listingcharacter">Cleaner</samp>
+            <a class="indexanchor" id="i11_54"/>. An operation (of type 
+            <samp class="listingcharacter listingcharacter">Cleaner.Cleanable</samp>
+            <a class="indexanchor" id="i11_55"/>) can be registered to a 
+            <samp class="listingcharacter listingcharacter">Cleaner</samp>, which will be called whenever the automatic garbage collection strikes and the object is no longer accessible. Internally, the class uses 
+            <samp class="listingcharacter listingcharacter">PhantomReference</samp>
+        .</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+            
+            <p class="standard first">Let’s create a point and register a 
+                <samp class="listingcharacter listingcharacter">Cleaner</samp>. Then, we’ll stimulate the garbage collector by using too much memory space, which will trigger the 
+                <samp class="listingcharacter listingcharacter">Cleaner</samp>
+            .</p>
+            
+            <div class="listing " id="l11.18"><pre>Point p <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Cleaner<span class="">.</span><span class="">create</span><span class="">().</span><span class="">register</span><span class="">(</span><span class=""> p</span><span class="">,</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"point is gone"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>p <span class="">=</span><span class=""> null</span><span class="">;</span><span class=""><br/></span><span class="">new</span><span class=""> </span><span class="">byte</span><span class="">[</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)</span><span class=""> Runtime</span><span class="">.</span><span class="">getRuntime</span><span class="">().</span><span class="">freeMemory</span><span class="">()</span><span class=""> </span><span class="">].</span><span class="">clone</span><span class="">()</span><span class="">;</span></pre></div>
+            
+            <p class="caption "><b>Listing 11.18</b>    
+            src/main/java/com/tutego/insel/lang/ref/CleanerDemo, main()</p>
+            
+            <p class="standard last">
+                <a id="p639"/>The 
+                <samp class="listingcharacter listingcharacter">register(Object obj, Runnable action)</samp> method receives the object to watch in the first parameter and then a 
+                <samp class="listingcharacter listingcharacter">Runnable</samp>, calling the 
+                <samp class="listingcharacter listingcharacter">run()</samp> method whenever the 
+                <samp class="listingcharacter listingcharacter">Cleaner</samp> cleans up. With our need for memory, therefore, a console output of “Point is gone!” is likely. In no case may the cleanup operation reference 
+                <samp class="listingcharacter listingcharacter">p</samp> again. This example also uses a lambda expression (with the arrow) to shorten the code a little. More on this topic will follow in 
+                <span class="crossreference "><a href="13_001.html#h13">Chapter 13</a></span>
+            .</p>
+        
+        </div>
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

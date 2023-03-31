@@ -1,0 +1,269 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Handling Characters and Strings" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Handling Characters and Strings" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Handling Characters and Strings</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h5.7">5.7    CharSequence as Base Type</h2>
+        
+        <p class="standard">So far, you’ve learned how the classes 
+            <samp class="listingcharacter listingcharacter">String</samp>, 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>, and 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> can store and pass strings. A 
+            <samp class="listingcharacter listingcharacter">string</samp> is a value object and an important tool in programs since immutable string values are represented by it, while 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>/
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp>
+         comprise mutable strings.</p>
+        
+        <p class="standard">But what happens when a substring is required where it shouldn’t matter whether the original is a 
+            <samp class="listingcharacter listingcharacter">String</samp>, 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp>, or 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp> object? And what if read-only access is to be allowed so that changes are excluded? One solution is to expect everything to be a 
+            <samp class="listingcharacter listingcharacter">String</samp> object (and the Java library does this). But then the program parts that use 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>/
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> internally must first construct a new 
+            <samp class="listingcharacter listingcharacter">string</samp>
+        , and that costs resources.</p>
+        
+        <p class="standard">Fortunately, the 
+            <samp class="listingcharacter listingcharacter">String</samp> and 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>/
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> classes have a common base type: 
+            <samp class="listingcharacter listingcharacter">CharSequence</samp>
+            <a class="indexanchor" id="i05_99"/>. This type represents an immutable, read-only sequence of characters. (Interfaces, base types, and their implementation are described further in 
+            <span class="crossreference "><a href="08_001.html#h8">Chapter 8</a></span>, 
+            <span class="crossreference "><a href="08_001.html#h8.1">Section 8.1</a></span>.) Methods therefore no longer must decide on concrete classes but can simply accept a 
+            <samp class="listingcharacter listingcharacter">CharSequence</samp> object as an argument or pass it on as a return. As a return, 
+            <samp class="listingcharacter listingcharacter">
+                <a id="p343"/>
+            CharSequence</samp> isn’t especially useful; in this context, 
+            <samp class="listingcharacter listingcharacter">String</samp> is more practical. A 
+            <samp class="listingcharacter listingcharacter">String</samp> and a 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>/
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> object have many more methods than 
+            <samp class="listingcharacter listingcharacter">CharSequence</samp>, but as a parameter type, 
+            <samp class="listingcharacter listingcharacter">CharSequence</samp>
+         is well suited if more functionality isn’t needed.</p>
+        
+        <div class="imagebox figure-type"><a href="img-f5.3.html" id="f5.3"><img alt="Some Implementing Classes of the CharSequence Interface" id="img-f5.3" src="bilderklein/klein05_003.png"/></a></div>
+        
+        <p class="caption "><b>Figure 5.3</b>    
+            Some Implementing Classes of the CharSequence Interface</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+            
+            <p class="standard first">If a method is to obtain a string and the type doesn’t matter, you can implement something like the following example:</p>
+            
+            <div class="listing " id="l_none_51130"><pre><span class="">void</span><span class=""> </span><span class="">process</span><span class="">(</span><span class=""> CharSequence s </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  …<br/>}</pre></div>
+            
+            <p class="standard">In this way, you can avoid the use of these two methods:</p>
+            
+            <div class="listing  last_item" id="l_none_51139"><pre><span class="">void</span><span class=""> </span><span class="">process</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> s </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> … </span><span class="">}</span><span class=""><br/></span><span class="">void</span><span class=""> </span><span class="">process</span><span class="">(</span><span class=""> StringBuilder sb </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">process</span><span class="">(</span><span class=""> sb</span><span class="">.</span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>}</pre></div>
+        
+        </div>
+        
+        
+            
+            <h3 class="t3" id="h5.7.1">5.7.1    Basic Operations of the Interface</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">CharSequence</samp>
+             interface makes three methods mandatory for the implementing classes:</p>
+            
+            <div class="listing " id="l_none_51152"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">CharSequence</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p344"/>
+                        char charAt(int index)</samp><br/>Returns the character at the 
+                        <samp class="listingcharacter listingcharacter">index</samp>
+                     position.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int length()</samp><br/>Returns the length of the character string.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">default boolean isEmpty()</samp><br/>Abbreviation for the test 
+                        <samp class="listingcharacter listingcharacter">length() == 0</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">CharSequence subSequence(int start, int end)</samp><br/>Returns a new 
+                        <samp class="listingcharacter listingcharacter">CharSequence</samp> from 
+                        <samp class="listingcharacter listingcharacter">start</samp> to 
+                        <samp class="listingcharacter listingcharacter">end</samp>. 
+                        <samp class="listingcharacter listingcharacter">subSequence(...)</samp> returns a 
+                        <samp class="listingcharacter listingcharacter">CharSequence</samp> object. The effect is the same as calling 
+                        <samp class="listingcharacter listingcharacter">substring(begin, end)</samp> on a 
+                        <samp class="listingcharacter listingcharacter">string</samp>
+                    ; only the return type is different.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The following method already present anyway via the absolute superclass 
+                <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+            :</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">String toString()</samp><br/>Returns a string of the sequence. The length of the 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>
+                     string is exactly the length of the sequence.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Among others, 
+                <samp class="listingcharacter listingcharacter">String</samp>/
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>/
+                <samp class="listingcharacter listingcharacter">StringBuffer</samp> are implementing classes of the 
+                <samp class="listingcharacter listingcharacter">CharSequence</samp>
+             interface and implement these methods:</p>
+            
+            <div class="listing " id="l_none_51164"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span><span class="">String</span><span class=""> </span><span class="">implements</span><span class=""> CharSequence</span><span class="">,</span><span class=""> …</span><br/><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span><span class="">StringBuilder </span><span class="">implements</span><span class=""> CharSequence</span><span class="">,</span><span class=""> …</span><br/><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span><span class="">StringBuffer </span><span class="">implements</span><span class=""> CharSequence</span><span class="">,</span><span class=""> … </span></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">CharSequence subSequence(int beginIndex, int endIndex)</samp><br/>Returns a read-only substring.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.7.2">5.7.2    Static compare(...) Method in CharSequence</h3>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">CharSequence</samp> has the static method 
+                <samp class="listingcharacter listingcharacter">compare(...)</samp>, which compares two 
+                <samp class="listingcharacter listingcharacter">CharSequence</samp>
+             objects lexicographically:</p>
+            
+            <div class="listing " id="l_none_51179"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">CharSequence</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int compare(CharSequence cs1, CharSequence cs2)</samp><br/>Compares the two strings lexicographically.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">This static method has an advantage in that now all combinations of 
+                <samp class="listingcharacter listingcharacter">CharBuffer</samp>, 
+                <samp class="listingcharacter listingcharacter">Segment</samp>, 
+                <samp class="listingcharacter listingcharacter">String</samp>, 
+                <samp class="listingcharacter listingcharacter">StringBuffer</samp>, and 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+             can be checked with this one method. Furthermore, if the comparison results in 0, you also know that the strings contain the same characters.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.7.3">5.7.3    
+                <a id="p345"/>
+            Default Methods in the CharSequence Interface*</h3>
+            
+            <p class="standard">This interface has two default methods:</p>
+            
+            <div class="listing " id="l_none_51194"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">CharSequence</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">default IntStream chars()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">default IntStream codePoints()</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The importance of 
+                <samp class="listingcharacter listingcharacter">default</samp> and interfaces in general is discussed in 
+                <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>. At this point, we just want to emphasize the advantage that 
+                <samp class="listingcharacter listingcharacter">chars()</samp> can be used to run over the characters. However, this method has nothing to do with the extended 
+                <samp class="listingcharacter listingcharacter">for</samp>
+            , but with a different programming idiom.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example runs over a string and outputs each character:</p>
+                
+                <div class="listing " id="l_none_51204"><pre><span class="">"Drama is life with the dull bits left out."</span><span class="">.</span><span class="">chars</span><span class="">().</span><span class="">forEach</span><span class="">(</span><span class=""> c </span><span class="">-&gt;</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">char</span><span class="">)</span><span class=""> c </span><span class="">)</span><span class=""><br/></span> <span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard last">Syntactically, this example uses lambda expressions, which are introduced in detail in 
+                    <span class="crossreference "><a href="13_001.html#h13">Chapter 13</a></span>
+                .</p>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

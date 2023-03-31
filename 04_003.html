@@ -1,0 +1,272 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Arrays and Their Areas of Use" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Arrays and Their Areas of Use" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Arrays and Their Areas of Use</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h4.3">4.3    A Method with a Variable Number of Arguments</h2>
+        
+        <p class="standard">For many methods, you’ll clearly see exactly how many arguments must be passed. For example, nothing may be passed to a 
+            <samp class="listingcharacter listingcharacter">Math.random()</samp> method, and exactly one argument is valid for 
+            <samp class="listingcharacter listingcharacter">Math.sin(double)</samp>
+        .</p>
+        
+        
+            
+            <h3 class="t3" id="h4.3.1">4.3.1    
+                <a id="p257"/>
+            System.out.printf(...) Accepts Any Number of Arguments</h3>
+            
+            <p class="standard">In some methods, the number of valid arguments is basically unlimited. An example is 
+                <samp class="listingcharacter listingcharacter">printf(String, ...)</samp>
+            , which expects a string first but is free to pass anything else. Valid calls of this method include the following examples.</p>
+            
+            <table class="standardtable" id="t4.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Call</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Variable Argument List</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">System.out.printf("%n")</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Is empty.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">System.out.printf("%s", "One")</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Consists of only one element: 
+                                <samp class="listingcharacter listingcharacter">One</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">System.out.printf("%s,%s,%s", "1", "2", "3")</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Consists of three elements: 
+                                <samp class="listingcharacter listingcharacter">1</samp>, 
+                                <samp class="listingcharacter listingcharacter">2</samp>, and 
+                                <samp class="listingcharacter listingcharacter">3</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 4.1</b>    
+            Valid Calls of printf(...)</p>
+            
+            <p class="standard">To make the number of parameters arbitrary, Java provides methods with a 
+                <span class="italic">variable number of arguments</span>
+                <a class="indexanchor" id="i04_14"/>, called 
+                <span class="italic">varargs</span>
+                <a class="indexanchor" id="i04_15"/>. (In other programming languages these are called 
+                <span class="italic">variadic function</span>
+                <a class="indexanchor" id="i04_16"/>
+                <a class="indexanchor" id="i04_17"/>.) The method 
+                <samp class="listingcharacter listingcharacter">printf(formattingstring, arg1, args2, arg3, ...)</samp>
+             is an example of a varargs method.</p>
+            
+            <div class="listing " id="l_none_4484"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                <span class="bold">PrintStream</span> <span class="">extends</span><span class=""> FilterOutputStream</span><br/><span class="">implements</span><span class=""> Appendable, Closeable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">PrintStream printf(String format, </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">Object... </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">args)</samp><br/>Accepts an arbitrary list of arguments and formats it according to the given formatting string, 
+                        <samp class="listingcharacter listingcharacter">format</samp>
+                    . The formatting string determines how many arguments are needed. However, the compiler doesn’t evaluate the string, so it can’t check its correctness (i.e., that the number is correct), even at compile time.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">A method with a variable number of arguments uses the ellipsis (
+                <samp class="listingcharacter listingcharacter">...</samp>
+                <a class="indexanchor" id="i04_18"/>
+            ) to clarify that any number of arguments can be specified, including the specification of no elements. However, the type isn’t dropped in this case since it is also specified.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.3.2">4.3.2    Finding the Average of Variable Arguments</h3>
+            
+            <p class="standard">Earlier in 
+                <span class="crossreference "><a href="04_001.html#h4.1.6">Section 4.1.6</a></span>, we wrote a method—
+                <samp class="listingcharacter listingcharacter">avg(double</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">[] </samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">numbers)</samp>—to calculate the arithmetic mean of values. Let’s now change the parameter type to 
+                <samp class="listingcharacter listingcharacter">avg(double</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">...</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">numbers)</samp> so that the method can be easily filled with variable arguments. Only a small change from 
+                <samp class="listingcharacter listingcharacter">[]</samp> to 
+                <samp class="listingcharacter listingcharacter">...</samp>
+             is required; otherwise, nothing changes in the implementation. Let’s look at a completely programmed example next.</p>
+            
+            <div class="listing " id="l4.7"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> AvgVarArgs </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">avg</span><span class="">(</span><span class=""> </span><span class="">double</span><span class="">...</span><span class=""> numbers </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> /* implementation as before */</span><span class=""> }</span><br/> <br/>
+                <a id="p258"/>  public static void main( String[] args ) {<br/>    System.out.println( avg(
+                <span class="bold">1, 2, 9, 3</span>) );    <span class=""> // 3.75</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 4.7</b>    
+            src/main/java/com/tutego/insel/array/AvgVarArgs.java (Snippet)</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">If variable argument lists are defined in the signature, they may form only the last parameter; otherwise, the compiler can’t determine which parameters are varargs and which are the next filled parameter. This limitation automatically implies that a maximum of one vararg can be used in the parameter list.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h4.3.2.1">The Connection between Varargs and Arrays</h4>
+                
+                <p class="standard">A method with a vararg is basically a method with an array as a parameter type. The bytecode does not really say 
+                    <samp class="listingcharacter listingcharacter">avg(double... numbers)</samp> but says instead 
+                    <samp class="listingcharacter listingcharacter">avg(double[] numbers)</samp> with the additional info that 
+                    <samp class="listingcharacter listingcharacter">numbers </samp>is a vararg. Thus, the compiler allows any number of arguments and not exclusively a 
+                    <samp class="listingcharacter listingcharacter">double[] array</samp>
+                 as the argument.</p>
+                
+                <p class="standard">The user can call a varargs method without explicitly defining an array for the arguments. They don’t even notice that the compiler has created an array with four elements in the background. Thus, from</p>
+                
+                <div class="listing " id="l_none_4510"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">avg</span><span class="">(</span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">the compiler generates the following:</p>
+                
+                <div class="listing " id="l_none_4519"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">avg</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">new</span><span class=""> </span><span class="">double</span><span class="">[] { </span><span class="">1</span><span class="">, </span><span class="">2</span><span class="">, </span><span class="">9</span><span class="">, </span><span class="">3</span><span class=""> }</span></span> ) ); <span class=""/></pre></div>
+                
+                <p class="standard">It’s easy to see from the notation that we can also pass an array manually:</p>
+                
+                <div class="listing " id="l_none_4544"><pre><span class="">double</span><span class="">[]</span><span class=""> values </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">};</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">avg</span><span class="">(</span><span class=""> values </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Since varargs are implemented as arrays, overloaded variants like 
+                        <samp class="listingcharacter listingcharacter">avg(int... numbers)</samp> and 
+                        <samp class="listingcharacter listingcharacter">avg(int[] numbers)</samp>—the first with a vararg and the second with an array—are not possible. In this case, a better approach is to always use a variant with varargs, which is more powerful. Some authors also write the initial method 
+                        <samp class="listingcharacter listingcharacter">main(String[] args)</samp> with variable arguments, for instance, 
+                        <samp class="listingcharacter listingcharacter">main(String... args)</samp>
+                    . This expression is valid because an array exists in the bytecode.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.3.3">4.3.3    
+                <a id="p259"/>
+            Vararg Design Tips*</h3>
+            
+            <p class="standard">If a method has only one array parameter that is located at the end, you can replace it relatively easily by a vararg, which gives the caller the convenient possibility to use a more compact syntax. Some authors also write the entry method 
+                <samp class="listingcharacter listingcharacter">main(String[] args)</samp> with variable arguments, so that variable arguments can easily be passed to the 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>
+             method when testing.</p>
+            
+            <p class="standard">If a minimum number of arguments must be guaranteed—for 
+                <samp class="listingcharacter listingcharacter">max(</samp>...
+                <samp class="listingcharacter listingcharacter">)</samp>, at least two—you should use a declaration like 
+                <samp class="listingcharacter listingcharacter">max(int first, int second, int... remaining)</samp>
+            .</p>
+            
+            <p class="standard">For performance reasons, we recommend providing methods with frequent parameter list sizes as fixed methods, such as 
+                <samp class="listingcharacter listingcharacter">max(double, double)</samp>, 
+                <samp class="listingcharacter listingcharacter">max(double, double, double)</samp>, and 
+                <samp class="listingcharacter listingcharacter">max(double...)</samp>
+            . With this approach, the compiler always selects the appropriate method automatically, no temporary array objects are needed for two or three parameters, and automatic garbage collection doesn’t have to clear anything away.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

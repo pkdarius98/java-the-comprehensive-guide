@@ -1,0 +1,112 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Lambda Expressions and Functional Programming" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Lambda Expressions and Functional Programming" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Lambda Expressions and Functional Programming</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h13.7">13.7    What Is So Functional Now?</h2>
+        
+        <p class="standard">So far, much of this section has been spent introducing types from the 
+            <samp class="listingcharacter listingcharacter">java.util.function</samp>
+         package, the functional interfaces developers can use to express mappings in Java. Now let’s talk more generally about functional programming and its advantages.</p>
+        
+        
+            
+            <h3 class="t3" id="h13.7.1">13.7.1    Recyclability</h3>
+            
+            <p class="standard">First, functions provide an additional level of code reusability. Consider the following predicate:</p>
+            
+            <div class="listing " id="l_none_131300"><pre>Predicate<span class="">&lt;</span><span class="">Path</span><span class="">&gt;</span><span class=""> exists </span><span class="">=</span><span class=""> path </span><span class="">-&gt;</span><span class=""> Files</span><span class="">.</span><span class="">exists</span><span class="">(</span><span class=""> path </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">This 
+                <samp class="listingcharacter listingcharacter">exists</samp>
+             predicate is relatively simple and also omits exception handling. But of course you could write something more complex. The point is that these predicates can be reused in all sorts of places, such as for filtering in lists or deleting items from lists. The predicate can be passed as a function or connected to new predicates, as in the following examples:</p>
+            
+            <div class="listing " id="l_none_131302"><pre>Predicate<span class="">&lt;</span><span class="">Path</span><span class="">&gt;</span><span class=""> exists    </span><span class="">=</span><span class=""> path </span><span class="">-&gt;</span><span class=""> Files</span><span class="">.</span><span class="">exists</span><span class="">(</span><span class=""> path </span><span class="">);</span><span class=""><br/></span>Predicate<span class="">&lt;</span><span class="">Path</span><span class="">&gt;</span><span class=""> directory </span><span class="">=</span><span class=""> path </span><span class="">-&gt;</span><span class=""> Files</span><span class="">.</span><span class="">isDirectory</span><span class="">(</span><span class=""> path </span><span class="">);</span><span class=""><br/></span>Predicate<span class="">&lt;</span><span class="">Path</span><span class="">&gt;</span><span class=""> existsAndDirectory </span><span class="">=</span><span class=""> exists</span><span class="">.</span><span class="">and</span><span class="">(</span><span class=""> directory </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">Methods like 
+                <samp class="listingcharacter listingcharacter">ifPresent(Predicate)</samp> or 
+                <samp class="listingcharacter listingcharacter">removeIf(Predicate)</samp>
+             then take this predicate and perform operations. These small, mini-objects are easy to test, which minimizes errors in your code overall.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.7.2">13.7.2    Stateless, Immutable</h3>
+            
+            <p class="standard">Functional programming is about getting by without external states. Pure functional programming languages are based on pure functions, and even in Java, not every method must change an external state. However, Java developers are accustomed to thinking in terms of states, which is not inherently wrong: A text document in memory is just as much an object graph as a graphical application with input fields. The goal of functional programming are operations on data structures and calculations that lack side effects.</p>
+            
+            <p class="standard">
+                <a id="p796"/>
+            Pure functions without states have several advantages, such as the following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Functions can be executed any number of times without changing system states.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Functions can be executed in any order without the result becoming different.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Functions are easier to test than extensive state changes.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">These advantages are particularly appealing from the parallelization point of view because processors don’t really get faster; we have more processor cores available. Pure functions allow libraries to distribute tasks across cores (such as searching and filtering) and parallelize these tasks. The less that state influences the game, the better because states require synchronization, which increases wait times.</p>
+            
+            <p class="standard">Of course, a developer still must be careful because a lambda expression doesn’t have to be pure and can have side effects. For this reason, you must know when a lambda expression may be concurrent and thus synchronization is needed.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The 
+                    <samp class="listingcharacter listingcharacter">Iterable</samp> interface declares a 
+                    <samp class="listingcharacter listingcharacter">forEach(...)</samp>
+                 method, with a parameter of a functional interface type. In this case, a lambda expression is possible. However, a fundamental error would be for this lambda expression itself to interfere with the collection, as in the following case:</p>
+                
+                <div class="listing " id="l_none_131318"><pre>List<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> ints </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">99</span><span class="">,</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>ints<span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> v </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> ints </span><span class="">+</span><span class=""> “</span><span class="">,</span><span class=""> “ </span><span class="">+</span><span class=""> v</span><span class="">);</span><span class=""> </span>
+                    <span class="bold"><span class="">ints.</span><span class="">set</span><span class="">( v, </span><span class="">0</span><span class=""> )</span></span>; } );<span class=""/></pre></div>
+                
+                <p class="standard">The result is far from what was expected, which shows that lambda expressions can cause illegal side effects, as shown in the following output:</p>
+                
+                <div class="listing  last_item" id="l_none_131335"><pre>[1, 99, 2], 1<br/>[1, 0, 2], 0<br/>[0, 0, 2], 2</pre></div>
+            
+            </div>
+            
+            <p class="standard">The avoidance of states, coupled with the 
+                <span class="italic">immutability</span>
+             of values, can increase how easily a program can be comprehended since developers often have a hard time “replaying” the system in their minds with all the changes, especially if changes are happening concurrent. Our previous example illustrates this potential problem quite well. Understanding and debugging such systems is difficult. The fewer side effects, the easier a program is to understand. States make a program complex, not only in concurrent environments. If a method is pure, a developer only needs to understand the code of the method. If a method depends on the states of the object, a developer must understand the code of the entire class.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

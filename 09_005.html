@@ -1,0 +1,941 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    There Must Be Exceptions" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    There Must Be Exceptions" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    There Must Be Exceptions</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h9.5">9.5    Triggering Custom Exceptions</h2>
+        
+        <p class="standard">So far, exceptions have only been caught, but not generated. In this section, we’ll show you how custom exceptions can be thrown. On one hand, exceptions may arise when the JVM is provoked, for example, in the case of an integer division by 0, or can be generated explicitly by using 
+            <samp class="listingcharacter listingcharacter">throw</samp>
+        .</p>
+        
+        
+            
+            <h3 class="t3" id="h9.5.1">9.5.1    Triggering Exceptions via throw</h3>
+            
+            <p class="standard">If a method or a constructor itself is supposed to throw an exception, an exception object must first be created, and then, exception handling is triggered. In the lexicon, the 
+                <samp class="listingcharacter listingcharacter">throw</samp>
+                <a class="indexanchor" id="i09_40"/>
+             keyword signals an exception, and processing stops at that point.</p>
+            
+            <p class="standard">The exception type in the following example is 
+                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>
+                <a class="indexanchor" id="i09_41"/>
+            , which indicates an incorrect argument:</p>
+            
+            <div class="listing " id="l9.14"><pre><span class="">Player</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> age </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">if</span><span class=""> ( age &lt;= </span><span class="">0</span><span class=""> )</span><br/>    <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IllegalArgumentException</span><span class="">(</span></span><br/>
+                <span class="bold">        <span class="">"No age &lt;= 0 allowed, age must be positive or 0"</span><span class=""> );</span><br/></span><br/>  <span class="">this</span><span class="">.age = age;</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.14</b>    
+            com/tutego/insel/exception/v1/Player.java (Constructor)</p>
+            
+            <p class="standard">In this example, note that negative age transfers or those with 
+                <samp class="listingcharacter listingcharacter">0</samp> aren’t permitted and cause an exception. In the first step, 
+                <samp class="listingcharacter listingcharacter">new</samp> creates the exception object via a parameterized constructor. The 
+                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> class provides such a constructor that accepts a string to convey more detailed reasons for an exception. The API contains information about which parameters declare the individual exception classes. After creating the exception object, 
+                <samp class="listingcharacter listingcharacter">throw</samp> terminates local processing, and the JVM looks for a 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             that handles the exception.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">A 
+                    <samp class="listingcharacter listingcharacter">throws IllegalArgumentException</samp> on the constructor is unnecessary in this example because 
+                    <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> is a 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp> that needn’t be specified via a 
+                    <samp class="listingcharacter listingcharacter">throws</samp>
+                 in the method signature.</p>
+            
+            </div>
+            
+            <p class="standard">
+                <a id="p565"/>
+            Let’s consider another example where players with a negative age are initialized.</p>
+            
+            <div class="listing " id="l9.15"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">Player d = </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">( -</span><span class="">100</span><span class=""> );</span></span><br/>  System.out.<span class="">println</span><span class="">( d );</span><br/>}<br/><span class="">catch</span><span class=""> ( IllegalArgumentException e ) {</span><br/>  e.<span class="">printStackTrace</span><span class="">();</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.15</b>    
+            src/main/java/com/tutego/insel/exception/v1/Player.java, main()</p>
+            
+            <p class="standard">This scenario causes an exception, and the stack trace output by 
+                <samp class="listingcharacter listingcharacter">printStackTrace()</samp>
+             reads the following message:</p>
+            
+            <div class="listing " id="l_none_9370"><pre>Exception in thread "main" java.lang.IllegalArgumentException: No age &lt;= 0 allowed, age must be positive or 0<br/> at com.tutego.insel.exception.v1.Player.&lt;init&gt;(Player.java:9)<br/> at com.tutego.insel.exception.v1.Player.main(Player.java:28) </pre></div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">If a constructor throws an exception, usage like the following example is problematic:</p>
+                
+                <div class="listing " id="l_none_9385"><pre>Player p <span class="">=</span><span class=""> null</span><span class="">;</span><span class=""><br/></span><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  p <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">(</span><span class=""> v </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IllegalArgumentException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span>
+                    <span class="bold"><span class="">p.</span><span class="">getAge</span><span class="">();</span></span>  <span class=""> // BOOM: 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     NullPointerException</span><span class=""/><span class=""/></pre></div>
+                
+                <p class="standard last">The exception won’t result in an object if 
+                    <samp class="listingcharacter listingcharacter">v</samp> is negative. Thus, 
+                    <samp class="listingcharacter listingcharacter">p</samp> remains preset with 
+                    <samp class="listingcharacter listingcharacter">null</samp>. A 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> follows in the 
+                    <samp class="listingcharacter listingcharacter">BOOM</samp> line. The program code that expects the object, but perhaps calculates with a 
+                    <samp class="listingcharacter listingcharacter">null</samp>, should be included in the 
+                    <samp class="listingcharacter listingcharacter">try</samp>
+                 block. But usually such exceptions represent programming errors and aren’t caught.</p>
+            
+            </div>
+            
+            <p class="standard">Since the 
+                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> is a 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>, a 
+                <samp class="listingcharacter listingcharacter">try</samp>-
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             is technically not necessary as in the following example:</p>
+            
+            <div class="listing " id="l_none_9409"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  Player d <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">(</span><span class=""> </span><span class="">-</span><span class="">100</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The runtime exception wouldn’t necessarily need to be caught, but the effect would be that the exception wouldn’t be handled, and the program would terminate.</p>
+            
+            <div class="listing " id="l_none_9418"><pre><span class="">
+                    <a id="p566"/>
+                class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">IllegalArgumentException</span><br/><span class="">extends</span><span class=""> RuntimeException </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">IllegalArgumentException()</samp><br/>Creates a new exception without specifying the error.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">IllegalArgumentException(String s)</samp><br/>Creates a new exception object with a detailed error specification.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.5.2">9.5.2    Knowing and Using Existing Runtime Exception Types</h3>
+            
+            <p class="standard">The Java API provides a large number of exception classes, and declaring separate exception classes for each case isn’t necessary. Many standard cases, such as incorrect arguments or incorrect program states, cover standard exception classes.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Developers should never write 
+                    <samp class="listingcharacter listingcharacter">throw new Exception()</samp> or even 
+                    <samp class="listingcharacter listingcharacter">throw new Throwable()</samp>
+                , but always use concrete subclasses.</p>
+            
+            </div>
+            
+            <p class="standard">Let’s briefly explore some standard runtime exception subclasses of the 
+                <samp class="listingcharacter listingcharacter">java.lang</samp>
+             package next.</p>
+            
+            
+                
+                <h4 class="t4" id="h9.5.2.1">IllegalArgumentException</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>
+                    <a class="indexanchor" id="i09_42"/> indicates that a parameter hasn’t been specified correctly. This exception type can thus only be found in constructors or methods that have been passed incorrect arguments. Often, the reason is a disregarding of the value range. If the values are basically correct, this exception type must not be triggered. A few more details about this topic will follow in 
+                    <span class="crossreference "><a href="09_005.html#h9.5.3">Section 9.5.3</a></span>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h9.5.2.2">IllegalStateException</h4>
+                
+                <p class="standard">Objects usually have states. If operations need to be performed, but the states aren’t correct, the method can throw an 
+                    <samp class="listingcharacter listingcharacter">IllegalStateException</samp>
+                    <a class="indexanchor" id="i09_43"/>, indicating that the operation isn’t possible in the current state. If the condition were correct, the exception wouldn’t occur. Static methods should not have an 
+                    <samp class="listingcharacter listingcharacter">IllegalStateException</samp>.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn09_04" id="fn09_04">[ 163 ]</a></span>
+                </p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h9.5.2.3">UnsupportedOperationException</h4>
+                
+                <p class="standard">If classes implement interfaces or put into effect abstract methods of superclasses, an implementation must always exist, even if the subclass can’t or doesn’t actually want to implement the operation. Instead of just leaving the body of the method empty and 
+                    <a id="p567"/>letting a potential caller think the method is executing something, these methods should throw an 
+                    <samp class="listingcharacter listingcharacter">UnsupportedOperationException</samp>. The API documentation flags the abstract methods the subclasses may not want to implement as 
+                    <span class="italic">optional operations</span>, as shown in 
+                    <span class="crossreference "><a href="09_005.html#f9.8">Figure 9.8</a></span>
+                .</p>
+                
+                <div class="imagebox figure-type"><a href="img-f9.8.html" id="f9.8"><img alt="Optional Operations in the java.util.List Interface" id="img-f9.8" src="bilderklein/klein09_008.png"/></a></div>
+                
+                <p class="caption "><b>Figure 9.8</b>    
+            Optional Operations in the java.util.List Interface</p>
+                
+                <p class="standard">Unfortunately, a 
+                    <samp class="listingcharacter listingcharacter">javax.naming.OperationNotSupportedException</samp> also exists but shouldn’t be used. This exception is specifically intended for name services and is not also a 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h9.5.2.4">IndexOutOfBoundsException</h4>
+                
+                <p class="standard">An 
+                    <samp class="listingcharacter listingcharacter">IndexOutOfBoundsException</samp>
+                    <a class="indexanchor" id="i09_44"/> is thrown automatically by the JVM if, for example, a program disregards the 
+                    <samp class="listingcharacter listingcharacter">bounds</samp> of an array. You can use this exception type yourselves whenever you have index access, such as access to a line in a file, but the index is in the wrong range. 
+                    <samp class="listingcharacter listingcharacter">IndexOutOfBoundsException</samp> has the subclasses 
+                    <samp class="listingcharacter listingcharacter">ArrayIndexOutOfBoundsException</samp> and 
+                    <samp class="listingcharacter listingcharacter">StringIndexOutOfBoundsException</samp>. Usually, however, programmers don’t use these types. Inconsistencies exist in the use of 
+                    <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> and 
+                    <samp class="listingcharacter listingcharacter">IndexOutOfBoundsException</samp>. For example, if the index is wrong, some authors choose the first exception type, while others use the second one. Basically, both are valid. However, the 
+                    <samp class="listingcharacter listingcharacter">IndexOutOfBoundsException</samp> is more concrete and indicates more of an implementation detail. The parameterized constructor 
+                    <samp class="listingcharacter listingcharacter">IndexOutOfBoundsException(int)</samp>
+                 takes the wrong index in the integer parameter. The index should always be reported to simplify troubleshooting.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h9.5.2.5">
+                    <a id="p568"/>
+                Throwing a Custom NullPointerException?</h4>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                    <a class="indexanchor" id="i09_45"/>
+                 is one of the most common exceptions. The JVM triggers this exception for something like the following code example:</p>
+                
+                <div class="listing " id="l_none_9428"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> null</span><span class="">;</span><span class=""><br/></span>s<span class="">.</span><span class="">length</span><span class="">();</span><span class="">        </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     NullPointerException</span><span class=""> </span></pre></div>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> always indicates a programming error in a piece of code, and so usually, querying these exceptions serves no point since the programming error must be fixed. Programmers rarely throw a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                 by themselves because the JVM does that automatically. However, this exception can be deliberately triggered by the developer when an additional message is needed to provide clarity or early on when checking parameters at the head of a method.</p>
+                
+                <p class="standard">Often, this 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> arises when 
+                    <samp class="listingcharacter listingcharacter">null</samp> values are passed to methods. In this case, the API documentation must clearly specify whether 
+                    <samp class="listingcharacter listingcharacter">null</samp> is permitted as an argument or not. If not, it’s perfectly fine for the method to throw a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> if 
+                    <samp class="listingcharacter listingcharacter">null</samp> was passed by mistake after all. Checking for 
+                    <samp class="listingcharacter listingcharacter">null</samp> to then throw an 
+                    <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>, for example, isn’t really necessary. However, again, an 
+                    <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> is more general and less implementation specific than a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">To throw a 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp>, a simple 
+                        <samp class="listingcharacter listingcharacter">throw null;</samp> is also possible instead of 
+                        <samp class="listingcharacter listingcharacter">throw new NullPointerException();</samp>. However, since a custom 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                     is rare without an additional error message, this idiom isn’t really useful.</p>
+                
+                </div>
+                
+                <p class="standard">To summarize, a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                 is thrown in the following cases:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">When you call an object method on a 
+                            <samp class="listingcharacter listingcharacter">null</samp>
+                         object</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">During read or write access to an object state on a 
+                            <samp class="listingcharacter listingcharacter">null</samp>
+                         object</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">When you access the array length via 
+                            <samp class="listingcharacter listingcharacter">length</samp> on an array that’s 
+                            <samp class="listingcharacter listingcharacter">null</samp>, as in 
+                            <samp class="listingcharacter listingcharacter">int[] a = null; print(a.length);</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">In an element access to an array that’s 
+                            <samp class="listingcharacter listingcharacter">null</samp>, like in 
+                            <samp class="listingcharacter listingcharacter">int[] a = null; a[0]++;</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">With 
+                            <samp class="listingcharacter listingcharacter">throw null</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.5.3">9.5.3    Testing Parameters and Good Error Messages</h3>
+            
+            <p class="standard">An 
+                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>
+                <a class="indexanchor" id="i09_46"/> is a valuable exception that indicates an internal exception, namely, that a method was called with incorrect arguments. Ideally, a method should check all parameters for their correct range of values and operate according to the 
+                <span class="italic">fail-fast principle</span>, that is, report an exception as quickly as possible instead of ignoring or delaying errors. For example, if a person’s age can’t be negative in 
+                <samp class="listingcharacter listingcharacter">setAge(int)</samp>, an 
+                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> is a good choice. If in addition the exception string is mean
+                <a id="p569"/>
+            ingful, this exception can help immensely when troubleshooting the error: One tip is to specify a meaningful message.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Negative Example</h6>
+                
+                <p class="standard first">If the value range is wrong when forming a substring or if the index is too large for array access, a 
+                    <samp class="listingcharacter listingcharacter">StringIndexOutOfBoundsException</samp> or 
+                    <samp class="listingcharacter listingcharacter">ArrayIndexOutOfBoundsException</samp>
+                 will occur. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_9430"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Oracle-Paul"</span><span class="">.</span><span class="">substring</span><span class="">(</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> </span><span class="">20</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> //</span><span class=""> 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                    </span></pre></div>
+                
+                <p class="standard">This code returns the following output:</p>
+                
+                <div class="listing " id="l_none_9444"><pre>java.lang.StringIndexOutOfBoundsException: begin 0, end 20, length 11</pre></div>
+                
+                <p class="standard">Then, let’s say we write the following code:</p>
+                
+                <div class="listing " id="l_none_9459"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Oracle-Paul"</span><span class="">.</span><span class="">toCharArray</span><span class="">()[</span><span class="">20</span><span class="">]</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> //</span><span class=""> 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                    </span></pre></div>
+                
+                <p class="standard">The result is the following output:</p>
+                
+                <div class="listing  last_item" id="l_none_9471"><pre>java.lang.ArrayIndexOutOfBoundsException: Index 20 out of bounds for length 11</pre></div>
+            
+            </div>
+            
+            <p class="standard">Since testing parameters can turn into a big 
+                <samp class="listingcharacter listingcharacter">if</samp>-
+                <samp class="listingcharacter listingcharacter">throws</samp> party, introducing a helper class with static methods like 
+                <samp class="listingcharacter listingcharacter">isNull(...)</samp>, 
+                <samp class="listingcharacter listingcharacter">isFalse(...)</samp>, and 
+                <samp class="listingcharacter listingcharacter">isInRange(...)</samp> makes sense, which will then throw an 
+                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> if just the parameter isn’t correct.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn09_05" id="fn09_05">[ 164 ]</a></span> The Java standard library provides various 
+                <samp class="listingcharacter listingcharacter">check*(...)</samp> methods in the 
+                <samp class="listingcharacter listingcharacter">Objects</samp>
+             class.</p>
+            
+            
+                
+                <h4 class="t4" id="h9.5.3.1">null Checks</h4>
+                
+                <p class="standard">For 
+                    <samp class="listingcharacter listingcharacter">null</samp> checks, the method
+                    <a class="indexanchor" id="i09_47"/>
+                    <samp class="listingcharacter listingcharacter"> Objects.requireNonNull(reference)</samp> is useful, which throws a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> whenever 
+                    <samp class="listingcharacter listingcharacter">reference</samp> is 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                . Optionally, the error message can be specified as the second argument.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Tool Support</h6>
+                    
+                    <p class="standard first last">Another approach involves checks by external code check programs. Google, for example, uses parameter annotations, such as 
+                        <samp class="listingcharacter listingcharacter">@Nonnull</samp> or 
+                        <samp class="listingcharacter listingcharacter">@Nullable</samp>, in its numerous Java libraries.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn09_06" id="fn09_06">[ 165 ]</a></span> Static analysis tools (now integrated in development environments) or external tools such as SonarLint (<span class="url"><a href="https://www.sonarlint.org">https://www.sonarlint.org</a></span>) and 
+                        <span class="italic">FindBugs</span>
+                        <a class="indexanchor" id="i09_48"/> (<span class="url"><a href="http://findbugs.sourceforge.net/">findbugs.sourceforge.net/</a></span>) can check for cases in which the method is called with 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                    . However, these tests don’t take place at runtime.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.5.4">9.5.4    
+                <a id="p570"/>
+            Declaring New Exception Classes</h3>
+            
+            <p class="standard">Custom exceptions are always direct (or indirect) subclasses of 
+                <samp class="listingcharacter listingcharacter">Exception</samp>. (Custom exceptions can also be subclasses of 
+                <samp class="listingcharacter listingcharacter">Throwable</samp>, but this choice is not common.) Custom 
+                <samp class="listingcharacter listingcharacter">Exception</samp>
+             classes usually provide two constructors: a parameterless constructor and a constructor parameterized with a string to accept and store an error message.</p>
+            
+            <p class="standard">To declare a new exception type for the 
+                <samp class="listingcharacter listingcharacter">Player</samp> class from 
+                <span class="crossreference "><a href="09_005.html#l9.15">Listing 9.15</a></span>, let’s extend 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+                <a class="indexanchor" id="i09_49"/> to 
+                <samp class="listingcharacter listingcharacter">PlayerException</samp>
+             next.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f9.9.html" id="f9.9"><img alt="UML Diagram for PlayerException" id="img-f9.9" src="bilderklein/klein09_009.png"/></a></div>
+            
+            <p class="caption "><b>Figure 9.9</b>    
+            UML Diagram for PlayerException</p>
+            
+            <div class="listing " id="l9.16"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">exception</span><span class="">.</span><span class="">v2</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> PlayerException </span>
+                <span class="bold"><span class="">extends</span><span class=""> RuntimeException</span></span> {<br/><br/>  <span class="">public</span><span class=""> </span><span class="">PlayerException</span><span class="">() { }</span><br/><br/>  <span class="">public</span><span class=""> </span><span class="">PlayerException</span><span class="">( </span><span class="">String</span><span class=""> s ) {</span><br/>    <span class="">super</span><span class="">( s );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.16</b>    
+            src/main/java/com/tutego/insel/exception/v2/PlayerException.java</p>
+            
+            <p class="standard">
+                <a id="p571"/>Let’s revisit the initialization with age. Instead of the 
+                <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>, the constructor throws our more specialized 
+                <samp class="listingcharacter listingcharacter">PlayerException</samp>
+             in case of an error.</p>
+            
+            <div class="listing " id="l9.17"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> age </span><span class="">&lt;=</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span>
+                <span class="bold"><span class="">PlayerException</span></span><span class="">(</span><br/>        <span class="">"No age &lt;= 0 allowed, age must be positive or 0"</span><span class=""> ); </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.17</b>    
+            src/main/java/com/tutego/insel/exception/v2/Player.java (Snippet)</p>
+            
+            <p class="standard">In the main program, you can respond to the 
+                <samp class="listingcharacter listingcharacter">PlayerException</samp> by catching the exception explicitly with 
+                <samp class="listingcharacter listingcharacter">try</samp>-
+                <samp class="listingcharacter listingcharacter">catch</samp> or by passing it on to the caller—after all, our exception is a 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+             and would not need to be caught directly. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_9488"><pre>Exception in thread "main" 
+                <span class="bold">c.t.i.e.v2.PlayerException: No age &lt;= 0 allowed, age must be positive or 0</span><br/> at com.tutego.insel.exception.v2.Player.&lt;init&gt;(Player.java:9)<br/> at com.tutego.insel.exception.v2.Player.main(Player.java:16) </pre></div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">Creating subclasses of 
+                    <samp class="listingcharacter listingcharacter">Exception</samp> is always a good idea. If you didn’t create any subclasses, but instead directly indicated an exception via 
+                    <samp class="listingcharacter listingcharacter">throw new Exception()</samp>, you couldn’t distinguish this exception from other exceptions later on. The reason is that the hierarchy creation supports specialization in case of multiple 
+                    <samp class="listingcharacter listingcharacter">catch</samp> clauses as well as a distinction using 
+                    <samp class="listingcharacter listingcharacter">instanceof</samp>. If the exceptions are exactly of the 
+                    <samp class="listingcharacter listingcharacter">Exception</samp> type, you’d always have to catch your exceptions with 
+                    <samp class="listingcharacter listingcharacter">catch(Exception e)</samp>
+                 and thus get all other exceptions caught as well, which could then lack meaningful distinctions. However, developers shouldn’t use exception hierarchies too much; in many cases, a standard exception is sufficient.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.5.5">9.5.5    Custom Exceptions as Subclasses of Exception or RuntimeException?</h3>
+            
+            <p class="standard">Java isn’t alone with regard to exception handling. All modern programming languages have these language tools. However, one thing makes Java stand out: the distinction between checked and unchecked exceptions. Thus, when designing custom exception classes, the question arises whether or not they should be a subclass of 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+            . </p>
+            
+            <p class="standard">Some aids to decision making include the following considerations:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Let’s look at how the Java API deploys 
+                        <span class="italic">checked</span> and 
+                        <span class="italic">unchecked exceptions</span>. In general, unchecked exceptions
+                        <a class="indexanchor" id="i09_50"/> signal programming errors that need to be fixed. A good example is 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp>, 
+                        <samp class="listingcharacter listingcharacter">ClassCastException</samp>, or 
+                        <samp class="listingcharacter listingcharacter">ArrayIndexOutOfBoundsException</samp>. No question, exceptions of this type are programming errors that need to 
+                        <a id="p572"/>be fixed. A 
+                        <samp class="listingcharacter listingcharacter">catch</samp> would be unnecessary since this kind of exception simply doesn’t occur in correct code. The situation is different for checked exceptions. These exceptions indicate errors that may simply occur under certain circumstances. An 
+                        <samp class="listingcharacter listingcharacter">IOException</samp>
+                     may not be too bad because the file may not exist. However, when making this distinction, note that the JVM is the entity that throws the exception, not a method.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Should the application be able to “recover” from the exception or not? If a program error occurs due to a 
+                        <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+                    , the application shouldn’t “crash” but should continue working in a way that makes sense. Things are different with checked exceptions, which usually indicate that the error can be corrected, and the program can then be continued normally.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A module can work internally with 
+                        <samp class="listingcharacter listingcharacter">RuntimeExceptions</samp>, while an API designer modeling interfaces to systems can make good use of checked exceptions. This flexibility is one of the reasons why modern frameworks like 
+                        <span class="italic">Jakarta EE</span> (formerly Java EE) or 
+                        <span class="italic">Spring</span> rely almost exclusively on 
+                        <samp class="listingcharacter listingcharacter">RuntimeException</samp>: If an error does exist, then handling something and simply correcting it might be difficult. If, for example, an internal module shows an exception during database access, the entire operation must be aborted, and nothing can be saved. What happens with the 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                     on a small scale also applies on a large scale: The exception is a real problem, and the program simply can’t continue.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Checked exceptions can report if the caller doesn’t comply with the method contract. The 
+                        <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> is such an example.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn09_07" id="fn09_07">[ 166 ]</a></span> If the program had asked for the existence of the file beforehand via the 
+                        <samp class="listingcharacter listingcharacter">Files</samp> method 
+                        <samp class="listingcharacter listingcharacter">exists(...)</samp>, you wouldn’t have seen this exception. (The special case that the file was still there during the test, but then deleted in the background, should also not be neglected.) The caller is at fault, so to speak, and receives a checked exception because it doesn’t comply with the general conditions. In the case of an unchecked exception, the caller is not to blame for the problem, but instead a programming error exists. Because checked exceptions appear in the Javadoc, what happens if a developer doesn’t comply with the preconditions of the method should be clear. According to this philosophy, the 
+                        <samp class="listingcharacter listingcharacter">NumberFormatException</samp> should actually be a checked exception that triggers 
+                        <samp class="listingcharacter listingcharacter">Integer.parseInt(...)</samp>. In this case, the developer has fed the method 
+                        <samp class="listingcharacter listingcharacter">parseInt(...)</samp> with an incorrect value, thus violating the method contract. A checked exception would be correct in the context of this philosophy. On the other hand, one could argue that ignoring the correct parameters is an internal error because it’s the caller’s job to ensure the correct parameters are used, and so 
+                        <samp class="listingcharacter listingcharacter">parseInt(...)</samp> can exit with a 
+                        <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The distinction between 
+                        <span class="italic">internal errors</span> and 
+                        <span class="italic">external errors</span> allows for a division into checked and unchecked exceptions. Programming errors with exceptions (like 
+                        <samp class="listingcharacter listingcharacter">Null
+                            <a id="p573"/>
+                        PointerException</samp> or 
+                        <samp class="listingcharacter listingcharacter">ClassCastException</samp>) can be avoided because as programmers we can control our source code and remove the errors. But with external errors, you have no choice. The network can suddenly collapse and give you a 
+                        <samp class="listingcharacter listingcharacter">SocketException</samp> and an 
+                        <samp class="listingcharacter listingcharacter">IOException</samp>. These problems are out of our hands and can’t be prevented even by the most careful programming. This, of course, weakens the argument of the previous bullet point: You can query whether a file exists to avoid a 
+                        <samp class="listingcharacter listingcharacter">FileNotFoundException</samp>, but if the hard drive suddenly catches fire, we are sure to get an 
+                        <samp class="listingcharacter listingcharacter">IOException</samp>
+                     because Java programs aren’t created like this: “Ask if the hard drive is ready, and then read.” So if the error isn’t inside the program, but outside, checked exceptions can be used.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Checked exceptions in method signatures require the user to be aware of a specific API. Changing the exception type at a later stage is problematic since all 
+                        <samp class="listingcharacter listingcharacter">catch</samp> or 
+                        <samp class="listingcharacter listingcharacter">throws</samp> clauses would have to be modified. 
+                        <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+                    s are more flexible in this context. In agile program development, if the type of checked exceptions in the lifecycle of a software changes frequently, many changes may be required, which of course cost time and money.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The first point leads to some decisions in the Java API that plague developers but are consistent, such as the 
+                <samp class="listingcharacter listingcharacter">InterruptedException</samp>. Each 
+                <samp class="listingcharacter listingcharacter">Thread.sleep(...)</samp> to put a thread to sleep must catch an 
+                <samp class="listingcharacter listingcharacter">InterruptedException</samp>. This exception can occur when a thread sends an interrupt from outside. Because this event is not an error by any means, 
+                <samp class="listingcharacter listingcharacter">InterruptedException</samp> is a checked exception, even though we often find it annoying and rarely need to respond to 
+                <samp class="listingcharacter listingcharacter">InterruptedException</samp>. When creating a 
+                <samp class="listingcharacter listingcharacter">URL</samp>, the 
+                <samp class="listingcharacter listingcharacter">malformedURLException</samp> is also annoying, but if the input comes from a dialog box, the protocol may simply be wrong.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn09_08" id="fn09_08">[ 167 ]</a></span>
+            </p>
+            
+            <p class="standard">Checked exceptions are annoying to many developers, which leads to a problem when the exceptions are simply caught but nothing happens, such as with an empty 
+                <samp class="listingcharacter listingcharacter">catch</samp> block. However, the exception should perhaps run upwards. The problem is less common with a 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+            , which is usually handled at the correct central location.</p>
+            
+            <p class="standard">If we look closely at our previous list, another fact quickly becomes clear—that today there’s a lot of uncertainty about the correct 
+                <samp class="listingcharacter listingcharacter">Exception</samp> base class. While the compiler forces you to handle a checked exception, nothing can prevent you from doing the same for an unchecked exception. 
+                <samp class="listingcharacter listingcharacter">Integer.parseInt(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">NumberFormatException</samp> are good examples: The compiler doesn’t force you to perform a test, but you do so anyway. If developers are consistent and check exceptions independently, then the compiler generally doesn’t need to perform the test. For this reason, some developers pursue a radical strategy and design all exceptions as 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>s. The distinction as to whether an application should then “recover” or not is up to the viewer and 
+                <a id="p574"/>is only pure convention. With this all-is-unchecked version, Java would then be on par with C#, C++, Python, Groovy, and others.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn09_09" id="fn09_09">[ 168 ]</a></span>
+            </p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Special Returns or Exceptions?</h6>
+                
+                <p class="standard first">An exception isn’t always necessary, but when necessary, a return should be issued like 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 or “-1.” When an exception should be thrown isn’t always easy to know and depends on the context. For example, let’s say a method reads a file and performs a search. If a certain substring isn’t present, should the method throw an exception or not? The following criteria are important to keep in mind:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">If the document must have an identifier in the first line and the test checks for this identifier, then a log error exists if the identifier isn’t present.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Within the document, a simple text search takes place. A search term can be contained but doesn’t have to be.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard last">In the first case, an exception fits because an internal error exists. If the identifier must be in the file, but isn’t, then this error must not be dropped, and an exception demonstrates this fact perfectly. Whether the exception should be checked or unchecked is different matter. In the second case, an exception is inappropriate because if the search string isn’t contained in the document isn’t an error—that can happen. This same is true with 
+                    <samp class="listingcharacter listingcharacter">indexOf(...)</samp> or 
+                    <samp class="listingcharacter listingcharacter">matches(...)</samp> of 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                —after all, the methods wouldn’t throw any exceptions if there was no match.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.5.6">9.5.6    Catching and Redirecting Exceptions*</h3>
+            
+            <p class="standard">The exception that’s caught by a 
+                <samp class="listingcharacter listingcharacter">catch</samp> block can be triggered anew with another 
+                <samp class="listingcharacter listingcharacter">throw</samp>, which is referred to as a 
+                <span class="italic">rethrow</span>.
+                <a class="indexanchor" id="i09_51"/> An example will illustrate how this process works. A helper method named 
+                <samp class="listingcharacter listingcharacter">createUriFromHost(String)</samp> prefixes a host name with 
+                <samp class="listingcharacter listingcharacter">"http://"</samp> and returns the result as a 
+                <samp class="listingcharacter listingcharacter">URI</samp> object. Thus, 
+                <samp class="listingcharacter listingcharacter">createUriFromHost("tutego.de")</samp> returns a URI with <span class="url"><a href="http://tutego.de.">http://tutego.de.</a></span> But if the host name is wrong, the constructor of the 
+                <samp class="listingcharacter listingcharacter">URI</samp>
+             class will throw an exception.</p>
+            
+            <div class="listing " id="l9.18"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Rethrow </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> URI </span><span class="">createUriFromHost</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> host </span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> URISyntaxException </span><span class="">{</span><span class=""><br/></span>    <span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">URI</span><span class="">(</span><span class=""> </span><span class="">"http://"</span><span class=""> </span><span class="">+</span><span class=""> host </span><span class="">);</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>    <span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> URISyntaxException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      System<span class="">.</span><span class="">err</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Wrong URI! "</span><span class=""> </span><span class="">+</span><span class=""> e</span><span class="">.</span><span class="">getMessage</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>
+                <a id="p575"/>      
+                <span class="bold"><span class="">throw</span><span class=""> e;</span></span><br/>    }<br/>  }<br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">try</span><span class=""> {</span><br/>      <span class="">createUriFromHost</span><span class="">( </span><span class="">"tutego.de"</span><span class=""> );</span><br/>      <span class="">createUriFromHost</span><span class="">( </span><span class="">"%"</span><span class=""> );</span><br/>    }<br/>    <span class="">catch</span><span class=""> ( URISyntaxException e ) {</span><br/>      e.<span class="">printStackTrace</span><span class="">();</span><br/>    }<br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.18</b>    
+            src/main/java/com/tutego/insel/exception/Rethrow.java (Snippet)</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">URI</samp> class tests strings more accurately than the 
+                <samp class="listingcharacter listingcharacter">URL</samp> class, which is why we’ll use 
+                <samp class="listingcharacter listingcharacter">URI</samp> in this example. The exceptions are also somewhat different: 
+                <samp class="listingcharacter listingcharacter">URISyntaxException</samp> is the exception on 
+                <samp class="listingcharacter listingcharacter">URI</samp>; 
+                <samp class="listingcharacter listingcharacter">MalformedURLException</samp> is the exception on 
+                <samp class="listingcharacter listingcharacter">URL</samp>. We’ll provoke exactly this exception by passing a 
+                <samp class="listingcharacter listingcharacter">"http://%"</samp> to the constructor, which is obviously an incorrect URI. Our method will catch the 
+                <samp class="listingcharacter listingcharacter">URISyntaxException</samp>
+            , report the error on the standard error output, and then pass it on because our method can’t really handle the problem. The method can only report, which is an advantage if the caller doesn’t do that.</p>
+            
+            <p class="standard">The result is the following output:</p>
+            
+            <div class="listing " id="l_none_9519"><pre>Wrong URI! Malformed escape pair at index 7: http://%<br/>java.net.URISyntaxException: Malformed escape pair at index 7: http://%<br/>  at java.base/java.net.URI$Parser.fail(URI.java:2974)<br/>  at java.base/java.net.URI$Parser.scanEscape(URI.java:3102)<br/>  …<br/>  at java.base/java.net.URI.&lt;init&gt;(URI.java:623)<br/>  at com.tutego.insel.exception.Rethrow.createUriFromHost(Rethrow.java:9)<br/>  at com.tutego.insel.exception.Rethrow.main(Rethrow.java:20) </pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.5.7">9.5.7    Changing the Call Stack of Exceptions*</h3>
+            
+            <p class="standard">If you catch an exception 
+                <samp class="listingcharacter listingcharacter">e</samp> in exception handling and then redirect just that exception via 
+                <samp class="listingcharacter listingcharacter">throw e</samp>, you must be aware that the exception 
+                <samp class="listingcharacter listingcharacter">e</samp>
+             also redirects the call stack. Let’s return to our previous example:</p>
+            
+            <div class="listing " id="l_none_9528"><pre>Help! Malformed escape pair at index 7: http://%<br/>java.net.URISyntaxException: Malformed escape pair at index 7: http://%<br/>
+                <span class="bold"> at java.base/java.net.URI$Parser.fail(URI.java:2915)</span><br/> …<br/>
+                <a id="p576"/> at java.base/java.net.URI.&lt;init&gt;(URI.java:600)<br/>
+                <span class="bold"> at com.tutego.insel.exception.Rethrow.createUriFromHost(Rethrow.java:9)</span><br/> at com.tutego.insel.exception.Rethrow.main(Rethrow.java:20) </pre></div>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">main(...)</samp> method catches the exception of 
+                <samp class="listingcharacter listingcharacter">createUriFromHost(...)</samp>, but this method isn’t located at the top of the call stack. The exception didn’t come from 
+                <samp class="listingcharacter listingcharacter">createUriFromHost(...)</samp> itself, but from 
+                <samp class="listingcharacter listingcharacter">fail(...)</samp>, so 
+                <samp class="listingcharacter listingcharacter">fail(...)</samp> is located on top. If this scenario not desired, you can correct the code because the base class for all exceptions (
+                <samp class="listingcharacter listingcharacter">Throwable</samp>) provides the 
+                <samp class="listingcharacter listingcharacter">fillInStackTrace()</samp> method
+                <a class="indexanchor" id="i09_52"/>, which can be used to refill the call stack. Our well-known method 
+                <samp class="listingcharacter listingcharacter">createUriFromHost(...)</samp> is supposed to fall back on 
+                <samp class="listingcharacter listingcharacter">fillInStackTrace()</samp>
+            , as in the following example:</p>
+            
+            <div class="listing " id="l9.19"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> URI </span><span class="">createUriFromHost</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> host </span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> URISyntaxException </span><span class="">{</span><span class=""><br/></span>  <span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">URI</span><span class="">(</span><span class=""> </span><span class="">"http://"</span><span class=""> </span><span class="">+</span><span class=""> host </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> URISyntaxException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">err</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Help! "</span><span class=""> </span><span class="">+</span><span class=""> e</span><span class="">.</span><span class="">getMessage</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    
+                <span class="bold"><span class="">e.</span><span class="">fillInStackTrace</span><span class="">();</span></span><br/>    <span class="">throw</span><span class=""> e;</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.19</b>    
+            src/main/java/com/tutego/insel/exception/RethrowFillInStackTrace.java, createUriFromHost()</p>
+            
+            <p class="standard">If the 
+                <samp class="listingcharacter listingcharacter">URISyntaxException</samp> occurs in 
+                <samp class="listingcharacter listingcharacter">createUriFromHost(...)</samp>, our method will catch it. Originally, in 
+                <samp class="listingcharacter listingcharacter">e</samp>, the call stack is stored with the 
+                <samp class="listingcharacter listingcharacter">fail(...)</samp> method at the top; however,
+                <a class="indexanchor" id="i09_53"/>
+                <samp class="listingcharacter listingcharacter"> fillInStackTrace()</samp> first clears the whole stack trace and refills it with the path that the current thread takes to the method, which calls 
+                <samp class="listingcharacter listingcharacter">fillInStackTrace()</samp>, that is, 
+                <samp class="listingcharacter listingcharacter">createUriFromHost(...)</samp>
+            . For this reason, the console output also starts with our method:</p>
+            
+            <div class="listing " id="l_none_9555"><pre>Help! Malformed escape pair at index 7: http://%<br/>java.net.URISyntaxException: Malformed escape pair at index 7: http://%<br/> at com.….RethrowFillInStackTrace.createUriFromHost(RethrowFillInStackTrace.java:12)<br/> at com.….RethrowFillInStackTrace.main(RethrowFillInStackTrace.java:20) </pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.5.8">9.5.8    Nested Exceptions*</h3>
+            
+            <p class="standard">The reason for an exception may be that an embedded part fails, which is comparable to a transaction: If one part of the chain contains an error, the entire part can’t be executed. The same is true with exceptions. Let’s suppose you have a 
+                <samp class="listingcharacter listingcharacter">foo()</samp> method that throws an exception named 
+                <samp class="listingcharacter listingcharacter">HellException</samp> if it fails. Now, if the 
+                <samp class="listingcharacter listingcharacter">foo()</samp> method calls a 
+                <samp class="listingcharacter listingcharacter">bar()</samp> subroutine that performs an input/output operation, for example, and it fails, 
+                <a id="p577"/>the 
+                <samp class="listingcharacter listingcharacter">IOException</samp> will be the cause of the 
+                <samp class="listingcharacter listingcharacter">HellException</samp>
+            . So, mentioning the failure of the subtask when naming the reason for one’s own failure makes sense (again proof of how “human” programming can be).</p>
+            
+            <p class="standard">A 
+                <span class="italic">nested exception</span>
+                <a class="indexanchor" id="i09_54"/>
+                <a class="indexanchor" id="i09_55"/> stores a reference to another exception. When an exception object is created, the 
+                <span class="italic">cause</span> can be passed as an argument in two possible constructors of the 
+                <samp class="listingcharacter listingcharacter">Throwable</samp>
+             class:</p>
+            
+            <div class="listing " id="l_none_9557"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Throwable</span><br/><span class="">implements</span><span class=""> Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Throwable(Throwable cause)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Throwable(String message, Throwable cause)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The reason for the exception is queried by the 
+                <samp class="listingcharacter listingcharacter">Throwable getCause()</samp>
+             method.</p>
+            
+            <p class="standard">Since constructors aren’t inherited in Java, subclasses often provide constructors to assume the reason. At least 
+                <samp class="listingcharacter listingcharacter">Exception</samp>
+             does that and thus has four producers:</p>
+            
+            <div class="listing " id="l_none_9562"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Exception</span><br/><span class="">extends</span><span class=""> Throwable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Exception()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Exception(String message)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Exception(String message, Throwable cause)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Exception(Throwable cause)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Some deeper subclasses then also have these constructor types with 
+                <samp class="listingcharacter listingcharacter">Throwable</samp> parameters, like 
+                <samp class="listingcharacter listingcharacter">IOException</samp>, 
+                <samp class="listingcharacter listingcharacter">SQLException</samp>, or 
+                <samp class="listingcharacter listingcharacter">ClassNotFoundException</samp>, while others don’t, like 
+                <samp class="listingcharacter listingcharacter">PrinterException</samp>, for example. Custom subclasses can also use 
+                <samp class="listingcharacter listingcharacter">initCause (Throwable)</samp>
+             to specify a nested exception exactly once.</p>
+            
+            
+                
+                <h4 class="t4" id="h9.5.8.1">Wrapping Checked Exceptions in Unchecked Exceptions</h4>
+                
+                <p class="standard">In modern frameworks, the use of exceptions that don’t need to be checked (i.e., instances of 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp>) has become increasingly common. Known exceptions to be checked are wrapped in 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp> objects (a kind of exception wrapper), which store the reference to the throwing non-
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+                .</p>
+                
+                <p class="standard">Let’s consider an example. The following three lines specify whether the web page for a URL is available:</p>
+                
+                <div class="listing " id="l_none_9574"><pre>HttpURLConnection<span class="">.</span><span class="">setFollowRedirects</span><span class="">(</span><span class=""> </span><span class="">false</span><span class=""> </span><span class="">);</span><span class=""><br/></span>HttpURLConnection con <span class="">=</span><span class=""> </span><span class="">(</span><span class="">HttpURLConnection</span><span class="">)(</span><span class="">new</span><span class=""> </span><span class="">URL</span><span class="">(</span><span class=""> url </span><span class="">).</span><span class="">openConnection</span><span class="">());</span><span class=""><br/></span><span class="">boolean</span><span class=""> available </span><span class="">=</span><span class=""> con</span><span class="">.</span><span class="">getResponseCode</span><span class="">()</span><span class=""> </span><span class="">==</span><span class=""> HttpURLConnection</span><span class="">.</span><span class="">HTTP_OK</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <a id="p578"/>Since the constructor of 
+                    <samp class="listingcharacter listingcharacter">URL</samp> can throw a 
+                    <samp class="listingcharacter listingcharacter">MalformedURLException</samp> and since network access can throw an 
+                    <samp class="listingcharacter listingcharacter">IOException</samp>, these two exceptions must either be handled or passed on to the caller. (
+                    <samp class="listingcharacter listingcharacter">MalformedURLException</samp> is a special 
+                    <samp class="listingcharacter listingcharacter">IOException</samp>, which shortens the program a bit.) Let’s create a variant in which we wrap the checked exceptions in a 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+                 so that a utility method is available, and thus, the caller doesn’t have to deal with any exceptions for a long time:</p>
+                
+                <div class="listing " id="l9.20"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isAvailable</span><span class="">( </span><span class="">String</span><span class=""> url ) {</span><br/>  <span class="">try</span><span class=""> {</span><br/>    HttpURLConnection.<span class="">setFollowRedirects</span><span class="">( false );</span><br/>    HttpURLConnection con = (HttpURLConnection)(<span class="">new</span><span class=""> </span><span class="">URL</span><span class="">( url ).</span><span class="">openConnection</span><span class="">());</span><br/>    <span class="">return</span><span class=""> con.</span><span class="">getResponseCode</span><span class="">() == HttpURLConnection.HTTP_OK;</span><br/>  }<br/>  <span class="">catch</span><span class=""> ( IOException e ) {</span><br/>    <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">RuntimeException</span><span class="">( e );</span><br/>  }<br/>}<br/><br/><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>  System.out.<span class="">println</span><span class="">( </span><span class="">isAvailable</span><span class="">( </span><span class="">"http://caliginous.junk/"</span><span class=""> ) ); </span><span class="">// false</span><span class=""/><br/>  System.out.<span class="">println</span><span class="">( </span><span class="">isAvailable</span><span class="">( </span><span class="">"http://www.tutego.com/"</span><span class=""> ) ); </span><span class="">// true</span><span class=""/><br/>  System.out.<span class="">println</span><span class="">( </span><span class="">isAvailable</span><span class="">( </span><span class="">"pigeon://germany/dortmund/huelshof/28/"</span><span class=""> ) ); </span><span class="">//</span><span class=""> 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                    </span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 9.20</b>    
+            src/main/java/com/tutego/insel/exception/NestedException.java, NestedException</p>
+                
+                <p class="standard">The last line causes an exception because the “pigeon” protocol doesn’t exist. But the program aborts already before that, namely, at the first URL, because no connection to the server is possible. The result is the following output:</p>
+                
+                <div class="listing " id="l_none_9607"><pre>Exception in thread "main" java.lang.RuntimeException: java.net.UnknownHostException: caliginous.junk<br/> at c.t.i.e.NestedException.isAvailable(NestedException.java:15)<br/> at c.t.i.e.NestedException.main(NestedException.java:23)<br/>Caused by: java.net.UnknownHostException: caliginous.junk<br/> at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:567)<br/> at java.base/java.net.Socket.connect(Socket.java:633)<br/>…<br/>java.base/java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:529)<br/> at c.t.i.e.NestedException.isAvailable(NestedException.java:12)<br/> ... 1 more </pre></div>
+                
+                <p class="standard">
+                    <a id="p579"/>
+                In practice, with large stack traces and a scenario where intercepting and repackaging occurs, deciphering the history from the output is almost impossible since various parts are repeated and then abbreviated again. </p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">Instead of using the parameterized constructor 
+                        <samp class="listingcharacter listingcharacter">new RuntimeException(e)</samp>, you could have used 
+                        <samp class="listingcharacter listingcharacter">initCause(...)</samp>
+                    , as in the following example:</p>
+                    
+                    <div class="listing " id="l_none_9615"><pre><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IOException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  RuntimeException e2 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">RuntimeException</span><span class="">();</span><span class=""><br/></span>  
+                        <span class="bold"><span class="">e2.</span><span class="">initCause</span><span class="">( e )</span></span>;<br/>  <span class="">throw</span><span class=""> e2;</span><br/>}<span class=""/></pre></div>
+                    
+                    <p class="standard last">However, one important difference to note: Without the parameterized constructor and with 
+                        <samp class="listingcharacter listingcharacter">initCause(...)</samp>, no automatic call of 
+                        <samp class="listingcharacter listingcharacter">fillInStackTrace()</samp>
+                     will occur, so the stack trace looks different.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h9.5.8.2">UncheckedIOException</h4>
+                
+                <p class="standard">Exceptions in input/output operations are traditionally reported in Java via a checked exception of type 
+                    <samp class="listingcharacter listingcharacter">IOException</samp>. With frameworks, this scenario is sometimes a bit annoying, so you can use a kind of wrapper class in the 
+                    <samp class="listingcharacter listingcharacter">java.io</samp> package that embeds a checked 
+                    <samp class="listingcharacter listingcharacter">IOException</samp> in an unchecked 
+                    <samp class="listingcharacter listingcharacter">UncheckedIOException</samp>
+                    <a class="indexanchor" id="i09_56"/>
+                .</p>
+                
+                <div class="listing " id="l_none_9619"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                    <span class="bold">UncheckedIOException</span><br/><span class="">extends</span><span class=""> RuntimeException </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">UncheckedIOException(IOException cause)</samp><br/>Wraps 
+                            <samp class="listingcharacter listingcharacter">cause</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">UncheckedIOException(String message, IOException cause)</samp><br/>Wraps 
+                            <samp class="listingcharacter listingcharacter">cause</samp>
+                         with an additional message.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">So far, the Java library makes use of this exception type in only one place, that is, in 
+                    <samp class="listingcharacter listingcharacter">lines()</samp> of the 
+                    <samp class="listingcharacter listingcharacter">BufferedReader</samp>
+                 class. In this way, in the Stream API, the checked exceptions won’t get in the way.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

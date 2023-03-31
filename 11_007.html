@@ -1,0 +1,555 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Special Types of Java SE" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Special Types of Java SE" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Special Types of Java SE</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h11.7">11.7    Annotations in Java Platform, Standard Edition</h2>
+        
+        <p class="standard">In 
+            <span class="crossreference "><a href="11_001.html#h11.1">Section 11.1</a></span>, you learned about annotations as custom modifiers. In the process, you encountered 
+            <samp class="listingcharacter listingcharacter">@Override</samp>
+         several times. Annotations are only recognized by the compiler and are also only valid on methods.</p>
+        
+        
+            
+            <h3 class="t3" id="h11.7.1">11.7.1    Places for Annotations</h3>
+            
+            <p class="standard">Annotations can be set in declarations of the following elements:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Types (i.e., classes, interfaces, enumerations, and other annotation types)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Members (i.e., constructors, methods, and class/object variables)</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">For example, an annotation of a type can be set for the following elements:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Variable declarations</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">new</samp>
+                     keyword</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Typecasting</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">implements clause</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">throws</samp>
+                     clause for methods</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Annotations in type usage are called 
+                <span class="italic">type annotations</span> for short
+                <a class="indexanchor" id="i11_96"/>. This form allows even further testing of external tools in particular. Java comes with some annotation types, but so far, these annotation types are used exclusively for declarations, like the well-known 
+                <samp class="listingcharacter listingcharacter">@Override</samp>
+            . Predefined type annotations are not yet contained in Java SE.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>
+                    <a id="p678"/>
+                Outlook</h6>
+                
+                <p class="standard first">An example of an external library is the 
+                    <span class="italic">Checker Framework</span> (<span class="url"><a href="https://checkerframework.org/">https://checkerframework.org/</a></span>), which provides a large number of annotation types and a property checking tool. This library can be used to write the following code, for example:</p>
+                
+                <div class="listing " id="l_none_111188"><pre><span class="">@NonNull</span><span class=""> Object ref </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Object</span><span class="">();</span><span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">compareTo</span><span class="">(</span><span class="">@NonNull</span><span class=""> </span><span class="">String</span><span class=""> other</span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> … </span><span class="">}</span><span class=""><br/></span><span class="">boolean</span><span class=""> </span><span class="">lessThan</span><span class="">(</span><span class="">double</span><span class="">[]</span><span class=""> arr1</span><span class="">,</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">@SameLen</span><span class="">(</span><span class="">"#1"</span><span class="">)</span><span class=""> </span><span class="">[]</span><span class=""> arr2</span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> … }</span></pre></div>
+                
+                <p class="standard">Another example is 
+                    <span class="italic">Jakarta Bean Validation</span> (<span class="url"><a href="https://beanvalidation.org/">https://beanvalidation.org/</a></span>), which can be used to write, for example, the following code:</p>
+                
+                <div class="listing  last_item" id="l_none_111213"><pre>Optional<span class="">&lt;</span><span class="">@Past</span><span class=""> LocalDate</span><span class="">&gt;</span><span class=""> </span><span class="">getBirthday</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> … </span><span class="">}</span><span class=""><br/></span><span class="">@Min</span><span class="">(</span><span class="">value </span><span class="">=</span><span class=""> </span><span class="">18</span><span class="">)</span><span class=""> </span><span class="">@Max</span><span class="">(</span><span class="">value </span><span class="">=</span><span class=""> </span><span class="">150</span><span class="">)</span><span class=""> </span><span class="">int</span><span class=""> age;</span></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.7.2">11.7.2    Annotation Types from java.lang</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">java.lang</samp> package declares five annotation types, and 
+                <samp class="listingcharacter listingcharacter">@Override</samp>
+             has often appeared in this book already.</p>
+            
+            <table class="standardtable" id="t11.9">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Annotation Type</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Effect</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@Override</samp>
+                                <a class="indexanchor" id="i11_97"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">The annotated method overrides a method from the superclass or implements a method of an interface.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@Deprecated</samp>
+                                <a class="indexanchor" id="i11_98"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">The marked element is obsolete and should no longer be used.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@SuppressWarnings</samp>
+                                <a class="indexanchor" id="i11_99"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Suppresses certain compiler warnings.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@SafeVarargs</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Special marking for methods with variable argument count and generic argument type.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@FunctionalInterface</samp>
+                                <a class="indexanchor" id="i11_100"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">For interfaces that have only exactly one (abstract) method.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 11.9</b>    
+            Annotations from the java.lang Package</p>
+            
+            <p class="standard">The five annotations have special semantics for the compiler or the runtime system. Java SE declares other annotation types in other packages (such as the 
+                <samp class="listingcharacter listingcharacter">java.lang</samp>.
+                <samp class="listingcharacter listingcharacter">annotation</samp> and 
+                <samp class="listingcharacter listingcharacter">javax.annotation</samp>
+             packages), which aren’t relevant in this context. In addition, some special technology-specific annotation types exist for XML object mapping or web service declarations, for example.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.7.3">11.7.3    @Deprecated</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">@Deprecated</samp> annotation 
+                <a class="indexanchor" id="i11_101"/>does the same job as the Javadoc tag 
+                <samp class="listingcharacter listingcharacter">@deprecated</samp>
+            . Marked elements are considered obsolete, expressing that the developer should use alternatives.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p679"/>
+                Example</h6>
+                
+                <p class="standard first">In the following example, the 
+                    <samp class="listingcharacter listingcharacter">fubar()</samp>
+                 method is marked as deprecated:</p>
+                
+                <div class="listing " id="l_none_111226"><pre>
+                    <span class="bold"><span class="">@Deprecated</span></span><span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">fubar</span><span class="">() { … }</span><span class=""/></pre></div>
+                
+                <p class="standard last">If any program section calls 
+                    <samp class="listingcharacter listingcharacter">fubar()</samp>
+                , the compiler outputs a simple message.</p>
+            
+            </div>
+            
+            <p class="standard">The translation with the 
+                <samp class="listingcharacter listingcharacter">-Xlint:deprecation</samp> switch provides the exact warnings; at the moment, 
+                <samp class="listingcharacter listingcharacter">-deprecation</samp>
+             provides the same output.</p>
+            
+            <p class="standard">An element can also be marked as obsolete via a Javadoc tag. One difference remains: The Javadoc tag can only be evaluated by Javadoc (or another doclet), while annotations can be evaluated by other tools.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.7.4">11.7.4    Annotations with Additional Information</h3>
+            
+            <p class="standard">The annotations 
+                <samp class="listingcharacter listingcharacter">@Override</samp> and 
+                <samp class="listingcharacter listingcharacter">@Deprecated</samp> belong to the class of marker annotations
+                <a class="indexanchor" id="i11_102"/> because no additional specifications are necessary (or permitted). In addition, a 
+                <a class="indexanchor" id="i11_103"/>
+                <span class="italic">single-value annotation  </span>
+            gets exactly one additional piece of information, in contrast to a full annotation with arbitrary key-value pairs.</p>
+            
+            <table class="standardtable" id="t11.10">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Notation of Annotations</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Function</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@AnnotationType</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">(Marker) annotation</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@AnnotationType( value )</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Annotation with exactly one value</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">@AnnotationType( key1=value1, key2=value2,</samp> … 
+                                <samp class="listingcharacter listingcharacter">)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Annotation with key-value pairs</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 11.10</b>    
+            Annotations with and without Additional Information</p>
+            
+            <p class="standard">The parentheses are optional in marker annotations.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.7.5">11.7.5    @SuppressWarnings</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">@SuppressWarnings</samp>
+                <a class="indexanchor" id="i11_104"/>
+             annotation controls compiler warnings. Different values determine more precisely which indications are suppressed. For example, if a program uses generically declared data types but doesn’t use generics, a warning will occur. Let’s take the following program code:</p>
+            
+            <div class="listing " id="l_none_111222"><pre>ArrayList list<span class="">;</span><span class=""><br/></span>list <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">ArrayList</span><span class="">();</span><span class=""><br/></span>list<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span><span class="">"SuppressWarnings"</span><span class=""> </span><span class="">);</span><span class="">  </span></pre></div>
+            
+            <div class="imagebox figure-type"><a href="img-f11.9.html" id="f11.9"><img alt="&#10;                &#10;            Warnings in Eclipse" id="img-f11.9" src="bilderklein/klein11_009.png"/></a></div>
+            
+            <p class="caption "><b>Figure 11.9</b>    
+            
+                <a id="p680"/>
+            Warnings in Eclipse</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">javac</samp>
+             compiler reports rather ambiguously via the command line:</p>
+            
+            <div class="listing " id="l_none_111233"><pre>Note: ABC.java uses unchecked or unsafe operations.<br/>Note: Recompile with -Xlint:unchecked for details. </pre></div>
+            
+            <p class="standard">With the 
+                <samp class="listingcharacter listingcharacter">-Xlint</samp>
+             switch set, you can then call the object more precisely:</p>
+            
+            <div class="listing " id="l_none_111259"><pre>warning: [rawtypes] found raw type: ArrayList<br/>    ArrayList list;<br/>    ^<br/>  missing type arguments for generic class ArrayList&lt;E&gt;<br/>  where E is a type-variable:<br/>    E extends Object declared in class ArrayList<br/><br/>warning: [unchecked] unchecked call to add(E) as a member of the raw type ArrayList<br/>    list.add( "SuppressWarnings" );<br/>            ^<br/>  where E is a type-variable:<br/>    E extends Object declared in class ArrayList<br/>3 warnings </pre></div>
+            
+            <p class="standard">Two different types of warnings occur:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">ArrayList</samp> class is declared as a generic type, which is how the type should be parameterized, for example, with 
+                        <samp class="listingcharacter listingcharacter">ArrayList&lt;String&gt;</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The third line uses 
+                        <samp class="listingcharacter listingcharacter">add(...)</samp>
+                    , a method that could get a more precise type parameter via generics. Since we haven’t specified a type, a warning will follow.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Warnings can be turned off using the 
+                <samp class="listingcharacter listingcharacter">@SuppressWarnings</samp> annotation. As a special modifier, this annotation can be appended to a variable declaration, a method declaration, or a class declaration. The range is ascending. If you want to disable all warnings for old code quickly and painlessly, you can add 
+                <samp class="listingcharacter listingcharacter">@SuppressWarnings("all")</samp>
+             to the class declaration.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following example, the compiler should not output any messages for the class:</p>
+                
+                <div class="listing " id="l11.34"><pre>
+                    <span class="bold"><span class="">
+                            <a id="p681"/>
+                        @SuppressWarnings</span><span class="">( </span><span class="">"all"</span><span class=""> )</span></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> SuppressAllWarnings {</span><br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    java.util.ArrayList list1 = <span class="">new</span><span class=""> java.util.</span><span class="">ArrayList</span><span class="">();</span><br/>    list1.<span class="">add</span><span class="">( </span><span class="">"SuppressWarnings"</span><span class=""> );</span><br/><br/>    java.util.ArrayList list2 = <span class="">new</span><span class=""> java.util.</span><span class="">ArrayList</span><span class="">();</span><br/>  }<br/>}<span class=""/></pre></div>
+                
+                <p class="caption last"><b>Listing 11.34</b>    
+            src/main/java/com/tutego/insel/annotation/SuppressAllWarnings.java</p>
+            
+            </div>
+            
+            <p class="standard">Instead of suppressing every warning with 
+                <samp class="listingcharacter listingcharacter">@SuppressWarnings("all")</samp>
+            , a better strategy is to be selective in the following ways:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Using
+                        <samp class="listingcharacter listingcharacter"> @SuppressWarnings("rawtypes")</samp> for 
+                        <samp class="listingcharacter listingcharacter">ArrayList list</samp> and 
+                        <samp class="listingcharacter listingcharacter">list = new ArrayList()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Using
+                        <samp class="listingcharacter listingcharacter"> @SuppressWarnings("unchecked")</samp> for 
+                        <samp class="listingcharacter listingcharacter">list.add("...")</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Since two identical modifiers aren’t permitted—and 
+                <samp class="listingcharacter listingcharacter">@SuppressWarnings</samp>
+             twice is also not permitted—a special array notation is chosen.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The compiler should not provide messages for the non-generic used 
+                    <samp class="listingcharacter listingcharacter">ArrayList</samp>
+                 and its methods:</p>
+                
+                <div class="listing  last_item" id="l_none_111265"><pre>
+                    <span class="bold"><span class="">@SuppressWarnings</span><span class="">( { </span><span class="">"rawtypes"</span><span class="">, </span><span class="">"unchecked"</span><span class=""> } )</span></span><br/><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>  ArrayList list = <span class="">new</span><span class=""> </span><span class="">ArrayList</span><span class="">();</span><br/>  list.<span class="">add</span><span class="">( </span><span class="">"SuppressWarnings"</span><span class=""> );</span><br/>}<span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">We briefly mentioned that the 
+                <samp class="listingcharacter listingcharacter">@SuppressWarnings</samp>
+             annotation can also be used for variable declarations. For our example, however, this option is of little help if, for example, all warnings are switched off when the list is declared. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_111283"><pre>@SuppressWarnings( "all" ) ArrayList list;<br/>list = new ArrayList();          // Warning: ArrayList is a raw type …<br/>list.add( "SuppressWarnings" );  // Warning: Type safety … </pre></div>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">@SuppressWarnings("all")</samp> applies only to the one 
+                <samp class="listingcharacter listingcharacter">ArrayList list</samp> declaration and not to subsequent statements that do something with the 
+                <samp class="listingcharacter listingcharacter">list</samp>
+            . Therefore, for clarity, our example places the annotation on the same line.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p682"/>
+                Note</h6>
+                
+                <p class="standard first last">The 
+                    <samp class="listingcharacter listingcharacter">@SuppressWarnings("xyz")</samp> notation is just a shortcut for 
+                    <samp class="listingcharacter listingcharacter">@SuppressWarnings({"xzy"})</samp>, which in turn is just a shortcut of 
+                    <samp class="listingcharacter listingcharacter">@SuppressWarnings(value= {"xzy"})</samp>
+                .</p>
+            
+            </div>
+            
+            <p class="standard">In addition to the 
+                <samp class="listingcharacter listingcharacter">rawtype</samp> and 
+                <samp class="listingcharacter listingcharacter">unchecked</samp>
+             identifiers that come from generics, others aren’t particularly well documented. This lack of documentation stems from the fact that messages during program translation belong to the compiler infrastructure and not to the runtime environment, and thus not to the traditional Java API. Basically, the compiler can perform code analysis of any complexity and raise an alarm in case of suspected errors. But keep in mind that these are only warnings: If you do everything right as a programmer, you won’t see the messages. Nevertheless, understanding these warning is relevant because the compiler will sometimes note something that a developer wants to use deliberately, in which case it’s necessary to turn off these messages.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

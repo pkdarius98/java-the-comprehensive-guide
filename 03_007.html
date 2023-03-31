@@ -1,0 +1,685 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Classes and Objects" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Classes and Objects" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Classes and Objects</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h3.7">3.7    Using References, Diversity, Identity, and Equality</h2>
+        
+        <p class="standard">In Java, 
+            <samp class="listingcharacter listingcharacter">null</samp>
+         is an incredibly special reference that can trigger a large number of problems. But you can’t do without it, and the following section will demonstrate its importance. After this discussion, we’ll look at how object comparisons work and the difference between identity and equivalence.</p>
+        
+        
+            
+            <h3 class="t3" id="h3.7.1">3.7.1    null References and the Question of Philosophy</h3>
+            
+            <p class="standard">In Java, three special references exist: 
+                <samp class="listingcharacter listingcharacter">null</samp>, 
+                <samp class="listingcharacter listingcharacter">this</samp>, and 
+                <samp class="listingcharacter listingcharacter">super</samp>. (We’ll defer descriptions of 
+                <samp class="listingcharacter listingcharacter">this</samp> and 
+                <samp class="listingcharacter listingcharacter">super</samp> to 
+                <span class="crossreference "><a href="06_001.html#h6">Chapter 6</a></span>, 
+                <span class="crossreference "><a href="06_001.html#h6.1.4">Section 6.1.4</a></span>.) The special literal 
+                <samp class="listingcharacter listingcharacter">null</samp>
+                <a class="indexanchor" id="i03_60"/> can be used to initialize reference variables. The 
+                <samp class="listingcharacter listingcharacter">null</samp> reference
+                <a class="indexanchor" id="i03_61"/> is typeless and thus can be assigned to any reference variable and passed to any method that awaits an object.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_11" id="fn03_11">[ 98 ]</a></span>
+            </p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The declaration and initialization of two object variables with 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 is shown in the following example:</p>
+                
+                <div class="listing " id="l_none_3339"><pre>Point  p <span class="">=</span><span class=""> null</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> null</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> p </span><span class="">);</span><span class="">  </span><span class=""> // null</span><span class=""/></pre></div>
+                
+                <p class="standard last">The console output in the last line briefly returns “null,” which is actually a string representation of the 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 type.</p>
+            
+            </div>
+            
+            <p class="standard">Since 
+                <samp class="listingcharacter listingcharacter">null</samp> is typeless, and there’s only one 
+                <samp class="listingcharacter listingcharacter">null</samp>, 
+                <samp class="listingcharacter listingcharacter">null</samp> can be type-matched to any type. Thus, for example, 
+                <samp class="listingcharacter listingcharacter">(String) null == null &amp;&amp; (Point) null == null</samp> returns the result 
+                <samp class="listingcharacter listingcharacter">true</samp>. The 
+                <samp class="listingcharacter listingcharacter">null</samp> literal is intended for references only and can’t be converted to any primitive type such as the integer 0.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_12" id="fn03_12">[ 99 ]</a></span>
+            </p>
+            
+            <p class="standard">A whole lot can be done with 
+                <samp class="listingcharacter listingcharacter">null</samp>. The main purpose is to indicate uninitialized reference variables (i.e., to express that a reference variable doesn’t reference any object). In 
+                <a id="p229"/>lists or trees, for example, 
+                <samp class="listingcharacter listingcharacter">null</samp> indicates the absence of a valid successor or, in a graphical dialog box, that the user has aborted the dialog process. In these cases, 
+                <samp class="listingcharacter listingcharacter">null</samp>
+             is a valid indicator, not an error.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">For a local variable initialized with 
+                    <samp class="listingcharacter listingcharacter">null</samp>, the shortcut with 
+                    <samp class="listingcharacter listingcharacter">var</samp>
+                 does not work. A compiler error would arise with the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_3355"><pre>var text <span class="">=</span><span class=""> null</span><span class="">;</span><span class=""> </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Cannot infer type: variable initializer is 'null'</span><span class=""/></pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h3.7.1.1">Nothing Works on null except NullPointerException</h4>
+                
+                <p class="standard">Since 
+                    <samp class="listingcharacter listingcharacter">null</samp> doesn’t hide an object, you cannot call a method or query an object variable from 
+                    <samp class="listingcharacter listingcharacter">null</samp>. The compiler knows the type of each expression, but only the runtime environment (i.e., the JVM) knows what’s being referenced. When attempting to access a member of an object via the 
+                    <samp class="listingcharacter listingcharacter">null</samp> reference, the JVM throws a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>.
+                    <a class="indexanchor" id="i03_62"/>
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_13" id="fn03_13">[ 100 ]</a></span>
+                 Consider the following example:</p>
+                
+                <div class="listing " id="l3.10"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">oop</span><span class="">;</span><span class="">                   </span><span class=""> // 1</span><span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> NullPointer </span><span class="">{</span><span class="">                      </span><span class=""> // 2</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class="">    </span><span class=""> // 3</span><span class=""><br/></span>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point p </span><span class="">=</span><span class=""> null</span><span class="">;</span><span class="">                    </span><span class=""> // 4</span><span class=""><br/></span>    <span class="">String</span><span class="">         s </span><span class="">=</span><span class=""> null</span><span class="">;</span><span class="">                    </span><span class=""> // 5</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">p.</span><span class="">setLocation</span><span class="">( </span><span class="">1</span><span class="">, </span><span class="">2</span><span class=""> );</span></span>                      <span class=""> // 6</span><span class=""><br/></span>    s.<span class="">length</span><span class="">();                                 </span><span class=""> // 7</span><span class=""><br/></span>  }                                             <span class=""> // 8</span><span class=""><br/></span>}                                               <span class=""> // 9</span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 3.10</b>    
+            src/main/java/com/tutego/insel/oop/NullPointer.java</p>
+                
+                <p class="standard">Notice how we have a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> at runtime because the program terminates at 
+                    <samp class="listingcharacter listingcharacter">p.setLocation(...)</samp>
+                 with the following output:</p>
+                
+                <div class="listing " id="l_none_3381"><pre>Exception in thread <span class="">"main"</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span><span class="">NullPointerException</span><span class="">:</span><span class=""> Cannot invoke </span><span class="">"java.awt.Point.setLocation(int, int)"</span><span class=""> because </span><span class="">"p"</span><span class=""> is null</span><br/>at com<span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">oop</span><span class="">.</span><span class="">NullPointer</span><span class="">.</span><span class="">main</span><span class="">(</span><span class="">NullPointer</span><span class="">.</span><span class="">java</span><span class="">:</span><span class="">6</span><span class="">)</span><span class=""> </span></pre></div>
+                
+                <p class="standard">In the error message, the runtime environment tells you that the error, the 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                , is in line 6. To correct the error, you have two options. First, you must either initialize the variables, that is, assign an object as in the following example:</p>
+                
+                <div class="listing " id="l_none_3393"><pre>
+                    <a id="p230"/>p <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">();</span><span class=""><br/></span>s <span class="">=</span><span class=""> </span><span class="">""</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Alternatively, before accessing the members, you can perform a test to determine whether object variables point to something or are 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 and, depending on the outcome of the test, allow access to the member or not.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>null in Other Programming Languages*</h6>
+                    
+                    <p class="standard first">Is Java a purely OOP language? No, because Java distinguishes between primitive types and reference types. Let’s assume for a moment that primitive types don’t exist. Would Java then be a pure OOP language, where each reference references a pure object? The answer is still “no” because 
+                        <samp class="listingcharacter listingcharacter">null</samp> is something that enables you to initialize reference variables, but doesn’t represent an object and has no methods. This scenario can cause a 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                     when de-referencing.</p>
+                    
+                    <p class="standard last">Other programming languages have different approaches to solving the problem, and 
+                        <samp class="listingcharacter listingcharacter">null</samp> referencing isn’t possible. For example, in Ruby, everything is always an object. Where Java uses 
+                        <samp class="listingcharacter listingcharacter">null</samp> to express “unassigned,” Ruby does so with 
+                        <samp class="listingcharacter listingcharacter">nil</samp>. The subtle difference is that 
+                        <samp class="listingcharacter listingcharacter">nil</samp> is an instance of the class 
+                        <samp class="listingcharacter listingcharacter">NilClass</samp> (strictly speaking, a singleton that exists only once in the system). 
+                        <samp class="listingcharacter listingcharacter">nil</samp> also has some public methods like 
+                        <samp class="listingcharacter listingcharacter">to_s</samp> (like Java’s 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>), which then returns an empty string. With 
+                        <samp class="listingcharacter listingcharacter">nil</samp>, no 
+                        <samp class="listingcharacter listingcharacter">NullPointerException</samp> exists anymore, but of course, an error can still arise if a method is called on this object of type 
+                        <samp class="listingcharacter listingcharacter">NilClass</samp> that doesn’t exist. In Objective-C, the standard language for iOS programs (so far), you have the null object 
+                        <samp class="listingcharacter listingcharacter">nil</samp>. Usually, nothing happens when a message is sent to the 
+                        <samp class="listingcharacter listingcharacter">nil</samp>
+                     object; the message is simply ignored.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.7.2">3.7.2    Everything to null? Testing References</h3>
+            
+            <p class="standard">With the comparison operator 
+                <samp class="listingcharacter listingcharacter">==</samp> or the test for inequality via 
+                <samp class="listingcharacter listingcharacter">!=</samp>
+            , you can easily determine whether a reference variable really references an object or not, for example, through the following code:</p>
+            
+            <div class="listing " id="l_none_3398"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> object </span>
+                <span class="bold"><span class="">== null</span></span> )<br/> <span class=""> // variable references nothing, but is correctly initialized with null</span><span class=""><br/></span><span class="">else</span><span class=""><br/></span> <span class=""> // variable references an object</span><span class=""> </span><span class=""/></pre></div>
+            
+            
+                
+                <h4 class="t4" id="h3.7.2.1">null Test and Short-Circuit Operators</h4>
+                
+                <p class="standard">At this point, let’s come back to the usual logical short-circuit operators and the logical non-short-circuit operators. The former evaluates operands only from left to right until the result of the operation is fixed. At first glance, whether all subexpressions are evaluated or not doesn’t seem to matter. In some expressions, however, this evaluation is important. In the following example, the variable 
+                    <samp class="listingcharacter listingcharacter">s</samp> is of type 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                , and the program should output the string length when a string is entered:</p>
+                
+                <div class="listing " id="l3.11"><pre><span class="">
+                        <a id="p231"/>
+                    String</span><span class=""> s </span><span class="">=</span><span class=""> javax</span><span class="">.</span><span class="">swing</span><span class="">.</span><span class="">JOptionPane</span><span class="">.</span><span class="">showInputDialog</span><span class="">(</span><span class=""> </span><span class="">"Input a string"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> s </span><span class="">!=</span><span class=""> null </span><span class="">&amp;&amp;</span><span class=""> </span><span class="">!</span><span class=""> s</span><span class="">.</span><span class="">isEmpty</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Length of string: "</span><span class=""> </span><span class="">+</span><span class=""> s</span><span class="">.</span><span class="">length</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">else</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Dialog canceled or no input given"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 3.11</b>    
+            src/main/java/NullCheck.java, main</p>
+                
+                <p class="standard">The return value of 
+                    <samp class="listingcharacter listingcharacter">showInputDialog(...)</samp> is 
+                    <samp class="listingcharacter listingcharacter">null</samp> if the user cancels the dialog. Our program should take this possibility into account. Therefore, the 
+                    <samp class="listingcharacter listingcharacter">if</samp> condition tests whether 
+                    <samp class="listingcharacter listingcharacter">s</samp>
+                 references an object at all and, if so, additionally whether the string is non-empty. After that evaluation follows an output.</p>
+                
+                <p class="standard">This notation occurs frequently, and the AND operator for linking must be a short-circuit operator since it’s explicit in this case that the length is determined only if the 
+                    <samp class="listingcharacter listingcharacter">s</samp> variable references a 
+                    <samp class="listingcharacter listingcharacter">String</samp> object at all and is not 
+                    <samp class="listingcharacter listingcharacter">null</samp>. Otherwise, you’d get a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> on 
+                    <samp class="listingcharacter listingcharacter">s.isEmpty()</samp> if every subexpression was evaluated and 
+                    <samp class="listingcharacter listingcharacter">s</samp> was 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>The Luck of Others: null Coalescing Operator*</h6>
+                    
+                    <p class="standard first last">Since 
+                        <samp class="listingcharacter listingcharacter">null</samp> occurs far too often, but 
+                        <samp class="listingcharacter listingcharacter">null</samp> references must be avoided, you may see a lot of code like 
+                        <samp class="listingcharacter listingcharacter">o != null ? o : non_null_o</samp>. Various programming languages, including JavaScript, Kotlin, Objective-C, PHP, and Swift provide a shortcut for this construct called the 
+                        <span class="italic">null coalescing operator</span>. Sometimes written as 
+                        <samp class="listingcharacter listingcharacter">??</samp> or as 
+                        <samp class="listingcharacter listingcharacter">?:</samp>, in our example, the null coalescing operator is written as 
+                        <samp class="listingcharacter listingcharacter">o ?? non_null_o</samp>. This construct is especially nice with sequential tests of the type 
+                        <samp class="listingcharacter listingcharacter">o ?? p ?? q ?? r</samp>, where it says something like, “Return the first 
+                        <samp class="listingcharacter listingcharacter">non-null</samp>
+                     reference.” Java doesn’t provide such an operator.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.7.3">3.7.3    Assignments with References</h3>
+            
+            <p class="standard">A reference allows access to a referenced object, and a reference variable stores a reference. Multiple reference variables may store the same reference, similar to an object being addressed under different names—just as a person might be addressed as “Boss” by her co-workers, she might be called “Honey” by her husband. This nicknaming is also referred to as an 
+                <span class="italic">alias</span>
+                <a class="indexanchor" id="i03_63"/>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Let’s say you want to address a point object under an alternative variable name. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_3426"><pre>Point p <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">();</span><span class=""><br/></span>Point q <span class="">=</span><span class=""> p;</span></pre></div>
+                
+                <p class="standard last">A point object is created and referenced with the variable 
+                    <samp class="listingcharacter listingcharacter">p</samp>. The second line now stores the same reference in the variable 
+                    <samp class="listingcharacter listingcharacter">q</samp>. After that, 
+                    <samp class="listingcharacter listingcharacter">p</samp> and 
+                    <samp class="listingcharacter listingcharacter">q</samp> reference the same object. For 
+                    <a id="p232"/>better understanding, what’s important here is how often 
+                    <samp class="listingcharacter listingcharacter">new</samp> occurs because that tells you how many objects the JVM will create. Since only one 
+                    <samp class="listingcharacter listingcharacter">new</samp>
+                 exists in the two lines, only one point is created.</p>
+            
+            </div>
+            
+            <div class="imagebox figure-type"><a href="img-f_none_03_06.html" id="f_none_03_06"><img alt="" id="img-f_none_03_06" src="bilderklein/klein03_006_01.png"/></a></div>
+            
+            <p class="standard">If two object variables reference the same object, a natural consequence is that object states can be read and modified via two paths. If the same person is consistently called “Boss” in the company and “Honey” at home, everyone is happy.</p>
+            
+            <p class="standard">Let’s continue with our example using point objects. If 
+                <samp class="listingcharacter listingcharacter">p</samp> and 
+                <samp class="listingcharacter listingcharacter">q</samp> point to the same point object, changes via 
+                <samp class="listingcharacter listingcharacter">p</samp> can also be observed via the 
+                <samp class="listingcharacter listingcharacter">q</samp>
+             variable, as in the following example.</p>
+            
+            <div class="listing " id="l3.12"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">Point p = </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">();</span><br/>  Point q = p;</span><br/>  p.x = <span class="">10</span><span class="">;</span><br/>  System.out.<span class="">println</span><span class="">( q.x );</span><span class=""> // 10</span><span class=""><br/></span>  q.y = <span class="">5</span><span class="">;</span><br/>  System.out.<span class="">println</span><span class="">( p.y );</span><span class=""> // 5</span><span class=""><br/></span>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 3.12</b>    
+            ItsTheSame.java, main</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.7.4">3.7.4    Methods with Reference Types as Parameters</h3>
+            
+            <p class="standard">The fact that the same object can be addressed via two names (i.e., via two different variables) can be observed in methods. A method that receives an object reference via the parameter can access the passed object. As a result, the method can change this object with the provided methods or access the object variables.</p>
+            
+            <p class="standard">In the following example, we’ll declare two methods. The first method, 
+                <samp class="listingcharacter listingcharacter">initializePosition(Point)</samp>, is supposed to initialize a given point with random coordinates. Two 
+                <samp class="listingcharacter listingcharacter">Point</samp> objects are later passed to the method in 
+                <samp class="listingcharacter listingcharacter">
+                    <a id="p233"/>
+                main(...)</samp>: one for the player and one for the snake. The second method, 
+                <samp class="listingcharacter listingcharacter">printScreen(Point, Point)</samp>, prints the playing field on the screen and then prints a 
+                <samp class="listingcharacter listingcharacter">&amp;</samp> when the coordinate hits a player and an 
+                <samp class="listingcharacter listingcharacter">S</samp>
+             when it hits the snake. If the player and the snake happen to meet, the snake “wins.”</p>
+            
+            <div class="listing " id="l3.13"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">oop</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> DrawPlayerAndSnake </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">initializePosition</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">Point p</span></span> ) {<br/>    <span class="">int</span><span class=""> randomX = (</span><span class="">int</span><span class="">)(Math.</span><span class="">random</span><span class="">() * </span><span class="">40</span><span class="">);</span><span class=""> // 0 &lt;= x &lt; 40</span><span class=""><br/></span>    <span class="">int</span><span class=""> randomY = (</span><span class="">int</span><span class="">)(Math.</span><span class="">random</span><span class="">() * </span><span class="">10</span><span class="">);</span><span class=""> // 0 &lt;= y &lt; 10</span><span class=""><br/></span>    
+                <span class="bold">p.<span class="">setLocation</span><span class="">( randomX, randomY );</span></span><br/>  }<br/><br/>  <span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">printScreen</span><span class="">( </span>
+                <span class="bold">Point playerPosition,<br/>                           Point snakePosition</span> ) {<br/>    <span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> y = </span><span class="">0</span><span class="">; y &lt; </span><span class="">10</span><span class="">; y++ ) {</span><br/>      <span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> x = </span><span class="">0</span><span class="">; x &lt; </span><span class="">40</span><span class="">; x++ ) {</span><br/>        <span class="">if</span><span class=""> ( </span>
+                <span class="bold">snakePosition.<span class="">distanceSq</span><span class="">( x, y )</span></span> == <span class="">0</span><span class=""> )</span><br/>          System.out.<span class="">print</span><span class="">( ’S’ );</span><br/>        <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( </span>
+                <span class="bold">playerPosition.<span class="">distanceSq</span><span class="">( x, y )</span></span> == <span class="">0</span><span class=""> )</span><br/>          System.out.<span class="">print</span><span class="">( ’&amp;’ );</span><br/>        <span class="">else</span><span class=""> System.out.</span><span class="">print</span><span class="">( ’.’ );</span><br/>      }<br/>      System.out.<span class="">println</span><span class="">();</span><br/>    }<br/>  }<br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    Point playerPosition = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">();</span><br/>    Point snakePosition  = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">();</span><br/>    System.out.<span class="">println</span><span class="">( playerPosition );</span><br/>    System.out.<span class="">println</span><span class="">( snakePosition );</span><br/>    
+                <span class="bold"><span class="">initializePosition</span><span class="">( playerPosition );</span><br/>    <span class="">initializePosition</span><span class="">( snakePosition );</span></span><br/>    System.out.<span class="">println</span><span class="">( playerPosition );</span><br/>    System.out.<span class="">println</span><span class="">( snakePosition );</span><br/>    
+                <span class="bold"><span class="">printScreen</span><span class="">( playerPosition, snakePosition );</span></span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 3.13</b>    
+            src/main/java/com/tutego/insel/oop/DrawPlayerAndSnake.java</p>
+            
+            <p class="standard">
+                <a id="p234"/>
+            The code should produce the following output:</p>
+            
+            <div class="listing " id="l_none_3454"><pre>java.awt.Point[x=0,y=0]<br/>java.awt.Point[x=0,y=0]<br/>java.awt.Point[x=38,y=1]<br/>java.awt.Point[x=19,y=8]<br/>........................................<br/>......................................&amp;.<br/>........................................<br/>........................................<br/>........................................<br/>........................................<br/>........................................<br/>........................................<br/>...................S....................<br/>........................................ </pre></div>
+            
+            <p class="standard">The moment 
+                <samp class="listingcharacter listingcharacter">main(...)</samp> calls the static method 
+                <samp class="listingcharacter listingcharacter">initializePosition(Point)</samp>, we have two names for the 
+                <samp class="listingcharacter listingcharacter">Point</samp> object: 
+                <samp class="listingcharacter listingcharacter">playerPosition</samp> and 
+                <samp class="listingcharacter listingcharacter">p</samp>. However, this double naming is only inside the JVM because 
+                <samp class="listingcharacter listingcharacter">initializePosition(Point)</samp> knows the object only via 
+                <samp class="listingcharacter listingcharacter">p</samp> but doesn’t know the 
+                <samp class="listingcharacter listingcharacter">playerPosition</samp> variable. With 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>, the reverse is true: Only the variable name 
+                <samp class="listingcharacter listingcharacter">playerPosition</samp> is known in 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>, but it has no idea about the name 
+                <samp class="listingcharacter listingcharacter">p</samp>. The 
+                <samp class="listingcharacter listingcharacter">Point</samp> method 
+                <samp class="listingcharacter listingcharacter">distanceSq(int, int)</samp>
+             returns the squared distance from the current point to the passed coordinates.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The name of a parameter variable may well be the same as the name of the argument variable, which wouldn’t change the semantics. The namespaces are completely separate, and misunderstandings don’t exist because both the calling method and the called method have completely separate local variables.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h3.7.4.1">Value Transfer and Reference Transfer via Call by Value</h4>
+                
+                <p class="standard">Primitive variables are always copied by value (
+                    <span class="italic">call by value</span>
+                    <a class="indexanchor" id="i03_64"/>
+                ). The same applies to references, which are to be understood as a kind of pointer, which are basically only integers. For this reason, the following static method has no side effects:</p>
+                
+                <div class="listing " id="l3.14"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">oop</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> JavaIsAlwaysCallByValue </span><span class="">{</span><span class=""><br/></span><br/>  
+                    <span class="bold"><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">clear</span><span class="">( Point p ) {</span></span><br/>    System.out.<span class="">println</span><span class="">( p ); </span><span class=""> // java.awt.Point[x=10,y=20]</span><span class=""><br/></span>
+                    <a id="p235"/>    
+                    <span class="bold">p = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">();</span></span><br/>    System.out.<span class="">println</span><span class="">( p ); </span><span class=""> // java.awt.Point[x=0,y=0]</span><span class=""><br/></span>  
+                    <span class="bold">}<br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    Point p = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">( </span><span class="">10</span><span class="">, </span><span class="">20</span><span class=""> );</span><br/>    <span class="">clear</span><span class="">( p );</span><br/>    System.out.<span class="">println</span><span class="">( p ); </span><span class=""> // </span>
+                    <span class="bold">java.awt.Point[x=10,y=20]</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 3.14</b>    
+            JavaIsAlwaysCallByValue.java</p>
+                
+                <p class="standard">After assigning 
+                    <samp class="listingcharacter listingcharacter">p = new Point()</samp> in the 
+                    <samp class="listingcharacter listingcharacter">clear(Point)</samp> method, the parameter variable 
+                    <samp class="listingcharacter listingcharacter">p</samp> references another point object, and the reference passed to the method is thus lost. Of course, this change isn’t visible from outside because the parameter variable 
+                    <samp class="listingcharacter listingcharacter">p</samp> of 
+                    <samp class="listingcharacter listingcharacter">clear(...)</samp> is only a temporary alternative name for the 
+                    <samp class="listingcharacter listingcharacter">p</samp> from 
+                    <samp class="listingcharacter listingcharacter">main</samp>; a reassignment to the 
+                    <samp class="listingcharacter listingcharacter">clear</samp>-
+                    <samp class="listingcharacter listingcharacter">p </samp>doesn’t change the reference from the 
+                    <samp class="listingcharacter listingcharacter">main</samp>-
+                    <samp class="listingcharacter listingcharacter">p</samp>. As a result, the caller of 
+                    <samp class="listingcharacter listingcharacter">clear(...)</samp>, which is 
+                    <samp class="listingcharacter listingcharacter">main(...)</samp>
+                , has no new object under it. If you want to initialize the point with null, you must access the states of the passed object directly, for instance, in the following way:</p>
+                
+                <div class="listing " id="l_none_3468"><pre><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">clear</span><span class="">(</span><span class=""> Point p </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  p<span class="">.</span><span class="">x </span><span class="">=</span><span class=""> p</span><span class="">.</span><span class="">y </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Call by Reference Doesn’t Exist in Java: A Look at C and C++*</h6>
+                    
+                    <p class="standard first">In C++ , another way to pass arguments is called 
+                        <span class="italic">call by reference</span>
+                        <a class="indexanchor" id="i03_65"/>. A 
+                        <samp class="listingcharacter listingcharacter">swap(...)</samp>
+                     function is a good example of the usefulness of call by reference:</p>
+                    
+                    <div class="listing " id="l_none_3492"><pre><span class="">void</span><span class=""> </span><span class="">swap</span><span class="">(</span><span class=""> </span><span class="">int</span><span class="">&amp;</span><span class=""> a</span><span class="">,</span><span class=""> </span><span class="">int</span><span class="">&amp;</span><span class=""> b </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">int</span><span class=""> tmp </span><span class="">=</span><span class=""> a</span><span class="">;</span><span class=""> a </span><span class="">=</span><span class=""> b</span><span class="">;</span><span class=""> b </span><span class="">=</span><span class=""> tmp</span><span class="">;</span><span class=""> }</span></pre></div>
+                    
+                    <p class="standard">Pointers and references are something different in C++, which easily confuses beginners to the language. In C++ and also in C, a comparable 
+                        <samp class="listingcharacter listingcharacter">swap(...)</samp>
+                     function could also have been implemented with pointers:</p>
+                    
+                    <div class="listing " id="l_none_3488"><pre><span class="">void</span><span class=""> </span><span class="">swap</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">*</span><span class="">a</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">*</span><span class="">b </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">int</span><span class=""> tmp </span><span class="">=</span><span class=""> </span><span class="">*</span><span class="">a</span><span class="">;</span><span class=""> </span><span class="">*</span><span class="">a </span><span class="">=</span><span class=""> </span><span class="">*</span><span class="">b</span><span class="">;</span><span class=""> </span><span class="">*</span><span class="">b </span><span class="">=</span><span class=""> tmp</span><span class="">;</span><span class=""> }</span></pre></div>
+                    
+                    <p class="standard last">The implementation provides a reference to the argument in C(++).</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h3.7.4.2">Final Declared Reference Parameter and the Missing const</h4>
+                
+                <p class="standard">
+                    <a class="indexanchor" id="i03_66"/>As we’ve seen, final variables tell a programmer that variables must not be rewritten. Local variables, parameter variables, object variables, and class variables can be final. In any case, new assignments are taboo. Whether the parameter variable is of a primitive 
+                    <a id="p236"/>type or a reference type does not matter. Thus, with a method declaration of the following type, an assignment to 
+                    <samp class="listingcharacter listingcharacter">p</samp> and also to 
+                    <samp class="listingcharacter listingcharacter">value</samp>
+                 would be forbidden:</p>
+                
+                <div class="listing " id="l_none_3508"><pre><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">clear</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">final</span></span><span class=""> Point p, </span>
+                    <span class="bold"><span class="">final</span></span><span class=""> </span><span class="">int</span><span class=""> value ) </span><span class=""/></pre></div>
+                
+                <p class="standard">If the parameter variable isn’t 
+                    <samp class="listingcharacter listingcharacter">final</samp> and is a reference type, we’d lose the reference to the original object with an assignment, which would make little sense, as we saw in the previous example. Parameter variables declared 
+                    <samp class="listingcharacter listingcharacter">final</samp> make it clear in the program code that changing the reference variable doesn’t make any sense, and the compiler forbids an assignment. In the case of our 
+                    <samp class="listingcharacter listingcharacter">clear(...)</samp>
+                 method, the initialization would have been noticed directly as a compiler error. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_3509"><pre><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">clear</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">final</span></span><span class=""> Point p ) {</span><br/>  p = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">();    </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Cannot assign a value to final variable ’p’</span><span class=""><br/></span>} <span class=""/></pre></div>
+                
+                <p class="standard">Let’s recap: If a parameter is declared 
+                    <samp class="listingcharacter listingcharacter">final</samp>, no assignments are possible. However, 
+                    <samp class="listingcharacter listingcharacter">final</samp> doesn’t prohibit changes to objects, and therefore, 
+                    <samp class="listingcharacter listingcharacter">final</samp>
+                 could be understood as “definitive.” With the reference of the object, you can very well change the state, as we did in the previous sample program.</p>
+                
+                <p class="standard">Therefore, 
+                    <samp class="listingcharacter listingcharacter">final</samp> doesn’t fulfill the task of preventing write access to objects. A method with passed references can therefore modify objects if, for example, 
+                    <samp class="listingcharacter listingcharacter">set*(...)</samp>
+                 methods or variables can be accessed. Thus, the documentation must always explicitly describe when the method modifies the state of an object.</p>
+                
+                <p class="standard">In C++, the addition 
+                    <samp class="listingcharacter listingcharacter">const</samp>
+                    <a class="indexanchor" id="i03_67"/> for parameters enables the compiler to recognize that object states shouldn’t be changed. A program is called 
+                    <span class="italic">const-correct</span>
+                    <a class="indexanchor" id="i03_68"/> if it never modifies a constant object. This 
+                    <samp class="listingcharacter listingcharacter">const</samp> is an extension of the object type in C++, which doesn’t exist in Java. Although Java’s developers have reserved the 
+                    <samp class="listingcharacter listingcharacter">const</samp>
+                 keyword, it’s not used yet.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.7.5">3.7.5    Identity of Objects</h3>
+            
+            <p class="standard">The comparison operators 
+                <samp class="listingcharacter listingcharacter">==</samp>
+                <a class="indexanchor" id="i03_69"/> and 
+                <samp class="listingcharacter listingcharacter">!=</samp> are defined for all data types in such a way that they test the complete correspondence of two values. With primitive data types, this correspondence is easy to see, and with reference types,
+                <a class="indexanchor" id="i03_70"/> it’s basically the same. (Remember: references can be understood as pointers, which are integers.) The 
+                <samp class="listingcharacter listingcharacter">==</samp> operator tests references to see if they match (i.e., reference the same object). The 
+                <samp class="listingcharacter listingcharacter">!=</samp> operator tests the opposite (i.e., whether they do not match), so the references aren’t equal. Accordingly, the test says something about the identity of the referenced objects, but nothing about whether two different objects may have the same content. The content of the objects doesn’t matter for 
+                <samp class="listingcharacter listingcharacter">==</samp> and 
+                <samp class="listingcharacter listingcharacter">!=</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p237"/>
+                Example</h6>
+                
+                <p class="standard first">The following example shows two objects with three different point variables (
+                    <samp class="listingcharacter listingcharacter">p</samp>, 
+                    <samp class="listingcharacter listingcharacter">q</samp>, and 
+                    <samp class="listingcharacter listingcharacter">r</samp>) and illustrates the meaning of 
+                    <samp class="listingcharacter listingcharacter">==</samp>
+                :</p>
+                
+                <div class="listing  last_item" id="l_none_3517"><pre>Point p <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Point q <span class="">=</span><span class=""> p</span><span class="">;</span><span class=""><br/></span>Point r <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> p </span><span class="">==</span><span class=""> q </span><span class="">);</span><span class=""> // true, because p and q reference the </span><span class=""><br/></span>                             <span class=""> // same object</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> p </span><span class="">==</span><span class=""> r </span><span class="">);</span><span class=""> // false, because p and r reference two </span><span class=""><br/></span>                             <span class=""> // different point objects that happen to have </span><span class=""><br/></span>                             <span class=""> // the same coordinates</span><span class=""> </span></pre></div>
+            
+            </div>
+            
+            <p class="standard">Since 
+                <samp class="listingcharacter listingcharacter">p</samp> and 
+                <samp class="listingcharacter listingcharacter">q</samp> reference the same object, the comparison returns 
+                <samp class="listingcharacter listingcharacter">true</samp>. 
+                <samp class="listingcharacter listingcharacter">p</samp> and 
+                <samp class="listingcharacter listingcharacter">r</samp> reference different objects, but they happen to have the same content. But how is the compiler supposed to know when two point objects are equal in content? Is it because a point is characterized by the object variables 
+                <samp class="listingcharacter listingcharacter">x</samp> and 
+                <samp class="listingcharacter listingcharacter">y</samp>
+            ? The runtime environment might hastily compare the assignment of each object variable, but this approach doesn’t always correspond to the correct comparison we desire. For example, a point object could additionally record the number of method calls, which may not be taken into account in a comparison based on the location of two points.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.7.6">3.7.6    Equivalence and the equals(...) Method</h3>
+            
+            <p class="standard">The universal solution is to let the class determine when objects are equal (i.e., have the same value). For this purpose, each class can implement a method called 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                <a class="indexanchor" id="i03_71"/>, and with its help, each instance of this class can compare itself with any other object. The classes always decide, according to the use case, which object variables they refer to for an equality test, and 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> returns 
+                <samp class="listingcharacter listingcharacter">true</samp>
+             if the desired states (object variables) match.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Two non-identical point objects with the same content can be compared via 
+                    <samp class="listingcharacter listingcharacter">==</samp> and 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l_none_3546"><pre>Point p <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Point q <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> p </span>
+                    <span class="bold"><span class="">==</span></span> q );     <span class=""> // false</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( p.</span>
+                    <span class="bold"><span class="">equals</span></span><span class="">(q) );</span><span class=""> // true, since symmetrically also</span><br/><span class="">                                   // q.</span>
+                    <span class="bold">equals</span>(p)<span class=""/></pre></div>
+                
+                <p class="standard last">Only 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 tests content equivalence in this case.</p>
+            
+            </div>
+            
+            <p class="standard">
+                <a id="p238"/>Accordingly, due to the different meanings, we must carefully distinguish the concepts of 
+                <span class="italic">identity</span> and 
+                <span class="italic">equivalence</span> (also 
+                <span class="italic">equality</span>) of objects. For this reason, 
+                <span class="crossreference "><a href="03_007.html#t3.4">Table 3.4</a></span>
+             shows a summary.</p>
+            
+            <table class="standardtable" id="t3.4">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell"/>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Tested with</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Implementation</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Identity of the references</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i03_72"/>
+                                <samp class="listingcharacter listingcharacter">==</samp> or 
+                                <samp class="listingcharacter listingcharacter">!=</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Nothing to do</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Equivalence of states</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i03_73"/>
+                                <samp class="listingcharacter listingcharacter">equals(…)</samp> or 
+                                <samp class="listingcharacter listingcharacter">! equals(…)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Depending on the class</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 3.4</b>    
+            Identity and Equivamlence of Objects</p>
+            
+            
+                
+                <h4 class="t4" id="h3.7.6.1">equals(...) Implementation of Point*</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Point</samp> class declares 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                , as described in the API documentation. Let’s look at an implementation for an idea of how it works next.</p>
+                
+                <div class="listing " id="l3.15"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Point … </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">int</span><span class=""> x</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">int</span><span class=""> y</span><span class="">;</span><span class=""><br/></span>  …<br/>  <span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">equals</span><span class="">(</span><span class=""> Object obj </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    …<br/>    Point pt <span class="">=</span><span class=""> </span><span class="">(</span><span class="">Point</span><span class="">)</span><span class=""> obj</span><span class="">;</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span>
+                    <span class="bold"><span class="">(x == pt.x) &amp;&amp; (y == pt.y)</span></span>; <span class=""> // (*)</span><span class=""><br/></span>    …<br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 3.15</b>    
+            java/awt/Point.java (Snippet)</p>
+                
+                <p class="standard">Although some things are new in this example, we recognize the comparison in line 
+                    <samp class="listingcharacter listingcharacter">(*)</samp>. In this case, the 
+                    <samp class="listingcharacter listingcharacter">Point</samp> object compares its own object variables with the object variables of the point object passed as argument to 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h3.7.6.2">There’s Always an equals(...): The Object Superclass and Its Equals*</h4>
+                
+                <p class="standard">Every class has a 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method because of the universal superclass 
+                    <samp class="listingcharacter listingcharacter">Object</samp> (see 
+                    <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>; for details). Thus, if a class doesn’t specify its own 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method, it inherits an implementation from the 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 class, as in the following example:</p>
+                
+                <div class="listing " id="l3.16"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Object </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">equals</span><span class="">(</span><span class=""> Object obj </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">this</span><span class=""> == obj</span></span> );<br/>
+                    <a id="p239"/>  }<br/>  …<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 3.16</b>    
+            java/lang/Object.java (Snippet)</p>
+                
+                <p class="standard">In this case, the equivalence is mapped to the identity of the references, but no comparison of content occurs. This equivalence is the only thing the given implementation can do because, if the references are identical, the objects are naturally the same. The only thing is that the base class 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 doesn’t “know” anything about is states.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Language Comparison</h6>
+                    
+                    <p class="standard first last">Programming languages generally provide their own operators for identity comparison and equivalence testing. 
+                        <samp class="listingcharacter listingcharacter">==</samp> and 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> in Java is analogous to 
+                        <samp class="listingcharacter listingcharacter">is</samp> and 
+                        <samp class="listingcharacter listingcharacter">==</samp> in Python and 
+                        <samp class="listingcharacter listingcharacter">===</samp> and 
+                        <samp class="listingcharacter listingcharacter">==</samp>
+                     in Swift.</p>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

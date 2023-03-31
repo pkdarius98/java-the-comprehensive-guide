@@ -1,0 +1,183 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Introduction to Data Structures and Algorithms" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Introduction to Data Structures and Algorithms" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Introduction to Data Structures and Algorithms</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h18.4">18.4    The Stream API</h2>
+        
+        <p class="standard">Together with lambda expressions on the language side, an entire new library was implemented in Java 8 that makes processing datasets easy called the 
+            <span class="italic">Stream API</span>
+            <a class="indexanchor" id="i18_37"/>
+        . At the core of the Stream API are operations to filter, map, and reduce the data in collections.</p>
+        
+        
+            
+            <h3 class="t3" id="h18.4.1">18.4.1    Declarative Programming
+                <a class="indexanchor" id="i18_38"/>
+                <a class="indexanchor" id="i18_39"/>
+            </h3>
+            
+            <p class="standard">The Stream API is used in a functional style, and programs can thus be quite compact. The individual methods of the Stream API are all presented in detail in this section, each shown in the following example:</p>
+            
+            <div class="listing " id="l_none_18599"><pre>Object<span class="">[]</span><span class=""> words </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">" "</span><span class="">,</span><span class=""> </span><span class="">'3'</span><span class="">,</span><span class=""> null</span><span class="">,</span><span class=""> </span><span class="">"2"</span><span class="">,</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">""</span><span class=""> </span><span class="">};</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">stream</span><span class="">(</span><span class=""> words </span><span class="">)</span><span class="">             </span><span class=""> // Creates new stream</span><span class=""><br/></span>      <span class="">.</span><span class="">filter</span><span class="">(</span><span class=""> Objects</span><span class="">::</span><span class="">nonNull </span><span class="">)</span><span class="">  </span><span class=""> // Leave non-null references in the stream</span><span class=""><br/></span>      <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> Objects</span><span class="">::</span><span class="">toString </span><span class="">)</span><span class="">    </span><span class=""> // Convert objects to strings</span><span class=""><br/></span>      <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">::</span><span class="">trim </span><span class="">)</span><span class="">         </span><span class=""> // Truncate whitespace</span><span class=""><br/></span>      <span class="">.</span><span class="">filter</span><span class="">(</span><span class=""> s </span><span class="">-&gt;</span><span class=""> </span><span class="">!</span><span class=""> s</span><span class="">.</span><span class="">isEmpty</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> // Leave non-empty elements in the stream</span><span class=""><br/></span>      <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> Integer</span><span class="">::</span><span class="">parseInt </span><span class="">)</span><span class="">    </span><span class=""> // Convert strings to integers</span><span class=""><br/></span>      <span class="">.</span><span class="">sorted</span><span class="">()</span><span class="">                    </span><span class=""> // Sort the integers</span><span class=""><br/></span>      <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">);</span><span class=""> </span><span class=""> // 1 2 3</span><span class=""> </span></pre></div>
+            
+            <p class="standard">
+                <a id="p945"/>While the classes from the Collection API implement optimal storage forms for data, the task of the Stream API is to conveniently query and aggregate the data. The Stream API emphasizes the 
+                <span class="italic">what</span>, not the 
+                <span class="italic">how</span>
+            . Traversals and iterations don’t occur in the code; instead, the Fluent API declaratively describes what the result should look like. The library ultimately implements the how. For example, an implementation can decide whether processing is sequential or parallel, whether the order is important, whether all data must be cached for sorting purposes, and so on.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f18.3.html" id="f18.3"><img alt="The Pipeline Principle for Streams from the Previous Example" id="img-f18.3" src="bilderklein/klein18_003.png"/></a></div>
+            
+            <p class="caption "><b>Figure 18.3</b>    
+            The Pipeline Principle for Streams from the Previous Example</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.4.2">18.4.2    Internal versus External
+                <a class="indexanchor" id="i18_40"/> Iteration
+                <a class="indexanchor" id="i18_41"/>
+            </h3>
+            
+            <p class="standard">The first thing you notice about the Stream API is that the classic loop is missing. Usually, you would use loops to run through data and make queries on the elements. Traditional loops are always sequential and run from element to element, from beginning to end. The same rule is true for an iterator. The Stream API takes a different approach. With its help, the external iteration (controlled by loops from the developer) can be replaced by an internal iteration (the Stream API fetches data). For example, when 
+                <samp class="listingcharacter listingcharacter">forEach(...)</samp>
+             requests data, the data source is tapped and the data retrieved, but not before. </p>
+            
+            <p class="standard">One advantage is that we specify which data structure should be run through, but how this task is done internally can be determined and optimized by the implementation itself. If you write the loop yourself, the processing always runs element by element, while an internal iteration can also parallelize on its own and have partial problems computed by multiple execution units.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Appended to various collections is a 
+                    <samp class="listingcharacter listingcharacter">forEach(...)</samp> method that runs over all elements and calls a method on a passed consumer. However, the classic 
+                    <samp class="listingcharacter listingcharacter">for</samp> loop (or even the extended 
+                    <samp class="listingcharacter listingcharacter">for</samp> loop) isn’t now obsolete. Besides being easy to write and debug, the usual loop still has some advantages. 
+                    <samp class="listingcharacter listingcharacter">forEach(...)</samp> usually gets the executable code via a lambda expression, which has its limitations. For example, a lambda expression may not describe local variables (all local variables addressed by the lambda expression are effectively final) and may not throw checked exceptions. Inside a loop, neither is an issue. Incidentally, a 
+                    <samp class="listingcharacter listingcharacter">break</samp> can be used for loop terminations, which doesn’t exist in lambda expressions either (
+                    <samp class="listingcharacter listingcharacter">return</samp> in lambda corresponds to 
+                    <samp class="listingcharacter listingcharacter">continue</samp>
+                ).</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.4.3">18.4.3    
+                <a id="p946"/>
+            What Is a Stream?</h3>
+            
+            <p class="standard">A stream is a sequence of data (but not a data source per se) that stores data like a data structure. The data from the stream is processed through a chain of the following downstream processing steps:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Filter</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Map</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Reduce</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Processing along a chain is referred to as a 
+                <span class="italic">pipeline</span>
+                <a class="indexanchor" id="i18_42"/>
+             and consists of three components:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The pipeline starts with a data source, such as an array, a data structure, or a generator.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Various processing steps follow, such as filtering (elements disappear from the stream) or mapping (a data type can also be converted into another data type). These changes along the way are called 
+                        <span class="italic">intermediate operations</span>
+                        <a class="indexanchor" id="i18_43"/>
+                        <a class="indexanchor" id="i18_44"/>
+                    . The result of an intermediate operation is again a stream.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">At the end, the result is collected, and the result is no longer a stream. For example, a reduction would be the formation of a maximum or the concatenation of strings.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The actual data structure isn’t changed; rather, at the end of the intermediate operations, a terminal operation asks for the result. An example terminal operation
+                <a class="indexanchor" id="i18_45"/>
+                <a class="indexanchor" id="i18_46"/> is 
+                <samp class="listingcharacter listingcharacter">forEach(...)</samp>
+            , which is located at the end of the chain and for which the stream stops.</p>
+            
+            <p class="standard">Many terminal operations reduce the passing data to a value, unlike 
+                <samp class="listingcharacter listingcharacter">forEach(...)</samp>, for example. This reduction occurs in methods for simply counting elements or for calculating totals and are called 
+                <span class="italic">reducing operations</span>
+                <a class="indexanchor" id="i18_47"/>
+                <a class="indexanchor" id="i18_48"/>
+            . In the API, ready-made methods are available for standard reductions—for instance, calculating a total, maximum, or average—but general reductions are possible via your own functions, for example, calculating a product instead of the total.</p>
+            
+            
+                
+                <h4 class="t4" id="h18.4.3.1">Lazy Love</h4>
+                
+                <p class="standard">All intermediary operations are “lazy” because they postpone computations until they are needed. As shown in the first example, when the elements are taken from the array, they are passed to the next processing step in order. If the filter removes elements from the stream, they are gone and don’t need to be considered in a later step. It is therefore not the case that the data physically exists multiple times in a data structure with all elements, for example.</p>
+                
+                <p class="standard">In contrast to continuing operations, in terminal operations, a result must be present: These operations are “eager.” Basically, everything is deferred until a value is needed, that is, until a terminal operation really wants to access the result.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.4.3.2">
+                    <a id="p947"/>
+                State: Yes or No?</h4>
+                
+                <p class="standard">Intermediary operations may or may not have states. A filter operation, for example, has no state because, to accomplish its task, the program must look only at the current element, not at preceding ones. A sort operation, on the other hand, has a state: It “wants” all other elements to be saved because only knowing the current element isn’t sufficient for sorting; knowledge of all preceding ones is needed too.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

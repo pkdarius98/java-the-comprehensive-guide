@@ -1,0 +1,159 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Classes and Objects" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Classes and Objects" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Classes and Objects</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h3.5">3.5    
+            <a id="p218"/>
+        ZZZZZnake</h2>
+        
+        <p class="standard">A classic computer game is 
+            <span class="italic">Snake</span>
+        . On the screen is a player, a snake, some gold, and a door. The door and the gold are fixed, the player can be moved, and the snake moves independently towards the player. You must try to move the player to the gold and then to the door. If the snake catches you before you achieve these goals, you’re unlucky, and it’s game over.</p>
+        
+        <p class="standard">This game may sound complex at first glance, but you already have all the building blocks to program this game:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Player, Snake, Gold, and Door are 
+                    <samp class="listingcharacter listingcharacter">Point</samp>
+                 objects preconfigured with coordinates.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">A loop runs through all coordinates. If a player, the door, the snake, or gold has been “hit,” a symbolic representation of the figure is displayed.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">You’ll test three conditions for the game status: 1) Has the player collected the gold and is standing on the door? (You’ve won the game.) 2) Does the snake bite the player? (You’ve lost the game.) 3) Does the player collect gold?</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp>
+                 enables you to respond to keystrokes and move the player around the board.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The snake must move in the direction of the player. While the player can only move horizontally or vertically, the snake can move diagonally.</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">The corresponding source code for this game follows:</p>
+        
+        <div class="listing " id="l3.5"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> ZZZZZnake </span><span class="">{</span><span class=""/><br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""/><br/>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point playerPosition </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">9</span><span class=""> </span><span class="">);</span><span class=""/><br/>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point snakePosition  </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">30</span><span class="">,</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">);</span><span class=""/><br/>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point goldPosition   </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">6</span><span class="">,</span><span class=""> </span><span class="">6</span><span class=""> </span><span class="">);</span><span class=""/><br/>    java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point doorPosition   </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">);</span><span class=""/><br/>    <span class="">boolean</span><span class=""> rich </span><span class="">=</span><span class=""> </span><span class="">false;</span><span class=""/><br/><br/>    <span class="">while</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">true</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""/><br/>      <span class="">// Draw grid and symbols</span><span class=""/><br/><br/>      <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> y </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> y </span><span class="">&lt;</span><span class=""> </span><span class="">10</span><span class="">;</span><span class=""> y</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""/><br/>        <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> x </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> x </span><span class="">&lt;</span><span class=""> </span><span class="">40</span><span class="">;</span><span class=""> x</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""/><br/>          java<span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point p </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">(</span><span class=""> x</span><span class="">,</span><span class=""> y </span><span class="">);</span><span class=""/><br/>          <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> playerPosition</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> p </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""/><br/>            System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> </span><span class="">'&amp;'</span><span class=""> </span><span class="">);</span><span class=""/><br/>          <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> snakePosition</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> p </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""/><br/>            System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> </span><span class="">'S'</span><span class=""> </span><span class="">);</span><span class=""/><br/>          <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> goldPosition</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> p </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""/><br/>            System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> </span><span class="">'$'</span><span class=""> </span><span class="">);</span><span class=""/><br/>
+            <a id="p219"/>          <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> doorPosition</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> p </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""/><br/>            System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> </span><span class="">'#'</span><span class=""> </span><span class="">);</span><span class=""/><br/>          <span class="">else</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> </span><span class="">'.'</span><span class=""> </span><span class="">);</span><span class=""/><br/>        <span class="">}</span><span class=""/><br/>        System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">();</span><span class=""/><br/>      <span class="">}</span><span class=""/><br/><br/>      <span class="">// Determine status</span><span class=""/><br/><br/>      <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> rich </span><span class="">&amp;&amp;</span><span class=""> playerPosition</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> doorPosition </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""/><br/>        System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"You won!"</span><span class=""> </span><span class="">);</span><span class=""/><br/>        <span class="">return</span><span class="">;</span><span class=""/><br/>      <span class="">}</span><span class=""/><br/>      <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> playerPosition</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> snakePosition </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""/><br/>        System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"SSSSSS. You were bitten by the snake!"</span><span class=""> </span><span class="">);</span><span class=""/><br/>        <span class="">return</span><span class="">;</span><span class=""/><br/>      <span class="">}</span><span class=""/><br/>      <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> playerPosition</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> goldPosition </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""/><br/>        rich <span class="">=</span><span class=""> </span><span class="">true;</span><span class=""/><br/>        goldPosition<span class="">.</span><span class="">setLocation</span><span class="">(</span><span class=""> </span><span class="">-</span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">-</span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""/><br/>      <span class="">}</span><span class=""/><br/><br/>      <span class="">// Console input and change player position</span><span class=""/><br/>      <span class="">// Keep playing field between 0/0.. 39/9</span><span class=""/><br/><span class="">       </span><span class="">switch</span><span class=""> ( </span><span class="">new</span><span class=""> java.util.</span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">next</span><span class="">() ) {</span><span class=""/><br/><span class="">       </span><span class="">case</span><span class=""> </span><span class="">"u" /* p */</span><span class=""> -&gt; playerPosition.y = Math.</span><span class="">max</span><span class="">( </span><span class="">0</span><span class="">, playerPosition.y - </span><span class="">1</span><span class=""> );</span><span class=""/><br/><span class="">       </span><span class="">case</span><span class=""> </span><span class="">"d" /* own */</span><span class=""> -&gt; playerPosition.y = Math.</span><span class="">min</span><span class="">( </span><span class="">9</span><span class="">, playerPosition.y + </span><span class="">1</span><span class=""> );</span><span class=""/><br/><span class="">       </span><span class="">case</span><span class=""> </span><span class="">"l" /* eft */</span><span class=""> -&gt; playerPosition.x = Math.</span><span class="">max</span><span class="">( </span><span class="">0</span><span class="">, playerPosition.x - </span><span class="">1</span><span class=""> );</span><span class=""/><br/><span class="">       </span><span class="">case</span><span class=""> </span><span class="">"r" /* ight */</span><span class=""> -&gt; playerPosition.x = Math.</span><span class="">min</span><span class="">( </span><span class="">39</span><span class="">, playerPosition.x + </span><span class="">1</span><span class=""> );</span><span class=""/><br/><span class="">      }</span><span class=""/><br/><br/><span class="">      </span><span class="">// Snake moves towards the player</span><span class=""/><br/><br/><span class="">      </span><span class="">if</span><span class=""> ( playerPosition.x &lt; snakePosition.x )</span><span class=""/><br/><span class="">        snakePosition.x--;</span><span class=""/><br/><span class="">      </span><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( playerPosition.x &gt; snakePosition.x )</span><span class=""/><br/><span class="">        snakePosition.x++;</span><span class=""/><br/><span class="">      </span><span class="">if</span><span class=""> ( playerPosition.y &lt; snakePosition.y )</span><span class=""/><br/><span class="">        snakePosition.y--;</span><span class=""/><br/><span class="">      </span><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( playerPosition.y &gt; snakePosition.y )</span><span class=""/><br/><span class="">        snakePosition.y++;</span><span class=""/><br/><span class="">    } </span><span class="">// end while</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+        
+        <p class="caption "><b>Listing 3.5</b>    
+            ZZZZZnake.java</p>
+        
+        <p class="standard">
+            <a id="p220"/>The 
+            <samp class="listingcharacter listingcharacter">Point</samp>
+         members in use include the following:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The object states 
+                    <samp class="listingcharacter listingcharacter">x</samp>, 
+                    <samp class="listingcharacter listingcharacter">y</samp>
+                : The player and the snake can be moved, and the coordinates must be reset.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The 
+                    <samp class="listingcharacter listingcharacter">setLocation(...)</samp>
+                 method: Once the gold has been collected, you set the coordinates so that the coordinate from the gold is no longer on our grid.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 method: Tests if a point is on top of another point.</p>
+            
+            </li>
+        
+        </ul>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[»]  </span>Extension</h6>
+            
+            <p class="standard first">If you’re interested in a little more programming on this task, consider the following enhancements:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Player, snake, gold, and door should be set to random coordinates.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Instead of just one piece of gold, there should be two pieces.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Instead of one snake, there should be two snakes.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">With two snakes and two pieces of gold, things can get a little tight for the player. Let’s give the player a head start of 5 moves at the beginning without the snakes moving.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">For advanced developers: The program, which is so far only contained in the 
+                        <samp class="listingcharacter listingcharacter">main</samp>
+                     method, should be split into different methods.</p>
+                
+                </li>
+            
+            </ul>
+        
+        </div>
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,177 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Object-Oriented Relationship" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Object-Oriented Relationship" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Object-Oriented Relationship</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h7.5">7.5    Testing Dynamic Bindings</h2>
+        
+        <p class="standard">With regard to inheritance, in a form of is-a-type-of relationship, subclasses are always also of the same type as their superclasses. The visible methods that superclasses have thus also exist in the subclasses. The advantage of specialization is that the superclass specifies a simple implementation, and a subclass can override it. We saw this specialization earlier with 
+            <samp class="listingcharacter listingcharacter">toString()</samp>
+        . However, not only is specialization interesting from a design perspective but also in terms of inheritance. If a superclass provides a visible method, you always know that all subclasses will have that method, whether they override the method or not. As you’ll see in a moment, this inheritance leads to one of the most important constructs in OOP languages.</p>
+        
+        
+            
+            <h3 class="t3" id="h7.5.1">7.5.1    Bound to toString()</h3>
+            
+            <p class="standard">Since each class inherits members from 
+                <samp class="listingcharacter listingcharacter">java.lang.Object</samp>, the 
+                <samp class="listingcharacter listingcharacter">toString()</samp> method can be called on any object. In our examples, the 
+                <samp class="listingcharacter listingcharacter">Object</samp>, 
+                <samp class="listingcharacter listingcharacter">Event</samp>, and 
+                <samp class="listingcharacter listingcharacter">Workout </samp>classes all have their own 
+                <samp class="listingcharacter listingcharacter">toString()</samp> methods. 
+                <samp class="listingcharacter listingcharacter">Event</samp> overrides the 
+                <samp class="listingcharacter listingcharacter">toString()</samp> of 
+                <samp class="listingcharacter listingcharacter">Object</samp>, while 
+                <samp class="listingcharacter listingcharacter">Workout</samp> overrides the 
+                <samp class="listingcharacter listingcharacter">toString()</samp> method of 
+                <samp class="listingcharacter listingcharacter">Event</samp>
+            .</p>
+            
+            <p class="standard">Now, let’s look at an interesting scenario where the 
+                <samp class="listingcharacter listingcharacter">toString()</samp>
+             method is called but the reference type and the object type are different.</p>
+            
+            <div class="listing " id="l7.35"><pre>
+                <span class="bold"><span class="">
+                        <a id="p464"/>
+                    Workout</span></span> ww = <span class="">new</span><span class=""> </span>
+                <span class="bold"><span class="">Workout</span></span><span class="">();</span><br/>ww.about = <span class="">"Running"</span><span class="">;</span><br/>ww.duration = <span class="">100</span><span class="">;</span><br/>ww.caloriesBurned = <span class="">300</span><span class="">;</span><br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">ww.<span class="">toString</span><span class="">()</span></span> );<br/> <br/>
+                <span class="bold">Event</span> ew = <span class="">new</span><span class=""> </span>
+                <span class="bold"><span class="">Workout</span></span><span class="">();</span><br/>ew.about = <span class="">"Running"</span><span class="">;</span><br/>ew.duration = <span class="">100</span><span class="">;</span><br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">ew.<span class="">toString</span><span class="">()</span></span> );<br/> <br/>
+                <span class="bold">Object</span> ow = <span class="">new</span><span class=""> </span>
+                <span class="bold"><span class="">Workout</span></span><span class="">();</span><br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">ow.<span class="">toString</span><span class="">()</span></span> ); <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.35</b>    
+            src/main/java/com/tutego/insel/game/c/vn/DynamicBinding.java, main</p>
+            
+            <p class="standard">The
+                <samp class="listingcharacter listingcharacter"> toString()</samp> method is called three times, where the object type always remains the same (
+                <samp class="listingcharacter listingcharacter">Workout</samp>), but the reference type is always different (
+                <samp class="listingcharacter listingcharacter">Workout</samp>, 
+                <samp class="listingcharacter listingcharacter">Event</samp>, or 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+            ).</p>
+            
+            <p class="standard">Now is time for the most exciting question in OOP: What happens in the 
+                <samp class="listingcharacter listingcharacter">toString()</samp>
+             method call? </p>
+            
+            <p class="standard">The answer is the following output:</p>
+            
+            <div class="listing " id="l_none_7724"><pre>Workout<span class="">[</span><span class="">about</span><span class="">=</span><span class="">Running</span><span class="">,</span><span class=""> duration</span><span class="">=</span><span class="">100</span><span class="">][</span><span class="">caloriesBurned</span><span class="">=</span><span class="">300</span><span class="">]</span><span class=""><br/></span>Workout<span class="">[</span><span class="">about</span><span class="">=</span><span class="">Running</span><span class="">,</span><span class=""> duration</span><span class="">=</span><span class="">100</span><span class="">][</span><span class="">caloriesBurned</span><span class="">=</span><span class="">0</span><span class="">]</span><span class=""><br/></span>Workout<span class="">[</span><span class="">about</span><span class="">=</span><span class="">null</span><span class="">,</span><span class=""> duration</span><span class="">=</span><span class="">0</span><span class="">][</span><span class="">caloriesBurned</span><span class="">=</span><span class="">0</span><span class="">]</span><span class=""> </span></pre></div>
+            
+            <p class="standard">This output is easy to understand if you consider that two type systems are at work, and the compiler doesn’t have the same knowledge as the runtime environment. The crucial thing is that the runtime environment looks at the object type when calling a method, not at the reference type—the same behavior as 
+                <samp class="listingcharacter listingcharacter">instanceof</samp>. Since the variable type agreed to in the program doesn’t indicate which implementation of the 
+                <samp class="listingcharacter listingcharacter">toString()</samp> method is called, we call this scenario 
+                <span class="italic">late dynamic binding</span>
+                <a class="indexanchor" id="i07_48"/>
+                <a class="indexanchor" id="i07_49"/>
+                <span class="italic"> </span>(or 
+                <span class="italic">dynamic binding</span> for short). Only at runtime (which is late in comparison to translation time) does the runtime environment dynamically select the appropriate object method and match the actual type of the calling object. The JVM knows that a 
+                <samp class="listingcharacter listingcharacter">Workout</samp> object exists behind each of the three variables, so it calls the 
+                <samp class="listingcharacter listingcharacter">toString()</samp> method from 
+                <samp class="listingcharacter listingcharacter">Workout</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Language Comparison</h6>
+                
+                <p class="standard first last">Dynamic binding is automatic in Java and can’t be controlled or switched off by a modifier. In C++, functions—the term “method” is not used in C++—are not dynamically bound without explicit indication. If you want to bind functions dynamically in C++, you must explicitly place the keyword 
+                    <samp class="listingcharacter listingcharacter">virtual</samp> in front of the function; the result is a 
+                    <span class="italic">virtual function</span>
+                .</p>
+            
+            </div>
+            
+            <p class="standard">
+                <a id="p465"/>What’s important is that a method is overridden. Let’s assume that there’s no 
+                <samp class="listingcharacter listingcharacter">toString()</samp> in 
+                <samp class="listingcharacter listingcharacter">Object</samp>, but only an implementation in the 
+                <samp class="listingcharacter listingcharacter">Nap</samp> and 
+                <samp class="listingcharacter listingcharacter">Workout</samp> subclasses. We wouldn’t benefit from that in any way! We therefore explicitly use the commonality that 
+                <samp class="listingcharacter listingcharacter">Event</samp>, 
+                <samp class="listingcharacter listingcharacter">Workout</samp>, and other subclasses inherit 
+                <samp class="listingcharacter listingcharacter">toString()</samp> from 
+                <samp class="listingcharacter listingcharacter">Object</samp>. Without the superclass, no connective link would exist, and consequently, the superclass always provides a method that subclasses can override. If we were to create a new subclass of 
+                <samp class="listingcharacter listingcharacter">Object</samp> and not override 
+                <samp class="listingcharacter listingcharacter">toString()</samp>, the runtime environment would find 
+                <samp class="listingcharacter listingcharacter">toString()</samp> in 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+            , but the method would exist in any case—either the original method or the overridden variant.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Terminology</h6>
+                
+                <p class="standard first last">Dynamic binding is often also referred to as 
+                    <span class="italic">polymorphism</span>
+                    <a class="indexanchor" id="i07_50"/>, and a
+                    <span class="italic"> </span>dynamically bound call is then referred to as a 
+                    <span class="italic">polymorphic call</span>. This meaning is fine in the context of Java; however, in the world of programming languages “polymorphism” can designate many different things, such as parametric polymorphism (which in Java is called 
+                    <span class="italic">generics</span>
+                ). </p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.5.2">7.5.2    Implementing System.out.println(Object)</h3>
+            
+            <p class="standard">Let’s look at a program that makes dynamic binding even more obvious. The 
+                <samp class="listingcharacter listingcharacter">print*(...)</samp>
+             methods are overloaded to accept any object and then output the string representation.</p>
+            
+            <div class="listing " id="l7.36"><pre><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">println</span><span class="">(</span><span class=""> Object x </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">String</span><span class=""> s = </span><span class="">String</span><span class="">.</span><span class="">valueOf</span><span class="">( x );</span></span><br/> <span class=""> // String s = (obj == null) ? "null" : obj.toString();</span><span class=""><br/></span>  <span class="">synchronized</span><span class=""> ( </span><span class="">this</span><span class=""> ) {</span><br/>    
+                <span class="bold"><span class="">print</span><span class="">( s );</span><br/>    <span class="">newLine</span><span class="">();</span></span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.36</b>    
+            java/io/PrintStream.java, println() (Snippet)</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">println(Object)</samp> method consists of three parts: First, the string representation of an object is requested, which is where the dynamically bound call can be found. Then, this string is passed to 
+                <samp class="listingcharacter listingcharacter">print(String)</samp>, and finally, 
+                <samp class="listingcharacter listingcharacter">newLine()</samp>
+             produces the line break.</p>
+            
+            <p class="standard">The compiler has no idea at all what 
+                <samp class="listingcharacter listingcharacter">x</samp> is, and 
+                <samp class="listingcharacter listingcharacter">x</samp> can be anything because everything is a 
+                <samp class="listingcharacter listingcharacter">java.lang.Object</samp>. Statically, nothing can be read from the argument 
+                <samp class="listingcharacter listingcharacter">x</samp>
+            , and so the runtime environment must decide which class the method call will go to—the miracle of dynamic binding.</p>
+            
+            <p class="standard">IntelliJ displays a type hierarchy when you press 
+                <span class="keyboard">(Ctrl)</span>+
+                <span class="keyboard">(H)</span>
+            , by default showing superclasses and known subclasses.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

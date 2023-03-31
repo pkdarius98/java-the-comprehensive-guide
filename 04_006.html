@@ -1,0 +1,1303 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Arrays and Their Areas of Use" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Arrays and Their Areas of Use" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Arrays and Their Areas of Use</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h4.6">4.6    Using the Arrays Class for Comparing, Filling, Searching, and Sorting</h2>
+        
+        <p class="standard">The 
+            <samp class="listingcharacter listingcharacter">java.util.Arrays</samp>
+         class declares useful static methods for dealing with arrays, including options for comparing, sorting, and filling arrays, as well as conducting binary searches.</p>
+        
+        
+            
+            <h3 class="t3" id="h4.6.1">4.6.1    String Representation of an Array</h3>
+            
+            <p class="standard">Let’s say we have a string array we want to output to the screen for debugging purposes.</p>
+            
+            <div class="listing " id="l4.12"><pre><span class="">String</span><span class="">[]</span><span class=""> names </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">"Butterfinger"</span><span class="">,</span><span class=""> </span><span class="">"Dickmanns"</span><span class="">,</span><span class=""> </span><span class="">"Fruitella"</span><span class="">,</span><span class=""> </span><span class="">"Nutbar"</span><span class=""><br/></span><span class="">};</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 4.12</b>    
+            CandyNamesArraysToString, main()</p>
+            
+            <p class="standard">An output with 
+                <samp class="listingcharacter listingcharacter">System.out.println(names)</samp> is out of the question because 
+                <samp class="listingcharacter listingcharacter">toString()</samp> is not meaningfully defined on the array object type. The static method 
+                <samp class="listingcharacter listingcharacter">Arrays.toString(...)</samp>
+                <a class="indexanchor" id="i04_26"/>
+             returns the desired string representation of the array for different arrays. Let’s compare the following two examples:</p>
+            
+            <div class="listing " id="l_none_4789"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> names </span><span class="">);</span><span class="">                 </span><span class=""> // [Ljava.lang.String;@21b8d17c</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class="">names</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // [Butterfinger, Dickmanns, …]</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The use of 
+                <samp class="listingcharacter listingcharacter">Arrays.toString(...)</samp>
+                <a class="indexanchor" id="i04_27"/> doesn’t necessarily spare you from a 
+                <samp class="listingcharacter listingcharacter">for</samp> loop that runs through the array and calls 
+                <samp class="listingcharacter listingcharacter">print*(...)</samp> on each element because the output is 
+                <a id="p268"/>always of a specific format which starts with 
+                <samp class="listingcharacter listingcharacter">[</samp>, separates each element with commas and a space, and ends with 
+                <samp class="listingcharacter listingcharacter">]</samp>
+            .</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Arrays</samp> class declares the 
+                <samp class="listingcharacter listingcharacter">toString()</samp>
+             method for different array types:</p>
+            
+            <div class="listing " id="l_none_4808"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Arrays</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String toString(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a)</samp><br/>Returns a string representation of the array. The type specification 
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span> stands for 
+                        <samp class="listingcharacter listingcharacter">boolean</samp>, 
+                        <samp class="listingcharacter listingcharacter">byte</samp>, 
+                        <samp class="listingcharacter listingcharacter">char</samp>, 
+                        <samp class="listingcharacter listingcharacter">short</samp>, 
+                        <samp class="listingcharacter listingcharacter">int</samp>, 
+                        <samp class="listingcharacter listingcharacter">long</samp>, 
+                        <samp class="listingcharacter listingcharacter">float</samp>, 
+                        <samp class="listingcharacter listingcharacter">double</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String toString(Object[] a)</samp><br/>Returns a string representation of the array. In the case of the object type, the method calls 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>
+                     on each object in the array.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static String deepToString(Object[] a)</samp><br/>Also calls 
+                        <samp class="listingcharacter listingcharacter">Arrays.toString(...)</samp> on each sub-array and not just 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>
+                     as with any other object.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.6.2">4.6.2    Sorting</h3>
+            
+            <p class="standard">Various static 
+                <samp class="listingcharacter listingcharacter">Arrays.sort(…)</samp>/
+                <samp class="listingcharacter listingcharacter">Arrays.parallelSort(…)</samp>
+                <a class="indexanchor" id="i04_28"/> methods allow sorting elements in the array. With primitive elements (but not 
+                <samp class="listingcharacter listingcharacter">boolean</samp>
+            ), no problems will arise because they follow a natural order.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example sorts two arrays:</p>
+                
+                <div class="listing  last_item" id="l_none_4804"><pre><span class="">double</span><span class="">[]</span><span class=""> profits </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">-</span><span class="">1.9</span><span class="">,</span><span class=""> </span><span class="">3.1</span><span class="">,</span><span class=""> </span><span class="">3.2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> cities </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"Yuma"</span><span class="">,</span><span class=""> </span><span class="">"Albuquerque"</span><span class="">,</span><span class=""> </span><span class="">"Wichita"</span><span class=""> </span><span class="">};</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> profits </span><span class="">);</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> cities </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> profits </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // [-1.9, 3.0, 3.1, 3.2]</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> cities </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // [Albuquerque, Wichita, Yuma]</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">If the array consists of object references, the objects must be comparable. This comparison is accomplished either with an extra 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>, or the classes implement the 
+                <samp class="listingcharacter listingcharacter">Comparable</samp> interface, such as 
+                <samp class="listingcharacter listingcharacter">String</samp>. 
+                <span class="crossreference "><a href="11_001.html#h11">Chapter 11</a></span>, 
+                <span class="crossreference "><a href="11_004.html#h11.4">Section 11.4</a></span>
+            , describes these options in detail.</p>
+            
+            <div class="listing " id="l_none_4813"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Arrays</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void sort(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a )</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p269"/>
+                        static void sort(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a, int fromIndex, int toIndex)</samp><br/>Sorts the whole list of type 
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span> (where 
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span> stands for 
+                        <samp class="listingcharacter listingcharacter">byte</samp>, 
+                        <samp class="listingcharacter listingcharacter">char</samp>, 
+                        <samp class="listingcharacter listingcharacter">short</samp>, 
+                        <samp class="listingcharacter listingcharacter">int</samp>, 
+                        <samp class="listingcharacter listingcharacter">long</samp>, 
+                        <samp class="listingcharacter listingcharacter">float</samp>, or 
+                        <samp class="listingcharacter listingcharacter">double</samp>) or a selected part. With specified limits, 
+                        <samp class="listingcharacter listingcharacter">fromIndex</samp> is inclusive, and 
+                        <samp class="listingcharacter listingcharacter">toIndex</samp> is exclusive. If the bounds are incorrect, the method throws an 
+                        <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> (in the case 
+                        <samp class="listingcharacter listingcharacter">fromIndex &gt; toIndex</samp>) or an 
+                        <samp class="listingcharacter listingcharacter">ArrayIndexOutOfBoundsException</samp> (
+                        <samp class="listingcharacter listingcharacter">fromIndex &lt; 0</samp> or 
+                        <samp class="listingcharacter listingcharacter">toIndex &gt; a.length</samp>
+                    ).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void sort(Object[] a)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void sort(Object[] a, int fromIndex, int toIndex)</samp><br/>Sorts an array of objects. The elements must implement 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp>.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn04_09" id="fn04_09">[ 109 ]</a></span> In the method, no generic type parameter forces the elements to implement 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp>
+                     at translation time!</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; void sort(T[] a, Comparator&lt;? super T&gt; c)</samp>
+                    </p>
+                    
+                    <p class="standard last-item">See 
+                        <span class="crossreference "><a href="12_001.html#h12">Chapter 12</a></span>
+                     for information about type parameters.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; void sort(T[] a, int fromIndex, int toIndex, Comparator&lt;? super T&gt; c)</samp><br/>Sorts an array of objects with a given 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.6.3">4.6.3    Parallel Sorting</h3>
+            
+            <p class="standard">Special sorting methods are intended for very large arrays. For 
+                <samp class="listingcharacter listingcharacter">parallelSort(...)</samp>
+             methods, the library uses multiple threads to sort parts in parallel, which can increase speed. However, this is not a guarantee, because a performance advantage really only results with large arrays.</p>
+            
+            <p class="standard">The algorithm is simple to understand: First, the array is partitioned into sub-arrays, which are sorted in parallel and then merged into a larger, sorted array. The process is also called 
+                <span class="italic">parallel sort-merge</span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.6.4">4.6.4    Comparing Arrays of Primitives with Arrays.equals(...) and Arrays.deepEquals(...)*</h3>
+            
+            <p class="standard">The static method 
+                <samp class="listingcharacter listingcharacter">Arrays.equals(...)</samp>
+                <a class="indexanchor" id="i04_29"/> compares two arrays to check whether they have the same contents; for this purpose, the overloaded method is defined for all important types. If two arrays actually have the same contents, the method returns 
+                <samp class="listingcharacter listingcharacter">true</samp>; otherwise, 
+                <samp class="listingcharacter listingcharacter">false</samp>. Of course, both arrays must have the same number of elements; otherwise, the test is immediately over, and the result is 
+                <samp class="listingcharacter listingcharacter">false</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Let’s use the following code to compare three arrays:</p>
+                
+                <div class="listing  last_item" id="l_none_4835"><pre><span class="">
+                        <a id="p270"/>
+                    int</span><span class="">[]</span><span class=""> array1 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">int</span><span class="">[]</span><span class=""> array2 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">int</span><span class="">[]</span><span class=""> array3 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">9</span><span class=""> </span><span class="">};</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">Arrays.</span><span class="">equals</span><span class="">( array1, array2 )</span></span> );             <span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">Arrays.<span class="">equals</span><span class="">( array2, </span><span class="">1</span><span class="">, </span><span class="">3</span><span class="">, array3, </span><span class="">2</span><span class="">, </span><span class="">4</span><span class=""> )</span></span> ); <span class=""> // true</span><span class=""/><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">For arrays with nested referencing (arrays pointing to arrays), 
+                <samp class="listingcharacter listingcharacter">Arrays.equals(...)</samp> considers the inner array as an object reference and also compares it with 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp>. However, as a result, non-identical inner arrays referenced with the same elements are considered unequal. The static method 
+                <samp class="listingcharacter listingcharacter">deepEquals(...)</samp>
+                <a class="indexanchor" id="i04_30"/>
+             also includes arrays with nested references in the comparison.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example illustrates the difference between 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">deepEquals(...)</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_4850"><pre><span class="">int</span><span class="">[][]</span><span class=""> a1 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">},</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">}</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">int</span><span class="">[][]</span><span class=""> a2 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">},</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">}</span><span class=""> </span><span class="">};</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">Arrays.</span><span class="">equals</span><span class="">( a1, a2 )</span></span> );    <span class=""> // false</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">Arrays.<span class="">deepEquals</span><span class="">( a1, a2 )</span></span> );<span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( a1[</span><span class="">0</span><span class="">] );                      </span><span class=""> // for example [I@10b62c9</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( a2[</span><span class="">0</span><span class="">] );                      </span><span class=""> // for example [I@82ba41</span><span class=""/><span class=""/></pre></div>
+                
+                <p class="standard last">The last two console outputs show that the methods work differently. The arrays referenced by 
+                    <samp class="listingcharacter listingcharacter">a1</samp> and 
+                    <samp class="listingcharacter listingcharacter">a2</samp>
+                 contain the same elements, but are two different objects, so they aren’t identical.</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">As shown in the following example, 
+                    <samp class="listingcharacter listingcharacter">deepEquals(...)</samp>
+                 can also compare one-dimensional arrays:</p>
+                
+                <div class="listing  last_item" id="l_none_4858"><pre>Object<span class="">[]</span><span class=""> b1 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"1"</span><span class="">,</span><span class=""> </span><span class="">"2"</span><span class="">,</span><span class=""> </span><span class="">"3"</span><span class=""> </span><span class="">};</span><span class=""><br/></span>Object<span class="">[]</span><span class=""> b2 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"1"</span><span class="">,</span><span class=""> </span><span class="">"2"</span><span class="">,</span><span class=""> </span><span class="">"3"</span><span class=""> </span><span class="">};</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">deepEquals</span><span class="">(</span><span class=""> b1</span><span class="">,</span><span class=""> b2 </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // true</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <div class="listing " id="l_none_4862"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Arrays</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static boolean equals(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a, </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a2)</samp><br/>Compares two arrays of the same type and returns 
+                        <samp class="listingcharacter listingcharacter">true</samp> if the arrays are the same size and the elements are the same in pairs. 
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span> represents 
+                        <samp class="listingcharacter listingcharacter">boolean</samp>, 
+                        <samp class="listingcharacter listingcharacter">byte</samp>, 
+                        <samp class="listingcharacter listingcharacter">char</samp>, 
+                        <samp class="listingcharacter listingcharacter">int</samp>, 
+                        <samp class="listingcharacter listingcharacter">short</samp>, 
+                        <samp class="listingcharacter listingcharacter">long</samp>, 
+                        <samp class="listingcharacter listingcharacter">double</samp>, or 
+                        <samp class="listingcharacter listingcharacter">float</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p271"/>
+                        static boolean equals(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a, int aFromIndex, int aToIndex, </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] b, int bFromIndex, int bToIndex)</samp><br/>Compares two arrays but stays in the selected sections.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.6.5">4.6.5    Comparing Object Arrays Using Arrays.equals(...) and Arrays.deepEquals(...)*</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Arrays.equals(...)</samp> method can also compare arrays with arbitrary objects. However, this approach doesn’t use the identity check via 
+                <samp class="listingcharacter listingcharacter">==</samp> but instead checks for equivalence via 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp>. A 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> for comparisons is also possible; more on this topic is available in 
+                <span class="crossreference "><a href="11_001.html#h11">Chapter 11</a></span>, 
+                <span class="crossreference "><a href="11_004.html#h11.4">Section 11.4</a></span>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Do two string arrays contain the same words, where case doesn’t matter?</p>
+                
+                <div class="listing  last_item" id="l_none_4881"><pre><span class="">String</span><span class="">[]</span><span class=""> words1 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"normal"</span><span class="">,</span><span class=""> </span><span class="">"is"</span><span class=""> </span><span class="">,</span><span class=""> </span><span class="">"boring"</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> words2 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"iS"</span><span class="">,</span><span class=""> </span><span class="">"bOrinG"</span><span class=""> </span><span class="">,</span><span class=""> </span><span class="">"NoRmAL"</span><span class=""> </span><span class="">};</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> words1</span><span class="">,</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">CASE_INSENSITIVE_ORDER </span><span class="">);</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> words2</span><span class="">,</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">CASE_INSENSITIVE_ORDER </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class="">                         </span><span class=""> // true</span><span class=""><br/></span>    Arrays<span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> words1</span><span class="">,</span><span class=""> words2</span><span class="">,</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">CASE_INSENSITIVE_ORDER </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <div class="listing " id="l_none_4884"><pre><span class=""/><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Arrays</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static boolean equals(Object[] a, Object[] b)</samp><br/>Compares two arrays with object references. An object array may contain 
+                        <samp class="listingcharacter listingcharacter">null</samp>. In this case, equivalence holds for all elements 
+                        <samp class="listingcharacter listingcharacter">e1</samp> from 
+                        <samp class="listingcharacter listingcharacter">a</samp> and 
+                        <samp class="listingcharacter listingcharacter">e2</samp> from 
+                        <samp class="listingcharacter listingcharacter">b</samp> at the same position: 
+                        <samp class="listingcharacter listingcharacter">e1==null ? e2==null : e1.equals(e2)</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static boolean deepEquals(Object[] a, Object[] b)</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">true</samp>
+                     if the two arrays are equal as are all sub-arrays—recursively in the case of sub-object arrays.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; boolean equals(T[] a, T[] b, Comparator&lt;? super T&gt; cmp)</samp><br/>Compares two arrays with a 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp>, and 
+                        <samp class="listingcharacter listingcharacter">cmp.compare(a[i], b[i])</samp> must be 0 for all pairs for both elements to be considered equal. We can ignore the 
+                        <samp class="listingcharacter listingcharacter">&lt;? super T&gt;</samp>
+                     specification for now.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; boolean equals(T[] a, int aFromIndex, int aToIndex, T[] b, int bFromIndex, int bToIndex, Comparator&lt;? super T&gt; cmp)</samp><br/>Compares sections of arrays with a 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.6.6">4.6.6    
+                <a id="p272"/>
+            Searching Differences Using Mismatch (...)*</h3>
+            
+            <p class="standard">Furthermore, you can use the following methods:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int mismatch(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a, </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] b)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int mismatch(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a, int aFromIndex, int aToIndex, </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] b, int bFromIndex, int bToIndex)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">These methods return the index on the first element that’s unequal. If both arrays are equal, the return value is 
+                <samp class="listingcharacter listingcharacter">-1</samp>
+            .</p>
+            
+            <p class="standard">For finding a mismatch in an array of objects, you can also use the following methods:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int mismatch(Object[] a, Object[] b)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int mismatch(Object[] a, int aFromIndex, int aToIndex, Object[] b, int bFromIndex, int bToIndex)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;T&gt; int mismatch(T[] a, T[] b, Comparator&lt;? super T&gt; cmp)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;T&gt; int mismatch(T[] a, int aFromIndex, int aToIndex, T[] b, int bFromIndex, int bToIndex, Comparator&lt;? super T&gt; cmp)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The first and second methods use 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> directly; the third and fourth use an external 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.6.7">4.6.7    Filling Arrays*</h3>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">Arrays.fill(...)</samp>
+                <a class="indexanchor" id="i04_31"/>
+             fills an array with a fixed value. The start-end range can be specified optionally.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Let’s say we have a 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 array of length 6. The first half should be set with “Num Nums,” and the remaining half, with “Orbit.” Then, the array should be “shuffled” (i.e., mixed). Consider the following example:</p>
+                
+                <div class="listing " id="l_none_4890"><pre><span class="">String</span><span class="">[]</span><span class=""> array </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">String</span><span class="">[</span><span class=""> </span><span class="">6</span><span class=""> </span><span class="">];</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">fill</span><span class="">(</span><span class=""> array</span><span class="">,</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> array</span><span class="">.</span><span class="">length</span><span class=""> / 2, </span><span class="">"Num Nums"</span><span class=""> );</span><br/>Arrays.fill( array, array.length /<span class=""> </span><span class="">2</span><span class="">,</span><span class=""> array</span><span class="">.</span><span class="">length</span><span class="">,</span><span class=""> </span><span class="">"Orbit"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Collections<span class="">.</span><span class="">shuffle</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> array </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> array </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard last">No specific method exists to mix an array, but the 
+                    <samp class="listingcharacter listingcharacter">Collections</samp> class can achieve this goal with lists, which provide a little detour (from array to list) to enable access to the 
+                    <samp class="listingcharacter listingcharacter">shuffle(...)</samp>
+                 method.</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_4901"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Arrays</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void fill(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a, </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">*** </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">val)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p273"/>
+                        static void fill(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a, int fromIndex, int toIndex, </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">*** </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">val)</samp><br/>Places the element 
+                        <samp class="listingcharacter listingcharacter">val</samp> into the array. Possible types for 
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span> are 
+                        <samp class="listingcharacter listingcharacter">boolean</samp>, 
+                        <samp class="listingcharacter listingcharacter">char</samp>, 
+                        <samp class="listingcharacter listingcharacter">byte</samp>, 
+                        <samp class="listingcharacter listingcharacter">short</samp>, 
+                        <samp class="listingcharacter listingcharacter">int</samp>, 
+                        <samp class="listingcharacter listingcharacter">long</samp>, 
+                        <samp class="listingcharacter listingcharacter">double</samp>, or 
+                        <samp class="listingcharacter listingcharacter">float</samp> or any objects via 
+                        <samp class="listingcharacter listingcharacter">Object</samp>. For a range, 
+                        <samp class="listingcharacter listingcharacter">fromIndex</samp> is inclusive, and 
+                        <samp class="listingcharacter listingcharacter">toIndex</samp>
+                     is exclusive.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Besides the ability to fill an array with fixed values, an additional two methods are available: 
+                <samp class="listingcharacter listingcharacter">setAll(…)</samp> and 
+                <samp class="listingcharacter listingcharacter">parallelSetAll(…)</samp>
+            . These methods traverse a given array and call a specific method for each index used for initialization.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example*</h6>
+                
+                <p class="standard first">The following code fills a 
+                    <samp class="listingcharacter listingcharacter">double</samp>
+                 array with random numbers:</p>
+                
+                <div class="listing " id="l_none_4916"><pre><span class="">double</span><span class="">[]</span><span class=""> randoms </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">double</span><span class="">[</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">];</span><span class=""><br/></span>Arrays<span class="">.</span>
+                    <span class="bold"><span class="">setAll</span><span class="">( randoms, v -&gt; Math.</span><span class="">random</span><span class="">() )</span></span>;<br/>System.out.<span class="">println</span><span class="">( Arrays.</span><span class="">toString</span><span class="">( randoms ) );</span><span class=""/></pre></div>
+                
+                <p class="standard last">This example uses lambda expressions to describe the function. We’ll return to this syntax in 
+                    <span class="crossreference "><a href="13_001.html#h13">Chapter 13</a></span>
+                .</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_4922"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Arrays</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void setAll(int[] array, IntUnaryOperator generator)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void setAll(double[] array, IntToDoubleFunction generator)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void setAll(long[] array, IntToLongFunction generator)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; void setAll(T[] array, IntFunction&lt;? extends T&gt; generator)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void parallelSetAll(double[] array, IntToDoubleFunction generator)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void parallelSetAll(int[] array, IntUnaryOperator generator)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void parallelSetAll(long[] array, IntToLongFunction generator)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; void parallelSetAll(T[] array, IntFunction&lt;? extends T&gt; generator)</samp><br/>Traverses a given array in its entirety, passing the index to the 
+                        <samp class="listingcharacter listingcharacter">generator</samp>
+                     step by step. The generator maps the index to a value, which in turn is used for array initialization.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.6.8">4.6.8    Copying Array Sections*</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Arrays</samp> class provides a set of 
+                <samp class="listingcharacter listingcharacter">copyOf(...)</samp>
+                <a class="indexanchor" id="i04_32"/> and 
+                <samp class="listingcharacter listingcharacter">copyOfRange(...)</samp>
+                <a class="indexanchor" id="i04_33"/> methods, which have an advantage over 
+                <samp class="listingcharacter listingcharacter">clone()</samp> in that they also allow range specifications and can make the new array larger. In the latter case, the method fills the array with 
+                <samp class="listingcharacter listingcharacter">null</samp>, 
+                <samp class="listingcharacter listingcharacter">false</samp>, or 
+                <samp class="listingcharacter listingcharacter">0</samp>
+            , depending on the type.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Parts of 
+                    <samp class="listingcharacter listingcharacter">string</samp> array 
+                    <samp class="listingcharacter listingcharacter">names</samp>
+                 are to be transferred into new arrays:</p>
+                
+                <div class="listing  last_item" id="l_none_4928"><pre><span class="">
+                        <a id="p274"/>
+                    String</span><span class="">[]</span><span class=""> names </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"Big Hunk"</span><span class="">,</span><span class=""> </span><span class="">"Mamba"</span><span class="">,</span><span class=""> </span><span class="">"Charms"</span><span class="">,</span><span class=""> </span><span class="">"Gushers"</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> slice1 </span><span class="">=</span><span class=""> Arrays</span><span class="">.</span><span class="">copyOf</span><span class="">(</span><span class=""> names</span><span class="">,</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> slice1 </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // [Big Hunk, Mamba]</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> slice2 </span><span class="">=</span><span class=""> Arrays</span><span class="">.</span><span class="">copyOf</span><span class="">(</span><span class=""> names</span><span class="">,</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> slice2 </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>// [Big Hunk, Mamba, Charms, Gushers, null]<span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> slice3 </span><span class="">=</span><span class=""> Arrays</span><span class="">.</span><span class="">copyOfRange</span><span class="">(</span><span class=""> names</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> slice3 </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // [Charms, Gushers]</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> slice4 </span><span class="">=</span><span class=""> Arrays</span><span class="">.</span><span class="">copyOfRange</span><span class="">(</span><span class=""> names</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> slice4 </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // [Charms, Gushers, null]</span></pre></div>
+            
+            </div>
+            
+            <div class="listing " id="l_none_4940"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Arrays</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static ***[] copyOf(***[] original, int newLength)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static ***[] copyOfRange(***[] original, int from, int to)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; T[] copyOf(T[] original, int newLength)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T,U&gt; T[] copyOf(U[] original, int newLength, Class&lt;? extends T[]&gt; newType)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; T[] copyOfRange(T[] original, int from, int to)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T,U&gt; T[] copyOfRange(U[] original, int from, int to, <br/>Class&lt;? extends T[]&gt; newType)</samp><br/>Creates a new array with the desired size or range from an existing array. As usual, the index 
+                        <samp class="listingcharacter listingcharacter">from</samp> is inclusive, and 
+                        <samp class="listingcharacter listingcharacter">to</samp> is exclusive. 
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span> stands for 
+                        <samp class="listingcharacter listingcharacter">boolean</samp>, 
+                        <samp class="listingcharacter listingcharacter">byte</samp>, 
+                        <samp class="listingcharacter listingcharacter">char</samp>, 
+                        <samp class="listingcharacter listingcharacter">short</samp>, 
+                        <samp class="listingcharacter listingcharacter">int</samp>, 
+                        <samp class="listingcharacter listingcharacter">long</samp>, 
+                        <samp class="listingcharacter listingcharacter">float</samp>, or 
+                        <samp class="listingcharacter listingcharacter">double</samp>. The specifications in angle brackets are generics, which are presented in more detail in 
+                        <span class="crossreference "><a href="12_001.html#h12">Chapter 12</a></span>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example*</h6>
+                
+                <p class="standard first">Let’s look at a good example of 
+                    <samp class="listingcharacter listingcharacter">copyOf(...)</samp>
+                 where the destination array is larger. The following code attaches two arrays to each other:</p>
+                
+                <div class="listing " id="l_none_4960"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> T</span><span class="">[]</span><span class=""> </span><span class="">concat</span><span class="">(</span><span class=""> T</span><span class="">[]</span><span class=""> first</span><span class="">,</span><span class=""> T</span><span class="">[]</span><span class=""> second </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  T<span class="">[]</span><span class=""> result </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">Arrays.</span><span class="">copyOf</span><span class="">( first, first.length + second.length )</span></span>;<br/>  System.<span class="">arraycopy</span><span class="">( second, </span><span class="">0</span><span class="">, result, first.length, second.length );</span><br/><br/>  <span class="">return</span><span class=""> result;</span><br/>}<span class=""/></pre></div>
+                
+                <p class="standard last">This example uses generics (see 
+                    <span class="crossreference "><a href="12_001.html#h12">Chapter 12</a></span>, 
+                    <span class="crossreference "><a href="12_002.html#h12.2">Section 12.2</a></span>) to keep the type flexible. For a better understanding, think of 
+                    <samp class="listingcharacter listingcharacter">T</samp> as type 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 and mentally delete what is contained in the angle brackets.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.6.9">4.6.9    
+                <a id="p275"/>
+            Binary Search*</h3>
+            
+            <p class="standard">If the array is sorted, a binary search can be performed via 
+                <samp class="listingcharacter listingcharacter">Arrays.binarySearch(...)</samp>
+                <a class="indexanchor" id="i04_34"/>. If the array isn’t sorted, the result is unpredictable. If 
+                <samp class="listingcharacter listingcharacter">binarySearch(...)</samp>
+             finds the element, the return value is the index of the location; otherwise, the return value is negative.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example searches for an element in the sorted array:</p>
+                
+                <div class="listing  last_item" id="l_none_4971"><pre><span class="">int</span><span class="">[]</span><span class=""> numbers </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span>
+                    <span class="bold"><span class="">100</span></span><span class="">, </span><span class="">1000</span><span class=""> };</span><br/>System.out.<span class="">println</span><span class="">( Arrays.</span><span class="">binarySearch</span><span class="">( numbers, </span>
+                    <span class="bold"><span class="">100</span></span><span class=""> ) );</span><span class=""> // 2</span>
+                    <span class="bold"><span class=""/></span><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">If the array isn’t sorted in ascending order, an incorrect result is the consequence.</p>
+            
+            <p class="standard">The method
+                <samp class="listingcharacter listingcharacter"> binarySearch(...)</samp> returns a coded position where an element could be inserted in case the element isn’t in the array. So the index does not collide with a normal position of a find, which is always ⩾ 0, the return is negative and coded as 
+                <samp class="listingcharacter listingcharacter">-</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">insertionPosition </samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">- 1</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following example, element 101 does not exist in the array:</p>
+                
+                <div class="listing " id="l_none_4970"><pre><span class="">int</span><span class="">[]</span><span class=""> numbers </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span>
+                    <span class="bold"><span class="">1</span><span class="">, </span><span class="">10</span><span class="">, </span><span class="">100</span><span class="">, </span><span class="">1000</span></span><span class=""> };</span><br/>System.out.<span class="">println</span><span class="">( Arrays.</span><span class="">binarySearch</span><span class="">( numbers, </span>
+                    <span class="bold"><span class="">101</span></span><span class=""> ) );</span><span class=""> // </span>
+                    <span class="bold">-4<span class=""/></span><span class=""/></pre></div>
+                
+                <p class="standard last">The return is 
+                    <samp class="listingcharacter listingcharacter">-4</samp>
+                , because –4 = –3 – 1, which gives a possible insertion position of 3. This calculation is correct because 101 would go into the array in the following way: 1 (position 0), 10 (position 1), 100 (position 2), and finally 101 (position 3).</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first">Since the array must be sorted in 
+                    <samp class="listingcharacter listingcharacter">Arrays.binarySearch(...)</samp>, a preceding call to 
+                    <samp class="listingcharacter listingcharacter">Arrays.sort(...)</samp>
+                 can prepare the array for this sort operation. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_4985"><pre><span class="">int</span><span class="">[]</span><span class=""> numbers </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">100</span><span class="">,</span><span class=""> </span><span class="">1000</span><span class="">,</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">};</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> numbers </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class=""> numbers  </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // [1, 10, 100, 1000]</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">binarySearch</span><span class="">(</span><span class=""> numbers</span><span class="">,</span><span class=""> </span><span class="">100</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // 2</span><span class=""/></pre></div>
+                
+                <p class="standard last">Sorting is necessary only once and shouldn’t be repeated unnecessarily.</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_41006"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Arrays</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p276"/>
+                        static int binarySearch(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a, </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">*** </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">key)</samp><br/>Searches for a key with the binary search. 
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span> stands for 
+                        <samp class="listingcharacter listingcharacter">byte</samp>, 
+                        <samp class="listingcharacter listingcharacter">char</samp>, 
+                        <samp class="listingcharacter listingcharacter">int</samp>, 
+                        <samp class="listingcharacter listingcharacter">long</samp>, 
+                        <samp class="listingcharacter listingcharacter">float</samp>, or 
+                        <samp class="listingcharacter listingcharacter">double</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int binarySearch(Object[] a, Object key)</samp><br/>Searches for 
+                        <samp class="listingcharacter listingcharacter">key</samp> using the binary search. The objects must implement the 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp>
+                     interface. Generally, this requirement means that the elements must be of the same type (i.e., strings and bouncy castle objects shouldn’t be mixed).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; int binarySearch(T[] a, T key, Comparator&lt;? super T&gt; c)</samp><br/>Searches for an element in the object array using the binary search. The comparisons are carried out by the special comparison object 
+                        <samp class="listingcharacter listingcharacter">c</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; int binarySearch(T[] a, int fromIndex, int toIndex, <br/>T key, Comparator&lt;? super T&gt; c)</samp><br/>Restricts the binary search to ranges.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The API documentation of 
+                <samp class="listingcharacter listingcharacter">binarySearch(...)</samp> is a bit more difficult due to the use of generics (more on this topic in 
+                <span class="crossreference "><a href="12_001.html#h12">Chapter 12</a></span>, 
+                <span class="crossreference "><a href="12_001.html#h12.1.6">Section 12.1.6</a></span>). We’ll also return to the static method 
+                <samp class="listingcharacter listingcharacter">binarySearch(...)</samp> for arbitrary lists in 
+                <span class="crossreference "><a href="18_001.html#h18">Chapter 18</a></span>, 
+                <span class="crossreference "><a href="18_002.html#h18.2.4">Section 18.2.4</a></span>. We’ll also clarify the meaning of the 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> and 
+                <samp class="listingcharacter listingcharacter">Comparable</samp> interfaces in detail in 
+                <span class="crossreference "><a href="11_001.html#h11">Chapter 11</a></span>, 
+                <span class="crossreference "><a href="11_004.html#h11.4">Section 11.4</a></span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.6.10">4.6.10    Lexicographic Array Comparisons Using compare(...) and compareUnsigned(...)</h3>
+            
+            <p class="standard">Various 
+                <samp class="listingcharacter listingcharacter">int compare*(</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">***</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">[] a, </samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">***</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">[] b)</samp> methods can check arrays and test all pairs for order. The return already known from 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>: If every 
+                <samp class="listingcharacter listingcharacter">a[i] == b[i]</samp>, the return is 
+                <samp class="listingcharacter listingcharacter">0</samp>. If an 
+                <samp class="listingcharacter listingcharacter">a[i]</samp> in the query sequence is less than 
+                <samp class="listingcharacter listingcharacter">b[i]</samp>, the return is negative; if a 
+                <samp class="listingcharacter listingcharacter">a[i]</samp> is greater than 
+                <samp class="listingcharacter listingcharacter">b[i]</samp>, the return is positive. The method is overloaded with a variant that selects a range in the array: 
+                <samp class="listingcharacter listingcharacter">compare(</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">***</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">[] a, int aFromIndex, int aToIndex, </samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">***</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">[] b, int bFromIndex, int bToIndex)</samp>
+            . </p>
+            
+            <p class="standard">For 
+                <samp class="listingcharacter listingcharacter">byte</samp>, 
+                <samp class="listingcharacter listingcharacter">short</samp>, 
+                <samp class="listingcharacter listingcharacter">int</samp>, and 
+                <samp class="listingcharacter listingcharacter">long</samp>
+            , several unsigned comparison method also exist:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int compareUnsigned(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a, </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] b)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int compareUnsigned(</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] a, int aFromIndex, int aToIndex, </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">***</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">[] b, int bFromIndex, int bToIndex)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Separate methods for objects exist, such as the following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T extends Comparable&lt;? super T&gt;&gt; int compare(T[] a, T[] b)</samp><br/>Compares two object arrays, where the 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp>
+                     determines the order of the object pairs.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T extends Comparable&lt;? super T&gt;&gt; int compare(T[] a, int aFromIndex, int aToIndex, T[] b, int bFromIndex, int bToIndex)</samp><br/>Compares snippets.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p277"/>
+                        static &lt;T&gt; int compare(T[] a, T[] b, Comparator&lt;? super T&gt; cmp)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; int compare(T[] a, int aFromIndex, int aToIndex,T[] b, int bFromIndex, int bToIndex, Comparator&lt;? super T&gt; cmp)</samp><br/>Makes a comparison using an external 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp>
+                     object.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.6.11">4.6.11    Arrays for Lists with Arrays.asList(...): Convenient for Searching and Comparing*</h3>
+            
+            <p class="standard">If the array is unsorted, 
+                <samp class="listingcharacter listingcharacter">binarySearch(...)</samp> won’t work. The 
+                <samp class="listingcharacter listingcharacter">Arrays</samp> class doesn’t have a method for this case. Consequently, a separate loop is needed. But another option is possible: The static method 
+                <samp class="listingcharacter listingcharacter">Arrays.asList(...)</samp>
+                <a class="indexanchor" id="i04_35"/> can decorate the array as a list of type 
+                <samp class="listingcharacter listingcharacter">java.util.List</samp>, which then provides handy methods like 
+                <samp class="listingcharacter listingcharacter">contains(…)</samp>, 
+                <samp class="listingcharacter listingcharacter">equals(…)</samp>, or 
+                <samp class="listingcharacter listingcharacter">subList(...)</samp>. With these methods, more operations are possible on arrays, extending beyond the methods previously defined in the 
+                <samp class="listingcharacter listingcharacter">Arrays</samp>
+             object itself.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following code tests whether the 
+                    <samp class="listingcharacter listingcharacter">-?</samp> switch is set in the command line. The runtime environment passes the arguments passed in the command line as a string array to the 
+                    <samp class="listingcharacter listingcharacter">main(String[] args)</samp>
+                 method:</p>
+                
+                <div class="listing  last_item" id="l_none_41008"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> args </span><span class="">).</span><span class="">contains</span><span class="">(</span><span class=""> </span><span class="">"-?"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  …</pre></div>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following code tests whether sections of two arrays are equal:</p>
+                
+                <div class="listing " id="l_none_41031"><pre><span class="">// Index         0                1          2</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> a </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"Asus"</span><span class="">,</span><span class="">       </span><span class="">"Elitegroup"</span><span class="">,</span><span class=""> </span><span class="">"MSI"</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"Elitegroup"</span><span class="">,</span><span class=""> </span><span class="">"MSI"</span><span class="">,</span><span class="">        </span><span class="">"Shuttle"</span><span class=""> </span><span class="">};</span><span class=""><br/></span><br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> a </span><span class="">).</span><span class="">subList</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">).</span><span class=""><br/></span>                    <span class="">equals</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> b </span><span class="">).</span><span class="">subList</span><span class="">(</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // true</span><span class=""> </span></pre></div>
+                
+                <p class="standard last">In the case of 
+                    <samp class="listingcharacter listingcharacter">subList(...)</samp>, the start index is inclusive, and the end index is exclusive, which is the standard notation of ranges in Java, as in 
+                    <samp class="listingcharacter listingcharacter">substring(...)</samp> or 
+                    <samp class="listingcharacter listingcharacter">fill(...)</samp>. Thus, in this example, entries 1 to 2 from 
+                    <samp class="listingcharacter listingcharacter">a</samp> are compared with entries 0 to 1 from 
+                    <samp class="listingcharacter listingcharacter">b</samp>
+                . </p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_41024"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Arrays</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T&gt; List&lt;T&gt; asList(T... a)</samp><br/>Returns a list of type 
+                        <samp class="listingcharacter listingcharacter">T</samp> given an array of type 
+                        <samp class="listingcharacter listingcharacter">T</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <a id="p278"/>The static method 
+                <samp class="listingcharacter listingcharacter">asList(...)</samp>
+             accepts either an array of objects (but not a primitive array!) or enumerated elements via the vararg.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">In the case of enumerated elements, no element or exactly one element is allowed as well. Consider the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_41037"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">              </span><span class=""> // []</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class="">"Nuts"</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">        </span><span class=""> // [Nuts]</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">A primitive array passed to 
+                    <samp class="listingcharacter listingcharacter">Arrays.asList(...)</samp> doesn’t return a list of primitive elements (no 
+                    <samp class="listingcharacter listingcharacter">list</samp>
+                 is filled with primitive values). Consider the following example:</p>
+                
+                <div class="listing " id="l_none_41060"><pre><span class="">double</span><span class="">[]</span><span class=""> prices </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1.99</span><span class="">,</span><span class=""> </span><span class="">2.19</span><span class=""> </span><span class="">};</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class="">prices</span><span class="">).</span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // [[D@46f7f36a]</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">toString</span><span class="">(</span><span class="">prices</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">         </span><span class=""> // [1.99, 2.19]</span><span class=""> </span></pre></div>
+                
+                <p class="standard last">The reason is simple: 
+                    <samp class="listingcharacter listingcharacter">Arrays.asList(...)</samp> recognizes 
+                    <samp class="listingcharacter listingcharacter">prices</samp> not as an array of objects, but as exactly one element of an enumeration. Thus, the static method places the array of primitives as one element in the list, and the 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> object method of a 
+                    <samp class="listingcharacter listingcharacter">java.util.List</samp> object merely calls 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                 on the array object, resulting in the cryptic output.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.6.12">4.6.12    A Long Snake</h3>
+            
+            <p class="standard">Let’s now use our newly acquired knowledge about arrays to enhance our snake game from 
+                <span class="crossreference "><a href="03_001.html#h3">Chapter 3</a></span>, 
+                <span class="crossreference "><a href="03_005.html#h3.5">Section 3.5</a></span>
+            , to make the snake longer. Previously, the snake had no length, only a position on the board. Now, a program in an array should always memorize the snake’s last position. For this purpose, the following changes are necessary:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Instead of storing the position in a 
+                        <samp class="listingcharacter listingcharacter">Point</samp> object, the last five positions are stored in 
+                        <samp class="listingcharacter listingcharacter">Point[] snakePositions</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If the player hits one of these five snake points, the game is lost. In the screen output, if a coordinate is equal to one of the snake points, we draw an “S.” The test whether one of the snake coordinates hits a point 
+                        <samp class="listingcharacter listingcharacter">p</samp> is performed with 
+                        <samp class="listingcharacter listingcharacter">Arrays.asList(snakePositions).contains(p)</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Another point is that the snake moves, but the array of five points always stores only the last five movements—the old positions are discarded. The program realizes this functionality with a so called ring buffer (aka circular buffer)
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn04_10" id="fn04_10">[ 110 ]</a></span>—in addition to the posi
+                <a id="p279"/>
+            tions, we’ll manage an index pointing to the head. Each movement of the snake moves the index one position further until at the end of the array the index is at 0 again.</p>
+            
+            <p class="standard">Some example possible points for the snake can be symbolically represented in the following way:</p>
+            
+            <div class="listing " id="l_none_41059"><pre>snakeIdx <span class="">=</span><span class=""> </span><span class="">0</span><span class=""><br/></span>snakePositions <span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span>
+                <span class="bold"><span class="">[</span><span class="">2</span><span class="">,</span><span class="">2</span><span class="">]</span></span>, null, null, null, null }<br/>snakeIdx = <span class="">1</span><span class=""><br/></span>snakePositions = { 
+                <span class="bold">[<span class="">2</span><span class="">,</span><span class="">2</span><span class="">]</span></span>, 
+                <span class="bold">[<span class="">2</span><span class="">,</span><span class="">3</span><span class="">]</span></span>, null, null, null }<br/>…<br/>snakeIdx = <span class="">4</span><span class=""><br/></span>snakePositions = { [<span class="">2</span><span class="">,</span><span class="">2</span><span class="">], [</span><span class="">2</span><span class="">,</span><span class="">3</span><span class="">], [</span><span class="">3</span><span class="">,</span><span class="">3</span><span class="">], [</span><span class="">3</span><span class="">,</span><span class="">4</span><span class="">], </span>
+                <span class="bold">[<span class="">4</span><span class="">,</span><span class="">4</span><span class="">]</span></span> }<br/>snakeIdx = <span class="">0</span><span class=""><br/></span>snakePositions = { 
+                <span class="bold">[<span class="">5</span><span class="">,</span><span class="">5</span><span class="">]</span></span>, [<span class="">2</span><span class="">,</span><span class="">3</span><span class="">], [</span><span class="">3</span><span class="">,</span><span class="">3</span><span class="">], [</span><span class="">3</span><span class="">,</span><span class="">4</span><span class="">], [</span><span class="">4</span><span class="">,</span><span class="">4</span><span class="">] } </span><span class=""/></pre></div>
+            
+            <p class="standard">Old positions are overridden and replaced by new ones.</p>
+            
+            <p class="standard">Let’s look at our game with these changes applied.</p>
+            
+            <div class="listing " id="l4.13"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">array</span><span class="">;</span><span class=""> </span><br/><br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Point</span><span class="">;</span><span class=""><br/></span>
+                <span class="bold"><span class="">import</span><span class=""> java.util.Arrays;</span><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> LongerZZZZZnake {</span><br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    Point playerPosition   = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">( </span><span class="">10</span><span class="">, </span><span class="">9</span><span class=""> );</span><br/>    Point goldPosition     = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">( </span><span class="">6</span><span class="">, </span><span class="">6</span><span class=""> );</span><br/>    Point doorPosition     = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">( </span><span class="">0</span><span class="">, </span><span class="">5</span><span class=""> );</span><br/>    
+                <span class="bold">Point[] snakePositions = <span class="">new</span><span class=""> Point[</span><span class="">5</span><span class="">];</span><br/>    <span class="">int</span><span class=""> snakeIdx = </span><span class="">0</span><span class="">;</span><br/>    snakePositions[ snakeIdx ] = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">( </span><span class="">30</span><span class="">, </span><span class="">2</span><span class=""> );</span></span><br/>    <span class="">boolean</span><span class=""> rich = false;</span><br/><br/>    <span class="">while</span><span class=""> ( true ) {</span><br/>      <span class="">if</span><span class=""> ( rich &amp;&amp; playerPosition.</span><span class="">equals</span><span class="">( doorPosition ) ) {</span><br/>        System.out.<span class="">println</span><span class="">( </span><span class="">"You won!"</span><span class=""> );</span><br/>        <span class="">break</span><span class="">;</span><br/>      }<br/>      <span class="">if</span><span class=""> ( </span>
+                <span class="bold">Arrays.<span class="">asList</span><span class="">( snakePositions ).</span><span class="">contains</span><span class="">( playerPosition )</span></span> ) {<br/>        System.out.<span class="">println</span><span class="">( </span><span class="">"SSSSSS. You were bitten by the snake!"</span><span class=""> );</span><br/>        <span class="">break</span><span class="">;</span><br/>      }<br/>      <span class="">if</span><span class=""> ( playerPosition.</span><span class="">equals</span><span class="">( goldPosition ) ) {</span><br/>        rich = true;<br/>        goldPosition.<span class="">setLocation</span><span class="">( -</span><span class="">1</span><span class="">, -</span><span class="">1</span><span class=""> );</span><br/>
+                <a id="p280"/>      }<br/><br/>     <span class=""> // Draw grid and symbols</span><span class=""><br/></span><br/>      <span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> y = </span><span class="">0</span><span class="">; y &lt; </span><span class="">10</span><span class="">; y++ ) {</span><br/>        <span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> x = </span><span class="">0</span><span class="">; x &lt; </span><span class="">40</span><span class="">; x++ ) {</span><br/>          Point p = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">( x, y );</span><br/>          <span class="">if</span><span class=""> ( playerPosition.</span><span class="">equals</span><span class="">( p ) )</span><br/>            System.out.<span class="">print</span><span class="">( </span><span class="">'&amp;'</span><span class=""> );</span><br/>          <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( </span>
+                <span class="bold">Arrays.<span class="">asList</span><span class="">( snakePositions ).</span><span class="">contains</span><span class="">( p )</span></span> )<br/>            System.out.<span class="">print</span><span class="">( </span><span class="">'S'</span><span class=""> );</span><br/>          <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( goldPosition.</span><span class="">equals</span><span class="">( p ) )</span><br/>            System.out.<span class="">print</span><span class="">( </span><span class="">'$'</span><span class=""> );</span><br/>          <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( doorPosition.</span><span class="">equals</span><span class="">( p ) )</span><br/>            System.out.<span class="">print</span><span class="">( </span><span class="">'#'</span><span class=""> );</span><br/>          <span class="">else</span><span class=""><br/></span>            System.out.<span class="">print</span><span class="">( </span><span class="">'.'</span><span class=""> );</span><br/>        }<br/>        System.out.<span class="">println</span><span class="">();</span><br/>      }<br/><br/>     <span class=""> // Console input and change player position</span><span class=""><br/></span><br/>      <span class="">switch</span><span class=""> ( </span><span class="">new</span><span class=""> java.util.</span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">next</span><span class="">() ) {</span><br/>        <span class="">case</span><span class=""> </span><span class="">"u"</span><span class=""> -&gt; playerPosition.y = Math.</span><span class="">max</span><span class="">( </span><span class="">0</span><span class="">, playerPosition.y - </span><span class="">1</span><span class=""> );</span><br/>        <span class="">case</span><span class=""> </span><span class="">"d"</span><span class=""> -&gt; playerPosition.y = Math.</span><span class="">min</span><span class="">( </span><span class="">9</span><span class="">, playerPosition.y + </span><span class="">1</span><span class=""> );</span><br/>        <span class="">case</span><span class=""> </span><span class="">"l"</span><span class=""> -&gt; playerPosition.x = Math.</span><span class="">max</span><span class="">( </span><span class="">0</span><span class="">, playerPosition.x - </span><span class="">1</span><span class=""> );</span><br/>        <span class="">case</span><span class=""> </span><span class="">"r"</span><span class=""> -&gt; playerPosition.x = Math.</span><span class="">min</span><span class="">( </span><span class="">39</span><span class="">, playerPosition.x + </span><span class="">1</span><span class=""> );</span><br/>      }<br/><br/>     <span class=""> // Snake moves towards the player</span><span class=""><br/></span>
+                <span class="bold"><br/>      Point snakeHead = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">( snakePositions[snakeIdx].x,</span><br/>                                   snakePositions[snakeIdx].y );<br/></span><br/>      <span class="">if</span><span class=""> ( playerPosition.x &lt; </span>
+                <span class="bold">snakeHead.x</span> )<br/>        
+                <span class="bold">snakeHead.x--;</span><br/>      <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( playerPosition.x &gt; </span>
+                <span class="bold">snakeHead.x</span> )<br/>        
+                <span class="bold">snakeHead.x++;</span><br/>      <span class="">if</span><span class=""> ( playerPosition.y &lt; </span>
+                <span class="bold">snakeHead.y</span> )<br/>        
+                <span class="bold">snakeHead.y--;</span><br/>      <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( playerPosition.y &gt; </span>
+                <span class="bold">snakeHead.y</span> )<br/>        
+                <span class="bold">snakeHead.y++;<br/><br/>      snakeIdx = (snakeIdx + <span class="">1</span><span class="">) % snakePositions.length;</span><br/>
+                    <a id="p281"/>
+                      snakePositions[snakeIdx] = snakeHead;</span><br/>    }<span class=""> // end while</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 4.13</b>    
+            src/main/java/com/tutego/insel/array/LongerZZZZZnake.java</p>
+            
+            <p class="standard">For more advanced work, try to enhance our game with the following goals:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Replace the array with a dynamic data structure of type 
+                        <samp class="listingcharacter listingcharacter">ArrayList&lt;Point&gt;</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">After every other step by the user, the length of the snake should grow by one.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">When the player collects a gold piece, the length of the snake should shrink by one.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,186 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Arrays and Their Areas of Use" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Arrays and Their Areas of Use" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Arrays and Their Areas of Use</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h4.5">4.5    Library Support for Arrays</h2>
+        
+        <p class="standard">Arrays are objects, but they “can’t do” much. In many other programming languages, such as JavaScript, the situation is quite different. In Java, the methods are swapped out, especially in 
+            <samp class="listingcharacter listingcharacter">java.util.Arrays</samp>
+        .</p>
+        
+        
+            
+            <h3 class="t3" id="h4.5.1">4.5.1    Cloning Can Be Worthwhile: Propagating Arrays</h3>
+            
+            <p class="standard">To create a copy of an array with the same size and element type, you can use the object method 
+                <samp class="listingcharacter listingcharacter">clone()</samp>
+                <a class="indexanchor" id="i04_24"/>.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn04_08" id="fn04_08">[ 108 ]</a></span>
+             </p>
+            
+            <p class="standard">
+                <a id="p265"/>
+            This method clones—in our case copies—the elements of an array object into a new array.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following code finds out whether an array is sorted or not:</p>
+                
+                <div class="listing " id="l_none_4747"><pre><span class="">int</span><span class="">[]</span><span class=""> numbers </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">99</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">int</span><span class="">[]</span><span class=""> numbersClone </span><span class="">=</span><span class=""> numbers</span><span class="">.</span><span class="">clone</span><span class="">();</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> numbersClone </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> numbers</span><span class="">,</span><span class=""> numbersClone </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // true</span><span class=""/> </pre></div>
+                
+                <p class="standard last">
+                    <samp class="listingcharacter listingcharacter">Arrays.sort(...)</samp> will operate in-place, so it would change the original array if any sorting is done. For that reason we make a copy and sort that copy. The 
+                    <samp class="listingcharacter listingcharacter">Arrays.equals(...)</samp> call returns 
+                    <samp class="listingcharacter listingcharacter">true</samp>
+                 in this example because the arrays have the same sorted contents.</p>
+            
+            </div>
+            
+            <p class="standard">In the case of cloned object arrays, note that the copy is flat. References from the first array are copied by 
+                <samp class="listingcharacter listingcharacter">clone()</samp>
+             into the new array, but the referenced objects themselves are not cloned. Thus, for multidimensional arrays, only the first dimension is copied, and sub-arrays are thus shared.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following example, two arrays reference the same 
+                    <samp class="listingcharacter listingcharacter">Point</samp>
+                 object; the copy is flat but not deep:</p>
+                
+                <div class="listing  last_item" id="l_none_4736"><pre>Point<span class="">[]</span><span class=""> pointArray1 </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">),</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">)</span><span class=""> </span><span class="">};</span><span class=""><br/></span>Point<span class="">[]</span><span class=""> pointArray2 </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">pointArray1.</span><span class="">clone</span><span class="">()</span></span>;<br/>System.out.<span class="">println</span><span class="">( pointArray1[ </span><span class="">0</span><span class=""> ] == pointArray2[ </span><span class="">0</span><span class=""> ] ); </span><span class=""> // true</span><span class=""> </span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.5.2">4.5.2    Why Can Arrays “Do” So Little?</h3>
+            
+            <p class="standard">Arrays have a 
+                <samp class="listingcharacter listingcharacter">length</samp> attribute and a 
+                <samp class="listingcharacter listingcharacter">clone()</samp> method as well as the usual methods inherited from 
+                <samp class="listingcharacter listingcharacter">Object</samp>—which is
+                <samp class="listingcharacter listingcharacter"> </samp>not much! While other Java SE-classes like 
+                <samp class="listingcharacter listingcharacter">String</samp>, 
+                <samp class="listingcharacter listingcharacter">Arrays</samp>, or 
+                <samp class="listingcharacter listingcharacter">System</samp> have a Javadoc and consequently appear in the application programming interface (API) documentation there is no such Javadoc for arrays. Since an infinite number of array types exists—
+                <samp class="listingcharacter listingcharacter">[]</samp>
+             can be placed after any type—an infinite number of class declarations is possible.</p>
+            
+            <p class="standard">What arrays can do is described in the Java Language Specification (JLS). Each time a new method or change is made, the JLS would require adjustment, which is impractical. Of course, methods like 
+                <samp class="listingcharacter listingcharacter">sort(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">indexOf(...)</samp> on array objects would be handy, but if too much has been integrated in the language, that’s not good. Oracle also wants to keep the documentation of such methods out of the JLS, which is why the methods have moved to an extra class, 
+                <samp class="listingcharacter listingcharacter">Arrays</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p266"/>
+                Note</h6>
+                
+                <p class="standard first last">The length is always the capacity of the array and is not information about how many array elements are in use. For example, an array may be 10 elements in size, but we might only use the first 2 positions.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.5.3">4.5.3    Copying Array Contents</h3>
+            
+            <p class="standard">Another useful static method is 
+                <samp class="listingcharacter listingcharacter">System.arraycopy(...)</samp>
+                <a class="indexanchor" id="i04_25"/>
+            . It can work in two ways:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">On two already existing arrays</span> <br/>Part of an array is copied into another array. 
+                        <samp class="listingcharacter listingcharacter">arraycopy(...)</samp>
+                     is suitable for implementing enlarging arrays by first creating a new larger array and then copying the old array contents into the new one.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">On the same array</span> <br/>The method can be used to move elements of an array by certain positions. The areas may well overlap.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The 
+                    <samp class="listingcharacter listingcharacter">arraycopy(...)</samp>
+                 method can also copy within its own array. The following code moves all elements in the array one position to the left or right and saves the remaining element to the end or to the start.</p>
+                
+                <div class="listing " id="l4.11"><pre><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">rotateLeft</span><span class="">(</span><span class=""> </span><span class="">int</span><span class="">[]</span><span class=""> numbers </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> first </span><span class="">=</span><span class=""> numbers</span><span class="">[</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">];</span><span class=""><br/></span>  System<span class="">.</span><span class="">arraycopy</span><span class="">(</span><span class=""> numbers</span><span class="">,</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> numbers</span><span class="">,</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> numbers</span><span class="">.</span><span class="">length </span><span class="">-</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  numbers<span class="">[</span><span class=""> numbers</span><span class="">.</span><span class="">length </span><span class="">-</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> first</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">rotateRight</span><span class="">(</span><span class=""> </span><span class="">int</span><span class="">[]</span><span class=""> numbers </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> last </span><span class="">=</span><span class=""> numbers</span><span class="">[</span><span class=""> numbers</span><span class="">.</span><span class="">length </span><span class="">-</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">];</span><span class=""><br/></span>  System<span class="">.</span><span class="">arraycopy</span><span class="">(</span><span class=""> numbers</span><span class="">,</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> numbers</span><span class="">,</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> numbers</span><span class="">.</span><span class="">length </span><span class="">-</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  numbers<span class="">[</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> last</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class="">[]</span><span class=""> numbers </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">};</span><span class=""><br/></span>  <span class="">rotateLeft</span><span class="">(</span><span class=""> numbers </span><span class="">);</span><span class="">  </span><span class=""> // [2, 3, 4, 1]</span><span class=""><br/></span>  <span class="">rotateLeft</span><span class="">(</span><span class=""> numbers </span><span class="">);</span><span class="">  </span><span class=""> // [3, 4, 1, 2]</span><span class=""><br/></span>  <span class="">rotateRight</span><span class="">(</span><span class=""> numbers </span><span class="">);</span><span class=""> </span><span class=""> // [2, 3, 4, 1]</span><span class=""><br/></span>} </pre></div>
+                
+                <p class="caption last"><b>Listing 4.11</b>    
+            src/main/java/com/tutego/insel/array/ArrayRollLeftRight.java (Snippet)</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_4773"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">System</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p267"/>
+                        static void arraycopy(Object src, int srcPos, Object dest, int destPos, int length)</samp><br/>Copies 
+                        <samp class="listingcharacter listingcharacter">length</samp> entries of the 
+                        <samp class="listingcharacter listingcharacter">src</samp> array from position 
+                        <samp class="listingcharacter listingcharacter">srcPos</samp> into an array named 
+                        <samp class="listingcharacter listingcharacter">dest</samp> from position 
+                        <samp class="listingcharacter listingcharacter">destPos</samp>
+                    . The type of the array doesn’t matter, but both arrays must be of the same type in both cases. For large arrays, this method works more quickly than a separate copy loop.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="imagebox figure-type"><a href="img-f4.2.html" id="f4.2"><img alt="Copying the Elements from One Array to Another" id="img-f4.2" src="bilderklein/klein04_002.png"/></a></div>
+            
+            <p class="caption "><b>Figure 4.2</b>    
+            Copying the Elements from One Array to Another</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

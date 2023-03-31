@@ -1,0 +1,554 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    The Tools of the JDK" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    The Tools of the JDK" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    The Tools of the JDK</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h23.3">23.3    The Java Runtime Environment</h2>
+        
+        <p class="standard">The Java interpreter 
+            <span class="italic">java</span>
+            <a class="indexanchor" id="i23_06"/> executes the Java bytecode in the runtime environment. For this task, the interpreter looks for the special static 
+            <samp class="listingcharacter listingcharacter">main(String[])</samp>
+         method in the class file passed as a parameter. A general call of the interpreter can be written in the following way:</p>
+        
+        <div class="listing " id="l_none_2324"><pre>$ 
+            <span class="bold">java [ options ] class name [ arguments ]</span>
+         </pre></div>
+        
+        <p class="standard">If the class is declared in a package, the name of the class must be fully qualified. For example, if the 
+            <samp class="listingcharacter listingcharacter">Main</samp> class is located in the package 
+            <samp class="listingcharacter listingcharacter">com.tutego</samp> (i.e., in the subdirectory 
+            <samp class="listingcharacter listingcharacter">com/tutego</samp>), the class name must be 
+            <samp class="listingcharacter listingcharacter">com.tutego.Main</samp>. The runtime environment must be able to find the required classes. Like the compiler, the JVM evaluates the 
+            <samp class="listingcharacter listingcharacter">CLASSPATH</samp>
+            <a class="indexanchor" id="i23_07"/> environment variable and allows the classpath to be specified by the 
+            <samp class="listingcharacter listingcharacter">-classpath</samp>
+            <a class="indexanchor" id="i23_08"/>
+         option.</p>
+        
+        
+            
+            <h3 class="t3" id="h23.3.1">23.3.1    Switches of the Java Virtual Machine</h3>
+            
+            <p class="standard">Various switches are possible for the JVM runtime environment, for instance, the following:</p>
+            
+            <table class="standardtable" id="t23.2">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Option</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Meaning</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-client</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Selects the 
+                                <span class="italic">Java HotSpot Client VM</span>
+                            , which is the default.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-server</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Selects the 
+                                <span class="italic">Java HotSpot Server VM</span>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i23_09"/>
+                                <samp class="listingcharacter listingcharacter">-cp </samp>
+                                <span class="italic">
+                                    <samp class="listingcharacter listingcharacter">classpath</samp>
+                                </span>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">A list of paths within which the compiler can find the class files. This option overrides the 
+                                <samp class="listingcharacter listingcharacter">CLASSPATH</samp>
+                             environment variable that may be set and doesn’t add to it. The semicolon (Windows) or colon (Unix) separates multiple directories.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">
+                                    <a id="p1094"/>
+                                -</samp>
+                                <span class="italic">
+                                    <samp class="listingcharacter listingcharacter">DProperty</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">=</samp>
+                                <span class="italic">
+                                    <samp class="listingcharacter listingcharacter">value</samp>
+                                </span>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Sets the value of a property, such as 
+                                <samp class="listingcharacter listingcharacter">-Dversion=1.2</samp>, which can later be queried by <br/>
+                                <samp class="listingcharacter listingcharacter">System.getProperty(..)</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-help</samp> or 
+                                <samp class="listingcharacter listingcharacter">-?</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Lists all available options.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-ea</samp>
+                                <a class="indexanchor" id="i23_10"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Enables assertions that are disabled by default.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-jar</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Starts an application from the JAR file if a class with a 
+                                <samp class="listingcharacter listingcharacter">main</samp>
+                            -method is named in the manifest file. However, the main class can still be specified.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-verbose</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item">
+                                <a class="indexanchor" id="i23_11"/>
+                            Provides further information about the runtime environment:</p>
+                            
+                            <ul>
+                                
+                                <li>
+                                    
+                                    <p class="standard first-item last-item"><samp class="listingcharacter listingcharacter">-verbose:class</samp> provides information about loaded classes.</p>
+                                
+                                </li>
+                                
+                                <li>
+                                    
+                                    <p class="standard first-item last-item"><samp class="listingcharacter listingcharacter">-verbose:gc</samp> provides information about garbage collection calls.</p>
+                                
+                                </li>
+                                
+                                <li>
+                                    
+                                    <p class="standard first-item last-item"><samp class="listingcharacter listingcharacter">-verbose:jni</samp> provides information about native calls.</p>
+                                
+                                </li>
+                            
+                            </ul>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-version</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Displays the current version.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-X</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Displays non-standardized options.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-Xdebug</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Starts with the debugger.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-Xincgc</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Turns on incremental automatic garbage collection.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-Xms</samp>
+                                <span class="italic">
+                                    <samp class="listingcharacter listingcharacter">n</samp>
+                                </span>
+                                <a class="indexanchor" id="i23_12"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Initial size of the memory area for allocating objects (in MiB); the default is 2 MiB.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-Xmx</samp>
+                                <span class="italic">
+                                    <samp class="listingcharacter listingcharacter">n</samp>
+                                </span>
+                                <a class="indexanchor" id="i23_13"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Maximum available memory area for the allocation of objects. As a simple number, 
+                                <samp class="listingcharacter listingcharacter">n</samp> describes the bytes or kilobytes with an appended 
+                                <samp class="listingcharacter listingcharacter">k</samp> or megabytes (appended 
+                                <samp class="listingcharacter listingcharacter">m</samp>), for example, 
+                                <samp class="listingcharacter listingcharacter">-Xms128m</samp>
+                            .</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-Xnoclassgc</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <a class="indexanchor" id="i23_14"/>
+                            Turns off the garbage collector for classes that have been loaded but are no longer needed.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-Xrs</samp>
+                                <a class="indexanchor" id="i23_15"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Reduces internally the use of Unix signals by the runtime environment. This switch may result in worse performance, but better compatibility with various Unix/Solaris versions.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">-Xssn</samp>
+                                <a class="indexanchor" id="i23_16"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Sets the size of the stack.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 23.2</b>    
+            Options of the java Interpreter</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The longer Oracle’s JVM exists, the longer the list of options will become. The standard JVM documentation at <span class="url"><a href="https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html">https://docs.oracle.com/en/java/javase/17/docs/specs/man/java.html</a></span> briefly lists all the available options.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h23.3.1.1">
+                    <a id="p1095"/>Classpath Wildcard
+                    <a class="indexanchor" id="i23_17"/>
+                </h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">-cp</samp>
+                    <a class="indexanchor" id="i23_18"/> option extends the classpath by Java Archive files (JAR files, with the 
+                    <span class="italic">.jar</span> extension) and individual class files (with the 
+                    <span class="italic">.class</span> extension). The classpath wildcard 
+                    <samp class="listingcharacter listingcharacter">*</samp>
+                 allows even easier specification of JAR files. We advise enclosing the specifications in quotation marks so that the shell doesn’t perform any expansions, unless expansion is desired.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example loads the 
+                        <span class="italic">log.jar</span> and all JAR files in the 
+                        <span class="italic">lib</span>
+                     directory to the classpath:</p>
+                    
+                    <div class="listing " id="l_none_2348"><pre>$ 
+                        <span class="bold">java -cp "log.jar;lib/*" MainClass</span><br/>$ 
+                        <span class="bold">java -cp "log.jar:lib/*" MainClass</span>
+                    </pre></div>
+                    
+                    <p class="standard last">Windows separates paths with a semicolon, while Unix separates them with a colon.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h23.3.1.2">Additional Options</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">-X</samp> option can set further switches and then send additional statements to the runtime environment, for example, about the maximum memory to be used. An interesting switch is 
+                    <samp class="listingcharacter listingcharacter">-XshowSettings</samp>, which prints the states of the default properties. This switch is quite useful, for example, to read which paths have been set. If you apply this switch to the program 
+                    <samp class="listingcharacter listingcharacter">NinetyNineBottlesOfBeer</samp> from 
+                    <span class="crossreference "><a href="01_001.html#h1">Chapter 1</a></span>, 
+                    <span class="crossreference "><a href="01_008.html#h1.8.1">Section 1.8.1</a></span>
+                , you’ll get the following output:</p>
+                
+                <div class="listing " id="l_none_2362"><pre>$ 
+                    <span class="bold">java -XshowSettings NinetyNineBottlesOfBeer</span><br/>VM settings:<br/>    Max. Heap Size (Estimated): 3.95G<br/>    Using VM: Java HotSpot(TM) 64-Bit Server VM<br/><br/>Property settings:<br/>    file.encoding = Cp1252<br/>    file.separator = \<br/>    java.class.path = .<br/>… </pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">In addition to these simple 
+                        <samp class="listingcharacter listingcharacter">-X</samp> options, other special HotSpot options are set with 
+                        <samp class="listingcharacter listingcharacter">-XX</samp>
+                    . But the use of these switches is quite rare.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h23.3.2">23.3.2    The Difference between java.exe and javaw.exe</h3>
+            
+            <p class="standard">In a Windows installation, two executables in the Java JDK exist for the interpreter: 
+                <span class="italic">java.exe</span> and 
+                <a class="indexanchor" id="i23_19"/>
+                <span class="italic">javaw.exe .</span> Mostly, 
+                <span class="italic">java.exe</span> is used. The difference is that an application 
+                <a id="p1096"/>started via a graphical user interface (GUI) with 
+                <span class="italic">java.exe</span> displays a console window, unlike 
+                <span class="italic">javaw.exe</span>. Without a console window, 
+                <span class="italic">javaw</span> also doesn’t show any output via 
+                <samp class="listingcharacter listingcharacter">System.out/err</samp>
+            .</p>
+            
+            <p class="standard">Usually, a program with a GUI uses 
+                <span class="italic">java</span> during development and then 
+                <span class="italic">javaw</span>
+             in production operation.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

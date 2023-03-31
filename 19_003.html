@@ -1,0 +1,691 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Files and Data Streams" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Files and Data Streams" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Files and Data Streams</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h19.3">19.3    
+            <a id="p980"/>
+        Random Access Files</h2>
+        
+        <p class="standard">Files can be read and modified in two different ways: first, via a data stream that processes bytes as in a media stream and, second, via 
+            <span class="italic">random access</span>. While the data stream enforces a strict sequence, random access doesn’t care because it can jump back and forth arbitrarily within a file and maintains a file pointer that you can set. Since we’re dealing with files, the whole thing is then called a 
+            <span class="italic">random access file</span>, and the class that provides random access is 
+            <samp class="listingcharacter listingcharacter">java.io.RandomAccessFile</samp>
+        .</p>
+        
+        
+            
+            <h3 class="t3" id="h19.3.1">19.3.1    Opening a RandomAccessFile for Reading and Writing</h3>
+            
+            <p class="standard">The class declares two constructors that use a file name or 
+                <samp class="listingcharacter listingcharacter">File</samp> object to create a 
+                <samp class="listingcharacter listingcharacter">RandomAccessFile</samp>
+                <a class="indexanchor" id="i19_04"/> object. In the constructor, the second parameter specifies a string for the access mode; this parameterized constructor can be used to open a file in read or write mode, as shown in 
+                <span class="crossreference "><a href="19_003.html#t19.1">Table 19.1</a></span>
+            . The specification avoids errors because a file opened for reading can’t be overwritten by mistake.</p>
+            
+            <table class="standardtable" id="t19.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Mode</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Function</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">r</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">The file will be opened for reading. Attempting to write to this file is penalized with an exception. If the file doesn’t exist, an error will be triggered.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">rw</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">The file is opened for reading and writing. An existing file is opened, and the data can be appended without deleting the file. If the file doesn’t exist, the file will be (re-)created, and its start size will be zero. If the file should be deleted, you must do so explicitly by using 
+                                <samp class="listingcharacter listingcharacter">delete()</samp> from the 
+                                <samp class="listingcharacter listingcharacter">File</samp>
+                             class itself.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 19.1</b>    
+            Two Modes for the Constructor of RandomAccessFile</p>
+            
+            <p class="standard">In addition, an 
+                <samp class="listingcharacter listingcharacter">s</samp> or 
+                <samp class="listingcharacter listingcharacter">d</samp> can be appended to 
+                <samp class="listingcharacter listingcharacter">rw</samp>
+            ; these additions represent options for synchronizing the data with the file system when writing.</p>
+            
+            <div class="listing " id="l_none_19209"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                <span class="bold">RandomAccessFile</span><br/><span class="">implements</span><span class=""> DataOutput, DataInput, Closeable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">RandomAccessFile(String name, String mode) throws FileNotFoundException</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">RandomAccessFile(File file, String mode) throws FileNotFoundException</samp><br/>Opens the file. Whether the file is prepared for reading or writing is determined by the 
+                        <samp class="listingcharacter listingcharacter">mode</samp> string with the valid assignments 
+                        <samp class="listingcharacter listingcharacter">r</samp> or 
+                        <samp class="listingcharacter listingcharacter">rw</samp>. If the mode is set incorrectly, an 
+                        <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> will be raised. A 
+                        <samp class="listingcharacter listingcharacter">FileNotFoundException</samp>
+                     will be raised if the file can’t be opened.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void close()</samp><br/>Closes an open file.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.3.2">19.3.2    
+                <a id="p981"/>
+            Reading from RandomAccessFile</h3>
+            
+            <p class="standard">To retrieve data from a file managed with 
+                <samp class="listingcharacter listingcharacter">RandomAccessFile</samp>, you can use one of the 
+                <samp class="listingcharacter listingcharacter">read*(...)</samp> methods. These methods directly read the byte field from the file or read several bytes combined to a primitive data type. 
+                <samp class="listingcharacter listingcharacter">readChar()</samp>, for example, reads 2 bytes in a row and combines them into a 
+                <samp class="listingcharacter listingcharacter">char</samp>
+            .</p>
+            
+            <div class="listing " id="l_none_19225"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                <span class="bold">RandomAccessFile</span><br/><span class="">implements</span><span class=""> DataOutput, DataInput, Closeable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int read() throws IOException</samp><br/>Reads exactly 1 byte and returns this byte as 
+                        <samp class="listingcharacter listingcharacter">int</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int read(byte[] b) throws IOException</samp><br/>Reads the amount of 
+                        <samp class="listingcharacter listingcharacter">b.length()</samp> bytes and stores this value in the 
+                        <samp class="listingcharacter listingcharacter">b</samp>
+                     field.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int read(byte[] b, int off, int len) throws IOException</samp><br/>Reads 
+                        <samp class="listingcharacter listingcharacter">len</samp> bytes from the file and writes them to the 
+                        <samp class="listingcharacter listingcharacter">b</samp> array starting at the position 
+                        <samp class="listingcharacter listingcharacter">off</samp> in the array. The read size is always returned, even if less than 
+                        <samp class="listingcharacter listingcharacter">len</samp>
+                     bytes were read.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final boolean readBoolean() throws IOException</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final byte readByte() throws IOException</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final short readShort() throws IOException</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final int readInt() throws IOException</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final long readLong() throws IOException</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final char readChar() throws IOException</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final double readDouble() throws IOException</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final float readFloat() throws IOException</samp><br/>Reads a primitive data type.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final int readUnsignedByte() throws IOException</samp><br/>Reads a byte interpreted as unsigned.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final int readUnsignedShort() throws IOException</samp><br/>Reads two bytes interpreted as unsigned.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final void readFully(byte[] b) throws IOException</samp><br/>Attempts to fill the entire buffer 
+                        <samp class="listingcharacter listingcharacter">b</samp>
+                    . </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final void readFully(byte[] b, int off, int len) throws IOException</samp><br/>Reads 
+                        <samp class="listingcharacter listingcharacter">len</samp> bytes and stores them in buffer 
+                        <samp class="listingcharacter listingcharacter">b</samp> starting at index 
+                        <samp class="listingcharacter listingcharacter">off</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Finally, the following two methods return a string:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final String readLine() throws IOException</samp><br/>Reads a line of text terminated by the end-of-line character 
+                        <samp class="listingcharacter listingcharacter">\r</samp> or 
+                        <samp class="listingcharacter listingcharacter">\n</samp> or a combination 
+                        <samp class="listingcharacter listingcharacter">\r\n</samp>. The last line doesn’t need to be terminated in this way because an end of file counts as an end of line. 
+                        <samp class="listingcharacter listingcharacter">readLine()</samp> doesn’t interpret characters as Unicode, but 
+                        <a id="p982"/>simply takes the characters as ASCII bytes. (Without converting various code pages, such as from a file in an unfamiliar IBM format, 
+                        <samp class="listingcharacter listingcharacter">readLine()</samp> won’t read the correct corresponding Unicode lines. This byte-in-char conversion would have to be done manually.) Also, because 
+                        <samp class="listingcharacter listingcharacter">RandomAccessFile</samp> doesn’t buffer, line-by-line processing of ASCII files via 
+                        <samp class="listingcharacter listingcharacter">readLine()</samp> isn’t suitable for speed reasons, and the appropriate 
+                        <samp class="listingcharacter listingcharacter">Scanner</samp> or 
+                        <samp class="listingcharacter listingcharacter">BufferedReader</samp>
+                     class should be used.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final String readUTF()</samp><br/>Reads a modified UTF-encoded string and returns a Unicode string. A UTF string combines either 1, 2, or 3 bytes into a Unicode character. Later in this section, we’ll describe UTF encoding in more detail.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h19.3.2.1">Return -1 and EOFException*</h4>
+                
+                <p class="standard">The methods do not all return an error if the file has already been processed and no more data is present. In the case of 
+                    <samp class="listingcharacter listingcharacter">int read()</samp>, 
+                    <samp class="listingcharacter listingcharacter">int read(byte[])</samp>, or 
+                    <samp class="listingcharacter listingcharacter">int read(byte[], int, int)</samp>, a return value of 
+                    <samp class="listingcharacter listingcharacter">-1</samp> is the result, and no exception arises. The same behavior is true for 
+                    <samp class="listingcharacter listingcharacter">readLine()</samp>. The method returns 
+                    <samp class="listingcharacter listingcharacter">null</samp> at the end of the file. Other read methods may enforce a certain number of bytes, for example, 
+                    <samp class="listingcharacter listingcharacter">readLong()</samp> with 8 bytes or 
+                    <samp class="listingcharacter listingcharacter">readByte()</samp> for only 1 byte. Thus, in case of an end of file, an 
+                    <samp class="listingcharacter listingcharacter">EOFException</samp>
+                    <a class="indexanchor" id="i19_05"/> will follow. You’ll rarely see other uses of 
+                    <samp class="listingcharacter listingcharacter">EOFException</samp>
+                 in the Java library.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h19.3.2.2">UTF-8 Encoding*</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">writeUTF(String)</samp>
+                    <a class="indexanchor" id="i19_06"/> and 
+                    <samp class="listingcharacter listingcharacter">readUTF()</samp>
+                    <a class="indexanchor" id="i19_07"/> are two operations prescribed by the 
+                    <samp class="listingcharacter listingcharacter">DataOutput</samp> and 
+                    <samp class="listingcharacter listingcharacter">DataInput</samp> interfaces. In addition to 
+                    <samp class="listingcharacter listingcharacter">RandomAccessFile</samp>, 
+                    <samp class="listingcharacter listingcharacter">DataOutputStream</samp> implements the 
+                    <samp class="listingcharacter listingcharacter">DataOutput</samp> interface, and 
+                    <samp class="listingcharacter listingcharacter">DataInputStream</samp> implements the 
+                    <samp class="listingcharacter listingcharacter">DataInput</samp>
+                 interface.</p>
+                
+                <p class="standard">Java manages Unicode characters via the 
+                    <samp class="listingcharacter listingcharacter">char</samp> data type, which is only 16 bits long.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn19_03" id="fn19_03">[ 226 ]</a></span>
+                 In many regions, most characters come from the conventional 8 bits of the Latin-1 character set. If the characters were sent as Unicode (i.e., 2 bytes), half of the 16-bit data stream would essentially consist of zeros. For this reason, an alternative encoding can write each 16-bit Unicode character in a space-saving manner and is 1, 2, or 3 bytes long depending on the assignment. The coding of the characters depends on the assignment of the bits in the following ways:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">’\u0001’</samp> to 
+                            <samp class="listingcharacter listingcharacter">’\u007F’</samp>
+                        : The characters are written directly with 1 byte. Texts in European languages, most of which are written in 7-bit ASCII, can thus be written in a compact manner.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">’\u0080’</samp> to 
+                            <samp class="listingcharacter listingcharacter">’\u07FF’</samp>
+                        : The characters are encoded with 2 bytes.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">’\u0800’</samp> to 
+                            <samp class="listingcharacter listingcharacter">’\uFFFF’</samp>
+                        : The characters are coded with 3 bytes.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The encoding chosen by Java is based on UTF-8 and will be referred to simply as 
+                    <span class="italic">UTF-8 encoding</span>
+                    <a class="indexanchor" id="i19_08"/>
+                 in the following sections.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p983"/>
+                    Note</h6>
+                    
+                    <p class="standard first last">If the strings were written using only the presented encoding, the character reader wouldn’t know when the end of the string has been reached. Therefore, 
+                        <samp class="listingcharacter listingcharacter">writeUTF(String) </samp>starts with a length identifier. For reading lines, 
+                        <samp class="listingcharacter listingcharacter">readUTF()</samp> is advantageous because 
+                        <samp class="listingcharacter listingcharacter">readLine()</samp>
+                     doesn’t perform the correct Unicode conversion.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.3.3">19.3.3    Writing with RandomAccessFile</h3>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">RandomAccessFile</samp> implements the interfaces 
+                <samp class="listingcharacter listingcharacter">DataOutput</samp>
+                <a class="indexanchor" id="i19_09"/> and 
+                <samp class="listingcharacter listingcharacter">DataInput</samp>
+                <a class="indexanchor" id="i19_10"/>. Thus, the 
+                <samp class="listingcharacter listingcharacter">read*(...)</samp> methods are implemented, as we’ve presented so far, but a set of write methods is also available in the form 
+                <samp class="listingcharacter listingcharacter">write*(</samp>
+            ...). These methods are analogous to the reading methods we discussed earlier:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">write(byte[] b)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">write(int b)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">write(byte[] b, int off, int len)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">writeBoolean(boolean v)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">writeByte(int v)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">writeBytes(String s)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">writeChar(int v)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">writeChars(String s)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">writeDouble(double v)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">writeFloat(float v)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">writeInt(int v)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">writeLong(long v)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">writeShort(int v)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">writeUTF(String str)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The return type is 
+                <samp class="listingcharacter listingcharacter">void</samp>, and the methods can throw an 
+                <samp class="listingcharacter listingcharacter">IOException</samp>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.3.4">19.3.4    The Length of the RandomAccessFile</h3>
+            
+            <p class="standard">You can access the length of the file with two methods: one in write mode (modifying) and one in read mode.</p>
+            
+            <div class="listing " id="l_none_19231"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                <span class="bold">RandomAccessFile</span><br/><span class="">implements</span><span class=""> DataOutput, DataInput, Closeable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p984"/>
+                        void setLength(long newLength) throws IOException</samp><br/>Sets the size of the file to 
+                        <samp class="listingcharacter listingcharacter">newLength</samp>. If the file is smaller than 
+                        <samp class="listingcharacter listingcharacter">newLength</samp>, the size will be increased with the unspecified data. If the file is larger than the length to be set, the file will be truncated. Thus, file contents can be easily deleted using 
+                        <samp class="listingcharacter listingcharacter">setLength(0)</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long length() throws IOException</samp><br/>Returns the length of the file. Write access increases the value, and 
+                        <samp class="listingcharacter listingcharacter">setLength()</samp>
+                     also modifies the length.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.3.5">19.3.5    Back and Forth within the File</h3>
+            
+            <p class="standard">The reading methods we describe earlier automatically set the data pointer
+                <a class="indexanchor" id="i19_11"/>
+             one position further. However, you can also manually set the data pointer to a self-selected location and use it to navigate through a file.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example creates a file and sets the byte 0xFF to position 1,000:</p>
+                
+                <div class="listing " id="l19.5"><pre><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> RandomAccessFile file </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">RandomAccessFile</span><span class="">(</span><span class="">“c</span><span class="">:/</span><span class="">test</span><span class="">.</span><span class="">bin”</span><span class="">,</span><span class=""> “rw” </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  file<span class="">.</span><span class="">seek</span><span class="">(</span><span class=""> </span><span class="">999</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  file<span class="">.</span><span class="">write</span><span class="">(</span><span class=""> 0xFF </span><span class="">);</span><span class=""> </span><br/>}</pre></div>
+                
+                <p class="caption "><b>Listing 19.5</b>    
+            src/main/java/com/tutego/insel/io/CreateBigFile.java, main()</p>
+                
+                <p class="standard last">Since 
+                    <samp class="listingcharacter listingcharacter">skipBytes(int)</samp> can’t put the file pointer “behind” the file, the solution works only with 
+                    <samp class="listingcharacter listingcharacter">seek(long)</samp>
+                .</p>
+            
+            </div>
+            
+            <p class="standard">Any subsequent read or write access can then start at the position of the pointer. The following methods described relate to this file pointer and its position:</p>
+            
+            <div class="listing " id="l_none_19255"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                <span class="bold">RandomAccessFile</span><br/><span class="">implements</span><span class=""> DataOutput, DataInput, Closeable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long getFilePointer() throws IOException</samp><br/>Returns the current position of the file pointer. The first byte is at position zero.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void seek(long pos) throws IOException</samp><br/>Sets the position of the file pointer to 
+                        <samp class="listingcharacter listingcharacter">pos</samp>. This specification is absolute and therefore can’t be negative. If negative, an exception will be thrown. 
+                        <samp class="listingcharacter listingcharacter">file.seek(file.length());</samp>
+                     sets the pointer to the end of the file.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int skipBytes(int n) throws IOException</samp><br/>Unlike 
+                        <samp class="listingcharacter listingcharacter">seek()</samp>, 
+                        <samp class="listingcharacter listingcharacter">skipBytes()</samp> positions relatively. 
+                        <samp class="listingcharacter listingcharacter">n</samp> is the number by which the file pointer is moved. If 
+                        <samp class="listingcharacter listingcharacter">n</samp> is negative, no bytes will be skipped. A relative positioning with positive and negative 
+                        <samp class="listingcharacter listingcharacter">n</samp> for a 
+                        <samp class="listingcharacter listingcharacter">RandomAccessFile raf</samp> can be achieved using 
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p985"/>
+                        raf.seek(raf.getFilePointer() + n)</samp>. But the total must not be negative; otherwise, 
+                        <samp class="listingcharacter listingcharacter">seek()</samp> will throw an 
+                        <samp class="listingcharacter listingcharacter">IOException</samp>. The return provides the bytes actually skipped, which doesn’t have to be identical with 
+                        <samp class="listingcharacter listingcharacter">n</samp>! Interestingly, 
+                        <samp class="listingcharacter listingcharacter">seek(long)</samp> is parameterized with 
+                        <samp class="listingcharacter listingcharacter">long</samp>, but 
+                        <samp class="listingcharacter listingcharacter">skipBytes(int)</samp> is parameterized only with 
+                        <samp class="listingcharacter listingcharacter">int</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">If 
+                <samp class="listingcharacter listingcharacter">seek(long)</samp>
+             sets the pointer further than is possible, the file is not automatically made larger. However, the file will change in size when data is written.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

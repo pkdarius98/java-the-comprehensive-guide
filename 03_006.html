@@ -1,0 +1,673 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Classes and Objects" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Classes and Objects" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Classes and Objects</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h3.6">3.6    Tying Packages, Imports, and Compilation Units</h2>
+        
+        <p class="standard">The class library of Java is rather extensive, with thousands of types, and covers everything developers of platform-independent programs need as a basis. The class library includes data structures, classes for date/time calculation, file processing, and more. Most types are implemented in Java itself (and the source code is usually directly available from the development environment), but some parts are implemented natively, for example, when reading from a file.</p>
+        
+        <p class="standard">When you program your own classes, they supplement the standard library, so to speak; the bottom line is that creating your own classes increases the number of possible types a program can use.</p>
+        
+        
+            
+            <h3 class="t3" id="h3.6.1">3.6.1    Java Packages</h3>
+            
+            <p class="standard">A
+                <a class="indexanchor" id="i03_48"/>
+                <span class="italic"> package</span>
+             is a group of thematically related types. Packages can be arranged in hierarchies so that one package can contain another package—similar to the directory structure of a file system. Examples of packages include the following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">java.awt</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">java.util</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p221"/>
+                        com.google</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">org.apache.commons.math3.fraction</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">com.tutego.insel</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The Java standard library classes are located in packages starting with 
+                <samp class="listingcharacter listingcharacter">java</samp>
+                <a class="indexanchor" id="i03_49"/> and 
+                <samp class="listingcharacter listingcharacter">javax</samp>.
+                <a class="indexanchor" id="i03_50"/> Google uses the 
+                <samp class="listingcharacter listingcharacter">com.google</samp> root; the Apache Foundation publishes Java code at 
+                <samp class="listingcharacter listingcharacter">org.apache</samp>
+            . In this way, you can read from the outside which types your own class depends on.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.6.2">3.6.2    Packages in the Standard Library</h3>
+            
+            <p class="standard">The logical grouping and hierarchy can be observed easily in the Java library. The Java standard library starts with the 
+                <samp class="listingcharacter listingcharacter">java</samp> root; some types are in 
+                <samp class="listingcharacter listingcharacter">javax</samp>. This package contains other packages, such as 
+                <samp class="listingcharacter listingcharacter">awt</samp>, 
+                <samp class="listingcharacter listingcharacter">math</samp>, and 
+                <samp class="listingcharacter listingcharacter">util</samp>. For example, 
+                <samp class="listingcharacter listingcharacter">java.math</samp> contains the classes 
+                <samp class="listingcharacter listingcharacter">BigInteger</samp> and 
+                <samp class="listingcharacter listingcharacter">BigDecimal</samp> because working with arbitrarily large integers and floats is part of mathematics. A point and a polygon, represented by the 
+                <samp class="listingcharacter listingcharacter">Point</samp> and 
+                <samp class="listingcharacter listingcharacter">Polygon</samp> classes, are part of the graphical user interface (GUI) package, which is the 
+                <samp class="listingcharacter listingcharacter">java.awt</samp>
+             package.</p>
+            
+            <p class="standard">If someone put custom classes in packages with the prefix 
+                <samp class="listingcharacter listingcharacter">java</samp>, for example, 
+                <samp class="listingcharacter listingcharacter">java.tutego</samp>, a program author might cause confusion since you could no longer easily see whether the package was a component of each distribution. For this reason, the prefix 
+                <samp class="listingcharacter listingcharacter">java </samp>
+            is forbidden for custom packages.</p>
+            
+            <p class="standard">Classes that are in a package starting with 
+                <samp class="listingcharacter listingcharacter">javax</samp> can be part of the Java SE like 
+                <samp class="listingcharacter listingcharacter">javax.swing</samp>, but these classes don’t necessarily have to be part of the Java SE; more on this topic will follow in 
+                <span class="crossreference "><a href="16_001.html#h16">Chapter 16</a></span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.6.3">3.6.3    Full Qualification and Import Declaration</h3>
+            
+            <p class="standard">To use the 
+                <samp class="listingcharacter listingcharacter">Point</samp> class, which is located in the 
+                <samp class="listingcharacter listingcharacter">java.awt</samp> package, outside of the 
+                <samp class="listingcharacter listingcharacter">java.awt</samp>
+             package (which is almost always the case), you must make this known to the compiler with the entire package specification. For this purpose, the class name alone isn’t sufficient because the class name might be ambiguous and a class declaration might exist in different packages.</p>
+            
+            <p class="standard">Types can’t be uniquely identified until you specify their package. A dot separates packages, so you’ll write 
+                <samp class="listingcharacter listingcharacter">java.awt</samp> and 
+                <samp class="listingcharacter listingcharacter">java.util</samp> instead of just 
+                <samp class="listingcharacter listingcharacter">awt</samp> or 
+                <samp class="listingcharacter listingcharacter">util</samp>. With an innumerable number of packages and classes worldwide, uniqueness would not be feasible at all if we didn’t write it this way. A type with the same name may be in different packages, for example, 
+                <samp class="listingcharacter listingcharacter">java.</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">util</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">.List</samp> and 
+                <samp class="listingcharacter listingcharacter">java.</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">awt</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">.List</samp> or 
+                <samp class="listingcharacter listingcharacter">java.</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">util</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">.Date</samp> and 
+                <samp class="listingcharacter listingcharacter">java.</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">sql</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">.Date</samp>
+            . Therefore, only the package and the type together form a unique identifier.</p>
+            
+            <p class="standard">
+                <a id="p222"/>To enable the compiler to precisely assign a class to a package, two options are available: First, types can be fully qualified, as we’ve been doing up to now. An alternative and more practical approach is to make the compiler aware of the types in the package through an 
+                <samp class="listingcharacter listingcharacter">import</samp>
+                <a class="indexanchor" id="i03_51"/>
+             declaration.</p>
+            
+            <table class="standardtable" id="t3.3">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Full Qualificataion</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Import Declaration</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item">
+                                <samp class="listingcharacter listingcharacter">class AwtWithoutImport {<br/> public static void main(String[] args){<br/></samp> 
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">java.awt.Point</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter"> p = <br/> new </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">java.awt.Point</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">();<br/><br/></samp> 
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">java.awt.Polygon</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter"> t = <br/> new </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">java.awt.Polygon</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">();<br/> t.addPoint( 10, 10 );<br/> t.addPoint( 10, 20 );<br/> t.addPoint( 20, 10 );<br/><br/> System.out.println( p );<br/> System.out.println( t.contains(15, 
+                                    <img alt="inline image" class="inline_image" src="bilder/umbruchzeichen.png"/><br/> 15) );<br/> }<br/>}</samp>
+                            </p>
+                            
+                            <p class="standard last-item">Listing 3.6: AwtWithoutImport.java</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">import java.awt.Point;<br/>import java.awt.Polygon;<br/></samp>
+                                </span><br/>
+                                <samp class="listingcharacter listingcharacter">class AwtWithImport {<br/> public static void main(String[] args){<br/></samp> 
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Point</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter"> p = new </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Point</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">();<br/><br/><br/></samp> 
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Polygon</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter"> t = new </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Polygon</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">();<br/><br/> t.addPoint( 10, 10 );<br/> t.addPoint( 10, 20 );<br/> t.addPoint( 20, 10 );<br/><br/> System.out.println( p );<br/> System.out.println( t.contains(15, 
+                                    <img alt="inline image" class="inline_image" src="bilder/umbruchzeichen.png"/><br/> 15) );<br/> }<br/>}</samp>
+                            </p>
+                            
+                            <p class="standard last-item">Listing 3.7: AwtWithImport.java</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 3.3</b>    
+            Type Access via Full Qualification and with an import Declaration</p>
+            
+            <p class="standard">The source code on the left uses the full qualification approach, and each reference to a type costs more writing effort; on the right, the 
+                <samp class="listingcharacter listingcharacter">import</samp> declaration only mentions the class name and “swaps out” the package specification to an 
+                <samp class="listingcharacter listingcharacter">import</samp>. All types named with 
+                <samp class="listingcharacter listingcharacter">import</samp> are remembered by the compiler for this file in a data structure. When the compiler arrives at the line with 
+                <samp class="listingcharacter listingcharacter">Point p = new Point();</samp>, it finds the 
+                <samp class="listingcharacter listingcharacter">Point</samp> type in its data structure and can assign the type to the 
+                <samp class="listingcharacter listingcharacter">java.awt</samp>
+             package, thus again providing the indispensable qualification.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The types from 
+                    <samp class="listingcharacter listingcharacter">java.lang</samp> are automatically imported, and thus, 
+                    <samp class="listingcharacter listingcharacter">import java.lang. String;</samp>
+                 isn’t needed.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.6.4">3.6.4    
+                <a id="p223"/>
+            Reaching All Types of a Package with Type-Import-on-Demand</h3>
+            
+            <p class="standard">If a Java class accesses several other types of the same package, the number of 
+                <samp class="listingcharacter listingcharacter">import</samp> declarations can become large. In our example, we’re only using two classes from 
+                <samp class="listingcharacter listingcharacter">java.awt</samp> (
+                <samp class="listingcharacter listingcharacter">Point</samp> and 
+                <samp class="listingcharacter listingcharacter">Polygon</samp>), but you can easily imagine what happens when additional windows, labels, buttons, sliders, and more are included from the GUI package. In this case, an asterisk 
+                <samp class="listingcharacter listingcharacter">*</samp> is allowed as the last member in an 
+                <samp class="listingcharacter listingcharacter">import</samp>
+             declaration:</p>
+            
+            <div class="listing " id="l_none_3256"><pre><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span>
+                <span class="bold">*</span>;<br/><span class="">import</span><span class=""> java.math.</span>
+                <span class="bold">*</span>; <span class=""/></pre></div>
+            
+            <p class="standard">With this syntax, the compiler knows all the types in the 
+                <samp class="listingcharacter listingcharacter">java.awt</samp> and 
+                <samp class="listingcharacter listingcharacter">java.math</samp> packages, so the compiler can map the package for the 
+                <samp class="listingcharacter listingcharacter">Point</samp> and 
+                <samp class="listingcharacter listingcharacter">Polygon</samp> classes as well as the package for the 
+                <samp class="listingcharacter listingcharacter">BigInteger</samp>
+             class.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">The 
+                    <samp class="listingcharacter listingcharacter">*</samp>
+                 is only allowed on the last hierarchy level and always applies to all types in this package. The following examples are syntactically incorrect:</p>
+                
+                <div class="listing " id="l_none_3259"><pre><span class="">import</span><span class=""> </span><span class="">*;</span><span class="">           </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Syntax error on token "*", Identifier expected</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">awt</span><span class="">.</span><span class="">Po</span><span class="">*;</span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Syntax error on token "*", delete this token</span><span class=""/></pre></div>
+                
+                <p class="standard">A declaration like 
+                    <samp class="listingcharacter listingcharacter">import java.*;</samp> is syntactically correct but has no effect because no type declarations exist in the package 
+                    <samp class="listingcharacter listingcharacter">java</samp>
+                , only subpackages.</p>
+                
+                <p class="standard last">The 
+                    <samp class="listingcharacter listingcharacter">import</samp>
+                 declaration refers only to a directory (assuming that the packages are mapped to the file system) and doesn’t include subdirectories.</p>
+            
+            </div>
+            
+            <p class="standard">Although the 
+                <samp class="listingcharacter listingcharacter">*</samp> does shorten the number of individual 
+                <samp class="listingcharacter listingcharacter">import</samp>
+             declarations, there are two things to keep in mind:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If two different packages contain a type with the same name, for example, 
+                        <samp class="listingcharacter listingcharacter">Date</samp> in both 
+                        <samp class="listingcharacter listingcharacter">java.util</samp> and 
+                        <samp class="listingcharacter listingcharacter">java.sql</samp> or 
+                        <samp class="listingcharacter listingcharacter">List</samp> in both 
+                        <samp class="listingcharacter listingcharacter">java.awt</samp> and 
+                        <samp class="listingcharacter listingcharacter">java.util</samp>
+                    , an interpretation error will occur when the type is used because the compiler doesn’t understand the meaning. Full qualification will solve the problem.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The number of 
+                        <samp class="listingcharacter listingcharacter">import</samp> declarations tells you something about the degree of complexity. The more 
+                        <samp class="listingcharacter listingcharacter">import</samp> declarations you use the greater the dependencies on other classes, which is generally a red flag. Although graphical tools can show dependencies accurately, 
+                        <samp class="listingcharacter listingcharacter">import *</samp>
+                     could obscure the full scope of dependency.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Best Practice</h6>
+                
+                <p class="standard first last">Development environments usually set the 
+                    <samp class="listingcharacter listingcharacter">import</samp> declarations automatically and usually cascade the blocks. Therefore, the 
+                    <samp class="listingcharacter listingcharacter">*</samp>
+                 should be used sparingly because it “pollutes” the namespace by many types and increases the risk of collision.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.6.5">3.6.5    
+                <a id="p224"/>
+            Hierarchical Structures across Packages and Mirroring in the File System</h3>
+            
+            <p class="standard">The classes belonging to a package are usually located
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_10" id="fn03_10">[ 97 ]</a></span>
+             in the same directory. The name of the package is the same as the name of the directory (and vice versa, of course). Instead of the directory separator (such as “/” or “\”), a dot is used.</p>
+            
+            <p class="standard">Let’s assume the following directory structure with a helper class:</p>
+            
+            <p class="standard">
+                <span class="italic">com/tutego/insel/printer/DatePrinter.class</span>
+            </p>
+            
+            <p class="standard">In this case, the package name is 
+                <samp class="listingcharacter listingcharacter">com.tutego.insel.printer</samp>, and thus the directory name is 
+                <span class="italic">com/tutego/insel/printer</span>
+            . Umlauts and special characters should be avoided, because they always cause trouble in the file system. Identifiers should always be in English anyway.</p>
+            
+            
+                
+                <h4 class="t4" id="h3.6.5.1">The Structure of Package Names</h4>
+                
+                <p class="standard">Basically, a package name can be arbitrary, but hierarchies usually consist of inverted domain names. Thus, the domain of the website <span class="url"><a href="http://tutego.com">http://tutego.com</a></span> becomes 
+                    <samp class="listingcharacter listingcharacter">com.tutego</samp>
+                . This naming ensures that classes remain unique worldwide. A package name is usually written entirely in lowercase.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.6.6">3.6.6    The Package Declaration</h3>
+            
+            <p class="standard">To place the 
+                <samp class="listingcharacter listingcharacter">DatePrinter</samp> class in a 
+                <samp class="listingcharacter listingcharacter">com.tutego.insel.printer</samp>
+             package, two things must be true:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The package must be physically located in a directory (i.e., 
+                        <span class="italic">com/tutego/insel/printer</span>
+                    ).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The source code contains a 
+                        <samp class="listingcharacter listingcharacter">package</samp>
+                     declaration at the top.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">package</samp>
+                <a class="indexanchor" id="i03_52"/> declaration must be located at the very start; otherwise, an interpretation error will occur (of course, comments can be placed before the 
+                <samp class="listingcharacter listingcharacter">package</samp>
+             declaration):</p>
+            
+            <div class="listing " id="l3.6"><pre>
+                <span class="bold"><span class="">package</span></span><span class=""> com.tutego.insel.printer;</span><br/><br/>
+                <span class="bold"><span class="">import</span></span><span class=""> java.time.LocalDate;</span><br/>
+                <span class="bold"><span class="">import</span></span><span class=""> java.time.format.*;</span><br/><br/>
+                <span class="bold"><span class="">public</span><span class=""> </span><span class="">class</span></span><span class=""> DatePrinter {</span><br/>  
+                <span class="bold"><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span></span><span class=""> </span><span class="">printCurrentDate</span><span class="">() {</span><br/>    DateTimeFormatter fmt = DateTimeFormatter.<span class="">ofLocalizedDate</span><span class="">( FormatStyle.</span>
+                <span class="italic">MEDIUM</span> );<br/>
+                <a id="p225"/>    System.
+                <span class="italic">out</span>.<span class="">println</span><span class="">( LocalDate.</span><span class="">now</span><span class="">().</span><span class="">format</span><span class="">( fmt ) );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 3.6</b>    
+            src/main/java/com/tutego/insel/printer/DatePrinter.java</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">package</samp> declaration is followed by the 
+                <samp class="listingcharacter listingcharacter">import</samp>
+             declaration(s) and the type declaration(s) as usual.</p>
+            
+            <p class="standard">To use the class, you have two options, as you already know: either the full qualification or an 
+                <samp class="listingcharacter listingcharacter">import</samp>
+             declaration. The following code is an example of the first variant.</p>
+            
+            <div class="listing " id="l3.7"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> DatePrinterUser1 </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                <span class="bold"><span class="">com.tutego.insel.printer.DatePrinter</span></span>.<span class="">printCurrentDate</span><span class="">();</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 3.7</b>    
+            src/main/java/DatePrinterUser1.java</p>
+            
+            <p class="standard">The following code is an example of the second variant, with the 
+                <samp class="listingcharacter listingcharacter">import</samp>
+             declaration:</p>
+            
+            <div class="listing " id="l3.8"><pre>
+                <span class="bold"><span class="">import</span><span class=""> com.tutego.insel.printer.DatePrinter;</span><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> DatePrinterUser2 {</span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    
+                <span class="bold">DatePrinter</span>.<span class="">printCurrentDate</span><span class="">();</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 3.8</b>    
+            src/main/java/DatePrinterUser2.java</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">A development environment takes a lot of work off your hands, so you’ll rarely notice file operations like creating directories, for example. A modern integrated development environment (IDE) also takes care of moving types to other packages, the associated changes to the file system, and adjustments to the 
+                    <samp class="listingcharacter listingcharacter">import</samp> and 
+                    <samp class="listingcharacter listingcharacter">package</samp>
+                 declarations for you.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.6.7">3.6.7    Unnamed Package (Default Package)</h3>
+            
+            <p class="standard">An 
+                <span class="italic">unnamed package</span>
+                <a class="indexanchor" id="i03_53"/>
+                <a class="indexanchor" id="i03_54"/> or 
+                <span class="italic">default package</span>
+                <a class="indexanchor" id="i03_55"/>
+                <a class="indexanchor" id="i03_56"/> contains a class without a package specification. A best practice is to always organize your own classes in packages. Doing so enables finer visibility, and conflicts with other companies and other programmers can be avoided. Big problems could arise if 1) every company were messy and put all their 
+                <a id="p226"/>
+            classes in unnamed packages and then 2) tried to swap out libraries. Conflicts would essentially be preprogrammed.</p>
+            
+            <p class="standard">A class located in the package can import any other visible class from other packages, but not classes from the unnamed package. Let’s assume 
+                <samp class="listingcharacter listingcharacter">Sugar</samp> is in the unnamed package and 
+                <samp class="listingcharacter listingcharacter">Chocolate</samp> in the 
+                <samp class="listingcharacter listingcharacter">com.tutego</samp>
+             package:</p>
+            
+            <p class="standard">
+                <span class="italic">Sugar.class<br/>com/tutego/insel/Chocolate.class</span>
+            </p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Chocolate</samp> class can’t use 
+                <samp class="listingcharacter listingcharacter">Sugar</samp>
+             because classes from the unnamed package are not visible to subpackages. Only other classes in the unnamed package can use classes in the unnamed package.</p>
+            
+            <p class="standard">If 
+                <samp class="listingcharacter listingcharacter">Sugar</samp> was in a package (or even in a superpackage!), 
+                <samp class="listingcharacter listingcharacter">Chocolate</samp> could import 
+                <samp class="listingcharacter listingcharacter">Sugar</samp>
+            :</p>
+            
+            <p class="standard">
+                <span class="italic">com/Sugar.class<br/>com/tutego/insel/Chocolate.class</span>
+            </p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.6.8">3.6.8    Compilation Unit</h3>
+            
+            <p class="standard">A 
+                <span class="italic">.java</span> file is a 
+                <span class="italic">compilation unit</span>
+                <a class="indexanchor" id="i03_57"/>
+             that consists of three (optional) segments in the following order:</p>
+            
+            <ol>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">package</samp>
+                     declaration</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">import</samp>
+                     declaration(s)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The declaration(s)</p>
+                
+                </li>
+            
+            </ol>
+            
+            <p class="standard">Thus, a compilation unit consists of, at most, one package declaration (not necessary if the type is in the default package), any number of 
+                <samp class="listingcharacter listingcharacter">import</samp> declarations, and any number of type declarations. The compiler translates each type of compilation unit into its own 
+                <span class="italic">.class</span>
+             file. A package is ultimately a collection of compilation units. Usually, the compilation unit is a source code file; in general, the lines of code could also come from a database or be generated at runtime.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.6.9">3.6.9    Static Import*</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">import</samp> declaration informs the compiler about the packages, so that a type no longer needs to be fully qualified if it’s explicitly listed in the 
+                <samp class="listingcharacter listingcharacter">import</samp> section or if the package of the type is named via 
+                <samp class="listingcharacter listingcharacter">*</samp>
+            .</p>
+            
+            <p class="standard">If a class specifies static methods or constants, its members are always addressed by the type name. Java provides a 
+                <span class="italic">static import</span>
+                <a class="indexanchor" id="i03_58"/>
+                <a class="indexanchor" id="i03_59"/> as an option to use the static methods or variables immediately without prefixed type names. So, while the normal 
+                <samp class="listingcharacter listingcharacter">import</samp> names the types to the compiler, a static 
+                <samp class="listingcharacter listingcharacter">import</samp>
+             makes class members known to the compiler, thus going one level deeper.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p227"/>
+                Example</h6>
+                
+                <p class="standard first">Import the static variable 
+                    <samp class="listingcharacter listingcharacter">out</samp> from 
+                    <samp class="listingcharacter listingcharacter">System</samp>
+                 statically for the screen output with the following code:</p>
+                
+                <div class="listing " id="l_none_3297"><pre><span class="">import</span><span class=""> </span>
+                    <span class="bold"><span class="">static</span></span><span class=""> java.lang.System.</span>
+                    <span class="bold">out</span>;<span class=""/></pre></div>
+                
+                <p class="standard last">With the otherwise usual output via 
+                    <samp class="listingcharacter listingcharacter">System.out.print*(...)</samp>, the class name can be omitted after the static import so that you only need 
+                    <samp class="listingcharacter listingcharacter">out.print*(...)</samp>
+                .</p>
+            
+            </div>
+            
+            <p class="standard">Let’s include several static members in the following example of a static 
+                <samp class="listingcharacter listingcharacter">import</samp>
+            :</p>
+            
+            <div class="listing " id="l3.9"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">oop</span><span class="">;</span><span class=""><br/></span><br/>
+                <span class="bold"><span class="">import</span><span class=""> </span><span class="">static</span><span class=""> java.lang.System.out;</span><br/><span class="">import</span><span class=""> </span><span class="">static</span><span class=""> javax.swing.JOptionPane.showInputDialog;</span><br/><span class="">import</span><span class=""> </span><span class="">static</span><span class=""> java.lang.Integer.parseInt;</span><br/><span class="">import</span><span class=""> </span><span class="">static</span><span class=""> java.lang.Math.max;</span><br/><span class="">import</span><span class=""> </span><span class="">static</span><span class=""> java.lang.Math.min;</span><br/></span><br/><span class="">class</span><span class=""> StaticImport {</span><br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">int</span><span class=""> i = </span>
+                <span class="bold"><span class="">parseInt</span></span><span class="">( </span>
+                <span class="bold"><span class="">showInputDialog</span></span><span class="">( </span><span class="">"First number"</span><span class=""> ) );</span><br/>    <span class="">int</span><span class=""> j = </span>
+                <span class="bold"><span class="">parseInt</span></span><span class="">( </span>
+                <span class="bold"><span class="">showInputDialog</span></span><span class="">( </span><span class="">"Second number"</span><span class=""> ) );</span><br/>    
+                <span class="bold">out</span>.<span class="">printf</span><span class="">( </span><span class="">"%d is greater than or equal to %d.%n"</span><span class="">,</span><br/>                
+                <span class="bold"><span class="">max</span></span><span class="">(i, j), </span>
+                <span class="bold"><span class="">min</span></span><span class="">(i, j)  );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 3.9</b>    
+            src/main/java/com/tutego/insel/oop/StaticImport.java</p>
+            
+            
+                
+                <h4 class="t4" id="h3.6.9.1">Importing Multiple Types Statically</h4>
+                
+                <p class="standard">The following static import imports the static 
+                    <samp class="listingcharacter listingcharacter">max(...)/min(</samp>
+                ...) methods: </p>
+                
+                <div class="listing " id="l_none_3330"><pre><span class="">import</span><span class=""> </span><span class="">static</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span><span class="">Math</span><span class="">.</span><span class="">max</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> </span><span class="">static</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span><span class="">Math</span><span class="">.</span><span class="">min</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If you require more static methods, the wildcard variant goes beyond the individual enumeration, as in the following example:</p>
+                
+                <div class="listing " id="l_none_3335"><pre><span class="">import</span><span class=""> </span><span class="">static</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span><span class="">Math</span><span class="">.</span>
+                    <span class="bold">*</span>; <span class=""/></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Best Practice</h6>
+                    
+                    <p class="standard first last">Even if Java provides this wildcard option, you should use it in moderation. The possibility of static imports is useful when classes want to use constants, but you run the 
+                        <a id="p228"/>
+                    risk, with a missing type name, that where the member actually comes from will become invisible, as well as what dependency it is based on. Problems also arise with methods that have names that are homonyms: A method from its own class can overlay statically imported methods. So, if later in the custom class—or superclass—a method is included that has the same signature as a statically imported method, a compiler error will not arise, but the semantics will change because then the new custom method will be used instead of the statically imported one.</p>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

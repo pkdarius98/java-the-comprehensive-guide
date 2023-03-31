@@ -1,0 +1,1098 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Files and Data Streams" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Files and Data Streams" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Files and Data Streams</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h19.4">19.4    Base Classes for Input/Output</h2>
+        
+        <p class="standard">Different classes for reading and writing binary and character data are collected in the 
+            <samp class="listingcharacter listingcharacter">java.io</samp>
+         package. For byte-oriented processing beyond text document, such as processing for PDF or MP3 files, other classes can work with HTML documents and configuration files. Separating binary data from character data is useful because, for example, when reading text files, they must always be converted to Unicode since Java internally encodes all characters in Unicode.</p>
+        
+        <p class="standard">The stream classes from the 
+            <samp class="listingcharacter listingcharacter">java.io</samp>
+         package are built around three central principles:</p>
+        
+        <ol>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Some abstract base classes prescribe operations for inputs/outputs.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">These abstract base classes exist once for Unicode characters and once for bytes.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The implementations of these abstract base classes either realize the concrete input to or output from a particular resource (such as a file or memory area) or are filters.</p>
+            
+            </li>
+        
+        </ol>
+        
+        
+            
+            <h3 class="t3" id="h19.4.1">19.4.1    The Four Abstract Base Classes</h3>
+            
+            <p class="standard">Since classes for reading and writing Unicode characters and bytes must be separated, classes exist for input/output of bytes (or byte arrays), and classes exist for input/output of Unicode characters (arrays or strings), as shown in the following table:</p>
+            
+            <table class="standardtable" id="t19.2">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Base Class</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Bytes <br/>(or Byte Arrays)</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Characters <br/>(or Character Arrays)</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Input</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">InputStream</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Reader</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Output</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">OutputStream</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Writer</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 19.2</b>    
+            Base Classes for Input/Output</p>
+            
+            <p class="standard">We refer to these four types as 
+                <span class="italic">IO stream classes</span>
+                <a class="indexanchor" id="i19_12"/>. These classes contain the expected methods like 
+                <samp class="listingcharacter listingcharacter">read(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">write(...)</samp>
+            .</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">InputStream</samp> and 
+                <samp class="listingcharacter listingcharacter">OutputStream</samp> classes form the base classes for all byte-oriented classes and thus serve as a link for methods that require an input and output object as parameters. Thus, an 
+                <samp class="listingcharacter listingcharacter">InputStream</samp> isn’t only conceivable for files, but also for data coming through a network. The same applies to 
+                <samp class="listingcharacter listingcharacter">Reader</samp> and 
+                <samp class="listingcharacter listingcharacter">Writer</samp>; they are the abstract 
+                <a id="p986"/>base classes for reading and writing Unicode characters and Unicode strings. The base classes specify abstract 
+                <samp class="listingcharacter listingcharacter">read(...)</samp> or 
+                <samp class="listingcharacter listingcharacter">write(...)</samp>
+             methods, and the subclasses override the methods because only they know how something is actually read or written.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.4.2">19.4.2    The Abstract Base Class OutputStream</h3>
+            
+            <p class="standard">Looking at the 
+                <samp class="listingcharacter listingcharacter">OutputStream</samp>
+                <a class="indexanchor" id="i19_13"/>
+            , notice how all the essential operations related to writing are gathered in one place. The nice thing about all data streams is that special subclasses know how to implement exactly the prescribed functionality. In other words, a concrete stream of data writing to files or to a network connection knows how bytes should get into files or onto the network. At this point, Java has reached the end of its platform independence because, on such a deep level, only native methods can write the bytes.</p>
+            
+            <div class="listing " id="l_none_19269"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                <span class="bold">OutputStream</span><br/><span class="">implements</span><span class=""> Closeable, Flushable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">abstract void write(int b) throws IOException</samp><br/>Writes a single byte to the data stream.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void write(byte[] b) throws IOException</samp><br/>Writes the bytes from the array to the stream.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void write(byte[] b, int off, int len) throws IOException</samp><br/>Writes parts of the byte array, specifically 
+                        <samp class="listingcharacter listingcharacter">len</samp> bytes from the position 
+                        <samp class="listingcharacter listingcharacter">off</samp>
+                    , to the output stream.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void close() throws IOException</samp><br/>Closes the data stream. This method is the only method from 
+                        <samp class="listingcharacter listingcharacter">Closeable</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void flush() throws IOException</samp><br/>Writes data still held in the buffer. This method is the only method from the 
+                        <samp class="listingcharacter listingcharacter">Flushable</samp>
+                     interface.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static OutputStream nullOutputStream()</samp><br/>Returns an 
+                        <samp class="listingcharacter listingcharacter">OutputStream</samp>
+                     that discards all bytes.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">IOException</samp> isn’t a 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+             and must be handled.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The 
+                    <samp class="listingcharacter listingcharacter">ByteArrayOutputStream</samp> class is a subclass of 
+                    <samp class="listingcharacter listingcharacter">OutputStream</samp> and stores all data in an internal 
+                    <samp class="listingcharacter listingcharacter">byte</samp>
+                 array. Let’s write in some data using the three given methods:</p>
+                
+                <div class="listing  last_item" id="l_none_19279"><pre><span class="">byte</span><span class="">[]</span><span class=""> bytes </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> ’O’</span><span class="">,</span><span class=""> ’N’</span><span class="">,</span><span class=""> ’A’</span><span class="">,</span><span class=""> ’L’</span><span class="">,</span><span class=""> ’D’ </span><span class="">};</span><span class=""><br/></span>//                0    1    2    3    4<span class=""><br/></span>ByteArrayOutputStream out <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">ByteArrayOutputStream</span><span class="">();</span><span class=""><br/></span><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>
+                    <a id="p987"/>  out<span class="">.</span>
+                    <span class="bold"><span class="">write</span></span><span class="">( ’D’ );         </span><span class=""> // write D</span><span class=""><br/></span>  out.
+                    <span class="bold"><span class="">write</span></span><span class="">( bytes );       </span><span class=""> // write ONALD</span><span class=""><br/></span>  out.
+                    <span class="bold"><span class="">write</span></span><span class="">( bytes, </span><span class="">1</span><span class="">, </span><span class="">2</span><span class=""> ); </span><span class=""> // write NA</span><span class=""><br/></span>  System.out.<span class="">println</span><span class="">( out.</span><span class="">toString</span><span class="">( StandardCharsets.ISO_8859_1.</span><span class="">name</span><span class="">() )  );</span><br/>}<br/><span class="">catch</span><span class=""> ( IOException e ) {</span><br/>  e.<span class="">printStackTrace</span><span class="">();</span><br/>}<span class=""/></pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h19.4.2.1">About Concrete and Abstract Methods*</h4>
+                
+                <p class="standard">Two features can be seen in the methods of the 
+                    <samp class="listingcharacter listingcharacter">OutputStream</samp>: First, only bytes are written, and second, not all methods are 
+                    <samp class="listingcharacter listingcharacter">abstract</samp> and must be overridden by subclasses for concrete output streams. Only 
+                    <samp class="listingcharacter listingcharacter">write(int)</samp>
+                 is abstract and elementary. This scenario is tricky because in fact the methods that write a byte array can be mapped to the method that writes a single byte. Let’s look at the source code of the library:</p>
+                
+                <div class="listing " id="l19.6"><pre><span class="">public</span><span class=""> </span><span class="">abstract</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">write</span><span class="">(</span><span class="">int</span><span class=""> b</span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> IOException</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">write</span><span class="">(</span><span class="">byte</span><span class="">[]</span><span class=""> b</span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> IOException </span><span class="">{</span><span class=""><br/></span>  <span class="">write</span><span class="">(</span><span class="">b</span><span class="">,</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> b</span><span class="">.</span><span class="">length</span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">write</span><span class="">(</span><span class="">byte</span><span class=""> b</span><span class="">[],</span><span class=""> </span><span class="">int</span><span class=""> off</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> len</span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> IOException </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class="">b </span><span class="">==</span><span class=""> null</span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">NullPointerException</span><span class="">();</span><span class=""><br/></span>  <span class="">}</span><span class=""> </span><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">((</span><span class="">off </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class="">)</span><span class=""> </span><span class="">||</span><span class=""> </span><span class="">(</span><span class="">off </span><span class="">&gt;</span><span class=""> b</span><span class="">.</span><span class="">length</span><span class="">)</span><span class=""> </span><span class="">||</span><span class=""> </span><span class="">(</span><span class="">len </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class="">)</span><span class=""> </span><span class="">||</span><span class=""><br/></span>             <span class="">((</span><span class="">off </span><span class="">+</span><span class=""> len</span><span class="">)</span><span class=""> </span><span class="">&gt;</span><span class=""> b</span><span class="">.</span><span class="">length</span><span class="">)</span><span class=""> </span><span class="">||</span><span class=""> </span><span class="">((</span><span class="">off </span><span class="">+</span><span class=""> len</span><span class="">)</span><span class=""> </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class="">))</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IndexOutOfBoundsException</span><span class="">();</span><span class=""><br/></span>  <span class="">}</span><span class=""> </span><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class="">len </span><span class="">==</span><span class=""> </span><span class="">0</span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">for</span><span class=""> </span><span class="">(</span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">;</span><span class=""> i </span><span class="">&lt;</span><span class=""> len </span><span class="">;</span><span class=""> i</span><span class="">++)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">write</span><span class="">(</span><span class="">b</span><span class="">[</span><span class="">off </span><span class="">+</span><span class=""> i</span><span class="">]);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class="">  </span></pre></div>
+                
+                <p class="caption "><b>Listing 19.6</b>    
+            java/lang/OutputStream.java (Snippet)</p>
+                
+                <p class="standard">From both concrete 
+                    <samp class="listingcharacter listingcharacter">write(...)</samp> implementations, notice how they rather conveniently defer the work to other methods. But this implementation isn’t ideal! Let’s imagine that a file output stream overwrites only the one abstract method that is necessary. And let’s further assume that our program now always writes large byte arrays, such as a 5 Megabyte file that’s in the memory. Then, for each byte in the byte array, a loop 
+                    <a id="p988"/>
+                passes all the bytes to a presumably native method. If implemented in this way, we couldn’t use the speed of the medium at all, especially since every file system provides functions that may transfer entire blocks. Fortunately, the implementation doesn’t look like this because we forgot in the model that the subclass must implement the abstract method, but it can still override other methods as can the actual file-based streams.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">When a superclass calls an abstract method that later implements the subclass, this design pattern is called the 
+                        <span class="italic">template pattern</span>
+                        <a class="indexanchor" id="i19_14"/>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">At the same time, a question arises how an 
+                    <samp class="listingcharacter listingcharacter">OutputStream</samp>, which prescribes the properties for all conceivable output streams, can know how a special output stream is closed with 
+                    <samp class="listingcharacter listingcharacter">close()</samp>, for example, or knows to write its buffered bytes with 
+                    <samp class="listingcharacter listingcharacter">flush()</samp>—the methods would have to be abstract, too! 
+                    <samp class="listingcharacter listingcharacter">OutputStream</samp>
+                 simply provide an empty implementation. The advantage is that subclasses are not required to always override the methods but if they can, they should.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.4.3">19.4.3    The Abstract Base Class InputStream</h3>
+            
+            <p class="standard">The counterpart of 
+                <samp class="listingcharacter listingcharacter">OutputStream</samp> is 
+                <samp class="listingcharacter listingcharacter">InputStream</samp>
+                <a class="indexanchor" id="i19_15"/> in which each binary input stream is represented by the abstract 
+                <samp class="listingcharacter listingcharacter">InputStream</samp> class. The console input 
+                <samp class="listingcharacter listingcharacter">System.in</samp>
+                <a class="indexanchor" id="i19_16"/> is of type 
+                <samp class="listingcharacter listingcharacter">InputStream</samp>. The class provides several 
+                <samp class="listingcharacter listingcharacter">read*(...)</samp> methods and is also slightly more complex than 
+                <samp class="listingcharacter listingcharacter">OutputStream</samp>
+            .</p>
+            
+            <div class="listing " id="l_none_19289"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                <span class="bold">InputStream</span><br/><span class="">implements</span><span class=""> Closeable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int available() throws IOException</samp><br/>Returns the number of available characters in the data stream that can be read immediately, without blocking. (Blocking means the method waits until new data is available.)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">abstract int read() throws IOException</samp><br/>Reads a byte from the data stream and returns it. The return value is -1 if the data stream doesn’t provide any more data. If data is basically still available, the method will block. The return type is 
+                        <samp class="listingcharacter listingcharacter">int</samp> because -1 (0xFFFFFF) indicates the end of the data stream and -1 as a 
+                        <samp class="listingcharacter listingcharacter">byte</samp> (which would be 0xFF) couldn’t be distinguished from a normal data point. Unfortunately, no constant for -1 exists in the Java API.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn19_04" id="fn19_04">[ 227 ]</a></span>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p989"/>
+                        int read(byte[] b) throws IOException</samp><br/>Reads up to 
+                        <samp class="listingcharacter listingcharacter">b.length</samp> bytes from the data stream and puts them into the 
+                        <samp class="listingcharacter listingcharacter">b</samp> array. The actual length of the bytes read is returned and needn’t be 
+                        <samp class="listingcharacter listingcharacter">b.length</samp>; fewer bytes may be read as well. In the base class 
+                        <samp class="listingcharacter listingcharacter">InputStream</samp>, this method is simply implemented as 
+                        <samp class="listingcharacter listingcharacter">return read(b, 0, b.length);</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int read(byte[] b, int off, int len) throws IOException</samp><br/>Reads the data stream and puts the data into the byte array 
+                        <samp class="listingcharacter listingcharacter">b</samp>, starting at the position 
+                        <samp class="listingcharacter listingcharacter">off</samp>. In addition, 
+                        <samp class="listingcharacter listingcharacter">len</samp>
+                     limits the maximum number of bytes to be read.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int readNBytes(byte[] b, int off, int len) throws IOException</samp><br/>Attempts to read the number of 
+                        <samp class="listingcharacter listingcharacter">len</samp> bytes from the data stream and put them into the byte array. In contrast to 
+                        <samp class="listingcharacter listingcharacter">read(byte[], int, int)</samp>, 
+                        <samp class="listingcharacter listingcharacter">readNBytes(...)</samp> carries out several attempts to obtain the number of 
+                        <samp class="listingcharacter listingcharacter">len</samp> data by accessing 
+                        <samp class="listingcharacter listingcharacter">read(byte[], int, int)</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">byte[] readNBytes(int len) throws IOException</samp><br/>Attempts to read the number of 
+                        <samp class="listingcharacter listingcharacter">len</samp> bytes from the stream and put them into the return array. The array can be smaller than 
+                        <samp class="listingcharacter listingcharacter">len</samp>
+                     if the end of the stream has been reached before.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">byte[] readAllBytes() throws IOException</samp><br/>Reads all remaining data from the data stream and returns an array with these bytes.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long transferTo(OutputStream out) throws IOException</samp><br/>Reads all bytes from the data stream and writes them to 
+                        <samp class="listingcharacter listingcharacter">out.</samp>
+                     If an exception occurs, we recommend closing both data streams.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long skip(long n) throws IOException</samp><br/>Skips a number of characters. The return provides the bytes actually skipped, which doesn’t have to be identical with 
+                        <samp class="listingcharacter listingcharacter">n</samp>
+                    !</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean markSupported()</samp><br/>Returns a truth value indicating whether the stream permits memorizing and resetting positions. This marker is a pointer that can point to specific locations in the input file.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void mark(int readlimit)</samp><br/>Memorizes the current position in the data stream. If 
+                        <samp class="listingcharacter listingcharacter">markSupported()</samp> is 
+                        <samp class="listingcharacter listingcharacter">true</samp>, 
+                        <samp class="listingcharacter listingcharacter">readlimit</samp>
+                     bytes can be read afterwards, and jumping back to the marked position is possible.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void reset() throws IOException</samp><br/>Jumps back to the position set with 
+                        <samp class="listingcharacter listingcharacter">mark()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void close() throws IOException</samp><br/>Closes the data stream. This operation is from the 
+                        <samp class="listingcharacter listingcharacter">Closeable</samp>
+                     interface.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static InputStream nullInputStream()</samp><br/>Returns an 
+                        <samp class="listingcharacter listingcharacter">InputStream</samp>
+                     that doesn’t read bytes.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <a id="p990"/>Notice that all methods except 
+                <samp class="listingcharacter listingcharacter">mark(int)</samp> and 
+                <samp class="listingcharacter listingcharacter">markSupported()</samp> throw an 
+                <samp class="listingcharacter listingcharacter">IOException</samp> in case of an error. In the 
+                <samp class="listingcharacter listingcharacter">read(...)</samp> method, which reads multiple bytes, an array is always passed as a buffer into which the 
+                <samp class="listingcharacter listingcharacter">InputStream</samp> writes, but the same principle applies in the 
+                <samp class="listingcharacter listingcharacter">Reader</samp>
+            . No method returns an array with the read data for two reasons: First, buffers are usually reused, and so you’d possibly have a large number of objects. Second, the data stream could be very large or even infinite.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">
+                    <samp class="listingcharacter listingcharacter">available()</samp> returns the number of bytes that can be read without blocking. (“Blocking” means that the method doesn’t return immediately but waits until new data is available.) The return of 
+                    <samp class="listingcharacter listingcharacter">available()</samp> says nothing about how many characters the 
+                    <samp class="listingcharacter listingcharacter">InputStream</samp> can store in total. However, for 
+                    <samp class="listingcharacter listingcharacter">FileInputStream</samp>, the 
+                    <samp class="listingcharacter listingcharacter">available()</samp>
+                 method usually does return the file length, which is generally not the case for network streams.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.4.4">19.4.4    The Abstract Base Class Writer</h3>
+            
+            <p class="standard">The abstract 
+                <samp class="listingcharacter listingcharacter">Writer</samp> class is the base type for all character-based writing classes
+                <a class="indexanchor" id="i19_17"/>
+            .</p>
+            
+            <div class="listing " id="l_none_19306"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                <span class="bold">Writer</span><br/><span class="">implements</span><span class=""> Appendable, Closeable, Flushable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void write(int c) throws IOException</samp><br/>Writes a single Unicode character. Only the low part (16 bits of the 
+                        <samp class="listingcharacter listingcharacter">int</samp>
+                    ) of the 32-bit integer is written.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void write(char[] cbuf) throws IOException</samp><br/>Writes an array of characters.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">abstract void write(char[] cbuf, int off, int len) throws IOException</samp><br/>Writes 
+                        <samp class="listingcharacter listingcharacter">len</samp> characters of the 
+                        <samp class="listingcharacter listingcharacter">cbuf</samp> array starting from the position 
+                        <samp class="listingcharacter listingcharacter">off</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void write(String str) throws IOException</samp><br/>Writes the string 
+                        <samp class="listingcharacter listingcharacter">str</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void write(String str, int off, int len) throws IOException</samp><br/>Writes 
+                        <samp class="listingcharacter listingcharacter">len</samp> characters of the 
+                        <samp class="listingcharacter listingcharacter">str</samp> string starting from the position 
+                        <samp class="listingcharacter listingcharacter">off</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Writer append(char c) throws IOException</samp><br/>Appends a sign. Behaves like 
+                        <samp class="listingcharacter listingcharacter">write(c)</samp>, except that it returns an 
+                        <samp class="listingcharacter listingcharacter">Appendable</samp>, as required by the 
+                        <samp class="listingcharacter listingcharacter">Appendable</samp> interface. 
+                        <samp class="listingcharacter listingcharacter">Writer</samp> is a suitable 
+                        <samp class="listingcharacter listingcharacter">Appendable</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Writer append(CharSequence csq) throws IOException</samp><br/>Appends a string. This method is an implementation from the 
+                        <samp class="listingcharacter listingcharacter">Appendable</samp>
+                     interface.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p991"/>
+                        Writer append(CharSequence csq, int start, int end) throws IOException</samp><br/>Appends parts of a string. This method is an implementation from the 
+                        <samp class="listingcharacter listingcharacter">Appendable</samp>
+                     interface.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">abstract void flush() throws IOException</samp><br/>Writes the internal buffer. Joins different 
+                        <samp class="listingcharacter listingcharacter">flush()</samp> calls to form a chain based on the dependency of the objects. The method writes all data to the buffer. This method is an implementation from the 
+                        <samp class="listingcharacter listingcharacter">Flushable</samp>
+                     interface.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">abstract void close() throws IOException</samp><br/>Writes the buffered stream and closes it. 
+                        <samp class="listingcharacter listingcharacter">Write(...)</samp> or 
+                        <samp class="listingcharacter listingcharacter">flush()</samp> calls executed after closing will cause an 
+                        <samp class="listingcharacter listingcharacter">IOException</samp>. An additional 
+                        <samp class="listingcharacter listingcharacter">close()</samp> won’t throw an exception. This method is an implementation from the 
+                        <samp class="listingcharacter listingcharacter">Closeable</samp>
+                     interface.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static Writer nullWriter()</samp><br/>Returns a special 
+                        <samp class="listingcharacter listingcharacter">Writer</samp> that discards all characters. The return is comparable to the Unix device 
+                        <span class="italic">/dev/null</span>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">A passed 
+                <samp class="listingcharacter listingcharacter">null</samp>
+             reference always leads to an exception.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.4.5">19.4.5    The Appendable Interface*</h3>
+            
+            <p class="standard">All 
+                <samp class="listingcharacter listingcharacter">Writers</samp> (and also the classes 
+                <samp class="listingcharacter listingcharacter">PrintStream</samp>, 
+                <samp class="listingcharacter listingcharacter">CharBuffer</samp>, 
+                <samp class="listingcharacter listingcharacter">StringBuffer</samp>, and 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>) implement the 
+                <samp class="listingcharacter listingcharacter">Appendable</samp>
+                <a class="indexanchor" id="i19_18"/>
+             interface, which prescribes three methods:</p>
+            
+            <div class="listing " id="l_none_19323"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                <span class="bold">Appendable</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Appendable append(char c)</samp><br/>Appends the character 
+                        <samp class="listingcharacter listingcharacter">c</samp> to the current 
+                        <samp class="listingcharacter listingcharacter">Appendable</samp> and returns the current object of type. 
+                        <samp class="listingcharacter listingcharacter">Appendable</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Appendable append(CharSequence csq)</samp><br/>Appends the string to this 
+                        <samp class="listingcharacter listingcharacter">Appendable</samp>
+                     and returns it.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Appendable append(CharSequence csq, int start, int end)</samp><br/>Appends a part of the string to this 
+                        <samp class="listingcharacter listingcharacter">Appendable</samp>
+                     and returns it.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h19.4.5.1">Covariant Return in Writer from Appendable</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Writer</samp> class demonstrates pretty well a covariant return type; that is, the return type of an overridden or implemented method can also be a subtype. And this is how 
+                    <samp class="listingcharacter listingcharacter">Writer</samp> proceeds, which implements the 
+                    <samp class="listingcharacter listingcharacter">Appendable</samp> interface. The 
+                    <samp class="listingcharacter listingcharacter">append(...)</samp> method in 
+                    <samp class="listingcharacter listingcharacter">Writer </samp>doesn’t simply have the 
+                    <samp class="listingcharacter listingcharacter">Appendable</samp> return type from the 
+                    <samp class="listingcharacter listingcharacter">Appendable</samp> interface but fleshes it out to 
+                    <samp class="listingcharacter listingcharacter">Writer</samp>, which is a subtype of 
+                    <samp class="listingcharacter listingcharacter">Appendable</samp>
+                . Consider the following example:</p>
+                
+                <div class="listing " id="l_none_19337"><pre><span class="">
+                        <a id="p992"/>
+                    public</span><span class=""> </span>
+                    <span class="bold"><span class="">Writer</span></span> <span class="">append</span><span class="">( </span><span class="">char</span><span class=""> c ) </span><span class="">throws</span><span class=""> IOException {</span><br/>  <span class="">write</span><span class="">( c );</span><br/>  <span class="">return</span><span class=""> </span><span class="">this</span><span class="">;</span><br/>} <span class=""/></pre></div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.4.6">19.4.6    The Abstract Base Class Reader</h3>
+            
+            <p class="standard">The abstract class 
+                <samp class="listingcharacter listingcharacter">Reader</samp>
+                <a class="indexanchor" id="i19_19"/> can read characters from an input stream that provides characters. The only methods subclasses must implement are 
+                <samp class="listingcharacter listingcharacter">read (char[], int, int)</samp> and 
+                <samp class="listingcharacter listingcharacter">close()</samp>, which corresponds to the procedure for the 
+                <samp class="listingcharacter listingcharacter">Writer</samp> classes, which also must implement only 
+                <samp class="listingcharacter listingcharacter">write(char[], int, int)</samp> and 
+                <samp class="listingcharacter listingcharacter">close()</samp> in addition to 
+                <samp class="listingcharacter listingcharacter">flush()</samp>, which doesn’t exist for read streams. Consequently, two abstract methods exist for the 
+                <samp class="listingcharacter listingcharacter">Reader</samp>
+             class. However, the subclasses also reimplement other methods for reasons of speed.</p>
+            
+            <div class="listing " id="l_none_19339"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                <span class="bold">Reader</span><br/><span class="">implements</span><span class=""> Readable, Closeable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">protected Reader()</samp><br/>Creates a new reader that synchronizes with itself.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">protected Reader(Object lock)</samp><br/>Creates a new reader synchronized with the 
+                        <samp class="listingcharacter listingcharacter">lock</samp>
+                     object.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">abstract int read(char[] cbuf, int off, int len) throws IOException</samp><br/>Reads 
+                        <samp class="listingcharacter listingcharacter">len</samp> characters into the 
+                        <samp class="listingcharacter listingcharacter">cbuf</samp> buffer starting from location 
+                        <samp class="listingcharacter listingcharacter">off</samp>. If 
+                        <samp class="listingcharacter listingcharacter">len</samp> characters aren’t present, the 
+                        <samp class="listingcharacter listingcharacter">Reader</samp>
+                     will wait. The method returns the number of characters read or -1 if the end of the stream was reached.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int read(CharBuffer target) throws IOException</samp><br/>Reads characters into the 
+                        <samp class="listingcharacter listingcharacter">CharBuffer</samp>. The method prescribes the 
+                        <samp class="listingcharacter listingcharacter">Readable</samp>
+                     interface.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int read() throws IOException</samp><br/>This parameterless method reads the next character from the input stream and then waits when there’s no character ready in the stream. The return value is an 
+                        <samp class="listingcharacter listingcharacter">int</samp> in the range of 0 to 65,635 (0x0000 to 0xFFFF). But the reason the return value is 
+                        <samp class="listingcharacter listingcharacter">int</samp> and not 
+                        <samp class="listingcharacter listingcharacter">char</samp>
+                     can easily be explained by the fact that the method must encode the return value -1 (0xFFFFFF) if the data stream doesn’t provide any more data.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int read(char[] cbuf) throws IOException</samp><br/>Reads characters from the stream and writes them to an array. The method waits until inputs are available. The return value is the number of characters read or -1 if the end of the data stream was reached.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long transferTo(Writer out) throws IOException</samp><br/>Reads all characters from this stream and writes them to 
+                        <samp class="listingcharacter listingcharacter">out.</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p993"/>
+                        abstract void close() throws IOException</samp><br/>Closes the stream. If a call of 
+                        <samp class="listingcharacter listingcharacter">read(...)</samp>, 
+                        <samp class="listingcharacter listingcharacter">mark(int)</samp> or 
+                        <samp class="listingcharacter listingcharacter">reset()</samp> follows, the methods throw an 
+                        <samp class="listingcharacter listingcharacter">IOException</samp>
+                    . A doubly closed stream has no further effect.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static Reader nullReader()</samp><br/>Returns a 
+                        <samp class="listingcharacter listingcharacter">Reader</samp>
+                     that doesn’t read characters.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h19.4.6.1">Get Ready</h4>
+                
+                <p class="standard">In addition to these necessary methods, which are given with the 
+                    <samp class="listingcharacter listingcharacter">Reader</samp> class, you can use other interesting methods to query for status and set positions. The 
+                    <samp class="listingcharacter listingcharacter">ready()</samp> method returns 
+                    <samp class="listingcharacter listingcharacter">true</samp> if a 
+                    <samp class="listingcharacter listingcharacter">read(...)</samp> is possible without blocking the input. The default implementation of the abstract 
+                    <samp class="listingcharacter listingcharacter">Reader</samp> class always returns 
+                    <samp class="listingcharacter listingcharacter">false</samp>
+                . </p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">Let’s assume that the data stream is to be completely emptied until no more data is available, and the data stream has reached its end. We could write the following code:</p>
+                    
+                    <div class="listing " id="l_none_19349"><pre><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> c</span><span class="">;</span><span class=""> </span><span class="">(</span><span class="">c </span><span class="">=</span><span class=""> reader</span><span class="">.</span><span class="">read</span><span class="">())</span><span class=""> </span><span class="">!=</span><span class=""> </span><span class="">-</span><span class="">1</span><span class="">;</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">char</span><span class="">)</span><span class=""> c </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard">Another way to implement the solution differently might involve the following code:</p>
+                    
+                    <div class="listing " id="l_none_19361"><pre><span class="">while</span><span class=""> </span><span class="">(</span><span class=""> reader</span><span class="">.</span><span class="">ready</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">char</span><span class="">)</span><span class=""> reader</span><span class="">.</span><span class="">read</span><span class="">()</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">However, the semantics are quite different: In the second example, data is only read until either the data stream is empty or—and this is the point—blocking is necessary if, for example, no data is available via the network and we must wait for more data to arrive. In this case, we only get the data until the point when blocking starts, but not all the data.</p>
+                
+                </div>
+                
+                <div class="listing " id="l_none_19377"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                    <span class="bold">Reader</span><br/><span class="">implements</span><span class=""> Readable, Closeable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean ready() throws IOException</samp><br/>Returns 
+                            <samp class="listingcharacter listingcharacter">true</samp> if reading directly from the stream is possible. However, a 
+                            <samp class="listingcharacter listingcharacter">false</samp>
+                         result does not always mean blocking is occurring.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">
+                        <samp class="listingcharacter listingcharacter">InputStream</samp> and 
+                        <samp class="listingcharacter listingcharacter">Reader</samp> are similar, but an 
+                        <samp class="listingcharacter listingcharacter">InputStream</samp> doesn’t declare a 
+                        <samp class="listingcharacter listingcharacter">ready()</samp> method. For this purpose, a method named 
+                        <samp class="listingcharacter listingcharacter">available()</samp> in 
+                        <samp class="listingcharacter listingcharacter">InputStream</samp> can tell you how many bytes can be read without blocking. Again, this method doesn’t exist in the 
+                        <samp class="listingcharacter listingcharacter">Reader</samp>
+                    .</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h19.4.6.2">
+                    <a id="p994"/>
+                Jumps and Markers</h4>
+                
+                <p class="standard">You can use the 
+                    <samp class="listingcharacter listingcharacter">mark(int)</samp> method to mark a position at which the 
+                    <samp class="listingcharacter listingcharacter">Reader</samp> is currently located. Calling the 
+                    <samp class="listingcharacter listingcharacter">reset()</samp> method resets the input stream to this position. In other words, this location can be returned to at a later time. 
+                    <samp class="listingcharacter listingcharacter">mark(int readAheadLimit)</samp> has an integer parameter (
+                    <samp class="listingcharacter listingcharacter">int</samp>, not 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                ) that specifies how many characters may be read until the mark is no longer valid. The number is important because this value denotes the internal size of the buffer that must be applied for the stream.</p>
+                
+                <p class="standard">Not every data stream supports this return. For example, the 
+                    <samp class="listingcharacter listingcharacter">StringReader</samp> class supports marking a position, but the 
+                    <samp class="listingcharacter listingcharacter">FileReader</samp> class doesn’t. Thus, you should check upfront via 
+                    <samp class="listingcharacter listingcharacter">markSupported()</samp> whether the marking process is supported in any given class. If the data stream doesn’t support markers and you ignore this warning, an 
+                    <samp class="listingcharacter listingcharacter">IOException</samp> will be raised because 
+                    <samp class="listingcharacter listingcharacter">Reader</samp> implements 
+                    <samp class="listingcharacter listingcharacter">mark(int)</samp> and 
+                    <samp class="listingcharacter listingcharacter">reset()</samp>
+                 quite simply. You can override these methods if necessary.</p>
+                
+                <div class="listing " id="l19.7"><pre><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">mark</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> readAheadLimit </span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> IOException </span><span class="">{</span><span class=""><br/></span>  <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IOException</span><span class="">(</span><span class="">“</span><span class="">mark</span><span class="">()</span><span class=""> not supported”</span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">reset</span><span class="">()</span><span class=""> </span><span class="">throws</span><span class=""> IOException </span><span class="">{</span><span class=""><br/></span>  <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IOException</span><span class="">(</span><span class="">“</span><span class="">reset</span><span class="">()</span><span class=""> not supported”</span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 19.7</b>    
+            java/io/Reader.java (Snippet)</p>
+                
+                <p class="standard">Consequently, 
+                    <samp class="listingcharacter listingcharacter">markSupported()</samp> also returns 
+                    <samp class="listingcharacter listingcharacter">false</samp> in the 
+                    <samp class="listingcharacter listingcharacter">Reader</samp>
+                 class.</p>
+                
+                <div class="listing " id="l_none_19400"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                    <span class="bold">Reader</span><br/><span class="">implements</span><span class=""> Readable, Closeable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">long skip(long n) throws IOException</samp><br/>Skips 
+                            <samp class="listingcharacter listingcharacter">n</samp>
+                         characters. Blocks until characters are present. Returns the number of characters actually skipped.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean markSupported()</samp><br/>Determines if the stream supports the 
+                            <samp class="listingcharacter listingcharacter">mark()</samp>
+                         operation.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">void mark(int readAheadLimit) throws IOException</samp><br/>Marks a position in the stream. The parameter determines after how many characters the marker becomes invalid; in other words, the parameter specifies the buffer size.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">void reset() throws IOException</samp><br/>If a marker exists, the stream starts at the marker. If the position hasn’t been set before, then an 
+                            <samp class="listingcharacter listingcharacter">IOException</samp> with the string “Stream not marked” will be thrown. The API documentation leaves how the method should react if more than 
+                            <samp class="listingcharacter listingcharacter">readAheadLimit</samp>
+                         characters have been read in the meantime open with the remark “might fail.”</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">
+                        <a id="p995"/>
+                    Reader</samp> implements the already known 
+                    <samp class="listingcharacter listingcharacter">Closeable</samp> interface with the 
+                    <samp class="listingcharacter listingcharacter">close()</samp> method. Just as a 
+                    <samp class="listingcharacter listingcharacter">Writer</samp> implements the 
+                    <samp class="listingcharacter listingcharacter">Appendable</samp> interface, a 
+                    <samp class="listingcharacter listingcharacter">Reader</samp> implements the 
+                    <samp class="listingcharacter listingcharacter">Readable</samp> interface and thus the operation, 
+                    <samp class="listingcharacter listingcharacter">int read(CharBuffer target) throws IOException</samp>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.4.7">19.4.7    The Interfaces Closeable, AutoCloseable, and Flushable</h3>
+            
+            <p class="standard">Two special interfaces, 
+                <samp class="listingcharacter listingcharacter">Closeable</samp> and 
+                <samp class="listingcharacter listingcharacter">Flushable</samp>
+            , prescribe methods that implement all resources to be closed and/or write data out of an internal buffer.</p>
+            
+            
+                
+                <h4 class="t4" id="h19.4.7.1">Closeable</h4>
+                
+                <p class="standard">All read and write stream classes that can be closed implement 
+                    <samp class="listingcharacter listingcharacter">Closeable</samp>
+                    <a class="indexanchor" id="i19_20"/>. In Java Platform, Standard Edition (Java SE), these are all 
+                    <samp class="listingcharacter listingcharacter">Reader</samp>/
+                    <samp class="listingcharacter listingcharacter">Writer</samp> and 
+                    <samp class="listingcharacter listingcharacter">InputStream/OutputStream</samp> classes as well as other classes like 
+                    <samp class="listingcharacter listingcharacter">java.net.Socket</samp>
+                .</p>
+                
+                <div class="listing " id="l_none_19409"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                    <span class="bold">Closeable</span><br/><span class="">extends</span><span class=""> AutoClosable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">void close() throws IOException</samp><br/>Closes the data stream. Closing a closed stream once again has no consequences.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Closeable</samp> interface extends 
+                    <samp class="listingcharacter listingcharacter">java.</samp>
+                    <span class="bold">
+                        <samp class="listingcharacter listingcharacter">lang</samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">.AutoCloseable</samp> (see 
+                    <span class="crossreference "><a href="09_001.html#h9">Chapter 9</a></span>,
+                    <samp class="listingcharacter listingcharacter"> </samp>
+                    <span class="crossreference "><a href="09_006.html#h9.6.2">Section 9.6.2</a></span>) so that anything that implements 
+                    <samp class="listingcharacter listingcharacter">Closeable</samp> is thus of type 
+                    <samp class="listingcharacter listingcharacter">AutoCloseable</samp> and can be used as a variable with a 
+                    <samp class="listingcharacter listingcharacter">try</samp>
+                 with resources.</p>
+                
+                <div class="listing " id="l_none_19405"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">AutoClosable</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">void close() throws Exception</samp><br/>Closes the data stream. Closing a closed stream once again has no consequences.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="imagebox figure-type"><a href="img-f19.4.html" id="f19.4"><img alt="Unified Modeling Class (UML) Class Diagram Showing the Inheritance Relationship between Closeable and AutoCloseable" id="img-f19.4" src="bilderklein/klein19_004.png"/></a></div>
+                
+                <p class="caption "><b>Figure 19.4</b>    
+            Unified Modeling Class (UML) Class Diagram Showing the Inheritance Relationship between Closeable and AutoCloseable</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p996"/>
+                    Note</h6>
+                    
+                    <p class="standard first last">Each 
+                        <samp class="listingcharacter listingcharacter">InputStream</samp>, 
+                        <samp class="listingcharacter listingcharacter">OutputStream</samp>, 
+                        <samp class="listingcharacter listingcharacter">Reader</samp>, and 
+                        <samp class="listingcharacter listingcharacter">Writer</samp> implement 
+                        <samp class="listingcharacter listingcharacter">close()</samp> and, along with 
+                        <samp class="listingcharacter listingcharacter">close()</samp>, also implement the constraint to handle a checked 
+                        <samp class="listingcharacter listingcharacter">IOException</samp>. With an input stream, the exception is almost worthless and can actually be ignored. With an output stream, the exception is already much more valuable because the task of 
+                        <samp class="listingcharacter listingcharacter">close()</samp> doesn’t only consist of closing a resource, but also of writing buffered data upfront. Thus, a 
+                        <samp class="listingcharacter listingcharacter">close()</samp> is often an indirect 
+                        <samp class="listingcharacter listingcharacter">write(...)</samp>, and in this context, you must know whether all residual data has been written correctly. The exception shouldn’t be ignored under any circumstances, and the 
+                        <samp class="listingcharacter listingcharacter">catch</samp>
+                     block must not simply be left empty. Logging is the least you can do in this context.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h19.4.7.2">Flushable</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">Flushable</samp>
+                    <a class="indexanchor" id="i19_21"/>
+                 is only found in writing classes and is especially important for classes that buffer data:</p>
+                
+                <div class="listing " id="l_none_19417"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.</span>
+                    <span class="bold">Flushable</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">void flush() throws IOException</samp><br/>Writes buffered data to the stream.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The base classes 
+                    <samp class="listingcharacter listingcharacter">Writer</samp> and 
+                    <samp class="listingcharacter listingcharacter">OutputStream</samp> implement this interface, as does 
+                    <samp class="listingcharacter listingcharacter">Formatter</samp>
+                .</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

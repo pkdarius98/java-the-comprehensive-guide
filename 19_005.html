@@ -1,0 +1,657 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Files and Data Streams" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Files and Data Streams" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Files and Data Streams</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h19.5">19.5    Reading from Files and Writing to Files</h2>
+        
+        <p class="standard">To read data from files or write data to files, a stream class is needed that manages the mapping of the abstract methods of 
+            <samp class="listingcharacter listingcharacter">Reader</samp>, 
+            <samp class="listingcharacter listingcharacter">Writer</samp>, 
+            <samp class="listingcharacter listingcharacter">InputStream</samp>, and 
+            <samp class="listingcharacter listingcharacter">OutputStream</samp>
+         to files. To carry out such implementations, three different approaches are available:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The 
+                    <samp class="listingcharacter listingcharacter">Files</samp> utility class provides some 
+                    <samp class="listingcharacter listingcharacter">new*(...)</samp>
+                 methods that enable read/write data streams for character- and byte-oriented files.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">A 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object provides 
+                    <samp class="listingcharacter listingcharacter">getResourceAsStream(...)</samp> and returns an 
+                    <samp class="listingcharacter listingcharacter">InputStream</samp> that reads bytes from files in the module path. For writing, no comparable method exists. If Unicode characters must be read, the 
+                    <samp class="listingcharacter listingcharacter">InputStream</samp> must be converted to a 
+                    <samp class="listingcharacter listingcharacter">Reader</samp>
+                .</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The special classes 
+                    <samp class="listingcharacter listingcharacter">FileInputStream</samp>, 
+                    <samp class="listingcharacter listingcharacter">FileReader</samp>, 
+                    <samp class="listingcharacter listingcharacter">FileOutputStream</samp>, and 
+                    <samp class="listingcharacter listingcharacter">FileWriter</samp> are stream classes that map 
+                    <samp class="listingcharacter listingcharacter">read(…)</samp>/
+                    <samp class="listingcharacter listingcharacter">write(…)</samp>
+                 methods to files. Thus, additional classes exist for special sources and targets (also called sinks), such as network or database connections.</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">Each of these variants has its own advantages and disadvantages, so we’ll briefly describe the individual options and distinguish them from each other next.</p>
+        
+        
+            
+            <h3 class="t3" id="h19.5.1">19.5.1    
+                <a id="p997"/>
+            Obtaining Byte-Oriented Data Streams via Files</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Files</samp>
+             class provides methods that directly provide the input/output stream. Let’s start with the byte-oriented stream classes:</p>
+            
+            <div class="listing " id="l_none_19426"><pre><span class="">final</span><span class=""> </span><span class="">abstract</span><span class=""> java</span><span class="">.</span><span class="">nio</span><span class="">.</span><span class="">file</span><span class="">.</span>
+                <span class="bold">Files</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static OutputStream newOutputStream(Path path, OpenOption… options)<br/>throws IOException</samp>
+                        <a class="indexanchor" id="i19_22"/><br/>Creates a file and provides the output stream to the file.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static InputStream newInputStream(Path path, OpenOption… options)<br/>throws IOException</samp><br/>Opens the file and provides an input stream for reading.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Since the 
+                <samp class="listingcharacter listingcharacter">OpenOption</samp>
+             is a vararg and can therefore be omitted, the program code is short. (An even shorter version would lack the correct error handling, however.)</p>
+            
+            
+                
+                <h4 class="t4" id="h19.5.1.1">Example: Write a Small PPM Graphic File</h4>
+                
+                <p class="standard">The PPM format is a simple graphics format. This format starts with an identifier, followed by the dimensions and finally the ARGB values for representing pixel colors.</p>
+                
+                <div class="listing " id="l19.8"><pre><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> OutputStream out </span><span class="">=</span><span class=""> Files</span><span class="">.</span><span class="">newOutputStream</span><span class="">(</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"littlepic.tmp.ppm"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  out<span class="">.</span><span class="">write</span><span class="">(</span><span class=""> </span><span class="">"P3 1 1 255 255 0 0"</span><span class="">.</span><span class="">getBytes</span><span class="">(</span><span class=""> StandardCharsets</span><span class="">.</span><span class="">ISO_8859_1 </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IOException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  e<span class="">.</span><span class="">printStackTrace</span><span class="">();</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 19.8</b>    
+            src/main/java/com/tutego/insel/stream/WriteTinyPPM.java, main()</p>
+                
+                <p class="standard">PPM files can be converted online, for example, via <span class="url"><a href="https://convertio.co/ppm-jpg/">https://convertio.co/ppm-jpg/</a></span>.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.5.2">19.5.2    Obtaining Character-Oriented Data Streams via Files</h3>
+            
+            <p class="standard">In addition to the static 
+                <samp class="listingcharacter listingcharacter">Files</samp> methods 
+                <samp class="listingcharacter listingcharacter">newOutputStream(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">newInputStream(...)</samp>, two additional methods return character-oriented streams (i.e., 
+                <samp class="listingcharacter listingcharacter">Reader</samp>/
+                <samp class="listingcharacter listingcharacter">Writer</samp>
+            ):</p>
+            
+            <div class="listing " id="l_none_19445"><pre><span class="">final</span><span class=""> </span><span class="">abstract</span><span class=""> java</span><span class="">.</span><span class="">nio</span><span class="">.</span><span class="">file</span><span class="">.</span>
+                <span class="bold">Files</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static BufferedReader newBufferedReader(Path path, Charset cs)</samp><br/>
+                        <samp class="listingcharacter listingcharacter">throws IOException</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static BufferedWriter newBufferedWriter(Path path, Charset cs, OpenOption… options)<br/>
+                            <a id="p998"/>
+                        throws IOException</samp><br/>Provides an input/output stream that reads Unicode characters. The 
+                        <samp class="listingcharacter listingcharacter">Charset</samp>
+                     object determines the character encoding of the texts so that the text is correctly converted to Unicode.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static BufferedReader newBufferedReader(Path path)<br/>throws IOException</samp><br/>Corresponds to 
+                        <samp class="listingcharacter listingcharacter">newBufferedReader(path, StandardCharsets.UTF_8)</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static BufferedWriter newBufferedWriter(Path path, OpenOption… options)<br/>throws IOException</samp><br/>Corresponds to 
+                        <samp class="listingcharacter listingcharacter">Files.newBufferedWriter(path, StandardCharsets.UTF_8, options)</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">BufferedReader</samp> and 
+                <samp class="listingcharacter listingcharacter">BufferedWriter</samp> are subclasses of 
+                <samp class="listingcharacter listingcharacter">Reader</samp>/
+                <samp class="listingcharacter listingcharacter">Writer</samp>
+             that cache files in the internal buffer for optimization purposes.</p>
+            
+            
+                
+                <h4 class="t4" id="h19.5.2.1">newBufferedWriter(…)</h4>
+                
+                <p class="standard">The return of 
+                    <samp class="listingcharacter listingcharacter">newBufferedWriter(...)</samp> is 
+                    <samp class="listingcharacter listingcharacter">BufferedWriter</samp>, a subclass of 
+                    <samp class="listingcharacter listingcharacter">Writer</samp>. Every 
+                    <samp class="listingcharacter listingcharacter">Writer</samp> has methods like 
+                    <samp class="listingcharacter listingcharacter">write(String)</samp>
+                 that write strings to the stream. The following example uses this method:</p>
+                
+                <div class="listing " id="l19.9"><pre><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">Writer out = Files.</span><span class="">newBufferedWriter</span><span class="">( Paths.</span><span class="">get</span><span class="">( </span><span class="">"out.bak.txt"</span><span class=""> ),</span><br/>                                            StandardCharsets.ISO_8859_1 )</span> ) {<br/>  out.<span class="">write</span><span class="">( "Knock! Knock! Who's there? Spell! Spell who? W-H-O..." );</span><br/>  out.<span class="">write</span><span class="">( System.</span><span class="">lineSeparator</span><span class="">() );</span><br/>}<br/><span class="">catch</span><span class=""> ( IOException e ) {</span><br/>  e.<span class="">printStackTrace</span><span class="">();</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 19.9</b>    
+            src/main/java/com/tutego/insel/stream/NewBufferedWriterDemo.java, main()</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h19.5.2.2">newBufferedReader()</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">BufferedReader</samp> provides two practical methods in addition to the simple inherited read methods of the 
+                    <samp class="listingcharacter listingcharacter">Reader</samp>
+                 superclass:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String readLine()</samp>: Reads a line up to the end-of-line character (or end-of-stream). The return will be 
+                            <samp class="listingcharacter listingcharacter">null</samp>
+                         if no new line character can be read because the end of stream has been reached. The end-of-line character isn’t part of the string.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Stream&lt;String&gt; lines()</samp>
+                        : Returns a stream of strings, where each string represents one line (without the separator).</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">
+                    <a id="p999"/>
+                For example, the following program runs through all lines of a file:</p>
+                
+                <div class="listing " id="l19.10"><pre><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> BufferedReader in </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">Files.</span><span class="">newBufferedReader</span><span class="">( Paths.</span><span class="">get</span><span class="">( </span><span class="">"lyrics.txt"</span><span class=""> ), </span><br/>                                                   StandardCharsets.ISO_8859_1 )</span> ) {<br/> <span class="">for</span><span class=""> ( </span><span class="">String</span><span class=""> line; (line = in.</span><span class="">readLine</span><span class="">()) != null; )</span><br/>  System.out.<span class="">println</span><span class="">( line );</span><br/>}<br/><span class="">catch</span><span class=""> ( IOException e ) {</span><br/>  e.<span class="">printStackTrace</span><span class="">();</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 19.10</b>    
+            src/main/java/com/tutego/insel/stream/NewBufferedReaderDemo.java, main()</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">With the Stream API, the code looks similar, as shown in the following example:</p>
+                    
+                    <div class="listing " id="l_none_19477"><pre><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> BufferedReader in </span><span class="">=</span><span class=""> Files</span><span class="">.</span><span class="">newBufferedReader</span><span class="">(</span><span class=""> … </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  in<span class="">.</span><span class="">lines</span><span class="">().</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">);</span><span class=""><br/></span>}</pre></div>
+                    
+                    <p class="standard last">If an error occurs while reading over the stream, a 
+                        <samp class="listingcharacter listingcharacter">RuntimeException</samp> of type 
+                        <samp class="listingcharacter listingcharacter">UncheckedIOException</samp>
+                     will be thrown.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.5.3">19.5.3    The Function of OpenOption in the Files.new*(...) Methods</h3>
+            
+            <p class="standard">If a file already exists, the contents of that file will be deleted when it is opened for writing, so to speak, and then rewritten; if the file doesn’t exist, it will be created anew. However, this default option is a bit too restrictive, and therefore, 
+                <samp class="listingcharacter listingcharacter">OpenOption</samp> describes additional options. 
+                <samp class="listingcharacter listingcharacter">OpenOption</samp> is an interface implemented by the 
+                <samp class="listingcharacter listingcharacter">LinkOption</samp> and 
+                <samp class="listingcharacter listingcharacter">StandardOpenOption</samp>
+             enumerations.</p>
+            
+            <table class="standardtable" id="t19.3">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">OpenOption</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Description</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first tablecell_last top_border_cell tablecell_has_colspan" colspan="2">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">java.nio.file.StandardOpenOption</samp>
+                                </span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">READ</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Open for read access.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">WRITE</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Open for write access.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">APPEND</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">New data is appended to the end. Atomic in parallel write operations.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">
+                                    <a id="p1000"/>
+                                TRUNCATE_EXISTING</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">For writers, if the file exists, the length is set to 0 beforehand.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">CREATE</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Creates the file if it doesn’t exist yet.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">CREATE_NEW</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Creates the file only if it didn’t exist before. Otherwise, an error will be thrown.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">DELETE_ON_CLOSE</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">The Java library tries to delete the file when it’s closed.*</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">SPARSE</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Hint to the file system to store the file in a compact manner because it consists of many zero bytes.**</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">SYNC</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Every write access and every update of the metadata should immediately go to the file system.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">DSYNC</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Every write access should immediately go to the file system.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="2">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">java.nio.file.LinkOption</samp>
+                                </span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">NOFOLLOW_LINKS</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Symbolic links aren’t followed.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="2">
+                            
+                            <p class="standard first-item">* This option is useful, for example, when the main memory is too small and files are used as temporary storage for reading/writing. At the end of the operation, the file can be deleted.</p>
+                            
+                            <p class="standard last-item">** This option is interesting for Windows and NTFS file systems, see also <span class="url"><a href="https://stackoverflow.com/questions/17634362/what-is-the-use-of-standardopenoption-sparse">https://stackoverflow.com/questions/17634362/what-is-the-use-of-standardopenoption-sparse</a></span>.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 19.3</b>    
+            Constants from StandardOpenOption and LinkOption</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">CREATE_NEW</samp>
+             option can work only if the file doesn’t exist yet, as clearly shown by the following example:</p>
+            
+            <div class="listing " id="l19.11"><pre>Files<span class="">.</span><span class="">deleteIfExists</span><span class="">(</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"popi.herbert.tmp"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Files<span class="">.</span><span class="">newOutputStream</span><span class="">(</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"popi.herbert.tmp"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">).</span><span class="">close</span><span class="">();</span><span class=""><br/></span>Files<span class="">.</span><span class="">newOutputStream</span><span class="">(</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"popi.herbert.tmp"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">).</span><span class="">close</span><span class="">();</span><span class=""><br/></span>Files<span class="">.</span><span class="">newOutputStream</span><span class="">(</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"popi.herbert.tmp"</span><span class=""> </span><span class="">),</span><span class=""><br/></span>                       StandardOpenOption<span class="">.</span><span class="">CREATE_NEW </span><span class="">).</span><span class="">close</span><span class="">();</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 19.11</b>    
+            src/main/java/com/tutego/insel/nio2/StandardOpenOptionCreateNewDemo.java, main()</p>
+            
+            <p class="standard">In this case, the last line leads to “java.nio.file.FileAlreadyExistsException: popi.herbert.tmp.”</p>
+            
+            <p class="standard">
+                <a id="p1001"/>The 
+                <samp class="listingcharacter listingcharacter">DELETE_ON_CLOSE</samp>
+             option is useful for temporary files. The following example illustrates how that works:</p>
+            
+            <div class="listing " id="l19.12"><pre>Path path <span class="">=</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"popi.herbert.tmp"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>Files<span class="">.</span><span class="">deleteIfExists</span><span class="">(</span><span class=""> path </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Files</span><span class="">.</span><span class="">exists</span><span class="">(</span><span class=""> path </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // false</span><span class=""><br/></span><br/>Files<span class="">.</span><span class="">newOutputStream</span><span class="">(</span><span class=""> path </span><span class="">).</span><span class="">close</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Files</span><span class="">.</span><span class="">exists</span><span class="">(</span><span class=""> path </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // true</span><span class=""><br/></span><br/>Files<span class="">.</span><span class="">newOutputStream</span><span class="">(</span><span class=""> path</span><span class="">,</span><span class=""> StandardOpenOption</span><span class="">.</span><span class="">DELETE_ON_CLOSE</span><span class="">,</span><span class=""><br/></span>                             StandardOpenOption<span class="">.</span><span class="">SYNC </span><span class="">).</span><span class="">close</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Files</span><span class="">.</span><span class="">exists</span><span class="">(</span><span class=""> path </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // false</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 19.12</b>    
+            src/main/java/com/tutego/insel/nio2/StandardOpenOptionDeleteOnCloseDemo.java, main()</p>
+            
+            <p class="standard">In the last case, the file is created, a data stream is fetched and immediately closed. Because of 
+                <samp class="listingcharacter listingcharacter">StandardOpenOption.DELETE_ON_CLOSE</samp> Java will delete the file by itself, which is shown by 
+                <samp class="listingcharacter listingcharacter">Files.exists(Path, LinkOption...)</samp>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.5.4">19.5.4    Loading Resources from the Module Path and from JAR Files</h3>
+            
+            <p class="standard">The classpath/module path can contain resources, such as graphics or configuration files, in addition to the class files. Access to these files isn’t implemented via 
+                <samp class="listingcharacter listingcharacter">Path</samp> or 
+                <samp class="listingcharacter listingcharacter">File</samp> because these files can be located within a Java Archive file (JAR file). For this reason, you can use 
+                <samp class="listingcharacter listingcharacter">getResourceAsStream(String)</samp>
+                <a class="indexanchor" id="i19_23"/>
+                <a class="indexanchor" id="i19_24"/> from the 
+                <samp class="listingcharacter listingcharacter">Class</samp>
+             object:</p>
+            
+            <div class="listing " id="l_none_19510"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Class</span>&lt;T&gt;<br/><span class="">implements</span><span class=""> Serializable, GenericDeclaration, Type, AnnotatedElement </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">InputStream getResourceAsStream(String name)</samp><br/>Returns an input stream to the file named 
+                        <samp class="listingcharacter listingcharacter">name</samp> or 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                     if no resource exists with the name in the class/module path.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The method isn’t about opening and reading a file from a different JAR file. You can only access files from inside your own JAR file.</p>
+            
+            </div>
+            
+            <p class="standard">Because the class loader finds the resource, it discovers all files entered in the class loader path. This rule also applies to JAR archives because everything from the class 
+                <a id="p1002"/>loader is available there. Since the method doesn’t throw an exception, a test about whether the return is not 
+                <samp class="listingcharacter listingcharacter">null</samp>
+             is essential.</p>
+            
+            <p class="standard">The following program reads a byte from the 
+                <span class="italic">onebyte.txt</span>
+             file and outputs it to the screen:</p>
+            
+            <div class="listing " id="l19.13"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">io</span><span class="">.</span><span class="">stream</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">io</span><span class="">.*;</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Objects</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> GetResourceAsStreamDemo </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">String</span><span class=""> filename </span><span class="">=</span><span class=""> </span><span class="">"onebyte.txt"</span><span class="">;</span><span class=""><br/></span>    <span class="">try</span><span class=""> </span><span class="">(</span><span class=""> InputStream is </span><span class="">=</span><span class=""> Objects</span><span class="">.</span><span class="">requireNonNull</span><span class="">(</span><span class=""><br/></span>            
+                <span class="bold"><span class="">GetResourceAsStreamDemo.</span><span class="">class</span><span class="">.</span><span class="">getResourceAsStream</span><span class="">( filename )</span></span>,<br/>            <span class="">"File does not exist"</span><span class=""> ) ) {</span><br/>      System.out.<span class="">println</span><span class="">( is.</span><span class="">read</span><span class="">() ); </span><span class=""> // 49</span><span class=""><br/></span>    }<br/>    <span class="">catch</span><span class=""> ( IOException e ) {</span><br/>      e.<span class="">printStackTrace</span><span class="">();</span><br/>    }<br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 19.13</b>    
+            src/main/java/com/tutego/insel/io/stream/GetResourceAsStreamDemo.java</p>
+            
+            <p class="standard">The 
+                <span class="italic">onebyte.txt</span> file is located in the same path as the class and thus is located at 
+                <span class="italic">com/tutego/island/io/stream/onebyte.txt</span>. For example, if the resource is located in the root directory of the package, the notation is 
+                <samp class="listingcharacter listingcharacter">"</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">/</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">onebyte.txt"</samp>
+            . If a resource lies outside the module path, it can’t be read. But one big advantage is that the method can tap all the resources accessible via the class loader, which is especially the case when the files come from JAR files. With JAR, no usual path in the file system is used; the program usually stops at the JAR file itself.</p>
+            
+            <p class="standard">To use the 
+                <samp class="listingcharacter listingcharacter">getResourceAsStream(String)</samp> methods, a 
+                <samp class="listingcharacter listingcharacter">Class</samp> object is needed, which you can get in our case via 
+                <span class="italic">
+                    <samp class="listingcharacter listingcharacter">Typename</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">.class</samp>. This step is necessary because our 
+                <samp class="listingcharacter listingcharacter">main(String[])</samp> method is static. Otherwise, 
+                <samp class="listingcharacter listingcharacter">getClass()</samp>, a method that each class inherits from the base class 
+                <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+            , can also be used within object methods.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

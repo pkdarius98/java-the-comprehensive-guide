@@ -1,0 +1,254 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Arrays and Their Areas of Use" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Arrays and Their Areas of Use" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Arrays and Their Areas of Use</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h4.2">4.2    The Extended for Loop</h2>
+        
+        <p class="standard">
+            <samp class="listingcharacter listingcharacter">for</samp> loops often traverse arrays or data structures. As earlier in 
+            <span class="crossreference "><a href="04_001.html#h4.1.6">Section 4.1.6</a></span>
+        , when calculating the mean value, we can use the following code:</p>
+        
+        <div class="listing " id="l_none_4382"><pre><span class="">
+                <a id="p253"/>
+            double</span><span class=""> sum </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> </span>
+            <span class="bold"><span class="">i</span></span> = <span class="">0</span><span class="">; </span>
+            <span class="bold">i</span> &lt; numbers.length; 
+            <span class="bold">i</span>++ )<br/>  sum += numbers[ 
+            <span class="bold">i</span> ];<br/><span class="">double</span><span class=""> arg = sum / numbers.length; </span><span class=""/></pre></div>
+        
+        <p class="standard">The only justification for the loop variable 
+            <samp class="listingcharacter listingcharacter">i</samp> is to serve as an index; only with 
+            <samp class="listingcharacter listingcharacter">i</samp>
+         can the element be addressed at a certain place in the array.</p>
+        
+        <p class="standard">Because complete iterations of arrays are frequent, the following shortcut can be used for such iterations:</p>
+        
+        <div class="listing " id="l_none_4393"><pre><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span>
+            <span class="italic"><span class="">type identifier</span></span>: 
+            <span class="italic">Array</span> )<br/>  … <span class=""/></pre></div>
+        
+        <p class="standard">The extended form of the 
+            <samp class="listingcharacter listingcharacter">for</samp>
+            <a class="indexanchor" id="i04_09"/> loop
+            <a class="indexanchor" id="i04_10"/> detaches from the index and queries each element of the array. Think of this as passing through a set because the colon can be read as “in.” To the right of the colon is always an array or, as we’ll see later in this section, something of type 
+            <samp class="listingcharacter listingcharacter">Iterable</samp>
+        , such as a data structure. On the left, a new local variable is declared that will later accept each element of the collection as it runs.</p>
+        
+        <p class="standard">Let’s now rewrite our program for calculating averages. The static method 
+            <samp class="listingcharacter listingcharacter">avg(...)</samp> should run with the extended 
+            <samp class="listingcharacter listingcharacter">for</samp> over the loop instead of incrementing the index itself. An exception indicates whether the array reference is 
+            <samp class="listingcharacter listingcharacter">null</samp>
+         or the array contains no elements.</p>
+        
+        <div class="listing " id="l4.4"><pre><span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">avg</span><span class="">(</span><span class=""> </span><span class="">double</span><span class="">[]</span><span class=""> numbers </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> numbers </span><span class="">==</span><span class=""> null </span><span class="">||</span><span class=""> numbers</span><span class="">.</span><span class="">length </span><span class="">==</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IllegalArgumentException</span><span class="">(</span><span class=""> </span><span class="">"Array null or empty"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>  <span class="">double</span><span class=""> sum </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span><br/>  
+            <span class="bold"><span class="">for</span><span class=""> ( </span><span class="">double</span><span class=""> n : </span></span>numbers 
+            <span class="bold">)</span><br/>    sum += n;<br/><br/>  <span class="">return</span><span class=""> sum / numbers.length;</span><br/>} <span class=""/></pre></div>
+        
+        <p class="caption "><b>Listing 4.4</b>    
+            src/main/java/com/tutego/insel/array/Avg2.java, avg()</p>
+        
+        <p class="standard">The 
+            <samp class="listingcharacter listingcharacter">for</samp> line is therefore to be read as “For each element 
+            <samp class="listingcharacter listingcharacter">n</samp> of type 
+            <samp class="listingcharacter listingcharacter">double</samp> in 
+            <samp class="listingcharacter listingcharacter">numbers</samp>
+         do....” A variable for the loop index is no longer necessary.</p>
+        
+        
+            
+            <h3 class="t3" id="h4.2.1">4.2.1    Using Anonymous Arrays in the Extended for Loop</h3>
+            
+            <p class="standard">To the right of the colon, you can quickly build an array over which the extended 
+                <samp class="listingcharacter listingcharacter">for</samp>
+             can then run, as in the following example:</p>
+            
+            <div class="listing " id="l_none_4418"><pre><span class="">
+                    <a id="p254"/>
+                for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> weight </span><span class="">:</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">int</span><span class="">[]{</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">5</span><span class="">,</span><span class=""> </span><span class="">7</span><span class="">,</span><span class=""> </span><span class="">11</span><span class=""> </span><span class="">}</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> weight </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">This approach is convenient for running over a fixed set of values and also works for objects, such as strings, as in the following example:</p>
+            
+            <div class="listing " id="l_none_4411"><pre><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name </span><span class="">:</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">String</span><span class="">[]{</span><span class=""> </span><span class="">"Butterfinger Crisp"</span><span class="">,</span><span class=""> </span><span class="">"NutRageous"</span><span class=""> </span><span class="">}</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> name </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">To the right of the colon, you can have an array or an object of type 
+                    <samp class="listingcharacter listingcharacter">Iterable</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_4436"><pre><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name </span><span class="">:</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">"Butterfinger Crisp"</span><span class="">,</span><span class=""> </span><span class="">"NutRageous"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> name </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">Arrays.asList(...)</samp> doesn’t create an array as a return but instead builds a collection from the variable argument list, which is of the special 
+                    <samp class="listingcharacter listingcharacter">Iterable</samp> type; anything 
+                    <samp class="listingcharacter listingcharacter">Iterable</samp> can run the extended 
+                    <samp class="listingcharacter listingcharacter">for</samp> loop. We’ll get back to this topic later in this section. Regardless of the extended 
+                    <samp class="listingcharacter listingcharacter">for</samp>, using 
+                    <samp class="listingcharacter listingcharacter">Arrays.asList(...)</samp>
+                 has another advantage, such as for actual-element-of queries, like the following example:</p>
+                
+                <div class="listing " id="l_none_4437"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">6</span><span class="">,</span><span class=""> </span><span class="">7</span><span class="">,</span><span class=""> </span><span class="">8</span><span class="">,</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">).</span><span class="">contains</span><span class="">(</span><span class=""> number </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  … </pre></div>
+                
+                <p class="standard last">More about this method will follow in 
+                    <span class="crossreference "><a href="04_006.html#h4.6">Section 4.6</a></span>
+                .</p>
+            
+            </div>
+            
+            <p class="standard">Internally, the compiler implements this extended 
+                <samp class="listingcharacter listingcharacter">for</samp>
+             loop quite classically, so that the bytecode is the same for both variants. However, some disadvantages of this variant include the following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The extended 
+                        <samp class="listingcharacter listingcharacter">for</samp> always runs through the entire array by default. A start index and an end index can’t be set explicitly. The loop can be aborted using 
+                        <samp class="listingcharacter listingcharacter">break</samp>
+                     so that a premature end of the loop is basically possible.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The order is always “front to back.”</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The step length is always 1.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The index isn’t visible.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The loop returns an element but can’t write to the array.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">If other requirements exist, only a classic 
+                <samp class="listingcharacter listingcharacter">for</samp>
+             loop can help.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.2.2">4.2.2    Example: Searching Arrays with Strings</h3>
+            
+            <p class="standard">In our first example, we want a non-primitive array
+                <a class="indexanchor" id="i04_11"/>
+                <a class="indexanchor" id="i04_12"/> to reference strings and later check if any user input in the array exists. Case-insensitive string comparisons can be implemented with 
+                <samp class="listingcharacter listingcharacter">equalsIgnoreCase(...)</samp>
+            , as in the following example:</p>
+            
+            <div class="listing " id="l4.5"><pre>
+                <span class="bold"><span class="">
+                        <a id="p255"/>
+                    String</span><span class="">[] validInputs = { </span><span class="">"Banana"</span><span class="">, </span><span class="">"Apple"</span><span class="">, </span><span class="">"Cherry"</span><span class=""> };</span><br/></span><br/><span class="">String</span><span class=""> input = null;</span><br/><span class="">boolean</span><span class=""> found = false;</span><br/><span class="">while</span><span class=""> ( ! found ) {</span><br/>  input = <span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">nextLine</span><span class="">();</span><br/><br/>  <span class="">for</span><span class=""> ( </span><span class="">String</span><span class=""> s : validInputs )</span><br/>    <span class="">if</span><span class=""> ( s.</span><span class="">equalsIgnoreCase</span><span class="">( input ) ) {</span><br/>      found = true;<br/>      <span class="">break</span><span class="">;</span><br/>    }<br/>}<br/><br/>System.out.<span class="">println</span><span class="">( </span><span class="">"Yummy "</span><span class=""> + input ); </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 4.5</b>    
+            src/main/java/com/tutego/insel/array/UserInputInStringArray.java, main()</p>
+            
+            <p class="standard">To initialize the array, the program uses a compact variant that combines three things: the construction of an array object (with sufficient space for three references), the initialization of the array object with the three object references, and finally the initialization of the 
+                <samp class="listingcharacter listingcharacter">validInputs</samp>
+             variable with the new array—all in a single statement.</p>
+            
+            <p class="standard">For the search, the extended 
+                <samp class="listingcharacter listingcharacter">for</samp> is used, which is embedded in a loop that ends exactly when the 
+                <samp class="listingcharacter listingcharacter">found</samp> flag becomes 
+                <samp class="listingcharacter listingcharacter">true</samp>. If we never enter a correct string, the outer loop will never end. If we find an entry, the 
+                <samp class="listingcharacter listingcharacter">flag</samp> can be set, and 
+                <samp class="listingcharacter listingcharacter">break</samp>
+             will exit the array loop prematurely.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.2.3">4.2.3    Creating Random Player Positions</h3>
+            
+            <p class="standard">In the second example, five randomly initialized points are to be stored in an array. The points are supposed to represent players.</p>
+            
+            <p class="standard">First, let’s initialize an array with the following code:</p>
+            
+            <div class="listing " id="l_none_4470"><pre>Point<span class="">[]</span><span class=""> players </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Point</span><span class="">[</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">];</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The declaration creates space for five references to point objects, but not a single 
+                <samp class="listingcharacter listingcharacter">Point</samp> object is created. By default, the array elements are initialized with the 
+                <samp class="listingcharacter listingcharacter">null</samp> reference, so 
+                <samp class="listingcharacter listingcharacter">System.out.println(players[0])</samp> would bring the output “null” to the screen. We don’t want to leave it at 
+                <samp class="listingcharacter listingcharacter">null</samp>, so the individual array positions must be initialized with something like 
+                <samp class="listingcharacter listingcharacter">players[0] = new Point()</samp>
+            .</p>
+            
+            <p class="standard">Random numbers are generated by the mathematical method 
+                <samp class="listingcharacter listingcharacter">Math.random()</samp>
+                <a class="indexanchor" id="i04_13"/>
+            . However, since the static method returns floats between 0 (inclusive) and 1 (exclusive), the numbers are first manipulated by multiplication and then truncated.</p>
+            
+            <p class="standard">
+                <a id="p256"/>In the final step, we’ll output a grid on the screen where two nested loops traverse all x/y coordinates of the selected area and then set a 
+                <samp class="listingcharacter listingcharacter">&amp;</samp>
+             when the point hits a player.</p>
+            
+            <p class="standard">Let’s look at the complete program.</p>
+            
+            <div class="listing " id="l4.6"><pre>Point<span class="">[]</span><span class=""> players </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Point</span><span class="">[</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">];</span><span class=""><br/></span><br/>
+                <span class="bold"><span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> i = </span><span class="">0</span><span class="">; i &lt; players.length; i++ )</span><br/>  players[ i ] = <span class="">new</span><span class=""> </span><span class="">Point</span><span class="">( (</span><span class="">int</span><span class="">)(Math.</span><span class="">random</span><span class="">() * </span><span class="">40</span><span class="">),</span><br/>                            (<span class="">int</span><span class="">)(Math.</span><span class="">random</span><span class="">() * </span><span class="">10</span><span class="">) );</span><br/></span><br/><span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> y = </span><span class="">0</span><span class="">; y &lt; </span><span class="">10</span><span class="">; y++ ) {</span><br/>  <span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> x = </span><span class="">0</span><span class="">; x &lt; </span><span class="">40</span><span class="">; x++ )</span><br/>    <span class="">if</span><span class=""> ( Arrays.</span><span class="">asList</span><span class="">( players ).</span><span class="">contains</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(x,y) ) )</span><br/>      System.out.<span class="">print</span><span class="">( </span><span class="">'&amp;'</span><span class=""> );</span><br/>    <span class="">else</span><span class=""><br/></span>      System.out.<span class="">print</span><span class="">( </span><span class="">'.'</span><span class=""> );</span><br/>  System.out.<span class="">println</span><span class="">();</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 4.6</b>    
+            src/main/java/com/tutego/insel/array/FivePlayers.java, main()</p>
+            
+            <p class="standard">The expression 
+                <samp class="listingcharacter listingcharacter">Arrays.asList(players).contains(new Point(x, y))</samp> checks whether any point in the 
+                <samp class="listingcharacter listingcharacter">players</samp>
+             array is equal to the point with x/y coordinates.</p>
+            
+            <p class="standard">The program generates the following output:</p>
+            
+            <div class="listing " id="l_none_4487"><pre>........................................<br/>...............&amp;........................<br/>&amp;.......................................<br/>........................................<br/>........................................<br/>..............................&amp;.........<br/>........................................<br/>...&amp;....................&amp;...............<br/>........................................<br/>........................................ </pre></div>
+            
+            <p class="standard">While the extended 
+                <samp class="listingcharacter listingcharacter">for</samp> loop is good for traversing arrays, it doesn’t work for initialization because the extended 
+                <samp class="listingcharacter listingcharacter">for</samp> is only good for reading. Element initializations work for arrays only with 
+                <samp class="listingcharacter listingcharacter">players[i]=...</samp>, which requires a classic 
+                <samp class="listingcharacter listingcharacter">for</samp>
+             loop with the index.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

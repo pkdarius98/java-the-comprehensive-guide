@@ -1,0 +1,663 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Object-Oriented Relationship" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Object-Oriented Relationship" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Object-Oriented Relationship</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h7.3">7.3    
+            <a id="p447"/>
+        Types in Hierarchies</h2>
+        
+        <p class="standard">Inheritance involves some new aspects in terms of the compatibility of types. This section deals with the question of which types are compatible and how a type can be tested at runtime.</p>
+        
+        
+            
+            <h3 class="t3" id="h7.3.1">7.3.1    Automatic
+                <a class="indexanchor" id="i07_32"/>
+             and Explicit Typecasting</h3>
+            
+            <p class="standard">Let’s recap which types we’ve created so far: We modeled the 
+                <samp class="listingcharacter listingcharacter">Nap</samp> and 
+                <samp class="listingcharacter listingcharacter">Workout</samp> classes as subclasses of 
+                <samp class="listingcharacter listingcharacter">Event</samp>. The custom superclass 
+                <samp class="listingcharacter listingcharacter">Event</samp> itself doesn’t extend an explicit superclass, so implicitly 
+                <samp class="listingcharacter listingcharacter">java.lang.Object</samp> is the superclass. 
+                <samp class="listingcharacter listingcharacter">Event</samp> has two object variables (
+                <samp class="listingcharacter listingcharacter">about</samp> and 
+                <samp class="listingcharacter listingcharacter">duration</samp>), which are inherited by 
+                <samp class="listingcharacter listingcharacter">Nap</samp> and 
+                <samp class="listingcharacter listingcharacter">Workout</samp>, and 
+                <samp class="listingcharacter listingcharacter">Workout</samp> has the additional variable 
+                <samp class="listingcharacter listingcharacter">caloriesBurned</samp>
+             for the “burned” calories.</p>
+            
+            
+                
+                <h4 class="t4" id="h7.3.1.1">Is-a-Type-of Relationships and Automatic Typecasting</h4>
+                
+                <p class="standard">An interesting property associated with the is-a-type-of relationship can be seen when looking at the relationships between types. We can break down these relationships in the following way:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">An 
+                            <samp class="listingcharacter listingcharacter">event</samp> is an 
+                            <samp class="listingcharacter listingcharacter">Event</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A 
+                            <samp class="listingcharacter listingcharacter">Nap</samp> is a 
+                            <samp class="listingcharacter listingcharacter">Nap</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A 
+                            <samp class="listingcharacter listingcharacter">Workout</samp> is a 
+                            <samp class="listingcharacter listingcharacter">Workout</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A 
+                            <samp class="listingcharacter listingcharacter">Nap</samp> is an 
+                            <samp class="listingcharacter listingcharacter">Event</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A 
+                            <samp class="listingcharacter listingcharacter">Workout</samp> is an 
+                            <samp class="listingcharacter listingcharacter">Event</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">An 
+                            <samp class="listingcharacter listingcharacter">Event</samp> is a 
+                            <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A 
+                            <samp class="listingcharacter listingcharacter">Nap</samp> is a 
+                            <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A 
+                            <samp class="listingcharacter listingcharacter">Workout</samp> is a 
+                            <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Let’s code these relationships in Java next.</p>
+                
+                <div class="listing " id="l7.19"><pre>
+                    <span class="bold"><span class="">Nap</span></span>    napAsNap    = <span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">();</span><br/>
+                    <span class="bold">Event</span>  napAsEvent  = <span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">();</span><br/>
+                    <span class="bold">Object</span> napAsObject = <span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">();</span><br/> <br/>
+                    <span class="bold">Workout</span> workoutAsWorkout = <span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><br/>
+                    <span class="bold">Event</span>   workoutAsEvent   = <span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><br/>
+                    <span class="bold">Object</span>  workoutAsObject  = <span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">(); </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.19</b>    
+            src/main/java/com/tutego/insel/game/c/vl/TypeSuptype.java (Snippet)</p>
+                
+                <p class="standard">Therefore, whenever a type is required, a subtype is also allowed. The compiler performs an implicit typecasting. We’ll look at this principle, called the 
+                    <span class="italic">Liskov substitution principle</span>, in 
+                    <span class="crossreference "><a href="07_003.html#h7.3.2">Section 7.3.2</a></span>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.3.1.2">
+                    <a id="p448"/>
+                What Do the Compiler and Runtime Environment Know about Our Program?</h4>
+                
+                <p class="standard">The compiler and runtime environment have different views of the program and know different things. By using 
+                    <samp class="listingcharacter listingcharacter">new</samp>, only two types of objects exist at runtime: 
+                    <samp class="listingcharacter listingcharacter">Nap</samp> and 
+                    <samp class="listingcharacter listingcharacter">Workout</samp>
+                , even if we have the following code:</p>
+                
+                <div class="listing " id="l_none_7365"><pre>
+                    <span class="bold"><span class="">Event</span></span> workoutAsEvent = <span class="">new</span><span class=""> </span>
+                    <span class="bold"><span class="">Workout</span></span><span class="">(); </span><span class=""/></pre></div>
+                
+                <p class="standard">In this case, 
+                    <samp class="listingcharacter listingcharacter">workoutAsEvent</samp> references a 
+                    <samp class="listingcharacter listingcharacter">workout object</samp> at runtime. But the compiler “forgets” the relationship and thinks 
+                    <samp class="listingcharacter listingcharacter">workoutAsEvent</samp> is just a simple 
+                    <samp class="listingcharacter listingcharacter">Event</samp>
+                .</p>
+                
+                <div class="imagebox figure-type"><a href="img-f7.10.html" id="f7.10"><img alt="The Compiler Only Sees a Section and Draws Its Own Conclusions" id="img-f7.10" src="bilderklein/klein07_010.png"/></a></div>
+                
+                <p class="caption "><b>Figure 7.10</b>    
+            The Compiler Only Sees a Section and Draws Its Own Conclusions</p>
+                
+                <p class="standard">However, in the 
+                    <samp class="listingcharacter listingcharacter">Event</samp> class, only 
+                    <samp class="listingcharacter listingcharacter">about</samp> and 
+                    <samp class="listingcharacter listingcharacter">duration</samp> are declared; no 
+                    <samp class="listingcharacter listingcharacter">caloriesBurned</samp> object variable has been defined, although the actual 
+                    <samp class="listingcharacter listingcharacter">Workout</samp> object does have a 
+                    <samp class="listingcharacter listingcharacter">caloriesBurned</samp>, of course. But we can’t access 
+                    <samp class="listingcharacter listingcharacter">caloriesBurned</samp>
+                 for now in the following example:</p>
+                
+                <div class="listing " id="l_none_7361"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> workoutAsEvent</span><span class="">.</span><span class="">about </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> workoutAsEvent</span><span class="">.</span><span class="">caloriesBurned </span><span class="">);</span><span class=""><br/></span>// Cannot resolve symbol 'caloriesBurned'<span class=""> </span></pre></div>
+                
+                <p class="standard">You can write this code more restrictively in the following way:</p>
+                
+                <div class="listing " id="l_none_7379"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> workoutAsObject</span><span class="">.</span><span class="">about </span><span class="">);</span><span class=""><br/></span>// Cannot resolve symbol 'about'<span class=""> </span></pre></div>
+                
+                <p class="standard">In this case, a complete 
+                    <samp class="listingcharacter listingcharacter">Workout</samp> object still exists behind the reference variable 
+                    <samp class="listingcharacter listingcharacter">workoutAsObject</samp>, but neither 
+                    <samp class="listingcharacter listingcharacter">caloriesBurned</samp> nor 
+                    <samp class="listingcharacter listingcharacter">about</samp>/
+                    <samp class="listingcharacter listingcharacter">duration</samp> can be used; only the capabilities from 
+                    <samp class="listingcharacter listingcharacter">java.lang.Object</samp>
+                 remain.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p449"/>
+                    Terminology</h6>
+                    
+                    <p class="standard first">In Java, two type systems are at work: that of the compiler and that of the runtime environment. To distinguish the type that the compiler knows from the type that the JVM knows, we’ll use the terms 
+                        <span class="italic">reference type</span>
+                        <a class="indexanchor" id="i07_33"/> and 
+                        <span class="italic">object type</span>
+                        <a class="indexanchor" id="i07_34"/>
+                    , respectively. Consider the following example:</p>
+                    
+                    <div class="listing " id="l_none_7394"><pre>   Event event    <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">()</span><span class=""><br/></span>// ^^^^                 ^^^^^^^<br/>// Reference type       Object type<span class=""> </span></pre></div>
+                    
+                    <p class="standard last">In this example, 
+                        <samp class="listingcharacter listingcharacter">Event</samp> is the reference type, and 
+                        <samp class="listingcharacter listingcharacter">Workout</samp> is the object type. (Memory aid: 
+                        <samp class="listingcharacter listingcharacter">new</samp> builds objects that are in memory, and the compiler stores a reference in a reference variable.) The compiler sees only the reference type, not the object type. Put more simply: The compiler is only interested in the left-hand side of a construction like 
+                        <samp class="listingcharacter listingcharacter">Event e = new Workout()</samp>, namely, (
+                        <samp class="listingcharacter listingcharacter">Event e</samp>), while the runtime environment is only interested in the right-hand side, namely, 
+                        <samp class="listingcharacter listingcharacter">e = new Workout()</samp>
+                    .</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.3.1.3">Explicit Type Conversion</h4>
+                
+                <p class="standard">This type restriction also applies elsewhere. If a variable of type 
+                    <samp class="listingcharacter listingcharacter">Room</samp>
+                 is declared, we can’t initialize the variable with a “smaller” type, as in the following example:</p>
+                
+                <div class="listing " id="l_none_7395"><pre>Event    event   <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><span class="">   </span><span class=""> // Workout is object type at runtime</span><span class=""><br/></span>Workout  running <span class="">=</span><span class=""> event</span><span class="">;</span><span class="">           </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     </span><br/>// Incompatible types. Found: '[…].Event', required: '[…].Workout'<span class=""> </span></pre></div>
+                
+                <p class="standard">During runtime, even if 
+                    <samp class="listingcharacter listingcharacter">event</samp> references a 
+                    <samp class="listingcharacter listingcharacter">Workout</samp>, you can’t initialize 
+                    <samp class="listingcharacter listingcharacter">running</samp> with it. The compiler knows 
+                    <samp class="listingcharacter listingcharacter">event</samp> only under the “smaller” type 
+                    <samp class="listingcharacter listingcharacter">Event</samp>, which isn’t sufficient for initializing the “larger” 
+                    <samp class="listingcharacter listingcharacter">Workout</samp>
+                 type.</p>
+                
+                <p class="standard">However, you can make the object behind 
+                    <samp class="listingcharacter listingcharacter">event</samp> a full-fledged 
+                    <samp class="listingcharacter listingcharacter">Workout</samp> (with calories spent) for a compiler by an explicit typecasting
+                    <a class="indexanchor" id="i07_35"/>
+                .</p>
+                
+                <div class="listing " id="l7.20"><pre>Event    event   <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><span class=""><br/></span>Workout  running <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">(Workout) event</span></span>;<br/>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">running.caloriesBurned</span> ); <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.20</b>    
+            src/main/java/com/tutego/insel/game/c/vl/TypeSuptype.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.3.1.4">Impossible Matching and ClassCastException</h4>
+                
+                <p class="standard">However, explicit typecasting only works if 
+                    <samp class="listingcharacter listingcharacter">event</samp> does actually reference a 
+                    <samp class="listingcharacter listingcharacter">Workout</samp>
+                 object. The compiler can be coaxed into an invalid typecasting, and thus, the following incorrect code is also translated into bytecode without errors being raised:</p>
+                
+                <div class="listing " id="l7.21"><pre>
+                    <a id="p450"/>Event    event   <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">()</span></span>;<br/>Workout  running = 
+                    <span class="bold">(Workout) event</span>;<span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     ClassCastException</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( running.caloriesBurned ); </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.21</b>    
+            src/main/java/com/tutego/insel/game/c/vl/TypeSuptype.java (Snippet)</p>
+                
+                <p class="standard">The compiler goes along with this nonsense, but not the JVM; at runtime, this object results in a 
+                    <samp class="listingcharacter listingcharacter">ClassCastException</samp>
+                    <a class="indexanchor" id="i07_36"/>
+                , with the following message:</p>
+                
+                <div class="listing " id="l_none_7428"><pre>Exception in thread <span class="">"main"</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span><span class="">ClassCastException</span><span class="">:</span><span class=""> </span><span class="">class</span><span class=""> </span><span class="">[</span><span class="">…</span><span class="">].</span><span class="">Nap cannot be cast to </span><span class="">class</span><span class=""> </span><span class="">[</span><span class="">…</span><span class="">].</span><span class="">Workout </span><span class="">([</span><span class="">…</span><span class="">].</span><span class="">Nap and </span><span class="">[</span><span class="">…</span><span class="">].</span><span class="">Workout are in unnamed module of loader </span><span class="">'app'</span><span class="">)</span><span class=""><br/></span>   at … </pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">In programming, restricting the type may be relevant. If you use 
+                        <samp class="listingcharacter listingcharacter">var</samp>
+                    , then the type of the variable will automatically be the type on the right. For example, let’s say we write the following code:</p>
+                    
+                    <div class="listing " id="l_none_7431"><pre>Event event <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">(</span><span class="">)</span></pre></div>
+                    
+                    <p class="standard">In this case, we've specifically chosen the 
+                        <samp class="listingcharacter listingcharacter">Nap</samp> type for 
+                        <samp class="listingcharacter listingcharacter">event</samp>. Note that, when you declare a variable with 
+                        <samp class="listingcharacter listingcharacter">var</samp>
+                    , the new variable gets exactly the type of the right-hand side.</p>
+                    
+                    <div class="listing " id="l_none_7456"><pre>var event <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">()</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">In this case, 
+                        <samp class="listingcharacter listingcharacter">event</samp> is a 
+                        <samp class="listingcharacter listingcharacter">Nap</samp>, so it has and can do more than an 
+                        <samp class="listingcharacter listingcharacter">Event</samp>
+                    . </p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.3.2">7.3.2    The Substitution Principle</h3>
+            
+            <p class="standard">Let’s suppose you need to find out how long two events (
+                <samp class="listingcharacter listingcharacter">Nap</samp> and 
+                <samp class="listingcharacter listingcharacter">Workout</samp>) last in total. A first attempt would probably involve declaring three methods that can be called with all combinations of 
+                <samp class="listingcharacter listingcharacter">Nap</samp> and 
+                <samp class="listingcharacter listingcharacter">Workout</samp>
+            :</p>
+            
+            <div class="listing " id="l_none_7460"><pre><span class="">int</span><span class=""> </span><span class="">totalDuration</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">Nap event1, Nap event2</span></span> ) {<br/>  <span class="">return</span><span class=""> event1.duration + event2.duration;</span><br/>}<br/><span class="">int</span><span class=""> </span><span class="">totalDuration</span><span class="">( </span>
+                <span class="bold">Workout event1, Nap event2</span> ) {<br/>  <span class="">return</span><span class=""> event1.duration + event2.duration;</span><br/>}<br/><span class="">int</span><span class=""> </span><span class="">totalDuration</span><span class="">( </span>
+                <span class="bold">Workout event1, Workout event2</span> ) {<br/>  <span class="">return</span><span class=""> event1.duration + event2.duration;</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">
+                <a id="p451"/>
+            Notice how the bodies of these methods are identical. In this case, inheritance can help you generalize the code. To illustrate this advantage, let’s consider two real-life scenarios:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">When we pack a suitcase, different things go into it. We don’t have a special suitcase for shoes, then a second suitcase for the shirts, a third suitcase for the headphones we keep losing, and so on.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Let’s imagine some friends come back famished after a hike and ask, “Do you have anything to eat?” When we’re hungry, all that matters is something edible. Therefore, we can offer ice cream, but also offer grilled grasshoppers and 
+                        <span class="italic">hákarl</span>
+                     (fermented Icelandic shark), because it’s all edible.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">This starting point leads to an important concept in object orientation: “If you want a little, you can get a lot.” More precisely, if subclasses like 
+                <samp class="listingcharacter listingcharacter">Nap</samp> or 
+                <samp class="listingcharacter listingcharacter">Workout</samp> extend the superclass 
+                <samp class="listingcharacter listingcharacter">Event</samp>, you can also pass a 
+                <samp class="listingcharacter listingcharacter">Nap</samp> or 
+                <samp class="listingcharacter listingcharacter">Workout</samp> object wherever something of type 
+                <samp class="listingcharacter listingcharacter">Event</samp> is requested since both are of type 
+                <samp class="listingcharacter listingcharacter">Event</samp> and specificity resides with the subclass. Also, you can pass other subclasses of 
+                <samp class="listingcharacter listingcharacter">Event</samp> and 
+                <samp class="listingcharacter listingcharacter">Nap</samp> since subclasses also carry the “gene” 
+                <samp class="listingcharacter listingcharacter">Event</samp>. All these things would be of type 
+                <samp class="listingcharacter listingcharacter">Event</samp>
+            , and therefore, all are type compatible.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f_none_07_10.html" id="f_none_07_10"><img alt="" id="img-f_none_07_10" src="bilderklein/klein07_010_01.png"/></a></div>
+            
+            <p class="standard">In the next example, we’ll use a method called 
+                <samp class="listingcharacter listingcharacter">totalDuration(Event... events)</samp> that takes a variable argument list of 
+                <samp class="listingcharacter listingcharacter">Event</samp> objects and calculates the total of all durations. The method doesn’t care about the object type at all because, if the method awaits an 
+                <samp class="listingcharacter listingcharacter">Event</samp>, we could pass an object exactly of the object type 
+                <samp class="listingcharacter listingcharacter">Event</samp>, but also 
+                <samp class="listingcharacter listingcharacter">Nap</samp> or 
+                <samp class="listingcharacter listingcharacter">Workout</samp>. Each 
+                <samp class="listingcharacter listingcharacter">event</samp> basically has the object variables 
+                <samp class="listingcharacter listingcharacter">about</samp> and 
+                <samp class="listingcharacter listingcharacter">duration</samp>
+             since all subclasses inherit the members and subclasses can’t “conjure away” the members.</p>
+            
+            <div class="listing " id="l7.22"><pre><span class="">
+                    <a id="p452"/>
+                public</span><span class=""> </span><span class="">class</span><span class=""> TotalDuration </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">totalDuration</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">Event... events</span></span> ) {<br/>    <span class="">int</span><span class=""> sum = </span><span class="">0</span><span class="">;</span><br/>    <span class="">for</span><span class=""> ( </span>
+                <span class="bold">Event event : events</span> )<br/>      sum += 
+                <span class="bold">event.duration</span>;<br/>    <span class="">return</span><span class=""> sum;</span><br/>  }<br/> <br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    
+                <span class="bold">Workout running</span> = <span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><br/>    
+                <span class="bold">running.duration</span> = <span class="">50</span><span class="">;</span><br/>    
+                <span class="bold">Event sleeping</span> = <span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">();</span><br/>    
+                <span class="bold">sleeping.duration</span> = <span class="">40</span><span class="">;</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">totalDuration</span><span class="">( </span>
+                <span class="bold">running, sleeping</span> ) );<br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.22</b>    
+            src/main/java/com/tutego/insel/game/c/vl/TotalDuration.java, TotalDuration</p>
+            
+            <p class="standard">With 
+                <samp class="listingcharacter listingcharacter">Event</samp>, we’ve created a base class that teaches some basic functionality (in our case, the object variables 
+                <samp class="listingcharacter listingcharacter">about</samp> and 
+                <samp class="listingcharacter listingcharacter">duration</samp>) to all its subclasses. Thus, the base class provides a common denominator, such as common object variables or methods that each subclass will have—we can not specify that certain object variables/methods go to certain subclasses. This type relationship is much more flexible than writing special methods for the concrete types 
+                <samp class="listingcharacter listingcharacter">Nap</samp> and 
+                <samp class="listingcharacter listingcharacter">Workout</samp>. If new 
+                <samp class="listingcharacter listingcharacter">Event</samp> types appear later in an application, 
+                <samp class="listingcharacter listingcharacter">totalDuration(Event...)</samp>
+             can handle them as a matter of course, and you won’t have to touch the “algorithm” again.</p>
+            
+            <p class="standard">When an object of a subclass appears instead of the object itself is called 
+                <span class="italic">substitution</span>. The principle was formulated by Professor Barbara Liskov
+                <a class="indexanchor" id="i07_37"/>
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn07_07" id="fn07_07">[ 142 ]</a></span> and is therefore referred to as the 
+                <span class="italic">Liskov substitution principle</span>
+                <a class="indexanchor" id="i07_38"/>
+                <a class="indexanchor" id="i07_39"/>
+            .</p>
+            
+            <p class="standard">Countless other examples exist in the Java library. The 
+                <samp class="listingcharacter listingcharacter">println(Object)</samp> method is such an example. The method accepts any object because the parameter type is 
+                <samp class="listingcharacter listingcharacter">Object</samp>. Substitution means that you can put any object there since all classes are derived from 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.3.3">7.3.3    Testing Types with the instanceof Operator</h3>
+            
+            <p class="standard">In the previous example, the 
+                <samp class="listingcharacter listingcharacter">totalDuration(...)</samp> method could be passed a variable number of 
+                <samp class="listingcharacter listingcharacter">Events</samp> objects, and thus, the method can access anything that has an 
+                <samp class="listingcharacter listingcharacter">Event</samp>. If we pass “more” (that is, if we pass concrete subclasses), then the method doesn’t know this additional information. Now and then, you’ll need to know the concrete 
+                <a id="p453"/>type, and the relational operator 
+                <samp class="listingcharacter listingcharacter">instanceof</samp> helps you check instances for their relationships to reference types. This operator determines, during runtime, whether a reference is unequal to 
+                <samp class="listingcharacter listingcharacter">null</samp>
+             and of a particular type. The operator is binary and thus has two operands.</p>
+            
+            <p class="standard">Let’s look at an example that doesn’t add anything of type 
+                <samp class="listingcharacter listingcharacter">Nap</samp>
+             when calculating a total:</p>
+            
+            <div class="listing " id="l7.23"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">totalDurationOfNoNapEvents</span><span class="">(</span><span class=""> Event</span><span class="">...</span><span class=""> events </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> sum </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span>  <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> Event event </span><span class="">:</span><span class=""> events </span><span class="">)</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">!</span><span class=""> </span><span class="">(</span>
+                <span class="bold">event <span class="">instanceof</span><span class=""> Nap</span></span>) )<br/>      sum += event.duration;<br/>  <span class="">return</span><span class=""> sum;</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.23</b>    
+            src/main/java/com/tutego/insel/game/c/vl/TotalDuration.java, totalDurationOfNoNapEvents</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The 
+                    <samp class="listingcharacter listingcharacter">instanceof</samp> operator tests an object for its hierarchy. For example, 
+                    <samp class="listingcharacter listingcharacter">o instanceof Object</samp> is true for every object 
+                    <samp class="listingcharacter listingcharacter">o</samp> because every object is always a child of 
+                    <samp class="listingcharacter listingcharacter">java.lang.Object</samp>. In this context, the programming language Smalltalk makes a distinction using two messages: 
+                    <samp class="listingcharacter listingcharacter">isMemberOf</samp> (exactly) and 
+                    <samp class="listingcharacter listingcharacter">isKindOf</samp> (like Java’s 
+                    <samp class="listingcharacter listingcharacter">instanceof</samp>). To test the exact type, you can use the 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object, as in the expression 
+                    <samp class="listingcharacter listingcharacter">o.getClass() == Object.class</samp>, which tests whether 
+                    <samp class="listingcharacter listingcharacter">o</samp> is exactly an 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 object.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h7.3.3.1">instanceof, Reference Types, and Object Types</h4>
+                
+                <p class="standard">Basically, the compiler can already know some types, but the test is really performed at runtime. Let’s formulate an example to illustrate that 
+                    <samp class="listingcharacter listingcharacter">instanceof</samp> really needs to run the test at runtime. In all cases, the object is a 
+                    <samp class="listingcharacter listingcharacter">Workout</samp>
+                 at runtime, only the reference type differs in the following example:</p>
+                
+                <div class="listing " id="l7.24"><pre>Workout wo1 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo1 </span><span class="">instanceof</span><span class=""> Workout </span><span class="">);</span><span class="">       </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo1 </span><span class="">instanceof</span><span class=""> Event </span><span class="">);</span><span class="">         </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo1 </span><span class="">instanceof</span><span class=""> Object </span><span class="">);</span><span class="">        </span><span class=""> // true</span><span class=""><br/></span> <br/>Event wo2 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo2 </span><span class="">instanceof</span><span class=""> Workout </span><span class="">);</span><span class="">       </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo2 </span><span class="">instanceof</span><span class=""> Event </span><span class="">);</span><span class="">         </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo2 </span><span class="">instanceof</span><span class=""> Object </span><span class="">);</span><span class="">        </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo2 </span><span class="">instanceof</span><span class=""> Nap </span><span class="">);</span><span class="">           </span><span class=""> // false</span><span class=""><br/></span> <br/>
+                    <a id="p454"/>Object wo3 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo3 </span><span class="">instanceof</span><span class=""> Workout </span><span class="">);</span><span class="">       </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo3 </span><span class="">instanceof</span><span class=""> Event </span><span class="">);</span><span class="">         </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo3 </span><span class="">instanceof</span><span class=""> Object </span><span class="">);</span><span class="">        </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo3 </span><span class="">instanceof</span><span class=""> Nap </span><span class="">);</span><span class="">           </span><span class=""> // false</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wo3 </span><span class="">instanceof</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">);</span><span class="">        </span><span class=""> // false</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.24</b>    
+            src/main/java/com/tutego/insel/game/c/vl/InstanceofDemo.java, main</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.3.3.2">No Arbitrary Type Tests with instanceof</h4>
+                
+                <p class="standard">However, the compiler doesn’t let everything through. If two types aren’t in the type hierarchy at all, the compiler rejects the test because the inheritance relationships are already incompatible, as in the following example:</p>
+                
+                <div class="listing " id="l_none_7507"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">“Aye-aye” </span><span class="">instanceof</span><span class=""> Event</span></span> );<span class=""><br/></span>// Inconvertible types; cannot cast ’java.lang.String’ to ’[…].Event’<span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">The expression is incorrect because 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> is not a base class for 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">You can use 
+                        <samp class="listingcharacter listingcharacter">instanceof</samp> to control the program flow based on the actual types, for example, with code like 
+                        <samp class="listingcharacter listingcharacter">if(reference instanceof type) A else B</samp>. As a rule, however, the control logic of this type generally indicates a design problem that can often be solved in a different way. Dynamic binding is one such solution, which we’ll discuss later in 
+                        <span class="crossreference "><a href="07_005.html#h7.5">Section 7.5</a></span>
+                    .</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.3.3.3">instanceof and null</h4>
+                
+                <p class="standard">An 
+                    <samp class="listingcharacter listingcharacter">instanceof</samp> test with a reference that’s 
+                    <samp class="listingcharacter listingcharacter">null</samp> always returns 
+                    <samp class="listingcharacter listingcharacter">false</samp>
+                , as in the following example: </p>
+                
+                <div class="listing " id="l_none_7507234234523452345"><pre><span class="">String</span><span class=""> ref </span><span class="">=</span><span class=""> null</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> ref </span><span class="">instanceof</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">);</span><span class="">     </span><span class=""> // false</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> ref </span><span class="">instanceof</span><span class=""> Object </span><span class="">);</span><span class="">     </span><span class=""> // false</span><span class=""> </span></pre></div>
+                
+                <p class="standard">This test result makes sense because 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 doesn’t correspond to any concrete object.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first">Because 
+                        <samp class="listingcharacter listingcharacter">instanceof</samp> contains a 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                     test, you should avoid writing the following code:</p>
+                    
+                    <div class="listing " id="l_none_7534"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> s </span><span class="">!=</span><span class=""> null </span><span class="">&amp;&amp;</span><span class=""> s </span><span class="">instanceof</span><span class=""> </span><span class="">String</span><span class=""> )</span></pre></div>
+                    
+                    <p class="standard">Instead, you should always use a more simplified type of notation, as in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_7532"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> s </span><span class="">instanceof</span><span class=""> </span><span class="">String</span><span class=""> )</span></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.3.4">7.3.4    
+                <a id="p455"/>
+            Pattern Matching for instanceof</h3>
+            
+            <p class="standard">The Java compiler and runtime environment have different, but powerful, type systems. While the runtime environment always knows the precise object type, the compiler only knows the reference type, which can be a base type of the object type. For example, if a reference variable is of type 
+                <samp class="listingcharacter listingcharacter">Object</samp> and a 
+                <samp class="listingcharacter listingcharacter">String</samp> is referenced at runtime, then the object type is 
+                <samp class="listingcharacter listingcharacter">String</samp>, and the compiler doesn’t know the type, only that it’s somehow an 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+            .</p>
+            
+            <p class="standard">Sometimes, a switch must be programmed in the code that takes the actual object type into account. At runtime, the object type can be tested with the 
+                <samp class="listingcharacter listingcharacter">instanceof</samp> operator. A common case distinction in programs is to first test the exact type with 
+                <samp class="listingcharacter listingcharacter">instanceof</samp> or with 
+                <samp class="listingcharacter listingcharacter">getClass()</samp>
+             and then match a reference variable to a subtype.</p>
+            
+            <p class="standard">Let’s look at an example. This method should receive two 
+                <samp class="listingcharacter listingcharacter">Event</samp> parameters, and if these events are of type 
+                <samp class="listingcharacter listingcharacter">Workout</samp>
+            , the number of calories consumed should be extracted and compared. One variant of this program could be as follows:</p>
+            
+            <div class="listing " id="l7.25"><pre><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">burnedSameCalories</span><span class="">(</span><span class=""> Event event1</span><span class="">,</span><span class=""> Event event2 </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">!(</span><span class="">event1 </span><span class="">instanceof</span><span class=""> Workout </span><span class="">&amp;&amp;</span><span class=""> event2 </span><span class="">instanceof</span><span class=""> Workout</span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">false;</span><span class=""><br/></span>  Workout workout1 <span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">(Workout)</span></span> event1;<br/>  Workout workout2 = 
+                <span class="bold">(Workout)</span> event2;<br/>  <span class="">return</span><span class=""> workout1.caloriesBurned == workout2.caloriesBurned;</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.25</b>    
+            src/main/java/com/tutego/island/game/c/vl/PatternMatchingInstanceOf.java (Snippet)</p>
+            
+            <p class="standard">This solution approach works according to the fail-fast method. Early on, the code tests whether the two events are of the 
+                <samp class="listingcharacter listingcharacter">Workout</samp> type at all. If not, the method is exited with 
+                <samp class="listingcharacter listingcharacter">false</samp>. Then, if both 
+                <samp class="listingcharacter listingcharacter">Event</samp> objects are of type 
+                <samp class="listingcharacter listingcharacter">Workout</samp>
+            , explicit typecasting takes place, and the calories are extracted and compared.</p>
+            
+            <p class="standard">Another implementation variant is not to leave the method in the case distinction, but instead making the comparison in the body of the case distinction account for special 
+                <samp class="listingcharacter listingcharacter">Workout</samp>
+             objects:</p>
+            
+            <div class="listing " id="l_none_7564"><pre><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">burnedSameCalories</span><span class="">(</span><span class=""> Event event1</span><span class="">,</span><span class=""> Event event2 </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> event1 </span><span class="">instanceof</span><span class=""> Workout </span><span class="">&amp;&amp;</span><span class=""> event2 </span><span class="">instanceof</span><span class=""> Workout </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    Workout workout1 <span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">(Workout)</span></span> event1;<br/>    Workout workout2 = 
+                <span class="bold">(Workout)</span> event2;<br/>    <span class="">return</span><span class=""> workout1.caloriesBurned == workout2.caloriesBurned;</span><br/>  }<br/>  <span class="">return</span><span class=""> false;</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">
+                <a id="p456"/>In both cases, you can easily see in the code that first an 
+                <samp class="listingcharacter listingcharacter">instanceof</samp>
+             test is performed, and then a new variable is declared, which is derived from another expression (in this case, a variable) by a type conversion.</p>
+            
+            <p class="standard">Such cases are fairly common. For this reason, after the type to be tested for 
+                <samp class="listingcharacter listingcharacter">instanceof</samp>, an identifier for a new variable can be initialized exactly when the 
+                <samp class="listingcharacter listingcharacter">instanceof</samp> test is true. In Java, this language feature is called 
+                <span class="italic">pattern matching for instanceof</span>.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn07_08" id="fn07_08">[ 143 ]</a></span> The pattern is exactly this 
+                <samp class="listingcharacter listingcharacter">instanceof</samp> test, and the variable is called the 
+                <span class="italic">pattern variable</span>
+            . The pattern variable is only set if the test was successful. Otherwise, the variable won’t be initialized and won’t available for access.</p>
+            
+            <p class="standard">With two pattern variables, let’s formulate our program to be a little more concise:</p>
+            
+            <div class="listing " id="l_none_7571"><pre><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">burnedSameCalories</span><span class="">(</span><span class=""> Event event1</span><span class="">,</span><span class=""> Event event2 </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">event1 </span><span class="">instanceof</span><span class=""> Workout workout1</span></span> &amp;&amp; 
+                <span class="bold">event2 <span class="">instanceof</span><span class=""> Workout workout2</span></span> )<br/>    <span class="">return</span><span class=""> </span>
+                <span class="bold">workout1.caloriesBurned</span> == 
+                <span class="bold">workout2.caloriesBurned</span>;<br/>  <span class="">return</span><span class=""> false;</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">This example shows that, in the body of the case distinction, the initialized variables 
+                <samp class="listingcharacter listingcharacter">workout1</samp> and 
+                <samp class="listingcharacter listingcharacter">workout2</samp>
+             can be accessed.</p>
+            
+            <p class="standard">However, the other branch is also possible, namely, that in case of unsuitable types, the method will be exited:</p>
+            
+            <div class="listing " id="l_none_7581"><pre><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">burnedSameCalories</span><span class="">(</span><span class=""> Event event1</span><span class="">,</span><span class=""> Event event2 </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">!(</span><span class="">event1 </span>
+                <span class="bold"><span class="">instanceof</span><span class=""> Workout workout1</span></span> &amp;&amp; event2 
+                <span class="bold"><span class="">instanceof</span><span class=""> Workout workout2</span></span>) )<br/>    <span class="">return</span><span class=""> false;</span><br/>  <span class="">return</span><span class=""> </span>
+                <span class="bold">workout1.caloriesBurned</span> == 
+                <span class="bold">workout2.caloriesBurned</span>;<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">With this solution approach, notice how the variables remain declared for the remaining code block.</p>
+            
+            <p class="standard">The compiler can track quite precisely at which point a pattern variable is valid and initialized, which allows another variant:</p>
+            
+            <div class="listing " id="l_none_7580"><pre><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">burnedSameCalories</span><span class="">(</span><span class=""> Event event1</span><span class="">,</span><span class=""> Event event2 </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class="">    event1 </span><span class="">instanceof</span><span class=""> Workout </span>
+                <span class="bold"><span class="">workout1</span></span> &amp;&amp; event2 <span class="">instanceof</span><span class=""> Workout </span>
+                <span class="bold">workout2</span><br/>         &amp;&amp; 
+                <span class="bold">workout1.caloriesBurned</span> == 
+                <span class="bold">workout2.caloriesBurned</span>;<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">
+                <a id="p457"/>Now is where 
+                <span class="italic">flow scoping</span> takes place. The evaluation of the operands with the 
+                <samp class="listingcharacter listingcharacter">&amp;&amp;</samp> operator occurs from left to right. Since the AND operator used in this case works as a short-circuit method, as many parts are evaluated until the answer is fixed (i.e., terminated earlier if an operand is 
+                <samp class="listingcharacter listingcharacter">false</samp>). However, because the pattern variables were already introduced at the beginning, after two valid type checks, the compiler knows that for the third expression—the comparison—two variables 
+                <samp class="listingcharacter listingcharacter">workout1</samp> and 
+                <samp class="listingcharacter listingcharacter">workout2</samp> of type 
+                <samp class="listingcharacter listingcharacter">Workout</samp>
+             exist.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,301 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    There Must Be Exceptions" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    There Must Be Exceptions" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    There Must Be Exceptions</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h9.7">9.7    Special Features of Exception Handling*</h2>
+        
+        <p class="standard">A few surprises lurk in exception handling, which we’ll describe separately in this section.</p>
+        
+        
+            
+            <h3 class="t3" id="h9.7.1">9.7.1    Return Values for Thrown Exceptions</h3>
+            
+            <p class="standard">If the method promises a return, the compiler checks whether each program flow leads to a return value. However, you must clarify the statement “Every method with a result type not equal to 
+                <samp class="listingcharacter listingcharacter">void</samp> must have a 
+                <samp class="listingcharacter listingcharacter">return </samp>statement.” Only in one special case is the 
+                <a id="p589"/>method not required to have a 
+                <samp class="listingcharacter listingcharacter">return</samp> statement, namely, exactly if the 
+                <samp class="listingcharacter listingcharacter">throw</samp>
+             statement terminates processing before the end of the method, as in the following example:</p>
+            
+            <div class="listing " id="l_none_9838"><pre><span class="">class</span><span class=""> Windows10KeyGenerator </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">generateKey</span><span class="">() {</span><br/>    <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">UnsupportedOperationException</span><span class="">();</span><br/>  }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">Looking at 
+                <samp class="listingcharacter listingcharacter">generateKey()</samp> reveals that, despite an announced return value, no 
+                <samp class="listingcharacter listingcharacter">return</samp> statement can be found in the body. The processing is thus aborted by an exception before the return. If the compiler can see that a method throws an exception and the 
+                <samp class="listingcharacter listingcharacter">return</samp> statement is unreachable, then everything after 
+                <samp class="listingcharacter listingcharacter">throw</samp>
+             is unreachable and no further statements may follow.</p>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">generateKey()</samp> doesn’t need to announce this exception with 
+                <samp class="listingcharacter listingcharacter">throws</samp> because 
+                <samp class="listingcharacter listingcharacter">UnsupportedOperationException</samp>
+                <a class="indexanchor" id="i09_61"/> is a 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.7.2">9.7.2    Exceptions and Returns Disappear: The Duo return and finally</h3>
+            
+            <p class="standard">One unusual phenomenon in Java exception handling occurs with a 
+                <samp class="listingcharacter listingcharacter">return</samp> statement inside a 
+                <samp class="listingcharacter listingcharacter">finally</samp> block. First, a 
+                <samp class="listingcharacter listingcharacter">return</samp> in the 
+                <samp class="listingcharacter listingcharacter">finally</samp> block “overrides” the return value of a 
+                <samp class="listingcharacter listingcharacter">return</samp> in the 
+                <samp class="listingcharacter listingcharacter">try</samp>
+             block. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_9851"><pre><span class="">static</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">getIsbn</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">"3821829877"</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">finally</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">""</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The caller always receives an empty string.</p>
+            
+            <p class="standard">The following program is also interesting:</p>
+            
+            <div class="listing " id="l_none_9842"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">fun</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">while</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">true</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>    <span class="">finally</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">break</span><span class="">;</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>
+                <a id="p590"/>  <span class="">return</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">In this case, the output to the console is 
+                <samp class="listingcharacter listingcharacter">1</samp>. The 
+                <samp class="listingcharacter listingcharacter">break</samp> in 
+                <samp class="listingcharacter listingcharacter">finally</samp>
+             lets the runtime environment exit the loop and ignore the return value.</p>
+            
+            <p class="standard">Another curiosity is the exception. The runtime environment does 
+                <span class="italic">not</span> pass an exception thrown in the 
+                <samp class="listingcharacter listingcharacter">try</samp> block to the caller when a 
+                <samp class="listingcharacter listingcharacter">return</samp> statement is issued in the 
+                <samp class="listingcharacter listingcharacter">finally</samp>
+             block, but simply offers the return.</p>
+            
+            <p class="standard">For example, the following method throws a 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+            , but the caller of the method will never see this exception:</p>
+            
+            <div class="listing " id="l_none_9865"><pre><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">translucentVsBillyButcher</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">RuntimeException</span><span class="">();</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">finally</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                <span class="bold"><span class="">return</span><span class="">;</span></span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">If you remove the line that contains the 
+                <samp class="listingcharacter listingcharacter">return</samp>
+            , the behavior of the runtime environment will be as expected.</p>
+            
+            <p class="standard">IntelliJ marks 
+                <samp class="listingcharacter listingcharacter">finally</samp> and 
+                <samp class="listingcharacter listingcharacter">return</samp> with “'finally' block cannot complete normally” and “'return' inside 'finally' block,” respectively, to indicate the problem. With the annotation 
+                <samp class="listingcharacter listingcharacter">@SuppressWarnings("finally")</samp>
+            , you can turn off this hint.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.7.3">9.7.3    throws on Overridden Methods</h3>
+            
+            <p class="standard">An important rule must be followed when overriding methods: Overridden methods in a subclass must 
+                <span class="italic">not</span> throw 
+                <span class="italic">more</span> exceptions than already listed in the 
+                <samp class="listingcharacter listingcharacter">throws</samp>
+             part of the superclass. Doing so would violate the substitution principle Thus, a method of the subclass can only perform the following tasks:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Trigger the same exceptions as the higher-level class</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Use a subclass of the exception in the base class </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Omit exceptions</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">For this purpose, consider the following constructed example for the previous two cases where 
+                <samp class="listingcharacter listingcharacter">ProtocolException</samp> as a subclass of 
+                <samp class="listingcharacter listingcharacter">IOException</samp>
+            :</p>
+            
+            <div class="listing " id="l9.27"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> SubRandomAccessFile </span><span class="">extends</span><span class=""> RandomAccessFile </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">SubRandomAccessFile</span><span class="">(</span><span class=""> File file</span><span class="">,</span><span class=""> </span><span class="">String</span><span class=""> mode </span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> FileNotFoundException </span><span class="">{</span><span class=""><br/></span>    <span class="">super</span><span class="">(</span><span class=""> file</span><span class="">,</span><span class=""> mode </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>
+                <a id="p591"/>  <span class="">@Override</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">long</span><span class=""> </span><span class="">length</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">super</span><span class="">.</span><span class="">length</span><span class="">();</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>    <span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IOException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>  <span class="">@Override</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">write</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> b </span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> ProtocolException </span><span class="">{</span><span class=""><br/></span>    <span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">super</span><span class="">.</span><span class="">write</span><span class="">(</span><span class=""> b </span><span class="">);</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>    <span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IOException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">ProtocolException</span><span class="">();</span><span class=""><br/></span>    <span class="">}</span><span class=""> </span><br/>  <span class="">}</span><span class=""><br/></span> <br/>  <span class="">@Override</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">close</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 9.27</b>    
+            src/main/java/com/tutego/insel/exception/SubRandomAccessFile.java (Snippet)</p>
+            
+            <p class="standard">The methods 
+                <samp class="listingcharacter listingcharacter">length()</samp>, 
+                <samp class="listingcharacter listingcharacter">write(...)</samp>, and 
+                <samp class="listingcharacter listingcharacter">close()</samp> throw an 
+                <samp class="listingcharacter listingcharacter">IOException</samp> in 
+                <samp class="listingcharacter listingcharacter">RandomAccessFile</samp>. Our subclass 
+                <samp class="listingcharacter listingcharacter">SubRandomAccessFile</samp> overrides 
+                <samp class="listingcharacter listingcharacter">length()</samp> and omits the exception in the signature. This problem has some consequences in usage. For example, you might use the class as 
+                <samp class="listingcharacter listingcharacter">SubRandomAccessFile</samp>
+             of the type, as in the following example:</p>
+            
+            <div class="listing " id="l_none_9893"><pre>
+                <span class="bold"><span class="">SubRandomAccessFile</span></span> raf = …<br/>raf.<span class="">length</span><span class="">(); </span><span class=""/></pre></div>
+            
+            <p class="standard">In this case, 
+                <samp class="listingcharacter listingcharacter">length()</samp> will no longer need to catch an exception and must not be caught either because a 
+                <samp class="listingcharacter listingcharacter">try</samp>-
+                <samp class="listingcharacter listingcharacter">catch</samp> on an 
+                <samp class="listingcharacter listingcharacter">IOException</samp>
+             leads to a compiler error.</p>
+            
+            <p class="standard">Consider the reverse scenario. If 
+                <samp class="listingcharacter listingcharacter">raf</samp> is of the type of the base class 
+                <samp class="listingcharacter listingcharacter">RandomAccessFile</samp>
+            , the exception must be caught in any case, as in the following example:</p>
+            
+            <div class="listing " id="l_none_989318981"><pre>
+                <span class="bold"><span class="">RandomAccessFile</span></span> raf = …;<br/><span class="">try</span><span class=""> {</span><br/>  raf.<span class="">length</span><span class="">();</span><br/>}<br/><span class="">catch</span><span class=""> ( IOException e ) { } </span><span class=""/></pre></div>
+            
+            <p class="standard">
+                <a id="p592"/>
+            This case shows the difficulty of omitting the exceptions for overridden methods.</p>
+            
+            <p class="standard">For the 
+                <samp class="listingcharacter listingcharacter">write(...)</samp> method, 
+                <samp class="listingcharacter listingcharacter">throws</samp> lists the exception type 
+                <samp class="listingcharacter listingcharacter">ProtocolException</samp> as a subclass of 
+                <samp class="listingcharacter listingcharacter">IOException</samp>. Of course, simply leaving 
+                <samp class="listingcharacter listingcharacter">super.write(...)</samp> in 
+                <samp class="listingcharacter listingcharacter">write(...)</samp> is not enough, which would only throw a more general 
+                <samp class="listingcharacter listingcharacter">IOException</samp>, but not the promised more specific 
+                <samp class="listingcharacter listingcharacter">ProtocolException</samp>. Therefore, you can intercept the 
+                <samp class="listingcharacter listingcharacter">super.write(...)</samp> in the body of the method and create the more specific 
+                <samp class="listingcharacter listingcharacter">ProtocolException</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Design</h6>
+                
+                <p class="standard first last">Accordingly, if an overridden subclass method can’t add checked exceptions, the base type design must be such that subclasses can report necessary exceptions.</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">If a subclass implements its own constructor that then calls 
+                    <samp class="listingcharacter listingcharacter">super(...)</samp>
+                 for a constructor that throws an exception, the subclass constructor must also report this exception because the new constructor can’t catch the exception. So, in our example, the following code would be forbidden:</p>
+                
+                <div class="listing " id="l_none_9902"><pre><span class="">public</span><span class=""> </span><span class="">SubRandomAccessFile</span><span class="">(</span><span class=""> File file</span><span class="">,</span><span class=""> </span><span class="">String</span><span class=""> mode </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">super</span><span class="">(</span><span class=""> file</span><span class="">,</span><span class=""> mode </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""> </span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> Exception e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span>}</pre></div>
+                
+                <p class="standard last">The reason is quite simple: If the superclass constructor throws an exception, the object isn’t fully initialized. Furthermore, if the constructor of the subclass then catches the exception, perhaps the subclass would inherit not fully initialized members of the superclass and thus is an incomplete object, which is undesirable.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.7.4">9.7.4    Unreachable catch Clauses</h3>
+            
+            <p class="standard">If code in a 
+                <samp class="listingcharacter listingcharacter">try</samp> block throws an exception and a 
+                <samp class="listingcharacter listingcharacter">catch</samp> clause for it is available, the 
+                <samp class="listingcharacter listingcharacter">catch</samp> clause is referred to as 
+                <span class="italic">reachable</span>
+                <a class="indexanchor" id="i09_62"/>. In addition, this 
+                <samp class="listingcharacter listingcharacter">catch</samp> clause must not be preceded by another 
+                <samp class="listingcharacter listingcharacter">catch</samp> that catches this exception. For example, if you provide 
+                <samp class="listingcharacter listingcharacter">catch(Exception e)</samp> as the first catch statement, it naturally handles all exceptions. In consequence, 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             clauses must always be sorted from special to general exception types (anything else would also be prevented by the compiler).</p>
+            
+            <p class="standard">If you create a 
+                <samp class="listingcharacter listingcharacter">RandomAccessFile</samp> object and then use 
+                <samp class="listingcharacter listingcharacter">readLine()</samp>, a 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> must be caught by the constructor and an 
+                <samp class="listingcharacter listingcharacter">IOException</samp> by 
+                <samp class="listingcharacter listingcharacter">readLine()</samp>. Since a 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> is a specialization (i.e., a subclass of 
+                <samp class="listingcharacter listingcharacter">IOException</samp>), a 
+                <samp class="listingcharacter listingcharacter">catch(IOException e)</samp> would already suffice. Consequently, if the 
+                <samp class="listingcharacter listingcharacter">catch</samp> for the 
+                <samp class="listingcharacter listingcharacter">FileNotFoundException</samp>
+             is placed behind it in the source code, that part will never be executed, as the compiler rightly notes.</p>
+            
+            
+                
+                <h4 class="t4" id="h9.7.4.1">
+                    <a id="p593"/>
+                Exaggerated throws Clauses</h4>
+                
+                <p class="standard">A method compiles even if it specifies too many or too general exceptions in its 
+                    <samp class="listingcharacter listingcharacter">throws</samp>
+                 clause. Consider the following example:</p>
+                
+                <div class="listing " id="l9.28"><pre><span class="">void</span><span class=""> </span><span class="">openFile</span><span class="">()</span><span class=""> </span><span class="">throws</span><span class=""> </span>
+                    <span class="bold"><span class="">FileNotFoundException,</span><br/>                       IOException,<br/>                       InterruptedException</span> {<br/>  <span class="">try</span><span class=""> ( RandomAccessFile r = </span><span class="">new</span><span class=""> </span><span class="">RandomAccessFile</span><span class="">( </span><span class="">""</span><span class="">, </span><span class="">""</span><span class=""> ) ) { }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 9.28</b>    
+            src/main/java/com/tutego/insel/exception/TooManyExceptions.java, openFile()</p>
+                
+                <p class="standard">Our 
+                    <samp class="listingcharacter listingcharacter">openFile()</samp> method calls the constructor of 
+                    <samp class="listingcharacter listingcharacter">RandomAccessFile</samp>, which as we know can lead to a 
+                    <samp class="listingcharacter listingcharacter">FileNotFoundException</samp>. The 
+                    <samp class="listingcharacter listingcharacter">openFile()</samp> method, however, gives the more general superclass 
+                    <samp class="listingcharacter listingcharacter">IOException</samp> in addition to 
+                    <samp class="listingcharacter listingcharacter">FileNotFoundException</samp> and reports another checked exception with 
+                    <samp class="listingcharacter listingcharacter">InterruptedException</samp>
+                , which the body doesn’t trigger at all. Nevertheless, the compiler does let it through.</p>
+                
+                <p class="standard">When calling such methods in 
+                    <samp class="listingcharacter listingcharacter">try</samp> blocks, the exceptions declared too much must be caught in the 
+                    <samp class="listingcharacter listingcharacter">catch</samp>
+                 clauses, even if they can’t actually be reached:</p>
+                
+                <div class="listing " id="l9.29"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">openFile</span><span class="">();</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IOException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> InterruptedException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 9.29</b>    
+            src/main/java/com/tutego/insel/exception/TooManyExceptions.java, useFile()</p>
+                
+                <p class="standard">The point is that this problem may well happen later in an extension of a method, such as an 
+                    <samp class="listingcharacter listingcharacter">InterruptedException</samp>
+                , and then the callers are already prepared for this eventuality.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

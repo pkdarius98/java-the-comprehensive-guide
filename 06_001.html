@@ -1,0 +1,762 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Writing Custom Classes" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Writing Custom Classes" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Writing Custom Classes</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h6">6    
+        <a id="p369"/>
+    Writing Custom Classes</h1><p class="introductorynote indent_chapter_single">“The law is the abstract expression of the general will being in and of itself.”<br/>—Georg Wilhelm Friedrich Hegel (1770–1831)</p><p class="standard">In the preceding chapters, you learned a lot about object orientation, but our discussion was more from the user point of view. You’ve seen how objects can be built, and we’ve also implemented simple classes with static methods. Now is the time to round out your knowledge of object-oriented programming (OOP) and build your own 
+        <span class="italic">custom data types</span>
+    .</p><div class="box box_standard">
+        
+        <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+        
+        <p class="standard first">We’ll illustrate the concepts of object orientation with a program based on the 
+            <span class="italic">Drug Wars</span> game. John Dell developed this MS-DOS-based game in the early 1980s to demonstrate a core principle of economics: buy low and sell high. With easy-to-understand rules, 
+            <span class="italic">Drug Wars</span>
+         can be played in a web browser at the following websites:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item"><span class="url"><a href="https://classicreload.com/drug-wars.html">https://classicreload.com/drug-wars.html</a></span> (first version)</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item"><span class="url"><a href="https://archive.org/details/DruglordV2.0SW1992FantasyWareInc.Simulation">https://archive.org/details/DruglordV2.0SW1992FantasyWareInc.Simulation</a></span> (extended version)</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard last">In our examples, we’ll switch from hard drugs to soft drugs and use candy. We’ll call our game 
+            <span class="italic">Jawbreaker</span>
+        .</p>
+    
+    </div>
+        
+        <h2 class="t2" id="h6.1">6.1    Declaring Custom Classes with Members</h2>
+        
+        <p class="standard">The declaration of a class is introduced by the 
+            <samp class="listingcharacter listingcharacter">class</samp> keyword
+            <a class="indexanchor" id="i06_00"/>
+        . In the body of the class, you can declare the following elements:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Object and class variables</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Methods</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Constructors</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Class initializers as well as instance initializers</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Nested types, such as classes, records, interfaces, and enumerations</p>
+            
+            </li>
+        
+        </ul>
+        
+        
+            
+            <h3 class="t3" id="h6.1.1">6.1.1    
+                <a id="p370"/>
+            Minimum Class</h3>
+            
+            <p class="standard">Our focus on candy is represented by the 
+                <samp class="listingcharacter listingcharacter">Candy</samp>
+             class.</p>
+            
+            <div class="listing " id="l6.1"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">game</span><span class="">.</span><span class="">c</span><span class="">.</span><span class="">v1</span><br/><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 6.1</b>    
+            src/main/java/com/tutego/insel/game/c/v1/Candy.java</p>
+            
+            <div class="imagebox figure-type"><a href="img-f6.1.html" id="f6.1"><img alt="Unified Modeling Language (UML) Diagram of the Candy Class as Just an Outlined Box" id="img-f6.1" src="bilderklein/klein06_001.png"/></a></div>
+            
+            <p class="caption "><b>Figure 6.1</b>    
+            Unified Modeling Language (UML) Diagram of the Candy Class as Just an Outlined Box</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Candy </samp>class has a constructor generated by the compiler, and 
+                <samp class="listingcharacter listingcharacter">new Candy()</samp> creates a instance from this blueprint. Details about the constructor will follow in 
+                <span class="crossreference "><a href="06_005.html#h6.5.3">Section 6.5.3</a></span>. We’ll omit visibility modifiers (such as 
+                <samp class="listingcharacter listingcharacter">public</samp>) for now and then focus on them more closely in 
+                <span class="crossreference "><a href="06_002.html#h6.2">Section 6.2</a></span>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Code Abbreviations in this Book</h6>
+                
+                <p class="standard first last">As in previous chapters, the 
+                    <samp class="listingcharacter listingcharacter">package</samp> and 
+                    <samp class="listingcharacter listingcharacter">import</samp>
+                 declarations are omitted from our code snippets, so that the code can be a little shorter.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.1.2">6.1.2    Declaring Object Variables</h3>
+            
+            <p class="standard">This 
+                <samp class="listingcharacter listingcharacter">class Candy { }</samp> class has no object variables and therefore can’t store any states. Let’s give the candy three object variables: one for the name (type 
+                <samp class="listingcharacter listingcharacter">String</samp>), a second for the price (type 
+                <samp class="listingcharacter listingcharacter">int</samp>), and a third for the number of candies (type 
+                <samp class="listingcharacter listingcharacter">int</samp>
+            ).</p>
+            
+            <div class="listing " id="l6.2"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">String</span><span class=""> name;</span><br/>  <span class="">int</span><span class="">    price;</span><br/>  <span class="">int</span><span class="">    quantity;</span></span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.2</b>    
+            src/main/java/com/tutego/insel/game/c/v2/Candy.java (Snippet)</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">You can’t use 
+                    <samp class="listingcharacter listingcharacter">var</samp>
+                 with object variables and must therefore specify the data types.</p>
+            
+            </div>
+            
+            <p class="standard">
+                <a id="p371"/>A second class, 
+                <samp class="listingcharacter listingcharacter">Application</samp>, creates two instances of a candy in its static 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>
+             method, describes the object variables, and reads them.</p>
+            
+            <div class="listing " id="l6.3"><pre>Candy lollipop <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><span class=""><br/></span>
+                <span class="bold"><span class="">lollipop.name</span></span> = <span class="">"Lollipop"</span><span class="">;</span><br/>
+                <span class="bold">lollipop.price</span> = <span class="">12</span><span class="">;</span><br/>
+                <span class="bold">lollipop.quantity</span> = <span class="">2</span><span class="">;</span><br/> <br/>Candy licorice = <span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><br/>
+                <span class="bold">licorice.name</span> = <span class="">"Licorice"</span><span class="">;</span><br/>
+                <span class="bold">licorice.price</span> = <span class="">22</span><span class="">;</span><br/> <br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%s, %d × %d = %d%n"</span><span class="">,</span><span class=""> // Lollipop, 2 × 12 = 24</span><span class=""><br/></span>                   
+                <span class="bold">lollipop.name</span>, 
+                <span class="bold">lollipop.quantity</span>, 
+                <span class="bold">lollipop.price</span>,<br/>                   
+                <span class="bold">lollipop.quantity</span> * 
+                <span class="bold">lollipop.price</span> );<br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%s, %d × %d = %d%n"</span><span class="">,</span><span class=""> // Licorice, 0 × 22 = 0</span><span class=""><br/></span>                   
+                <span class="bold">licorice.name</span>, 
+                <span class="bold">licorice.quantity</span>, 
+                <span class="bold">licorice.price</span>,<br/>                   
+                <span class="bold">licorice.quantity</span> * 
+                <span class="bold">licorice.price</span> ); <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.3</b>    
+            src/main/java/com/tutego/insel/game/c/v2/Application.java (Snippet)</p>
+            
+            <div class="imagebox figure-type"><a href="img-f6.2.html" id="f6.2"><img alt="UML Class Diagram Showing the Dependencies of Application and Candy" id="img-f6.2" src="bilderklein/klein06_002.png"/></a></div>
+            
+            <p class="caption "><b>Figure 6.2</b>    
+            UML Class Diagram Showing the Dependencies of Application and Candy</p>
+            
+            <div class="imagebox figure-type"><a href="img-f6.3.html" id="f6.3"><img alt="UML Object Diagram Showing the Two Candy Instances" id="img-f6.3" src="bilderklein/klein06_003.png"/></a></div>
+            
+            <p class="caption "><b>Figure 6.3</b>    
+            UML Object Diagram Showing the Two Candy Instances</p>
+            
+            <p class="standard">When two files are open in the editor, then that’s the point at which keyboard junkies may want to quickly switch between editors. In IntelliJ, the shortcuts are 
+                <span class="keyboard">(Ctrl)</span>+
+                <span class="keyboard">(Tab)</span> and 
+                <span class="keyboard">(Ctrl)</span>+
+                <span class="keyboard">(Shift)</span>+
+                <span class="keyboard">(Tab)</span>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p372"/>
+                Note</h6>
+                
+                <p class="standard first last">No special naming convention exist for object variables. Thus, although you can prefix local variables (such as 
+                    <samp class="listingcharacter listingcharacter">f</samp> or 
+                    <samp class="listingcharacter listingcharacter">_</samp>
+                ) to distinguish them, even Eclipse has moved away from this convention. Basically, object variables can also be named like methods, but this approach is unusual because variable names are generally nouns, while methods are verbs. Furthermore, identifiers cannot be identical to keywords.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h6.1.2.1">Initializing Object Variables</h4>
+                
+                <p class="standard">Unlike local variables, the JVM initializes all object variables with a default value—the same is true for class variables, which we’ll describe in 
+                    <span class="crossreference "><a href="06_003.html#h6.3">Section 6.3</a></span>
+                . The following values are the defaults:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">0 for numeric values and 
+                            <samp class="listingcharacter listingcharacter">char</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">false</samp> for 
+                            <samp class="listingcharacter listingcharacter">boolean</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">null</samp>
+                         for reference variables</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">If you don’t like these default values, your variables can be assigned values, as in the following example:</p>
+                
+                <div class="listing " id="l_none_653"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    price</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    quantity </span>
+                    <span class="bold"><span class="">= </span><span class="">1</span></span><span class="">;</span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">The expression 
+                    <samp class="listingcharacter listingcharacter">new Candy().quantity == 1</samp> would therefore return 
+                    <samp class="listingcharacter listingcharacter">true</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Design Tip</h6>
+                    
+                    <p class="standard first last">You may find yourself walking a tightrope when using simple data types or when referencing other objects. If 
+                        <samp class="listingcharacter listingcharacter">Candy</samp> stores the price, an 
+                        <samp class="listingcharacter listingcharacter">int</samp> (or 
+                        <samp class="listingcharacter listingcharacter">double</samp>) is problematic because 
+                        <samp class="listingcharacter listingcharacter">Candy</samp>
+                     would also have to perform a validation so that the price never becomes negative; however, this behavior does not fit in with the definition of what candy is or what it does! The general OOP rule is: For data that needs to be validated and may also be related to other object variables, create a new data type.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.1.2.2">Validity Range, Visibility, and Lifetime</h4>
+                
+                <p class="standard">Local variables begin their lifecycles the moment they are declared and initialized. If the block ends, the local variable is no longer valid, and it can no longer be used because it has disappeared from the visibility area. This lifecycle is different for object variables. An object variable lives from the moment the object has been built via 
+                    <samp class="listingcharacter listingcharacter">new</samp> and contin
+                    <a id="p373"/>ues living until the garbage collector clears the object away. However, the variable is always visible and valid in the entire object and in all blocks.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_01" id="fn06_01">[ 124 ]</a></span>
+                </p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.1.3">6.1.3    Declaring Methods</h3>
+            
+            <p class="standard">Object variables are joined by methods that usually operate on object variables. Let’s give the candy two methods:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">totalPrice()</samp>
+                    : Calculates the total price as the product of quantity and price.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">resetQuantity()</samp>
+                    : Resets the quantity to 1.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Unlike our previous static methods, these three methods for 
+                <samp class="listingcharacter listingcharacter">Candy</samp> will be object methods, so they will 
+                <span class="italic">not</span> carry the 
+                <samp class="listingcharacter listingcharacter">static</samp>
+             modifier.</p>
+            
+            <div class="listing " id="l6.4"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    price</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    quantity </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span> <br/>  
+                <span class="bold"><span class="">int</span><span class=""> </span><span class="">totalPrice</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> price * quantity;</span><br/>  }<br/> <br/>  <span class="">void</span><span class=""> </span><span class="">resetQuantity</span><span class="">() {</span><br/>    quantity = <span class="">1</span><span class="">;</span><br/>  }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.4</b>    
+            src/main/java/com/tutego/insel/game/c/v3/Candy.java (Snippet)</p>
+            
+            <div class="imagebox figure-type"><a href="img-f6.4.html" id="f6.4"><img alt="UML Class Diagram of Candy with Three Object Variables and Two Methods" id="img-f6.4" src="bilderklein/klein06_004.png"/></a></div>
+            
+            <p class="caption "><b>Figure 6.4</b>    
+            UML Class Diagram of Candy with Three Object Variables and Two Methods</p>
+            
+            <p class="standard">
+                <a id="p374"/>The 
+                <samp class="listingcharacter listingcharacter">totalPrice()</samp> method builds the price as a product of price and quantity and returns the result. 
+                <samp class="listingcharacter listingcharacter">resetQuantity()</samp>
+             resets the product quantity to 1.</p>
+            
+            <p class="standard">Let’s test our methods by creating some candy.</p>
+            
+            <div class="listing " id="l6.5"><pre>Candy lollipop <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><span class=""><br/></span>lollipop<span class="">.</span><span class="">name </span><span class="">=</span><span class=""> </span><span class="">"Lollipop"</span><span class="">;</span><span class=""><br/></span>lollipop<span class="">.</span><span class="">price </span><span class="">=</span><span class=""> </span><span class="">12</span><span class="">;</span><span class=""><br/></span>lollipop<span class="">.</span><span class="">quantity </span><span class="">=</span><span class=""> </span><span class="">2</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">lollipop.</span><span class="">totalPrice</span><span class="">()</span></span> );<span class=""> // 24</span><span class=""><br/></span>
+                <span class="bold">lollipop.<span class="">resetQuantity</span><span class="">()</span></span>;<br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">lollipop.<span class="">totalPrice</span><span class="">()</span></span> );<span class=""> // 12</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.5</b>    
+            src/main/java/com/tutego/insel/game/c/v3/Application.java (Snippet)</p>
+            
+            <p class="standard">Pressing 
+                <span class="keyboard">(Ctrl)</span>+
+                <span class="keyboard">(F12)</span> activates a window with an overview. To navigate quickly in the compilation unit, a small text field allows you to search, and the cursor keys allow you to navigate. Pressing 
+                <span class="keyboard">(Enter)</span>
+             transports you to the selected entry.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Java Virtual Machine (JVM): Internal Information*</h6>
+                
+                <p class="standard first last">Each object has its own object states, but not each object also has the code for the methods duplicated because the code doesn’t change for each object. Internally, methods exist only once and use a reference to the object data on which they can operate.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h6.1.3.1">Method Calls
+                    <a class="indexanchor" id="i06_01"/>
+                 and Side Effects</h4>
+                
+                <p class="standard">
+                    <a class="indexanchor" id="i06_02"/>All the variables and methods of a class are visible in the class itself. In other words, within a class, the object variables and methods are used by their names. Thus, the 
+                    <samp class="listingcharacter listingcharacter">totalPrice(...)</samp> method directly accesses the necessary object variables 
+                    <samp class="listingcharacter listingcharacter">price</samp> and 
+                    <samp class="listingcharacter listingcharacter">quantity</samp> to execute the program logic. This shorthand is often used for side effects. The 
+                    <samp class="listingcharacter listingcharacter">resetQuantity()</samp> method explicitly changes the object variable 
+                    <samp class="listingcharacter listingcharacter">quantity</samp> and thus modifies the state of the object. 
+                    <samp class="listingcharacter listingcharacter">totalPrice(...)</samp>, on the other hand, only reads the state and doesn’t modify it. Methods that change states should document this appropriately in the application programming interface (API) description. Methods that change states are also called 
+                    <span class="italic">mutators</span>
+                    <a class="indexanchor" id="i06_03"/>; methods that perform read operations are referred to as 
+                    <span class="italic">accessor methods</span>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.1.3.2">Object-Oriented and Procedural Programming in Comparison</h4>
+                
+                <p class="standard">Developers from the procedural world have internalized a different model of thinking, so at this point, we’d like to clarify the special nature of object orientation once again. While in good OO modeling, the objects always have states and behaviors at the same time, in the procedural world, only memory areas are referenced; the data and the 
+                    <a id="p375"/>behavior aren’t connected. This separation becomes problematic when a procedural way of thinking is mapped into Java programs. Let’s look at an example: The 
+                    <samp class="listingcharacter listingcharacter">CandyData</samp>
+                 class is a pure data container for the state, but behavior is not declared.</p>
+                
+                <div class="listing " id="l6.6"><pre><span class="">class</span><span class=""> CandyData </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    price</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    quantity </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.6</b>    
+            src/main/java/com/tutego/insel/nonoop/CandyData.java (Snippet)</p>
+                
+                <p class="standard">Now, instead of attaching the methods neatly to the class, as in this first example, in the procedural world, a subroutine would get exactly one data object and request or change states from it.</p>
+                
+                <div class="listing " id="l6.7"><pre><span class="">class</span><span class=""> CandyFunctions </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">totalPrice</span><span class="">( CandyData candy ) {</span><br/>    <span class="">return</span><span class=""> candy.price * candy.quantity;</span><br/>  }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.7</b>    
+            src/main/java/com/tutego/insel/nonoop/CandyFunctions.java (Snippet)</p>
+                
+                <p class="standard">Since the subroutines are now no longer bound to objects, the methods can be static. However, methods (whether static or not) in the 
+                    <samp class="listingcharacter listingcharacter">CandyData</samp> class would be just as wrong if they were passed a 
+                    <samp class="listingcharacter listingcharacter">CandyData</samp>
+                 object.</p>
+                
+                <p class="standard">This non-OO approach is easy to see in calls. As shown in 
+                    <span class="crossreference "><a href="06_001.html#t6.1">Table 6.1</a></span>
+                , the incorrect way is on the left, and on the right, you'll see the correct, OO-modeled way.</p>
+                
+                <table class="standardtable" id="t6.1">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Procedural Programming</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">OOP</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">CandyData lollipop = new CandyData();<br/>lollipop.price = 12;<br/>int p = CandyFunctions.</samp>
+                                    <span class="bold"><samp class="listingcharacter listingcharacter">totalPrice( lollipop )</samp></span>
+                                ;</p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Candy lollipop = new Candy();<br/>lollipop.price = 12;<br/>int p =</samp> 
+                                    <span class="bold"><samp class="listingcharacter listingcharacter">lollipop.totalPrice()</samp></span>
+                                ;</p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 6.1</b>    
+            Procedural Programming and OOP Compared</p>
+                
+                <p class="standard">An indication of problematic OO modeling is therefore when objects are passed to external methods instead of the methods themselves being set to the objects.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.1.4">6.1.4    Shadowed Variables</h3>
+            
+            <p class="standard">If a method introduces a new variable, the same variable name can’t be used again in an inner block.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p376"/>
+                Example</h6>
+                
+                <p class="standard first">The following code in a 
+                    <samp class="listingcharacter listingcharacter">main(...)</samp>
+                 method causes a compiler error:</p>
+                
+                <div class="listing  last_item" id="l_none_6102"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> </span>
+                    <span class="bold"><span class="">args</span></span> ) {<br/>  <span class="">int</span><span class=""> </span>
+                    <span class="bold">args</span> = <span class="">1</span><span class="">;   </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Duplicate local variable args</span><span class=""><br/></span>}<span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">However, when a variable leaves a block, its name is free again. The following code is therefore allowed:</p>
+            
+            <div class="listing " id="l_none_6117"><pre><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> </span>
+                <span class="bold"><span class="">i</span></span> = <span class="">0</span><span class="">; i &lt; </span><span class="">10</span><span class="">; i++ )</span><br/>  System.out.<span class="">println</span><span class="">( i );</span><br/><span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> </span>
+                <span class="bold">i</span> = <span class="">0</span><span class="">; i &lt; </span><span class="">10</span><span class="">; i++ )</span><br/>  System.out.<span class="">println</span><span class="">( i ); </span><span class=""/></pre></div>
+            
+            <p class="standard">Basically, no problem arises if a local variable/parameter variable has the same name as an object variable. In this case, we speak of a 
+                <span class="italic">shadowed variable</span>
+                <a class="indexanchor" id="i06_04"/>.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_02" id="fn06_02">[ 125 ]</a></span>
+             The compiler will then use the local variable and no longer use the object variable.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following example, the local 
+                    <samp class="listingcharacter listingcharacter">price</samp> variable in 
+                    <samp class="listingcharacter listingcharacter">totalPrice()</samp> hides the object variable 
+                    <samp class="listingcharacter listingcharacter">price</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_6107"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> price</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class=""> quantity </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">int</span><span class=""> </span><span class="">totalPrice</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">int</span><span class=""> </span>
+                    <span class="bold"><span class="">price</span></span> = quantity;<br/>    
+                    <span class="bold">price</span> *= 
+                    <span class="bold">price</span> * quantity;<br/>    <span class="">return</span><span class=""> </span>
+                    <span class="bold">price</span>;<br/>  }<br/>}<span class=""/></pre></div>
+                
+                <p class="standard last">We have two 
+                    <samp class="listingcharacter listingcharacter">price</samp> variables in our example, but any access to 
+                    <samp class="listingcharacter listingcharacter">price</samp>
+                 in the method automatically references the local variable and not the object variable.</p>
+            
+            </div>
+            
+            <p class="standard">Shadowed variables are useful because, without such a concept, a newly inserted object variable could quickly break many methods that also happen to use the same name in the body.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_03" id="fn06_03">[ 126 ]</a></span>
+            </p>
+            
+            <p class="standard">
+                <a id="p377"/>
+            But what if we want to use a local variable simultaneously with an object variable of the same name?</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.1.5">6.1.5    The this Reference</h3>
+            
+            <p class="standard">In each object method and constructor,
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_04" id="fn06_04">[ 127 ]</a></span> a reference named 
+                <samp class="listingcharacter listingcharacter">this</samp> is available, which references the own instance. This reference
+                <a class="indexanchor" id="i06_05"/>
+             enables you to implement elegant solutions, as the following examples show:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">this</samp> reference solves the problem that may arise when parameters or local variables shadow object variables
+                        <a class="indexanchor" id="i06_06"/>
+                        <a class="indexanchor" id="i06_07"/>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If a method returns the 
+                        <samp class="listingcharacter listingcharacter">this</samp>
+                     reference to the current object, methods of the class can easily be placed one behind the other.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">this</samp>
+                     reference can give another method a reference to ourselves.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h6.1.5.1">Using Shadowed Object Variables</h4>
+                
+                <p class="standard">If a local variable has the same name as an object variable, the former shadows the latter, as described in the previous section. Far from a tragedy, shadowing only becomes a problem if access to the object variable specifically is required at a later stage.</p>
+                
+                <p class="standard">However, this limitation doesn’t mean that the object variable can no longer be accessed. The 
+                    <samp class="listingcharacter listingcharacter">this</samp> reference points to the current object, and thus access to object members is also possible at any time. In the following example, a local 
+                    <samp class="listingcharacter listingcharacter">price</samp> variable is introduced again, but access to the object variable is achieved via 
+                    <samp class="listingcharacter listingcharacter">this.price</samp>
+                :</p>
+                
+                <div class="listing " id="l6.8"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> price</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class=""> quantity </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span> <br/>  <span class="">int</span><span class=""> </span><span class="">totalPrice</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">int</span><span class=""> price </span><span class="">=</span><span class=""> quantity </span><span class="">*</span><span class=""> </span>
+                    <span class="bold"><span class="">this</span><span class="">.price</span></span>;<br/>    <span class="">return</span><span class=""> price;</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.8</b>    
+            src/main/java/com/tutego/insel/game/c/v4/Candy.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.1.5.2">Using this for Setters</h4>
+                
+                <p class="standard">Common elements used with 
+                    <samp class="listingcharacter listingcharacter">this</samp> include methods or constructors that initialize states. Developers like to name parameter variables in the same way as the copied variables to express a strong affiliation. So, let’s write a 
+                    <samp class="listingcharacter listingcharacter">setName(String)</samp>
+                 method with the following code:</p>
+                
+                <div class="listing " id="l_none_6129"><pre><span class="">
+                        <a id="p378"/>
+                    class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setName</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">this</span><span class="">.name = name;</span></span><br/>  }<br/>}  <span class=""/></pre></div>
+                
+                <p class="standard">The object passed to 
+                    <samp class="listingcharacter listingcharacter">setName(String)</samp> is to initialize the object variable 
+                    <samp class="listingcharacter listingcharacter">name</samp>. Thus, 
+                    <samp class="listingcharacter listingcharacter">this.name</samp> accesses the object variable directly, so the assignment 
+                    <samp class="listingcharacter listingcharacter">this.name = name</samp>
+                 initializes the object variable with the argument.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.1.5.3">Using this for Cascaded Methods*</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">append(...)</samp> methods on 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> return the 
+                    <samp class="listingcharacter listingcharacter">this</samp>
+                 reference so the following can be written:</p>
+                
+                <div class="listing " id="l_none_6140"><pre>StringBuilder sb <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">();</span><span class=""><br/></span>sb<span class="">.</span><span class="">append</span><span class="">(</span><span class=""> "</span><span class="">'Ding Dong'</span><span class=""> or </span><span class="">" ).append( "'Boom Boom'</span><span class="">" </span><span class="">).</span><span class="">append</span><span class="">(</span><span class=""> </span><span class="">'?'</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Each 
+                    <samp class="listingcharacter listingcharacter">append(...)</samp> changes the internal state and returns the 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                 object on which it is called, so we can append methods in a cascaded manner. This flowing style is called fluent API.</p>
+                
+                <p class="standard">Let’s use this cascaded approach and program a different implementation of the 
+                    <samp class="listingcharacter listingcharacter">Candy</samp> class so that the 
+                    <samp class="listingcharacter listingcharacter">name(String)</samp> and 
+                    <samp class="listingcharacter listingcharacter">price(int)</samp> methods assign the name and the price. Both methods return their own 
+                    <samp class="listingcharacter listingcharacter">Candy</samp> object via the 
+                    <samp class="listingcharacter listingcharacter">this</samp>
+                 reference:</p>
+                
+                <div class="listing " id="l6.9"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    price</span><span class="">;</span><span class=""><br/></span> <br/>  
+                    <span class="bold"><span class="">Candy </span><span class="">name</span><span class="">( </span><span class="">String</span><span class=""> name ) {</span><br/>    <span class="">this</span><span class="">.name = name;</span><br/>    <span class="">return</span><span class=""> </span><span class="">this</span><span class="">;</span><br/>  }<br/> <br/>  <span class="">String</span><span class=""> </span><span class="">name</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> name;</span><br/>  }<br/> <br/>  Candy <span class="">price</span><span class="">( </span><span class="">int</span><span class=""> price ) {</span><br/>    <span class="">this</span><span class="">.price = price;</span><br/>    <span class="">return</span><span class=""> </span><span class="">this</span><span class="">;</span><br/>  }<br/> <br/>
+                        <a id="p379"/>  <span class="">int</span><span class=""> </span><span class="">price</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> price;</span><br/>  }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.9</b>    
+            src/main/java/com/tutego/insel/game/c/v5/Candy.java (Snippet)</p>
+                
+                <p class="standard">Let’s create a 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>
+                 and cascade the methods next.</p>
+                
+                <div class="listing " id="l6.10"><pre>Candy candy <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">().</span>
+                    <span class="bold"><span class="">name</span><span class="">( </span><span class="">"Nerds Candy"</span><span class=""> ).</span><span class="">price</span><span class="">( </span><span class="">80</span><span class=""> )</span></span>;<br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%s %d%n"</span><span class="">, </span>
+                    <span class="bold">candy.<span class="">name</span><span class="">()</span></span>, 
+                    <span class="bold">candy.<span class="">price</span><span class="">()</span></span> );<span class=""> // Nerds Candy 80</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.10</b>    
+            src/main/java/com/tutego/insel/game/c/v5/Application.java (Snippet)</p>
+                
+                <div class="imagebox figure-type"><a href="img-f6.5.html" id="f6.5"><img alt="UML Class Diagram for Candy with the Fluent API" id="img-f6.5" src="bilderklein/klein06_005.png"/></a></div>
+                
+                <p class="caption "><b>Figure 6.5</b>    
+            UML Class Diagram for Candy with the Fluent API</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">new Candy()</samp> expression returns a reference that we immediately use for the method call. Since 
+                    <samp class="listingcharacter listingcharacter">name(...)</samp> returns an object reference of type 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>, 
+                    <samp class="listingcharacter listingcharacter">.price(...)</samp>
+                 is possible directly behind it. </p>
+                
+                <p class="standard">Thus, cascading 
+                    <samp class="listingcharacter listingcharacter">name("Nerds Candy").price(80)</samp> causes the name and price to be set, and the next method call in the chain receives a reference to the same object via 
+                    <samp class="listingcharacter listingcharacter">this</samp>
+                , but with a changed internal state.</p>
+                
+                <p class="standard">Examples of this type can be found in a few places in the Java library. Referred to as 
+                    <span class="italic">builders</span>
+                , this type usually consists only of the methods for write operations.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">The 
+                        <samp class="listingcharacter listingcharacter">Candy name(String)</samp> method is convenient with its return but violates JavaBeans conventions (
+                        <span class="crossreference "><a href="06_002.html#h6.2.6">Section 6.2.6</a></span> for details) for two reasons: Setters must not have a return and must always start with 
+                        <samp class="listingcharacter listingcharacter">set</samp>
+                    . JavaBeans are therefore not “compatible” with this compact builder notation.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.1.5.4">
+                    <a id="p380"/>
+                Passing Oneself via this</h4>
+                
+                <p class="standard">If object A wants to communicate to another object B so that B “knows” the other object A, the 
+                    <samp class="listingcharacter listingcharacter">this</samp> reference is particularly useful. Let’s demonstrate this use case with an example: The two classes 
+                    <samp class="listingcharacter listingcharacter">Luke</samp> and 
+                    <samp class="listingcharacter listingcharacter">Darth</samp> represent two people, with 
+                    <samp class="listingcharacter listingcharacter">Luke</samp> having an object variable 
+                    <samp class="listingcharacter listingcharacter">dad</samp>
+                 for his father.</p>
+                
+                <div class="listing " id="l6.11"><pre><span class="">class</span><span class=""> Luke </span><span class="">{</span><span class=""><br/></span>  Darth dad<span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><br/><span class="">class</span><span class=""> Darth </span><span class="">{</span><span class=""><br/></span>  <span class="">void</span><span class=""> </span><span class="">revealTruthTo</span><span class="">(</span><span class=""> Luke son </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">son.dad = </span><span class="">this</span></span><span class="">;</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.11</b>    
+            src/main/java/com/tutego/insel/oop/LukeAndVader.java (Part 1)</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">revealTruthTo(Luke)</samp> method is exciting because it sets the 
+                    <samp class="listingcharacter listingcharacter">dad</samp> object variable with the 
+                    <samp class="listingcharacter listingcharacter">this</samp> reference on the passed 
+                    <samp class="listingcharacter listingcharacter">Luke</samp> object. With this method, 
+                    <samp class="listingcharacter listingcharacter">Luke</samp>
+                 knows his father, which can be tested in the following class:</p>
+                
+                <div class="listing " id="l6.12"><pre>Luke luke <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Luke</span><span class="">();</span><span class="">  </span><br/>Darth vader <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Darth</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> luke</span><span class="">.</span><span class="">dad </span><span class="">);</span><span class=""> // null</span><span class=""><br/></span>vader<span class="">.</span><span class="">revealTruthTo</span><span class="">(</span><span class=""> luke </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> luke</span><span class="">.</span><span class="">dad </span><span class="">);</span><span class=""> // com.tutego.insel.oop.Darth@01234567</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.12</b>    
+            src/main/java/com/tutego/insel/oop/LukeAndVader.java (Part 2)</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">In static methods, the 
+                        <samp class="listingcharacter listingcharacter">this</samp>
+                     reference isn’t available because we don’t reference a concrete object in class methods.</p>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

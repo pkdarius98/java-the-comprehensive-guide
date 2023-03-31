@@ -1,0 +1,641 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Writing Custom Classes" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Writing Custom Classes" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Writing Custom Classes</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h6.4">6.4    Constants and Enumerations</h2>
+        
+        <p class="standard">Some variables will change (such as a loop counter), and some won’t when a program is running. Unchanging variables include, for example, the start time of the daily news or the dimensions of an A4 page. The values shouldn’t be repeated in the source code but instead should be addressed by their names. For this purpose, variables are declared to which constant value can be assigned; these constants are then referred to as 
+            <span class="italic">symbolic constants</span>
+            <a class="indexanchor" id="i06_29"/>
+            <a class="indexanchor" id="i06_30"/>
+        .</p>
+        
+        <p class="standard">In Java, you can declare constants in two ways:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">As self-defined public static final variables.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">As enumerations via 
+                    <samp class="listingcharacter listingcharacter">enum</samp>
+                 (which internally are also only public final static values)</p>
+            
+            </li>
+        
+        </ul>
+        
+        
+            
+            <h3 class="t3" id="h6.4.1">6.4.1    Constants via Static Final Variables</h3>
+            
+            <p class="standard">Let’s consider again the 
+                <samp class="listingcharacter listingcharacter">City</samp>
+             class and the static variable:</p>
+            
+            <div class="listing " id="l_none_6399"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> City </span><span class="">{</span><span class=""><br/></span> <br/>  <span class="">private</span><span class=""> </span>
+                <span class="bold"><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> KANDY_HERSHEY_DISTANCE</span></span> = <span class="">124</span><span class="">;</span><br/>  …<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">This variable can be changed by anyone who has access to the 
+                <samp class="listingcharacter listingcharacter">City</samp>
+             class.</p>
+            
+            <p class="standard">Static variables are also used to declare symbolic constants. To keep the variables unchanging, the 
+                <samp class="listingcharacter listingcharacter">final</samp>
+                <a class="indexanchor" id="i06_31"/>
+             modifier is used. In this way, the compiler is informed that a value may only be assigned to this variable once. For variables, this modifier means they are constants; any rewrite would be an error. Usually, constants are public, but of course, they can be private if only used in the class to which they belong.</p>
+            
+            <div class="listing " id="l_none_6392"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> City </span><span class="">{</span><span class=""><br/></span> <br/>  <span class="">private</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                <span class="bold"><span class="">final</span></span><span class=""> </span><span class="">int</span><span class=""> KANDY_HERSHEY_DISTANCE = </span><span class="">124</span><span class="">;</span><br/>  …<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">
+                <a id="p398"/>Now, the variable 
+                <samp class="listingcharacter listingcharacter">KANDY_HERSHEY_DISTANCE</samp>
+             can only be read, but not modified at a later stage. Accessing a static final variable looks the same as accessing other static variables.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">If numbers like 
+                    <samp class="listingcharacter listingcharacter">124</samp> are in the source code without obvious meaning, these numbers are often called 
+                    <span class="italic">magic numbers</span>
+                    <a class="indexanchor" id="i06_32"/>
+                    <a class="indexanchor" id="i06_33"/>. The task is to define these values as constants and to name them in a meaningful way. So, if you need the distance between the two cities Kandy and Hershey in the code, don’t write 
+                    <samp class="listingcharacter listingcharacter">124</samp>. Instead, write 
+                    <samp class="listingcharacter listingcharacter">KANDY_HERSHEY_DISTANCE</samp>
+                . A common practice is to capitalize the names of constants throughout to emphasize their importance.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.4.2">6.4.2    Type-Unsafe Enumerations</h3>
+            
+            <p class="standard">Constants are an invaluable way to make source code more expressive and clear, which is important because source code is read more often than it is written. Often, constants are found for mathematical constants or size constraints.</p>
+            
+            <p class="standard">Constants are special when used as elements of an enumeration. Enumerations are reminiscent of completed sets, such as:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Days of the week (i.e., Monday, Tuesday, etc.)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Months of a year (i.e., January, February, etc.)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Font styles (i.e., bold, italic, etc.)</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Predefined line patterns (i.e., solid, dashed, etc.)</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">For example, the days of the week and also the months of the year are provided by the 
+                <samp class="listingcharacter listingcharacter">java. util.Calendar</samp> class via public static 
+                <samp class="listingcharacter listingcharacter">int</samp>
+             constants.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">If a couple finds out in June that they are expecting a baby, when might they need to buy diapers?</p>
+                
+                <div class="listing  last_item" id="l_none_6402"><pre><span class="">int</span><span class=""> month </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">Calendar.JUNE</span></span>;<br/><span class="">int</span><span class=""> conception = (month + </span><span class="">9</span><span class="">) % </span><span class="">12</span><span class="">;</span><br/>System.out.<span class="">println</span><span class="">( conception );  </span><span class=""> // </span><span class="">2</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">Let’s look at example of a 
+                <samp class="listingcharacter listingcharacter">CandyType</samp>
+             class, which is supposed to declare constants for the texture of a candy:</p>
+            
+            <div class="listing " id="l6.25"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> CandyType </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">CandyType</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""> </span><br/> <br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">int</span><span class=""> OTHER     </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">int</span><span class=""> CARAMELS  </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span>
+                <a id="p399"/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">int</span><span class=""> CHOCOLATE </span><span class="">=</span><span class=""> CARAMELS </span><span class="">+</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">int</span><span class=""> GUMMIES   </span><span class="">=</span><span class=""> CHOCOLATE </span><span class="">*</span><span class=""> </span><span class="">2</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 6.25</b>    
+            src/main/java/com/tutego/insel/game/c/v9/CandyType.java (Snippet)</p>
+            
+            <p class="standard">For their assignments, we recommend choosing constants relative to their predecessors to simplify the insertion in the middle, as shown with the 
+                <samp class="listingcharacter listingcharacter">CHOCOLATE</samp> and 
+                <samp class="listingcharacter listingcharacter">GUMMIES</samp> variables. This class has a private constructor, which prevents it from being created externally via 
+                <samp class="listingcharacter listingcharacter">new</samp>. For constructors, 
+                <span class="crossreference "><a href="06_005.html#h6.5">Section 6.5</a></span>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h6.4.2.1">Problem with the Data Type int as a Constant Type</h4>
+                
+                <p class="standard">Simple constant types—as in our case 
+                    <samp class="listingcharacter listingcharacter">int</samp>—entail several disadvantages. Suppose the 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>
+                 class were to store the type of candy as an integer.</p>
+                
+                <div class="listing " id="l6.26"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">int</span><span class=""> price</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">int</span><span class=""> candyType</span></span>;<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.26</b>    
+            src/main/java/com/tutego/insel/game/c/v9/CandyType.java (Snippet)</p>
+                
+                <p class="standard">The first disadvantage is that the constants don’t necessarily have to be applied by everyone and developers may use the values directly.</p>
+                
+                <div class="listing " id="l6.27"><pre>Candy candy <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><span class=""><br/></span>candy<span class="">.</span><span class="">candyType </span><span class="">=</span><span class=""> CandyType</span><span class="">.</span><span class="">CARAMELS</span><span class="">;</span><span class="">                 </span><span class="">// :)</span><span class=""/><span class=""><br/></span>candy<span class="">.</span><span class="">candyType </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class="">                                  </span><span class="">// :-|</span><span class=""/><span class=""><br/></span>candy<span class="">.</span><span class="">candyType </span><span class="">=</span><span class=""> Cursor</span><span class="">.</span><span class="">DEFAULT_CURSOR               </span><span class="">// :-@</span><span class=""/><br/>                  <span class="">+</span><span class=""> GridBagConstraints</span><span class="">.</span><span class="">PAGE_END / Character</span><span class="">.</span><span class="">LETTER_NUMBER</span><span class="">;</span><br/>candy.price = CandyType.CARAMELS ^ CandyType.GUMMIES; <span class="">// :-O</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.27</b>    
+            src/main/java/com/tutego/insel/game/c/v9/Application.java (Snippet)</p>
+                
+                <p class="standard">The next problem occurs as soon as the assignment of a constant later changes. This change won’t happen with a constant like 
+                    <samp class="listingcharacter listingcharacter">Math.PI</samp>, but it could happen with the candy type if a new snack is inserted later. This new entry could mess up the whole logic, if for example 
+                    <samp class="listingcharacter listingcharacter">CARAMELS</samp>
+                 becomes 2 instead of 1, but compiled programs still compare the candy type with 1.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Integers do have an advantage, however, when enumerations are combined, such as a candy that’s both caramel and chocolate. This combination can be represented by 
+                        <samp class="listingcharacter listingcharacter">CARAMELS + CHOCOLATE</samp>
+                    , which works well if each constant takes exactly 1 unique bit. Thus, if the values of the constants are 1, 2, 4, 8, 16, and so on, they can be added and we get a combination of different enumerations.</p>
+                
+                </div>
+                
+                <p class="standard">
+                    <a id="p400"/>
+                Let’s summarize: Constants are just names for values, and in the evaluation, the value remains. No one can prohibit transmitting these values directly. With strings as values of the constants, we don’t get closer to the solution either.</p>
+                
+                <p class="standard">A good way to get away from integers or strings is to use objects of a class as constants. For this task, you don’t need to resort to custom class declarations, but Java provides its own language constructs.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.4.3">6.4.3    Enumeration Types: Type-Safe Enumerations with enum</h3>
+            
+            <p class="standard">To give enumeration constants their own type rather than being integers or strings, Java provides a language construct via the 
+                <samp class="listingcharacter listingcharacter">enum</samp> keyword. The notation for enumerations is somewhat reminiscent of the declaration of classes and variables, except that the 
+                <samp class="listingcharacter listingcharacter">enum</samp>
+                <a class="indexanchor" id="i06_34"/> keyword is used instead of 
+                <samp class="listingcharacter listingcharacter">class</samp>, that the variables are automatically static and public, and that no type is specified. Java itself declares many enumeration types, such as for days of the week, but we want to introduce an 
+                <span class="italic">enumeration </span>type named 
+                <a class="indexanchor" id="i06_35"/>
+                <samp class="listingcharacter listingcharacter">CandyType</samp>
+             for the type of candy.</p>
+            
+            <div class="listing " id="l6.28"><pre><span class="">public</span><span class=""> </span><span class="">enum</span><span class=""> CandyType </span><span class="">{</span><span class=""><br/></span>  CARAMELS<span class="">,</span><span class=""> CHOCOLATE</span><span class="">,</span><span class=""> GUMMIES</span><span class="">,</span><span class=""> OTHER</span><br/><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 6.28</b>    
+            src/main/java/com/tutego/insel/game/c/va/CandyType.java (Snippet)</p>
+            
+            <p class="standard">Constant names are usually capitalized, just as static variables used as constants are capitalized.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f6.11.html" id="f6.11"><img alt="An Enumeration in UML Expressed Using the Stereotype" id="img-f6.11" src="bilderklein/klein06_011.png"/></a></div>
+            
+            <p class="caption "><b>Figure 6.11</b>    
+            An Enumeration in UML Expressed Using the Stereotype</p>
+            
+            
+                
+                <h4 class="t4" id="h6.4.3.1">Using Enumerations</h4>
+                
+                <p class="standard">To understand how enumeration types can be used, let’s look at how the compiler implements them. Internally, the compiler creates a normal class, in our case, 
+                    <samp class="listingcharacter listingcharacter">CandyType</samp>
+                . All enumeration elements are static variables (constants) of the enumeration type. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_6455"><pre><span class="">
+                        <a id="p401"/>
+                    public</span><span class=""> </span><span class="">class</span><span class=""> </span>
+                    <span class="bold"><span class="">CandyType</span></span> {<br/>  <span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">static</span></span><span class=""> </span><span class="">final</span><span class=""> </span>
+                    <span class="bold">CandyType CARAMELS  = <span class="">new</span><span class=""> </span><span class="">CandyType</span><span class="">(</span></span> … 
+                    <span class="bold">)</span>;<br/>  <span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">static</span></span><span class=""> </span><span class="">final</span><span class=""> </span>
+                    <span class="bold">CandyType CHOCOLATE = <span class="">new</span><span class=""> </span><span class="">CandyType</span><span class="">(</span></span> … 
+                    <span class="bold">)</span>;<br/>  …<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">When the class is loaded, four 
+                    <samp class="listingcharacter listingcharacter">CandyType</samp> objects are created, and the static variables 
+                    <samp class="listingcharacter listingcharacter">CARAMELS</samp>, 
+                    <samp class="listingcharacter listingcharacter">CHOCOLATE</samp>, 
+                    <samp class="listingcharacter listingcharacter">GUMMIES</samp>, and 
+                    <samp class="listingcharacter listingcharacter">OTHER</samp>
+                 are initialized. Now, you can easily use these enumerations because they’re addressed like any other static variable, as in the following example:</p>
+                
+                <div class="listing " id="l_none_6483"><pre>CandyType amedei <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">CandyType.CHOCOLATE</span></span>; <span class=""/></pre></div>
+                
+                <p class="standard">Behind the enumerations are objects that can be further processed just like other objects, as in the following example:</p>
+                
+                <div class="listing " id="l_none_6481"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> amedei </span><span class="">==</span><span class=""> </span>
+                    <span class="bold"><span class="">CandyType.CHOCOLATE</span></span> )<br/>  System.out.<span class="">println</span><span class="">( “Whew, that’s expensive!” ); </span><span class=""/></pre></div>
+                
+                <p class="standard">Also, 
+                    <samp class="listingcharacter listingcharacter">enum</samp> constants implement the 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                 method, which returns the name of the constant.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.4.3.2">Enumeration Comparisons via ==</h4>
+                
+                <p class="standard">As the implementation of the enumeration types shows, one object is constructed for each constant, which are called 
+                    <span class="italic">singletons</span>
+                    <a class="indexanchor" id="i06_36"/> (i.e., objects that are created only once). We can’t build our own new enumeration objects because the class only declares a private constructor. Accessing this object is like accessing a static variable. Comparing two constants thus amounts to comparing static reference variables, for which the comparison via 
+                    <samp class="listingcharacter listingcharacter">==</samp> is perfectly correct. An 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 isn’t necessary.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following method determines if a candy is unknown (
+                        <samp class="listingcharacter listingcharacter">OTHER</samp>
+                    ):</p>
+                    
+                    <div class="listing  last_item" id="l_none_6495"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isUnknownCandyType</span><span class="">(</span><span class=""> CandyType type </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> type </span><span class="">==</span><span class=""> CandyType</span><span class="">.</span><span class="">OTHER</span><span class="">;</span><span class=""><br/></span>}</pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.4.3.3">enum constants in switch</h4>
+                
+                <p class="standard">Enum constants can be used in 
+                    <samp class="listingcharacter listingcharacter">switch</samp> statements.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_08" id="fn06_08">[ 131 ]</a></span> Let’s initialize a variable of type 
+                    <samp class="listingcharacter listingcharacter">CandyType</samp>
+                 and use a case distinction with the enumeration for a test on two candy types; we’ll use three alternative notations.</p>
+                
+                <div class="listing " id="l6.29"><pre>
+                    <a id="p402"/>CandyType werther <span class="">=</span><span class=""> CandyType</span><span class="">.</span><span class="">CARAMELS</span><span class="">;</span><span class=""><br/></span><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> werther </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">case</span><span class=""> CARAMELS</span><span class="">:</span><span class=""> </span><br/>  <span class="">case</span><span class=""> CHOCOLATE</span><span class="">:</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"caramel/chocolate"</span><span class=""> );</span><br/>}<br/>switch ( werther ) {<br/>  case CARAMELS, CHOCOLATE: System.out.println( “caramel/chocolate” );<br/>}<br/>switch ( werther ) {<br/>  case CARAMELS, CHOCOLATE -&gt; System.out.println( “caramel/<span class="">chocolate” </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.29</b>    
+            src/main/java/com/tutego/insel/game/c/va/Application.java (Snippet)</p>
+                
+                <p class="standard">With 
+                    <samp class="listingcharacter listingcharacter">case</samp>, a 
+                    <samp class="listingcharacter listingcharacter">CandyType.CARAMELS</samp> qualification isn’t possible and would lead to a compiler error. The reason is that with, 
+                    <samp class="listingcharacter listingcharacter">switch (werther)</samp>, the type 
+                    <samp class="listingcharacter listingcharacter">CandyType</samp> is already determined via the variable 
+                    <samp class="listingcharacter listingcharacter">werther</samp>. The type of the 
+                    <samp class="listingcharacter listingcharacter">switch</samp> variable cannot be different from the type of the variable in 
+                    <samp class="listingcharacter listingcharacter">case</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.4.3.4">Enumeration Type References Can Be Null</h4>
+                
+                <p class="standard">The fact that the enumerations are only objects has an important consequence. Let’s first look at the variable declaration 
+                    <samp class="listingcharacter listingcharacter">type</samp>
+                 of the enumeration type, which is initialized with a reference, in the following example:</p>
+                
+                <div class="listing " id="l_none_6511"><pre>CandyType type <span class="">=</span><span class=""> CandyType</span><span class="">.</span><span class="">CARAMELS</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">type</samp> variable stores a reference to the 
+                    <samp class="listingcharacter listingcharacter">CandyType.CARAMELS object</samp>. The unpleasant thing about reference variables, however, is that they can also be assigned 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                , which isn’t an element of the enumeration in this sense, as in the following example:</p>
+                
+                <div class="listing " id="l_none_6530"><pre>CandyType type <span class="">=</span><span class=""> null</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If such a 
+                    <samp class="listingcharacter listingcharacter">null</samp> reference ends up in a 
+                    <samp class="listingcharacter listingcharacter">switch</samp>, a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> will be thrown because hidden in the 
+                    <samp class="listingcharacter listingcharacter">switch</samp> is an access to the ordinal number stored in the 
+                    <samp class="listingcharacter listingcharacter">Enum</samp>
+                 object.</p>
+                
+                <p class="standard">Methods that take elements of an enumeration—that is, object references—should generally test for 
+                    <samp class="listingcharacter listingcharacter">null</samp> and throw an exception to indicate the erroneous part; the given helper method 
+                    <samp class="listingcharacter listingcharacter">Objects.requireNonNull(...)</samp>
+                 can handle this check. Consider the following example:</p>
+                
+                <div class="listing " id="l6.30"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span> <br/>  <span class="">private</span><span class=""> CandyType type</span><span class="">;</span><span class=""><br/></span> <br/>
+                    <a id="p403"/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setType</span><span class="">(</span><span class=""> CandyType type </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">this</span><span class="">.type = Objects.</span><span class="">requireNonNull</span><span class="">( type, “CandyType can’t be null” )</span></span>;<br/>  }<br/> <br/>  <span class="">public</span><span class=""> CandyType </span><span class="">getCandyType</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> type;</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.30</b>    
+            src/main/java/com/tutego/insel/game/c/va/Candy.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.4.3.5">Declaring Enumeration Types as Nested Types*</h4>
+                
+                <p class="standard">New enumeration types can also be placed inside other type declarations; in this case, we’re speaking of 
+                    <span class="italic">nested types</span>. In other words, 
+                    <samp class="listingcharacter listingcharacter">CandyType</samp> can also be declared within another class or some other interface. If the nested enumeration is public, anyone can use it. However, a nest enum follows the same visibilities as classes since enumerations are nothing more than classes generated by the compiler. Enumerations within types are always implicitly static, so the 
+                    <samp class="listingcharacter listingcharacter">static</samp>
+                 keyword isn’t needed.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">A type named 
+                        <samp class="listingcharacter listingcharacter">CandyType</samp> is nested in 
+                        <samp class="listingcharacter listingcharacter">Candy</samp>
+                     in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_6544"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  
+                        <span class="bold"><span class="">public</span><span class=""> /* static */</span><span class=""> </span><span class="">enum</span><span class=""> CandyType {</span><br/>    CARAMELS, CHOCOLATE, GUMMIES, OTHER<br/>  }</span><br/>}<span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.4.3.6">Static Imports of Enumerations*</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">enum</samp> constants are static variables and can be addressed in different ways. Let’s take 
+                    <samp class="listingcharacter listingcharacter">CandyType</samp>
+                 again in its own compilation unit.</p>
+                
+                <div class="listing " id="l6.31"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">game</span><span class="">.</span><span class="">enums</span><span class="">;</span><span class=""><br/></span> <br/><span class="">public</span><span class=""> </span><span class="">enum</span><span class=""> CandyType </span><span class="">{</span><span class=""><br/></span>  CARAMELS<span class="">,</span><span class=""> CHOCOLATE</span><span class="">,</span><span class=""> GUMMIES</span><span class="">,</span><span class=""> OTHER</span><br/><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.31</b>    
+            src/main/java/com/tutego/insel/game/enums/CandyType.java</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">CandyType</samp> enumeration is located in the 
+                    <samp class="listingcharacter listingcharacter">com.tutego.insel.game.enums</samp> package. To access a constant like 
+                    <samp class="listingcharacter listingcharacter">CARAMELS</samp>, different 
+                    <samp class="listingcharacter listingcharacter">import</samp>
+                 variants can be used.</p>
+                
+                <table class="standardtable" id="t6.5">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <a id="p404"/>
+                                Import Declaration</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Access</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">import com.tutego.insel.game.enums.CandyType</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">CandyType.CARAMELS</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">import com.tutego.insel.game.enums.*</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">CandyType.CARAMELS</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">import static com.tutego.insel.game.enums.CandyType.*</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">CARAMELS</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 6.5</b>    
+            Import Declarations and Access Variants: Top-Level Enum</p>
+                
+                <p class="standard">Let’s add a nested enumeration of the 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>
+                 class in the package in our next example:</p>
+                
+                <div class="listing " id="l6.32"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">game</span><span class="">.</span><span class="">enums</span><span class="">;</span><span class=""><br/></span> <br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">enum</span><span class=""> CandyType </span><span class="">{</span><span class=""><br/></span>    CARAMELS<span class="">,</span><span class=""> CHOCOLATE</span><span class="">,</span><span class=""> GUMMIES</span><span class="">,</span><span class=""> OTHER</span><br/>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.32</b>    
+            src/main/java/com/tutego/insel/game/enums/CandyType.java</p>
+                
+                <table class="standardtable" id="t6.6">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Import Declaration</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Access</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">import com.tutego.insel.game.enums.Candy</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Candy.CandyType.CARAMELS</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">import com.tutego.insel.game.enums.Candy.CandyType</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">CandyType.CARAMELS</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">import static com.tutego.insel.game.enums.Candy.CandyType.*</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">CARAMELS</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 6.6</b>    
+            Import Declarations and Access Variants: Nested Enum</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.4.3.7">Standard Methods of Enumeration Types*</h4>
+                
+                <p class="standard">The created enumeration objects get a number of additional members by default. They override 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>, 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp>, and 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> from 
+                    <samp class="listingcharacter listingcharacter">Object </samp>and additionally implement 
+                    <samp class="listingcharacter listingcharacter">Serializable</samp> and 
+                    <samp class="listingcharacter listingcharacter">Comparable</samp>
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_09" id="fn06_09">[ 132 ]</a></span> but not 
+                    <samp class="listingcharacter listingcharacter">Cloneable</samp> since enumeration objects can’t be cloned. The 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> method returns the name of the constant so that 
+                    <samp class="listingcharacter listingcharacter">CandyType.CARAMELS.toString().equals(“CARAMELS”)</samp> is true. In addition, each enumeration object inherits from the special class 
+                    <samp class="listingcharacter listingcharacter">Enum</samp>. 
+                    <span class="crossreference "><a href="08_001.html#h8">Chapter 8</a></span>, 
+                    <span class="crossreference "><a href="08_002.html#h8.2">Section 8.2</a></span>
+                , explores this topic in more detail.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

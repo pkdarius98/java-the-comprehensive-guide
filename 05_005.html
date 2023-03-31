@@ -1,0 +1,2182 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Handling Characters and Strings" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Handling Characters and Strings" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Handling Characters and Strings</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h5.5">5.5    The String Class and Its Methods</h2>
+        
+        <p class="standard">The developers of Java have formed a symbiosis between 
+            <samp class="listingcharacter listingcharacter">String</samp> as a class and 
+            <samp class="listingcharacter listingcharacter">String</samp> as a “built-in” data type. Compared to other objects, this special treatment for 
+            <samp class="listingcharacter listingcharacter">String</samp>
+         is evident in two aspects:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The language allows the direct construction of 
+                    <samp class="listingcharacter listingcharacter">String</samp> objects from 
+                    <samp class="listingcharacter listingcharacter">String</samp> literals
+                    <a class="indexanchor" id="i05_41"/> (strings in double quotes), such as 
+                    <samp class="listingcharacter listingcharacter">"Dick Dastardly"</samp>
+                .</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The concatenation
+                    <a class="indexanchor" id="i05_42"/> (of multiple strings with 
+                    <samp class="listingcharacter listingcharacter">+</samp>, as in 
+                    <samp class="listingcharacter listingcharacter">"Dick" + " " + "Dick Dastardly"</samp>) is allowed, but the plus sign is not allowed for any other object type. For example, you can’t add up two 
+                    <samp class="listingcharacter listingcharacter">Point</samp> objects. So, with the plus sign on 
+                    <samp class="listingcharacter listingcharacter">String</samp> objects, a special operator is defined on the 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 class; user-defined overloaded operators aren’t possible in Java.</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">The 
+            <samp class="listingcharacter listingcharacter">String</samp> class provides exactly one constant, 
+            <samp class="listingcharacter listingcharacter">CASE_INSENSITIVE_ORDER</samp> of type 
+            <samp class="listingcharacter listingcharacter">Comparator&lt;String&gt;</samp>
+        , a few constructors, some static methods, and some object methods. We’ll explore these items next.</p>
+        
+        
+            
+            <h3 class="t3" id="h5.5.1">5.5.1    String Literals as String Objects for Constant Strings</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i05_43"/>To use strings, you must have an object of the 
+                <samp class="listingcharacter listingcharacter">String</samp> class. Note that, conveniently, anything enclosed in double quotes is automatically a 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             object. As a result, a dot for the method call can be placed right after the string literal.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first last">The code
+                    <samp class="listingcharacter listingcharacter"> "Peanut butter".length()</samp>
+                 returns the length of the string. The result is 13. Whitespace and special characters are included in the count.</p>
+            
+            </div>
+            
+            <p class="standard">Only strings enclosed in double quotes are string literals and thus are preconstructed objects. However, this is not true for 
+                <samp class="listingcharacter listingcharacter">StringBuilder/StringBuffer</samp>, which must be created manually via 
+                <samp class="listingcharacter listingcharacter">new</samp>. When using string literals, you should explicitly refrain from creating 
+                <samp class="listingcharacter listingcharacter">String</samp> objects via 
+                <samp class="listingcharacter listingcharacter">new</samp>. The expression 
+                <samp class="listingcharacter listingcharacter">s = new String("String")</samp> doesn’t make sense, but 
+                <samp class="listingcharacter listingcharacter">s = “String”</samp>
+             is correct.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.5.2">5.5.2    Concatenation with +</h3>
+            
+            <p class="standard">As we’ve seen in several examples, strings can be easily concatenated using 
+                <samp class="listingcharacter listingcharacter">+</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p304"/>
+                Example</h6>
+                
+                <p class="standard first">If the segments have different data types during concatenation and one of them is 
+                    <samp class="listingcharacter listingcharacter">String</samp>, all subsequent segments are automatically set to 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                . Consider the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_5165"><pre><span class="">int</span><span class=""> quantity </span><span class="">=</span><span class=""> </span><span class="">12</span><span class="">;</span><span class=""><br/></span><span class="">double</span><span class=""> price </span><span class="">=</span><span class=""> </span><span class="">0.99</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"Quantity: "</span><span class=""> </span><span class="">+</span><span class=""> quantity </span><span class="">+</span><span class=""> </span><span class="">", price: "</span><span class=""> </span><span class="">+</span><span class=""> price</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s </span><span class="">);</span><span class="">     </span><span class=""> // Quantity: 12, price: 0.99</span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.5.3">5.5.3    Multiline Text Blocks with “””</h3>
+            
+            <p class="standard">Strings with a newline occur repeatedly in programs, for example, in screen outputs or embedded HTML, XML, JSON, or SQL. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_5164"><pre><span class="">String</span><span class=""> joke </span><span class="">=</span><span class=""><br/></span>    <span class="">"A teacher asked her student “Why are you doing math on the floor?”\n"</span><span class=""> </span><span class="">+</span><span class=""><br/></span>    <span class="">"The student answered, “You told us not to use any tables!”"</span><span class="">;</span><span class=""> </span></pre></div>
+            
+            <p class="standard">In the first string literal, 
+                <samp class="listingcharacter listingcharacter">\n</samp>
+             represents the line break. The plus sign puts the two strings together. The Java compiler independently produces a larger string literal from the two constants.</p>
+            
+            
+                
+                <h4 class="t4" id="h5.5.3.1">Simple Text Blocks</h4>
+                
+                <p class="standard">To solve the problem more elegantly, Java provides text blocks,
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_05" id="fn05_05">[ 115 ]</a></span> which makes it easier to build multiline strings. Three double quotes (called the 
+                    <span class="italic">opening delimiter</span>) introduce a text block, and three double quotes close a text block again (called the 
+                    <span class="italic">closing delimiter</span>
+                ). When you use text blocks, we could rewrite the earlier example in the following way:</p>
+                
+                <div class="listing " id="l_none_5178"><pre><span class="">String</span><span class=""> joke </span><span class="">=</span><span class=""> </span><span class="">"""</span><br/>    A teacher asked her student “Why are you doing math on the floor?”<br/>    The student answered, “You told us not to use any tables!”"""<span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> joke </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">A text block is always introduced with three double quotes, which must be followed by a line break. Thus, a text block always includes at least two lines of source code and can never be written on only one line.</p>
+                
+                <p class="standard">After the introduction of a text block, the compiler appends a line break, LINE-FEED (shortened as LF; in Unicode, 
+                    <samp class="listingcharacter listingcharacter">\u000A</samp>), to each line that isn’t terminated with three 
+                    <a id="p305"/>
+                quotes. Our example only has one line break. If we had written the three quotation marks on the next line, we’d have two line breaks in the result:</p>
+                
+                <div class="listing " id="l_none_5191"><pre><span class="">String</span><span class=""> joke </span><span class="">=</span><span class=""> </span><span class="">"""</span><br/>        A teacher asked her student “Why are you doing math on the floor?”<br/>        The student answered, “You told us not to use any tables!”<br/>        """<span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Placement determines whether the three quotes that close the text block are on a separate line (the resulting string ends with LF) or at the end of a string (the resulting string doesn’t end with LF). When writing, the more symmetrical and prettier approach is having the beginning of a text block and the end of a text block each on a single line, but it’s not always desirable to have a line break at the end.</p>
+                
+                <p class="standard">Text blocks are an alternative notation for strings in double quotes. Later in the bytecode, how the string was created will not be evident. Text blocks can be used just like regular strings in all places where strings are required, for example, as arguments, as in the following example:</p>
+                
+                <div class="listing " id="l_none_5189"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"""</span><br/>        A teacher asked her student “Why are you doing math on the floor?”<br/>        The student answered, “You told us not to use any tables!”"""<span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If a line break is useful in the source code within the text block (e.g., so that the line doesn’t become too long), the line break in the resulting string can be prevented with a backslash, as in the following example:</p>
+                
+                <div class="listing " id="l_none_5212"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"""</span><br/>        A teacher asked her student \<br/>        “Why are you doing math on the floor?”<br/>        The student answered, \<br/>        “You told us not to use any tables!”"""<span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The output is the same as before.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.3.2">Formatting</h4>
+                
+                <p class="standard">Since text blocks are strings, you can concatenate text blocks with the 
+                    <samp class="listingcharacter listingcharacter">+</samp>
+                 operator, as in the following example:</p>
+                
+                <div class="listing " id="l_none_5223"><pre><span class="">String</span><span class=""> teacher </span><span class="">=</span><span class=""> </span><span class="">"A teacher "</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> student </span><span class="">=</span><span class=""> </span><span class="">"The student "</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""><br/></span>    teacher <span class="">+</span><span class=""> </span><span class="">"""</span><br/>        asked her student “Why are you doing math on the floor?”<br/>
+                    <a id="p306"/>        """<span class=""> </span><span class="">+</span><span class=""><br/></span>    student <span class="">+</span><span class=""> </span><span class="">"""</span><br/>        answered, “You told us not to use any tables!”"""<span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Notice how inserting variable contents isn’t particularly elegant. However, the goal of text blocks is not necessarily to create something like string interpolation, as in JavaScript, for example.</p>
+                
+                <p class="standard">Manipulating these strings is easier by using formatting strings, as the following example:</p>
+                
+                <div class="listing " id="l_none_5237"><pre><span class="">String</span><span class=""> teacher </span><span class="">=</span><span class=""> </span><span class="">"A teacher "</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> student </span><span class="">=</span><span class=""> </span><span class="">"The student "</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""><br/></span>    <span class="">"""</span><br/>        %s asked her student “Why are you doing math on the floor?”<br/>        %s answered, “You told us not to use any tables!”"""<span class="">,</span><span class=""> teacher</span><span class="">,</span><span class=""> student </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">An alternative might be to write the following code:</p>
+                
+                <div class="listing " id="l_none_5236"><pre><span class="">String</span><span class=""> teacher </span><span class="">=</span><span class=""> </span><span class="">"A teacher "</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> student </span><span class="">=</span><span class=""> </span><span class="">"The student "</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> joke </span><span class="">=</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">format</span><span class="">(</span><span class=""><br/></span>    <span class="">"""</span><br/>    %s asked her student “Why are you doing math on the floor?”<br/>    %s answered, “You told us not to use any tables!”"""<span class="">,</span><span class=""> teacher</span><span class="">,</span><span class=""> student </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> joke </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Another option is provided by the 
+                    <samp class="listingcharacter listingcharacter">String</samp> method 
+                    <samp class="listingcharacter listingcharacter">formatted(...)</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_5246"><pre><span class="">String</span><span class=""> teacher </span><span class="">=</span><span class=""> </span><span class="">"A teacher "</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> student </span><span class="">=</span><span class=""> </span><span class="">"The student "</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> joke </span><span class="">=</span><span class=""><br/></span>    <span class="">"""</span><br/>    %s asked her student “Why are you doing math on the floor?”<br/>    %s answered, “You told us not to use any tables!”"""<span class=""><br/></span>        <span class="">.</span><span class="">formatted</span><span class="">(</span><span class=""> teacher</span><span class="">,</span><span class=""> student </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> joke </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.3.3">Meaning of Indentations</h4>
+                
+                <p class="standard">The indentation of the lines in a text block plays an essential role. The lines of a text block don’t have to start at the beginning of the line, at position 0, but may be indented to the right and follow the usual conventions in the indentation of Java programs. When indenting, 
+                    <span class="italic">incidental whitespace</span> should be excluded from the actual text block. In these cases, the Java compiler applies a small algorithm. The rule is that the line 
+                    <a id="p307"/>furthest to the left (the line with the three trailing quotation marks is one of them) determines the incidental whitespace that’s truncated. Whether the whitespace character is a tab or space doesn’t matter, even if it looks different on the screen! The 
+                    <span class="italic">essential whitespace</span>
+                 remains to the right of this point.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example 1</h6>
+                    
+                    <div class="listing " id="l_none_5263"><pre>String joke2 = """<br/>    Do we even need Halloween anymore?<br/>      I’ve been wearing a mask and eating candy for 30 months...""";<br/>System.out.println( joke2 ); </pre></div>
+                    
+                    <p class="standard">Output 1:</p>
+                    
+                    <div class="listing  last_item" id="l_none_52631231345"><pre>Do we even need Halloween anymore?<br/>  I’ve been wearing a mask and eating candy for 30 months...</pre></div>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example 2</h6>
+                    
+                    <div class="listing " id="l_none_5291"><pre>String joke2 = """<br/>      Do we even need Halloween anymore?<br/>    I’ve been wearing a mask and eating candy for 30 months...""";<br/>System.out.println( joke2 ); </pre></div>
+                    
+                    <p class="standard">Output 2:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5305"><pre>  Do we even need Halloween anymore?<br/>I’ve been wearing a mask and eating candy for 30 months...</pre></div>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example 3</h6>
+                    
+                    <div class="listing " id="l_none_5294"><pre>String joke2 = """<br/>    Do we even need Halloween anymore?<br/>    I’ve been wearing a mask and eating candy for 30 months...<br/>  """; <br/>System.out.println( joke2 );</pre></div>
+                    
+                    <p class="standard">Output 3:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5319"><pre>  Do we even need Halloween anymore?<br/>  I’ve been wearing a mask and eating candy for 30 months...</pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.3.4">Escape Sequences</h4>
+                
+                <p class="standard">Finally, let’s talk about a few rules. In the source code, an end of line could be indicated by different symbols in the text: CR (
+                    <samp class="listingcharacter listingcharacter">\u000D</samp>), CR-LF (
+                    <samp class="listingcharacter listingcharacter">\u000D\u000A</samp>), or LF 
+                    <samp class="listingcharacter listingcharacter">(\u000A</samp>). The 
+                    <a id="p308"/>compiler performs what is called 
+                    <span class="italic">normalization</span> so that, at the end, only one LF (
+                    <samp class="listingcharacter listingcharacter">\u000A</samp>
+                ) exists in the string.</p>
+                
+                <p class="standard">Text blocks can contain all the escape sequences, including 
+                    <samp class="listingcharacter listingcharacter">\n</samp>, 
+                    <samp class="listingcharacter listingcharacter">\t</samp>, 
+                    <samp class="listingcharacter listingcharacter">\'</samp>, 
+                    <samp class="listingcharacter listingcharacter">\"</samp>, and 
+                    <samp class="listingcharacter listingcharacter">\\</samp>. They are not raw strings, where the backslash (\) is taken as literal character, so the backslash must still be masked out. With 
+                    <samp class="listingcharacter listingcharacter">\r</samp>
+                , you can create a CR-LF sequence.</p>
+                
+                <p class="standard">If single or double quotes occur in a string, they can be used without masking. However, a special case is when the double quote is right at the end before the three closing double quotes; in this case, masking is necessary.</p>
+                
+                <div class="listing " id="l_none_5329"><pre>String joke3 = <span class="">"""</span><span class=""/><br/><span class="">    If you have 20 candy bars and eat 19 of them, what do you have?</span><span class=""/><br/><span class="">    "Type 2 diabetes\""""</span><span class="">;</span><br/>System.out.<span class="">println</span><span class="">( joke3 ); </span></pre></div>
+                
+                <p class="standard">If three quotation marks should appear in the output itself, one of the three quotation marks must be masked out to avoid being misinterpreted as a terminator. Consider how to obtain the following output:</p>
+                
+                <div class="listing " id="l_none_5348"><pre>1 "<br/>2 ""<br/>3 """<br/>4 """"<br/>5 """""<br/>6 """""" </pre></div>
+                
+                <p class="standard">We would need to write the following code:</p>
+                
+                <div class="listing " id="l_none_5347"><pre>System.out.<span class="">println</span><span class=""/>( <span class="">"""</span><span class=""/><br/><span class="">                    1 "</span><span class=""/><br/><span class="">                    2 ""</span><span class=""/><br/><span class="">                    3 ""\"</span><span class=""/><br/><span class="">                    4 ""\""</span><span class=""/><br/><span class="">                    5 ""\"""</span><span class=""/><br/><span class="">                    6 ""\"""\""""</span><span class=""> ); </span></pre></div>
+                
+                <p class="standard">Such strings, however, are not particularly readable.</p>
+                
+                <p class="standard">Another rule is that spaces are truncated from the end. Consider the following text block:</p>
+                
+                <div class="listing " id="l_none_5350"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"""</span><br/>1
+                    <img alt="inline image" class="inline_image" src="bilder/u0002.png"/><br/>"""<span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">This text block becomes the string 
+                    <samp class="listingcharacter listingcharacter">"1\u0002"</samp>. The “open box” 
+                    <img alt="inline image" class="inline_image" src="bilder/u0002.png"/>
+                 stands for blanks that otherwise wouldn’t be seen in print.</p>
+                
+                <p class="standard">
+                    <a id="p309"/>If spaces must count at the end, you must introduce the escape sequence 
+                    <samp class="listingcharacter listingcharacter">\s</samp>. This escape sequence is translated to a regular space (
+                    <samp class="listingcharacter listingcharacter">\u0020</samp>
+                ). For our earlier example, then, you could write the following code:</p>
+                
+                <div class="listing " id="l_none_5364"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"""</span><br/>          1      \s<br/>          2  \s<br/>          """<span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Let’s test your understanding with a task: What kind of string is created by the following code?</p>
+                
+                <div class="listing " id="l_none_5369"><pre><span class="">String</span><span class=""> joke2 </span><span class="">=</span><span class=""> </span><span class="">"""</span><br/>    Do we even need Halloween anymore?\s\<br/>    I’ve been wearing a mask and eating candy for 30 months\<br/>    ...<br/>        """<span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The result is a string that is equivalent to the following output:</p>
+                
+                <div class="listing " id="l_none_5383"><pre>"Do we even need Halloween anymore? I’ve been wearing a mask and eating candy for 30 months ...\n" </pre></div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.5.4">5.5.4    String Length and Testing for Empty Strings</h3>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">String</samp> objects internally manage the string of characters they represent and provide a variety of methods to expose the properties of the object. You’ve already used one method, namely, 
+                <samp class="listingcharacter listingcharacter">length()</samp>
+                <a class="indexanchor" id="i05_44"/>. For 
+                <samp class="listingcharacter listingcharacter">String</samp> objects, 
+                <samp class="listingcharacter listingcharacter">length()</samp> is implemented to return the number of characters in the string (the length of the string
+                <a class="indexanchor" id="i05_45"/>). To find out if a string has no characters, the method 
+                <samp class="listingcharacter listingcharacter">isEmpty()</samp> can be used instead of 
+                <samp class="listingcharacter listingcharacter">length() == 0</samp>. The 
+                <samp class="listingcharacter listingcharacter">isBlank() </samp>method tests whether a string is empty or consists only of whitespace. In the context of this method, whitespace is any character where 
+                <samp class="listingcharacter listingcharacter">Character.isWhitespace(int)</samp>
+             returns as true.</p>
+            
+            <table class="standardtable" id="t5.7">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Statement</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Result</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">"".length()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">0</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">"".isEmpty()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">true</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">" ".length()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">1</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">" ".isEmpty()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">false</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">" ".isBlank()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">true</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">String s = null; s.length();</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 5.7</b>    
+            Results of the length(...), isEmpty(...), and isBlank(...) Methods</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p310"/>
+                Note</h6>
+                
+                <p class="standard first last">From arrays, recall that 
+                    <samp class="listingcharacter listingcharacter">length</samp> is an object variable. For 
+                    <samp class="listingcharacter listingcharacter">String</samp>, 
+                    <samp class="listingcharacter listingcharacter">length()</samp>
+                 is an object method and thus requires parentheses.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h5.5.4.1">A Handy Helper Method: isNullOrEmpty(String)</h4>
+                
+                <p class="standard">For example, while the .NET framework provides the static member function 
+                    <samp class="listingcharacter listingcharacter">IsNullOrEmpty(String)</samp>, which tests whether the passed reference is 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 or the string is empty, in Java, this evaluation must be tested separately. A separate static utility method comes in handy, as in the following example:</p>
+                
+                <div class="listing " id="l5.3"><pre><span class="">/**</span><br/> * Checks if a String is {@code null} or empty ({@code ""}).<br/> *<br/> * &lt;pre&gt;<br/> * StringUtils.isNullOrEmpty(null) == true<br/> * StringUtils.isNullOrEmpty(&amp;quot;&amp;quot;) == true<br/> * StringUtils.isNullOrEmpty(&amp;quot; &amp;quot;) == false<br/> * StringUtils.isNullOrEmpty(&amp;quot;bob&amp;quot;) == false<br/> * StringUtils.isNullOrEmpty(&amp;quot; bob &amp;quot;) == false<br/> * &lt;/pre&gt;<br/> *<br/> * @param str The String to check, may be {@code null}.<br/> * @return {@code true} if the String is empty or {@code null}, {@code false}<br/> * otherwise.<br/> */<span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isNullOrEmpty</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> str </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> str </span><span class="">==</span><span class=""> null </span><span class="">||</span><span class=""> str</span><span class="">.</span><span class="">isEmpty</span><span class="">();</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 5.3</b>    
+            src/main/java/com/tutego/insel/string/LengthAndEmptyDemo.java (Snippet)</p>
+                
+                <p class="standard">This method, however, doesn’t test whether the string consists of whitespace only.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.5.5">5.5.5    Accessing a Specific Character with charAt(int)</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i05_46"/>Perhaps the most important method of the 
+                <samp class="listingcharacter listingcharacter">String</samp> class is 
+                <samp class="listingcharacter listingcharacter">charAt(int index)</samp>.
+                <a class="indexanchor" id="i05_47"/>
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_06" id="fn05_06">[ 116 ]</a></span> This method returns the corresponding character in a place called 
+                <span class="italic">index</span>. This method thus provides a way to traverse the characters of a string (along with the 
+                <samp class="listingcharacter listingcharacter">length()</samp> method). 
+                <a id="p311"/>If the index is less than zero or greater than or equal to the number of characters in the string, the method throws a 
+                <samp class="listingcharacter listingcharacter">StringIndexOutOfBoundsException</samp>
+                <a class="indexanchor" id="i05_48"/>
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_07" id="fn05_07">[ 117 ]</a></span>
+             with the error location.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following code returns the first and last characters in the string 
+                    <samp class="listingcharacter listingcharacter">s</samp>
+                :</p>
+                
+                <div class="listing  last_item" id="l_none_5419"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> "I'm not fat</span><span class="">,</span><span class=""> just well</span><span class="">-</span><span class="">covered</span><span class="">!</span><span class="">"</span><span class="">;</span><span class=""><br/></span><span class="">char</span><span class=""> first </span><span class="">=</span><span class=""> s</span><span class="">.</span>
+                    <span class="bold"><span class="">charAt</span></span><span class="">( </span><span class="">0</span><span class=""> );                         </span><span class=""> // 'I'</span><span class=""><br/></span><span class="">char</span><span class=""> last  = s.</span>
+                    <span class="bold"><span class="">charAt</span></span><span class="">( s.</span><span class="">length</span><span class="">() - </span><span class="">1</span><span class=""> );            </span><span class=""> // '!'</span><span class=""/><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">You must remember that the count starts from 0. Therefore, you must subtract one digit from the length of the string. Since the comparison to the correct range occurs each time 
+                <samp class="listingcharacter listingcharacter">charAt(int)</samp>
+             is accessed, you should consider whether the string should be copied once into its own character array instead (in case multiple access is expected).</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note*</h6>
+                
+                <p class="standard first last">Since Unicode characters can also be composed of 2 Java 
+                    <samp class="listingcharacter listingcharacter">char</samp>s (the 
+                    <span class="italic">surrogate pair</span>), an alternative method is available: 
+                    <samp class="listingcharacter listingcharacter">int codePointAt(int index)</samp>. This method is slower than 
+                    <samp class="listingcharacter listingcharacter">charAt(...)</samp> because a linear search must be performed. It isn’t known in advance at which position a Unicode character is located from exactly one 
+                    <samp class="listingcharacter listingcharacter">char</samp> or from two 
+                    <samp class="listingcharacter listingcharacter">char</samp>s. In this book, we always assume Unicode characters that can be encoded in a 
+                    <samp class="listingcharacter listingcharacter">char</samp>
+                . </p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.5.6">5.5.6    Searching for Contained Characters and Strings</h3>
+            
+            <p class="standard">The object method 
+                <samp class="listingcharacter listingcharacter">contains(CharSequence)</samp>
+                <a class="indexanchor" id="i05_49"/> tests whether a 
+                <span class="italic">substring</span>
+                <a class="indexanchor" id="i05_50"/> occurs in the string and returns 
+                <samp class="listingcharacter listingcharacter">true</samp>
+             if it does. Case sensitivity is relevant. In the following program, we’ll test whether a string contains one of the allowed names of candy:</p>
+            
+            <div class="listing " id="l5.4"><pre><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">containsCandyName</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> text </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  text <span class="">=</span><span class=""> text</span><span class="">.</span><span class="">toLowerCase</span><span class="">();</span><span class=""><br/></span>  <span class="">String</span><span class="">[]</span><span class=""> candyNames </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">"starburst"</span><span class="">,</span><span class=""> </span><span class="">"snackers"</span><span class="">,</span><span class=""> </span><span class="">"n&amp;n"</span><span class="">,</span><span class=""> </span><span class="">"cold tamales"</span><span class=""> </span><br/>  <span class="">};</span><span class=""><br/></span>  <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> candyName </span><span class="">:</span><span class=""> candyNames </span><span class="">)</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> text</span><span class="">.</span><span class="">contains</span><span class="">(</span><span class=""> candyName </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">true;</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">false;</span><span class=""><br/></span><span class="">
+                    <a id="p312"/>
+                }</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> msg1 </span><span class="">=</span><span class=""> </span><span class="">"Starburst is so delicious."</span><span class="">;</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">containsCandyName</span><span class="">(</span><span class=""> msg1 </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // true</span><span class=""><br/></span>  <span class="">String</span><span class=""> msg2 </span><span class="">=</span><span class=""> </span><span class="">"I only like warm milk."</span><span class="">;</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">containsCandyName</span><span class="">(</span><span class=""> msg2 </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // false</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 5.4</b>    
+            src/main/java/com/tutego/insel/string/ContainsCandyName.java (Snippet)</p>
+            
+            
+                
+                <h4 class="t4" id="h5.5.6.1">Returning Found Locations with indexOf(...)</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">contains(...)</samp> method is 
+                    <span class="italic">not</span> overloaded with a 
+                    <samp class="listingcharacter listingcharacter">char</samp>, so we can’t search for a single character unless the string consisted of only 1 character. However, this search is possible with the 
+                    <samp class="listingcharacter listingcharacter">indexOf(...)</samp> method, which returns the location of a character or substring. If 
+                    <samp class="listingcharacter listingcharacter">indexOf(...)</samp>
+                    <a class="indexanchor" id="i05_51"/>
+                 finds nothing, it returns -1.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example searches a character with 
+                        <samp class="listingcharacter listingcharacter">indexOf(...)</samp>
+                    :</p>
+                    
+                    <div class="listing " id="l_none_5438"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"Ernest Gräfenberg"</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class=""> index1 </span><span class="">=</span><span class=""> s</span><span class="">.</span>
+                        <span class="bold"><span class="">indexOf</span></span><span class="">( </span><span class="">'e'</span><span class=""> );                    </span><span class=""> // 3</span><span class=""><br/></span><span class="">int</span><span class=""> index2 = s.</span>
+                        <span class="bold"><span class="">indexOf</span></span><span class="">( </span><span class="">'e'</span><span class="">, index1 + </span><span class="">1</span><span class=""> );        </span><span class=""> // 11</span><span class=""><br/></span><span class="">int</span><span class=""> index3 = s.</span>
+                        <span class="bold"><span class="">indexOf</span></span><span class="">( </span><span class="">'e'</span><span class="">, </span><span class="">69696969</span><span class=""> );          </span><span class=""> // -1</span><span class=""> </span><span class=""/></pre></div>
+                    
+                    <p class="standard last">The assignment of 
+                        <samp class="listingcharacter listingcharacter">index1</samp> is 3 because, at code point 3, an 
+                        <samp class="listingcharacter listingcharacter">'e'</samp> occurs for the first time. The second method 
+                        <samp class="listingcharacter listingcharacter">indexOf(...)</samp> continues searching with the second expression 
+                        <samp class="listingcharacter listingcharacter">index1 + 1</samp>
+                     (that is, starting at code point 4). The result is 11.</p>
+                
+                </div>
+                
+                <p class="standard">Like 
+                    <samp class="listingcharacter listingcharacter">contains(...)</samp>
+                , the search is case sensitive. The characters in a string are numbered like array elements starting from 0. If the index argument is less than 0, this number is ignored, and the index is automatically set to 0.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">If the character 
+                        <samp class="listingcharacter listingcharacter">c</samp> describes an escape character,
+                        <a class="indexanchor" id="i05_52"/>
+                     for example, a tab or a return, then processing can continue in the following way:</p>
+                    
+                    <div class="listing " id="l_none_5432"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">"\b\t\n\f\r\"</span><span class="">\\"</span><span class="">.</span>
+                        <span class="bold"><span class="">indexOf</span><span class="">(c)</span></span> &gt;= <span class="">0</span><span class=""> ) {</span><br/>  …<br/>}<span class=""/> </pre></div>
+                    
+                    <p class="standard last">We couldn’t use 
+                        <samp class="listingcharacter listingcharacter">contains(...)</samp> because the parameter type is only 
+                        <samp class="listingcharacter listingcharacter">CharSequence</samp>, not 
+                        <samp class="listingcharacter listingcharacter">char</samp>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">
+                    <a id="p313"/>The 
+                    <samp class="listingcharacter listingcharacter">indexOf(...)</samp> method is parameterized not only with 
+                    <samp class="listingcharacter listingcharacter">char</samp>, but also with 
+                    <samp class="listingcharacter listingcharacter">String</samp>,
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_08" id="fn05_08">[ 118 ]</a></span>
+                 to search for entire strings and return the starting point.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Call 
+                        <samp class="listingcharacter listingcharacter">indexOf(String, int)</samp>
+                     with the search for a partial string:</p>
+                    
+                    <div class="listing " id="l_none_5450"><pre><span class="">String</span><span class=""> str </span><span class="">=</span><span class=""> "I'll be ill if</span><span class=""> you remove the apostrophe</span><span class="">.</span><span class="">";</span><span class=""><br/></span>//            0123456789<span class=""><br/></span>String s = "<span class="">ll"</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class=""> index </span><span class="">=</span><span class=""> str</span><span class="">.</span>
+                        <span class="bold"><span class="">indexOf</span></span><span class="">( s, str.</span><span class="">indexOf</span><span class="">(s) + </span><span class="">1</span><span class=""> );      </span><span class=""> // 9</span><span class=""> </span><span class=""/></pre></div>
+                    
+                    <p class="standard last">The next search position is calculated from the old finder position. The result is 9 because the substring “ll” appears there for the second time.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.6.2">Searching from the End</h4>
+                
+                <p class="standard">Just as you can search a string starting at the beginning, you can also start at the end.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In the following example, the 
+                        <samp class="listingcharacter listingcharacter">lastIndexOf(...)</samp>method is used for this purpose
+                        <a class="indexanchor" id="i05_53"/>
+                    :</p>
+                    
+                    <div class="listing " id="l_none_5452"><pre><span class="">String</span><span class=""> str </span><span class="">=</span><span class=""> </span><span class="">"May the F</span>
+                        <span class="bold">o</span>rce be with y
+                        <span class="bold">o</span>u."<span class="">;</span><br/><span class="">int</span><span class=""> index  = str.</span>
+                        <span class="bold"><span class="">lastIndexOf</span></span><span class="">( </span><span class="">'o'</span><span class=""> );                </span><span class=""> // 23</span> <span class=""/></pre></div>
+                    
+                    <p class="standard">As with 
+                        <samp class="listingcharacter listingcharacter">indexOf(...)</samp>
+                    , an overloaded version can search backwards from a certain position for the next occurrence of “o.” In this case, you would write the following code:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5462"><pre>index <span class="">=</span><span class=""> str</span><span class="">.</span><span class="">lastIndexOf</span><span class="">(</span><span class=""> </span><span class="">'o'</span><span class="">,</span><span class=""> index </span><span class="">-</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class="">         </span><span class=""> // 9</span><span class=""> </span></pre></div>
+                
+                </div>
+                
+                <p class="standard">The parameters of the 
+                    <samp class="listingcharacter listingcharacter">char</samp>-oriented methods 
+                    <samp class="listingcharacter listingcharacter">indexOf(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">lastIndexOf(...)</samp> are all of type 
+                    <samp class="listingcharacter listingcharacter">int</samp> and not, as one might expect, of type 
+                    <samp class="listingcharacter listingcharacter">char</samp> and 
+                    <samp class="listingcharacter listingcharacter">int</samp>. The character to be searched is passed as the first 
+                    <samp class="listingcharacter listingcharacter">int</samp> argument. The conversion of 
+                    <samp class="listingcharacter listingcharacter">char</samp> to 
+                    <samp class="listingcharacter listingcharacter">int</samp> is done automatically by the Java compiler, so this change isn’t noticeable. Unfortunately, however, confusion in the order of arguments may occur: With 
+                    <samp class="listingcharacter listingcharacter">s.indexOf(start, c)</samp> the first parameter 
+                    <samp class="listingcharacter listingcharacter">start</samp> is interpreted as a character, and the desired character 
+                    <samp class="listingcharacter listingcharacter">c</samp>
+                 is interpreted as the start position of the search.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.6.3">Number of Substrings of a String*</h4>
+                
+                <p class="standard">So far, the Java library doesn’t provide a direct method to determine the number of substrings in a string. However, such a method can be written quickly in the following way:</p>
+                
+                <div class="listing " id="l5.5"><pre><span class="">
+                        <a id="p314"/>
+                    public</span><span class=""> </span><span class="">class</span><span class=""> CountMatches </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">frequency</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> source</span><span class="">,</span><span class=""> </span><span class="">String</span><span class=""> part </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> source </span><span class="">==</span><span class=""> null </span><span class="">||</span><span class=""> source</span><span class="">.</span><span class="">isEmpty</span><span class="">()</span><span class=""> </span><span class="">||</span><span class=""> part </span><span class="">==</span><span class=""> null </span><span class="">||</span><span class=""> part</span><span class="">.</span><span class="">isEmpty</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">return</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span><br/>    <span class="">int</span><span class=""> count </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""><br/></span><br/>    <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> pos </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> </span><span class="">(</span><span class="">pos </span><span class="">=</span><span class=""> source</span><span class="">.</span><span class="">indexOf</span><span class="">(</span><span class=""> part</span><span class="">,</span><span class=""> pos </span><span class="">))</span><span class=""> </span><span class="">!=</span><span class=""> </span><span class="">-</span><span class="">1</span><span class="">;</span><span class=""> count</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      pos <span class="">+=</span><span class=""> part</span><span class="">.</span><span class="">length</span><span class="">();</span><span class=""><br/></span><br/>    <span class="">return</span><span class=""> count</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">frequency</span><span class="">(</span><span class=""> </span><span class="">"cherry schnaps, schnitzel"</span><span class="">,</span><span class=""> </span><span class="">"sch"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 2</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">frequency</span><span class="">(</span><span class=""> </span><span class="">"cherry schnaps, schnitzel"</span><span class="">,</span><span class=""> </span><span class="">"zel"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 1</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">frequency</span><span class="">(</span><span class=""> </span><span class="">"cherry schnaps, schnitzel"</span><span class="">,</span><span class=""> </span><span class="">""</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> // 0</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 5.5</b>    
+            src/main/java/com/tutego/insel/string/CountMatches.java (Snippet)</p>
+                
+                <p class="standard">The chosen implementation returns the number of non-overlapping substrings. The implementation would return the result “2” when calling 
+                    <samp class="listingcharacter listingcharacter">frequency("aaaa", "aa")</samp> because, with 
+                    <samp class="listingcharacter listingcharacter">pos += part.length()</samp>
+                , the implementation always moves as many steps further to the right as the substring is long. Depending on the interpretation of the task—and other algorithms—the value “3” would also be a permitted return, but then the loop would always have to go only one position to the right.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.5.7">5.5.7    The Hangman Game</h3>
+            
+            <p class="standard">The methods you’ve learned so far can solve an estimated 90% of all tasks in daily programming practice. In summary, so far, we covered the following methods:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int charAt(int)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int length()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean equals(Object)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean contains(CharSequence)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int indexOf(char)</samp>, 
+                        <samp class="listingcharacter listingcharacter">int indexOf(String)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Let’s now use these methods to make a little game, the famous Hangman
+                <a class="indexanchor" id="i05_54"/> game. The aim is to guess all the letters of a word. At the beginning, each letter is made unrecognizable by an underscore. The user starts guessing and gradually fills in the individual 
+                <a id="p315"/>
+            placeholders. If the player fails to guess the word after a fixed number of rounds, he has lost.</p>
+            
+            <div class="listing " id="l5.6"><pre><span class="">String</span><span class=""> hangmanWord = </span><span class="">"alligatoralley"</span><span class="">;</span><span class=""/><br/><span class="">String</span><span class=""> usedChars = </span><span class="">""</span><span class="">;</span><span class=""/><br/><br/><span class="">String</span><span class=""> guessedWord = </span><span class="">""</span><span class="">;</span><span class=""/><br/><span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> i = </span><span class="">0</span><span class="">; i &lt; hangmanWord.</span><span class="">length</span><span class="">(); i++ )</span><span class=""/><br/><span class="">  guessedWord += </span><span class="">"_"</span><span class="">;</span><span class=""/><br/><br/><span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> guesses = </span><span class="">0</span><span class="">; ; guesses++ ) {</span><span class=""/><br/><span class="">  </span><span class="">if</span><span class=""> ( guesses == </span><span class="">10</span><span class=""> ) {</span><span class=""/><br/><span class="">    System.out.</span><span class="">printf</span><span class="">(</span><span class=""/><br/><span class="">     </span><span class="">"Sorry, game over after 10 attempts! Speaking of which, the word was '%s'."</span><span class="">,</span><span class=""/><br/><span class="">     hangmanWord );</span><span class=""/><br/><span class="">    </span><span class="">break</span><span class="">;</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><br/><span class="">  System.out.</span><span class="">printf</span><span class="">(</span><span class=""/><br/><span class="">      </span><span class="">"Round %d. Previous guess: '%s'. What character do you choose?%n"</span><span class="">,</span><span class=""/><br/><span class="">      guesses, guessedWord );</span><span class=""/><br/><span class="">  </span><span class="">char</span><span class=""> guessedChar = </span><span class="">new</span><span class=""> java.util.</span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">next</span><span class="">().</span><span class="">charAt</span><span class="">( </span><span class="">0</span><span class=""> );</span><span class=""/><br/><br/><span class="">  </span><span class="">if</span><span class=""> ( usedChars.</span><span class="">indexOf</span><span class="">( guessedChar ) &gt;= </span><span class="">0</span><span class=""> )</span><span class=""/><br/><span class="">    System.out.</span><span class="">printf</span><span class="">( </span><span class="">"'%c' you have entered before!%n"</span><span class="">, guessedChar );</span><span class=""/><br/><span class="">  </span><span class="">else</span> { <span class=""> //Character has not been used yet</span><span class=""/><br/><span class="">     usedChars += guessedChar;</span><span class=""/><br/><span class="">    �� hangmanWord.</span><span class="">indexOf</span><span class="">( c ) == -</span><span class="">1</span><span class=""/><br/><span class="">    </span><span class="">if</span><span class=""> ( hangmanWord.</span><span class="">indexOf</span><span class="">( guessedChar ) &gt;= </span><span class="">0</span><span class=""> ) {</span><span class=""/><br/><span class="">      guessedWord = </span><span class="">""</span><span class="">;</span><span class=""/><br/><span class="">      </span><span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> i = </span><span class="">0</span><span class="">; i &lt; hangmanWord.</span><span class="">length</span><span class="">(); i++ )</span><span class=""/><br/><span class="">        guessedWord += usedChars.</span><span class="">indexOf</span><span class="">( hangmanWord.</span><span class="">charAt</span><span class="">( i ) ) &gt;= </span><span class="">0</span><span class=""> ?</span><span class=""/><br/><span class="">                         hangmanWord.</span><span class="">charAt</span><span class="">( i ) : </span><span class="">"_"</span><span class="">;</span><span class=""/><br/><br/><span class="">      </span><span class="">if</span><span class=""> ( guessedWord.</span><span class="">contains</span><span class="">( </span><span class="">"_"</span><span class=""> ) )</span><span class=""/><br/><span class="">        System.out.</span><span class="">printf</span><span class="">( </span><span class="">"Good guess, |%s| can be found in the word. "</span><span class=""> +</span><span class=""/><br/><span class="">                           </span><span class="">"But there’s something missing!%n"</span><span class="">, guessedChar );</span><span class=""/><br/><span class="">      </span><span class="">else</span><span class=""> {</span><span class=""/><br/><span class="">        System.out.</span><span class="">printf</span><span class="">( </span><span class="">"Congratulations, you have guessed the word '%s'!"</span><span class="">,</span><span class=""/><br/><span class="">                           hangmanWord );</span><span class=""/><br/><span class="">        </span><span class="">break</span><span class="">;</span><span class=""/><br/><span class="">      }</span><span class=""/><br/><span class="">    }</span><span class=""/><br/><span class="">
+                    <a id="p316"/>
+                    </span><span class="">else</span><span class=""/><br/><span class="">      System.out.</span><span class="">printf</span><span class="">( </span><span class="">"Bad luck, %c does not occur in the word!%n"</span><span class="">,</span><span class=""/><br/><span class="">                         guessedChar );</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 5.6</b>    
+            src/main/java/com/tutego/insel/string/Hangman1.java, main(…)</p>
+            
+            <p class="standard">The game starts with the following output:</p>
+            
+            <div class="listing " id="l_none_5501"><pre>Round 0. Previous guess: '______________'. What character do you choose? </pre></div>
+            
+            <p class="standard">The player types in a letter, such as “e,” and then presses 
+                <span class="keyboard">(Enter)</span>
+            . In turn, the program responds in the following way:</p>
+            
+            <div class="listing " id="l_none_5514"><pre>e<br/>Good guess, 'e' can be found in the word. But there's something missing!<br/>Round 1. Previous guess: '____________e_'. What character do you choose?<br/>a<br/>Good guess, 'a' can be found in the word. But there's something missing!<br/>Round 2. Previous guess: 'a____a___a__e_'. What character do you choose? </pre></div>
+            
+            <p class="standard">This gameplay loop continues until the end of the game.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.5.8">5.5.8    Good That We Have Compared</h3>
+            
+            <p class="standard">To compare strings, many possibilities and options are available, such as the following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> method of the 
+                        <samp class="listingcharacter listingcharacter">String</samp>
+                     class searches for absolute matches.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">equalsIgnoreCase(...)</samp>
+                        <a class="indexanchor" id="i05_55"/> method of the 
+                        <samp class="listingcharacter listingcharacter">String</samp>
+                     class can be used for case-insensitive comparisons.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">switch</samp> statement allows you to compare 
+                        <samp class="listingcharacter listingcharacter">String</samp> objects with a list of jump targets. Internally, 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                     performs the comparison.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Whether a string starts or ends with a word is indicated by the 
+                        <samp class="listingcharacter listingcharacter">String</samp> methods 
+                        <samp class="listingcharacter listingcharacter">startsWith(...)</samp> and 
+                        <samp class="listingcharacter listingcharacter">endsWith(...)</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">For comparing individual sections, you can use the 
+                        <samp class="listingcharacter listingcharacter">String</samp> method 
+                        <samp class="listingcharacter listingcharacter">regionMatches(...)</samp>
+                    , a method that can also work case insensitively.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If a match to a regular expression is desired, the 
+                        <samp class="listingcharacter listingcharacter">matches(...)</samp> method of 
+                        <samp class="listingcharacter listingcharacter">String</samp> and the special classes 
+                        <samp class="listingcharacter listingcharacter">Pattern</samp> and 
+                        <samp class="listingcharacter listingcharacter">Matcher</samp>
+                    , which are specific to regular expressions, will help.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">While the vast majority of scripting languages and also C# allow string comparisons via 
+                    <samp class="listingcharacter listingcharacter">==</samp>, the semantics for Java is unique: Comparison with 
+                    <samp class="listingcharacter listingcharacter">==</samp> is only true if the two references are identical (i.e., two 
+                    <samp class="listingcharacter listingcharacter">String</samp> objects are identical). 
+                    <samp class="listingcharacter listingcharacter">==</samp>
+                 doesn’t test equivalence.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h5.5.8.1">
+                    <a id="p317"/>
+                The equals(...) Method</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">String</samp> class overrides the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method inherited from the 
+                    <samp class="listingcharacter listingcharacter">Object</samp> class to compare two strings. The method returns 
+                    <samp class="listingcharacter listingcharacter">true</samp>
+                 if the strings are of equal length and if all characters match.</p>
+                
+                <p class="standard">When comparing identities via 
+                    <samp class="listingcharacter listingcharacter">==</samp>, the result is usually different for strings than when comparing via 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                . Consider the following example:</p>
+                
+                <div class="listing " id="l_none_5521"><pre><span class="">String</span><span class=""> input </span><span class="">=</span><span class=""> javax</span><span class="">.</span><span class="">swing</span><span class="">.</span><span class="">JOptionPane</span><span class="">.</span><span class="">showInputDialog</span><span class="">(</span><span class=""> </span><span class="">"Password"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">String</span><span class=""> expected </span><span class="">=</span><span class=""> </span><span class="">"qwerty123"</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> input </span><span class="">==</span><span class=""> expected </span><span class="">);</span><span class="">                </span><span class=""> // (1)</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> input</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> expected </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">         </span><span class=""> // (2.1)</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> expected</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> input </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">         </span><span class=""> // (2.2)</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Objects</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> expected</span><span class="">,</span><span class=""> input </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // (3)</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Assuming that 
+                    <samp class="listingcharacter listingcharacter">input</samp> references the string 
+                    <samp class="listingcharacter listingcharacter">qwerty123</samp>, the comparison (line 1) via 
+                    <samp class="listingcharacter listingcharacter">==</samp> yields the value 
+                    <samp class="listingcharacter listingcharacter">false</samp> since the 
+                    <samp class="listingcharacter listingcharacter">String</samp> object returned by 
+                    <samp class="listingcharacter listingcharacter">showInputDialog(...)</samp> is a completely different one than the present password 
+                    <samp class="listingcharacter listingcharacter">qwerty123</samp>. Only the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> comparison (lines 2.1 and 2.2) is correct in this case because the pure characters are compared, and they are equal. Basically, the variants (in lines 2.1 and 2.2) are the same since 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> is symmetric. But an advantage exists with line 2.2 because 
+                    <samp class="listingcharacter listingcharacter">input</samp> can also be 
+                    <samp class="listingcharacter listingcharacter">null</samp>, and so a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> won’t be thrown, as with line 2.1. 
+                    <samp class="listingcharacter listingcharacter">Objects.equals(...)</samp> is useful in this context because the method internally checks for 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">In the 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> comparison, all characters play a role, even if they aren’t visible. Thus, the following comparisons lead to 
+                        <samp class="listingcharacter listingcharacter">false</samp>
+                    :</p>
+                    
+                    <div class="listing  last_item" id="l_none_5526"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                        <span class="bold"><span class="">"\t"</span></span><span class="">.</span><span class="">equals</span><span class="">( </span>
+                        <span class="bold"><span class="">"\n"</span></span><span class=""> ) );               </span><span class=""> // false</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                        <span class="bold"><span class="">"\t"</span></span><span class="">.</span><span class="">equals</span><span class="">( </span>
+                        <span class="bold"><span class="">"\t "</span></span><span class=""> ) );              </span><span class=""> // false</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                        <span class="bold"><span class="">"\u0000"</span></span><span class="">.</span><span class="">equals</span><span class="">( </span>
+                        <span class="bold"><span class="">"\u0000\u0000"</span></span><span class=""> ) ); </span><span class=""> // fals</span><span class="">e</span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.8.2">The equalsIgnoreCase(...) Method</h4>
+                
+                <p class="standard">When you perform comparisons, 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> is case sensitive. With 
+                    <samp class="listingcharacter listingcharacter">equalsIgnoreCase(...)</samp>
+                    <a class="indexanchor" id="i05_56"/>
+                , the Java library provides an additional method that compares strings case insensitively; the test is done character by character.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Let’s compare two strings, one case sensitive and the other case-insensitive:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5538"><pre><span class="">String</span><span class=""> str </span><span class="">=</span><span class=""> </span><span class="">"BOOMERANG"</span><span class="">;</span><span class=""><br/></span><span class="">boolean</span><span class=""> result1 </span><span class="">=</span><span class=""> str</span><span class="">.</span>
+                        <span class="bold"><span class="">equals</span></span><span class="">( </span><span class="">"boomerang"</span><span class=""> );            </span><span class=""> // false</span><span class=""><br/></span><span class="">boolean</span><span class=""> result2 = str.</span>
+                        <span class="bold"><span class="">equalsIgnoreCase</span></span><span class="">( </span><span class="">"BOOMerang"</span><span class=""> );  </span><span class=""> // true</span><span class=""/><span class=""/></pre></div>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p318"/>
+                    Comparison of Methods</h6>
+                    
+                    <p class="standard first">Let’s assume we want to compare two strings regardless of case (ß is a letter only used in German).</p>
+                    
+                    <div class="listing " id="l_none_5560"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"Spaß"</span><span class="">,</span><span class=""> t </span><span class="">=</span><span class=""> </span><span class="">"SPASS"</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">toUpperCase</span><span class="">().</span><span class="">equals</span><span class="">(</span><span class=""> t</span><span class="">.</span><span class="">toUpperCase</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> t</span><span class="">.</span><span class="">toUpperCase</span><span class="">().</span><span class="">equals</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">toUpperCase</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">toLowerCase</span><span class="">().</span><span class="">equals</span><span class="">(</span><span class=""> t</span><span class="">.</span><span class="">toLowerCase</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // false</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> t</span><span class="">.</span><span class="">toLowerCase</span><span class="">().</span><span class="">equals</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">toLowerCase</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // false</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">equalsIgnoreCase</span><span class="">(</span><span class=""> t </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">                  </span><span class=""> // false</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> t</span><span class="">.</span><span class="">equalsIgnoreCase</span><span class="">(</span><span class=""> s </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">                  </span><span class=""> // false</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">With 
+                        <samp class="listingcharacter listingcharacter">equalsIgnoreCase(...)</samp>, length is compared at the beginning. It’s unequal, so the result is quickly determined. If the lengths are equal, all characters will be compared individually. 
+                        <samp class="listingcharacter listingcharacter">Character.toUpperCase('ß')</samp>
+                     is also “ß” so far.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.8.3">Lexicographic Comparisons with Greater/Less Relation</h4>
+                
+                <p class="standard">Like 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">equalsIgnoreCase(String)</samp>, the methods 
+                    <samp class="listingcharacter listingcharacter">compareTo(String)</samp>
+                    <a class="indexanchor" id="i05_57"/> and 
+                    <samp class="listingcharacter listingcharacter">compareToIgnoreCase(String)</samp>
+                    <a class="indexanchor" id="i05_58"/> compare the current string with another string. Note, however, that the return value of 
+                    <samp class="listingcharacter listingcharacter">compareTo(String)</samp> isn’t a 
+                    <samp class="listingcharacter listingcharacter">boolean</samp>, but an 
+                    <samp class="listingcharacter listingcharacter">int</samp>. The result signals whether the argument is lexicographically less than, greater than, or equal to the 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 object. These distinctions are important in a sorting method, for example. The sorting algorithm must know how to sort two strings when comparing them.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In the following example, we’ll compare three strings in their lexicographic order. All comparisons show 
+                        <samp class="listingcharacter listingcharacter">true</samp>
+                    :</p>
+                    
+                    <div class="listing " id="l_none_5569"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Justus"</span><span class="">.</span><span class="">compareTo</span><span class="">(</span><span class=""> </span><span class="">"Bob"</span><span class=""> </span><span class="">)</span><span class="">    </span><span class="">&gt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Justus"</span><span class="">.</span><span class="">compareTo</span><span class="">(</span><span class=""> </span><span class="">"Justus"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">==</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Justus"</span><span class="">.</span><span class="">compareTo</span><span class="">(</span><span class=""> </span><span class="">"Peter"</span><span class=""> </span><span class="">)</span><span class="">  </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">In the first case, since “Justus” is lexicographically greater than “Bob,” the numeric return of the 
+                        <samp class="listingcharacter listingcharacter">compareTo(String)</samp>
+                     method is greater than 0.</p>
+                
+                </div>
+                
+                <p class="standard">The comparison made by 
+                    <samp class="listingcharacter listingcharacter">compareTo(String)</samp> is based only on the internal numeric encoding of the Unicode characters. Thus, 
+                    <samp class="listingcharacter listingcharacter">compareTo(...)</samp> does not take into account specific regional features, such as the usual treatment of German umlauts. For this purpose, we’d need to use 
+                    <samp class="listingcharacter listingcharacter">Collator</samp>
+                 classes.</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">
+                        <a id="p319"/>
+                    compareToIgnoreCase(...)</samp> is for ordering (greater than, less than, equal to) while 
+                    <samp class="listingcharacter listingcharacter">equalsIgnoreCase(...)</samp>
+                 is for testing the string equivalence: for both methods, case is irrelevant.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">The OpenJDK implements 
+                        <samp class="listingcharacter listingcharacter">compareToIgnoreCase(...)</samp> with a 
+                        <samp class="listingcharacter listingcharacter">Comparator&lt;String&gt;</samp>, which puts any two strings in order. The 
+                        <samp class="listingcharacter listingcharacter">Comparator&lt;String&gt;</samp> is also accessible as a static variable named 
+                        <samp class="listingcharacter listingcharacter">CASE_INSENSITIVE_ORDER</samp>, which is, for example, convenient for sorted sets where case isn’t important. Comparators are introduced in more detail in 
+                        <span class="crossreference "><a href="11_001.html#h11">Chapter 11</a></span>, 
+                        <span class="crossreference "><a href="11_004.html#h11.4">Section 11.4</a></span>
+                    .</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.8.4">If the String Ends with ..., Does It Start with ...?</h4>
+                
+                <p class="standard">To determine whether a string starts with a certain string (let’s call this a 
+                    <span class="italic">prefix</span>
+                    <a class="indexanchor" id="i05_59"/> ), you can call the 
+                    <samp class="listingcharacter listingcharacter">startsWith(...)</samp>
+                    <a class="indexanchor" id="i05_60"/> method. A similar method exists for 
+                    <span class="italic">suffixes</span>
+                    <a class="indexanchor" id="i05_61"/>: 
+                    <a class="indexanchor" id="i05_62"/>
+                    <samp class="listingcharacter listingcharacter">endsWith(...) , which </samp>
+                checks if a string ends with a specific string of characters.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following code tests a filename extension with 
+                        <samp class="listingcharacter listingcharacter">endsWith(String)</samp> and tests a salutation with 
+                        <samp class="listingcharacter listingcharacter">startsWith(String)</samp>
+                        <a class="indexanchor" id="i05_63"/>
+                    :</p>
+                    
+                    <div class="listing " id="l_none_5581"><pre><span class="">String</span><span class="">   filename   </span><span class="">=</span><span class=""> </span><span class="">"The best openings for beginners (in chess).TXT"</span><span class="">;</span><span class=""><br/></span><span class="">boolean</span><span class="">  isTxt      </span><span class="">=</span><span class=""> filename</span><span class="">.</span><span class="">toLowerCase</span><span class="">().</span><span class="">endsWith</span><span class="">(</span><span class=""> </span><span class="">".txt"</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // true</span><span class=""><br/></span><span class="">String</span><span class="">   email      </span><span class="">=</span><span class=""> </span><span class="">"Very honoured P. Ennis,\nThank you for your offer."</span><span class="">;</span><span class=""><br/></span><span class="">boolean</span><span class="">  isHonoured </span><span class="">=</span><span class=""> email</span><span class="">.</span><span class="">toLowerCase</span><span class="">().</span><span class="">startsWith</span><span class="">(</span><span class=""> </span><span class="">"Dear"</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // false</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">The string is converted to lowercase before the request because no method of the type 
+                        <samp class="listingcharacter listingcharacter">endsWithIgnoreCase(...)</samp>
+                     exists.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.8.5">Comparing String Sections with regionMatches(...) *</h4>
+                
+                <p class="standard">
+                    <a class="indexanchor" id="i05_64"/>An extension of the whole-or-nothing comparison methods is provided by 
+                    <samp class="listingcharacter listingcharacter">regionMatches(...)</samp>
+                    <a class="indexanchor" id="i05_65"/>, which compares individual sections of one string with sections of another. If the first argument of 
+                    <samp class="listingcharacter listingcharacter">regionMatches(...)</samp> assumes the truth value 
+                    <samp class="listingcharacter listingcharacter">true</samp>, then case doesn’t matter. As with 
+                    <samp class="listingcharacter listingcharacter">equals*(...)</samp>, the return value is a 
+                    <samp class="listingcharacter listingcharacter">boolean</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In the following example, the call of 
+                        <samp class="listingcharacter listingcharacter">regionMatches(...)</samp> returns 
+                        <samp class="listingcharacter listingcharacter">true</samp>
+                    :</p>
+                    
+                    <div class="listing  last_item" id="l_none_5587"><pre><span class="">String</span><span class="">  s </span><span class="">=</span><span class=""> "She's a straight lemonhead</span><span class="">!</span><span class=""> </span><span class="">";</span><span class=""><br/></span>// Position: 0                17<span class=""><br/></span>boolean b = s.regionMatches( 17, "<span class="">Make life</span><span class="">!</span><span class=""> Take the lemons back</span><span class="">!</span><span class="">"</span><span class="">,</span><span class=""> </span><span class="">20</span><span class="">,</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">);</span><span class=""><br/></span>// Position:                     0                    20<span class=""/></pre></div>
+                
+                </div>
+                
+                <p class="standard">
+                    <a id="p320"/>The method starts the comparison at the 17th character, that is, at the “l” in the string 
+                    <samp class="listingcharacter listingcharacter">s</samp>, and at the 20th letters in the comparison string
+                    <a class="indexanchor" id="i05_66"/>, which is also an “l.” The counting of the characters starts again at 0. Five characters are compared from these two positions. In this example, comparing “lemon” and “lemon” returns as 
+                    <samp class="listingcharacter listingcharacter">true</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In the following example, if the comparison should be case insensitive
+                        <a class="indexanchor" id="i05_67"/>, the first argument of the overloaded method is 
+                        <samp class="listingcharacter listingcharacter">true</samp>
+                    :</p>
+                    
+                    <div class="listing  last_item" id="l_none_5610"><pre><span class="">String</span><span class="">  s </span><span class="">=</span><span class=""> "She's a straight LEMONhead</span><span class="">!</span><span class=""> </span><span class="">";</span><span class=""><br/></span>// Position: 0                17<span class=""><br/></span>boolean b = s.regionMatches( true, 17, "<span class="">Make life</span><span class="">!</span><span class=""> Take the LemOns back</span><span class="">!</span><span class="">"</span><span class="">,</span><span class=""> </span><span class="">20</span><span class="">,</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">String</samp> class can’t perform a case-insensitive comparison for the 
+                    <samp class="listingcharacter listingcharacter">startsWith(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">endsWith(...)</samp> methods. Instead, you would use 
+                    <samp class="listingcharacter listingcharacter">regionMatches(...)</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">To test if an email starts with a certain salutation, regardless of capitalization:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5621"><pre><span class="">String</span><span class=""> startWith </span><span class="">=</span><span class=""> </span><span class="">"Dear "</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> email </span><span class="">=</span><span class=""> </span><span class="">"DEAR HAROLD, when is it time for sports again?"</span><span class="">;</span><span class=""><br/></span><span class="">boolean</span><span class=""> niceOpening </span><span class="">=</span><span class=""> email</span><span class="">.</span><span class="">regionMatches</span><span class="">(</span><span class=""> </span><span class="">true,</span><span class=""><br/></span>                          <span class="">0</span><span class="">,</span><span class=""> startWith</span><span class="">,</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> startWith</span><span class="">.</span><span class="">length</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // true</span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.5.9">5.5.9    Extracting String Sections</h3>
+            
+            <p class="standard">At this point, you’ve already used the
+                <a class="indexanchor" id="i05_68"/> most important method of the 
+                <samp class="listingcharacter listingcharacter">String</samp> class several times, namely, 
+                <samp class="listingcharacter listingcharacter">charAt(int index)</samp>
+            . However, this method is not the only method for accessing certain sections of a string.</p>
+            
+            
+                
+                <h4 class="t4" id="h5.5.9.1">Using substring(...) to Retrieve Sections of a String as a String</h4>
+                
+                <p class="standard">To retrieve a substring from a string, you can use the 
+                    <samp class="listingcharacter listingcharacter">substring(...)</samp> method
+                    <a class="indexanchor" id="i05_69"/>. This method exists in two variants, both of which return a new 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 object that corresponds to the desired section of the original.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In the following example,
+                        <samp class="listingcharacter listingcharacter"> substring(int)</samp> returns a substring starting from an index to the end. The result is a new 
+                        <samp class="listingcharacter listingcharacter">String</samp>
+                     object:</p>
+                    
+                    <div class="listing " id="l_none_5611"><pre><span class="">
+                            <a id="p321"/>
+                        String</span><span class=""> s1 </span><span class="">=</span><span class=""> </span><span class="">"I think I am, therefore, I am. I think."</span><span class="">;</span><span class=""><br/></span>// Position: 0                              31<span class=""><br/></span><span class="">String</span><span class=""> s2 </span><span class="">=</span><span class=""> s1</span><span class="">.</span>
+                        <span class="bold"><span class="">substring</span></span><span class="">( </span><span class="">31</span><span class=""> );         </span><span class=""> // I think.</span><span class=""/><span class=""/></pre></div>
+                    
+                    <div class="imagebox figure-type"><a href="img-f_none_05_02.html" id="f_none_05_02"><img alt="" id="img-f_none_05_02" src="bilderklein/klein05_002_03.png"/></a></div>
+                
+                </div>
+                
+                <p class="standard">The index of 
+                    <samp class="listingcharacter listingcharacter">substring(int)</samp> specifies the starting position (zero-based) from which characters are copied into the new substring. 
+                    <samp class="listingcharacter listingcharacter">substring(int)</samp> returns the part from this character to the end of the original string. Thus, 
+                    <samp class="listingcharacter listingcharacter">s.substring(0)</samp> is equal to 
+                    <samp class="listingcharacter listingcharacter">s</samp> for any 
+                    <samp class="listingcharacter listingcharacter">non-zero</samp> string 
+                    <samp class="listingcharacter listingcharacter">s</samp>
+                .</p>
+                
+                <p class="standard">To specify a substring more precisely, you would use the second variant, 
+                    <samp class="listingcharacter listingcharacter">substring(int, int)</samp>
+                . Your arguments indicate the beginning and the end of the desired section.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example cuts out a section of the string:</p>
+                    
+                    <div class="listing " id="l_none_5639"><pre><span class="">String</span><span class=""> twitter </span><span class="">=</span><span class=""> </span><span class="">"Instagram is just Twitter for people who go outside."</span><span class="">;</span><span class=""><br/></span>//                0                 18     25<span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> twitter</span><span class="">.</span><span class="">substring</span><span class="">(</span><span class=""> </span><span class="">18</span><span class="">,</span><span class=""> </span><span class="">25</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // Twitter</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">While the start position is inclusive, the end position is exclusive. This specification is common in Java. In other words, at the end position, the character no longer belongs to the substring.</p>
+                
+                </div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">substring(int)</samp> method is nothing more than a specialization of 
+                    <samp class="listingcharacter listingcharacter">substring(int, int)</samp> because the first variant with the starting index can also be written as 
+                    <samp class="listingcharacter listingcharacter">s.substring(beginIndex, s.length())</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p322"/>
+                    Example</h6>
+                    
+                    <p class="standard first">The following example converts the first character of a text to uppercase:</p>
+                    
+                    <div class="listing " id="l_none_5652"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">firstToUpper</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">){</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> string</span><span class="">.</span><span class="">isEmpty</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">""</span><span class="">;</span><span class=""><br/></span>  <span class="">return</span><span class=""> string</span><span class="">.</span><span class="">substring</span><span class="">(</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">).</span><span class="">toUpperCase</span><span class="">().</span><span class="">concat</span><span class="">(</span><span class=""> string</span><span class="">.</span><span class="">substring</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>}</pre></div>
+                    
+                    <p class="standard">Note there is another solution, namely, the following:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5653"><pre><span class="">return</span><span class=""> Character</span><span class="">.</span><span class="">toUpperCase</span><span class="">(</span><span class=""> string</span><span class="">.</span><span class="">charAt</span><span class="">(</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">+</span><span class=""> string</span><span class="">.</span><span class="">substring</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">Of course, various index checks are now added—a 
+                    <samp class="listingcharacter listingcharacter">StringIndexOutOfBoundsException</samp>
+                    <a class="indexanchor" id="i05_70"/>
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_09" id="fn05_09">[ 119 ]</a></span> reports incorrect positional information as with 
+                    <samp class="listingcharacter listingcharacter">charAt(int)</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.9.2">String before/after a Delimiter String*</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">String</samp> class doesn’t provide a simple library method for the case where a delimiter is given and a substring is requested before or after that delimiter.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_10" id="fn05_10">[ 120 ]</a></span> Such a method would be useful, for example, for files where the dot separates the filename from the suffix. You can write two static utility methods, 
+                    <samp class="listingcharacter listingcharacter">substringBefore(String string, String delimiter)</samp> and 
+                    <samp class="listingcharacter listingcharacter">substringAfter(String string, String delimiter)</samp>
+                , which do exactly that. When applied, they look like this (ignore for a moment that the filename itself can also contain a dot):</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">substringBefore( "index.html", "." )</samp> returns 
+                            <samp class="listingcharacter listingcharacter">"index"</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">substringAfter( "index.html", "." )</samp> returns 
+                            <samp class="listingcharacter listingcharacter">"html"</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The implementation of these methods is simple: In the first step, the methods search for the delimiter via 
+                    <samp class="listingcharacter listingcharacter">indexOf(...)</samp>. Then, they return the substring before or after this found delimiter string via 
+                    <samp class="listingcharacter listingcharacter">substring(...)</samp>. A few agreements: The delimiter isn’t part of the return. And if the delimiter doesn’t appear in the string, 
+                    <samp class="listingcharacter listingcharacter">substringBefore(...)</samp> returns the entire string, while 
+                    <samp class="listingcharacter listingcharacter">substringAfter(...)</samp> returns the empty string. String and delimiter must not be 
+                    <samp class="listingcharacter listingcharacter">null</samp>. If so, a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                 will follow, indicating the programming error. Programmed out, the two methods look as follows:</p>
+                
+                <div class="listing " id="l5.7"><pre><span class="">
+                        <a id="p323"/>
+                    public</span><span class=""> </span><span class="">class</span><span class=""> StringUtils </span><span class="">{</span><span class=""/><br/><br/>  <span class="">/�**</span><span class=""/><br/><span class="">   * Returns the substring before the first occurrence of a delimiter.</span><span class=""/><br/><span class="">   * The delimiter is not part of the result.</span><span class=""/><br/><span class="">   *</span><span class=""/><br/><span class="">   * @param string    to get a substring from.</span><span class=""/><br/><span class="">   * @param delimiter String to search for.</span><span class=""/><br/><span class="">   * @return          Substring before the first occurrence of the delimiter.</span><span class=""/><br/><span class="">   */</span><span class=""/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">String</span><span class=""> </span><span class="">substringBefore</span><span class="">( </span><span class="">String</span><span class="">, </span><span class="">String</span><span class=""> delimiter )</span></span> {<span class=""/><br/><span class="">    </span><span class="">int</span><span class=""> pos = string.</span><span class="">indexOf</span><span class="">( delimiter );</span><span class=""/><br/><br/><span class="">    </span><span class="">return</span><span class=""> pos &gt;= </span><span class="">0</span><span class=""> ? string.</span><span class="">substring</span><span class="">( </span><span class="">0</span><span class="">, pos ) : string;</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><br/><span class="">  </span><span class="">/**</span><span class=""/><br/><span class="">   * Returns the substring after the first occurrence of a delimiter. </span><span class=""/><br/><span class="">   * The delimiter is not part of the result.</span><span class=""/><br/><span class="">   *</span><span class=""/><br/><span class="">   * @param string    to get a substring from.</span><span class=""/><br/><span class="">   * @param delimiter String to search for.</span><span class=""/><br/><span class="">   * @return          Substring after the first occurrence of the delimiter.</span><span class=""/><br/><span class="">   */</span><span class=""/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">String</span><span class=""> </span><span class="">substringAfter</span><span class="">( </span><span class="">String</span><span class=""> string, </span><span class="">String</span><span class=""> delimiter )</span></span> {<span class=""/><br/><span class="">    </span><span class="">int</span><span class=""> pos = string.</span><span class="">indexOf</span><span class="">( delimiter );</span><span class=""/><br/><br/><span class="">    </span><span class="">return</span><span class=""> pos &gt;= </span><span class="">0</span><span class=""> ? string.</span><span class="">substring</span><span class="">( pos + delimiter.</span><span class="">length</span><span class="">() ) : </span><span class="">""</span><span class="">;</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 5.7</b>    
+            src/main/java/com/tutego/insel/string/StringUtils.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.9.3">Extracting Strings as an Array from the String via getChars(...)*</h4>
+                
+                <p class="standard">While 
+                    <samp class="listingcharacter listingcharacter">charAt(int)</samp> returns only one character from the string, 
+                    <samp class="listingcharacter listingcharacter">getChars(int srcBegin, int srcEnd, char[] dest, int dstBegin)</samp>
+                 copies multiple characters from a specified range of the string into a passed array.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example copies parts of the string into an array:</p>
+                    
+                    <div class="listing " id="l_none_5666"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"Blessing of the Throats"</span><span class="">;</span><span class=""><br/></span><span class="">char</span><span class="">[]</span><span class=""> chars </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">char</span><span class="">[</span><span class=""> </span><span class="">5</span><span class=""> </span><span class="">];</span><span class=""><br/></span><span class="">int</span><span class=""> srcBegin </span><span class="">=</span><span class=""> </span><span class="">7</span><span class="">;</span><span class=""><br/></span>
+                        <a id="p324"/>s<span class="">.</span>
+                        <span class="bold"><span class="">getChars</span></span><span class="">( srcBegin, srcBegin + </span><span class="">5</span><span class="">, chars, </span><span class="">0</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">String</span><span class="">(chars) ); </span><span class=""> // blessing</span><span class=""> </span><span class=""/></pre></div>
+                    
+                    <p class="standard last">
+                        <samp class="listingcharacter listingcharacter">s.getChars(...)</samp> copies five characters from position 7 of the string 
+                        <samp class="listingcharacter listingcharacter">s</samp> into the elements of the array 
+                        <samp class="listingcharacter listingcharacter">char</samp>. The first character from the section is then in 
+                        <samp class="listingcharacter listingcharacter">chars[0]</samp>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">The method 
+                    <samp class="listingcharacter listingcharacter">getChars(...)</samp>
+                    <a class="indexanchor" id="i05_71"/> must of course again test whether the specified arguments are in the green range, that is, whether the start value isn’t &lt; 0 and whether the end value doesn’t exceed the size of the string. If the arguments don’t fit, the method throws a 
+                    <samp class="listingcharacter listingcharacter">StringIndexOutOfBoundsException</samp>. In addition, if the start value is behind the end value, a 
+                    <samp class="listingcharacter listingcharacter">StringIndexOutOfBoundsException</samp> will arise, which indicates how big a difference between the positions exists. The best approach is to calculate the end position from the start position, as was done in the earlier example. If all characters fit into the array, the implementation of the 
+                    <samp class="listingcharacter listingcharacter">getChars(...)</samp> method uses 
+                    <samp class="listingcharacter listingcharacter">System.arraycopy(...)</samp> to copy the characters from the internal array of the 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 object to the destination you’ve specified.</p>
+                
+                <p class="standard">For accessing the complete contents of a string as an array of characters, you can use the 
+                    <samp class="listingcharacter listingcharacter">toCharArray()</samp>
+                    <a class="indexanchor" id="i05_72"/> method. Internally, the method also works with 
+                    <samp class="listingcharacter listingcharacter">getChars(...)</samp>. As a destination array, 
+                    <samp class="listingcharacter listingcharacter">toCharArray()</samp>
+                 just creates a new array, which we then get back.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">The following code can be used to iterate over a string:</p>
+                    
+                    <div class="listing " id="l_none_5692"><pre><span class="">String</span><span class=""> string </span><span class="">=</span><span class=""> </span><span class="">"Clones are people two."</span><span class="">;</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">char</span><span class=""> c </span><span class="">:</span><span class=""> string</span><span class="">.</span><span class="">toCharArray</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> c </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">This solution comes at a price, however, because simply creating a new 
+                        <samp class="listingcharacter listingcharacter">char[]</samp> object for the pass costs memory and computation time for memory allocation and garbage collection. Therefore, this variant isn’t recommended. Alternatively, 
+                        <samp class="listingcharacter listingcharacter">chars()</samp> can be used, which returns a stream of characters for the string, but then works without an explicit 
+                        <samp class="listingcharacter listingcharacter">for</samp> loop; we’ll describe the Stream API in 
+                        <span class="crossreference "><a href="18_001.html#h18">Chapter 18</a></span>, 
+                        <span class="crossreference "><a href="18_004.html#h18.4">Section 18.4</a></span>
+                    .</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.9.4">Other Options for Decomposition</h4>
+                
+                <p class="standard">Two other ways exist for extracting certain parts from a string. One option is 
+                    <samp class="listingcharacter listingcharacter">split (...)</samp>, which allows you to split a string using a regular expression. You could also use the 
+                    <samp class="listingcharacter listingcharacter">lines()</samp>
+                 method, which returns a stream of lines that were separated by line breaks.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">A string consists of several lines. The following example cuts off the whitespace at the beginning and end of each line and then output all lines:</p>
+                    
+                    <div class="listing " id="l_none_5693"><pre><span class="">
+                            <a id="p325"/>
+                        String</span><span class=""> text </span><span class="">=</span><span class=""> “ I wouldn’t lie to you</span><span class="">.</span><span class=""> \n Well</span><span class="">...</span><span class="">that’s a lie</span><span class="">.</span><span class=""> \t “</span><span class="">;</span><span class=""><br/></span>text<span class="">.</span><span class="">lines</span><span class="">().</span><span class="">forEach</span><span class="">(</span><span class=""> line </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> line</span><span class="">.</span><span class="">trim</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">;</span> </pre></div>
+                    
+                    <p class="standard last">This example draws on lambda expressions, which are the subject of 
+                        <span class="crossreference "><a href="13_001.html#h13">Chapter 13</a></span>
+                    .</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.5.10">5.5.10    Appending Strings, Merging Strings, Case Sensitivity, and Whitespace</h3>
+            
+            <p class="standard">Although 
+                <samp class="listingcharacter listingcharacter">String</samp> objects themselves are immutable, the 
+                <samp class="listingcharacter listingcharacter">String</samp> class provides methods that take out or add parts of a string. Of course, these changes aren’t made to the 
+                <samp class="listingcharacter listingcharacter">String</samp> object itself on which the method is called, but the method returns a reference to a new 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             object with modified contents.</p>
+            
+            
+                
+                <h4 class="t4" id="h5.5.10.1">Appending to Strings</h4>
+                
+                <p class="standard">To append another string to a string, two obvious possibilities are available:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Using the
+                            <a class="indexanchor" id="i05_73"/>
+                            <samp class="listingcharacter listingcharacter"> String</samp> method 
+                            <samp class="listingcharacter listingcharacter">concat(String)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Using the plus operator (which is more flexible since non-strings are first converted to strings)</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Later, we’ll show you how the 
+                    <samp class="listingcharacter listingcharacter">StringBuilder/StringBuffer</samp> classes can take it even further and provide overloaded 
+                    <samp class="listingcharacter listingcharacter">append(...)</samp>
+                 methods for different data types.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following code appends the current time (with deleted nanoseconds) to the end of a string:</p>
+                    
+                    <div class="listing " id="l_none_5709"><pre><span class="">String</span><span class=""> s1 </span><span class="">=</span><span class=""> </span><span class="">"Current time: "</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> s2 </span><span class="">=</span><span class=""> LocalTime</span><span class="">.</span><span class="">now</span><span class="">().</span><span class="">withNano</span><span class="">(</span><span class="">0</span><span class="">).</span><span class="">toString</span><span class="">();</span><span class=""><br/></span><span class="">String</span><span class=""> s3 </span><span class="">=</span><span class=""> s1</span><span class="">.</span><span class="">concat</span><span class="">(</span><span class=""> s2 </span><span class="">);</span><span class=""> // Current time: 12:53:14</span> </pre></div>
+                    
+                    <p class="standard">Similarly, you can write the following code:</p>
+                    
+                    <div class="listing " id="l_none_5721"><pre><span class="">String</span><span class=""> s4 </span><span class="">=</span><span class=""> </span><span class="">"Current time: "</span><span class=""> </span><span class="">+</span><span class=""> LocalTime</span><span class="">.</span><span class="">now</span><span class="">().</span><span class="">withNano</span><span class="">(</span><span class="">0</span><span class="">).</span><span class="">toString</span><span class="">()</span><span class="">;</span> </pre></div>
+                    
+                    <p class="standard">This code can even shortened because the plus operator automatically calls 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>
+                     on objects:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5715"><pre><span class="">String</span><span class=""> s5 </span><span class="">=</span><span class=""> </span><span class="">"Current time: "</span><span class=""> </span><span class="">+</span><span class=""> LocalTime</span><span class="">.</span><span class="">now</span><span class="">().</span><span class="">withNano</span><span class="">(</span><span class="">0</span><span class="">)</span><span class="">;</span> </pre></div>
+                
+                </div>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">concat(String)</samp> creates an internal array, copies the two strings into it via 
+                    <samp class="listingcharacter listingcharacter">getChars(...)</samp>, and returns the resulting string with a 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 constructor.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.10.2">Merging Multiple Strings</h4>
+                
+                <p class="standard">Two overloaded class methods related to 
+                    <samp class="listingcharacter listingcharacter">join(...)</samp> can join multiple strings and put a separator string between the links. These methods differ in terms of their parameter 
+                    <a id="p326"/>lists: One receives the links directly via a vararg, while the other receives them via 
+                    <samp class="listingcharacter listingcharacter">Iterable</samp>
+                :</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String join(CharSequence delimiter, CharSequence... elements)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String join(CharSequence delimiter, Iterable&lt;? extends CharSequence&gt; <br/>elements)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The arguments must be strings and can’t be common objects that are automatically converted to strings. In addition, the links must not be 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example puts words together with a space to form a sentence:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5725"><pre><span class="">String</span><span class="">[]</span><span class=""> words </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"I"</span><span class="">,</span><span class=""> </span><span class="">"programmed"</span><span class="">,</span><span class=""> </span><span class="">"you"</span><span class="">,</span><span class=""> </span><span class="">"to"</span><span class="">,</span><span class=""> </span><span class="">"believe"</span><span class="">,</span><span class=""> </span><span class="">"that."</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">join</span><span class="">(</span><span class=""> </span><span class="">" "</span><span class="">,</span><span class=""> words </span><span class="">)</span><span class="">;</span> </pre></div>
+                
+                </div>
+                
+                <p class="standard">The delimiter string must not be 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 but can be empty.</p>
+                
+                <p class="standard">No comparable method exists in 
+                    <samp class="listingcharacter listingcharacter">StringBuilder/StringBuffer</samp>, but a small 
+                    <samp class="listingcharacter listingcharacter">StringJoiner</samp> class can do the actual work of 
+                    <samp class="listingcharacter listingcharacter">join(...)</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.10.3">Case Sensitivity</h4>
+                
+                <p class="standard">
+                    <a class="indexanchor" id="i05_74"/>The 
+                    <samp class="listingcharacter listingcharacter">Character</samp> class declares some static methods that convert single characters to uppercase/lowercase. We can save the loop that does this for each character using the methods 
+                    <samp class="listingcharacter listingcharacter">toUpperCase(...)</samp>
+                    <a class="indexanchor" id="i05_75"/> and 
+                    <samp class="listingcharacter listingcharacter">toLowerCase(...)</samp>
+                    <a class="indexanchor" id="i05_76"/> from the 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 class. </p>
+                
+                <p class="standard">What’s interesting about both methods is that they observe some language-dependent subtleties. For example, that there is not really a capital “ß” in German, because “ß” becomes “SS.” To take country-specific features into account, the 
+                    <samp class="listingcharacter listingcharacter">to*Case(...)</samp> methods can additionally be fed with a 
+                    <samp class="listingcharacter listingcharacter">Locale</samp>
+                 object (which represent a linguistic region).</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">Some conversions to uppercase/lowercase may result in different strings depending on the local language. </p>
+                    
+                    <p class="standard">The specification of a 
+                        <samp class="listingcharacter listingcharacter">Locale</samp>
+                        <a class="indexanchor" id="i05_77"/> for the two 
+                        <samp class="listingcharacter listingcharacter">to****Case(...)</samp>
+                     methods is especially important for Turkish-language applications, as in the following example:</p>
+                    
+                    <div class="listing " id="l_none_5747"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"TITANIK"</span><span class="">.</span><span class="">toLowerCase</span><span class="">()</span><span class="">  </span><span class="">);</span><span class="">                   </span><span class=""> // t</span>
+                        <span class="bold">i</span>tan
+                        <span class="bold">i</span>k<span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span><span class="">"TITANIK"</span><span class="">.</span><span class="">toLowerCase</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">Locale</span><span class="">( </span><span class="">"tr"</span><span class=""> ) )  );</span><span class=""> // t</span>
+                        <span class="bold">ı</span>tan
+                        <span class="bold">ık</span><span class=""/><span class=""/></pre></div>
+                    
+                    <p class="standard last">Note the subtle difference: In the second result string, the “i” has no dot!</p>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p327"/>
+                    Note</h6>
+                    
+                    <p class="standard first">The parameterless methods 
+                        <samp class="listingcharacter listingcharacter">toUpperCase()</samp> and 
+                        <samp class="listingcharacter listingcharacter">toLowerCase()</samp> can select a locale according to the locale settings of the operating system. In the following example, 
+                        <samp class="listingcharacter listingcharacter">toLowerCase()</samp>
+                     is modified by a locale:</p>
+                    
+                    <div class="listing " id="l_none_5765"><pre><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toLowerCase</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">toLowerCase</span><span class="">(</span><span class=""> Locale</span><span class="">.</span><span class="">getDefault</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>} </pre></div>
+                    
+                    <p class="standard last">Thus, you should keep in mind that the default setting isn’t necessarily the best.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.10.4">Removing Whitespace</h4>
+                
+                <p class="standard">
+                    <a class="indexanchor" id="i05_78"/>
+                In a user input or in a configuration file, commonly whitespace (such as spaces or tabs) may exist before or after the important part of a text. </p>
+                
+                <p class="standard">These whitespaces should be removed before processing. The 
+                    <samp class="listingcharacter listingcharacter">String</samp> class provides 
+                    <samp class="listingcharacter listingcharacter">trim()</samp>
+                    <a class="indexanchor" id="i05_79"/>, 
+                    <samp class="listingcharacter listingcharacter">strip()</samp>, 
+                    <samp class="listingcharacter listingcharacter">stripLeading()</samp>, and 
+                    <samp class="listingcharacter listingcharacter">stripTrailing()</samp>
+                 for this purpose. Let’s look at their differences.</p>
+                
+                <table class="standardtable" id="t5.8">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Method</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Removes...</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">trim()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">All code points less than or equal to the space U+0020 at the beginning and at the end of the string.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">strip()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">All characters at the beginning and at the end of the string that are whitespace characters according to the definition of 
+                                    <samp class="listingcharacter listingcharacter">Character.isWhitespace(int)</samp>
+                                .</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">stripLeading()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Like 
+                                    <samp class="listingcharacter listingcharacter">strip()</samp>
+                                , but only at the beginning of the string.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">stripTrailing()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Like 
+                                    <samp class="listingcharacter listingcharacter">strip()</samp>
+                                , but only at the end of the string.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 5.8</b>    
+            Differences between trim() and strip*()</p>
+                
+                <p class="standard">None of these four methods can remove whitespace in the middle of a string.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example removes spaces and similar fill characters at the beginning and end of a string:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5773"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">" \tTalk to the hand.\n  \t "</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> "'</span><span class="">" + </span>
+                        <span class="bold">s.trim()</span> + "<span class="">'" );</span><span class=""> // 'Talk to the hand.'</span><span class=""/><span class=""/> </pre></div>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p328"/>
+                    Example</h6>
+                    
+                    <p class="standard first">The following example tests if a string is empty with all whitespace subtracted:</p>
+                    
+                    <div class="listing " id="l_none_5784"><pre><span class="">boolean</span><span class=""> isBlank </span><span class="">=</span><span class=""> </span><span class="">""</span><span class="">.</span><span class="">equals</span><span class="">(</span><span class=""> s</span><span class="">.</span>
+                        <span class="bold"><span class="">trim</span><span class="">()</span></span> );<span class=""/></pre></div>
+                    
+                    <p class="standard">An alternative is to write the following:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5785"><pre><span class="">boolean</span><span class=""> isBlank </span><span class="">=</span><span class=""> s</span><span class="">.</span>
+                        <span class="bold"><span class="">trim</span><span class="">()</span></span>.<span class="">isEmpty</span><span class="">();</span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.5.11">5.5.11    Searched, Found, and Replaced</h3>
+            
+            <p class="standard">Since 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             objects are immutable, a change method can only return a new string with the changes. </p>
+            
+            <div class="listing " id="l_none_5804"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold"><span class="">String</span></span><span class=""><br/></span><span class="">implements</span><span class=""> Serializable, Comparable&lt;</span><span class="">String</span><span class="">&gt;, CharSequence </span><span class=""/></pre></div>
+            
+            <p class="standard">In Java, four methods can perform search and replace actions:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">String replace(char oldChar, char newChar)</samp><br/>Replaces all occurrences of the 
+                        <samp class="listingcharacter listingcharacter">oldChar</samp> character with 
+                        <samp class="listingcharacter listingcharacter">newChar</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">String replace(CharSequence target, CharSequence replacement)</samp><br/>One character string is replaced with another character string.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">String replaceAll(String regex, String replacement)</samp><br/>Replaces all strings described by a regular expression.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">String replaceFirst(String regex, String replacement)</samp><br/>Replaces the first string described by a regular expression.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h5.5.11.1">Replacing without Regular Expressions</h4>
+                
+                <p class="standard">
+                    <a class="indexanchor" id="i05_80"/>The
+                    <a class="indexanchor" id="i05_81"/>
+                    <samp class="listingcharacter listingcharacter"> replace(char, char)</samp>
+                 method replaces single characters.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example changes the letter “o” occurring in a string to “u”:</p>
+                    
+                    <div class="listing " id="l_none_5809"><pre><span class="">String</span><span class=""> s1 </span><span class="">=</span><span class=""> </span><span class="">"H</span>
+                        <span class="bold">o</span>n
+                        <span class="bold">o</span>lulu"<span class="">;</span><br/><span class="">String</span><span class=""> s2 = s1.</span>
+                        <span class="bold"><span class="">replace</span></span><span class="">( </span><span class="">'o'</span><span class="">, </span><span class="">'u'</span><span class=""> );         </span><span class=""> // s2 = "H</span>
+                        <span class="bold">u</span>n
+                        <span class="bold">u</span>lulu"<span class=""> </span><span class=""/></pre></div>
+                    
+                    <p class="standard last">The 
+                        <samp class="listingcharacter listingcharacter">String</samp> object named 
+                        <samp class="listingcharacter listingcharacter">s1</samp> doesn’t get changed. Only a new 
+                        <samp class="listingcharacter listingcharacter">String</samp> object with the content 
+                        <samp class="listingcharacter listingcharacter">Hunululu</samp> is created and returned by 
+                        <samp class="listingcharacter listingcharacter">replace(...)</samp>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">If something must be replaced, 
+                    <samp class="listingcharacter listingcharacter">replace(...)</samp> internally creates a new 
+                    <samp class="listingcharacter listingcharacter">char</samp> array, performs the replacements, and converts the internal character array to a 
+                    <samp class="listingcharacter listingcharacter">String</samp> object that represents the return. If there’s nothing to replace, we’ll get back the same 
+                    <samp class="listingcharacter listingcharacter">String</samp> object that made the request. The 
+                    <samp class="listingcharacter listingcharacter">
+                        <a id="p329"/>
+                    replace(...)</samp>
+                 method always replaces all characters. We must write ourselves a variant that replaces only the first character.</p>
+                
+                <p class="standard">A second overloaded variant, 
+                    <samp class="listingcharacter listingcharacter">replace(CharSequence, CharSequence)</samp>
+                , searches for all occurring strings and replaces them with another string. The replacement string can also be empty, in which case the characters in the result will be deleted.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In the following example, for the string 
+                        <samp class="listingcharacter listingcharacter">s</samp>
+                    , “wristwatches” should be replaced by “watches”:</p>
+                    
+                    <div class="listing " id="l_none_5821"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"Which wristwatches are Swiss wristwatches?"</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">replace</span><span class="">(</span><span class=""> </span><span class="">"wristwatches"</span><span class="">,</span><span class=""> </span><span class="">"watches"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">The result is: “Which watches are Swiss watches?”</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.11.2">Searching and Replacing with Regular Expressions*</h4>
+                
+                <p class="standard">The methods 
+                    <samp class="listingcharacter listingcharacter">replaceAll(...)</samp>
+                    <a class="indexanchor" id="i05_82"/> and 
+                    <samp class="listingcharacter listingcharacter">replaceFirst(...)</samp>
+                    <a class="indexanchor" id="i05_83"/> search in strings using regular expressions and make replacements. 
+                    <samp class="listingcharacter listingcharacter">replaceFirst(...)</samp>
+                , as the name suggests, replaces only the first occurrence.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In the following example, more than two spaces in a row should be compressed to one space:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5822"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"A  proper  copper    coffee pot."</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">replaceAll</span><span class="">(</span><span class=""> </span><span class="">" +"</span><span class="">,</span><span class=""> </span><span class="">" "</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">  <br/></span><span class="">// A proper copper coffee pot.</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">replaceFirst</span><span class="">(</span><span class=""> </span><span class="">" +"</span><span class="">,</span><span class=""> </span><span class="">" "</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);<br/></span><span class="">// A proper  copper    coffee pot.</span><span class=""/> </pre></div>
+                
+                </div>
+                
+                <p class="standard">Because the search string is always a regular expression and special characters like “.” or “+” have a special role, 
+                    <samp class="listingcharacter listingcharacter">replaceAll(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">replaceFirst(...)</samp> aren’t directly suitable for general replacement tasks; instead, the 
+                    <samp class="listingcharacter listingcharacter">replace(...)</samp>
+                 method is more suitable and also faster.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">For string replacement, you can juxtapose 
+                        <samp class="listingcharacter listingcharacter">replace(...)</samp> and 
+                        <samp class="listingcharacter listingcharacter">replaceAll(...)</samp>
+                    , as in the following example:</p>
+                    
+                    <div class="listing " id="l_none_5843"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"""</span><br/>    I’m Watt. \<br/>    What’s your name? \<br/>
+                        <a id="p330"/>    Watt’s my name. \<br/>    Yes, what’s your name?"""<span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">replace</span><span class="">(</span><span class=""> </span><span class="">"."</span><span class="">,</span><span class=""> </span><span class="">"!"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard">The call replaces all dots with exclamation marks, so the result would be the following:</p>
+                    
+                    <div class="listing " id="l_none_5859"><pre>I’m Watt! What’s your name? Watt’s my name! Yes, what’s your name?</pre></div>
+                    
+                    <p class="standard">Using 
+                        <samp class="listingcharacter listingcharacter">s.replaceAll(".", "!")</samp>
+                     won’t be successful, since the following string will be the result:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5861"><pre>!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</pre></div>
+                
+                </div>
+                
+                <p class="standard">The dot (.) stands for any character in regular expressions. Only when a backslash (
+                    <samp class="listingcharacter listingcharacter">\</samp>)
+                    <a class="indexanchor" id="i05_84"/> masks out the dot (since the backslash is used in escape sequences in strings, this character itself must also be masked out), a statement like 
+                    <samp class="listingcharacter listingcharacter">s.replaceAll("\\.", "!")</samp> returns the desired result. The static method 
+                    <samp class="listingcharacter listingcharacter">Pattern.quote(String)</samp>
+                    <a class="indexanchor" id="i05_85"/> masks out the pattern special characters for you, so that 
+                    <samp class="listingcharacter listingcharacter">s.replaceAll(Pattern.quote("."), "!")</samp> works fine. The API documentation <span class="url"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html">https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html</a></span> provides some small examples in addition to the full documentation.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.5.12">5.5.12    Creating String Objects with Constructors and from Repeats*</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">String</samp> class has various methods that build new 
+                <samp class="listingcharacter listingcharacter">String</samp> objects, especially because 
+                <samp class="listingcharacter listingcharacter">String</samp> objects are immutable. These methods include 
+                <samp class="listingcharacter listingcharacter">substring(...)</samp>, 
+                <samp class="listingcharacter listingcharacter">join(</samp>...), and 
+                <samp class="listingcharacter listingcharacter">format(</samp>
+            ...).</p>
+            
+            
+                
+                <h4 class="t4" id="h5.5.12.1">Building New String Objects with Constructors</h4>
+                
+                <p class="standard">If the string isn’t present as a string literal, new 
+                    <samp class="listingcharacter listingcharacter">String</samp> objects can be built using the various constructors of the 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 class. Most constructors are intended for special cases and don’t occur in normal Java programs. With a quick overview, the function is self-explanatory:</p>
+                
+                <div class="listing " id="l_none_5878"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span>
+                    <span class="bold"><span class="">.</span><span class="">String</span></span><span class=""><br/></span><span class="">implements</span><span class=""> CharSequence, Comparable&lt;</span><span class="">String</span><span class="">&gt;, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String()</samp><br/>Creates a new object without characters (the empty string
+                            <a class="indexanchor" id="i05_86"/>
+                            <samp class="listingcharacter listingcharacter"> ""</samp>
+                        ).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String(String string)</samp><br/>Creates a new object with a copy of 
+                            <samp class="listingcharacter listingcharacter">string</samp>. Basically, the constructor is unnecessary since 
+                            <samp class="listingcharacter listingcharacter">String</samp> objects are 
+                            <span class="italic">immutable</span>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String(char[] value)<br/>String(char[] value, int offset, int length)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p331"/>String(int[] codePoints, int offset, int count)<br/>String(byte[] bytes)<br/>String(byte[] bytes, int offset, int length)<br/>String(byte[] bytes, String charsetName) throws UnsupportedEncodingException</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String(byte[] bytes, Charset charset) <br/>String(byte[] bytes, int offset, int length, String charsetName)<br/>throws UnsupportedEncodingException<br/>String(byte[] bytes, int offset, int length, Charset charset)<br/>String(StringBuffer buffer)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String(StringBuilder builder)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">In particular, the constructors are only necessary if a 
+                    <samp class="listingcharacter listingcharacter">String</samp> object is to be built from a foreign representation such as a 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp>, 
+                    <samp class="listingcharacter listingcharacter">StringBuffer</samp>, 
+                    <samp class="listingcharacter listingcharacter">char[]</samp>, or 
+                    <samp class="listingcharacter listingcharacter">byte[]</samp>
+                 or parts (substring or sub-array) of them.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example tests whether two strings—regardless of case—represent anagrams, that is, the two strings have the same letters:</p>
+                    
+                    <div class="listing " id="l_none_5875"><pre><span class="">String</span><span class=""> a1 </span><span class="">=</span><span class=""> </span><span class="">"iPad"</span><span class="">,</span><span class=""> a2 </span><span class="">=</span><span class=""> </span><span class="">"Paid"</span><span class="">;</span><span class=""><br/></span><span class="">char</span><span class="">[]</span><span class=""> a1chars </span><span class="">=</span><span class=""> a1</span><span class="">.</span><span class="">toCharArray</span><span class="">();</span><span class=""><br/></span><span class="">char</span><span class="">[]</span><span class=""> a2chars </span><span class="">=</span><span class=""> a2</span><span class="">.</span><span class="">toCharArray</span><span class="">();</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> a1chars </span><span class="">);</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> a2chars </span><span class="">);</span><span class=""><br/></span><span class="">boolean</span><span class=""> isAnangram </span><span class="">=</span><span class=""> </span>
+                        <span class="bold"><span class="">new</span><span class=""> </span><span class="">String</span><span class="">(a1chars)</span></span>.<span class="">equalsIgnoreCase</span><span class="">(</span>
+                        <span class="bold"><span class="">new</span><span class=""> </span><span class="">String</span><span class="">(a2chars)</span></span>);<br/>System.out.<span class="">println</span><span class="">( isAnangram );      </span><span class=""> // true</span><span class=""> </span><span class=""/></pre></div>
+                    
+                    <p class="standard last">The 
+                        <samp class="listingcharacter listingcharacter">Arrays.sort(...)</samp> method sorts an array, in this case, the 
+                        <samp class="listingcharacter listingcharacter">char</samp> array. If case sensitivity is relevant, 
+                        <samp class="listingcharacter listingcharacter">Arrays.equals(char[], char[])</samp>
+                     can be used.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.12.2">On the Constructor Call New String(String)</h4>
+                
+                <p class="standard">One constructor easily leads to confusion—the constructor that adopts another string. Thus, the following two lines result in the reference to a 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 object:</p>
+                
+                <div class="listing " id="l_none_5888"><pre><span class="">String</span><span class=""> rudi </span><span class="">=</span><span class=""> </span><span class="">"There is no spoon"</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> rudi </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">String</span><span class="">(</span><span class=""> </span><span class="">"There is no spoon"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The second solution unnecessarily creates an additional 
+                    <samp class="listingcharacter listingcharacter">String</samp> object because the literal is already a full-fledged 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 object. The constructor is basically unnecessary.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.12.3">Strings in the Constant Pool</h4>
+                
+                <p class="standard">The JVM automatically creates a corresponding 
+                    <samp class="listingcharacter listingcharacter">String</samp> object for each string literal. This creation happens once at most for each constant string, no matter how often the JVM 
+                    <a id="p332"/>uses it in the course of the program and which classes reference the string. This 
+                    <samp class="listingcharacter listingcharacter">String</samp> object “lives” in an area called the 
+                    <span class="italic">constant pool</span>
+                    <a class="indexanchor" id="i05_87"/>.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_11" id="fn05_11">[ 121 ]</a></span>
+                </p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">Let’s assume that the following statement is contained in one class 
+                        <samp class="listingcharacter listingcharacter">A</samp> and in another class 
+                        <samp class="listingcharacter listingcharacter">B</samp>
+                    :</p>
+                    
+                    <div class="listing " id="l_none_5908"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                        <span class="bold"><span class="">"tutego"</span></span><span class=""> );</span><span class=""/></pre></div>
+                    
+                    <p class="standard">We can execute the following code: </p>
+                    
+                    <div class="listing " id="l_none_5925"><pre><span class="">int</span><span class=""> len </span><span class="">=</span><span class=""> </span><span class="">"tutego"</span><span class="">.</span><span class="">length</span><span class="">()</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">Then, the string “tutego” exists as a 
+                        <samp class="listingcharacter listingcharacter">String</samp>
+                     object only once in the runtime environment.</p>
+                
+                </div>
+                
+                <p class="standard">For constant values, the compiler performs optimizations, such as computing constant expressions the same way. Not only does it insert the result 
+                    <samp class="listingcharacter listingcharacter">3 </samp>for expressions like 
+                    <samp class="listingcharacter listingcharacter">1 + 2</samp>
+                , but the compiler also joins broken constant string parts concatenated with plus to form a string.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The first and second declarations look the same in the bytecode:</p>
+                    
+                    <div class="listing " id="l_none_5928"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""><br/></span> <span class="">"Operating systems are like underwear-nobody really wants to look at them."</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"Operating systems are like underwear"</span><span class=""> </span>
+                        <span class="bold"><span class="">+</span></span><br/>           <span class="">'-'</span><span class=""> </span>
+                        <span class="bold">+</span> <span class="">"nobody really wants to look at them."</span><span class="">;</span><span class=""/> </pre></div>
+                    
+                    <p class="standard last">The compiler automatically merges the strings
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_12" id="fn05_12">[ 122 ]</a></span>
+                     into one large string, so no concatenation is necessary at runtime. The compiler always “calculates” constant expressions directly itself.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.12.4">Empty Strings
+                    <a class="indexanchor" id="i05_88"/>
+                 or Null Strings</h4>
+                
+                <p class="standard">The statements both reference 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 objects that don’t contain any characters:</p>
+                
+                <div class="listing " id="l_none_5942"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">""</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">String</span><span class="">();</span><span class=""> </span></pre></div>
+                
+                <p class="standard">However, the second notation creates a new 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 object, while in the first case the string literal is in the constant pool.</p>
+                
+                <p class="standard">
+                    <a id="p333"/>We call a string without characters an 
+                    <span class="italic">empty string</span> or a 
+                    <span class="italic">null string</span>
+                    <a class="indexanchor" id="i05_89"/>. Unfortunately, the last term is chosen somewhat unfortunately, so we won’t use it in the book because the term 
+                    <span class="italic">null string</span> can easily be confused with the term 
+                    <samp class="listingcharacter listingcharacter">null reference</samp>. But while access to a null string might be unproblematic, de-references on the 
+                    <samp class="listingcharacter listingcharacter">null reference</samp> inevitably lead to a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                , as in the following example:</p>
+                
+                <div class="listing " id="l_none_5950"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> null</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s </span><span class="">);</span><span class="">        </span><span class=""> // Output: null</span><span class=""><br/></span>s<span class="">.</span><span class="">length</span><span class="">();</span><span class="">                     </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     NullPointerException</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">print*(null)</samp> results in the console output “null,” and no exception arises because the case distinction in 
+                    <samp class="listingcharacter listingcharacter">print*(Object)</samp> and 
+                    <samp class="listingcharacter listingcharacter">print*(String)</samp> consider the 
+                    <samp class="listingcharacter listingcharacter">null </samp>reference as a special case.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn05_13" id="fn05_13">[ 123 ]</a></span> Accessing 
+                    <samp class="listingcharacter listingcharacter">s</samp> via 
+                    <samp class="listingcharacter listingcharacter">s.length()</samp>, on the other hand, leads to the unpopular 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.5.12.5">Generating Strings from Repetitions</h4>
+                
+                <p class="standard">The useful object method 
+                    <samp class="listingcharacter listingcharacter">repeat(int count)</samp>
+                 multiplies a string.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following code repeats the string 
+                        <samp class="listingcharacter listingcharacter">s</samp>
+                     three times:</p>
+                    
+                    <div class="listing  last_item" id="l_none_5948"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"tu"</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s</span><span class="">.</span><span class="">repeat</span><span class="">(</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">   </span><span class=""> // tututu</span><span class=""> </span></pre></div>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

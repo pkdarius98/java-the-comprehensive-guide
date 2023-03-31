@@ -1,0 +1,2368 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Lambda Expressions and Functional Programming" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Lambda Expressions and Functional Programming" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Lambda Expressions and Functional Programming</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h13.5">13.5    Functional Interfaces from the java.util.function Package</h2>
+        
+        <p class="standard">Functions implement mappings, and since different types of mappings exist, the Java standard library in the 
+            <samp class="listingcharacter listingcharacter">java.util.function</samp> package provides functional interfaces for the most common cases. 
+            <span class="crossreference "><a href="13_005.html#t13.11">Table 13.11</a></span>
+         provides an overview.</p>
+        
+        <table class="standardtable" id="t13.11">
+            
+            <thead>
+                
+                <tr>
+                    
+                    <th class="tablehead tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <a id="p771"/>
+                        Interface</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">Mapping</p>
+                    
+                    </th>
+                
+                </tr>
+            
+            </thead>
+            
+            <tbody>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Consumer&lt;T&gt;</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">(T) → void</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">DoubleConsumer</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">(double) → void</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BiConsumer&lt;T,U&gt;</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">(T, U) → void</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Supplier&lt;T&gt;</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">() → T</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BooleanSupplier</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">() → boolean</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Predicate&lt;T&gt;</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">(T) → boolean</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">LongPredicate</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">(long) → boolean</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BiPredicate&lt;T,U&gt;</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">(T, U) → boolean</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Function&lt;T,R&gt;</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">(T) → R</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">LongToDoubleFunction</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">(long) → double</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BiFunction&lt;T,U,R&gt;</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">(T, U) → R</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">UnaryOperator&lt;T&gt;</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">(T) → T</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">DoubleBinaryOperator</samp>
+                        </p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">(double, double) → double</samp>
+                        </p>
+                    
+                    </td>
+                
+                </tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <p class="caption "><b>Table 13.11</b>    
+            Some Predefined Functional Interfaces</p>
+        
+        
+            
+            <h3 class="t3" id="h13.5.1">13.5.1    Blocks with Code and the Functional Interface Consumer</h3>
+            
+            <p class="standard">Instructions of code can be put into a method of an object and passed on in this way. This transfer is a common need for which the 
+                <samp class="listingcharacter listingcharacter">java.util.function</samp> package specifies a simple 
+                <samp class="listingcharacter listingcharacter">Consumer</samp>
+             functional interface that represents a consumer. This consumer accepts and then “consumes” (consumes) data but returns nothing.</p>
+            
+            <div class="listing " id="l_none_13831"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">function</span><span class="">.</span>
+                <span class="bold">Consumer</span>&lt;T&gt; <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void accept(T t)</samp><br/>Performs operations with the transfer 
+                        <samp class="listingcharacter listingcharacter">t</samp>
+                    . </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">default Consumer&lt;T&gt; andThen(Consumer&lt;? super T&gt; after)</samp><br/>Returns a new 
+                        <samp class="listingcharacter listingcharacter">Consumer</samp> that first executes the current 
+                        <samp class="listingcharacter listingcharacter">Consumer</samp> and then 
+                        <samp class="listingcharacter listingcharacter">after</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">accept(...)</samp> method gets one argument—though of course the implementation doesn’t have to use it—and doesn’t return anything. Transformations aren’t possible with the type because the consumer can only save the results via detours, and the interface isn’t intended for that purpose. 
+                <samp class="listingcharacter listingcharacter">Consumer</samp>
+             types are intended more as the end link of a chain, where, for example, data is written to a file that has been previously processed. These side effects are intentional, as they come after a chain of side-effect-free operations.</p>
+            
+            
+                
+                <h4 class="t4" id="h13.5.1.1">
+                    <a id="p772"/>
+                Consumer Type in the Application Programming Interface</h4>
+                
+                <p class="standard">In the Java API, the 
+                    <samp class="listingcharacter listingcharacter">Consumer</samp> type usually shows up as an argument of a 
+                    <samp class="listingcharacter listingcharacter">forEach(Consumer)</samp> method that runs data sources and calls 
+                    <samp class="listingcharacter listingcharacter">accept(...)</samp> for each element. The method on the 
+                    <samp class="listingcharacter listingcharacter">Iterable</samp> type is interesting because the important 
+                    <samp class="listingcharacter listingcharacter">Collection</samp> data structures like 
+                    <samp class="listingcharacter listingcharacter">ArrayList</samp> implement this interface. Thus, you can easily run over all the data and execute a piece of code for each element. 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp> also has a similar method, the 
+                    <samp class="listingcharacter listingcharacter">forEachRemaining(Consumer)</samp> method where the word “remaining” clearly indicates that the 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp> may have already experienced a few 
+                    <samp class="listingcharacter listingcharacter">next() </samp>
+                calls, and therefore, the consumers don’t necessarily catch the first elements.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example outputs each element in a list to the console:</p>
+                    
+                    <div class="listing  last_item" id="l_none_13857"><pre>Arrays<span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">).</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">Compared to a typical iteration, the functional variant is a little shorter in code, but otherwise, no difference exists. Also, 
+                    <samp class="listingcharacter listingcharacter">forEach(...)</samp> does nothing else on 
+                    <samp class="listingcharacter listingcharacter">Iterable</samp> other than fetching all elements via the 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.5.1.2">Writing a Custom Wrapper Consumer</h4>
+                
+                <p class="standard">Consumers always represent code, and an API can now simply accept a block of code along the lines of 
+                    <samp class="listingcharacter listingcharacter">doSomethingWith(myConsumer)</samp>
+                 to, for instance, process it in a background thread or execute it repeatedly. Furthermore, a block of code can be stopped after an allowed maximum duration, after a certain time interval, etc.</p>
+                
+                <p class="standard">Let’s write a 
+                    <samp class="listingcharacter listingcharacter">Consumer</samp>
+                 wrapper that logs the execution time of another consumer.</p>
+                
+                <div class="listing " id="l13.10"><pre><span class="">class</span><span class=""> Consumers </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> Consumer</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">executionTimeLogger</span><span class="">(</span><span class=""> Consumer</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> block </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> t </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">long</span><span class=""> start </span><span class="">=</span><span class=""> System</span><span class="">.</span><span class="">nanoTime</span><span class="">();</span><span class=""><br/></span>      block<span class="">.</span><span class="">accept</span><span class="">(</span><span class=""> t </span><span class="">);</span><span class=""><br/></span>      <span class="">long</span><span class=""> duration </span><span class="">=</span><span class=""> System</span><span class="">.</span><span class="">nanoTime</span><span class="">()</span><span class=""> </span><span class="">-</span><span class=""> start</span><span class="">;</span><span class=""><br/></span>      System<span class="">.</span><span class="">getLogger</span><span class="">(</span><span class=""> </span><span class="">"executionTime"</span><span class=""> </span><span class="">).</span><span class="">log</span><span class="">(</span><span class=""><br/></span>          System<span class="">.</span><span class="">Logger</span><span class="">.</span><span class="">Level</span><span class="">.</span><span class="">INFO</span><span class="">,</span><span class=""> </span><span class="">"Execution time (ns): {0}"</span><span class="">,</span><span class=""> duration </span><span class="">);</span><span class=""><br/></span>    <span class="">};</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 13.10</b>    
+            src/main/java/com/tutego/insel/lambda/Consumers.java (Snippet)</p>
+                
+                <p class="standard">The following call shows the usage of this method:</p>
+                
+                <div class="listing " id="l_none_13868"><pre>Arrays<span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">executionTimeLogger</span><span class="">( System.out::println )</span></span> ); <span class=""/></pre></div>
+                
+                <p class="standard">
+                    <a id="p773"/>
+                The result is the following output:</p>
+                
+                <div class="listing " id="l_none_13878"><pre>1<br/>Jan. 23, 2023 12:16:31 PM c.t.i.l.Consumers lambda$executionTimeLogger$0<br/>INFO: Execution time (ns): 87.800<br/>Jan. 23, 2023 12:16:31 PM c.t.i.l.Consumers lambda$executionTimeLogger$0<br/>INFO: Execution time (ns): 25.100<br/>Jan. 23, 2023 12:16:31 PM c.t.i.l.Consumers lambda$executionTimeLogger$0<br/>INFO: Execution time (ns): 18.100<br/>Jan. 23, 2023 12:16:31 PM c.t.i.l.Consumers lambda$executionTimeLogger$0<br/>INFO: Execution time (ns): 13.200<br/>2<br/>3<br/>4 </pre></div>
+                
+                <p class="standard">What we’ve implemented is an example of the 
+                    <span class="italic">execute-around-method pattern</span>
+                    <a class="indexanchor" id="i13_28"/>
+                , where you put something else around a block of code.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.5.2">13.5.2    Supplier</h3>
+            
+            <p class="standard">A 
+                <span class="italic">supplier</span>
+                <a class="indexanchor" id="i13_29"/> (also called 
+                <span class="italic">provider</span>
+                <a class="indexanchor" id="i13_30"/>) is a factory and provides objects. In Java, the 
+                <samp class="listingcharacter listingcharacter">java.util.function</samp> package declares the 
+                <samp class="listingcharacter listingcharacter">Supplier</samp>
+             functional interface for object providers:</p>
+            
+            <div class="listing " id="l_none_13888"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">function</span><span class="">.</span>
+                <span class="bold">Supplier</span>&lt;T&gt; <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">T get()</samp><br/>Performs operations with the transfer 
+                        <samp class="listingcharacter listingcharacter">t</samp>
+                    . </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">Supplier</samp> doesn’t declare any other static or default methods. What’s exactly returned by 
+                <samp class="listingcharacter listingcharacter">get()</samp>
+             is a task of the implementation. The result might be new objects, the same objects always (singletons), or objects from a cache.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.5.3">13.5.3    Predicates and java.util.function.Predicate</h3>
+            
+            <p class="standard">A predicate is a statement about an object that is true or false. The question 
+                <samp class="listingcharacter listingcharacter">"tutego".isEmpty()</samp> asks whether the string “tutego” is empty or not. While the
+                <samp class="listingcharacter listingcharacter"> </samp>result is “false”, 
+                <samp class="listingcharacter listingcharacter">isEmpty</samp>
+             is therefore a predicate because it can make a truth statement about an object (a string in our case).</p>
+            
+            <p class="standard">Predicates as objects are flexible because objects can be passed to different places. Thus, a predicate can determine what should be deleted from a collection or whether at least one element is in a collection.</p>
+            
+            <p class="standard">
+                <a id="p774"/>The 
+                <samp class="listingcharacter listingcharacter">java.util.function</samp> package
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn13_07" id="fn13_07">[ 194 ]</a></span> declares a flexible 
+                <samp class="listingcharacter listingcharacter">Predicate</samp>
+             functional interface in the following way:</p>
+            
+            <div class="listing " id="l_none_13894"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">function</span><span class="">.</span>
+                <span class="bold">Predicate</span>&lt;T&gt; <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean test(T t)</samp><br/>Performs a test on 
+                        <samp class="listingcharacter listingcharacter">t</samp> and returns 
+                        <samp class="listingcharacter listingcharacter">true</samp> if the criterion is met; otherwise, 
+                        <samp class="listingcharacter listingcharacter">false</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following example, the test of whether a character is a digit can now be performed differently by predicate objects:</p>
+                
+                <div class="listing  last_item" id="l_none_13921"><pre>
+                    <span class="bold"><span class="">Predicate&lt;Character&gt; isDigit</span></span> = <br/>   c -&gt; Character.<span class="">isDigit</span><span class="">( c ); </span><span class=""> // short: Character::isDigit</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">isDigit.<span class="">test</span><span class="">(</span><span class="">'a'</span><span class="">)</span></span> ); <span class=""> // false</span><span class=""/><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">If the 
+                <samp class="listingcharacter listingcharacter">Predicate</samp> interface had existed earlier in Java 1.0, no need would exist for the 
+                <samp class="listingcharacter listingcharacter">Character.isDigit(...)</samp> method. A 
+                <samp class="listingcharacter listingcharacter">Predicate&lt;Character&gt;</samp> could be used as a static variable in the 
+                <samp class="listingcharacter listingcharacter">Character</samp> class, so that a test would then be written as 
+                <samp class="listingcharacter listingcharacter">Character.IS_DIGIT.test(...)</samp> or as a return from a 
+                <samp class="listingcharacter listingcharacter">Predicate&lt;Character&gt; isDigit()</samp> method using 
+                <samp class="listingcharacter listingcharacter">Character.isDigit().test(...)</samp>
+            . In the future, the API may change so that statements on objects with truth returns will no longer be realized as methods with the classes (but instead will be offered as predicate objects). Fortunately, however, method references give you the flexibility to easily use existing methods as lambda expressions, and so we can return from methods to functions.</p>
+            
+            
+                
+                <h4 class="t4" id="h13.5.3.1">The Predicate Type in the Application Programming Interface</h4>
+                
+                <p class="standard">A few places in the Java API where 
+                    <samp class="listingcharacter listingcharacter">Predicate</samp>
+                 objects are used include the following:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">As an argument for delete methods, to specify elements in collections that should be deleted or filtered</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">In the default methods of the 
+                            <samp class="listingcharacter listingcharacter">Predicate</samp>
+                         interface itself to link predicates</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">In regular expressions, on a 
+                            <samp class="listingcharacter listingcharacter">Pattern</samp> (
+                            <samp class="listingcharacter listingcharacter">asPredicate()</samp> and 
+                            <samp class="listingcharacter listingcharacter">asMatchPredicate() </samp>return a 
+                            <samp class="listingcharacter listingcharacter">Predicate</samp>
+                         for tests)</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">In the Stream API, where objects are identified via a predicate as they pass through the stream, for example, to filter them out</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example deletes all characters that are digits from a list of arbitrary characters:</p>
+                    
+                    <div class="listing " id="l_none_13927"><pre>
+                        <span class="bold"><span class="">
+                                <a id="p775"/>
+                            Predicate&lt;Character&gt; isDigit = Character::isDigit</span></span>;<br/>List&lt;Character&gt; list = <span class="">new</span><span class=""> ArrayList&lt;&gt;( Arrays.</span><span class="">asList</span><span class="">( </span><span class="">'a'</span><span class="">, </span><span class="">'1'</span><span class=""> ) );</span><br/>list.<span class="">removeIf</span><span class="">( </span>
+                        <span class="bold">isDigit</span> );<span class=""/></pre></div>
+                    
+                    <p class="standard last">In this way, the focus is not on the loop, but on the deletion.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.5.3.2">Default Methods of Predicate</h4>
+                
+                <p class="standard">A number of default methods are provided by the 
+                    <samp class="listingcharacter listingcharacter">Predicate</samp>
+                 functional interface:</p>
+                
+                <div class="listing " id="l_none_13941"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">function</span><span class="">.</span>
+                    <span class="bold">Predicate</span>&lt;T&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default Predicate&lt;T&gt; negate()</samp><br/>Returns a negation of the current predicate (implemented as 
+                            <samp class="listingcharacter listingcharacter">return t -&gt; ! test(t);</samp>
+                        ).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T&gt; Predicate&lt;T&gt; not(Predicate&lt;? super T&gt; target)</samp><br/>Returns 
+                            <samp class="listingcharacter listingcharacter">target.negate()</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default Predicate&lt;T&gt; and(Predicate&lt;? super T&gt; p)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default Predicate&lt;T&gt; or(Predicate&lt;? super T&gt; p)</samp><br/>Links the current predicate to another predicate with a logical AND/OR.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T&gt; Predicate&lt;T&gt; isEqual(Object targetRef)</samp><br/>Returns a new predicate that performs an equivalence test with 
+                            <samp class="listingcharacter listingcharacter">targetRef</samp>, basically 
+                            <samp class="listingcharacter listingcharacter">return ref -&gt; Objects.equals(ref, targetRef)</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example deletes characters that are 
+                        <span class="italic">not</span>
+                     digits from a list of characters:</p>
+                    
+                    <div class="listing  last_item" id="l_none_13938"><pre>Predicate<span class="">&lt;</span><span class="">Character</span><span class="">&gt;</span><span class=""> isDigit </span><span class="">=</span><span class=""> Character</span><span class="">::</span><span class="">isDigit</span><span class="">;</span><span class=""><br/></span>Predicate<span class="">&lt;</span><span class="">Character</span><span class="">&gt;</span><span class=""> isNotDigit </span><span class="">=</span><span class=""> isDigit</span><span class="">.</span>
+                        <span class="bold"><span class="">negate</span><span class="">()</span></span>;<br/>List&lt;Character&gt; list = <span class="">new</span><span class=""> ArrayList&lt;&gt;( Arrays.</span><span class="">asList</span><span class="">( </span><span class="">'a'</span><span class="">, </span><span class="">'1'</span><span class=""> ) );</span><br/>list.<span class="">removeIf</span><span class="">( isNotDigit );</span><span class=""><br/></span>// alternatively: list.removeIf( Predicate.not( isDigit ) );<span class=""> </span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.5.4">13.5.4    Functions via the Functional Interface java.util.function.Function</h3>
+            
+            <p class="standard">Functions in the sense of functional programming can be of different types: with parameter lists/returns or without. But functions are basically special forms, and the functional interface 
+                <samp class="listingcharacter listingcharacter">java.util.function.Function</samp>
+             is the most general function that returns a result for an argument.</p>
+            
+            <div class="listing " id="l_none_13963"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">function</span><span class="">.</span>
+                <span class="bold">Function</span>&lt;T,R&gt; <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p776"/>
+                        R apply(T t)</samp><br/>Applies a function and provides a return to the input 
+                        <samp class="listingcharacter listingcharacter">t</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example is a function to determine the absolute value:</p>
+                
+                <div class="listing  last_item" id="l_none_139638444"><pre>
+                    <span class="bold"><span class="">Function&lt;Double,Double&gt;</span></span> abs = a -&gt; Math.<span class="">abs</span><span class="">( a ); </span><span class=""> // alternativ Math::abs</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">abs.<span class="">apply</span><span class="">( -</span><span class="">12</span><span class="">. )</span></span> );          <span class=""> // 12.0</span><span class=""> </span><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">For functions, too, an area of tension arises for the API design. Basically, “functions” now no longer need to be provided as methods at all; classes could also offer them as 
+                <samp class="listingcharacter listingcharacter">Function</samp>
+             objects. But since method references easily bridge from method names to objects, developers can work quite well with classic methods.</p>
+            
+            
+                
+                <h4 class="t4" id="h13.5.4.1">The Function Type in the Application Programming Interface</h4>
+                
+                <p class="standard">The Stream API is the biggest beneficiary of the 
+                    <samp class="listingcharacter listingcharacter">Function</samp> type. A few examples exist in object comparisons (
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>
+                ), in the concurrency package, and in associative memories. In the Stream API section, we’ll explore many more examples.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">An associative memory is supposed to be implemented as a cache, which associates the content to file names. If no content for the key (the file name) exists yet, the file content should be read and put into the associative memory. Consider the following example:</p>
+                    
+                    <div class="listing " id="l13.11"><pre><span class="">class</span><span class=""> FileCache </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> Map</span><span class="">&lt;</span><span class="">String</span><span class="">,</span><span class="">byte</span><span class="">[]&gt;</span><span class=""> map </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> HashMap</span><span class="">&lt;&gt;();</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">byte</span><span class="">[]</span><span class=""> </span><span class="">getContent</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> filename </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> map</span><span class="">.</span><span class="">computeIfAbsent</span><span class="">(</span><span class=""> filename</span><span class="">,</span><span class=""> file </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>        <span class="">return</span><span class=""> Files</span><span class="">.</span><span class="">readAllBytes</span><span class="">(</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> file </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>      <span class="">}</span><span class=""> </span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IOException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">UncheckedIOException</span><span class="">(</span><span class=""> e </span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span>    <span class="">}</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>}</pre></div>
+                    
+                    <p class="caption "><b>Listing 13.11</b>    
+            src/main/java/com/tutego/insel/lambda/FileCache.java (Snippet)</p>
+                    
+                    <p class="standard last">We’ll return to this method in 
+                        <span class="crossreference "><a href="18_001.html#h18">Chapter 18</a></span>, 
+                        <span class="crossreference "><a href="18_003.html#h18.3">Section 18.3</a></span>; we just wanted to show you passing functions to other functions—in this case, a 
+                        <samp class="listingcharacter listingcharacter">Function&lt;String,byte[])</samp> to 
+                        <samp class="listingcharacter listingcharacter">computeIfAbsent(...)</samp>. As soon as the 
+                        <samp class="listingcharacter listingcharacter">getContent(String)</samp> call addresses the file cache, the method will ask the 
+                        <samp class="listingcharacter listingcharacter">Map</samp>
+                     for a value, and if it has no value for the key, the lambda expression will return the content for the file name.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.5.4.2">
+                    <a id="p777"/>
+                Getter Methods as Functions via Method References</h4>
+                
+                <p class="standard">Method references are among the most syntactically concise tools in the Java language. In combination with getters, a pattern can be read that’s often seen in code. First, let’s review 
+                    <samp class="listingcharacter listingcharacter">Function</samp>
+                 and its use in method references, with the following example:</p>
+                
+                <div class="listing " id="l_none_13981"><pre>Function<span class="">&lt;</span>
+                    <span class="bold"><span class="">String</span></span><span class="">,</span><span class="">String</span><span class="">&gt; func1a = (</span>
+                    <span class="bold"><span class="">String</span></span><span class=""> s) -&gt; s.</span><span class="">toUpperCase</span><span class="">();</span><br/>Function&lt;
+                    <span class="bold"><span class="">String</span></span><span class="">,</span><span class="">String</span><span class="">&gt; func1b = </span>
+                    <span class="bold"><span class="">String</span><span class="">::toUpperCase</span></span>;<br/>Function&lt;
+                    <span class="bold">Point</span>,Double&gt;  func2a = (
+                    <span class="bold">Point</span> p) -&gt; p.<span class="">getX</span><span class="">();</span><br/>Function&lt;
+                    <span class="bold">Point</span>,Double&gt;  func2b = 
+                    <span class="bold">Point::getX</span>;<br/>System.out.<span class="">println</span><span class="">( func1b.</span><span class="">apply</span><span class="">( </span><span class="">"jocelyn"</span><span class=""> ) );        </span><span class=""> // JOCELYN</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( func2b.</span><span class="">apply</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">( </span><span class="">9</span><span class="">, </span><span class="">0</span><span class=""> ) ) );</span><span class=""> // 9.0</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">The fact that 
+                    <samp class="listingcharacter listingcharacter">Function</samp> matches the given method reference is incomprehensible at first glance since the signatures of 
+                    <samp class="listingcharacter listingcharacter">toUpperCase()</samp> and 
+                    <samp class="listingcharacter listingcharacter">getX()</samp>
+                 don’t declare a parameter. Thus, these methods aren’t functions in the usual sense (into which something goes and out of which something comes). However, we’re dealing with a special case because the methods mentioned in the method reference fulfill the following prerequisites:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The methods are non-static (i.e., 
+                            <samp class="listingcharacter listingcharacter">Math::max</samp>
+                        ).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">No reference is being used (i.e., 
+                            <samp class="listingcharacter listingcharacter">System.out::print</samp>
+                        ).</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">In this case, however, the compiler will call an object method on exactly the object passed as the first argument of the functional interface. (Please read this sentence twice!)</p>
+                
+                <p class="standard">Thus, 
+                    <samp class="listingcharacter listingcharacter">Function</samp> is a practical type in all scenarios in which states are somehow queried via getters, as is often the case with a 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>, for example. In this scenario, a static method is quite useful, for instance, 
+                    <samp class="listingcharacter listingcharacter">Comparator&lt;...&gt; Comparator.comparing(Function&lt;...&gt; keyExtractor</samp>
+                . (Note that generics are omitted.) </p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example gets a list of packages accessible from the class loader and sorts them by name:</p>
+                    
+                    <div class="listing  last_item" id="l_none_13999"><pre>List<span class="">&lt;</span><span class="">Package</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> Package</span><span class="">.</span><span class="">getPackages</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Collections<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> list</span><span class="">,</span><span class=""> </span>
+                        <span class="bold"><span class="">Comparator.</span><span class="">comparing</span><span class="">( Package::getName )</span></span> );<br/>System.out.<span class="">println</span><span class="">( list );</span><span class=""> // [package java.io, … sun.util.locale …</span><span class=""/><span class=""/> </pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.5.4.3">Default Methods in Function</h4>
+                
+                <p class="standard">The functional interface prescribes only one 
+                    <samp class="listingcharacter listingcharacter">apply(...)</samp>
+                 method but declares three additional default methods:</p>
+                
+                <div class="listing " id="l_none_131006"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">function</span><span class="">.</span>
+                    <span class="bold">Function</span>&lt;T,R&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p778"/>
+                            static &lt;T&gt; Function&lt;T,T&gt; identity()</samp><br/>Returns a function that always returns the input as a result, implemented as 
+                            <samp class="listingcharacter listingcharacter">return t -&gt; t;</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default &lt;V&gt; Function&lt;T,V&gt; andThen(Function&lt;? super R,? extends V&gt; after)</samp><br/>Corresponds to 
+                            <samp class="listingcharacter listingcharacter">t -&gt; after.apply(apply(t))</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default &lt;V&gt; Function&lt;V,R&gt; compose(Function&lt;? super V,? extends T&gt; before)</samp><br/>Corresponds to 
+                            <samp class="listingcharacter listingcharacter">v -&gt; apply(before.apply(v))</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">identity()</samp> seems pointless at first glance but serves a purpose if a 
+                    <samp class="listingcharacter listingcharacter">Function</samp>
+                 is required in the API where nothing should change and the input should be the output.</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">andThen(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">compose(...)</samp> methods differ in the order in which the functions are called. The good thing is that the parameter names (
+                    <samp class="listingcharacter listingcharacter">before</samp>, 
+                    <samp class="listingcharacter listingcharacter">after</samp>
+                ) make it clear what is called here and in what order.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <div class="listing  last_item" id="l_none_131009"><pre>Function<span class="">&lt;</span><span class="">String</span><span class="">,</span><span class=""> </span><span class="">String</span><span class="">&gt;</span><span class=""> f1 </span><span class="">=</span><span class=""> s </span><span class="">-&gt;</span><span class=""> </span><span class="">"~"</span><span class=""> </span><span class="">+</span><span class=""> s </span><span class="">+</span><span class=""> </span><span class="">"~"</span><span class="">;</span><span class=""><br/></span>Function<span class="">&lt;</span><span class="">String</span><span class="">,</span><span class=""> </span><span class="">String</span><span class="">&gt;</span><span class=""> f2 </span><span class="">=</span><span class=""> s </span><span class="">-&gt;</span><span class=""> </span><span class="">"&lt;"</span><span class=""> </span><span class="">+</span><span class=""> s </span><span class="">+</span><span class=""> </span><span class="">"&gt;"</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> f1</span><span class="">.</span><span class="">andThen</span><span class="">(</span><span class=""> f2 </span><span class="">).</span><span class="">apply</span><span class="">(</span><span class=""> </span><span class="">":)"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // &lt;~:)~&gt;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> f2</span><span class="">.</span><span class="">andThen</span><span class="">(</span><span class=""> f1 </span><span class="">).</span><span class="">apply</span><span class="">(</span><span class=""> </span><span class="">":)"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // ~&lt;:)&gt;~</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> f1</span><span class="">.</span><span class="">compose</span><span class="">(</span><span class=""> f2 </span><span class="">).</span><span class="">apply</span><span class="">(</span><span class=""> </span><span class="">":)"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // ~&lt;:)&gt;~</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> f2</span><span class="">.</span><span class="">compose</span><span class="">(</span><span class=""> f1 </span><span class="">).</span><span class="">apply</span><span class="">(</span><span class=""> </span><span class="">":)"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // &lt;~:)~&gt;</span><span class=""> </span></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.5.4.4">Function versus Consumer/Predicate</h4>
+                
+                <p class="standard">Basically, everything can be represented as a 
+                    <samp class="listingcharacter listingcharacter">Function</samp>
+                 because of the following:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A 
+                            <samp class="listingcharacter listingcharacter">Consumer&lt;T&gt;</samp> can also be understood as 
+                            <samp class="listingcharacter listingcharacter">Function&lt;T,Void&gt;</samp>
+                         (something goes in, but nothing comes out).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A 
+                            <samp class="listingcharacter listingcharacter">Predicate&lt;T&gt;</samp> can also be understood as 
+                            <samp class="listingcharacter listingcharacter">Function&lt;T,Boolean&gt;</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">A 
+                            <samp class="listingcharacter listingcharacter">Supplier&lt;T&gt;</samp> can also be understood as 
+                            <samp class="listingcharacter listingcharacter">Function&lt;Void,T&gt;</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Nevertheless, these special types serve their purpose because the more accurate the type, the better.</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">Function</samp> is not a base type of 
+                    <samp class="listingcharacter listingcharacter">Consumer</samp> or 
+                    <samp class="listingcharacter listingcharacter">Supplier</samp> because “no return” or “no parameter” can’t be expressed by a generic type, which would be possible with 
+                    <samp class="listingcharacter listingcharacter">Function&lt;T,R&gt;</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.5.4.5">UnaryOperator</h4>
+                
+                <p class="standard">Another interface in the 
+                    <samp class="listingcharacter listingcharacter">java.util.function package</samp> specializes 
+                    <samp class="listingcharacter listingcharacter">Function</samp>, namely, the
+                    <samp class="listingcharacter listingcharacter"> UnaryOperator</samp>. A 
+                    <samp class="listingcharacter listingcharacter">UnaryOperator</samp> is a special 
+                    <samp class="listingcharacter listingcharacter">Function</samp>
+                 where the types for “input” and “output” are the same.</p>
+                
+                <div class="listing " id="l_none_131030"><pre><span class="">
+                        <a id="p779"/>
+                    interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">function</span><span class="">.</span>
+                    <span class="bold">UnaryOperator</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> Function&lt;T,T&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T&gt; UnaryOperator&lt;T&gt; identity()</samp><br/>Returns the identity operator that maps all inputs to outputs.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Generic types make it clear that the type of the method parameter is the same as the result type. Except for 
+                    <samp class="listingcharacter listingcharacter">identity()</samp>
+                , no other functionality exists; the interface is used only for type declaration.</p>
+                
+                <p class="standard">In some places in the Java library, this type also occurs, for example, in the 
+                    <samp class="listingcharacter listingcharacter">replaceAll(UnaryOperator)</samp> method of 
+                    <samp class="listingcharacter listingcharacter">List</samp>
+                 types.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example doubles each entry in a list:</p>
+                    
+                    <div class="listing  last_item" id="l_none_131047"><pre>List<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">);</span><span class=""><br/></span>list<span class="">.</span><span class="">replaceAll</span><span class="">(</span><span class=""> </span>
+                        <span class="bold"><span class="">e -&gt; e * </span><span class="">2</span></span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( list ); </span><span class=""> // [2, 4, 6]</span><span class=""> </span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.5.5">13.5.5    I Take Two</h3>
+            
+            <p class="standard">“Bi” is a well-known Latin prefix for “two,” which when applied to types from the 
+                <samp class="listingcharacter listingcharacter">java.util.function</samp>
+             package means that two arguments can be passed instead of only one argument.</p>
+            
+            <table class="standardtable" id="t13.12">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Type</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Interface</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Operation</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Consumer</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Consumer&lt;T&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void accept(T t)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">BiConsumer&lt;T,</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">U</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void accept(T t, </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">U u</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last"/>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Function</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Function&lt;T,</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">R</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">R apply(T t)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">BiFunction&lt;T,</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">U</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">,R&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">R apply(T t, </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">U u</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last"/>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Predicate</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Predicate&lt;T&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">boolean test(T t)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">BiPredicate&lt;T,</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">U</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">boolean test(T t, </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">U u</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">)</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last"/>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 13.12</b>    
+            One- and Two-Argument Methods in Comparison</p>
+            
+            <p class="standard">The “bi” types have no type relationship with non-“bi” types.</p>
+            
+            
+                
+                <h4 class="t4" id="h13.5.5.1">BiConsumer
+                    <a class="indexanchor" id="i13_31"/>
+                </h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">BiConsumer</samp> declares the 
+                    <samp class="listingcharacter listingcharacter">accept(T, U)</samp> method with two parameters, each of which can carry different types. The main use of the type in the Java standard library is 
+                    <a id="p780"/>associative memories that pass keys and values to 
+                    <samp class="listingcharacter listingcharacter">accept(...)</samp>. For example, 
+                    <samp class="listingcharacter listingcharacter">Map</samp>
+                 declares the following method:</p>
+                
+                <div class="listing " id="l_none_131042"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Map</span>&lt;K,V&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default void forEach(BiConsumer&lt;? super K,? super V&gt; action)</samp><br/>Runs through the associative memory and calls the 
+                            <samp class="listingcharacter listingcharacter">accept(...)</samp> method from the passed 
+                            <samp class="listingcharacter listingcharacter">BiConsumer</samp>
+                         on each key-value pair.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example results in an output of temperatures of various cities:</p>
+                    
+                    <div class="listing  last_item" id="l_none_131068"><pre>Map<span class="">&lt;</span><span class="">String</span><span class="">,</span><span class="">Integer</span><span class="">&gt;</span><span class=""> map </span><span class="">=</span><span class=""> Map</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"Manila"</span><span class="">,</span><span class=""> </span><span class="">25</span><span class="">,</span><span class=""> </span><span class="">"Dortmund"</span><span class="">,</span><span class=""> </span><span class="">-</span><span class="">5</span><span class=""> </span><span class="">);</span><span class=""><br/></span>map<span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">k</span><span class="">,</span><span class=""> v</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%d°C in %s%n"</span><span class="">,</span><span class=""> v</span><span class="">,</span><span class=""> k </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">BiConsumer</samp> has a default method named 
+                    <samp class="listingcharacter listingcharacter">andThen(...)</samp>, just as the 
+                    <samp class="listingcharacter listingcharacter">Consumer</samp>
+                 declares it for chaining.</p>
+                
+                <div class="listing " id="l_none_131079"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">function</span><span class="">.</span>
+                    <span class="bold">BiConsumer</span>&lt;T,U&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default BiConsumer&lt;T,U&gt; andThen(BiConsumer&lt;? super T,? super U&gt; after)</samp><br/>Links the current 
+                            <samp class="listingcharacter listingcharacter">BiConsumer</samp> to 
+                            <samp class="listingcharacter listingcharacter">after</samp> to form a new 
+                            <samp class="listingcharacter listingcharacter">BiConsumer</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.5.5.2">BiFunction
+                    <a class="indexanchor" id="i13_32"/> and BinaryOperator
+                    <a class="indexanchor" id="i13_33"/>
+                </h4>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">BiFunction</samp> is a function with two arguments, while a regular 
+                    <samp class="listingcharacter listingcharacter">Function</samp>
+                 accepts only one argument.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example illustrates the use of 
+                        <samp class="listingcharacter listingcharacter">Function</samp> and 
+                        <samp class="listingcharacter listingcharacter">BiFunction</samp>
+                     with method references:</p>
+                    
+                    <div class="listing  last_item" id="l_none_131078"><pre>Function<span class="">&lt;</span><span class="">Double</span><span class="">,</span><span class="">Double</span><span class="">&gt;</span><span class=""> sign </span><span class="">=</span><span class=""> Math</span><span class="">::</span><span class="">abs</span><span class="">;</span><span class=""><br/></span>BiFunction<span class="">&lt;</span><span class="">Double</span><span class="">,</span><span class="">Double</span><span class="">,</span><span class="">Double</span><span class="">&gt;</span><span class=""> max </span><span class="">=</span><span class=""> Math</span><span class="">::</span><span class="">max;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">The Java library uses 
+                    <samp class="listingcharacter listingcharacter">Function</samp> much more often than 
+                    <samp class="listingcharacter listingcharacter">BiFunction</samp>. The most common use is in the standard library around associative memories, where a key and a value are passed to a 
+                    <samp class="listingcharacter listingcharacter">BiFunction</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example converts all associated values of a 
+                        <samp class="listingcharacter listingcharacter">HashMap</samp>
+                     to uppercase:</p>
+                    
+                    <div class="listing  last_item" id="l_none_131095"><pre>
+                        <a id="p781"/>Map<span class="">&lt;</span><span class="">String</span><span class="">,</span><span class="">String</span><span class="">&gt;</span><span class=""> twitterNames </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> HashMap</span><span class="">&lt;&gt;();</span><span class=""><br/></span>twitterNames<span class="">.</span><span class="">put</span><span class="">(</span><span class=""> </span><span class="">"elonmusk"</span><span class="">,</span><span class=""> </span><span class="">"Elon Musk"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>twitterNames<span class="">.</span><span class="">put</span><span class="">(</span><span class=""> </span><span class="">"jimmyfallon"</span><span class="">,</span><span class=""> </span><span class="">"Jimmy Fallon"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>BiFunction<span class="">&lt;</span><span class="">String</span><span class="">,</span><span class=""> </span><span class="">String</span><span class="">,</span><span class=""> </span><span class="">String</span><span class="">&gt;</span><span class=""> uppercaser </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">k</span><span class="">,</span><span class=""> v</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> v</span><span class="">.</span><span class="">toUpperCase</span><span class="">();</span><span class=""><br/></span>twitterNames<span class="">.</span><span class="">replaceAll</span><span class="">(</span><span class=""> uppercaser </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> twitterNames </span><span class="">);</span><span class=""> </span><span class=""> // {elonmusk=ELON MUSK, …}</span><span class=""> </span></pre></div>
+                
+                </div>
+                
+                <p class="standard">If the type is the same for a 
+                    <samp class="listingcharacter listingcharacter">Function</samp>, the Java API provides the more special type 
+                    <samp class="listingcharacter listingcharacter">UnaryOperator</samp> for these cases. If all three types of a 
+                    <samp class="listingcharacter listingcharacter">BiFunction</samp> are the same, 
+                    <samp class="listingcharacter listingcharacter">BinaryOperator</samp>
+                 can be used for comparison, in the following ways:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">interface UnaryOperator&lt;T&gt; extends Function&lt;T,T&gt;</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">interface BinaryOperator&lt;T&gt; extends BiFunction&lt;T,T,T&gt;</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example illustrates the use of
+                        <samp class="listingcharacter listingcharacter"> BiFunction</samp> and 
+                        <samp class="listingcharacter listingcharacter">BinaryOperator</samp>
+                    :</p>
+                    
+                    <div class="listing  last_item" id="l_none_131099"><pre>BiFunction<span class="">&lt;</span><span class="">Double</span><span class="">,</span><span class="">Double</span><span class="">,</span><span class="">Double</span><span class="">&gt;</span><span class=""> max1 </span><span class="">=</span><span class=""> Math</span><span class="">::</span><span class="">max</span><span class="">;</span><span class=""><br/></span>BinaryOperator<span class="">&lt;</span><span class="">Double</span><span class="">&gt;</span><span class="">           max2 </span><span class="">=</span><span class=""> Math</span><span class="">::</span><span class="">max;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">BinaryOperator</samp> plays a major role in what’s called 
+                    <span class="italic">reductions</span>, for example, when two values become one, as in 
+                    <samp class="listingcharacter listingcharacter">Math.max(...)</samp>
+                . We’ll return to this topic when we discuss the Stream API.</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">BiFunction</samp>
+                 interface declares exactly one default method: </p>
+                
+                <div class="listing " id="l_none_131103"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">function</span><span class="">.</span>
+                    <span class="bold">BiFunction</span>&lt;T,U,R&gt;<br/><span class="">extends</span><span class=""> Function&lt;T,T&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default &lt;V&gt; BiFunction&lt;T,U,V&gt; andThen(Function&lt;? super R,? extends V&gt; after)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">BinaryOperator</samp>
+                , on the other hand, has two static methods:</p>
+                
+                <div class="listing " id="l_none_131131"><pre><span class="">public</span><span class=""> </span><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">function</span><span class="">.</span>
+                    <span class="bold">BinaryOperator</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BiFunction&lt;T,T,T&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T&gt; BinaryOperator&lt;T&gt; maxBy(Comparator&lt;? super T&gt; comparator)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T&gt; BinaryOperator&lt;T&gt; minBy(Comparator&lt;? super T&gt; comparator)</samp><br/>Returns a 
+                            <samp class="listingcharacter listingcharacter">BinaryOperator</samp> that returns the maximum/minimum with respect to a given 
+                            <samp class="listingcharacter listingcharacter">comparator</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.5.5.3">
+                    <a id="p782"/>BiPredicate
+                    <a class="indexanchor" id="i13_34"/>
+                </h4>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">BiPredicate</samp> tests two arguments and condenses them to a truth value. Like 
+                    <samp class="listingcharacter listingcharacter">Predicate</samp>, 
+                    <samp class="listingcharacter listingcharacter">BiPredicate</samp> also declares three default methods 
+                    <samp class="listingcharacter listingcharacter">and(...)</samp>, 
+                    <samp class="listingcharacter listingcharacter">or(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">negate(...)</samp>, although of course 
+                    <samp class="listingcharacter listingcharacter">BiPredicate</samp> lacks a static 
+                    <samp class="listingcharacter listingcharacter">isEqual(...)</samp> method like 
+                    <samp class="listingcharacter listingcharacter">Predicate</samp>. For 
+                    <samp class="listingcharacter listingcharacter">BiPredicate</samp> there’s only one use in the Java standard library in a method for finding files. The use is rare, and besides, a predicate is always a function with 
+                    <samp class="listingcharacter listingcharacter">boolean</samp>
+                 return, so that there’s actually no compelling need for this interface.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first last">By the way, with 
+                        <samp class="listingcharacter listingcharacter">Bi*</samp> and two arguments the specialization stop; no types like 
+                        <samp class="listingcharacter listingcharacter">Tri*</samp>, 
+                        <samp class="listingcharacter listingcharacter">Quad*</samp>, etc. exist. These types aren’t necessary in practice because, on one hand, a reduction can often take place—for example, 
+                        <samp class="listingcharacter listingcharacter">max(1, 2, 3)</samp> is equal to 
+                        <samp class="listingcharacter listingcharacter">max(1, max(2, 3))</samp>. On the other hand, the parameter type can be a collection, as in 
+                        <samp class="listingcharacter listingcharacter">Function&lt;List&lt;Integer&gt;,Integer&gt; max</samp>
+                    .</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.5.6">13.5.6    Functional Interfaces with Primitives</h3>
+            
+            <p class="standard">The functional interfaces presented so far are quite flexible due to the generic type parameters, but what is missing are signatures with primitives—Java has a “problem” in that generics only work with reference types, but not with primitive types. For this reason, four versions exist of almost all interfaces in the 
+                <samp class="listingcharacter listingcharacter">java.util.function</samp> package: a generic one for arbitrary references and then versions for the types 
+                <samp class="listingcharacter listingcharacter">int</samp>, 
+                <samp class="listingcharacter listingcharacter">long</samp>, and 
+                <samp class="listingcharacter listingcharacter">double</samp>
+            . The designers of the API left wrapper types and support for certain primitive types out for performance reasons, so as to avoid boxing.</p>
+            
+            <p class="standard">
+                <span class="crossreference "><a href="13_005.html#t13.13">Table 13.13</a></span>
+             provides an overview of functional interfaces, all of which have no inheritance relationships to other interfaces.</p>
+            
+            <table class="standardtable" id="t13.13">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Functional Interface</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Function Descriptor</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first tablecell_last top_border_cell tablecell_has_colspan" colspan="2">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">*Supplier</samp>
+                                </span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">BooleanSupplier</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">boolean getAsBoolean()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">IntSupplier</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int getAsInt()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">LongSupplier</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">long getAsLong()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">DoubleSupplier</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double getAsDouble()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="2">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">*Consumer</samp>
+                                </span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">IntConsumer</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void accept(int value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">LongConsumer</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void accept(long value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">
+                                    <a id="p783"/>
+                                DoubleConsumer</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void accept(double value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ObjIntConsumer&lt;T&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void accept(T t, int value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ObjLongConsumer&lt;T&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void accept(T t, long value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ObjDoubleConsumer&lt;T&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">void accept(T t, double value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="2">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">*Predicate</samp>
+                                </span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">IntPredicate</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">boolean test(int value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">LongPredicate</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">boolean test(long value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">DoublePredicate</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">boolean test(double value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="2">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">*Function</samp>
+                                </span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">DoubleToIntFunction</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int applyAsInt(double value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">IntToDoubleFunction</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double applyAsDouble(int value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">LongToIntFunction</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int applyAsInt(long value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">IntToLongFunction</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">long applyAsLong(int value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">DoubleToLongFunction</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">long applyAsLong(double value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">LongToDoubleFunction</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double applyAsDouble(long value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">IntFunction&lt;R&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">R apply(int value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">LongFunction&lt;R&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">R apply(long value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">DoubleFunction&lt;R&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">R apply(double value)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ToIntFunction&lt;T&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int applyAsInt(T t)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ToLongFunction&lt;T&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">long applyAsLong(T t)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ToDoubleFunction&lt;T&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double applyAsDouble(T t)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ToIntBiFunction&lt;T,U&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int applyAsInt(T t, U u)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ToLongBiFunction&lt;T,U&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">long applyAsLong(T t, U u)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ToDoubleBiFunction&lt;T,U&gt;</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double applyAsDouble(T t, U u)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first tablecell_last tablecell_has_colspan" colspan="2">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">*Operator</samp>
+                                </span>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">IntUnaryOperator</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int applyAsInt(int operand)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">LongUnaryOperator</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">long applyAsLong(long operand)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">
+                                    <a id="p784"/>
+                                DoubleUnaryOperator</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double applyAsDouble(double operand)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">IntBinaryOperator</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">int applyAsInt(int left, int right)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">LongBinaryOperator</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">long applyAsLong(long left, long right)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">DoubleBinaryOperator</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">double applyAsDouble(double left, double right)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 13.13</b>    
+            Special Functional Interfaces for Primitive Values</p>
+            
+            
+                
+                <h4 class="t4" id="h13.5.6.1">Static and Default Methods</h4>
+                
+                <p class="standard">Some generically declared functional interface types have default methods or static methods, and similar methods can be found in the primitive functional interfaces:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The 
+                            <samp class="listingcharacter listingcharacter">*Consumer</samp> interfaces declare 
+                            <samp class="listingcharacter listingcharacter">default *Consumer andThen(*Consumer after)</samp>, but not the 
+                            <samp class="listingcharacter listingcharacter">Obj*Consumer</samp> type, which don’t have default methods; the 
+                            <samp class="listingcharacter listingcharacter">*</samp> is a abbreviation for the prefix 
+                            <samp class="listingcharacter listingcharacter">Int</samp>,
+                            <samp class="listingcharacter listingcharacter"> Long</samp> and
+                            <samp class="listingcharacter listingcharacter"> Double</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item">The 
+                            <samp class="listingcharacter listingcharacter">*Predicate</samp>
+                         interfaces declare the following methods:</p>
+                        
+                        <ul>
+                            
+                            <li>
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">default *Predicate negate()</samp>
+                                </p>
+                            
+                            </li>
+                            
+                            <li>
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">default *Predicate and(*Predicate other)</samp>
+                                </p>
+                            
+                            </li>
+                            
+                            <li>
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">default *Predicate or(*Predicate other)</samp>
+                                </p>
+                            
+                            </li>
+                        
+                        </ul>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item">Each 
+                            <samp class="listingcharacter listingcharacter">*UnaryOperator</samp>
+                         declares the following methods:</p>
+                        
+                        <ul>
+                            
+                            <li>
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">default *UnaryOperator andThen(*UnaryOperator after)</samp>
+                                </p>
+                            
+                            </li>
+                            
+                            <li>
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">default *UnaryOperator compose(*UnaryOperator before)</samp>
+                                </p>
+                            
+                            </li>
+                            
+                            <li>
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">static *UnaryOperator identity()</samp>
+                                </p>
+                            
+                            </li>
+                        
+                        </ul>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BinaryOperator</samp> has two static methods, 
+                            <samp class="listingcharacter listingcharacter">maxBy(...)</samp> and 
+                            <samp class="listingcharacter listingcharacter">minBy(...)</samp>, which don’t exist in the primitive 
+                            <samp class="listingcharacter listingcharacter">*BinaryOperator</samp> version because no 
+                            <samp class="listingcharacter listingcharacter">Comparator</samp>
+                         is needed in primitive comparisons.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The 
+                            <samp class="listingcharacter listingcharacter">*Supplier</samp> interfaces don’t declare static methods or default methods (just like 
+                            <samp class="listingcharacter listingcharacter">Supplier</samp>
+                        ).</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

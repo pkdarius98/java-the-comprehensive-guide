@@ -1,0 +1,319 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Bits and Bytes, Mathematics and Money" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Bits and Bytes, Mathematics and Money" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Bits and Bytes, Mathematics and Money</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h21.7">21.7    Money and Currency</h2>
+        
+        <p class="standard">Numbers require context. A number alone without a unit and without context isn’t usable. Numbers always must describe something: an age, a tree height, a turnover, or more generally “life, the universe, and everything.”</p>
+        
+        
+            
+            <h3 class="t3" id="h21.7.1">21.7.1    Representing Amounts of Money</h3>
+            
+            <p class="standard">For money amounts, no specific data type exists in Java, and so the storage of money values can look different, depending on the program. The following data types are suitable:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal</samp>
+                    : Its advantages are precise calculations and selectable roundings.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A pair of 
+                        <samp class="listingcharacter listingcharacter">int</samp> or 
+                        <samp class="listingcharacter listingcharacter">long</samp>
+                    : Enables separate storage of the digits before and after the decimal point.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int</samp> or 
+                        <samp class="listingcharacter listingcharacter">long</samp>
+                    : Instead of separate dollar and cent amounts, everything is stored in cents.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The primitive data types 
+                    <samp class="listingcharacter listingcharacter">double</samp> and 
+                    <samp class="listingcharacter listingcharacter">float</samp>
+                 aren’t recommended because of their inability to correctly represent multiples of 0.01—rounding errors can quickly occur.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h21.7.1.1">Money and Currency API</h4>
+                
+                <p class="standard">In Java Specification Request (JSR) 354 “Money and Currency API
+                    <a class="indexanchor" id="i21_132"/>,” a separate data type for amounts of money is defined. Originally, the types were supposed to be included in Java Platform, Standard Edition (Java SE), but this inclusion hasn’t happened yet. Nevertheless, these types are interesting, and the reference implementation 
+                    <span class="italic">Moneta</span>
+                    <a class="indexanchor" id="i21_133"/> is worth a look: <span class="url"><a href="http://javamoney.github.io/ri.html">http://javamoney.github.io/ri.html</a></span>. Besides monetary amounts, this small library permits conversions, formatting, and custom currencies.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.7.2">21.7.2    ISO 4217</h3>
+            
+            <p class="standard">Currencies are described by currency codes, and their definitions can be found in the ISO 4217 standard. </p>
+            
+            <table class="standardtable" id="t21.15">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a id="p1065"/>
+                            ISO-4217 Code</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Currency/Unit</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Country</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">EUR</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Euro</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Countries of the Economic and Monetary Union of the European Union</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">CNY</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Renminbi</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">China</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">DKK</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Crown</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Denmark</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">GBP</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Pound</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">United Kingdom</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">INR</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Rupee</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">India</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">USD</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Dollar</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">USA, Ecuador, etc.</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">XAU</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Troy ounce of gold</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last"/>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 21.15</b>    
+            Some ISO 4217 Codes</p>
+            
+            <p class="standard">The last entry in the table reveals that there are also ISO codes for precious metals and even funds. A numeric code is defined for each abbreviation.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.7.3">21.7.3    Representing Currencies in Java</h3>
+            
+            <p class="standard">Java represents currencies through the 
+                <samp class="listingcharacter listingcharacter">java.util.Currency</samp>
+                <a class="indexanchor" id="i21_134"/> class. Instances of the class are requested by the factory method 
+                <samp class="listingcharacter listingcharacter">getInstance(String currencyCode)</samp>
+             or selected from an enumeration.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example outputs all the currencies registered in the system with some additional information:</p>
+                
+                <div class="listing " id="l_none_21980"><pre>
+                    <span class="bold"><span class="">Currency.</span><span class="">getAvailableCurrencies</span><span class="">()</span></span>.<span class="">stream</span><span class="">()</span><br/>        .<span class="">sorted</span><span class="">( Comparator.</span><span class="">comparing</span><span class="">( Currency::getCurrencyCode ) )</span><br/>        .<span class="">forEach</span><span class="">( c -&gt; System.out.</span><span class="">printf</span><span class="">( “%s, %s, %s, %s%n”,</span><br/>                                          
+                    <span class="bold">c.<span class="">getCurrencyCode</span><span class="">()</span></span>, 
+                    <span class="bold">c.<span class="">getSymbol</span><span class="">()</span></span>,<br/>                                          
+                    <span class="bold">c.<span class="">getDisplayName</span><span class="">()</span></span>, 
+                    <span class="bold">c.<span class="">getNumericCode</span><span class="">()</span></span> ) );<span class=""/></pre></div>
+                
+                <p class="standard">The result is the following output:</p>
+                
+                <div class="listing  last_item" id="l_none_21987"><pre>ADP, ADP, Andorran Peseta, 20<br/>AED, AED, VAE Dirham, 784<br/>AFA, AFA, Afghan Afghani (1927-2002), 4<br/>AFN, AFN, Afghan Afghani, 971<br/>ALL, ALL, Albanian Lek, 8<br/>…</pre></div>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

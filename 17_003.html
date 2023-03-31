@@ -1,0 +1,1045 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Introduction to Concurrent Programming" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Introduction to Concurrent Programming" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Introduction to Concurrent Programming</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h17.3">17.3    
+            <a id="p882"/>
+        Thread Members and States</h2>
+        
+        <p class="standard">
+            <a class="indexanchor" id="i17_24"/>
+            <a class="indexanchor" id="i17_25"/>
+        A thread has a whole set of states, such as a name and a priority, which can be queried and set. Not every property can be changed after startup so this section focuses on properties that can actually be changed.</p>
+        
+        
+            
+            <h3 class="t3" id="h17.3.1">17.3.1    The Name of a Thread</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i17_26"/>A thread has a large number of properties such as a state, a priority, and also a name. A name can be set with 
+                <samp class="listingcharacter listingcharacter">setName(...)</samp> and queried with 
+                <samp class="listingcharacter listingcharacter">getName()</samp>
+            :</p>
+            
+            <div class="listing " id="l_none_1795"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Thread</span><br/><span class="">implements</span><span class=""> Runnable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Thread(String name)</samp><br/>Creates a new 
+                        <samp class="listingcharacter listingcharacter">Thread</samp> object and sets the name. Useful for subclasses that call the constructor via 
+                        <samp class="listingcharacter listingcharacter">super(name)</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Thread(Runnable target, String name)</samp><br/>Creates a new 
+                        <samp class="listingcharacter listingcharacter">Thread</samp> object with a 
+                        <samp class="listingcharacter listingcharacter">Runnable</samp>
+                     and sets the name.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final String getName()</samp><br/>Returns the name of the thread. The name is specified in the constructor or assigned with 
+                        <samp class="listingcharacter listingcharacter">setName(...)</samp>
+                    . By default, the name is “Thread-x,” where x is a unique number.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final void setName(String name)</samp><br/>Changes the name of the thread.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.3.2">17.3.2    The States of a Thread*</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i17_27"/>
+                <a class="indexanchor" id="i17_28"/>An instance of 
+                <samp class="listingcharacter listingcharacter">Thread</samp>
+             will have a few conditions:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">New</span>: The lifecycle of a 
+                        <samp class="listingcharacter listingcharacter">Thread</samp> object starts with 
+                        <samp class="listingcharacter listingcharacter">new</samp>
+                    , but the object doesn’t run yet.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">Running</span> and 
+                        <span class="italic">ready</span>: Via 
+                        <samp class="listingcharacter listingcharacter">start()</samp>, the thread gets into the state “ready” or “running.” The thread always switches back and forth between the two states. If the thread is 
+                        <span class="italic">running</span>, the scheduler has selected it for execution by the operating system; if 
+                        <span class="italic">ready</span>
+                    , the thread is not currently running but will be considered by the scheduler for the next round until the scheduler allocates computing time to it again.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">Waiting</span>
+                    : This state is achieved using special synchronization techniques or input/output functions—the thread dwells in a wait state.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">Terminated</span>: After the activity of the 
+                        <samp class="listingcharacter listingcharacter">Thread</samp>
+                     object has ended, the object can no longer be activated and is dead (i.e., terminated).</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h17.3.2.1">
+                    <a id="p883"/>
+                With a Sign of Life: State via Thread.State</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">getState()</samp> method shows the current state of a thread. This method returns an object of the 
+                    <samp class="listingcharacter listingcharacter">Thread.State</samp> enumeration type (the only enumeration in the 
+                    <samp class="listingcharacter listingcharacter">java.lang</samp>
+                 package), which declares the following states:</p>
+                
+                <table class="standardtable" id="t17.2">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">State</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Explanation</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">NEW</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">New thread, not yet started</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">RUNNABLE</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Runs in the JVM.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">BLOCKED</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Waits for a 
+                                    <samp class="listingcharacter listingcharacter">MonitorLock</samp> when it wants to enter a 
+                                    <samp class="listingcharacter listingcharacter">synchronized</samp>
+                                 block, for example.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">WAITING</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Waits for a 
+                                    <samp class="listingcharacter listingcharacter">notify()</samp>
+                                , for example.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">TIMED_WAITING</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Waits in a 
+                                    <samp class="listingcharacter listingcharacter">sleep()</samp>
+                                , for example.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">TERMINATED</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Execution is finished.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 17.2</b>    
+            States of a Thread</p>
+                
+                <p class="standard">In addition, the 
+                    <samp class="listingcharacter listingcharacter">isAlive()</samp>
+                 method inquires whether the thread has been started but isn’t yet dead.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.3.3">17.3.3    Sleepers Wanted</h3>
+            
+            <p class="standard">Sometimes, you’ll find it necessary to pause a thread for a certain time. For this purpose, the methods of two classes are available:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">The overloaded static method </span>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">Thread.sleep(...)</samp>
+                        </span>
+                        <a class="indexanchor" id="i17_29"/><br/>Somewhat surprisingly, this method is not an instance method of a 
+                        <samp class="listingcharacter listingcharacter">Thread</samp>
+                     object but is a static method. You can only send your own thread to sleep but you cannot simply put an external thread, whose reference you have, to sleep for a few seconds and thus stop it from executing.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">The object method </span>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">sleep(...) </samp>
+                        </span>
+                        <span class="bold">on a </span>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">TimeUnit</samp>
+                        </span> object<br/>In addition, this method always references the executing thread. The advantage over 
+                        <samp class="listingcharacter listingcharacter">sleep(...)</samp>
+                     is that, with this method, the time units are more visible.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Let’s say the executing thread needs to sleep for 2 seconds. We can achieve this goal with 
+                    <samp class="listingcharacter listingcharacter">Thread.sleep(...)</samp>
+                 in the following way:</p>
+                
+                <div class="listing " id="l_none_17123"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">Thread.</span><span class="">sleep</span><span class="">( </span><span class="">2000</span><span class=""> );</span></span><br/>} <span class="">catch</span><span class=""> ( InterruptedException e ) { }</span><span class=""/></pre></div>
+                
+                <p class="standard">
+                    <a id="p884"/>Then, with 
+                    <samp class="listingcharacter listingcharacter">TimeUnit</samp>
+                , we can specify a sleep period in the following way:</p>
+                
+                <div class="listing  last_item" id="l_none_17131"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">TimeUnit.SECONDS.</span><span class="">sleep</span><span class="">( </span><span class="">2</span><span class=""> );</span></span><br/>} <span class="">catch</span><span class=""> ( InterruptedException e ) { }</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">Sleep can be interrupted by an 
+                <samp class="listingcharacter listingcharacter">InterruptedException</samp>
+                <a class="indexanchor" id="i17_30"/>, for example, by 
+                <samp class="listingcharacter listingcharacter">interrupt()</samp>. The exception must be handled because it isn’t a 
+                <samp class="listingcharacter listingcharacter">RuntimeException</samp>
+            .</p>
+            
+            <div class="listing " id="l_none_17132"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Thread</span><br/><span class="">implements</span><span class=""> Runnable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void sleep(long millis) throws InterruptedException</samp><br/>The currently executing thread is put to sleep for 
+                        <samp class="listingcharacter listingcharacter">millis</samp> milliseconds; a small inaccuracy is of course possible. If another thread interrupts the sleeping thread, an 
+                        <samp class="listingcharacter listingcharacter">InterruptedException</samp>
+                     will be thrown prematurely.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void sleep(long millis, int nanos) throws InterruptedException</samp><br/>The currently executing thread is put to sleep for 
+                        <samp class="listingcharacter listingcharacter">millis</samp> milliseconds and additionally for 
+                        <samp class="listingcharacter listingcharacter">nanos</samp> nanoseconds. Unlike 
+                        <samp class="listingcharacter listingcharacter">sleep(long)</samp>, an 
+                        <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>
+                     will be thrown if the number of milliseconds is negative. This exception will also be thrown if the nanosecond count is not between 0 and 999,999.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">To discourage developers from using an outdated API, a delay can be built in, which is quite nasty, but then the new API will quickly catch on.</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_17147"><pre><span class="">enum</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">concurrent</span><span class="">.</span>
+                <span class="bold">TimeUnit</span><br/><span class="">extends</span><span class=""> Enum&lt;TimeUnit&gt;</span><br/><span class="">implements</span><span class=""> Serializable, Comparable&lt;TimeUnit&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">NANOSECONDS</samp>, 
+                        <samp class="listingcharacter listingcharacter">MICROSECONDS</samp>, 
+                        <samp class="listingcharacter listingcharacter">MILLISECONDS</samp>, 
+                        <samp class="listingcharacter listingcharacter">SECONDS</samp>, 
+                        <samp class="listingcharacter listingcharacter">MINUTES</samp>, 
+                        <samp class="listingcharacter listingcharacter">HOURS</samp>, 
+                        <samp class="listingcharacter listingcharacter">DAYS</samp><br/>Enumeration elements of 
+                        <samp class="listingcharacter listingcharacter">TimeUnit</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void sleep(long timeout) throws InterruptedException</samp><br/>Executes a 
+                        <samp class="listingcharacter listingcharacter">Thread.sleep()</samp>
+                     for the time unit.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">To perform something task after a certain time, you don’t need to start a separate thread and then put that thread into sleep mode. The Java API provides timers that are useful in these cases.</p>
+            
+            </div>
+            
+            <p class="standard">
+                <a id="p885"/>An overloaded 
+                <samp class="listingcharacter listingcharacter">Thread.sleep(long, TimeUnit)</samp>
+             method would be a good idea, but this method doesn’t exist.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.3.4">17.3.4    When Threads Are Finished</h3>
+            
+            <p class="standard">Some threads run all the time because they implement server functions, for example. Other threads perform an operation once and are finished afterwards. Generally, a thread is finished when one of the following conditions is true:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <samp class="listingcharacter listingcharacter">run()</samp>
+                     method terminated without an error. If we program an infinite loop, it would potentially form a never-ending thread.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A 
+                        <samp class="listingcharacter listingcharacter">RuntimeException</samp> occurs in the 
+                        <samp class="listingcharacter listingcharacter">run()</samp>
+                     method, which terminates the method. That doesn’t end the other threads or the JVM in its entirety.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The thread was canceled from the outside. The 
+                        <samp class="listingcharacter listingcharacter">stop()</samp>
+                     method, which is basically problematic, can be used for this purpose. Its use isn’t recommended, and it’s also deprecated.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The virtual machine is terminated and takes all threads to the grave with it.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.3.5">17.3.5    Terminating a Thread Politely Using Interrupts
+                <a class="indexanchor" id="i17_31"/>
+            </h3>
+            
+            <p class="standard">A thread is usually finished when the 
+                <samp class="listingcharacter listingcharacter">run()</samp> method has been properly executed to the end. However, if a 
+                <samp class="listingcharacter listingcharacter">run()</samp> method contains an infinite loop, such as a server waiting for incoming requests, the thread must be forced to surrender externally. We’ll discuss the obvious possibility of using the 
+                <samp class="listingcharacter listingcharacter">Thread</samp> method 
+                <samp class="listingcharacter listingcharacter">stop()</samp>
+                <a class="indexanchor" id="i17_32"/> to stall a thread in 
+                <span class="crossreference "><a href="17_003.html#h17.3.7">Section 17.3.7</a></span>
+            .</p>
+            
+            <p class="standard">However, if you don’t want to terminate the thread from the outside, you can politely ask the thread to quit its job and thus come to an end. In this case, the thread would only have to check periodically whether someone from the outside has expressed the wish to abort.</p>
+            
+            
+                
+                <h4 class="t4" id="h17.3.5.1">The interrupt() and isInterrupted() Methods</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">interrupt()</samp>
+                    <a class="indexanchor" id="i17_33"/> method sets an internal flag from outside in a 
+                    <samp class="listingcharacter listingcharacter">Thread</samp> object, which can then be queried periodically in the 
+                    <samp class="listingcharacter listingcharacter">run()</samp> method via 
+                    <samp class="listingcharacter listingcharacter">isInterrupted()</samp>
+                    <a class="indexanchor" id="i17_34"/>
+                .</p>
+                
+                <p class="standard">The following program displays a message on the screen every half second. After 2 seconds, the interrupt request is reported via 
+                    <samp class="listingcharacter listingcharacter">interrupt()</samp>
+                . The otherwise infinitely running loop pays attention to this signal and aborts:</p>
+                
+                <div class="listing " id="l17.4"><pre>Runnable killingMeSoftly <span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"There is life before death."</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>  <span class="">while</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">! Thread.</span><span class="">currentThread</span><span class="">().</span><span class="">isInterrupted</span><span class="">()</span></span> ) {<br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"It runs, and runs, and runs, and runs."</span><span class=""> );</span><br/><br/>
+                    <a id="p886"/>    <span class="">try</span><span class=""> {</span><br/>      Thread.<span class="">sleep</span><span class="">( </span><span class="">500</span><span class=""> );</span><br/>    }<br/>    <span class="">catch</span><span class=""> ( InterruptedException e ) {</span><br/>      
+                    <span class="bold">Thread.<span class="">currentThread</span><span class="">().</span><span class="">interrupt</span><span class="">();</span></span><br/>      System.out.<span class="">println</span><span class="">( </span><span class="">"Interruption in sleep()."</span><span class=""> );</span><br/>    }<br/>  }<span class=""> // end while</span><span class=""><br/></span><br/>  System.out.<span class="">println</span><span class="">( </span><span class="">"This is the end, beautiful friend."</span><span class=""> );</span><br/>};<br/><br/>Thread t = <span class="">new</span><span class=""> </span><span class="">Thread</span><span class="">( killingMeSoftly );</span><br/>t.<span class="">start</span><span class="">();</span><br/>Thread.<span class="">sleep</span><span class="">( </span><span class="">2000</span><span class=""> );</span><br/>
+                    <span class="bold">t.<span class="">interrupt</span><span class="">();</span></span> <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 17.4</b>    
+            src/main/java/com/tutego/insel/thread/ThreadusInterruptus.java, main(…)</p>
+                
+                <p class="standard">The output nicely shows the sequence of operations:</p>
+                
+                <div class="listing " id="l_none_17164"><pre>There is life before death.<br/>It runs, and runs, and runs, and runs.<br/>It runs, and runs, and runs, and runs.<br/>It runs, and runs, and runs, and runs.<br/>It runs, and runs, and runs, and runs.<br/>Interruption in sleep().<br/>This is the end, beautiful friend. </pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">If inherited from 
+                        <samp class="listingcharacter listingcharacter">Thread</samp>, the 
+                        <samp class="listingcharacter listingcharacter">isInterrupted()</samp> and 
+                        <samp class="listingcharacter listingcharacter">interrupt()</samp>
+                     methods are immediately accessible in the subclass.</p>
+                
+                </div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">run()</samp> method in the thread is implemented in such a way that the loop is exited exactly when 
+                    <samp class="listingcharacter listingcharacter">isInterrupted()</samp> returns 
+                    <samp class="listingcharacter listingcharacter">true</samp> (i.e., the 
+                    <samp class="listingcharacter listingcharacter">interrupt()</samp> method was called from outside for this thread instance). This step is exactly what happens in the 
+                    <samp class="listingcharacter listingcharacter">main(...)</samp>
+                 method.</p>
+                
+                <p class="standard">At first glance, the program is easy to understand, but let’s focus on the 
+                    <samp class="listingcharacter listingcharacter">interrupt()</samp> in the 
+                    <samp class="listingcharacter listingcharacter">catch</samp> block. If this line were not there, the program would most likely not work. Why not? The secret is, if the output is only every half second, the thread is in the 
+                    <samp class="listingcharacter listingcharacter">sleep(...)</samp> method almost all the time. So, 
+                    <samp class="listingcharacter listingcharacter">interrupt()</samp> will probably find the thread just sleeping. The method 
+                    <samp class="listingcharacter listingcharacter">sleep(...)</samp>
+                 doesn’t like this interruption at all and reacts in the following way, which is well documented in the Javadoc:</p>
+                
+                <ol>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p887"/>
+                            sleep(...)</samp> throws an 
+                            <samp class="listingcharacter listingcharacter">InterruptedException</samp>
+                            <a class="indexanchor" id="i17_35"/> when interrupted with 
+                            <samp class="listingcharacter listingcharacter">interrupt()</samp>, which is exactly the exception our 
+                            <samp class="listingcharacter listingcharacter">try-catch</samp>
+                         block catches.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The method resets the interrupt flag. A query via 
+                            <samp class="listingcharacter listingcharacter">isInterrupted()</samp>
+                         consequently reports no interruption.</p>
+                    
+                    </li>
+                
+                </ol>
+                
+                <p class="standard">In general, that the interrupt flag is reset is good because it has done its job. In our case, however, 
+                    <samp class="listingcharacter listingcharacter">interrupt()</samp> must be called again because the termination flag must be set again so that 
+                    <samp class="listingcharacter listingcharacter">isInterrupted()</samp> can determine the end in the 
+                    <samp class="listingcharacter listingcharacter">while</samp>
+                 loop.</p>
+                
+                <p class="standard">If you use the object method 
+                    <samp class="listingcharacter listingcharacter">isInterrupted()</samp>, besides 
+                    <samp class="listingcharacter listingcharacter">sleep(...)</samp>, the 
+                    <samp class="listingcharacter listingcharacter">Object</samp> methods 
+                    <samp class="listingcharacter listingcharacter">join(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">wait(...)</samp> also clear the flag via 
+                    <samp class="listingcharacter listingcharacter">InterruptedException</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">The methods 
+                        <samp class="listingcharacter listingcharacter">sleep(...)</samp>, 
+                        <samp class="listingcharacter listingcharacter">wait(...)</samp>, and 
+                        <samp class="listingcharacter listingcharacter">join(...)</samp> all throw an 
+                        <samp class="listingcharacter listingcharacter">InterruptedException</samp> if they are interrupted by the 
+                        <samp class="listingcharacter listingcharacter">interrupt()</samp> method. In other words, 
+                        <samp class="listingcharacter listingcharacter">interrupt()</samp>
+                     terminates these methods with the exception.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h17.3.5.2">Summary: interrupted(), isInterrupted(), and interrupt()</h4>
+                
+                <p class="standard">These method names are rather confusing, so let’s summarize their tasks again: The object method 
+                    <samp class="listingcharacter listingcharacter">interrupt()</samp> sets a flag in a (different) 
+                    <samp class="listingcharacter listingcharacter">Thread</samp> object to indicate that a request to terminate the thread was received. However, the thread isn’t terminated, although the method name suggests it would. This flag can be queried with the object method 
+                    <samp class="listingcharacter listingcharacter">isInterrupted()</samp>. Usually, this query is done inside a loop that determines whether the thread’s activity should continue. The static method 
+                    <samp class="listingcharacter listingcharacter">interrupted()</samp>
+                    <a class="indexanchor" id="i17_36"/> is also a request method and tests the corresponding flag of the currently running thread, like 
+                    <samp class="listingcharacter listingcharacter">Thread.currentThread().isInterrupted()</samp>, but in addition the method also clears the interrupt status, which 
+                    <samp class="listingcharacter listingcharacter">isInterrupted()</samp> doesn’t do. Two consecutive calls of 
+                    <samp class="listingcharacter listingcharacter">interrupted()</samp> will therefore result in a 
+                    <samp class="listingcharacter listingcharacter">false</samp>
+                 unless another interruption occurs in the meantime.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.3.6">17.3.6    Unhandled Exceptions, Thread End,
+                <a class="indexanchor" id="i17_37"/>
+             and UncaughtExceptionHandler</h3>
+            
+            <p class="standard">If an unhandled unchecked exception occurs during thread execution
+                <a class="indexanchor" id="i17_38"/>
+            , the JVM terminates the thread. This termination won’t be logged separately on the console; only the exception message will be displayed.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following example, the JVM terminates the thread due to an uncaught exception, while the 
+                    <samp class="listingcharacter listingcharacter">main</samp>
+                 thread continues to run:</p>
+                
+                <div class="listing " id="l_none_17180"><pre>Thread t <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Thread</span><span class="">(</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Thread</span><span class="">.</span><span class="">currentThread</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>
+                    <a id="p888"/>      System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">/</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    <span class="">},</span><span class=""> </span><span class="">"Waiting for the summer rain"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>t<span class="">.</span><span class="">start</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> t</span><span class="">.</span><span class="">isAlive</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Thread<span class="">.</span><span class="">sleep</span><span class="">(</span><span class=""> </span><span class="">1000</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Thread</span><span class="">.</span><span class="">currentThread</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> t</span><span class="">.</span><span class="">isAlive</span><span class="">()</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">The result is the following output:</p>
+                
+                <div class="listing  last_item" id="l_none_17196"><pre>true<br/>Thread[Waiting for the summer rain,5,main]<br/>Exception in thread "Waiting for the summer rain" java.lang.ArithmeticException: / by zero<br/>  at T.lambda$0(T.java:8)<br/>  at java.base/java.lang.Thread.run(Thread.java:844)<br/>Thread[main,5,main]<br/>false</pre></div>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h17.3.6.1">Setting UncaughtExceptionHandler
+                    <a class="indexanchor" id="i17_39"/>
+                </h4>
+                
+                <p class="standard">One reason for a thread to end is an unhandled exception, such as from an uncaught 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp>. To allow a controlled exit in this case, an 
+                    <samp class="listingcharacter listingcharacter">UncaughtExceptionHandler</samp>
+                    <a class="indexanchor" id="i17_40"/>
+                 can be appended to the thread, which will be notified whenever the thread ends because of an unhandled exception.</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">UncaughtExceptionHandler</samp> is a nested interface declared in 
+                    <samp class="listingcharacter listingcharacter">Thread</samp> that imposes the operation 
+                    <samp class="listingcharacter listingcharacter">void uncaughtException(Thread t, Throwable e)</samp>. An implementation of the interface can be appended either to an individual thread or to all threads. Therefore, in case of a termination by unhandled exceptions, the JVM calls the 
+                    <samp class="listingcharacter listingcharacter">uncaughtException(...)</samp> method. In this way, the application can still log the error passed by the JVM via 
+                    <samp class="listingcharacter listingcharacter">throwable e</samp>
+                .</p>
+                
+                <div class="listing " id="l_none_17199"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Thread</span><br/><span class="">implements</span><span class=""> Runnable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">void setUncaughtExceptionHandler(Thread.UncaughtExceptionHandler eh)</samp><br/>Sets the 
+                            <samp class="listingcharacter listingcharacter">UncaughtExceptionHandler</samp>
+                         for the thread.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Thread.UncaughtExceptionHandler getUncaughtExceptionHandler()</samp><br/>Returns the current 
+                            <samp class="listingcharacter listingcharacter">UncaughtExceptionHandler</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static void setDefaultUncaughtExceptionHandler(Thread.UncaughtExceptionHandler eh)</samp><br/>Sets the 
+                            <samp class="listingcharacter listingcharacter">UncaughtExceptionHandler</samp>
+                         for all threads.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static Thread.UncaughtExceptionHandler getDefaultUncaughtExceptionHandler()</samp><br/>Returns the assigned 
+                            <samp class="listingcharacter listingcharacter">UncaughtExceptionHandler</samp>
+                         of all threads.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">
+                    <a id="p889"/>An 
+                    <samp class="listingcharacter listingcharacter">UncaughtExceptionHandler</samp> set locally with 
+                    <samp class="listingcharacter listingcharacter">setUncaughtExceptionHandler(...)</samp> overrides the entry for the 
+                    <samp class="listingcharacter listingcharacter">setDefaultUncaughtExceptionHandler(...)</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h17.3.6.2">If the Thread Is to Report an Error</h4>
+                
+                <p class="standard">Since a thread operates concurrently, the 
+                    <samp class="listingcharacter listingcharacter">run()</samp> method poorly reports exceptions or returns values synchronously. Who should listen to the method and at what point? A solution to the problem is using a listener who logs in to the thread and is informed whether the thread could do its job or not. Another solution is provided by 
+                    <samp class="listingcharacter listingcharacter">Callable</samp> (see 
+                    <span class="crossreference "><a href="05_001.html#h5">Chapter 5</a></span>, 
+                    <span class="crossreference "><a href="05_005.html#h5.5.8">Section 5.5.8</a></span>
+                ), which can return a special error code or display an exception.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.3.7">17.3.7    The stop() from the Outside and the Rescue with ThreadDeath*</h3>
+            
+            <p class="standard">If a thread doesn’t listen to 
+                <samp class="listingcharacter listingcharacter">interrupt()</samp>, but instead for some reason urgently needs to be terminated, you must use the deprecated 
+                <samp class="listingcharacter listingcharacter">stop()</samp> method, even though we should avoid using a deprecated method. By the way, if you use native compilation with GraalVM, the method is not supported.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn17_03" id="fn17_03">[ 218 ]</a></span>
+            </p>
+            
+            <p class="standard">The fact that this method is deprecated tells you to avoid using 
+                <samp class="listingcharacter listingcharacter">stop()</samp>. (Unfortunately, unlike most other outdated methods, no replacement can be easily recommended.) You can’t override 
+                <samp class="listingcharacter listingcharacter">stop()</samp>
+             either because it’s final. When you terminate a thread from outside, you no longer give it a chance to leave its state consistently. In addition, the interruption can occur at any point, allowing requested resources to remain in a state of limbo.</p>
+            
+            <div class="listing " id="l_none_17216"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Thread</span><br/><span class="">implements</span><span class=""> Runnable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final void stop()</samp><br/>If the thread hasn’t been started at all or if it has already been processed or terminated, the method will return immediately.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Rendezvous with join(...) *</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">When you distribute tasks to several threads, a time will come when the results must be collected. However, the results can’t be joined until all threads have finished executing. When they meet at a specific time, it’s called a 
+                <span class="italic">rendezvous</span>
+                <a class="indexanchor" id="i17_41"/>
+            .</p>
+            
+            <p class="standard">Several strategies for waiting exist. First, you can use 
+                <samp class="listingcharacter listingcharacter">Callable</samp> and then wait synchronously for the end with 
+                <samp class="listingcharacter listingcharacter">get()</samp>. If you use 
+                <samp class="listingcharacter listingcharacter">Runnable</samp>, a thread can’t pass direct results like a method to the outside because the 
+                <samp class="listingcharacter listingcharacter">run()</samp> method has the 
+                <samp class="listingcharacter listingcharacter">void</samp>
+             result type. Moreover, since a concurrent thread works asynchronously, you don’t even know when to expect the result.</p>
+            
+            <p class="standard">
+                <a id="p890"/>The transfer of values isn’t a problem. Class variables and also object variables can help in this case because you can communicate through them. The only thing missing now is that waiting for the end of a thread’s activity, which can be achieved with 
+                <samp class="listingcharacter listingcharacter">join(...)</samp>
+             methods.</p>
+            
+            <p class="standard">In the example shown in 
+                <span class="crossreference "><a href="17_003.html#l17.5">Listing 17.5</a></span>, a 
+                <samp class="listingcharacter listingcharacter">thread</samp> places a result in the 
+                <samp class="listingcharacter listingcharacter">result</samp> variable. You can see the effects of 
+                <samp class="listingcharacter listingcharacter">join()</samp>
+                <a class="indexanchor" id="i17_42"/>
+             if you include the line that’s been commented out in the following example:</p>
+            
+            <div class="listing " id="l17.5"><pre><span class="">class</span><span class=""> JoinerRunnable </span><span class="">implements</span><span class=""> Runnable </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">int</span><span class=""> result</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">run</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    result <span class="">=</span><span class=""> LocalDate</span><span class="">.</span><span class="">now</span><span class="">().</span><span class="">getDayOfYear</span><span class="">();</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><br/>JoinerRunnable runnable <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">JoinerRunnable</span><span class="">();</span><span class=""><br/></span>Thread thread <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Thread</span><span class="">(</span><span class=""> runnable </span><span class="">);</span><span class=""><br/></span>thread<span class="">.</span><span class="">start</span><span class="">();</span><span class=""><br/></span>// 
+                <span class="bold">thread.join();</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( runnable.result ); </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 17.5</b>    
+            src/main/java/com/tutego/insel/thread/JoinTheThread.java, main(…)</p>
+            
+            <p class="standard">Without calling 
+                <samp class="listingcharacter listingcharacter">join()</samp>, the result will be 0 because starting the thread costs some time. During this time, we can output the object variable automatically initialized to 0. If we include 
+                <samp class="listingcharacter listingcharacter">join()</samp>, the 
+                <samp class="listingcharacter listingcharacter">run()</samp> method will be executed at the end, and the thread sets the 
+                <samp class="listingcharacter listingcharacter">result</samp>
+             variable to the day of the year (value range 1 to 366), which is what will be displayed on the screen.</p>
+            
+            <div class="listing " id="l_none_17236"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Thread</span><br/><span class="">implements</span><span class=""> Runnable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final void join() throws InterruptedException</samp><br/>The currently executed thread waits for the thread for which the method is called to finish.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final void join(long millis) throws InterruptedException</samp><br/>Like 
+                        <samp class="listingcharacter listingcharacter">join()</samp>, but this variant waits at most 
+                        <samp class="listingcharacter listingcharacter">millis</samp> milliseconds. If the thread hasn’t been completely terminated by then, the program will continue. In this way, you can try to wait for the thread within a certain period of time but otherwise continue. With 
+                        <samp class="listingcharacter listingcharacter">millis</samp> is 
+                        <samp class="listingcharacter listingcharacter">0</samp>, this method has the same effect as 
+                        <samp class="listingcharacter listingcharacter">join()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p891"/>
+                        final void join (long millis, int nanos) throws InterruptedException</samp><br/>Like 
+                        <samp class="listingcharacter listingcharacter">join(long)</samp>
+                     but with a potentially more precise specification of the maximum wait time.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">After a 
+                <samp class="listingcharacter listingcharacter">thread.join(long)</samp>, the 
+                <samp class="listingcharacter listingcharacter">thread.isAlive()</samp> method is sometimes useful because it indicates whether 
+                <samp class="listingcharacter listingcharacter">thread</samp>
+             is still actively working or has finished.</p>
+            
+            <p class="standard">In 
+                <samp class="listingcharacter listingcharacter">TimeUnit</samp>, a helper method, 
+                <samp class="listingcharacter listingcharacter">timedJoin(...)</samp>
+            , allows you to work with durations more nicely.</p>
+            
+            <div class="listing " id="l_none_17252"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">TimeUnit</span><br/><span class="">implements</span><span class=""> Runnable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void timedJoin(Thread thread, long timeout) throws InterruptedException</samp><br/>Calculates milliseconds (
+                        <samp class="listingcharacter listingcharacter">ms</samp>) and nanoseconds (
+                        <samp class="listingcharacter listingcharacter">ns</samp>) from the 
+                        <samp class="listingcharacter listingcharacter">TimeUnit</samp> and 
+                        <samp class="listingcharacter listingcharacter">timeout</samp> and performs a 
+                        <samp class="listingcharacter listingcharacter">join(ms, ns)</samp> on the 
+                        <samp class="listingcharacter listingcharacter">thread</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h17.3.7.1">Waiting for the Slowest</h4>
+                
+                <p class="standard">Large problems can be split up into several parts, and each subproblem can then be solved by a thread. This approach is a worthwhile investment, especially for multiprocessor systems. Finally, you can simply wait for the threads to finish and collect the result. 
+                    <samp class="listingcharacter listingcharacter">Join(...)</samp>
+                 is well suited for this purpose.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Example</h6>
+                    
+                    <p class="standard first">Let’s say two threads are working on one problem. You must thus wait until both have completed their tasks. Then, for example, another thread could reuse the resources used by 
+                        <samp class="listingcharacter listingcharacter">a</samp> and 
+                        <samp class="listingcharacter listingcharacter">b</samp>
+                    , as in the following example: </p>
+                    
+                    <div class="listing  last_item" id="l_none_17256"><pre>Thread a <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Thread</span><span class="">(</span><span class=""> runnableA </span><span class="">);</span><span class=""><br/></span>Thread b <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Thread</span><span class="">(</span><span class=""> runnableB </span><span class="">);</span><span class=""><br/></span>a<span class="">.</span><span class="">start</span><span class="">();</span><span class=""><br/></span>b<span class="">.</span><span class="">start</span><span class="">();</span><span class=""><br/></span>
+                        <span class="bold"><span class="">a.</span><span class="">join</span><span class="">();</span><br/>b.<span class="">join</span><span class="">();</span></span><span class=""/></pre></div>
+                
+                </div>
+                
+                <p class="standard">Whose 
+                    <samp class="listingcharacter listingcharacter">join()</samp> we call first doesn’t matter since we must wait for the slowest thread anyway. If a thread is already finished, 
+                    <samp class="listingcharacter listingcharacter">join()</samp>
+                 returns immediately.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.3.8">17.3.8    Stopping and Resuming the Work*</h3>
+            
+            <p class="standard">To make one thread stop working for a certain time and still have another thread wake up the sleeping thread, you would have to implement that feature by yourself. Although two 
+                <samp class="listingcharacter listingcharacter">Thread</samp> methods—
+                <samp class="listingcharacter listingcharacter">suspend()</samp>
+                <a class="indexanchor" id="i17_43"/> and 
+                <samp class="listingcharacter listingcharacter">resume()</samp>
+                <a class="indexanchor" id="i17_44"/>—can be used, this start-stop 
+                <a id="p892"/>technique is deprecated because it’s as problematic as 
+                <samp class="listingcharacter listingcharacter">stop()</samp>
+            . In the future, these methods will be removed from Java Platform, Standard Edition (Java SE).</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.3.9">17.3.9    Priority*</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i17_45"/>
+                <a class="indexanchor" id="i17_46"/>Each thread has a priority, which indicates how much computing time a thread should receive in relation to other threads. The priority is a number between 
+                <samp class="listingcharacter listingcharacter">Thread.MIN_PRIORITY</samp>
+                <a class="indexanchor" id="i17_47"/> (1) and 
+                <samp class="listingcharacter listingcharacter">Thread.MAX_PRIORITY</samp>
+                <a class="indexanchor" id="i17_48"/> (10). The value allows the scheduler to identify which thread to give priority to when multiple threads are waiting for compute time. At its initialization, each thread gets the priority of the creating thread. Normally, the priority 
+                <samp class="listingcharacter listingcharacter">Thread.NORM_PRIORITY</samp>
+             (5) is assigned.</p>
+            
+            <p class="standard">The operating system (or the JVM) always takes threads out of the queue according to priority (hence 
+                <span class="italic">priority queue</span>
+                <a class="indexanchor" id="i17_49"/>). A thread with priority 
+                <span class="italic">N</span> is placed before all threads with importance less than 
+                <span class="italic">N</span>, but after threads with priority greater than or equal to 
+                <span class="italic">N</span>. Now, if a cooperative thread with priority 
+                <span class="italic">N</span> calls the 
+                <samp class="listingcharacter listingcharacter">yield()</samp> method, a thread with priority &lt;= 
+                <span class="italic">N</span>
+             also gets a chance to be executed.</p>
+            
+            <p class="standard">The priority can be changed by calling 
+                <samp class="listingcharacter listingcharacter">setPriority(...)</samp>
+                <a class="indexanchor" id="i17_50"/> and queried with 
+                <samp class="listingcharacter listingcharacter">getPriority()</samp>
+                <a class="indexanchor" id="i17_51"/>
+            . However, Java makes very weak assertions about the meaning and impact of thread priorities.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Example</h6>
+                
+                <p class="standard first last">In the following example, we’re assigning the highest priority to thread 
+                    <samp class="listingcharacter listingcharacter">t</samp>
+                :</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_17260"><pre>t<span class="">.</span><span class="">setPriority</span><span class="">(</span><span class=""> Thread</span><span class="">.</span><span class="">MAX_PRIORITY </span><span class="">);</span><span class=""><br/></span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Thread</span><br/><span class="">implements</span><span class=""> Runnable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final int getPriority()</samp><br/>Returns the priority of the thread.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">final void setPriority(int newPriority)</samp><br/>Sets the priority of the thread. The method returns an 
+                        <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp> if the priority isn’t between 
+                        <samp class="listingcharacter listingcharacter">MIN_PRIORITY</samp> (1) and 
+                        <samp class="listingcharacter listingcharacter">MAX_PRIORITY</samp>
+                     (10).</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h17.3.9.1">Granularity
+                    <a class="indexanchor" id="i17_52"/>
+                    <a class="indexanchor" id="i17_53"/>
+                 and Precedence</h4>
+                
+                <p class="standard">The ten priority levels don’t necessarily guarantee different code executions. Although you might assume that a thread with priority 
+                    <samp class="listingcharacter listingcharacter">NORM_PRIORITY+1</samp> executes program code more often than a thread with priority 
+                    <samp class="listingcharacter listingcharacter">NORM_PRIORITY</samp>, the operating system may implement these preferences differently. Let’s assume the platform implements only five priority levels. If 1 is the lowest level and 5 is the highest while the middle level is 3, probably 
+                    <samp class="listingcharacter listingcharacter">NORM_PRIORITY</samp> and 
+                    <samp class="listingcharacter listingcharacter">NORM_PRIORITY + 1</samp> will be transformed to level 3 and therefore have 
+                    <a id="p893"/>
+                the same priority. Thus, even with different priorities, you can’t expect that a particular program part will necessarily run more quickly. In addition, some operating systems with schedulers don’t support priorities or interpret them in unexpected ways.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

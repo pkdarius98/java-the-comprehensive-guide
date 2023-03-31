@@ -1,0 +1,419 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    The Class Library" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    The Class Library" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    The Class Library</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h16.8">16.8    Logging with Java</h2>
+        
+        <p class="standard">Logging information about program states is important for reconstructing and understanding the flow and states of a program at a later time. A logging API can write messages to the console or to external storage, such as text files, XML files, and databases, or to distribute these messages via chat.</p>
+        
+        
+            
+            <h3 class="t3" id="h16.8.1">16.8.1    
+                <a id="p865"/>
+            Logging Application Programming Interfaces</h3>
+            
+            <p class="standard">Regarding logging libraries and APIs, the Java world is unfortunately divided. Since the Java standard library didn’t provide a logging API in its first versions, the open-source library 
+                <span class="italic">log4j</span>
+                <a class="indexanchor" id="i16_59"/> quickly filled this gap. This library is used in almost every major Java project today. When the Logging API moved into Java 1.4 with Java Specification Request (JSR) 47, the Java community was surprised to find that 
+                <samp class="listingcharacter listingcharacter">java.util.logging</samp> (
+                <span class="italic">JUL</span>) was neither API-compatible with the popular Log4j nor as powerful as Log4j.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn16_08" id="fn16_08">[ 214 ]</a></span>
+            </p>
+            
+            <p class="standard">Over the years, the picture has changed. While in the early day’s developers relied exclusively on log4j, more and more projects are now using JUL. One of the reasons is that some developers want to avoid external dependencies (although this doesn’t really work since almost every included Java library is based on log4j). Another reason is that for many projects JUL is simply sufficient. In practice, for larger projects, as a result, multiple logging configurations overcrowd their own programs, as each logging implementation is configured differently.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.8.2">16.8.2    Logging with java.util.logging</h3>
+            
+            <p class="standard">The Java logging API can write a message that you can then use for maintenance or security checks. The API is simple:</p>
+            
+            <div class="listing " id="l16.4"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">logging</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> </span><span class="">static</span><span class=""> java</span><span class="">.</span><span class="">time</span><span class="">.</span><span class="">temporal</span><span class="">.</span><span class="">ChronoUnit</span><span class="">.</span><span class="">MILLIS</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> </span><span class="">static</span><span class=""> java</span><span class="">.</span><span class="">time</span><span class="">.</span><span class="">Instant</span><span class="">.</span><span class="">now</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">time</span><span class="">.</span><span class="">Instant</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">logging</span><span class="">.</span><span class="">Level</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">logging</span><span class="">.</span><span class="">Logger</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> JULDemo </span><span class="">{</span><span class=""><br/></span><br/>  
+                <span class="bold"><span class="">private</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> Logger log = Logger.</span><span class="">getLogger</span><span class="">( JULDemo.</span><span class="">class</span><span class="">.</span><span class="">getName</span><span class="">() );</span><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    Instant start = <span class="">now</span><span class="">();</span><br/>    log.<span class="">info</span><span class="">( </span><span class="">"About to start"</span><span class=""> );</span><br/><br/>    <span class="">try</span><span class=""> {</span><br/>
+                <span class="bold">      log.<span class="">log</span><span class="">( Level.INFO, </span><span class="">"Lets try to throw {0}"</span><span class="">, </span><span class="">"null"</span><span class=""> );</span></span><br/>      <span class="">throw</span><span class=""> null;</span><br/>    }<br/>
+                <a id="p866"/>    <span class="">catch</span><span class=""> ( Exception e ) {</span><br/>
+                <span class="bold">      log.<span class="">log</span><span class="">( Level.SEVERE, </span><span class="">"Oh Oh"</span><span class="">, e );</span></span><br/>    }<br/>
+                <span class="bold">    log.<span class="">info</span><span class="">( () -&gt; </span><span class="">String</span><span class="">.</span><span class="">format</span><span class="">( </span><span class="">"Runtime: %s ms"</span><span class="">, start.</span><span class="">until</span><span class="">(</span><span class="">now</span><span class="">(), MILLIS )) );</span></span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 16.4</b>    
+            src/main/java/com/tutego/insel/logging/CULDemo.java, JULDemo</p>
+            
+            <p class="standard">When you run the example, the following warning appears on the console:</p>
+            
+            <div class="listing " id="l_none_16315"><pre>Jan. 24, 2022 7:47:46 PM com.tutego.insel.logging.JULDemo main<br/>INFO: About to start<br/>Jan. 24, 2022 7:47:46 PM com.tutego.insel.logging.JULDemo main<br/>INFO: Lets try to throw null<br/>Jan. 24, 2022 7:47:46 PM com.tutego.insel.logging.JULDemo main<br/>SEVERE: Oh Oh<br/>java.lang.NullPointerException: Cannot throw exception because "null" is null<br/>at com.tutego.insel.logging.JULDemo.main(JULDemo.java:20)<br/><br/>Jan. 24, 2022 7:47:46 PM com.tutego.insel.logging.JULDemo main<br/>INFO: Runtime: 35 ms </pre></div>
+            
+            
+                
+                <h4 class="t4" id="h16.8.2.1">The Logger Object</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Logger</samp> object is a central element that can be retrieved via 
+                    <samp class="listingcharacter listingcharacter">Logger.getAnonymousLogger()</samp> or via 
+                    <samp class="listingcharacter listingcharacter">Logger.getLogger(String name)</samp>, where 
+                    <samp class="listingcharacter listingcharacter">name</samp> is usually assigned the fully qualified class name. Often, the 
+                    <samp class="listingcharacter listingcharacter">Logger</samp>
+                 object is declared as a private static final variable in the class.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h16.8.2.2">Logging with Log Level</h4>
+                
+                <p class="standard">Not every message is equally important. Some messages are useful for debugging or because of timing measurements, but exceptions in the 
+                    <samp class="listingcharacter listingcharacter">catch</samp> branches are hugely important. To support different levels of detail, you can specify a 
+                    <span class="italic">log level</span>
+                    <a class="indexanchor" id="i16_60"/>. This level determines how “serious” the error or a message is, which is important later when errors are sorted according to their urgency. Log levels are declared as constants in the 
+                    <samp class="listingcharacter listingcharacter">Level</samp> class
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn16_09" id="fn16_09">[ 215 ]</a></span>
+                 in the following ways:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">FINEST</samp>
+                         (smallest level)</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">FINER</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">FINE</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p867"/>
+                            CONFIG</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">INFO</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">WARNING</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">SEVERE</samp>
+                         (highest level)</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">For the logging process itself, the 
+                    <samp class="listingcharacter listingcharacter">Logger</samp> class provides the general method 
+                    <samp class="listingcharacter listingcharacter">log(Level level, String msg)</samp>
+                 or a separate method for each level.</p>
+                
+                <table class="standardtable" id="t16.8">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Level</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">Call via log(...)</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Special Log Method</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">SEVERE</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">log(Level.SEVERE, msg)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">severe(String msg)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">WARNING</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">log(Level.WARNING, msg)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">warning(String msg)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">INFO</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">log(Level.INFO, msg)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">info(String msg)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">CONFIG</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">log(Level.CONFIG, msg)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">config(String msg)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">FINE</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">log(Level.FINE, msg)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">fine(String msg)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">FINER</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">log(Level.FINER, msg)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">finer(String msg)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">FINEST</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">log(Level.FINEST, msg)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">finest(String msg)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 16.8</b>    
+            Log Levels and Methods</p>
+                
+                <p class="standard">All these methods send a message of type 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                . If an exception and the associated stack trace must be logged, developers must use the following logger method, which is also used in the example:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">void log(Level level, String msg, Throwable thrown)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The variants of 
+                    <samp class="listingcharacter listingcharacter">severe(...)</samp>, 
+                    <samp class="listingcharacter listingcharacter">warning(...)</samp>, and so on are not overloaded with a 
+                    <samp class="listingcharacter listingcharacter">Throwable</samp>
+                 parameter type.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

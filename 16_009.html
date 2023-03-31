@@ -1,0 +1,124 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    The Class Library" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    The Class Library" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    The Class Library</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h16.9">16.9    Maven: Resolving Build Management and Dependencies</h2>
+        
+        <p class="standard">In 
+            <span class="crossreference "><a href="01_001.html#h1">Chapter 1</a></span>, 
+            <span class="crossreference "><a href="01_009.html#h1.9.1">Section 1.9.1</a></span>
+        , we created a Maven project, but never really benefited from using Maven. Two things stand out:</p>
+        
+        <ol>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Dependencies can be easily declared, and they are automatically downloaded by Maven, including all sub-dependencies. Maven’s particular strength lies in resolving transitive dependencies.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">During the build, Java source code alone doesn’t make a project; the sources must be compiled, test cases must be run, and Javadoc should be generated. At the end, the final result is usually a compressed JAR file.</p>
+            
+            </li>
+        
+        </ol>
+        
+        
+            
+            <h3 class="t3" id="h16.9.1">16.9.1    
+                <a id="p868"/>
+            Dependency to Be Accepted</h3>
+            
+            <p class="standard">As an example, let’s create a dependency on the small web framework 
+                <span class="italic">Spark</span> (<span class="url"><a href="https://sparkjava.com">https://sparkjava.com</a></span>). Let’s open the Project Object Model (POM) file 
+                <span class="italic">pom.xml</span>
+             and add the code lines in bold for the dependency:</p>
+            
+            <div class="listing " id="l_none_16338"><pre><span class="">&lt;project …&gt;</span><span class=""/><br/>  …<br/>  <span class="">&lt;properties&gt;</span><span class=""/><br/>    <span class="">&lt;maven.compiler.target&gt;</span><span class="">17</span><span class="">&lt;/maven.compiler.target&gt;</span><span class=""/><br/>    <span class="">&lt;maven.compiler.source&gt;</span><span class="">17</span><span class="">&lt;/maven.compiler.source&gt;</span><span class=""/><br/>    <span class="">&lt;project.build.sourceEncoding&gt;</span><span class="">UTF-8</span><span class="">&lt;/project.build.sourceEncoding&gt;</span><span class=""/><br/>  <span class="">&lt;/properties&gt;</span><span class=""/><br/>  <span class="">&lt;dependencies&gt;</span><span class=""/><br/>    <span class="">&lt;dependency&gt;</span><span class=""/><br/>      <span class="">&lt;groupId&gt;</span><span class="">com.sparkjava</span><span class="">&lt;/groupId&gt;</span><span class=""/><br/>      <span class="">&lt;artifactId&gt;</span><span class="">spark-core</span><span class="">&lt;/artifactId&gt;</span><span class=""/><br/>      <span class="">&lt;version&gt;</span><span class="">2.9.3</span><span class="">&lt;/version&gt;</span><span class=""/><br/>    <span class="">&lt;/dependency&gt;</span><span class=""/><br/>  <span class="">&lt;/dependencies&gt;</span><span class=""/><br/><span class="">&lt;/project&gt;</span><span class=""> </span></pre></div>
+            
+            <p class="standard">Listing 16.5: pom.xml</p>
+            
+            <p class="standard">All dependencies are located in a special XML element named 
+                <samp class="listingcharacter listingcharacter">&lt;dependencies&gt;</samp>. Below that element, you can then have any number of 
+                <samp class="listingcharacter listingcharacter">&lt;dependency&gt;</samp>
+             blocks.</p>
+            
+            <p class="standard">Now that everything is prepared, let’s write the main program:</p>
+            
+            <div class="listing " id="l16.5"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> SparkServer </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    spark<span class="">.</span><span class="">Spark</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"/hello"</span><span class="">,</span><span class=""> </span><span class="">(</span><span class=""> req</span><span class="">,</span><span class=""> res </span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">"Hello Browser "</span><span class=""> </span><span class="">+</span><span class=""> req</span><span class="">.</span><span class="">userAgent</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 16.5</b>    
+            src/main/java/SparkServer.java</p>
+            
+            <p class="standard">When you start the program as usual, a web server starts as well, and you can read the output via the URL 
+                <span class="italic">http://localhost:4567/hello</span>
+            . (You can ignore the logger outputs.)</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.9.2">16.9.2    Local and the Remote Repository</h3>
+            
+            <p class="standard">Resolving dependent JAR files takes longer the first time because Maven contacts a remote repository and always pulls the latest JAR files from that location and then stores these files locally. The extensive remote repository stores almost all versions of JAR files for many well-known open-source projects. The 
+                <span class="italic">Central Repository</span>
+                <a class="indexanchor" id="i16_61"/> can be found <span class="url"><a href="https://repo.maven.apache.org/maven2/">https://repo.maven.apache.org/maven2/</a></span>.</p>
+            
+            <p class="standard">
+                <a id="p869"/>The downloaded resources themselves aren’t stored in the project but in a local repository located in the user’s home directory and named 
+                <span class="italic">.m2</span>
+            . In this way, all Maven projects share the same JAR files, and they don’t have to be reobtained and updated on a project-by-project basis.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h16.9.3">16.9.3    Lifecycles, Stages, and Maven Plugins</h3>
+            
+            <p class="standard">A Maven build consists of a three-stage lifecycle: 
+                <samp class="listingcharacter listingcharacter">clean</samp>, 
+                <samp class="listingcharacter listingcharacter">default</samp>, and 
+                <samp class="listingcharacter listingcharacter">site</samp>. Within this lifecycle are 
+                <span class="italic">stages.</span>
+                <a class="indexanchor" id="i16_62"/> For example, 
+                <samp class="listingcharacter listingcharacter">default</samp> contains the 
+                <samp class="listingcharacter listingcharacter">compile</samp> stage for translating the sources. Everything Maven runs are 
+                <span class="italic">plugins</span>
+                <a class="indexanchor" id="i16_63"/>, such as 
+                <samp class="listingcharacter listingcharacter">compilers</samp>, and many others that are listed at <span class="url"><a href="https://maven.apache.org/plugins/">https://maven.apache.org/plugins/</a></span>. A plugin can execute different 
+                <span class="italic">goals</span>
+                <a class="indexanchor" id="i16_64"/>. For example, the Javadoc plugin (described at <span class="url"><a href="https://maven.apache.org/components/plugins/maven-javadoc-plugin/">https://maven.apache.org/components/plugins/maven-javadoc-plugin/</a></span>) currently knows 16 goals. A goal can be accessed subsequently via the command line or via the integrated development environment (IDE).</p>
+            
+            <p class="standard">For example, a JAR file is created via the 
+                <samp class="listingcharacter listingcharacter">package</samp>
+             stage:</p>
+            
+            <div class="listing " id="l_none_16345"><pre>$ mvn package </pre></div>
+            
+            <p class="standard">The command-line tool must be called in the directory where the POM file is located.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

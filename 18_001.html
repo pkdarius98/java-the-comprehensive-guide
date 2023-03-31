@@ -1,0 +1,1501 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Introduction to Data Structures and Algorithms" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Introduction to Data Structures and Algorithms" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Introduction to Data Structures and Algorithms</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h18">18    
+        <a id="p909"/>
+    Introduction to Data Structures and Algorithms</h1><p class="introductorynote indent_chapter_double">“Happiness is simply good health and a bad memory.”<br/>—Ernest Hemingway (1899–1961)</p><p class="standard">Algorithms
+        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn18_01" id="fn18_01">[ 219 ]</a></span>
+     are a central topic in computer science. Their research and study occupy a significant place in that field. Algorithms can operate effectively with data only if the data is suitably structured. Even a simple example like a phone directory illustrates the importance of organizing data according to a schema: Searching for a cell phone number of a given name succeeds quickly, while searching for the name of a known number might be a tedious task. Data structures and algorithms are thus closely related, and the choice of the right data structure determines runtime efficiency; neither ever serves its purpose alone. Unfortunately, choosing the “right” data structure isn’t as easy as it sounds, and a number of difficult problems in computer science remain unsolved because a suitable data organization hasn’t been found.</p><p class="standard">The most important data structures
+        <a class="indexanchor" id="i18_00"/>
+    , such as lists, sets, and associative memories, will be introduced in this chapter.</p>
+        
+        <h2 class="t2" id="h18.1">18.1    
+            <a class="indexanchor" id="i18_01"/>
+        Lists</h2>
+        
+        <p class="standard">A list represents a sequence of data where the elements have a fixed order. The 
+            <samp class="listingcharacter listingcharacter">java.util.List</samp>
+            <a class="indexanchor" id="i18_02"/> interface prescribes behavior that all concrete lists must implement. Interesting implementations of the 
+            <samp class="listingcharacter listingcharacter">list</samp>
+         interface include the following:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">java.util.ArrayList</samp>
+                    <a class="indexanchor" id="i18_03"/>
+                : A list based on an array</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">java.util.LinkedList</samp>
+                    <a class="indexanchor" id="i18_04"/>
+                : A list by concatenated elements</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">java.util.concurrent.CopyOnWriteArrayList</samp>
+                    <a class="indexanchor" id="i18_05"/>
+                : A fast list, optimal for frequent concurrent read access</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">java.util.Vector</samp>
+                    <a class="indexanchor" id="i18_06"/>
+                : A synchronized list (This class is not deprecated but should no longer be used because all access is synchronized in a rather slow way.)</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">
+            <a id="p910"/>The methods for accessing lists via the common 
+            <samp class="listingcharacter listingcharacter">List</samp> interface are always the same. Thus, each list allows point access via 
+            <samp class="listingcharacter listingcharacter">get(index)</samp>,
+            <a class="indexanchor" id="i18_07"/> and each list can return all stored elements sequentially by means of an iterator. But the implementations of the interface 
+            <samp class="listingcharacter listingcharacter">List</samp>
+         differ in properties such as performance, memory requirements, or safe concurrency.</p>
+        
+        <p class="standard">Since all data structures can store any object derived from 
+            <samp class="listingcharacter listingcharacter">Object</samp>
+        , the lists are not fixed to certain data types in general, but generics can specify these types more precisely.</p>
+        
+        
+            
+            <h3 class="t3" id="h18.1.1">18.1.1    First List Example</h3>
+            
+            <p class="standard">Lists have some important properties: They remember the order of the inserted elements, and elements can also appear twice. Let’s apply these skills for a little memory game. The user specifies destination cities for a route, which the program stores in a list in the order originally entered. After entering a new destination on the route, the user must recite all the cities back in the correct order. Once this task is complete, the new city is added, and the process restarts. Basically, the game is infinite, but since no human can remember an infinite number of cities in a sequence, at some point, they’ll answer incorrectly, which will terminate the program.</p>
+            
+            <div class="listing " id="l18.1"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">list</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">text</span><span class="">.*;</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.*;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> MemorizeYourRoadTripRoute </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                <span class="bold"><span class="">List&lt;</span><span class="">String</span><span class="">&gt; cities = </span><span class="">new</span><span class=""> ArrayList&lt;&gt;();</span><br/></span><br/>    <span class="">while</span><span class=""> ( true ) {</span><br/>      System.out.<span class="">println</span><span class="">( </span><span class="">"What new city should be added?"</span><span class=""> );</span><br/>      <span class="">String</span><span class=""> newCity = </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">nextLine</span><span class="">();</span><br/>      
+                <span class="bold">cities.<span class="">add</span><span class="">( newCity );</span><br/></span><br/>      System.out.<span class="">printf</span><span class="">( </span><span class="">"What is the overall route? (Hint: %d %s)%n"</span><span class="">,</span><br/>                         
+                <span class="bold">cities.<span class="">size</span><span class="">(), cities.</span><span class="">size</span><span class="">()</span></span> == <span class="">1</span><span class=""> ? </span><span class="">"city"</span><span class=""> : </span><span class="">"cities"</span><span class=""> );</span><br/><br/>      
+                <span class="bold"><span class="">for</span><span class=""> ( </span><span class="">String</span><span class=""> city : cities )</span></span> {<br/>        <span class="">String</span><span class=""> guess = </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">nextLine</span><span class="">();</span><br/>        <span class="">if</span><span class=""> ( ! city.</span><span class="">equalsIgnoreCase</span><span class="">( guess ) ) {</span><br/>          System.out.<span class="">printf</span><span class="">( </span><span class="">"%s is not correct, %s would be correct. Too bad!%n"</span><span class="">,</span><br/>                             guess, city );<br/>
+                <a id="p911"/>          <span class="">return</span><span class="">;</span><br/>        }<br/>      }<br/>      System.out.<span class="">println</span><span class="">( </span><span class="">"Great, all cities in the right order!"</span><span class=""> );</span><br/>    }<br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 18.1</b>    
+            src/main/java/com/tutego/insel/util/list/MemorizeYourRoadTripRoute.java</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.1.2">18.1.2    Selection Criterion ArrayList or LinkedList</h3>
+            
+            <p class="standard">An 
+                <samp class="listingcharacter listingcharacter">ArrayList</samp> stores elements in an internal array (the same is true for 
+                <samp class="listingcharacter listingcharacter">Vector</samp>). A 
+                <samp class="listingcharacter listingcharacter">LinkedList</samp>, on the other hand, stores the elements in a linked list and implements the linking with a separate helper object for each list element. Areas of use, for 
+                <samp class="listingcharacter listingcharacter">LinkedList</samp> and 
+                <samp class="listingcharacter listingcharacter">ArrayList</samp>
+            , include the following scenarios:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Since 
+                        <samp class="listingcharacter listingcharacter">ArrayList</samp> uses an array internally, accessing a specific element by its position in the list is quite fast. When 
+                        <samp class="listingcharacter listingcharacter">LinkedList</samp>
+                     must be searched in a more elaborate way, more time is required.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">However, the linked list has one clear advantage: When elements are deleted or inserted in the middle of the list, the linking of the helper objects only needs to be changed in one place. In an 
+                        <samp class="listingcharacter listingcharacter">ArrayList</samp>
+                    , this change requires a lot of work, unless the element can be deleted at the end or (if the buffer size is large enough) inserted. If an element isn’t to be inserted or deleted at the end, all subsequent list elements must be moved.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">With an 
+                        <samp class="listingcharacter listingcharacter">ArrayList</samp>
+                    , the size of the internal array can become too small. Then, the runtime environment has no choice but to create a new, larger array object and copy all the elements to that array.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.1.3">18.1.3    The List Interface</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">List</samp> interface prescribes the general behavior for lists. Most of these methods are familiar from the 
+                <samp class="listingcharacter listingcharacter">Collection</samp> interface because 
+                <samp class="listingcharacter listingcharacter">List</samp> extends the 
+                <samp class="listingcharacter listingcharacter">Collection</samp> interface. Some methods have been added that reference the position of an element. (
+                <samp class="listingcharacter listingcharacter">Set</samp> instances, which also implement 
+                <samp class="listingcharacter listingcharacter">Collection</samp>
+            , don’t use an index.)</p>
+            
+            
+                
+                <h4 class="t4" id="h18.1.3.1">Adding and Setting Elements</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">add(...)</samp> method adds new elements to the list, where a position can determine the insertion point. The 
+                    <samp class="listingcharacter listingcharacter">addAll(...)</samp> method adds foreign elements from another collection to the list. 
+                    <samp class="listingcharacter listingcharacter">set(...)</samp> places an element in a specific position and overrides the original element (instead of moving it). The 
+                    <samp class="listingcharacter listingcharacter">size()</samp>
+                 method names the number of elements in the data structure.</p>
+                
+                <div class="listing " id="l18.2"><pre>
+                    <a id="p912"/>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list1 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""><br/></span>list1<span class="">.</span>
+                    <span class="bold"><span class="">add</span></span><span class="">( </span><span class="">"Eva"</span><span class=""> );</span><br/>list1
+                    <span class="bold">.<span class="">add</span></span><span class="">( </span><span class="">0</span><span class="">, </span><span class="">"Charisma"</span><span class=""> );</span><br/>list1.
+                    <span class="bold"><span class="">add</span></span><span class="">( </span><span class="">"Pallas"</span><span class=""> );</span><br/><br/>List&lt;<span class="">String</span><span class="">&gt; list2 = Arrays.</span><span class="">asList</span><span class="">( </span><span class="">"Tina"</span><span class="">, </span><span class="">"Wilhelmine"</span><span class=""> );</span><br/>list1.
+                    <span class="bold"><span class="">addAll</span></span><span class="">( </span><span class="">3</span><span class="">, list2 );</span><br/>list1.
+                    <span class="bold"><span class="">add</span></span><span class="">( </span><span class="">"</span>
+                    <span class="bold">XXX</span>"<span class=""> );</span><br/>list1.
+                    <span class="bold"><span class="">set</span></span><span class="">( </span><span class="">5</span><span class="">, </span><span class="">"Eva"</span><span class=""> );</span><br/><br/>System.out.<span class="">println</span><span class="">( list1 );       </span><span class=""> // [Charisma, Eva, Pallas, Tina, Wilhelmine, Eva]</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( list1.</span>
+                    <span class="bold"><span class="">size</span></span><span class="">() );</span><span class=""> // 6</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 18.2</b>    
+            src/main/java/com/tutego/insel/util/list/ListDemo.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.1.3.2">Position Requests and Searches</h4>
+                
+                <p class="standard">Whether or not the collection is empty is determined by 
+                    <samp class="listingcharacter listingcharacter">isEmtpy()</samp>. An element at a specific location can be queried by 
+                    <samp class="listingcharacter listingcharacter">get(int)</samp>. Whether elements are part of the collection is answered by 
+                    <samp class="listingcharacter listingcharacter">contains(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">containsAll(...)</samp>. As with strings, 
+                    <samp class="listingcharacter listingcharacter">indexOf(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">lastIndexOf(...)</samp>
+                 return the find positions.</p>
+                
+                <div class="listing " id="l18.3"><pre><span class="">boolean</span><span class=""> b </span><span class="">=</span><span class=""> list1</span><span class="">.</span>
+                    <span class="bold"><span class="">contains</span></span><span class="">( </span><span class="">"Tina"</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( b );           </span><span class=""> // true</span><span class=""><br/></span><br/>b = list1.
+                    <span class="bold"><span class="">containsAll</span></span><span class="">( Arrays.</span><span class="">asList</span><span class="">( </span><span class="">"Tina"</span><span class="">, </span><span class="">"Eva"</span><span class=""> ) );</span><br/>System.out.<span class="">println</span><span class="">( b );           </span><span class=""> // true</span><span class=""><br/></span><br/>Object o = list1.
+                    <span class="bold"><span class="">get</span></span><span class="">( </span><span class="">1</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( o );           </span><span class=""> // Eva</span><span class=""><br/></span><br/><span class="">int</span><span class=""> i = list1.</span>
+                    <span class="bold"><span class="">indexOf</span></span><span class="">( </span><span class="">"Eva"</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( i );           </span><span class=""> // 1</span><span class=""><br/></span><br/>i = list1.
+                    <span class="bold"><span class="">lastIndexOf</span></span><span class="">( </span><span class="">"Eva"</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( i );           </span><span class=""> // 5</span><span class=""><br/></span><br/>System.out.<span class="">println</span><span class="">( list1.</span><span class="">isEmpty</span><span class="">() );</span><span class=""> // false</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 18.3</b>    
+            src/main/java/com/tutego/insel/util/list/ListDemo.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.1.3.3">
+                    <a id="p913"/>
+                Lists or Arrays and Creating New Lists</h4>
+                
+                <p class="standard">Arrays can be derived from the lists, which is how intersections can be formed:</p>
+                
+                <div class="listing " id="l18.4"><pre><span class="">String</span><span class="">[]</span><span class=""> array </span><span class="">=</span><span class=""> list1</span><span class="">.</span>
+                    <span class="bold"><span class="">toArray</span></span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">String</span><span class="">[list1.</span><span class="">size</span><span class="">()] );</span><span class=""><br/></span>// alternative: String[] array = list1.toArray( String[]::new );<span class=""><br/></span> <br/>System.out.<span class="">println</span><span class="">( array[</span><span class="">3</span><span class="">] );    </span><span class=""> // "Tina"</span><span class=""><br/></span><br/>List&lt;<span class="">String</span><span class="">&gt; list3 = </span><span class="">new</span><span class=""> LinkedList&lt;&gt;( list1 );</span><br/>System.out.<span class="">println</span><span class="">( list3 );       </span><span class=""> // [Charisma, Eva, Pallas, Tina,</span><span class=""><br/></span>                                   <span class=""> // Wilhelmine, Eva]</span><span class=""><br/></span>list3.
+                    <span class="bold"><span class="">retainAll</span></span><span class="">( Arrays.</span><span class="">asList</span><span class="">( </span><span class="">"Tina"</span><span class="">, </span><span class="">"Eva"</span><span class=""> ) );</span><br/>System.out.<span class="">println</span><span class="">( list3 );       </span><span class=""> // [Eva, Tina, Eva]</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 18.4</b>    
+            src/main/java/com/tutego/insel/util/list/ListDemo.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.1.3.4">Deleting Elements</h4>
+                
+                <p class="standard">Methods are also available for deleting elements. In this regard, the list provides overloaded 
+                    <samp class="listingcharacter listingcharacter">remove(...)</samp> methods: 
+                    <samp class="listingcharacter listingcharacter">removeIf(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">removeAll(...)</samp>. The shortest way to delete everything from the list is 
+                    <samp class="listingcharacter listingcharacter">clear()</samp>
+                .</p>
+                
+                <div class="listing " id="l18.5"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> list1 </span><span class="">);</span><span class="">    </span><span class=""> // [Charisma, Eva, Pallas, Tina, Wilhelmine, Eva]</span><span class=""><br/></span>list1<span class="">.</span>
+                    <span class="bold"><span class="">remove</span></span><span class="">( </span><span class="">1</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( list1 );    </span><span class=""> // [Charisma, Pallas, Tina, Wilhelmine, Eva]</span><span class=""><br/></span><br/>list1.
+                    <span class="bold"><span class="">remove</span></span><span class="">( </span><span class="">"Wilhelmine"</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( list1 );    </span><span class=""> // [Charisma, Pallas, Tina, Eva]</span><span class=""><br/></span><br/>list1.
+                    <span class="bold"><span class="">removeAll</span></span><span class="">( Arrays.</span><span class="">asList</span><span class="">( </span><span class="">"Pallas"</span><span class="">, </span><span class="">"Eva"</span><span class=""> ) );</span><br/>System.out.<span class="">println</span><span class="">( list1 );    </span><span class=""> // [Charisma, Tina]</span><span class=""><br/></span><br/>list1.
+                    <span class="bold"><span class="">clear</span></span><span class="">();</span><br/>System.out.<span class="">println</span><span class="">( list1 );    </span><span class=""> // []</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 18.5</b>    
+            src/main/java/com/tutego/insel/util/list/ListDemo.java (Snippet)</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">The 
+                        <samp class="listingcharacter listingcharacter">remove(int)</samp> method deletes an element at the given position. In contrast, 
+                        <samp class="listingcharacter listingcharacter">remove(Object)</samp> searches for an object similar to 
+                        <samp class="listingcharacter listingcharacter">equals</samp> and then deletes it but then doesn’t search further for other occurrences. 
+                        <samp class="listingcharacter listingcharacter">removeIf(...)</samp> and 
+                        <samp class="listingcharacter listingcharacter">removeAll(...)</samp>
+                     always run completely over the entire data structure and look if an element satisfies the criterion for deletion, which may occur several times.</p>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p914"/>
+                    Example</h6>
+                    
+                    <p class="standard first">The following example deletes all 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                     references and whitespace strings from a list:</p>
+                    
+                    <div class="listing  last_item" id="l_none_1875"><pre>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""><br/></span>Collections<span class="">.</span><span class="">addAll</span><span class="">(</span><span class=""> list</span><span class="">,</span><span class=""> </span><span class="">"1"</span><span class="">,</span><span class=""> </span><span class="">""</span><span class="">,</span><span class=""> </span><span class="">" "</span><span class="">,</span><span class=""> </span><span class="">"two"</span><span class="">,</span><span class=""> null</span><span class="">,</span><span class=""> </span><span class="">"police"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>list<span class="">.</span>
+                        <span class="bold"><span class="">removeIf</span><span class="">( e -&gt; Objects.</span><span class="">isNull</span><span class="">( e ) || e.</span><span class="">trim</span><span class="">().</span><span class="">isEmpty</span><span class="">() );</span></span><br/>System.out.<span class="">println</span><span class="">( list );</span><span class=""> // [1, two, police]</span><span class=""/><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.1.3.5">Summary</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">List</samp> interface (in addition to those from the extended 
+                    <samp class="listingcharacter listingcharacter">Collection</samp>
+                 interface) includes the following methods:</p>
+                
+                <div class="listing " id="l_none_1879"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">List</span>&lt;E&gt;<br/><span class="">extends</span><span class=""> Collection&lt;E&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean add(E e)</samp><br/>Adds the element 
+                            <samp class="listingcharacter listingcharacter">e</samp>
+                         to the end of the list (an optional operation).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">void add(int index, E element)</samp><br/>Inserts an object at the specified position in the list (an optional operation).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean addAll(int index, Collection&lt;? extends E&gt; c)</samp><br/>Inserts all elements of the collection at the specified position in the list (an optional operation).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">void clear()</samp><br/>Deletes all elements from the set (an optional operation).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean contains(Object o)</samp><br/>Returns 
+                            <samp class="listingcharacter listingcharacter">true</samp> if the element 
+                            <samp class="listingcharacter listingcharacter">o</samp> is in the list. (The comparison is done by 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                        , and it isn’t a reference comparison.)</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean containsAll(Collection&lt;?&gt; c)</samp><br/>Returns 
+                            <samp class="listingcharacter listingcharacter">true</samp> if all elements of the collection 
+                            <samp class="listingcharacter listingcharacter">c</samp>
+                         are in the current list.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;E&gt; List&lt;E&gt; copyOf (Collection&lt;? extends E&gt; coll)</samp><br/>Creates an unmodifiable copy.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">E get(int index)</samp><br/>Returns the element at the specified position in the list.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int indexOf(Object o)</samp><br/>Returns the position of the first occurrence for 
+                            <samp class="listingcharacter listingcharacter">o</samp> or 
+                            <samp class="listingcharacter listingcharacter">-1</samp> if no list element matches 
+                            <samp class="listingcharacter listingcharacter">o</samp> in content (i.e., by 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp> and not by reference). Unfortunately, no method is available that continues searching from a certain point, as provided by the 
+                            <samp class="listingcharacter listingcharacter">String</samp> class. However, a sublist can be used for this task via 
+                            <samp class="listingcharacter listingcharacter">subList(...)</samp>
+                        , a method that is described a few lines later.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p915"/>
+                            boolean isEmpty()</samp><br/>Returns 
+                            <samp class="listingcharacter listingcharacter">true</samp>
+                         if the list is empty.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Iterator&lt;E&gt; iterator()</samp><br/>Returns the iterator. But the method calls 
+                            <samp class="listingcharacter listingcharacter">listIterator()</samp> and returns a 
+                            <samp class="listingcharacter listingcharacter">ListIterator</samp>
+                         object.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int lastIndexOf(Object o)</samp><br/>Searches from the back of the list for the first occurrence of 
+                            <samp class="listingcharacter listingcharacter">o</samp> and returns -1 if no list element matches 
+                            <samp class="listingcharacter listingcharacter">o</samp>
+                         in content.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">ListIterator&lt;E&gt; listIterator()</samp><br/>Returns a list iterator for the entire list. A list iterator provides additional operations in contrast to the general container iterator.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">ListIterator&lt;E&gt; listIterator(int index)</samp><br/>Returns a list iterator that traverses the list starting at position 
+                            <samp class="listingcharacter listingcharacter">index</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">E remove(int index)</samp><br/>Removes the element at the 
+                            <samp class="listingcharacter listingcharacter">index</samp>
+                         position from the list.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean remove(Object o)</samp><br/>Removes the first object in the list that is 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp> equal to 
+                            <samp class="listingcharacter listingcharacter">o</samp>. Returns 
+                            <samp class="listingcharacter listingcharacter">true</samp>
+                         if an element was removed (an optional operation).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean removeAll(Collection&lt;?&gt; c)</samp><br/>Deletes the elements from 
+                            <samp class="listingcharacter listingcharacter">c</samp>
+                         in its own list (an optional operation).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default boolean removeIf(Predicate&lt;? super E&gt; filter)</samp><br/>Removes all elements from the list for which the predicate is fulfilled.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean retainAll(Collection&lt;?&gt; c)</samp><br/>Optional. Removes all objects from the list that don’t appear in the collection 
+                            <samp class="listingcharacter listingcharacter">c</samp>
+                        . </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default void replaceAll(UnaryOperator&lt;E&gt; operator)</samp><br/>Calls the operator on each element and writes back the result.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">E set(int index, E element)</samp><br/>Replaces the element at the 
+                            <samp class="listingcharacter listingcharacter">index</samp> position with 
+                            <samp class="listingcharacter listingcharacter">element</samp>
+                         (an optional operation).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int size()</samp><br/>Returns the number of elements in the collection.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">List&lt;E&gt; subList(int fromIndex, int toIndex)</samp><br/>Returns the section of this list from position 
+                            <samp class="listingcharacter listingcharacter">fromIndex</samp> (included) 
+                            <samp class="listingcharacter listingcharacter">toIndex</samp>
+                         (not included). The returned list represents a view of a section of the original list. Changes to the partial list affect the entire list, and vice versa (as far as they affect the matching section).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default void sort(Comparator&lt;? super E&gt; c)</samp><br/>Sorts the list, equivalent to 
+                            <samp class="listingcharacter listingcharacter">Collections.sort(this, c)</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean equals(Object o)</samp><br/>Compares the list with another list. To do this, the method traverses both lists and 
+                            <a id="p916"/>
+                        compares element by element; two list objects are equal if their elements are pair wise equal.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int hashCode()</samp><br/>Returns the hash value of the list.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="imagebox figure-type"><a href="img-f_none_18_00.html" id="f_none_18_00"><img alt="" id="img-f_none_18_00" src="bilderklein/klein18_000_01.png"/></a></div>
+                
+                <p class="standard">So what 
+                    <samp class="listingcharacter listingcharacter">List</samp> adds to the 
+                    <samp class="listingcharacter listingcharacter">Collection</samp>
+                 are the index-based methods:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">add(int index, E element)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">addAll(int index, Collection&lt;? extends E&gt; c)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">get(int index)</samp>, 
+                            <samp class="listingcharacter listingcharacter">indexOf(Object o)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">lastIndexOf(Object o)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">listIterator()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">listIterator(int index)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">remove(int index)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">set(int index, E element)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">subList(int fromIndex, int toIndex)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">And additionally the two default methods 
+                    <samp class="listingcharacter listingcharacter">replaceAll(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">sort(...)</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">The 
+                        <samp class="listingcharacter listingcharacter">remove(...)</samp>
+                     method is overridden and deletes the following elements:</p>
+                    
+                    <ul>
+                        
+                        <li>
+                            
+                            <p class="standard first-item last-item">An element that’s searched for with 
+                                <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                            </p>
+                        
+                        </li>
+                        
+                        <li>
+                            
+                            <p class="standard first-item last-item">An element at a position given in 
+                                <samp class="listingcharacter listingcharacter">remove(int)</samp>
+                            </p>
+                        
+                        </li>
+                    
+                    </ul>
+                    
+                    <p class="standard">
+                        <a id="p917"/>
+                    Consider the following confusing example:</p>
+                    
+                    <div class="listing " id="l_none_1880"><pre>List<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">8</span><span class="">,</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">7</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Integer index <span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span>list<span class="">.</span><span class="">remove</span><span class="">(</span><span class=""> index </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> list </span><span class="">);</span><span class=""> </span><span class=""> // [9, 8, 7]</span><span class=""/></pre></div>
+                    
+                    <p class="standard">
+                        <samp class="listingcharacter listingcharacter">remove(Object)</samp> is called because 
+                        <samp class="listingcharacter listingcharacter">Object</samp> is most similar to the argument type 
+                        <samp class="listingcharacter listingcharacter">Integer</samp>. Thus, the 
+                        <samp class="listingcharacter listingcharacter">Integer.valueOf(1)</samp> element disappears from the list. Unboxing doesn’t take place, as expected, and therefore, the naming 
+                        <samp class="listingcharacter listingcharacter">index</samp>
+                     and the object type in the example are deliberately misleading. </p>
+                    
+                    <p class="standard">The following example more clearly represents what we meant:</p>
+                    
+                    <div class="listing  last_item" id="l_none_1892"><pre>list <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;(</span><span class=""> List</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">8</span><span class="">,</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">7</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">int</span><span class=""> realIndex </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""><br/></span>list<span class="">.</span><span class="">remove</span><span class="">(</span><span class=""> realIndex </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> list </span><span class="">);</span><span class=""> </span><span class=""> // [9, 1, 7]</span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.1.3.6">Copying and Cutting</h4>
+                
+                <p class="standard">The list classes implement 
+                    <samp class="listingcharacter listingcharacter">clone()</samp> and create a shallow copy rather than a deep copy. That is, the elements in the data structure are not themselves cloned; by the way, this is always true for 
+                    <samp class="listingcharacter listingcharacter">clone()</samp>
+                 in general.</p>
+                
+                <p class="standard">To delete a range, you can use 
+                    <samp class="listingcharacter listingcharacter">subList(from, to).clear()</samp>. The 
+                    <samp class="listingcharacter listingcharacter">subList</samp> technique immediately covers some other operations for which no special range variants exist, for example, 
+                    <samp class="listingcharacter listingcharacter">indexOf(...)</samp>
+                 for searching in a part of the list.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example creates a list, shortens it, and output the elements in backwards order:</p>
+                    
+                    <div class="listing  last_item" id="l_none_1897"><pre>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;(</span><span class=""><br/></span>    Arrays<span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">"0 1 2 3 4 5 6 7 8 9"</span><span class="">.</span><span class="">split</span><span class="">(</span><span class=""> </span><span class="">" "</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>
+                        <span class="bold"><span class="">list.</span><span class="">subList</span><span class="">( </span><span class="">2</span><span class="">, list.</span><span class="">size</span><span class="">() - </span><span class="">2</span><span class=""> ).</span><span class="">clear</span><span class="">();</span></span><br/>System.out.<span class="">println</span><span class="">( list );                  </span><span class=""> // [0, 1, 8, 9]</span><span class=""><br/></span><span class="">for</span><span class=""> ( ListIterator&lt;</span><span class="">String</span><span class="">&gt; it = list.</span><span class="">listIterator</span><span class="">( list.</span><span class="">size</span><span class="">() );</span><br/>      it.<span class="">hasPrevious</span><span class="">(); )</span><br/>  System.out.<span class="">print</span><span class="">( it.</span><span class="">previous</span><span class="">() + </span><span class="">" "</span><span class=""> );   </span><span class=""> // 9 8 1 0</span><span class=""/><span class=""/></pre></div>
+                
+                </div>
+                
+                <p class="standard">Like many other methods of 
+                    <samp class="listingcharacter listingcharacter">Collection</samp> data structures, 
+                    <samp class="listingcharacter listingcharacter">subList(...)</samp> creates a view on the list, which means that changes to this sublist will result in changes to the original. The same is true for 
+                    <samp class="listingcharacter listingcharacter">clear()</samp>
+                , which you can use to delete a subset of the original list.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p918"/>
+                    Note</h6>
+                    
+                    <p class="standard first">The 
+                        <samp class="listingcharacter listingcharacter">removeRange(int, int)</samp> method, which can be used for deleting, can’t be used (directly) because this method is 
+                        <samp class="listingcharacter listingcharacter">protected</samp>.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn18_02" id="fn18_02">[ 220 ]</a></span>
+                     This limitation can be resolved, for example, in the following way:</p>
+                    
+                    <div class="listing  last_item" id="l_none_18127"><pre><span class="">class</span><span class=""> RemovableList</span><span class="">&lt;</span><span class="">E</span><span class="">&gt;</span><span class=""> </span><span class="">extends</span><span class=""> ArrayList</span><span class="">&lt;</span><span class="">E</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">removeRange</span><span class="">(</span><span class="">int</span><span class=""> fromIndex</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> toIndex</span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">super</span><span class="">.</span><span class="">removeRange</span><span class="">(</span><span class="">fromIndex</span><span class="">,</span><span class=""> toIndex</span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>}</pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.1.3.7">Static Methods in List</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">List</samp>
+                 interface declares a set of static methods that build an immutable list:</p>
+                
+                <div class="listing " id="l_none_18118"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">List</span>&lt;E&gt;<br/><span class="">extends</span><span class=""> Collection&lt;E&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;E&gt; List&lt;E&gt; copyOf(Collection&lt;? extends E&gt; coll)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;E&gt; List&lt;E&gt; of()</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;E&gt; List&lt;E&gt; of(E... elements)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.1.4">18.1.4    ArrayList</h3>
+            
+            <p class="standard">Each instance of the 
+                <samp class="listingcharacter listingcharacter">ArrayList</samp> class
+                <a class="indexanchor" id="i18_08"/> represents a variable length array. The elements are accessed efficiently via indexes, which 
+                <samp class="listingcharacter listingcharacter">ArrayList</samp> implies via the implementation of the 
+                <samp class="listingcharacter listingcharacter">RandomAccess</samp> marker interface (refer back to 
+                <span class="crossreference "><a href="08_001.html#h8">Chapter 8</a></span>, 
+                <span class="crossreference "><a href="08_001.html#h8.1.18">Section 8.1.18</a></span> for more information)
+                <a class="indexanchor" id="i18_09"/>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h18.1.4.1">Creating an ArrayList</h4>
+                
+                <p class="standard">To create an 
+                    <samp class="listingcharacter listingcharacter">ArrayList</samp>
+                 object, three constructors are available:</p>
+                
+                <div class="listing " id="l_none_18147"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">ArrayList</span>&lt;E&gt;<br/><span class="">extends</span><span class=""> AbstractList&lt;E&gt;</span><br/><span class="">implements</span><span class=""> List&lt;E&gt;, RandomAccess, Cloneable, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p919"/>
+                            ArrayList()</samp><br/>An empty list with an initial capacity of 10 elements is created. If more than 10 elements are inserted, the list size must increase.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">ArrayList(int initialCapacity)</samp><br/>A list with the internal size of 
+                            <samp class="listingcharacter listingcharacter">initialCapacity</samp>
+                         elements is created.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">ArrayList(Collection&lt;? extends E&gt; c)</samp><br/>Copies all elements of the collection 
+                            <samp class="listingcharacter listingcharacter">c</samp> into the new 
+                            <samp class="listingcharacter listingcharacter">ArrayList</samp>
+                         object.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.1.4.2">The Internal Operation of ArrayList *</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">ArrayList</samp> object manage two sizes: first, the number of elements stored externally and, second, the internal size of the array. If the capacity of the array is greater than the number of elements, then elements can still be included without the list having to do anything. The number of elements in the list (i.e., its size) is returned by the 
+                    <samp class="listingcharacter listingcharacter">size()</samp> method; the capacity of the underlying array is returned by 
+                    <samp class="listingcharacter listingcharacter">capacity()</samp>
+                .</p>
+                
+                <p class="standard">The list will automatically increase in size if more elements are included than were originally planned for the place. This operation is called 
+                    <span class="italic">resizing</span>. The 
+                    <samp class="listingcharacter listingcharacter">initialCapacity</samp>
+                 size plays an important role with regard to working efficiently and should therefore be chosen appropriately. For this reason, let’s first consider how a list works if its internal array is too small.</p>
+                
+                <p class="standard">If an array stores 10 elements, but now an 11th is to be inserted, the runtime system must reserve a new memory area and copy each element of the old array into the new array. This operation costs time. For this reason alone, the constructor 
+                    <samp class="listingcharacter listingcharacter">ArrayList(int initialCapacity)</samp>
+                 should be chosen because these constructors set an initial size. Knowledge of your data then helps determine the data structure. If no value has been preset, 10 elements are assumed. In many cases, this value is too small.</p>
+                
+                <p class="standard">At this point, we’ve described creating a new array and copying elements, but we haven’t said anything about the size of the new array. The 
+                    <samp class="listingcharacter listingcharacter">ArrayList</samp>
+                 makes the internal array 1.5 times larger when expanded.</p>
+                
+                <p class="standard">The internal size of an array can be changed via 
+                    <a class="indexanchor" id="i18_10"/>
+                    <samp class="listingcharacter listingcharacter">ensureCapacity(int)</samp>. Calling 
+                    <samp class="listingcharacter listingcharacter">ensureCapacity(int minimumCapacity)</samp> causes the list to hold at least 
+                    <samp class="listingcharacter listingcharacter">minimumCapacity</samp>
+                 elements in total without resizing.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.1.5">18.1.5    LinkedList</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">LinkedList</samp>
+                <a class="indexanchor" id="i18_11"/> class implements the 
+                <samp class="listingcharacter listingcharacter">List</samp> interface as a
+                <a class="indexanchor" id="i18_12"/>
+                <a class="indexanchor" id="i18_13"/> linked list and doesn’t map the elements to an array. The implementation realizes the 
+                <samp class="listingcharacter listingcharacter">LinkedList</samp>
+             as a doubly linked list in which each element has a predecessor and successor–excluding the first and last element. (Singly linked lists have only one successor, making it difficult to navigate in either direction.)</p>
+            
+            <div class="imagebox figure-type"><a href="img-f18.1.html" id="f18.1"><img alt="&#10;                &#10;            Unified Modeling Language (UML) Class Diagram of LinkedList with Inheritance Relationships" id="img-f18.1" src="bilderklein/klein18_001.png"/></a></div>
+            
+            <p class="caption "><b>Figure 18.1</b>    
+            
+                <a id="p920"/>
+            Unified Modeling Language (UML) Class Diagram of LinkedList with Inheritance Relationships</p>
+            
+            <p class="standard">A 
+                <samp class="listingcharacter listingcharacter">LinkedList</samp> has other helper methods besides the given operations from the 
+                <samp class="listingcharacter listingcharacter">List</samp> interface, such as 
+                <samp class="listingcharacter listingcharacter">addFirst(...)</samp>, 
+                <samp class="listingcharacter listingcharacter">addLast(...)</samp>, 
+                <samp class="listingcharacter listingcharacter">getFirst()</samp>, 
+                <samp class="listingcharacter listingcharacter">getLast()</samp>, 
+                <samp class="listingcharacter listingcharacter">removeFirst()</samp>, and 
+                <samp class="listingcharacter listingcharacter">removeLast()</samp>. The implemented interfaces 
+                <samp class="listingcharacter listingcharacter">Queue</samp> and 
+                <samp class="listingcharacter listingcharacter">Deque</samp>
+             are somewhat responsible for the existence of these methods.</p>
+            
+            <div class="listing " id="l_none_18137"><pre><span class="">
+                    <a id="p921"/>
+                class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">LinkedList</span>&lt;E&gt;<br/><span class="">extends</span><span class=""> AbstractSequentialList&lt;E&gt;</span><br/><span class="">implements</span><span class=""> List&lt;E&gt;, Deque&lt;E&gt;, Cloneable, Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">LinkedList()</samp><br/>Creates a new empty list.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">LinkedList(Collection&lt;? extends E&gt; c)</samp><br/>Copies all elements of the collection 
+                        <samp class="listingcharacter listingcharacter">c</samp>
+                     into the new linked list.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.1.6">18.1.6    The Array Adapter Arrays.asList(...)</h3>
+            
+            <p class="standard">Arrays of object references and dynamic data structures don’t really go together, although they’re needed together quite often. The Java library provides the static method 
+                <samp class="listingcharacter listingcharacter">Arrays.asList(...)</samp>
+                <a class="indexanchor" id="i18_14"/> to treat an existing array as a 
+                <samp class="listingcharacter listingcharacter">java.util.List</samp>. The parameter type is a vararg, which is, after all, internally mapped to an array. Thus, 
+                <samp class="listingcharacter listingcharacter">asList(...)</samp>
+             can be used in two ways:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Arrays.asList(array)</samp>: The 
+                        <samp class="listingcharacter listingcharacter">array</samp>
+                     variable is a reference to an array, and the result is a list containing the same elements as the array.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Arrays.asList(e1, e2, e3)</samp>: The elements 
+                        <samp class="listingcharacter listingcharacter">e1</samp>,
+                        <samp class="listingcharacter listingcharacter"> e2</samp>, and
+                        <samp class="listingcharacter listingcharacter"> e3</samp>
+                     are elements of the list.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The design pattern that the Java library applies to the static method is referred to as the 
+                <span class="italic">adapter design pattern</span>
+                <a class="indexanchor" id="i18_15"/>
+            , which adapts the interface of one type to another interface of a different type.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example determines the number of smileys :-) in a string:</p>
+                
+                <div class="listing " id="l_none_18167"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"Peter :-) Paul :-) Mary"</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">Collections.</span><span class="">frequency</span></span><span class="">( Arrays.</span><span class="">asList</span><span class="">(s.</span><span class="">split</span><span class="">(</span><span class="">"\\s"</span><span class="">)), </span><span class="">":-)"</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( i );   </span><span class=""> // 2</span><span class=""/><span class=""/></pre></div>
+                
+                <p class="standard last">In 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                , no method is available for counting substrings.</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example outputs the largest element of an array:</p>
+                
+                <div class="listing " id="l_none_18171"><pre>Integer<span class="">[]</span><span class=""> ints </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">-</span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">};</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Collections</span><span class="">.</span><span class="">max</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> ints </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard last">To determine the maximum, the utility class 
+                    <samp class="listingcharacter listingcharacter">Arrays</samp> doesn’t provide a method, so the 
+                    <samp class="listingcharacter listingcharacter">max(...)</samp> method of 
+                    <samp class="listingcharacter listingcharacter">Collections</samp> comes in handy. In addition, 
+                    <samp class="listingcharacter listingcharacter">Arrays</samp> provides no way to replace array elements, whereas 
+                    <samp class="listingcharacter listingcharacter">Collections</samp> does. But sorting and filling 
+                    <samp class="listingcharacter listingcharacter">arrays</samp> is possible. In this case, 
+                    <samp class="listingcharacter listingcharacter">asList()</samp>
+                 doesn’t need to step in.</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_18180"><pre><span class="">
+                    <a id="p922"/>
+                class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Arrays</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">public static &lt;T&gt; List&lt;T&gt; asList(T… a)</samp><br/>Provides access to an array via the 
+                        <samp class="listingcharacter listingcharacter">List</samp>
+                     interface. Its variable arguments are quite convenient.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">Because of generics, the parameter type of 
+                    <samp class="listingcharacter listingcharacter">asList(...)</samp>
+                 is an object array, but never a primitive array. In our previous example, the following code would compile:</p>
+                
+                <div class="listing " id="l_none_18192"><pre><span class="">int</span><span class="">[]</span><span class=""> ints </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">-</span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">};</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> ints </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard last">However, the return of 
+                    <samp class="listingcharacter listingcharacter">Arrays.asList(ints)</samp> is of type 
+                    <samp class="listingcharacter listingcharacter">List&lt;int[]&gt;</samp>, which means the entire list consists of exactly one element, and that element is the primitive array. Fortunately, 
+                    <samp class="listingcharacter listingcharacter">Collections.max(Arrays.asList(ints))</samp> results in a compiler error because 
+                    <samp class="listingcharacter listingcharacter">max(Collection&lt;? extends T&gt;)</samp> can’t determine a maximum from a 
+                    <samp class="listingcharacter listingcharacter">List&lt;int[]&gt;</samp>, that is, from a list of arrays. In contrast, with 
+                    <samp class="listingcharacter listingcharacter">Arrays.asList(3, 9, -1, 0)</samp>, the compiler already converts the varargs arguments directly into wrapper objects via autoboxing, which results in a list of 
+                    <samp class="listingcharacter listingcharacter">Integer</samp>
+                 objects.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h18.1.6.1">Internal Matters</h4>
+                
+                <p class="standard">The return of 
+                    <samp class="listingcharacter listingcharacter">asList(...)</samp> isn’t a concrete class type like 
+                    <samp class="listingcharacter listingcharacter">ArrayList</samp> or 
+                    <samp class="listingcharacter listingcharacter">LinkedList</samp>, but something unknown, which 
+                    <samp class="listingcharacter listingcharacter">asList(...)</samp> returns as 
+                    <samp class="listingcharacter listingcharacter">List</samp>
+                . This list is just another view of the array.</p>
+                
+                <p class="standard">Now, however, some room for interpretation about what exactly is possible with the return remains. In addition, we might need to know whether the list allows fast point access (
+                    <samp class="listingcharacter listingcharacter">RandomAccess</samp> implemented) or whether optional operations such as changes or even total reorganizations are conceivable. A look at the implementation reveals more. The result is an adapter that redirects list methods like 
+                    <samp class="listingcharacter listingcharacter">get(index)</samp> or 
+                    <samp class="listingcharacter listingcharacter">set(index, element)</samp> directly to the array. Since array lengths are final, modification methods such as 
+                    <samp class="listingcharacter listingcharacter">remove(...)</samp> or 
+                    <samp class="listingcharacter listingcharacter">add(...)</samp> result in an 
+                    <samp class="listingcharacter listingcharacter">UnsupportedOperationException</samp>
+                    <a class="indexanchor" id="i18_16"/>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">If changes to the 
+                        <samp class="listingcharacter listingcharacter">asList(...)</samp>
+                     return are desired, the result must be copied into a new data structure, in the following way:</p>
+                    
+                    <div class="listing  last_item" id="l_none_18211"><pre>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">"A"</span><span class="">,</span><span class=""> </span><span class="">"B"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>list<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span><span class="">"C"</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.1.6.2">
+                    <a id="p923"/>
+                List.of(…)</h4>
+                
+                <p class="standard">An alternative to 
+                    <samp class="listingcharacter listingcharacter">asList(...)</samp> are various static overloaded 
+                    <samp class="listingcharacter listingcharacter">of(...)</samp> methods of the 
+                    <samp class="listingcharacter listingcharacter">List</samp> interface. In these methods, too, any number of arguments can be passed. With 
+                    <samp class="listingcharacter listingcharacter">asList(...)</samp>, however, the underlying array may change, so that the list changes automatically. With 
+                    <samp class="listingcharacter listingcharacter">List.of(...)</samp>, the references passed will be copied. Also, no elements can be written back to the 
+                    <samp class="listingcharacter listingcharacter">List.of(...)</samp> list, but they can be written to the 
+                    <samp class="listingcharacter listingcharacter">asList(...)</samp>
+                 list.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.1.7">18.1.7    ListIterator*</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">ListIterator</samp> interface
+                <a class="indexanchor" id="i18_17"/> is an extension of 
+                <samp class="listingcharacter listingcharacter">Iterator</samp>. This interface adds other methods so that elements can also be inserted at the current position. The location is also called the 
+                <span class="italic">cursor</span>. You should conceive of the location of the cursor as always 
+                <span class="italic">between</span> the elements; at the start, the cursor is located 
+                <span class="italic">before</span> the first element. The 
+                <samp class="listingcharacter listingcharacter">remove()</samp> and 
+                <samp class="listingcharacter listingcharacter">set(e)</samp> methods aren’t associated with cursor positions; they operate on the last element that was provided by 
+                <samp class="listingcharacter listingcharacter">next()</samp> or 
+                <samp class="listingcharacter listingcharacter">previous()</samp>
+            .</p>
+            
+            <div class="listing " id="l18.6"><pre>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""><br/></span>Collections<span class="">.</span><span class="">addAll</span><span class="">(</span><span class=""> list</span><span class="">,</span><span class=""> </span><span class="">"b"</span><span class="">,</span><span class=""> </span><span class="">"c"</span><span class="">,</span><span class=""> </span><span class="">"d"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>
+                <span class="bold"><span class="">ListIterator&lt;</span><span class="">String</span><span class="">&gt; it = list.</span><span class="">listIterator</span><span class="">();</span><br/><br/>it.<span class="">add</span><span class="">( </span><span class="">"a"</span><span class=""> );</span></span>                    <span class=""> // Add in front</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( list );       </span><span class=""> // [a, b, c, d]</span><span class=""><br/></span><br/>
+                <span class="bold">it.<span class="">next</span><span class="">();</span></span>                        <span class=""> // Position before</span><span class=""><br/></span>
+                <span class="bold">it.<span class="">remove</span><span class="">();</span></span>                      <span class=""> // Delete element</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( list );       </span><span class=""> // [a, c, d]</span><span class=""><br/></span><br/>
+                <span class="bold">it.<span class="">next</span><span class="">();</span></span>                        <span class=""> // Position before</span><span class=""><br/></span>
+                <span class="bold">it.<span class="">set</span><span class="">( </span><span class="">"C"</span><span class=""> );</span></span>                    <span class=""> // Replace element</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( list );       </span><span class=""> // [a, C, d]</span><span class=""><br/></span><br/>
+                <span class="bold">it = list.<span class="">listIterator</span><span class="">( </span><span class="">1</span><span class=""> );</span></span>      <span class=""> // New iterator with start pos. 1</span><span class=""><br/></span>
+                <span class="bold">it.<span class="">add</span><span class="">( </span><span class="">"B"</span><span class=""> );</span></span>                    <span class=""> // Add B</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( list );       </span><span class=""> // [a, B, C, d]</span><span class=""><br/></span><br/>
+                <span class="bold">it = list.<span class="">listIterator</span><span class="">( list.</span><span class="">size</span><span class="">() );</span><br/><br/>it.<span class="">previous</span><span class="">();</span></span>                    <span class=""> // One place forward</span><span class=""><br/></span>
+                <span class="bold">it.<span class="">remove</span><span class="">();</span></span>                      <span class=""> // Delete last element</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( list );       </span><span class=""> // [a, B, C]</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 18.6</b>    
+            src/main/java/com/tutego/insel/util/list/ListIteratorDemo.java, main()</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>
+                    <a id="p924"/>
+                Tip</h6>
+                
+                <p class="standard first last">As shown in the following example, 
+                    <samp class="listingcharacter listingcharacter">ListIterator</samp>
+                 can also process the elements backwards:</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_18219"><pre>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;();</span><span class=""><br/></span>Collections<span class="">.</span><span class="">addAll</span><span class="">(</span><span class=""> list</span><span class="">,</span><span class=""> </span><span class="">"1"</span><span class="">,</span><span class=""> </span><span class="">"2"</span><span class="">,</span><span class=""> </span><span class="">"3"</span><span class="">,</span><span class=""> </span><span class="">"4"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> ListIterator</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> it </span><span class="">=</span><span class=""> list</span><span class="">.</span><span class="">listIterator</span><span class="">(</span><span class=""> list</span><span class="">.</span><span class="">size</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>      it<span class="">.</span><span class="">hasPrevious</span><span class="">();</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">it.</span><span class="">previous</span><span class="">()</span></span> + <span class="">" "</span><span class=""> );</span><span class=""> // 4 3 2 1</span><span class=""><br/></span><span class="">interface</span><span class=""> </span>
+                <span class="bold">ListIterator</span>&lt;E&gt;<br/><span class="">extends</span><span class=""> Iterator&lt;E&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean hasPrevious()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean hasNext()</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">true</samp>
+                     if a preceding or following element exists.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">E previous()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">E next()</samp><br/>Returns the previous or next element of the list or issues 
+                        <samp class="listingcharacter listingcharacter">NoSuchElementException</samp>
+                     if the element doesn’t exist. Then, the method sets the cursor position back or forward.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int previousIndex()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int nextIndex()</samp><br/>Returns the index of the preceding or following element. If 
+                        <samp class="listingcharacter listingcharacter">previousIndex()</samp> goes before the list, the method will return 
+                        <samp class="listingcharacter listingcharacter">-1</samp>. If 
+                        <samp class="listingcharacter listingcharacter">nextIndex()</samp>
+                     goes after the list, the method will return the length of the entire list.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void remove()</samp><br/>Removes the last element returned by 
+                        <samp class="listingcharacter listingcharacter">next()</samp> or 
+                        <samp class="listingcharacter listingcharacter">previous()</samp>
+                     (an optional operation).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void add(E o)</samp><br/>Inserts a new object in front of the current position in the list (an optional operation).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void set(E o)</samp><br/>Replaces the element returned last by 
+                        <samp class="listingcharacter listingcharacter">next()</samp> or 
+                        <samp class="listingcharacter listingcharacter">previous()</samp>
+                     (an optional operation).</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.1.8">18.1.8    Understanding toArray(...) of Collection: Recognizing Traps</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">toArray()</samp>
+                <a class="indexanchor" id="i18_18"/> method of the 
+                <samp class="listingcharacter listingcharacter">Collection</samp>
+             interface returns an array of objects by definition. You must understand both the type of the entries and the type of the array itself.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following application of 
+                    <samp class="listingcharacter listingcharacter">toArray()</samp>
+                 transfers all the points of a collection into a new array:</p>
+                
+                <div class="listing  last_item" id="l_none_18224"><pre>
+                    <a id="p925"/>ArrayList<span class="">&lt;</span><span class="">Point</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""><br/></span>list<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class="">13</span><span class="">,</span><span class=""> </span><span class="">43</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>list<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">4</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Object<span class="">[]</span><span class=""> points </span><span class="">=</span><span class=""> list</span>
+                    <span class="bold"><span class="">.</span><span class="">toArray</span><span class="">();</span></span><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">With 
+                <samp class="listingcharacter listingcharacter">toArray()</samp>
+                <a class="indexanchor" id="i18_19"/>, we get an array with references to 
+                <samp class="listingcharacter listingcharacter">Point</samp> objects, but we can’t simply write 
+                <samp class="listingcharacter listingcharacter">points[1].x</samp> to access the 
+                <samp class="listingcharacter listingcharacter">Point</samp> object variable because the 
+                <samp class="listingcharacter listingcharacter">points</samp> array has the declared element type 
+                <samp class="listingcharacter listingcharacter">Object</samp>. The explicit type conversion is missing, and only 
+                <samp class="listingcharacter listingcharacter">((Point)points[1]).x</samp>
+             is correct.</p>
+            
+            <p class="standard">You might consider simply changing the type of the array from 
+                <samp class="listingcharacter listingcharacter">Object[]</samp> to 
+                <samp class="listingcharacter listingcharacter">Point[]</samp> since are 
+                <samp class="listingcharacter listingcharacter">Point</samp>
+             instances in the array, after all, and then try the following incorrect code:</p>
+            
+            <div class="listing " id="l_none_18237"><pre>Point<span class="">[]</span><span class=""> points </span><span class="">=</span><span class=""> list</span><span class="">.</span><span class="">toArray</span><span class="">();</span><span class="">            </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Compiler error</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The compiler reports the error “Type mismatch: cannot convert from Object[] to Point[]” because the return value of 
+                <samp class="listingcharacter listingcharacter">toArray()</samp> is an 
+                <samp class="listingcharacter listingcharacter">Object[]</samp> and not a 
+                <samp class="listingcharacter listingcharacter">Point[]</samp>. Now, maybe we could fix this type problem with a typecasting to a 
+                <samp class="listingcharacter listingcharacter">Point[]</samp>
+            , perhaps in the following way:</p>
+            
+            <div class="listing " id="l_none_18249"><pre>Point<span class="">[]</span><span class=""> points </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">Point</span><span class="">[])</span><span class=""> list</span><span class="">.</span><span class="">toArray</span><span class="">();</span><span class="">  </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Problem at runtime</span><span class=""> </span></pre></div>
+            
+            <p class="standard">While we no longer have a problem at compile time, at runtime, we’ll get the message “java.lang.ClassCastException: class [Ljava.lang.Object; cannot be cast to class [Ljava.awt.Point;” even if only 
+                <samp class="listingcharacter listingcharacter">Point</samp>
+             objects actually existed in the array.</p>
+            
+            <p class="standard">Let’s examine this programming error. What we did wrong is simple: We confused the type of the array with the types of the array elements. In the following code, we can assign anything to an array of object references:</p>
+            
+            <div class="listing " id="l_none_18270"><pre>Object<span class="">[]</span><span class=""> os </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Object</span><span class="">[</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">];</span><span class=""><br/></span>os<span class="">[</span><span class="">0</span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">();</span><span class=""><br/></span>os<span class="">[</span><span class="">1</span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">"Which seat can I take?"</span><span class="">;</span><span class=""><br/></span>os<span class="">[</span><span class="">2</span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> LocalDate</span><span class="">.</span><span class="">now</span><span class="">();</span><span class=""> </span></pre></div>
+            
+            <p class="standard">Notice that the type of the array is 
+                <samp class="listingcharacter listingcharacter">Object[]</samp>, and the array elements are also of type 
+                <samp class="listingcharacter listingcharacter">Object</samp>. Behind the keyword 
+                <samp class="listingcharacter listingcharacter">new</samp>, which creates the array object, is the common supertype for allowed array elements. For 
+                <samp class="listingcharacter listingcharacter">Object[]</samp>
+             arrays, the elements may be references for any objects. Clearly, an array can only hold object references that are compatible with the type for the array itself, that is, that refer to instances of the specified class or to copies of subclasses of that class. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_18263"><pre><span class="">/* 1 */</span><span class="">  Object[] os = new Point[ 3 ];</span><span class=""><br/></span>/* 2 */<span class="">  os[0] = new Point();</span><span class=""><br/></span>/* 3 */<span class="">  os[1] = LocalDate.now();             </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 ArrayStoreException </span><br/>/* 4 */<span class="">  os[2] = </span><span class="">"Which seat can I take?"</span><span class="">;    </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 ArrayStoreException</span><span class=""> </span></pre></div>
+            
+            <p class="standard">
+                <a id="p926"/>Lines 3 and 4 are permitted by the compiler but lead to an 
+                <samp class="listingcharacter listingcharacter">ArrayStoreException</samp> at runtime
+                <a class="indexanchor" id="i18_20"/>
+            .</p>
+            
+            <p class="standard">Let’s return to the 
+                <samp class="listingcharacter listingcharacter">toArray()</samp> method. Because the data structure to be read might contain anything, the type of the elements must be 
+                <samp class="listingcharacter listingcharacter">Object</samp>. We’ve just established that the element type of the array object returned as a result by the 
+                <samp class="listingcharacter listingcharacter">toArray()</samp> method must be at least as comprehensive. Since there’s no more general (more comprehensive) type than 
+                <samp class="listingcharacter listingcharacter">Object</samp>, the type of the array is also 
+                <samp class="listingcharacter listingcharacter">Object[]</samp>.This rule must be true, even if the elements of a data structure have a more special type in individual cases. A general implementation of 
+                <samp class="listingcharacter listingcharacter">toArray()</samp> has no choice but to create the array of type 
+                <samp class="listingcharacter listingcharacter">Object[]</samp> and the elements of type 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+            .</p>
+            
+            <p class="standard">To summarize, we previously wrote 
+                <samp class="listingcharacter listingcharacter">Object[] os = new Point[3];</samp> and saw that 
+                <samp class="listingcharacter listingcharacter">Object[]</samp> is a base type of 
+                <samp class="listingcharacter listingcharacter">Point[]</samp>. This fact is possible because 
+                <samp class="listingcharacter listingcharacter">Object</samp> is also a basic type of 
+                <samp class="listingcharacter listingcharacter">Point</samp>. The inheritance relationship of types carries over to the inheritance relationship of the arrays of those types, which is called 
+                <span class="italic">covariance</span>
+                <a class="indexanchor" id="i18_21"/>. However, if only an 
+                <samp class="listingcharacter listingcharacter">Object[]</samp> array is created—as by the parameterless 
+                <samp class="listingcharacter listingcharacter">toArray()</samp>—the result can’t be casted to the 
+                <samp class="listingcharacter listingcharacter">Point[]</samp> type, even if each element is a 
+                <samp class="listingcharacter listingcharacter">Point</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h18.1.8.1">The Solution to the Problem</h4>
+                
+                <p class="standard">Now, before we write a loop with a type conversion for every single array element or do a typecasting every time we access elements, we should consider the second 
+                    <samp class="listingcharacter listingcharacter">toArray(T[])</samp> method, which accepts a predefined array for the result as a parameter. With this method, the result array is of a more special type than 
+                    <samp class="listingcharacter listingcharacter">Object[]</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example requests an array of type 
+                        <samp class="listingcharacter listingcharacter">Point</samp> from the 
+                        <samp class="listingcharacter listingcharacter">toArray()</samp>
+                     method:</p>
+                    
+                    <div class="listing " id="l_none_18283"><pre>List<span class="">&lt;</span><span class="">Point</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""><br/></span>list<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class="">13</span><span class="">,</span><span class="">43</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>list<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class="">9</span><span class="">,</span><span class="">4</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Point<span class="">[]</span><span class=""> points </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">Point</span><span class="">[])</span><span class=""> list</span><span class="">.</span>
+                        <span class="bold"><span class="">toArray</span><span class="">( </span><span class="">new</span><span class=""> Point[</span><span class="">0</span><span class="">] );</span></span><span class=""/></pre></div>
+                    
+                    <p class="standard last">You’ll get list items copied into an array, and the type of the array is 
+                        <samp class="listingcharacter listingcharacter">Point[]</samp>, matching the list items currently present. The parameter indicates the desired type, which in this case is the 
+                        <samp class="listingcharacter listingcharacter">Point</samp>
+                     array.</p>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Performance Tip</h6>
+                    
+                    <p class="standard first">A best practice is to specify the size of the result array, that is, as large as the list, for 
+                        <samp class="listingcharacter listingcharacter">toArray(T[])</samp>. Then, 
+                        <samp class="listingcharacter listingcharacter">toArray(T[])</samp>
+                     fills exactly this array and returns it instead of building a new array. Consider the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_18292"><pre>ArrayList<span class="">&lt;</span><span class="">Point</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""><br/></span>list<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class="">13</span><span class="">,</span><span class="">43</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>
+                        <a id="p927"/>list<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class="">9</span><span class="">,</span><span class="">4</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Point<span class="">[]</span><span class=""> points </span><span class="">=</span><span class=""> list</span><span class="">.</span><span class="">toArray</span><span class="">(</span><span class=""> </span>
+                        <span class="bold"><span class="">new</span><span class=""> Point[list.</span><span class="">size</span><span class="">()]</span></span> );<span class=""><br/></span>// alternative Point[] points = list.toArray( Point[]::new )<span class="">;</span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.1.8.2">Creating Arrays with Reflection*</h4>
+                
+                <p class="standard">Internally, the 
+                    <samp class="listingcharacter listingcharacter">toArray(T[])</samp> method uses 
+                    <span class="italic">reflection</span> to dynamically create an array of the same type as the passed array. A method from 
+                    <samp class="listingcharacter listingcharacter">java.lang.reflect.Array</samp>
+                 is used for this task:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">public static Object newInstance(Class&lt;?&gt; componentType, int length)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In the following example, we’ll create a new array that has the same type as 
+                        <samp class="listingcharacter listingcharacter">array</samp>. The new empty field should have space for 
+                        <samp class="listingcharacter listingcharacter">len</samp>
+                     elements:</p>
+                    
+                    <div class="listing  last_item" id="l_none_18295"><pre>Object<span class="">[]</span><span class=""> array </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(-</span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">-</span><span class="">1</span><span class="">),</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">int</span><span class=""> len </span><span class="">=</span><span class=""> </span><span class="">100</span><span class="">;</span><span class=""><br/></span>Object<span class="">[]</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">Object</span><span class="">[])</span><span class=""> Array</span><span class="">.</span><span class="">newInstance</span><span class="">(</span><span class=""><br/></span>                         array<span class="">.</span><span class="">getClass</span><span class="">().</span><span class="">getComponentType</span><span class="">(),</span><span class=""> len</span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">array.getClass()</samp> call returns a 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object for the 
+                    <samp class="listingcharacter listingcharacter">array</samp>, such as an object representing the 
+                    <samp class="listingcharacter listingcharacter">Point[]</samp> type. With 
+                    <samp class="listingcharacter listingcharacter">array.getClass().getComponentType()</samp>, you’ll get a 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object for the element type of the array (i.e., 
+                    <samp class="listingcharacter listingcharacter">Point</samp>
+                ).</p>
+                
+                <p class="standard">So, we dynamically do what 
+                    <samp class="listingcharacter listingcharacter">new TYP[len]</samp> does, where 
+                    <samp class="listingcharacter listingcharacter">new</samp> must have the element type set at compile time. Since the return value of 
+                    <samp class="listingcharacter listingcharacter">newInstance()</samp> is a general 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                , the conversion to a suitable array must finally take place.</p>
+                
+                <p class="standard">If the passed array is large enough to store all the elements of the collection, 
+                    <samp class="listingcharacter listingcharacter">toArray(T[])</samp> copies the elements from the collection into the array. Incidentally, 
+                    <samp class="listingcharacter listingcharacter">toArray(new Object[0])</samp> is equivalent to calling 
+                    <samp class="listingcharacter listingcharacter">toArray()</samp>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.1.9">18.1.9    Managing Primitive Elements in Data Structures</h3>
+            
+            <p class="standard">Each Collection API data structure, even if used generically, accepts only references. Primitive data types don’t accept the collections, which has the consequence that wrapper objects are necessary. (Via boxing, Java seems to insert primitive elements, but in reality, Java inserts wrapper objects.) </p>
+            
+            <p class="standard">For instance, in the following code, two new 
+                <samp class="listingcharacter listingcharacter">Double</samp>
+             objects are created and then moved into the list:</p>
+            
+            <div class="listing " id="l_none_18313"><pre>
+                <a id="p928"/>List<span class="">&lt;</span><span class="">Double</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""><br/></span>list<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">1.1</span></span><span class=""> );</span><br/>list.<span class="">add</span><span class="">( </span>
+                <span class="bold"><span class="">2.2</span></span><span class=""> ); </span><span class=""/></pre></div>
+            
+            <p class="standard">When written differently and more clearly, you can truly see what is really happening:</p>
+            
+            <div class="listing " id="l_none_18336"><pre>List<span class="">&lt;</span><span class="">Double</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""><br/></span>list<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> Double</span><span class="">.</span><span class="">valueOf</span><span class="">(</span>
+                <span class="bold"><span class="">1.1</span></span><span class="">) );</span><br/>list.<span class="">add</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">Double</span><span class="">(</span>
+                <span class="bold"><span class="">2.2</span></span><span class="">) ); </span><span class=""/></pre></div>
+            
+            <p class="standard">From the call of 
+                <samp class="listingcharacter listingcharacter">Double.valueOf(...)</samp>, the 
+                <samp class="listingcharacter listingcharacter">new</samp> usage can’t be read, but the method is implemented as 
+                <samp class="listingcharacter listingcharacter">Double valueOf(double d){ return </samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">new Double(d)</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">; }</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h18.1.9.1">Special Libraries</h4>
+                
+                <p class="standard">For performant applications and large amounts of primitive elements, using a class for the special data type makes sense. Instead of programming these special classes on their own, developers can use two implementations:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <span class="italic">Eclipse Collections</span> (<span class="url"><a href="https://www.eclipse.org/collections/">https://www.eclipse.org/collections/</a></span>) include primitive collections and a comprehensive API.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <span class="italic">fastutil</span>
+                            <a class="indexanchor" id="i18_22"/> (<span class="url"><a href="https://fastutil.di.unimi.it/">https://fastutil.di.unimi.it/</a></span>) provides extensions with data structures for numerous primitive elements and high-performance input/output classes.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

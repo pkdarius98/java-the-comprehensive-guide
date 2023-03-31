@@ -1,0 +1,600 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Introduction to Data Structures and Algorithms" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Introduction to Data Structures and Algorithms" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Introduction to Data Structures and Algorithms</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h18.3">18.3    Associative Memory</h2>
+        
+        <p class="standard">An associative memory associates a key with a value. Java provides the general interface 
+            <samp class="listingcharacter listingcharacter">Map</samp>
+            <a class="indexanchor" id="i18_28"/> for data structures of this kind with important operations like 
+            <samp class="listingcharacter listingcharacter">put(key, value)</samp> to create an association and 
+            <samp class="listingcharacter listingcharacter">get(key)</samp>
+         to get an associated value.</p>
+        
+        
+            
+            <h3 class="t3" id="h18.3.1">18.3.1    The HashMap and TreeMap Classes and Static Map Methods</h3>
+            
+            <p class="standard">The Java library implements associative memory with a few classes, and we’ll focus our attention on two important classes first:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A quick implementation is the 
+                        <a class="indexanchor" id="i18_29"/>
+                        <span class="italic">hashtable</span>, which is implemented in Java by 
+                        <samp class="listingcharacter listingcharacter">java.util.HashMap</samp>
+                        <a class="indexanchor" id="i18_30"/>.
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn18_04" id="fn18_04">[ 222 ]</a></span> The key objects must be “hashable” (i.e., must implement 
+                        <samp class="listingcharacter listingcharacter">equals(...)</samp> and 
+                        <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                     concretely). A special interface for the elements isn’t necessary.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <a id="p939"/>In addition, the 
+                        <samp class="listingcharacter listingcharacter">java.util.TreeMap</samp>
+                        <a class="indexanchor" id="i18_31"/>
+                     class is somewhat slower in access but keeps all key objects always sorted. Elements are sorted into an internal binary tree. Keys can be put in order, which requires some preparation.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Let’s start with an associative memory to which we can add values, as in the following example:</p>
+                
+                <div class="listing " id="l_none_18477"><pre>
+                    <span class="bold"><span class="">Map</span></span>&lt;<span class="">String</span><span class="">,</span><span class="">String</span><span class="">&gt; twitterNames = </span><span class="">new</span><span class=""> </span>
+                    <span class="bold">HashMap</span>&lt;&gt;();<br/>twitterNames
+                    <span class="bold">.<span class="">put</span></span><span class="">( </span><span class="">"katyperry"</span><span class="">, </span><span class="">"Katy Perry"</span><span class=""> );</span><br/>twitterNames
+                    <span class="bold">.<span class="">put</span></span><span class="">( </span><span class="">"taylorswift13"</span><span class="">, </span><span class="">"Taylor Swift"</span><span class=""> );</span><br/>twitterNames
+                    <span class="bold">.<span class="">put</span></span><span class="">( </span><span class="">"Cristiano"</span><span class="">, </span><span class="">"Cristiano Ronaldo"</span><span class=""> );</span><br/>twitterNames
+                    <span class="bold">.<span class="">put</span></span><span class="">( </span><span class="">"ddlovato"</span><span class="">, </span><span class="">" Demi Lovato"</span><span class=""> );</span><br/>twitterNames
+                    <span class="bold">.<span class="">put</span></span><span class="">( </span><span class="">"KingJames"</span><span class="">, </span><span class="">"LeBron James"</span><span class=""> );</span><span class=""/></pre></div>
+                
+                <p class="standard">The second 
+                    <samp class="listingcharacter listingcharacter">HashMap</samp>
+                 is supposed to associate strings with numbers:</p>
+                
+                <div class="listing  last_item" id="l_none_18486"><pre>
+                    <span class="bold"><span class="">Map</span></span>&lt;<span class="">String</span><span class="">,Number&gt; num = </span><span class="">new</span><span class=""> </span>
+                    <span class="bold">HashMap</span>&lt;&gt;();<br/>num
+                    <span class="bold">.<span class="">put</span></span><span class="">( </span><span class="">"two"</span><span class="">, </span><span class="">2</span><span class=""> );     </span><span class=""> // Boxing via Integer.valueOf(2)</span><span class=""><br/></span>num
+                    <span class="bold">.<span class="">put</span></span><span class="">( </span><span class="">"three"</span><span class="">, </span><span class="">3.0</span><span class=""> ); </span><span class=""> // Boxing via Double.valueOf(3.0)</span><span class=""> </span><span class=""/></pre></div>
+            
+            </div>
+            
+            <div class="imagebox figure-type"><a href="img-f18.2.html" id="f18.2"><img alt="UML Class Diagram of the Map Interface" id="img-f18.2" src="bilderklein/klein18_002.png"/></a></div>
+            
+            <p class="caption "><b>Figure 18.2</b>    
+            UML Class Diagram of the Map Interface</p>
+            
+            <p class="standard">
+                <a id="p940"/>While 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp> and 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> methods are essential for the key objects of the hashed associative memory but aren’t necessary for tree-oriented methods—in these cases, only an order between the elements must be established, either with 
+                <samp class="listingcharacter listingcharacter">Comparable</samp> or 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>
+            .</p>
+            
+            <p class="standard">An associative memory works fast only in one direction. For example, in the case of a phone directory, if a name has been associated with a number, the data structure can quickly answer the question of which phone number. The other direction takes much longer because no link exists in the other direction. The association is always one-sided. These classes are not prepared for reciprocal relationships.</p>
+            
+            
+                
+                <h4 class="t4" id="h18.3.1.1">The HashMap Class</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">HashMap</samp>
+                 class is ideal for storing many elements unsorted and making them quickly available again via the keys. The internal hashing process is fast, but sorting the keys by a given criterion isn’t possible. An iterator will also provide an arbitrary order for us.</p>
+                
+                <div class="listing " id="l_none_18501"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">HashMap</span>&lt;K,V&gt;<br/><span class="">extends</span><span class=""> AbstractMap&lt;K,V&gt;</span><br/><span class="">implements</span><span class=""> Map&lt;K,V&gt;, Cloneable, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">HashMap()</samp><br/>Creates a new hash table.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">HashMap(Map&lt;? extends K,? extends V&gt; m)</samp><br/>Creates a new hash table from another 
+                            <samp class="listingcharacter listingcharacter">Map</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.3.1.2">The TreeMap Class and the SortedMap/NavigableMap Interface</h4>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">TreeMap</samp> implements the 
+                    <samp class="listingcharacter listingcharacter">NavigableMap </samp>interface
+                    <a class="indexanchor" id="i18_32"/>, which in turn inherits from the 
+                    <samp class="listingcharacter listingcharacter">SortedMap </samp>interface
+                    <a class="indexanchor" id="i18_33"/>, which in turn extends 
+                    <samp class="listingcharacter listingcharacter">Map</samp>. A 
+                    <samp class="listingcharacter listingcharacter">NavigableMap</samp>
+                 sorts the elements of an associative memory by key and provides access to the smallest or largest element.</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Some methods from 
+                            <samp class="listingcharacter listingcharacter">SortedMap</samp> like 
+                            <samp class="listingcharacter listingcharacter">firstKey()</samp>, 
+                            <samp class="listingcharacter listingcharacter">lastKey()</samp>, 
+                            <samp class="listingcharacter listingcharacter">subMap(fromKey, toKey)</samp>, and 
+                            <samp class="listingcharacter listingcharacter">tailMap(fromKey, toKey)</samp>
+                         form partial views of the associative memory.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Additional methods like 
+                            <samp class="listingcharacter listingcharacter">NavigableMap</samp>: 
+                            <samp class="listingcharacter listingcharacter">pollFirstEntry()</samp>, 
+                            <samp class="listingcharacter listingcharacter">pollLastEntry()</samp>, and 
+                            <samp class="listingcharacter listingcharacter">descendingMap()</samp>
+                         are available.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">To sort the keys in a 
+                    <samp class="listingcharacter listingcharacter">TreeMap</samp>, the same applies as for the 
+                    <samp class="listingcharacter listingcharacter">TreeSet</samp>: The elements must have a natural order, or an external 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>
+                 must specify the order.</p>
+                
+                <div class="listing " id="l_none_18515"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">TreeMap</span>&lt;K,V&gt;<br/><span class="">extends</span><span class=""> AbstractMap&lt;K,V&gt;</span><br/><span class="">implements</span><span class=""> NavigableMap&lt;K,V&gt;, Cloneable, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p941"/>
+                            TreeMap()</samp><br/>Creates a new 
+                            <samp class="listingcharacter listingcharacter">TreeMap</samp>
+                         that expects a natural order from its elements.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">TreeMap(Comparator&lt;? super K&gt; comparator)</samp><br/>Creates a new 
+                            <samp class="listingcharacter listingcharacter">TreeMap</samp> with a 
+                            <samp class="listingcharacter listingcharacter">Comparator</samp>
+                         so that the elements don’t need to have a natural order.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">TreeMap(Map&lt;? extends K,? extends V&gt; m)</samp><br/>Creates a 
+                            <samp class="listingcharacter listingcharacter">TreeMap</samp> with sorted elements from 
+                            <samp class="listingcharacter listingcharacter">m</samp>
+                        , which must have a natural order.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">TreeMap(SortedMap&lt;K,? extends V&gt; m)</samp><br/>Creates a 
+                            <samp class="listingcharacter listingcharacter">TreeMap</samp> with sorted elements from 
+                            <samp class="listingcharacter listingcharacter">m</samp> and also adopts the order from 
+                            <samp class="listingcharacter listingcharacter">m</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">To allow sorting, access is slightly slower than via 
+                    <samp class="listingcharacter listingcharacter">HashMap</samp>
+                , but hashing doesn’t permit elements to be sorted.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.3.1.3">Static Map Methods</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Map</samp> interface declares some static methods for building immutable 
+                    <samp class="listingcharacter listingcharacter">Map</samp>
+                 objects:</p>
+                
+                <div class="listing " id="l_none_18523"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Map</span>&lt;K, V&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; copyOf(Map&lt;? extends K,? extends V&gt; map)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; of()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; of(K k1, V v1)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; of(K k1, V v1, K k2, V v2)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; of(K k1, V v1, K k2, V v2, K k3, V v3)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map.Entry&lt;K,V&gt; entry(K k, V v)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;K, V&gt; Map&lt;K,V&gt; ofEntries(Map.Entry&lt;? extends K,? extends V&gt;... entries)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.3.2">18.3.2    
+                <a id="p942"/>
+            Inserting and Querying the Associative Memory</h3>
+            
+            <p class="standard">We’ve said that the elements of the associative memory are pairs consisting of keys and their associated values. The retrieval of values is efficiently possible only via keys.</p>
+            
+            
+                
+                <h4 class="t4" id="h18.3.2.1">Inserting Data</h4>
+                
+                <p class="standard">To add key-value pairs, the 
+                    <a class="indexanchor" id="i18_34"/>
+                    <samp class="listingcharacter listingcharacter">put(key, value)</samp>
+                 method can be used. The first argument is the key, and the second argument is the value to be associated with the key.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Note Regarding null</h6>
+                    
+                    <p class="standard first last">In some implementations of the 
+                        <samp class="listingcharacter listingcharacter">Map</samp> interface, the key or value can be 
+                        <samp class="listingcharacter listingcharacter">null</samp>. In these cases, we recommend looking at the Javadoc of the individual classes. For 
+                        <samp class="listingcharacter listingcharacter">HashMap</samp>, 
+                        <samp class="listingcharacter listingcharacter">null</samp> is explicitly allowed as a key and a value; for 
+                        <samp class="listingcharacter listingcharacter">ConcurrentHashMap</samp>, neither key nor value may be 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                    .</p>
+                
+                </div>
+                
+                <div class="listing " id="l_none_18530"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Map</span>&lt;K, V&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">V put(K key, V value)</samp><br/>Stores the key and the value in the associative memory. If already an entry exists in the associative memory for this key, the old value will be overridden, and the previous value for the key will be returned (unlike from 
+                            <samp class="listingcharacter listingcharacter">Set</samp>, where the operation would do nothing in this case). If the key is new, 
+                            <samp class="listingcharacter listingcharacter">put(...)</samp> will return 
+                            <samp class="listingcharacter listingcharacter">null</samp>. Thus, with 
+                            <samp class="listingcharacter listingcharacter">put(key, value) == null</samp>, you can’t clearly determine if 
+                            <samp class="listingcharacter listingcharacter">put(...)</samp> overrides a value and the old value was 
+                            <samp class="listingcharacter listingcharacter">null</samp>
+                         or if there wasn’t any key-value pair in the associative memory in the first place.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">void putAll(Map&lt;? extends K,? extends V&gt; m)</samp><br/>Inserts all key-value pairs from 
+                            <samp class="listingcharacter listingcharacter">m</samp> into the current 
+                            <samp class="listingcharacter listingcharacter">Map</samp>
+                        . This method also overrides existing keys under certain circumstances.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.3.2.2">Traversing All Values</h4>
+                
+                <p class="standard">The default method 
+                    <samp class="listingcharacter listingcharacter">forEach(java.util.function.BiConsumer)</samp> traverses all key-value pairs and calls a 
+                    <samp class="listingcharacter listingcharacter">BiConsumer</samp>
+                , which is a functional interface with a method that gets two parameters—key and value. The consumer can then evaluate the data.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following code creates a 
+                        <samp class="listingcharacter listingcharacter">Map</samp>
+                     with two pairs and outputs them:</p>
+                    
+                    <div class="listing " id="l_none_18552"><pre>Map<span class="">&lt;</span><span class="">String</span><span class="">,</span><span class=""> Integer</span><span class="">&gt;</span><span class=""> numbers </span><span class="">=</span><span class=""> Map</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"two"</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">"three"</span><span class="">,</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">);</span><span class=""><br/></span>
+                        <span class="bold"><span class="">BiConsumer&lt;</span><span class="">String</span><span class="">, Integer&gt; action =</span></span><br/>
+                        <span class="bold">    (key, value) -&gt; System.out.<span class="">println</span><span class="">( key + </span><span class="">"="</span><span class=""> + value );</span></span><br/>
+                        <span class="bold">numbers.<span class="">forEach</span><span class="">( action );</span></span><span class=""/></pre></div>
+                    
+                    <p class="standard">
+                        <a id="p943"/>
+                    The result could be the following output:</p>
+                    
+                    <div class="listing " id="l_none_18561"><pre>three<span class="">=</span><span class="">3</span><span class=""><br/></span>two<span class="">=</span><span class="">2</span></pre></div>
+                    
+                    <p class="standard">or</p>
+                    
+                    <div class="listing " id="l_none_18559"><pre>two<span class="">=</span><span class="">2</span><span class=""><br/></span>three<span class="">=</span><span class="">3</span></pre></div>
+                    
+                    <p class="standard last">The fact that the order is different might seem odd but is desired by design; 
+                        <samp class="listingcharacter listingcharacter">Map</samp> isn’t supposed to have a particular order. Incidentally, the same rule applies to 
+                        <samp class="listingcharacter listingcharacter">Set</samp>
+                    .</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.3.2.3">Querying an Associated Value</h4>
+                
+                <p class="standard">To read an element again, 
+                    <samp class="listingcharacter listingcharacter">Map</samp> declares the 
+                    <a class="indexanchor" id="i18_35"/>
+                    <samp class="listingcharacter listingcharacter">get(key)</samp> operation. The argument identifies the object to be found via the key by picking out the object from the data structure that’s equal to the query object in the sense of 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>. If the object doesn’t exist, the return will be 
+                    <samp class="listingcharacter listingcharacter">null</samp>. However, 
+                    <samp class="listingcharacter listingcharacter">null</samp> can also be the value associated with a key since 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 is perfectly permitted as a value.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example queries the associative memory after “two”:</p>
+                    
+                    <div class="listing " id="l_none_18590"><pre>Map<span class="">&lt;</span><span class="">String</span><span class="">,</span><span class=""> Integer</span><span class="">&gt;</span><span class=""> numbers </span><span class="">=</span><span class=""> Map</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"two"</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">"three"</span><span class="">,</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Integer number <span class="">=</span><span class=""> numbers</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"two"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> number </span><span class="">!=</span><span class=""> null </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> number</span><span class="">.</span><span class="">intValue</span><span class="">()</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">The result will be a 
+                        <samp class="listingcharacter listingcharacter">Number</samp> object. With generics, typecasting can be omitted if—as in our example—
+                        <samp class="listingcharacter listingcharacter">Integer</samp>
+                     objects were associated with the string. If the type hasn’t been specified previously, typecasting is necessary.</p>
+                
+                </div>
+                
+                <div class="listing " id="l_none_18593"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Map</span>&lt;K,V&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">V get(Object key)</samp><br/>Returns the object associated with the corresponding key. If no object matches, the method will return 
+                            <samp class="listingcharacter listingcharacter">null</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default V getOrDefault(Object key, V defaultValue)</samp><br/>If an associated value exists for the 
+                            <samp class="listingcharacter listingcharacter">key</samp>, that value will be returned; otherwise, the default 
+                            <samp class="listingcharacter listingcharacter">value</samp>
+                         will be returned.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.3.2.4">Does the Key Exist? Does the Value Exist?</h4>
+                
+                <p class="standard">With 
+                    <samp class="listingcharacter listingcharacter">get(...)</samp>, the presence of a key can’t really be tested for sure because 
+                    <samp class="listingcharacter listingcharacter">null</samp> can be associated with a key. This rule applies, for example, to 
+                    <samp class="listingcharacter listingcharacter">HashMap</samp>, where 
+                    <samp class="listingcharacter listingcharacter">null</samp> is permitted 
+                    <a id="p944"/>both as key and value. A safe alternative is provided by the 
+                    <a class="indexanchor" id="i18_36"/>
+                    <samp class="listingcharacter listingcharacter">containsKey(...)</samp> method, which returns 
+                    <samp class="listingcharacter listingcharacter">true</samp>
+                 if a key occurs in the table.</p>
+                
+                <p class="standard">In contrast to 
+                    <samp class="listingcharacter listingcharacter">get(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">containsKey(...)</samp>, which allow finding a value given a key, you can also search only for values without a certain key. However, this search operation is much slower because all values must be traversed. The class provides 
+                    <samp class="listingcharacter listingcharacter">containsValue(...)</samp> for this purpose. We can also get all associated values from the 
+                    <samp class="listingcharacter listingcharacter">Map</samp>
+                 without the keys.</p>
+                
+                <div class="listing " id="l_none_18596"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Map</span>&lt;K,V&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean containsKey(Object key)</samp><br/>Returns 
+                            <samp class="listingcharacter listingcharacter">true</samp> if the key occurs in the associative memory. 
+                            <samp class="listingcharacter listingcharacter">HashMap</samp> performs the comparison for equivalence with 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp>. Accordingly, the object to be compared should suitably override this method from 
+                            <samp class="listingcharacter listingcharacter">Object</samp>. 
+                            <samp class="listingcharacter listingcharacter">hashCode()</samp> and 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp> must be consistent with each other. The equivalence of two objects under 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp> must also follow the equality of 
+                            <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                         in each case.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean containsValue(Object value)</samp><br/>Returns 
+                            <samp class="listingcharacter listingcharacter">true</samp> if the associative memory contains one or more values that match the contents of the 
+                            <samp class="listingcharacter listingcharacter">value</samp> object (i.e., via 
+                            <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                        ).</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

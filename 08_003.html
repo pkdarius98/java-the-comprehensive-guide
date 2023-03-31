@@ -1,0 +1,486 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Interfaces, Enumerations, Sealed Classes, Records" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Interfaces, Enumerations, Sealed Classes, Records" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Interfaces, Enumerations, Sealed Classes, Records</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h8.3">8.3    Sealed Classes and Interfaces</h2>
+        
+        <p class="standard">Before we dive into the topic of sealed classes, let’s briefly review the properties of the types we’ve discussed so far.</p>
+        
+        <table class="standardtable" id="t8.3">
+            
+            <thead>
+                
+                <tr>
+                    
+                    <th class="tablehead tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">
+                            <a id="p524"/>
+                        Type</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">Instance Count</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">Subclasses Possible</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">Behavior Customizable</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">States Mutable</p>
+                    
+                    </th>
+                
+                </tr>
+            
+            </thead>
+            
+            <tbody>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">Regular class declaration</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">Any</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">Yes</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle top_border_cell">
+                        
+                        <p class="standard first-item last-item">Possible</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">Yes</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">Class with abstract method</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">Any</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">Must</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">Possible</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">Yes</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">Class with final method</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">Any</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">Yes</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">Yes, except for the final method</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">Yes</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">Final class</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">Any</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">No</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">No</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">Yes</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">Enumeration type</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">Fixed</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">No</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_middle">
+                        
+                        <p class="standard first-item last-item">Yes</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">No</p>
+                    
+                    </td>
+                
+                </tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <p class="caption "><b>Table 8.3</b>    
+            Possibilities and Limitations of the Different Types in Java</p>
+        
+        <p class="standard">This table clearly shows that the individual types always differ in some way or other—in one type something is forbidden; in another type, that same thing might be explicitly necessary.</p>
+        
+        <p class="standard">In the case of enumerations, no instances can be created directly as the objects are created internally. As many instances exist as there are elements in the enumeration type. Explicit subclasses of enumeration types are generally not possible, but indirect subclasses are. For this purpose, let’s first introduce an abstract method in the enumeration type (or implement an interface) that can then implement the individual enumeration elements. In this sense, any number of subclasses can be created from non-final regular classes, but only a limited number from enumeration types, and only internally; the subclasses themselves aren’t visible at all because they’re hidden. Also, enumeration types cannot store mutable states; they must remain constants.</p>
+        
+        <p class="standard">Let’s suppose we want to determine if the result of an operation was valid or invalid. This result can be expressed using an enumeration type in the following way:</p>
+        
+        <div class="listing " id="l_none_8725"><pre><span class="">enum</span><span class=""> Result </span><span class="">{</span><span class=""><br/></span>  Failure<span class="">,</span><span class=""> Success</span><br/><span class="">}</span><span class=""> </span></pre></div>
+        
+        <p class="standard">The following method could return something of type 
+            <samp class="listingcharacter listingcharacter">Result</samp>
+        : </p>
+        
+        <div class="listing " id="l_none_8739"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Baking </span><span class="">{</span><span class=""><br/></span>  <span class="">static</span><span class=""> Result </span><span class="">cake</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> Failure or Success </span><span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+        
+        <p class="standard">Callers know they can expect only two types of 
+            <samp class="listingcharacter listingcharacter">Results</samp>: either 
+            <samp class="listingcharacter listingcharacter">Failure</samp> or 
+            <samp class="listingcharacter listingcharacter">Success</samp>. Anything else is impossible and, no other 
+            <samp class="listingcharacter listingcharacter">Result</samp>
+         types can be added.</p>
+        
+        <p class="standard">
+            <a id="p525"/>
+        But now a request could arrive that a state should be stored as well, one that, for example, can remember message or that errors should have an error code. These scenarios immediately disqualify enumeration types, while classes come into play. You would thus write the following alternative code:</p>
+        
+        <div class="listing " id="l_none_8736"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> Result </span><span class="">{</span><span class=""><br/></span>  Object body<span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">class</span><span class=""> Success </span><span class="">extends</span><span class=""> Result </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">class</span><span class=""> Failure </span><span class="">extends</span><span class=""> Result </span><span class="">{</span><span class=""><br/></span>  <span class="">final</span><span class=""> </span><span class="">int</span><span class=""> errorCode</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+        
+        <p class="standard">This implementation enables you to store the state. Let’s return to the 
+            <samp class="listingcharacter listingcharacter">cake()</samp>
+         method:</p>
+        
+        <div class="listing " id="l_none_8749"><pre>Result <span class="">cake</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> … </span><span class="">}</span><span class=""> </span></pre></div>
+        
+        <p class="standard">Again, the method returns 
+            <samp class="listingcharacter listingcharacter">Result</samp>, but the receiver has a problem because, besides 
+            <samp class="listingcharacter listingcharacter">Success</samp> or 
+            <samp class="listingcharacter listingcharacter">Failure</samp>, any number of subclasses of the 
+            <samp class="listingcharacter listingcharacter">Result</samp> class could be created and returned by 
+            <samp class="listingcharacter listingcharacter">cake()</samp>
+        .</p>
+        
+        <p class="standard">What we’re looking for is a way to limit the number of possible subclasses but still, in principle, allow any number of instances that can have different states. This scenario is where sealed classes
+            <a class="indexanchor" id="i08_25"/>
+            <a class="indexanchor" id="i08_26"/>
+         take center stage.</p>
+        
+        
+            
+            <h3 class="t3" id="h8.3.1">8.3.1    Sealed Classes and Interfaces</h3>
+            
+            <p class="standard">With sealed classes
+                <a class="indexanchor" id="i08_27"/>, we know in advance which classes they extend. The compiler can use these classes to perform certain checks, such as checks for completeness with 
+                <samp class="listingcharacter listingcharacter">switch</samp>, as with 
+                <samp class="listingcharacter listingcharacter">enum</samp>
+            .</p>
+            
+            <p class="standard">Sealed classes are non-final and list
+                <a class="indexanchor" id="i08_28"/> the permitted subclasses via 
+                <samp class="listingcharacter listingcharacter">permits</samp>
+            , as in the following example:</p>
+            
+            <div class="listing " id="l8.33"><pre><span class="">abstract</span><span class=""> sealed </span><span class="">class</span><span class=""> Result </span>
+                <span class="bold"><span class="">permits</span></span> Failure, Success {<br/>  <span class="">final</span><span class=""> Object body;</span><br/>  <span class="">public</span><span class=""> </span><span class="">Result</span><span class="">( Object body ) { </span><span class="">this</span><span class="">.body = body;  }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.33</b>    
+            src/main/java/com/tutego/insel/sealed/Result.java, Result</p>
+            
+            <p class="standard">Whether the superclass is abstract or not doesn’t matter for 
+                <samp class="listingcharacter listingcharacter">permits</samp>. In our case, we don’t need any direct 
+                <samp class="listingcharacter listingcharacter">Result</samp> instances. 
+                <samp class="listingcharacter listingcharacter">permits</samp> is a bit like a softened 
+                <samp class="listingcharacter listingcharacter">final</samp>. With 
+                <samp class="listingcharacter listingcharacter">final</samp>, no subclasses can exist at all, while with 
+                <samp class="listingcharacter listingcharacter">permits</samp>
+             at least a few special subclasses can exist.</p>
+            
+            <p class="standard">
+                <a id="p526"/>Our example only has the two subclasses 
+                <samp class="listingcharacter listingcharacter">Failure</samp> and 
+                <samp class="listingcharacter listingcharacter">Success.</samp> The subclasses are 
+                <samp class="listingcharacter listingcharacter">final</samp>
+             in our example so that new types won’t appear subsequently; in a moment, we’ll explore some alternatives.</p>
+            
+            <div class="listing " id="l8.34"><pre>
+                <span class="bold"><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> Success </span><span class="">extends</span><span class=""> Result</span></span> {<br/>  <span class="">Success</span><span class="">( Object body ) { </span><span class="">super</span><span class="">( body ); }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.34</b>    
+            src/main/java/com/tutego/insel/sealed/Success.java, Success</p>
+            
+            <div class="listing " id="l8.35"><pre>
+                <span class="bold"><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> Failure </span><span class="">extends</span><span class=""> Result</span></span> {<br/>  <span class="">final</span><span class=""> </span><span class="">int</span><span class=""> errorCode;</span><br/>  <span class="">Failure</span><span class="">( </span><span class="">int</span><span class=""> errorCode, Object body ) {</span><br/>    <span class="">super</span><span class="">( body );</span><br/>    <span class="">this</span><span class="">.errorCode = errorCode;</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.35</b>    
+            src/main/java/com/tutego/insel/sealed/Failure.java, Failure</p>
+            
+            <p class="standard">A method like 
+                <samp class="listingcharacter listingcharacter">cake()</samp> can only create instances of 
+                <samp class="listingcharacter listingcharacter">Success</samp> and 
+                <samp class="listingcharacter listingcharacter">Failure</samp>
+            , for instance, in the following code: </p>
+            
+            <div class="listing " id="l8.36"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Baking </span><span class="">{</span><span class=""><br/></span>  <span class="">static</span><span class=""> Result </span><span class="">cake</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> Math</span><span class="">.</span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">&gt;</span><span class=""> </span><span class="">0.5</span><span class=""> </span><span class="">?</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Success</span><span class="">(</span><span class=""> </span><span class="">"Yummy"</span><span class=""> </span><span class="">)</span><span class=""><br/></span>                               <span class="">:</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Failure</span><span class="">(</span><span class=""> </span><span class="">29</span><span class="">,</span><span class=""> </span><span class="">"Burned"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.36</b>    
+            src/main/java/com/tutego/insel/sealed/Baking.java, Baking</p>
+            
+            <p class="standard">The recipient knows, as with the enumeration types before, that only 
+                <samp class="listingcharacter listingcharacter">Success</samp> or 
+                <samp class="listingcharacter listingcharacter">Failure</samp>
+             is possible:</p>
+            
+            <div class="listing " id="l8.37"><pre>var result <span class="">=</span><span class=""> Baking</span><span class="">.</span><span class="">cake</span><span class="">();</span><span class=""><br/></span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> result </span><span class="">instanceof</span><span class=""> Success </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Success: "</span><span class=""> </span><span class="">+</span><span class=""> result</span><span class="">.</span><span class="">body </span><span class="">);</span><span class=""><br/></span><span class="">else</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Failure: "</span><span class=""> </span><span class="">+</span><span class=""> result</span><span class="">.</span><span class="">body </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.37</b>    
+            src/main/java/com/tutego/insel/sealed/OperationDemo.java, main()</p>
+            
+            <p class="standard">In case discrimination, we only have two cases to distinguish between in our case. We’d have a big problem if a third 
+                <samp class="listingcharacter listingcharacter">Result</samp> subclass suddenly moved in because it would be treated like a 
+                <samp class="listingcharacter listingcharacter">Failure</samp>
+             in the existing code.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p527"/>
+                Outlook</h6>
+                
+                <p class="standard first">With sealed classes, exactly how many subclasses there are is known in advance. “JEP 406: Pattern Matching for switch”
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_11" id="fn08_11">[ 156 ]</a></span>
+                 paves the way for a new feature that did not ultimately make it into Java 17. The idea therefore is to rewrite the following code:</p>
+                
+                <div class="listing " id="l_none_8812"><pre><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> result </span><span class="">instanceof</span><span class=""> Success success </span><span class="">)</span><span class=""> …</span><br/><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> result </span><span class="">instanceof</span><span class=""> Failure failure </span><span class="">)</span><span class=""> …</span><br/><span class="">else</span><span class=""> </span><span class="">throw</span><span class=""> …</span></pre></div>
+                
+                <p class="standard">Instead, you would write the following code:</p>
+                
+                <div class="listing " id="l_none_8836"><pre><span class="">switch</span><span class=""> </span><span class="">(</span><span class=""> result </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">case</span><span class=""> Success success </span><span class="">-&gt;</span><span class=""> …</span><br/>  <span class="">case</span><span class=""> Failure failure </span><span class="">-&gt;</span><span class=""> …</span><br/>}</pre></div>
+                
+                <p class="standard last">The compiler knows that only two concrete types exist, and therefore, no default branch is necessary.</p>
+            
+            </div>
+            
+            <p class="standard">In addition to classes, interfaces can also enumerate their permitted implementations; we’ll explore another example in 
+                <span class="crossreference "><a href="08_004.html#h8.4">Section 8.4</a></span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.3.2">8.3.2    Subclasses Are Final, Sealed, and Non-Sealed</h3>
+            
+            <p class="standard">A subclass of a 
+                <samp class="listingcharacter listingcharacter">sealed</samp> superclass must be either 
+                <samp class="listingcharacter listingcharacter">final</samp>, 
+                <samp class="listingcharacter listingcharacter">sealed</samp>, or 
+                <samp class="listingcharacter listingcharacter">non-sealed</samp>. Recall from our earlier examples of 
+                <samp class="listingcharacter listingcharacter">final</samp> that final classes prohibit further subclasses. However, a subclass can itself be 
+                <samp class="listingcharacter listingcharacter">sealed</samp>
+             and thus explicitly list new subclasses.</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">non-sealed</samp>
+             modifier is a bit exotic because this keyword is the only (contextual) keyword that contains a hyphen. This modifier means that the seal is removed, and now, any number of subclasses can exist. In mathematics, commutative operations describe operations where the arguments of the operation can be swapped without changing the result. Addition and multiplication are commutative; subtraction and division aren’t. We can map these associations in the following ways:</p>
+            
+            <div class="listing " id="l8.38"><pre><span class="">abstract</span><span class=""> </span>
+                <span class="bold"><span class="">sealed</span></span> <span class="">class</span><span class=""> BinaryOperation</span><br/>         
+                <span class="bold">permits</span> Commutative, Noncommutative { }<br/><span class="">abstract</span><span class=""> </span>
+                <span class="bold">sealed</span> <span class="">class</span><span class=""> Commutative </span><span class="">extends</span><span class=""> BinaryOperation</span><br/>         
+                <span class="bold">permits</span> Addition, Multiplication { }<br/>
+                <span class="bold"><span class="">final</span></span><span class=""> </span><span class="">class</span><span class=""> Addition </span><span class="">extends</span><span class=""> Commutative { }</span><br/>
+                <span class="bold"><span class="">final</span></span><span class=""> </span><span class="">class</span><span class=""> Multiplication </span><span class="">extends</span><span class=""> Commutative { }</span><br/>
+                <span class="bold">non-sealed</span> <span class="">class</span><span class=""> Noncommutative </span><span class="">extends</span><span class=""> BinaryOperation { }</span><br/><span class="">class</span><span class=""> Subtraction </span><span class="">extends</span><span class=""> Noncommutative { } </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.38</b>    
+            src/main/java/com/tutego/insel/sealed/BinaryOperation.java (Snippet)</p>
+            
+            <p class="standard">
+                <a id="p528"/>For commutative operations, only instances of 
+                <samp class="listingcharacter listingcharacter">addition</samp> and 
+                <samp class="listingcharacter listingcharacter">multiplication</samp> are permitted, and no subclasses can be created. However, you can create any subclass from 
+                <samp class="listingcharacter listingcharacter">Noncommutative</samp>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.3.3">8.3.3    Abbreviated Notations</h3>
+            
+            <p class="standard">As we discuss in this section, 
+                <samp class="listingcharacter listingcharacter">permits</samp>
+             isn’t used in two special cases.</p>
+            
+            
+                
+                <h4 class="t4" id="h8.3.3.1">Subclasses in the Same Compilation Unit</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">permits</samp>
+                 keyword can be omitted if the subclasses reside in the same compilation unit. Consider the following example:</p>
+                
+                <div class="listing " id="l8.39"><pre><span class="">public</span><span class=""> sealed </span><span class="">class</span><span class=""> State </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> Open </span><span class="">extends</span><span class=""> State </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> Closed </span><span class="">extends</span><span class=""> State </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 8.39</b>    
+            src/main/java/com/tutego/insel/sealed/State.java (Snippet)</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h8.3.3.2">Nested Types</h4>
+                
+                <p class="standard">In Java, type declarations can be placed inside other type declarations to express a tight binding of types. This topic will be the subject of 
+                    <span class="crossreference "><a href="10_001.html#h10">Chapter 10</a></span>, 
+                    <span class="crossreference "><a href="10_001.html#h10.1">Section 10.1</a></span>
+                , but let’s look at a preview:</p>
+                
+                <div class="listing " id="l8.40"><pre><span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">sealed</span></span> <span class="">class</span><span class=""> Feeling {</span><br/>  <span class="">public</span><span class=""> </span><span class="">enum</span><span class=""> Scale {</span><br/>    Not_at_all, A_little, Moderately, Quite_a_lot, Extremely<br/>  }<br/> <br/>  <span class="">public</span><span class=""> </span><span class="">final</span><span class=""> Scale scale;</span><br/> <br/>  <span class="">protected</span><span class=""> </span><span class="">Feeling</span><span class="">( Scale scale ) { </span><span class="">this</span><span class="">.scale = Objects.</span><span class="">requireNonNull</span><span class="">( scale ); }</span><br/> <br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> </span>
+                    <span class="bold"><span class="">class</span><span class=""> Friendly </span><span class="">extends</span><span class=""> Feeling</span></span> {<br/>    <span class="">public</span><span class=""> </span><span class="">Friendly</span><span class="">( Scale scale ) { </span><span class="">super</span><span class="">( scale ); }</span><br/>  }<br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> </span>
+                    <span class="bold"><span class="">class</span><span class=""> Tense </span><span class="">extends</span><span class=""> Feeling</span></span> {<br/>    <span class="">public</span><span class=""> </span><span class="">Tense</span><span class="">( Scale scale ) { </span><span class="">super</span><span class="">( scale ); }</span><br/>  }<br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> </span>
+                    <span class="bold"><span class="">class</span><span class=""> Active </span><span class="">extends</span><span class=""> Feeling</span></span> {<br/>    <span class="">public</span><span class=""> </span><span class="">Active</span><span class="">( Scale scale ) { </span><span class="">super</span><span class="">( scale ); }</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 8.40</b>    
+            src/main/java/com/tutego/insel/sealed/Feeling.java, Feeling</p>
+                
+                <p class="standard">
+                    <a id="p529"/>
+                The following example uses types:</p>
+                
+                <div class="listing " id="l_none_8882"><pre>Feeling active <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Feeling</span><span class="">.</span><span class="">Active</span><span class="">(</span><span class=""> Feeling</span><span class="">.</span><span class="">Scale</span><span class="">.</span><span class="">Moderately </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> active</span><span class="">.</span><span class="">scale </span><span class="">);</span><span class="">  </span></pre></div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

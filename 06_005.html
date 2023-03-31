@@ -1,0 +1,746 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Writing Custom Classes" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Writing Custom Classes" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Writing Custom Classes</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h6.5">6.5    
+            <a id="p405"/>
+        Creating and Destroying Objects</h2>
+        
+        <p class="standard">If a program creates objects via the
+            <a class="indexanchor" id="i06_37"/> 
+            <samp class="listingcharacter listingcharacter">new</samp> keyword, the memory management of the runtime system reserves memory on the system heap. Then, the object states are initialized. If the object is no longer referenced, the 
+            <span class="italic">automatic garbage collector</span>
+            <a class="indexanchor" id="i06_38"/>
+         cleans up at certain intervals and returns the memory to the runtime system.</p>
+        
+        
+            
+            <h3 class="t3" id="h6.5.1">6.5.1    Writing Constructors</h3>
+            
+            <p class="standard">When a program creates a new object via 
+                <samp class="listingcharacter listingcharacter">new</samp>
+            , a constructor is automatically called for initialization. Every class must have a constructor in Java. Either the compiler automatically creates a constructor, or you’ll create your own. With your own constructor, you can set up an object with an initial, user-defined state after its creation. This approach may be necessary for classes that contain variables because they wouldn’t make sense without prior assignment or initialization.</p>
+            
+            
+                
+                <h4 class="t4" id="h6.5.1.1">Constructor Declarations</h4>
+                
+                <p class="standard">Constructor declarations contain special initializations and look similar to method declarations—and also use the familiar visibilities, parameter lists, and overloading—but two distinct differences should be considered:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Constructors always have the same name as the class.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Constructor declarations don’t have a return type—not even 
+                            <samp class="listingcharacter listingcharacter">void</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">If our 
+                        <samp class="listingcharacter listingcharacter">Candy</samp>
+                     class is to get a constructor, we must write the following code:</p>
+                    
+                    <div class="listing  last_item" id="l_none_6567"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  
+                        <span class="bold"><span class="">Candy</span><span class="">()</span></span> { }                <span class=""> // Constructor of Candy class</span><span class=""><br/></span>}<span class=""/></pre></div>
+                
+                </div>
+                
+                <p class="standard">A constructor that has no parameters is called a 
+                    <span class="italic">parameterless constructor</span>
+                    <a class="indexanchor" id="i06_39"/>
+                    <a class="indexanchor" id="i06_40"/>, a 
+                    <span class="italic">no-arg constructor</span>,
+                    <a class="indexanchor" id="i06_41"/> or a 
+                    <span class="italic">nullary constructor</span>
+                    <a class="indexanchor" id="i06_42"/>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.5.1.2">Call Sequence</h4>
+                
+                <p class="standard">The fact that the constructor is called during initialization and thus before an external method call can be demonstrated with a small example:</p>
+                
+                <div class="listing " id="l6.33"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">Candy</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"2 inside the constructor"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>
+                    <a id="p406"/>  <span class="">void</span><span class=""> </span><span class="">eat</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"4 eating"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"1 before the constructor call"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    Candy d <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Candy </span><span class="">();</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"3 after the constructor call"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    d<span class="">.</span><span class="">eat</span><span class="">();</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"5 tummy ache"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.33</b>    
+            src/main/java/com/tutego/insel/game/c/vb/Candy.java (Snippet)</p>
+                
+                <p class="standard">The call order will be output on the screen in the following sequence:</p>
+                
+                <div class="listing " id="l_none_6605"><pre>1 before the constructor call<br/>2 inside the constructor<br/>3 after the constructor call<br/>4 eating<br/>5 tummy ache </pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">UML knows attributes and operations but not constructors in the Java sense. In a UML diagram, constructors are labeled like operations, which are just named like the class.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.5.2">6.5.2    Relationship of Method and Constructor</h3>
+            
+            <p class="standard">Methods and constructors have a number of things in common, such as the following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">They have program code.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">They have an (optional) parameter list.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">They can have modifiers.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">They can access object variables and can use 
+                        <samp class="listingcharacter listingcharacter">this</samp>
+                    . </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Another difference, mentioned earlier, is that methods have a return type (even if it’s only 
+                <samp class="listingcharacter listingcharacter">void</samp>
+            ), but constructors don’t. Two other differences concern syntax and semantics.</p>
+            
+            <p class="standard">Constructors always carry the name of their class, and since class names are capitalized by convention, constructors are always capitalized as well, whereas methods are usually always lowercase. In addition, methods are usually verbs that instruct the object to do something; class names are nouns, not verbs.</p>
+            
+            <p class="standard">
+                <a id="p407"/>The program code of a constructor is automatically called by the JVM exactly once after the creation of an object, namely, as the first method before all other methods. Methods can be called any number of times and are under the control of the user. Constructors can’t be called again at a later time on an already existing object to reinitialize the object. The constructor call is implicitly and automatically linked to 
+                <samp class="listingcharacter listingcharacter">new</samp> and can’t be understood separately from 
+                <samp class="listingcharacter listingcharacter">new</samp>
+            .</p>
+            
+            <p class="standard">In summary, a constructor is a kind of special method for initializing an object.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Java Virtual Machine: Internal Information</h6>
+                
+                <p class="standard first last">A Java compiler converts constructors as 
+                    <samp class="listingcharacter listingcharacter">void</samp> methods called 
+                    <samp class="listingcharacter listingcharacter">&lt;init&gt;</samp>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.5.3">6.5.3    The Default Constructor</h3>
+            
+            <p class="standard">If you don’t specify a constructor at all in your class, the compiler automatically creates one because there must always be a constructor. The Java Language Specification (JLS) calls this required constructor the 
+                <span class="italic">default constructor</span>
+                <a class="indexanchor" id="i06_43"/>
+            .</p>
+            
+            <p class="standard">Consider the following code:</p>
+            
+            <div class="listing " id="l_none_6620"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The compiler turns it into a version that’s identical in bytecode, such as the following:</p>
+            
+            <div class="listing " id="l_none_6629"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">Candy</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The given constructor always has the same visibility as the class. If the class is package-visible, so is the constructor. And if the 
+                <samp class="listingcharacter listingcharacter">public</samp>/
+                <samp class="listingcharacter listingcharacter">private</samp>/
+                <samp class="listingcharacter listingcharacter">protected</samp>
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_10" id="fn06_10">[ 133 ]</a></span> modifiers set the type visibility, the automatically introduced constructor will also be 
+                <samp class="listingcharacter listingcharacter">public</samp>/
+                <samp class="listingcharacter listingcharacter">private</samp>/
+                <samp class="listingcharacter listingcharacter">protected</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h6.5.3.1">Default Constructor or Parameterless Constructor</h4>
+                
+                <p class="standard">Whether a parameterless constructor was created by the compiler or developer is an implementation detail that is irrelevant to users of the class. For this reason, whether we create a parameterless constructor ourselves or whether we let the compiler generate a given constructor for us doesn’t matter: In the bytecode, this difference in authorship can no longer be distinguished and is also irrelevant to the user of the class. Even a generated Javadoc API documentation for 
+                    <samp class="listingcharacter listingcharacter">public class C1 {}</samp> and 
+                    <samp class="listingcharacter listingcharacter">public class C2 { public C2(){} }</samp>
+                 would be structurally the same.</p>
+                
+                <p class="standard">
+                    <a id="p408"/>Thus, the default constructor is always a parameterless constructor. Even if the compiler creates a default constructor, specifying your own parameterless constructor, even if the body is empty, can be useful in some cases. One reason is to document it with Javadoc; another reason is to choose the visibility explicitly, for example, if the class is 
+                    <samp class="listingcharacter listingcharacter">public</samp>
+                 but the constructor is supposed to be private. More on this topic next.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.5.3.2">Private Constructors</h4>
+                
+                <p class="standard">A constructor can be private, which prevents an instance of this class from being formed externally. What appears to be rather limited at first glance turns out to be quite clever if intended to deliberately prevent the creation of instances. This limitation makes sense for 
+                    <span class="italic">utility classes</span>
+                    <a class="indexanchor" id="i06_44"/>, which
+                    <span class="italic"> </span>are classes that have only static methods and are thus helper classes
+                    <a class="indexanchor" id="i06_45"/>. Numerous examples of these helper classes already exist, for example, 
+                    <samp class="listingcharacter listingcharacter">Math</samp>. Why should instances be used in this case, which isn’t necessary for calling 
+                    <samp class="listingcharacter listingcharacter">max(...)</samp>
+                ? So, the creation of objects can be successfully prevented with a private constructor.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.5.4">6.5.4    Parameterized and Overloaded Constructors</h3>
+            
+            <p class="standard">The default constructor has no parameters, which is why we called it a 
+                <span class="italic">parameterless constructor</span>. However, like a method, a constructor can also have a parameter list: Then, the constructor is called a 
+                <span class="italic">parameterized constructor</span>
+                <a class="indexanchor" id="i06_46"/>
+                <a class="indexanchor" id="i06_47"/> or a 
+                <span class="italic">general constructor</span>
+                <a class="indexanchor" id="i06_48"/>
+                <a class="indexanchor" id="i06_49"/>
+            . Constructors can be overloaded like methods; that is, they can be declared with different parameter lists.</p>
+            
+            <p class="standard">Let’s implement the following requirement: A 
+                <samp class="listingcharacter listingcharacter">City</samp>
+             object must always be created with a name. Optionally, a number of inhabitants can be transferred as well.</p>
+            
+            <div class="listing " id="l6.34"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> City </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">int</span><span class="">    population</span><span class="">;</span><span class=""><br/></span> <br/>  
+                <span class="bold"><span class="">public</span><span class=""> </span><span class="">City</span><span class="">( </span><span class="">String</span><span class=""> name ) {</span><br/>    <span class="">setName</span><span class="">( name );</span><br/>  }<br/> <br/>  <span class="">public</span><span class=""> </span><span class="">City</span><span class="">( </span><span class="">String</span><span class=""> name, </span><span class="">int</span><span class=""> population ) {</span><br/>    <span class="">setName</span><span class="">( name );</span><br/>    <span class="">setPopulation</span><span class="">( population );</span><br/>  }<br/> </span><br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setName</span><span class="">( </span><span class="">String</span><span class=""> name ) {</span><br/>    <span class="">this</span><span class="">.name = Objects.</span><span class="">requireNonNull</span><span class="">( name );</span><br/>  }<br/> <br/>
+                <a id="p409"/>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">getName</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> name;</span><br/>  }<br/> <br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setPopulation</span><span class="">( </span><span class="">int</span><span class=""> population ) {</span><br/>    <span class="">if</span><span class=""> ( population &gt;= </span><span class="">0</span><span class=""> )</span><br/>      <span class="">this</span><span class="">.population = population;</span><br/>  }<br/> <br/>  <span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">getPopulation</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> population;</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.34</b>    
+            src/main/java/com/tutego/insel/game/c/vc/City.java (Snippet)</p>
+            
+            <div class="imagebox figure-type"><a href="img-f6.12.html" id="f6.12"><img alt="UML Diagram for City with Two Constructors" id="img-f6.12" src="bilderklein/klein06_012.png"/></a></div>
+            
+            <p class="caption "><b>Figure 6.12</b>    
+            UML Diagram for City with Two Constructors</p>
+            
+            <p class="standard">This use case may look like the following code:</p>
+            
+            <div class="listing " id="l6.35"><pre>City kandy <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">City</span><span class="">(</span><span class=""> </span><span class="">"Kandy"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%s %d%n"</span><span class="">,</span><span class=""><br/></span>                   kandy<span class="">.</span><span class="">getName</span><span class="">(),</span><span class=""> kandy</span><span class="">.</span><span class="">getPopulation</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // Kandy 0</span><span class=""><br/></span>City hershey <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">City</span><span class="">(</span><span class=""> </span><span class="">"Hershey"</span><span class="">,</span><span class=""> 10_200 </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%s %d%n"</span><span class="">,</span><span class=""><br/></span>                   hershey<span class="">.</span><span class="">getName</span><span class="">(),</span><span class=""> hershey</span><span class="">.</span><span class="">getPopulation</span><span class="">()</span><span class=""> </span><span class="">);<br/></span><span class="">                                                              // Hershey 10200</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 6.35</b>    
+            src/main/java/com/tutego/insel/game/c/vc/Application.java (Snippet)</p>
+            
+            <p class="standard">Parameterized constructors connect the initialization to the setters, so to speak. The object variables could be assigned directly, but we want to pass the values to be set to 
+                <a id="p410"/>the setters because this way the setter can validate right away, and the constructor is freed from the validation task. As we’ll discuss in 
+                <span class="crossreference "><a href="14_001.html#h14">Chapter 14</a></span>, 
+                <span class="crossreference "><a href="14_001.html#h14.1">Section 14.1</a></span>
+            , we need to follow the rule Don’t Repeat Yourself (DRY)! It’s certainly a matter of taste whether a negative population number should simply be ignored during setting or whether it should create an exception, but that’s another question.</p>
+            
+            
+                
+                <h4 class="t4" id="h6.5.4.1">When Does the Compiler Not Insert a Given Constructor?</h4>
+                
+                <p class="standard">If at least one constructor has been implemented by us, the compiler will no longer create a default constructor. Thus, you would have only parameterized constructors—as in our example earlier—trying to create an object for our 
+                    <samp class="listingcharacter listingcharacter">City</samp> class simply with the parameterless constructor via 
+                    <samp class="listingcharacter listingcharacter">new City()</samp>
+                 will result in a compiler error since no default constructor is generated by the compiler:</p>
+                
+                <div class="listing " id="l_none_6658"><pre>City city <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">City</span><span class="">();</span><span class="">     </span><span class=""> // Cannot resolve constructor 'City()'</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The fact that the compiler doesn’t create a default constructor has a good reason: If it did, an object could be created without perhaps initializing important variables. The parameterized constructors of a 
+                    <samp class="listingcharacter listingcharacter">City</samp> force a city name to be specified during creation, so that a name has been set in any case after construction and the reference variable is not 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                 by default. To allow developers to use a parameterless constructor in addition to parameterized constructors, we’d need to add that manually.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.5.4.2">What Does a Useful Constructor Look Like?</h4>
+                
+                <p class="standard">If an object has a set of object variables, a constructor will usually want to initialize these states. If we have an endless number of object variables in a class, should we also write an endless number of constructors? If a class has object variables that are set by 
+                    <samp class="listingcharacter listingcharacter">set*(...)</samp> methods and read by 
+                    <samp class="listingcharacter listingcharacter">get*()</samp> methods, you don’t need to set these object variables in the constructor. A parameterless constructor that puts the object in an initial state is appropriate; then its states can be changed with the access methods, which is the recommended approach according to JavaBeans conventions. Constructors that cover the most common initialization scenarios are certainly also practical. The object of the 
+                    <samp class="listingcharacter listingcharacter">java.awt.Point</samp>
+                 class can be created with the parameterless constructor, but you can also use a parameterized constructor, which would immediately set the coordinate values; so, all values are given before the first access.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.5.5">6.5.5    Copy Constructors</h3>
+            
+            <p class="standard">A constructor is extraordinarily handy if it accepts a type-identical object via its parameter and takes the initial values for its own state from this object. Such a constructor is called a 
+                <span class="italic">copy constructor</span>
+                <a class="indexanchor" id="i06_50"/>
+            .</p>
+            
+            <p class="standard">Let’s look at an example: The 
+                <samp class="listingcharacter listingcharacter">Candy</samp> class gets a constructor that accepts another candy. In this way, an already initialized 
+                <samp class="listingcharacter listingcharacter">Candy</samp> object can be passed to the constructor as a 
+                <a id="p411"/>
+            template for a new candy. The parameterized constructor can read all (or selectively chosen) object variables of an existing candy and transfer them to the newly created candy. The implementation resembles the following code:</p>
+            
+            <div class="listing " id="l6.36"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">int</span><span class="">    price</span><span class="">;</span><span class=""><br/></span> <br/>  
+                <span class="bold"><span class="">public</span><span class=""> </span><span class="">Candy</span><span class="">()</span></span> {<br/>  }<br/> <br/>  
+                <span class="bold"><span class="">public</span><span class=""> </span><span class="">Candy</span><span class="">( Candy other )</span></span> {<br/>    <span class="">this</span><span class="">.name  = other.name;</span><br/>    <span class="">this</span><span class="">.price = other.price;</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.36</b>    
+            src/main/java/com/tutego/insel/game/c/vd/Candy.java (Snippet)</p>
+            
+            <p class="standard">Let’s test this code in the following way:</p>
+            
+            <div class="listing " id="l6.37"><pre>Candy sugarDaddy <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><span class=""><br/></span>sugarDaddy<span class="">.</span><span class="">name </span><span class="">=</span><span class=""> </span><span class="">"Sugar Daddy Caramel Pops"</span><span class="">;</span><span class=""><br/></span>sugarDaddy<span class="">.</span><span class="">price </span><span class="">=</span><span class=""> </span><span class="">20</span><span class="">;</span><span class=""><br/></span> <br/>Candy caramelPops <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">(</span><span class=""> sugarDaddy </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%s %d%n"</span><span class="">,</span><span class="">            </span><span class=""> // Sugar Daddy Caramel Pops 20</span><span class=""><br/></span>                   caramelPops<span class="">.</span><span class="">name</span><span class="">,</span><span class=""> caramelPops</span><span class="">.</span><span class="">price </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 6.37</b>    
+            src/main/java/com/tutego/insel/game/c/vd/Application.java (Snippet)</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">main(...)</samp> method creates a new candy named 
+                <samp class="listingcharacter listingcharacter">sugarDaddy</samp> with the parameterless constructor and then initializes a new candy named 
+                <samp class="listingcharacter listingcharacter">caramelPops</samp> with the values of 
+                <samp class="listingcharacter listingcharacter">sugarDaddy</samp>. This template is referred to as a 
+                <span class="italic">prototype</span>
+                <a class="indexanchor" id="i06_51"/>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">If the 
+                    <samp class="listingcharacter listingcharacter">Candy</samp> class were to declare a second constructor, 
+                    <samp class="listingcharacter listingcharacter">Candy(Object)</samp> in addition to the parameterized constructor 
+                    <samp class="listingcharacter listingcharacter">Candy(Candy)</samp>, at first glance, a conflict arises when used by 
+                    <samp class="listingcharacter listingcharacter">new Candy(sugarDaddy)</samp> because both constructors would match. The Java compiler solves this possible confusion by always calling the most specific constructor, that is, 
+                    <samp class="listingcharacter listingcharacter">Candy(Candy)</samp> and not 
+                    <samp class="listingcharacter listingcharacter">Candy(Object)</samp>. This preference is also true for 
+                    <samp class="listingcharacter listingcharacter">new Candy(null)</samp>—again, the constructor 
+                    <samp class="listingcharacter listingcharacter">Candy(Candy)</samp> is used. While this question isn’t so significant for everyday life, candidates for the 
+                    <span class="italic">Oracle Certified Professional Java Programmer</span>
+                 certification must be prepared for such a question. For the rest, the same principle applies to the methods.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.5.6">6.5.6    
+                <a id="p412"/>
+            Calling Another Constructor of the Same Class via this(...)</h3>
+            
+            <p class="standard">Sometimes, different constructors are provided, but only one constructor hides the actual initialization of the object. Let’s change the 
+                <samp class="listingcharacter listingcharacter">City</samp> class a bit so that an object can once be initialized via a constructor 
+                <samp class="listingcharacter listingcharacter">City(String name, int population)</samp> and once via a copy constructor 
+                <samp class="listingcharacter listingcharacter">City(City other)</samp>
+            .</p>
+            
+            <div class="listing " id="l6.38"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> City </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">int</span><span class="">    population</span><span class="">;</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span><span class="">City</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> population </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                <span class="bold"><span class="">this</span><span class="">.name = name.</span><span class="">trim</span><span class="">();</span><br/>    <span class="">this</span><span class="">.population = Math.</span><span class="">max</span><span class="">( </span><span class="">0</span><span class="">, population );</span></span><br/>  }<br/> <br/>  <span class="">public</span><span class=""> </span><span class="">City</span><span class="">( City other ) {</span><br/>    
+                <span class="bold"><span class="">this</span><span class="">.name = other.name.</span><span class="">trim</span><span class="">();</span><br/>    <span class="">this</span><span class="">.population = Math.</span><span class="">max</span><span class="">( </span><span class="">0</span><span class="">, other.population );</span></span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.38</b>    
+            src/main/java/com/tutego/insel/game/c/ve/City.java (Snippet)</p>
+            
+            <p class="standard">Notice how both constructors perform three tasks: removing the whitespace from the name, ensuring that the population isn’t negative, and initializing the object variables 
+                <samp class="listingcharacter listingcharacter">name</samp> and 
+                <samp class="listingcharacter listingcharacter">population</samp>
+            . In the end, however, notice that the code is almost identical. The following elements occur three times each: assignment of object variables, whitespace removal, and range check.</p>
+            
+            <p class="standard">A smarter approach would be if the 
+                <samp class="listingcharacter listingcharacter">City(City)</samp> constructor called the 
+                <samp class="listingcharacter listingcharacter">City(String, int)</samp> constructor of its own class. Then, the same program code wouldn’t need to repeat several times. Java allows such constructor redirecting via the 
+                <a class="indexanchor" id="i06_52"/>
+                <samp class="listingcharacter listingcharacter">this</samp>
+             keyword:</p>
+            
+            <div class="listing " id="l6.39"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> City </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">int</span><span class="">    population</span><span class="">;</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span><span class="">City</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> population </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">this</span><span class="">.</span><span class="">name </span><span class="">=</span><span class=""> name</span><span class="">.</span><span class="">trim</span><span class="">();</span><span class=""><br/></span>    <span class="">this</span><span class="">.</span><span class="">population </span><span class="">=</span><span class=""> Math</span><span class="">.</span><span class="">max</span><span class="">(</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> population </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span><span class="">City</span><span class="">(</span><span class=""> City other </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                <span class="bold"><span class="">this</span><span class="">( other.name, other.population );</span></span><br/>  }<br/> <br/>
+                <a id="p413"/>  <span class="">public</span><span class=""> </span><span class="">City</span><span class="">() {</span><br/>    
+                <span class="bold"><span class="">this</span><span class="">( </span><span class="">"Undefined"</span><span class="">, </span><span class="">0</span><span class=""> );</span></span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.39</b>    
+            src/main/java/com/tutego/insel/game/c/vf/City.java (Snippet)</p>
+            
+            <p class="standard">One advantage over the previous solution is that one central location needs to be revised if changes arise. This advantage can already be seen in 
+                <samp class="listingcharacter listingcharacter">trim()</samp>: Previously, the trimming was included in every constructor, but after the change, trimming was included only locally in one place. Let’s suppose we implemented ten constructors for every conceivable case in exactly this style. If we need to initialize something in each constructor at once, the program code—such as a call of the 
+                <samp class="listingcharacter listingcharacter">init(...)</samp>
+             method—must be inserted into each of the constructors. We can simply get around this problem by moving the work to a special constructor. Now, if the program changes in such a way that additional program code must be executed everywhere when initializing, then we change one line in the concrete constructor that is used by all. As a result, only a little modification work is required of us, which is a great advantage from a software point of view. Everywhere in Java libraries, this technique can be recognized.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The 
+                    <samp class="listingcharacter listingcharacter">this</samp> keyword is assigned two functions in Java: First, 
+                    <samp class="listingcharacter listingcharacter">this</samp> is a reference to the current object, and second, when used with parentheses, 
+                    <samp class="listingcharacter listingcharacter">this</samp> represents a redirect to another constructor of the same class. Using the class name as a method call, that is, writing 
+                    <samp class="listingcharacter listingcharacter">City(other.name, other.population)</samp> instead of 
+                    <samp class="listingcharacter listingcharacter">this(other.name, other.population)</samp> doesn’t work syntactically because you could actually have a capitalized method 
+                    <samp class="listingcharacter listingcharacter">City(...)</samp>
+                , which, however, has nothing to do with the constructor.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h6.5.6.1">Constraints of this(...)*</h4>
+                
+                <p class="standard">When calling another constructor using 
+                    <samp class="listingcharacter listingcharacter">this(...)</samp>
+                , you must keep in mind two important constraints:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The call of 
+                            <samp class="listingcharacter listingcharacter">this(...)</samp>
+                         must be the first statement of the constructor.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">No object members can be accessed before calling 
+                            <samp class="listingcharacter listingcharacter">this(...)</samp> in the constructor. Thus, an object variable may not be passed as an argument to 
+                            <samp class="listingcharacter listingcharacter">this(...)</samp>
+                        , nor may another object method of the class be called to calculate the argument, for example. Only access to static variables (such as final variables that are constants) or calling static methods is allowed.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The first constraint states that creating an object is always the first thing a constructor must do. Nothing can be executed before initialization. The second limitation relates to 
+                    <a id="p414"/>the fact that the object variables aren’t initialized until 
+                    <span class="italic">after</span> the call of 
+                    <samp class="listingcharacter listingcharacter">this(...)</samp>
+                , so accessing them wouldn’t make any sense since the values would generally be null.</p>
+                
+                <p class="standard">Example:</p>
+                
+                <div class="listing " id="l6.40"><pre><span class="">class</span><span class=""> CottonCandy </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">static</span><span class="">         </span><span class="">int</span><span class=""> CALORIES </span><span class="">=</span><span class=""> </span><span class="">630</span><span class="">;</span><span class=""><br/></span> <span class=""> /*non-static*/</span><span class=""> int calories = 630;</span><br/><br/>  CottonCandy() {<br/>   <span class=""> // this( calories );   <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/></span><span class=""><br/></span>    <span class="">this</span><span class="">(</span><span class=""> CALORIES </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">CottonCandy</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> calories </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">this</span><span class="">.</span><span class="">calories </span><span class="">=</span><span class=""> calories</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.40</b>    
+            src/main/java/com/tutego/insel/oop/CottonCandy.java (Snippet)</p>
+                
+                <p class="standard">Since object variables haven’t yet been initialized up to a certain point (which we’ll describe in 
+                    <span class="crossreference "><a href="06_006.html#h6.6">Section 6.6</a></span>), the compiler won’t let us access them—only static variables are allowed as passing parameters. For this reason, the 
+                    <samp class="listingcharacter listingcharacter">this(calories)</samp> call isn’t valid because 
+                    <samp class="listingcharacter listingcharacter">calories</samp> is an object variable. The compiler error reads: “Cannot reference CottonCandy.calories’ before supertype constructor has been called.” The expression 
+                    <samp class="listingcharacter listingcharacter">this(CALORIES)</samp> is fine, however, because 
+                    <samp class="listingcharacter listingcharacter">CALORIES</samp>
+                 is a static variable.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.5.7">6.5.7    Immutable Objects and Wither Methods</h3>
+            
+            <p class="standard">Objects whose states can’t be changed are referred to as 
+                <span class="italic">immutable</span>
+                <a class="indexanchor" id="i06_53"/>
+            . These classes don’t declare public variables in this case, nor do they declare methods with side effects that could modify these states. Consequently, for immutable objects, setters don’t exist at all, and getters only maybe exist.</p>
+            
+            <p class="standard">Different ways are available for objects to get their values, and parameterized constructors are good for this task. Assignments can be passed in the constructor call and thus written directly into final variables quite easily. The Java library contains a number of such classes that have no parameterless constructor and some parameterized classes that await values. The values passed in the constructor initialize the object, and the object retains these values throughout its lifetime. These classes include, for example, 
+                <samp class="listingcharacter listingcharacter">Integer</samp>, 
+                <samp class="listingcharacter listingcharacter">Double</samp>, 
+                <samp class="listingcharacter listingcharacter">Color</samp>, 
+                <samp class="listingcharacter listingcharacter">File</samp>, or 
+                <samp class="listingcharacter listingcharacter">Font</samp>
+            .</p>
+            
+            <p class="standard">Immutable objects that also implement the 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> method are called 
+                <span class="italic">value objects</span>
+                <a class="indexanchor" id="i06_54"/>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h6.5.7.1">
+                    <a id="p415"/>
+                Assigning Final Values from the Constructor</h4>
+                
+                <p class="standard">A final variable can be assigned a value only once. This limitation doesn’t necessarily mean that the variable must be assigned a value at the declaration location—that assignment can also happen later. For example, a constructor may describe final object variables. The pair of final variable and initializing constructor is a frequently used idiom when variable values won’t be changed later. Thus, in our next example, the 
+                    <samp class="listingcharacter listingcharacter">name</samp>
+                 variable is final because it’s set only once via the constructor and then only read.</p>
+                
+                <div class="listing " id="l6.41"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> City </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">final</span></span><span class=""> </span><span class="">String</span><span class=""> name;</span><br/>  <span class="">public</span><span class=""> </span><span class="">City</span><span class="">( </span><span class="">String</span><span class=""> name ) { </span>
+                    <span class="bold"><span class="">this</span><span class="">.name</span></span> = name; }<br/>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">getName</span><span class="">() { </span><span class="">return</span><span class=""> name; }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.41</b>    
+            src/main/java/com/tutego/insel/game/c/vg/City.java (Snippet)</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Java Style</h6>
+                    
+                    <p class="standard first last">Whenever the assignment no longer changes, except for direct initialization in place or in the constructor, developers should use final variables.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.5.7.2">Wither Methods</h4>
+                
+                <p class="standard">Even though objects can’t be changed with setters, you can generally create new objects with changed states. For example, consider the 
+                    <samp class="listingcharacter listingcharacter">String</samp> class with the methods 
+                    <samp class="listingcharacter listingcharacter">trim()</samp> and 
+                    <samp class="listingcharacter listingcharacter">toUpperCase()</samp>
+                —the results are new strings, not changes to the original string.</p>
+                
+                <p class="standard">To change state variables, you can generally use 
+                    <span class="italic">wither methods</span>
+                    <a class="indexanchor" id="i06_55"/>
+                . These methods are similar to setters, except that they don’t change any state of the current object but instead result in a new object with the changed state.</p>
+                
+                <table class="standardtable" id="t6.7">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Getter</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">Setter</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Wither</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <span class="italic"><samp class="listingcharacter listingcharacter">Type</samp></span>
+                                    <samp class="listingcharacter listingcharacter"> getXXX()</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">void setXXX(</samp>
+                                    <span class="italic"><samp class="listingcharacter listingcharacter">Type</samp></span>
+                                    <samp class="listingcharacter listingcharacter"> xxx)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <span class="italic"><samp class="listingcharacter listingcharacter">ImmutableType</samp></span>
+                                    <samp class="listingcharacter listingcharacter"> withXXX(</samp>
+                                    <span class="italic"><samp class="listingcharacter listingcharacter">Type</samp></span>
+                                    <samp class="listingcharacter listingcharacter"> xxx)</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 6.7</b>    
+            Naming Convention of the Getter, Setter, and Wither Methods for Property xxx</p>
+                
+                <p class="standard">In the Java library, some data types have wither methods, generally temporal data types, such as 
+                    <samp class="listingcharacter listingcharacter">LocalDate</samp>,
+                    <samp class="listingcharacter listingcharacter"> LocalTime</samp>
+                , etc.</p>
+                
+                <p class="standard">Let’s consider another example: A city has a name and a number of inhabitants. The instances are supposed to be immutable.</p>
+                
+                <div class="listing " id="l6.42"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> City </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">int</span><span class="">    population</span><span class="">;</span><span class=""><br/></span> <br/>
+                    <a id="p416"/>  <span class="">public</span><span class=""> </span><span class="">City</span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> population </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">this</span><span class="">.</span><span class="">name </span><span class="">=</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>    <span class="">this</span><span class="">.</span><span class="">population </span><span class="">=</span><span class=""> population</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span> <br/>  
+                    <span class="bold"><span class="">public</span><span class=""> City </span><span class="">withName</span><span class="">( </span><span class="">String</span><span class=""> name ) {</span><br/>    <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">City</span><span class="">( name, population );</span><br/>  }<br/> <br/>  <span class="">public</span><span class=""> City </span><span class="">withPopulation</span><span class="">( </span><span class="">int</span><span class=""> population ) {</span><br/>    <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">City</span><span class="">( name, population );</span><br/>  }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.42</b>    
+            src/main/java/com/tutego/insel/game/c/vh/City.java (Snippet)</p>
+                
+                <p class="standard">The object variables can be 
+                    <samp class="listingcharacter listingcharacter">public</samp>
+                 because their values can’t be changed from the outside, so we can do without unnecessary getters, as in the following example:</p>
+                
+                <div class="listing " id="l6.43"><pre>City almostKandy <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">City</span><span class="">(</span><span class=""> </span><span class="">"H"</span><span class="">,</span><span class=""> </span><span class="">100</span><span class=""> </span><span class="">);</span><span class=""><br/></span>City kandy <span class="">=</span><span class=""> almostKandy</span><span class="">.</span>
+                    <span class="bold"><span class="">withPopulation</span><span class="">( 10_200 ).</span><span class="">withName</span><span class="">( </span><span class="">"Hershey"</span><span class=""> )</span></span>;<br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%s %d"</span><span class="">, kandy.name, kandy.population );</span><span class=""> // Hershey 10200</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.43</b>    
+            src/main/java/com/tutego/insel/game/c/vh/Application.java, main()</p>
+                
+                <div class="imagebox figure-type"><a href="img-f6.13.html" id="f6.13"><img alt="City with Wither Methods" id="img-f6.13" src="bilderklein/klein06_013.png"/></a></div>
+                
+                <p class="caption "><b>Figure 6.13</b>    
+            City with Wither Methods</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.5.8">6.5.8    We Don’t Miss You: The Garbage Collector</h3>
+            
+            <p class="standard">Fortunately, when programming in Java, you’re relieved of the tedious task of freeing memory from objects. If an object is no longer referenced, the garbage collector
+                <a class="indexanchor" id="i06_56"/>
+                <a class="indexanchor" id="i06_57"/>
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_11" id="fn06_11">[ 134 ]</a></span> finds 
+                <a id="p417"/>
+            this object and takes care of everything else, which of course simplifies the development process. The use of automatic garbage collection prevents two major problems:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">An object might be deleted, but the reference still exists (
+                        <a class="indexanchor" id="i06_58"/>
+                        <span class="italic">dangling pointer</span>
+                    ).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">No pointer points to a specific object, but the object still exists in memory (
+                        <a class="indexanchor" id="i06_59"/>
+                        <span class="italic">memory leak</span>
+                    ).</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">Constructors are special code blocks that the runtime environment always calls in the course of object creation. Languages such as C++, PHP, Python, and Swift are also familiar with the concept of a destructor
+                    <a class="indexanchor" id="i06_60"/>
+                , which is a special code block called whenever an object is no longer needed.</p>
+                
+                <p class="standard last">Java doesn’t know general destructors, instead offering a special language construct so that resources can be closed automatically (see 
+                    <span class="crossreference "><a href="09_001.html#h9">Chapter 9</a></span>, 
+                    <span class="crossreference "><a href="09_006.html#h9.6">Section 9.6</a></span>
+                ).</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h6.5.8.1">The General Mode of Operation of the Garbage Collector</h4>
+                
+                <p class="standard">Automatic garbage collection might seem an ominous thing that cleverly manages objects. But how does a garbage collector work? The garbage collector is implemented as an independent thread with low priority. This feature manages the root objects from which the entire mesh of living objects (the 
+                    <span class="italic">object graph</span>
+                    <a class="indexanchor" id="i06_61"/>
+                ) can be accessed. This object graph includes the root of the thread group tree and the local variables of all active method calls (the stack of all threads). At regular intervals, the garbage collector marks objects that aren’t needed and removes them.</p>
+                
+                <p class="standard">Thanks to 
+                    <span class="italic">HotSpot</span>
+                 technology, the creation of objects on Oracle’s JVM happens rather quickly. HotSpot uses a generation-oriented garbage collection that exploits the fact that two groups of objects exist with significantly different lifetimes. Most objects die young, but the few that survive grow rather old. The strategy in this context is that objects are created in a “kindergarten” that is routinely searched for dead objects and is limited in size. Surviving objects graduate from kindergarten after some time and then move into another generation in memory that is rarely searched by the garbage collector. In this way, the garbage collector follows the philosophy of Joseph von Auffenberg, who said: “Improvements must succeed in time; in a storm, you can no longer mend your sails.” Thus, automatic garbage collection cleans continuously; it doesn’t just start working when the memory is already full, at which point it’s too late.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.5.8.2">Manual Nulling and Memory Leaks</h4>
+                
+                <p class="standard">In the following scenario, the garbage collector will remove the unneeded object after the reference variable 
+                    <samp class="listingcharacter listingcharacter">reference</samp>
+                 when the runtime environment exits the inner block, as in the following example:</p>
+                
+                <div class="listing " id="l_none_6749"><pre><span class="">
+                        <a id="p418"/>
+                    {</span><span class=""><br/></span>  <span class="">{</span><span class=""><br/></span>    Candy reference <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span> <span class=""> // Object after candy is free for garbage collection </span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">In foreign programs, you’ll sometimes encounter statements like the following:</p>
+                
+                <div class="listing " id="l_none_6756"><pre>reference <span class="">=</span><span class=""> null</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">These statements are often unnecessary because, as in the case of our block, the garbage collector knows when the last reference was taken from the object. The situation is different if the lifetime of the variable is longer, such as for an object variable or even a static variable or when the variable referenced in an array. If the referenced object is then no longer needed, the variable (or array entry) should be set to 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                ; otherwise, the garbage collector wouldn’t clear the object away due to the heavy referencing. While automatic garbage collection finds every object that is no longer referenced, it doesn’t have the fortune-telling ability to detect memory leaks caused by unused but still referenced objects.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

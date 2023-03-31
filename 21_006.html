@@ -1,0 +1,1553 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Bits and Bytes, Mathematics and Money" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Bits and Bytes, Mathematics and Money" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Bits and Bytes, Mathematics and Money</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h21.6">21.6    Large Numbers*</h2>
+        
+        <p class="standard">The fixed length of the primitive data types 
+            <samp class="listingcharacter listingcharacter">int</samp> and 
+            <samp class="listingcharacter listingcharacter">long</samp> for integer values, and 
+            <samp class="listingcharacter listingcharacter">float</samp> and 
+            <samp class="listingcharacter listingcharacter">double</samp> for floating point values, isn’t sufficient for various numerical calculations. Arbitrarily large numbers in cryptography and precise resolutions in financial mathematics are particularly desirable. For such applications, two classes in the 
+            <samp class="listingcharacter listingcharacter">math</samp> package are available: 
+            <samp class="listingcharacter listingcharacter">BigInteger</samp> for integers and 
+            <samp class="listingcharacter listingcharacter">BigDecimal</samp>
+            <a class="indexanchor" id="i21_119"/> for floats, as shown in 
+            <span class="crossreference "><a href="21_006.html#f21.1">Figure 21.1</a></span>
+        .</p>
+        
+        <div class="imagebox figure-type"><a href="img-f21.1.html" id="f21.1"><img alt="The Inheritance Relationship of BigInteger and BigDecimal" id="img-f21.1" src="bilderklein/klein21_001.png"/></a></div>
+        
+        <p class="caption "><b>Figure 21.1</b>    
+            The Inheritance Relationship of BigInteger and BigDecimal</p>
+        
+        
+            
+            <h3 class="t3" id="h21.6.1">21.6.1    The BigInteger Class</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                <a class="indexanchor" id="i21_120"/> class enables you to create and manage integers of any accuracy for use in calculations. 
+                <samp class="listingcharacter listingcharacter">BigInteger</samp> objects are always as long internally as the corresponding results take up space (
+                <span class="italic">infinite word size</span>). The calculation options go far beyond options using primitive types and furthermore offer many static methods of the 
+                <samp class="listingcharacter listingcharacter">Math</samp> class. Extensions include modular arithmetic, the determination of the greatest common divisor
+                <a class="indexanchor" id="i21_121"/> (GCD
+                <a class="indexanchor" id="i21_122"/>), pseudo-prime tests
+                <a class="indexanchor" id="i21_123"/>
+            , bit manipulation, and more.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p1052"/>
+                Example</h6>
+                
+                <p class="standard first">The square of a number consisting only of 1s yields an interesting result, namely, a number that is both a palindrome
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn21_10" id="fn21_10">[ 237 ]</a></span>
+                 and also counts up (to the middle) in the manner of 1234, etc. Consider the following example:</p>
+                
+                <div class="listing " id="l21.9"><pre>BigInteger ones <span class="">=</span><span class=""> BigInteger</span><span class="">.</span><span class="">ONE</span><span class="">;</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> i </span><span class="">&lt;</span><span class=""> </span><span class="">20</span><span class="">;</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> ones </span><span class="">+</span><span class=""> </span><span class="">"^2 = "</span><span class=""> </span><span class="">+</span><span class=""> ones</span><span class="">.</span><span class="">pow</span><span class="">(</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  ones <span class="">=</span><span class=""> ones</span><span class="">.</span><span class="">multiply</span><span class="">(</span><span class=""> BigInteger</span><span class="">.</span><span class="">TEN </span><span class="">).</span><span class="">add</span><span class="">(</span><span class=""> BigInteger</span><span class="">.</span><span class="">ONE </span><span class="">);</span><span class=""><br/></span>}</pre></div>
+                
+                <p class="caption "><b>Listing 21.9</b>    
+            src/main/java/com/tutego/insel/math/BigIntegerDemo.java, main()</p>
+                
+                <p class="standard">The result of the loop is the following output:</p>
+                
+                <div class="listing  last_item" id="l_none_21747"><pre>1^2 = 1<br/>11^2 = 121<br/>111^2 = 12321<br/>1111^2 = 1234321<br/>11111^2 = 123454321<br/>…<br/>11111111111111111111^2 = 123456790123456790120987654320987654321</pre></div>
+            
+            </div>
+            
+            <p class="standard">Like strings, 
+                <samp class="listingcharacter listingcharacter">BigInteger</samp> objects are always immutable. The same rule is true for 
+                <samp class="listingcharacter listingcharacter">BigDecimal</samp>
+            . Thus, mathematical operations on these objects always return new objects.</p>
+            
+            
+                
+                <h4 class="t4" id="h21.6.1.1">Constants for Selected BigInteger Objects</h4>
+                
+                <p class="standard">In our small example, we used some existing 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                 objects to create new objects with their help. In total, the class provides four constants:</p>
+                
+                <div class="listing " id="l_none_21773"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">math</span><span class="">.</span>
+                    <span class="bold">BigInteger</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;BigInteger&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static final BigInteger ZERO</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static final BigInteger ONE</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static final BigInteger TWO</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static final BigInteger TEN</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.6.1.2">
+                    <a id="p1053"/>
+                Creating BigInteger Objects</h4>
+                
+                <p class="standard">For creation, several constructors and a factory method are available. No parameterless constructor exists because an empty immutable 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                 object isn’t especially useful.</p>
+                
+                <div class="listing " id="l_none_21771"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">math</span><span class="">.</span>
+                    <span class="bold">BigInteger</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;BigInteger&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static BigInteger valueOf(long val)</samp><br/>A static factory method that constructs a 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> from a 
+                            <samp class="listingcharacter listingcharacter">long</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger(String val)</samp><br/>Creates a 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                         from a string of digits with an optional sign.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger(String val, int radix)</samp><br/>A string with an optional sign is translated into a 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> object. The constructor uses the specified base 
+                            <samp class="listingcharacter listingcharacter">radix</samp> to interpret the characters of the string as digits. For 
+                            <samp class="listingcharacter listingcharacter">radix</samp>
+                         &gt; 10, the letters A-Z or a-z are used as additional “digits.”</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger(byte[] val)</samp><br/>A byte array with a two’s complement representation of a 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> number in big-endian format
+                            <a class="indexanchor" id="i21_124"/> (array element with index 0, contains the bits with the highest values) initializes the new 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                         object.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger(byte[] val, int off, int len)</samp><br/>Like 
+                            <samp class="listingcharacter listingcharacter">BigInteger(byte[] val)</samp>
+                        , only a subfield is considered.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger(int signum, byte[] magnitude)</samp><br/>Creates a 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> object from a big-endian amount or sign representation. 
+                            <samp class="listingcharacter listingcharacter">signum</samp>
+                         specifies the sign and can be assigned –1 (negative numbers), 0 (zero), and 1 (positive numbers).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger(int signum, byte[] magnitude, int off, int len)</samp><br/>As the previous constructor, but with a subfield.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">In addition to constructors that initialize the object with values from a byte array or string, an object can also be created with a random assignment. The class 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp> uses the 
+                    <samp class="listingcharacter listingcharacter">java.util.Random</samp> class. Likewise, 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                 objects can be created that are pseudo-primes.</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger(int numbits, Random rnd)</samp><br/>Returns a random number
+                            <a class="indexanchor" id="i21_125"/> from the value range 0 to 2
+                            <sup>numBits –1</sup>
+                        . All values are equally probable.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger(int bitLength, int certainty, Random rnd)</samp><br/>Creates a 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> number with bit length 
+                            <samp class="listingcharacter listingcharacter">bitLength</samp> (&gt;1), which is a prime number with some probability. The 
+                            <samp class="listingcharacter listingcharacter">certainty</samp> value determines how probable an incorrect 
+                            <a id="p1054"/>judgment might be. With probability 1/(2
+                            <sup>certainty</sup>), the generated number is not a prime number after all. The larger 
+                            <samp class="listingcharacter listingcharacter">certainty</samp>
+                         is (and the less probable a misjudgment), the more time the constructor takes.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">In case of incorrect strings, the constructor with a string parameter will throw a 
+                    <samp class="listingcharacter listingcharacter">NumberFormatException</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Let’s say we have a string that encodes a binary sequence of zeros and ones. Then, an object of the 
+                        <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                     class can be used to convert this string into a byte array. In a second step of the following example, an output is made:</p>
+                    
+                    <div class="listing " id="l_none_21780"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"11011101 10101010 0010101 00010101"</span><span class="">.</span><span class="">replace</span><span class="">(</span><span class=""> </span><span class="">" "</span><span class="">,</span><span class=""> </span><span class="">""</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">byte</span><span class="">[]</span><span class=""> bytes </span><span class="">=</span><span class=""> </span>
+                        <span class="bold"><span class="">new</span><span class=""> </span><span class="">BigInteger</span><span class="">( s, </span><span class="">2</span><span class=""> )</span></span>.<span class="">toByteArray</span><span class="">();</span><span class=""> // [158,261,69,69]</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Long.</span><span class="">toBinaryString</span><span class="">( ByteBuffer.</span><span class="">wrap</span><span class="">( bytes ).</span><span class="">getInt</span><span class="">() ) );</span><span class=""><br/></span>// 1101110110101010001010100010101<span class=""><br/></span>System.out.<span class="">printf</span><span class="">( </span><span class="">"%04X"</span><span class="">, </span>
+                        <span class="bold"><span class="">new</span><span class=""> </span><span class="">BigInteger</span><span class="">( </span><span class="">1</span><span class="">, bytes )</span></span> );<span class=""> // 6ED51515</span><span class=""/><span class=""/></pre></div>
+                    
+                    <p class="standard last">The first output uses 
+                        <samp class="listingcharacter listingcharacter">ByteBuffer.wrap(bytes).getInt()</samp> as a trick to assemble the bytes of a (small) array into an 
+                        <samp class="listingcharacter listingcharacter">int</samp>. However, the call only works if the array for an 
+                        <samp class="listingcharacter listingcharacter">int</samp> is exactly 4 bytes in size—in addition to 
+                        <samp class="listingcharacter listingcharacter">getInt()</samp>, you can also use 
+                        <samp class="listingcharacter listingcharacter">getShort()</samp> and 
+                        <samp class="listingcharacter listingcharacter">getLong()</samp> for arrays of size 2 and 8. For our example, 
+                        <samp class="listingcharacter listingcharacter">getInt()</samp> is OK because we actually have 4 bytes. The second output shows yet another use case for 
+                        <samp class="listingcharacter listingcharacter">BigInteger</samp>, namely, to produce hex outputs; the byte array can be of any length. The fact that it’s called 
+                        <samp class="listingcharacter listingcharacter">new BigInteger(1, bytes)</samp> instead of 
+                        <samp class="listingcharacter listingcharacter">new BigInteger(bytes)</samp> is important because we don’t want a sign for the hexadecimal output if the first bit in the byte array is set and usually indicates a negative number. The format string 
+                        <samp class="listingcharacter listingcharacter">%4X</samp>
+                     fills the output on the left with zeros if necessary.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.6.1.3">Internal Representation*</h4>
+                
+                <p class="standard">The implementation represents a 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp> object internally as well as the primitive data types 
+                    <samp class="listingcharacter listingcharacter">byte</samp>, 
+                    <samp class="listingcharacter listingcharacter">short</samp>, 
+                    <samp class="listingcharacter listingcharacter">int</samp>, and 
+                    <samp class="listingcharacter listingcharacter">long</samp> in the two’s complement. The other operations also correspond to the integer operations of the primitive data types, such as division by zero, which throws an 
+                    <samp class="listingcharacter listingcharacter">ArithmeticException</samp>
+                    <a class="indexanchor" id="i21_126"/>
+                .</p>
+                
+                <p class="standard">Internally, a 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp> increases the range of values, if necessary, so that some operations aren’t transferable. For example, the shift operator 
+                    <samp class="listingcharacter listingcharacter">&gt;&gt;&gt;</samp> can’t be taken over because, in a right-shift, we have no sign bit in the 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                . Since the size of the data type is always expanded if necessary and no overflow is possible due to this internal adjustment of the internal buffer, users may have to include their own overflow test in their programs if they need to limit the value range.</p>
+                
+                <p class="standard">
+                    <a id="p1055"/>An interpretation of the values must also be made for logical operators. For operations on two 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp> objects with different bit lengths, the smaller value is matched to the larger one by replication (repetition) of the sign bit. You can use special bit operators to set individual bits. As with the 
+                    <samp class="listingcharacter listingcharacter">BitSet</samp>
+                 class, the “infinite” size allows bits to be set even if the number doesn’t require that many bits. Bit operations can’t change the sign of a number; if necessary, a new sign bit with the original value is added before the number.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.6.1.4">Methods of BigInteger</h4>
+                
+                <p class="standard">The first category of methods replicates arithmetic operations for which there would otherwise be an operator character or method from 
+                    <samp class="listingcharacter listingcharacter">Math</samp>
+                : </p>
+                
+                <div class="listing " id="l_none_21790"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">math</span><span class="">.</span>
+                    <span class="bold">BigInteger</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;BigInteger&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger abs()</samp><br/>Returns the absolute value, similar to 
+                            <samp class="listingcharacter listingcharacter">Math.abs(...)</samp>
+                         for primitive data types.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger add(BigInteger val)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger and(BigInteger val)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger andNot(BigInteger val)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger divide(BigInteger val)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger mod(BigInteger m)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger multiply(BigInteger val)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger or(BigInteger val)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger remainder(BigInteger val)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger subtract(BigInteger val)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger xor(BigInteger val)</samp><br/>Creates a new 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                         object with the sum, AND-operation, AND-NOT-operation, division, modulo, product, OR-operation, remainder, difference, and XOR-operation of this object and the other one.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger[] divideAndRemainder(BigInteger val)</samp><br/>Returns an array with two 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> objects. In the array, the return object, position 0 contains the value for 
+                            <samp class="listingcharacter listingcharacter">this / val</samp>, followed by 
+                            <samp class="listingcharacter listingcharacter">this % val</samp>
+                         at position 1.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger modInverse(BigInteger m)</samp><br/>Creates a new 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> by inverting the current 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> (equivalent to 
+                            <samp class="listingcharacter listingcharacter">1/this</samp>) and then taking it modulo 
+                            <samp class="listingcharacter listingcharacter">m</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger modPow(BigInteger exponent, BigInteger m)</samp><br/>Takes the current 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> to the power of 
+                            <samp class="listingcharacter listingcharacter">exponent</samp> modulo 
+                            <samp class="listingcharacter listingcharacter">m</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p1056"/>
+                            BigInteger negate()</samp><br/>Negates the object and thus returns a new 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                         with reversed sign.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger not()</samp><br/>Returns a new 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                         whose bits are negated.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger pow(int exponent)</samp><br/>Creates 
+                            <samp class="listingcharacter listingcharacter">this</samp> to the power of 
+                            <samp class="listingcharacter listingcharacter">exponent</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int signum()</samp><br/>Returns the sign of the custom 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                         object.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger sqrt()</samp><br/>Returns the square root and 
+                            <samp class="listingcharacter listingcharacter">ArithmeticException</samp>
+                         if the number is negative.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger[] sqrtAndRemainder()</samp><br/>Returns an array with two elements. In the first position is the square root (
+                            <samp class="listingcharacter listingcharacter">see sqrt()</samp>); in the second position is the difference between the current value and the product of 
+                            <samp class="listingcharacter listingcharacter">sqrt()</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first last">The wrapper classes 
+                        <samp class="listingcharacter listingcharacter">Integer</samp> or 
+                        <samp class="listingcharacter listingcharacter">Long</samp> don’t provide methods for determining a greatest common divisor or for checking for a prime number. Using 
+                        <samp class="listingcharacter listingcharacter">BigInteger</samp> in this case may pay off. For example, what is the GCD of 855 and 99? Answers will be 
+                        <samp class="listingcharacter listingcharacter">BigInteger.valueOf( 855 ).gcd( BigInteger.valueOf( 99 ) ).longValsueExact()</samp>
+                     with 9.</p>
+                
+                </div>
+                
+                <p class="standard">The next category of methods is closely related to the bits of the number:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int bitCount()</samp><br/>Counts the number of set bits of the number that’s in the two’s complement.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int bitLength()</samp><br/>Returns the number of bits necessary to represent the number in the two’s complement without a sign bit.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger clearBit(int n)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger flipBit(int n)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger setBit(int n)</samp><br/>Returns a new 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> object with the 
+                            <span class="italic">n</span>
+                        th bit deleted, flipped, or set, respectively.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger shiftLeft(int n)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger shiftRight(int n)</samp><br/>Shifts the bits by 
+                            <samp class="listingcharacter listingcharacter">n</samp>
+                         places to the left or right.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int getLowestSetBit()</samp><br/>Returns the position of the bit that is set furthest to the right in the representation of the number.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p1057"/>boolean testBit(int n)<br/>true</samp> if the bit 
+                            <samp class="listingcharacter listingcharacter">n</samp>
+                         is set.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The following methods are of particular interest for cryptographic procedures:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger gcd(BigInteger val)</samp><br/>Returns the greatest common divisor from the current object and 
+                            <samp class="listingcharacter listingcharacter">val</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean isProbablePrime(int certainty)</samp><br/>Determines if the 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> object with probability 
+                            <samp class="listingcharacter listingcharacter">certainty</samp>
+                         is a prime number.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger nextProbablePrime()</samp><br/>Returns the next integer after the current 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                        , which is probably a prime number.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static BigInteger probablePrime(int bitLength, Random rnd)</samp><br/>Returns a prime number of length 
+                            <samp class="listingcharacter listingcharacter">bitLength</samp>
+                         with a certain probability.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Furthermore, several extraction and conversion methods are available:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">double doubleValue()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">float floatValue()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int intValue()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">long longValue()</samp><br/>Converts 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> to a 
+                            <samp class="listingcharacter listingcharacter">double</samp>, 
+                            <samp class="listingcharacter listingcharacter">float</samp>, 
+                            <samp class="listingcharacter listingcharacter">int</samp>, or 
+                            <samp class="listingcharacter listingcharacter">long</samp>. These methods are implemented methods of the abstract superclass 
+                            <samp class="listingcharacter listingcharacter">Number</samp>. If the value ranges don’t fit, they’ll be made to fit. Conversion errors due to lack of accuracy aren’t noticed by mistake.
+                            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn21_11" id="fn21_11">[ 238 ]</a></span>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">long longValueExact()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int intValueExact()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">short shortValueExact()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">byte byteValueExact()</samp><br/>Converts the value of 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> to the desired primitive data type. If the accuracy isn’t sufficient, an 
+                            <samp class="listingcharacter listingcharacter">ArithmeticException</samp> will follow. The 
+                            <samp class="listingcharacter listingcharacter">*ValueExact()</samp> methods follow the construction of the 
+                            <samp class="listingcharacter listingcharacter">*Exact()</samp> methods from 
+                            <samp class="listingcharacter listingcharacter">Math</samp>, which throw an 
+                            <samp class="listingcharacter listingcharacter">ArithmeticException</samp>
+                         if the value range is exceeded during operations (addition, multiplication...).</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">byte[] toByteArray()</samp><br/>Returns a byte array with 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                         as two’s complement.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String toString()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String toString(int radix)</samp><br/>Return the string representation from this 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                         to base 10 or to any base.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p1058"/>
+                    Example</h6>
+                    
+                    <p class="standard first">The following example uses
+                        <samp class="listingcharacter listingcharacter"> byteValue()</samp> and 
+                        <samp class="listingcharacter listingcharacter">byteValueExact()</samp>
+                     in comparison:</p>
+                    
+                    <div class="listing " id="l_none_21818"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> BigInteger</span><span class="">.</span><span class="">TEN</span><span class="">.</span><span class="">pow</span><span class="">(</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">).</span><span class="">byteValue</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>BigInteger<span class="">.</span><span class="">TEN</span><span class="">.</span><span class="">pow</span><span class="">(</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">).</span><span class="">byteValueExact</span><span class="">()</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">While the former returns the output –24, the latter is followed by a “java.lang.ArithmeticException: BigInteger out of int range” because of course 1,000 doesn’t fit into a byte.</p>
+                
+                </div>
+                
+                <p class="standard">The last group of methods are comparison methods:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger max(BigInteger val)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger min(BigInteger val)</samp><br/>Returns the larger or smaller of the 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                         objects.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean equals(Object x)</samp><br/>Compares whether 
+                            <samp class="listingcharacter listingcharacter">x</samp> and the current 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> object take on the same value. Overrides the method from 
+                            <samp class="listingcharacter listingcharacter">Object</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int compareTo(BigInteger o)</samp><br/>Since the 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> class implements the 
+                            <samp class="listingcharacter listingcharacter">java.lang.Comparable</samp> interface, any 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp> object can be compared to another 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>. This method is useful because, in this way, 
+                            <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                         objects can be easily placed into sortable data structures.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.6.2">21.6.2    Example: Quite Long Factorials with BigInteger</h3>
+            
+            <p class="standard">In our next example, the program should calculate the factorial
+                <a class="indexanchor" id="i21_127"/>
+             of a natural number. The number must be positive:</p>
+            
+            <div class="listing " id="l21.10"><pre><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">math</span><span class="">.*;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Factorial </span><span class="">{</span><span class=""><br/></span>  <span class="">static</span><span class=""> BigInteger </span><span class="">factorial</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> n </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    BigInteger result <span class="">=</span><span class=""> BigInteger</span><span class="">.</span><span class="">ONE</span><span class="">;</span><span class=""><br/></span><br/>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> n </span><span class="">&gt;</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">1</span><span class="">;</span><span class=""> i </span><span class="">&lt;=</span><span class=""> n</span><span class="">;</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""><br/></span>        result <span class="">=</span><span class=""> result</span><span class="">.</span><span class="">multiply</span><span class="">(</span><span class=""> BigInteger</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class="">i</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>    <span class="">return</span><span class=""> result</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>
+                <a id="p1059"/>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">factorial</span><span class="">(</span><span class="">100</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 21.10</b>    
+            src/main/java/com/tutego/insel/math/Factorial.java</p>
+            
+            <p class="standard">In addition to this iterative variant, a recursive variant is also conceivable. However, two reasons warn against its use. First, memory requirements are high because, for the calculation of 
+                <span class="italic">n</span>!, 
+                <span class="italic">n</span>
+             objects are necessary. Unlike the iterative variant, however, all intermediate objects must be kept in the memory until the recursion is resolved. This memory requirement results in the second weakness: a longer runtime. For academic reasons, however, this path should be mentioned because it’s interesting to observe how this recursive implementation can eat up memory. The problem wouldn’t be so bad if the heap could no longer store new objects, but unfortunately, the stack of the current thread is impacted:</p>
+            
+            <div class="listing " id="l21.11"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> BigInteger </span>
+                <span class="bold"><span class="">factorial2</span><span class="">( </span><span class="">int</span><span class=""> i )</span></span> {<br/>  <span class="">if</span><span class=""> ( i &lt;= </span><span class="">1</span><span class=""> )</span><br/>    <span class="">return</span><span class=""> BigInteger.ONE;</span><br/><br/>  <span class="">return</span><span class=""> BigInteger.</span><span class="">valueOf</span><span class="">( i ).</span><span class="">multiply</span><span class="">( </span>
+                <span class="bold"><span class="">factorial2</span><span class="">( i - </span><span class="">1</span><span class=""> )</span></span> );<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 21.11</b>    
+            src/main/java/com/tutego/insel/math/Factorial.java, factorial2()</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.6.3">21.6.3    Large Floats with BigDecimal</h3>
+            
+            <p class="standard">While 
+                <samp class="listingcharacter listingcharacter">BigInteger</samp> takes care of the integers of arbitrary accuracy, 
+                <samp class="listingcharacter listingcharacter">BigDecimal</samp>
+                <a class="indexanchor" id="i21_128"/> takes care of the floats. Again, these objects are immutable, and three constants exist: 
+                <samp class="listingcharacter listingcharacter">BigDecimal.ZERO</samp>, 
+                <samp class="listingcharacter listingcharacter">BigDecimal.ONE</samp>, and 
+                <samp class="listingcharacter listingcharacter">BigDecimal.TEN</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h21.6.3.1">Creating BigDecimal</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">BigDecimal</samp> provides parameterized constructors for various types, including 
+                    <samp class="listingcharacter listingcharacter">long</samp>, 
+                    <samp class="listingcharacter listingcharacter">double</samp>, and 
+                    <samp class="listingcharacter listingcharacter">String</samp>, and initializes a 
+                    <samp class="listingcharacter listingcharacter">BigDecimal</samp>
+                 object with them.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">Care must be taken with 
+                        <samp class="listingcharacter listingcharacter">double</samp>
+                    . Consider the following example:</p>
+                    
+                    <div class="listing " id="l_none_21848"><pre><span class="">new</span><span class=""> </span><span class="">BigDecimal</span><span class="">(</span><span class=""> </span><span class="">1.00000000000000000000000000000000000000000000000000000001</span><span class=""> )</span></pre></div>
+                    
+                    <p class="standard">The compiler takes the literal to the range valid for 
+                        <samp class="listingcharacter listingcharacter">double</samp> (
+                        <samp class="listingcharacter listingcharacter">1</samp>
+                    ), as in the following example:</p>
+                    
+                    <div class="listing " id="l_none_21842"><pre><span class="">new</span><span class=""> </span><span class="">BigDecimal</span><span class="">(</span><span class=""> </span><span class="">"1.00000000000000000000000000000000000000000000000000000001"</span><span class=""> )</span></pre></div>
+                    
+                    <p class="standard">
+                        <a id="p1060"/>This number is precise. The same phenomenon can be observed with 
+                        <samp class="listingcharacter listingcharacter">System.out.println(new BigDecimal(Math.PI));</samp>
+                     , which outputs the following value:</p>
+                    
+                    <div class="listing " id="l_none_21864"><pre>3.141592653589793
+                        <span class="bold">115997963468544185161590576171875</span>
+                    </pre></div>
+                    
+                    <p class="standard">The output suggests high accuracy; however, the correct version is the following value:</p>
+                    
+                    <div class="listing  last_item" id="l_none_21866"><pre>3.141592653589793
+                        <span class="bold">238462643383279502884197169399375</span>
+                    </pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.6.3.2">Methods instead of Operators</h4>
+                
+                <p class="standard">With the 
+                    <samp class="listingcharacter listingcharacter">BigDecimal</samp> objects, you can now perform calculations known from 
+                    <samp class="listingcharacter listingcharacter">BigInteger</samp>
+                . The main methods are the following:</p>
+                
+                <div class="listing " id="l_none_21886"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">math</span><span class="">.</span>
+                    <span class="bold">BigDecimal</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;BigDecimal&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal add(BigDecimal augend)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal subtract(BigDecimal subtrahend)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal divide(BigDecimal divisor)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal multiply(BigDecimal multiplicand)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal remainder(BigDecimal divisor)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal abs()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal negate()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal plus()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal max(BigDecimal val)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal min(BigDecimal val)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal pow(int n)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.6.3.3">Rounding Mode</h4>
+                
+                <p class="standard">A special feature is the 
+                    <samp class="listingcharacter listingcharacter">divide(...)</samp>
+                 method, which can additionally get a rounding mode and optionally a number of valid decimal places. Let’s first look at the method without a rounding mode indicated, as in the following example:</p>
+                
+                <div class="listing " id="l_none_21889"><pre>BigDecimal ten <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">BigDecimal</span><span class="">(</span><span class=""> </span><span class="">"10"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>BigDecimal two <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">BigDecimal</span><span class="">(</span><span class=""> </span><span class="">"2"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> ten</span><span class="">.</span><span class="">divide</span><span class="">(</span><span class=""> two </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">         </span><span class=""> // 5</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If the result is an integer or the result is exact, the lack of rounding isn’t a problem:</p>
+                
+                <div class="listing " id="l_none_21906"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> BigDecimal</span><span class="">.</span><span class="">ONE</span><span class="">.</span><span class="">divide</span><span class="">(</span><span class="">b</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 0.5</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <a id="p1061"/>However, if the result isn’t exact, 
+                    <samp class="listingcharacter listingcharacter">divide(...)</samp> can’t be used. The expression 
+                    <samp class="listingcharacter listingcharacter">new BigDecimal(1).divide( new BigDecimal(3) )</samp>
+                 results in the runtime error “java.lang.ArithmeticException: Non-terminating decimal expansion; no exact representable decimal result.”</p>
+                
+                <p class="standard">At this point, various rounding modes
+                    <a class="indexanchor" id="i21_129"/> specify how the last digit of a rounding should be determined. A rounding mode can be specified via an enumeration,
+                    <samp class="listingcharacter listingcharacter"> java.math.Submit RoundingMode</samp>
+                . The following constants exist:</p>
+                
+                <table class="standardtable" id="t21.14">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Constant in RoundingMode</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Meaning</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">DOWN</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Rounding toward 0</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">UP</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Rounding away from 0</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">FLOOR</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Rounding toward negative infinity</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">CEILING</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Rounding toward positive infinity</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">HALF_UP</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Rounding to nearest neighbor and away from 0 if both neighbors are equidistant</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">HALF_DOWN</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Rounding to nearest neighbor and towards 0 if both neighbors are equidistant</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">HALF_EVEN</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Rounding to the nearest neighbor and to the even neighbor if both neighbors are equidistant</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">UNNECESSARY</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">No rounding; operation must be exact</p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 21.14</b>    
+            The Meanings of RoundingMode Constants</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">ROUND_UNNECESSARY</samp> may only be used if the division is exact; otherwise, an 
+                    <samp class="listingcharacter listingcharacter">ArithmeticException</samp>
+                 will be thrown.</p>
+                
+                <div class="listing " id="l21.12"><pre>BigDecimal one   <span class="">=</span><span class=""> BigDecimal</span><span class="">.</span><span class="">ONE</span><span class="">;</span><span class=""><br/></span>BigDecimal three <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">BigDecimal</span><span class="">(</span><span class=""> </span><span class="">"3"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> one</span><span class="">.</span><span class="">divide</span><span class="">(</span><span class=""> three</span><span class="">,</span><span class=""> </span>
+                    <span class="bold"><span class="">RoundingMode.UP</span></span> ) );     <span class=""> // 1</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( one.</span><span class="">divide</span><span class="">( three, </span>
+                    <span class="bold">RoundingMode.DOWN</span> ) );   <span class=""> // 0</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 21.12</b>    
+            src/main/java/com/tutego/insel/math/DivideRoundingMode.java, main()</p>
+                
+                <p class="standard">Now, the number of decimal places can be determined, as shown in the following examples:</p>
+                
+                <div class="listing " id="l_none_21934"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> one</span><span class="">.</span><span class="">divide</span><span class="">(</span><span class=""> three</span><span class="">,</span><span class=""> </span><span class="">6</span><span class="">,</span><span class=""> RoundingMode</span><span class="">.</span><span class="">UP </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">  </span><span class=""> // 0.333334</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> one</span><span class="">.</span><span class="">divide</span><span class="">(</span><span class=""> three</span><span class="">,</span><span class=""> </span><span class="">6</span><span class="">,</span><span class=""> RoundingMode</span><span class="">.</span><span class="">DOWN </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // 0.333333</span><span class=""> </span></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p1062"/>
+                    Example</h6>
+                    
+                    <p class="standard first">
+                        <samp class="listingcharacter listingcharacter">BigDecimal</samp> provides the useful 
+                        <samp class="listingcharacter listingcharacter">setScale(...)</samp>
+                     method, which can you can use to set the number of decimal places, which is quite useful for rounding. In our example, 45 liters of gasoline are supposed to be paid at 1.399:</p>
+                    
+                    <div class="listing " id="l21.13"><pre>BigDecimal petrol <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">BigDecimal</span><span class="">(</span><span class=""> </span><span class="">"1.399"</span><span class=""> </span><span class="">).</span><span class="">multiply</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">BigDecimal</span><span class="">(</span><span class="">45</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> petrol</span><span class="">.</span>
+                        <span class="bold"><span class="">setScale</span><span class="">( </span><span class="">3</span><span class="">, RoundingMode.HALF_UP )</span></span> );<br/>System.out.<span class="">println</span><span class="">( petrol.</span>
+                        <span class="bold"><span class="">setScale</span><span class="">( </span><span class="">2</span><span class="">, RoundingMode.HALF_UP )</span></span> );<span class=""/></pre></div>
+                    
+                    <p class="caption "><b>Listing 21.13</b>    
+            src/main/java/com/tutego/insel/math/RoundWithSetScale.java, main()</p>
+                    
+                    <p class="standard last">The expenses are 62.955 and 62.96.</p>
+                
+                </div>
+                
+                <div class="listing " id="l_none_21947"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">math</span><span class="">.</span>
+                    <span class="bold">BigDecimal</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;BigDecimal&gt; </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal divide(BigDecimal divisor, RoundingMode roundingMode)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal divide(BigDecimal divisor, int scale, RoundingMode roundingMode)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal setScale(int newScale,RoundingMode roundingMode)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.6.4">21.6.4    Conveniently Setting the Calculation Accuracy via MathContext</h3>
+            
+            <p class="standard">An object of type 
+                <samp class="listingcharacter listingcharacter">java.math.MathContext</samp>
+                <a class="indexanchor" id="i21_130"/> conveniently specifies the calculation accuracy (not the decimal places) and the rounding mode for 
+                <samp class="listingcharacter listingcharacter">BigDecimal</samp>
+            . As the previous example showed, this information was given to the individual calculation methods. Now, this one object can be easily passed to all calculation methods.</p>
+            
+            <p class="standard">The state is set with the constructors because 
+                <samp class="listingcharacter listingcharacter">MathContext</samp>
+             objects will be immutable afterwards.</p>
+            
+            <div class="listing " id="l_none_21958"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">math</span><span class="">.</span>
+                <span class="bold">MathContext</span><br/><span class="">implements</span><span class=""> Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">MathContext(int setPrecision)</samp><br/>Creates a new 
+                        <samp class="listingcharacter listingcharacter">MathContext</samp> object with specified precision as rounding mode
+                        <samp class="listingcharacter listingcharacter"> HALF_UP</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">MathContext(int setPrecision, RoundingMode setRoundingMode)</samp><br/>Creates a new 
+                        <samp class="listingcharacter listingcharacter">MathContext</samp> with specified precision and a given rounding mode of type 
+                        <samp class="listingcharacter listingcharacter">RoundingMode</samp>
+                        <a class="indexanchor" id="i21_131"/>. The declared constants of the enumeration are 
+                        <samp class="listingcharacter listingcharacter">CEILING</samp>, 
+                        <samp class="listingcharacter listingcharacter">DOWN</samp>, 
+                        <samp class="listingcharacter listingcharacter">FLOOR</samp>, 
+                        <samp class="listingcharacter listingcharacter">HALF_DOWN</samp>, 
+                        <samp class="listingcharacter listingcharacter">HALF_EVEN</samp>, 
+                        <samp class="listingcharacter listingcharacter">HALF_UP</samp>, 
+                        <samp class="listingcharacter listingcharacter">UNNECESSARY</samp>, and 
+                        <samp class="listingcharacter listingcharacter">UP</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p1063"/>
+                        MathContext(String val)</samp><br/>Creates a new 
+                        <samp class="listingcharacter listingcharacter">MathContext</samp> object from a string. The structure of the string corresponds to the formatting of 
+                        <samp class="listingcharacter listingcharacter">MathContext toString()</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">toString()</samp><br/>Returns a string representation, for example, 
+                        <samp class="listingcharacter listingcharacter">precision=34 roundingMode=HALF_EVEN</samp> for 
+                        <samp class="listingcharacter listingcharacter">MathContext.DECIMAL128</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">For the usual cases, four ready-made 
+                <samp class="listingcharacter listingcharacter">MathContext</samp> objects are available as constants of the class: 
+                <samp class="listingcharacter listingcharacter">DECIMAL128</samp>, 
+                <samp class="listingcharacter listingcharacter">DECIMAL32</samp>, 
+                <samp class="listingcharacter listingcharacter">DECIMAL64</samp>, and 
+                <samp class="listingcharacter listingcharacter">UNLIMITED</samp>
+            .</p>
+            
+            <p class="standard">Once the 
+                <samp class="listingcharacter listingcharacter">MathContext</samp> object has been created, it will be passed within the constructor of 
+                <samp class="listingcharacter listingcharacter">BigDecimal</samp>
+            .</p>
+            
+            <div class="listing " id="l_none_2195895218"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">math</span><span class="">.</span>
+                <span class="bold">BigDecimal</span><br/><span class="">extends</span><span class=""> Number</span><br/><span class="">implements</span><span class=""> Comparable&lt;BigInteger&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal(BigInteger unscaledVal, int scale, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal(BigInteger val, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal(char[] in, int offset, int len, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal(char[] in, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal(double val, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal(int val, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal(long val, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal(String val, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Even with each calculation method, the 
+                <samp class="listingcharacter listingcharacter">MathContext</samp>
+             object can now be passed:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal add(BigDecimal augend, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal subtract(BigDecimal subtrahend, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal divide(BigDecimal divisor, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal remainder(BigDecimal divisor, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal divideToIntegralValue(BigDecimal divisor, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal abs(MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal plus(MathContext mc)</samp>, 
+                        <samp class="listingcharacter listingcharacter">BigDecimal negate(MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal pow(int n, MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal round(MathContext mc)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">BigDecimal sqrt(MathContext)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.6.5">21.6.5    
+                <a id="p1064"/>
+            Calculating even Faster with Mutable Implementations</h3>
+            
+            <p class="standard">The two data types 
+                <samp class="listingcharacter listingcharacter">BigInteger</samp> and 
+                <samp class="listingcharacter listingcharacter">BigDecimal</samp> are immutable, which leads to runtime losses in many calculations. Alternatives are available in the open-source world, such as <span class="url"><a href="https://github.com/bwakell/Huldra">https://github.com/bwakell/Huldra</a></span>, which implements other algorithms in addition to changeability. However, 
+                <samp class="listingcharacter listingcharacter">BigInteger</samp>
+             is also continuously optimized by Oracle.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

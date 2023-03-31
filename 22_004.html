@@ -1,0 +1,117 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Testing with JUnit" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Testing with JUnit" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Testing with JUnit</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h22.4">22.4    
+            <a id="p1083"/>
+        Structure of Large Test Cases</h2>
+        
+        <p class="standard">So far, we’ve been dealing with individual, complete test cases and have not really covered how to organize a large number of tests.</p>
+        
+        
+            
+            <h3 class="t3" id="h22.4.1">22.4.1    Fixtures</h3>
+            
+            <p class="standard">An important property of tests is that they are independent of each other. The assumption that a first test, for example, creates some test data that the second test can then draw on is wrong. Consequently, you should consider that each individual test method must assume to be the first test method and thus must establish its initial state itself. However, unnecessary source code duplication would result if each test method would now build this initial state by itself. The initial state is referred to as a 
+                <span class="italic">fixture</span>
+                <a class="indexanchor" id="i22_27"/>
+             (roughly “fixed inventory”), and JUnit provides four annotations in this context (which have changed from version 4 to version 5). The following example shows how they work:</p>
+            
+            <div class="listing " id="l22.12"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">junit</span><span class="">.</span><span class="">util</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">logging</span><span class="">.</span><span class="">Logger</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> org</span><span class="">.</span><span class="">junit</span><span class="">.</span><span class="">jupiter</span><span class="">.</span><span class="">api</span><span class="">.*;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> FixtureDemoTest </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">final</span><span class=""> Logger log </span><span class="">=</span><span class=""> Logger</span><span class="">.</span><span class="">getLogger</span><span class="">(</span><span class=""> FixtureDemoTest</span><span class="">.</span><span class="">class</span><span class="">.</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>  <span class="">@BeforeAll</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">beforeClass</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> log</span><span class="">.</span><span class="">info</span><span class="">(</span><span class=""> </span><span class="">"@BeforeAll"</span><span class=""> </span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span><br/>  <span class="">@AfterAll</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">afterClass</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> log</span><span class="">.</span><span class="">info</span><span class="">(</span><span class=""> </span><span class="">"@AfterAll"</span><span class=""> </span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span><br/>  <span class="">@BeforeEach</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setUp</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> log</span><span class="">.</span><span class="">info</span><span class="">(</span><span class=""> </span><span class="">"@Before"</span><span class=""> </span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span><br/>  <span class="">@AfterEach</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">tearDown</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> log</span><span class="">.</span><span class="">info</span><span class="">(</span><span class=""> </span><span class="">"@After"</span><span class=""> </span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span><br/>  <span class="">@Test</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">test1</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> log</span><span class="">.</span><span class="">info</span><span class="">(</span><span class=""> </span><span class="">"test 1"</span><span class=""> </span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span><br/>  <span class="">@Test</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">test2</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> log</span><span class="">.</span><span class="">info</span><span class="">(</span><span class=""> </span><span class="">"test 2"</span><span class=""> </span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 22.12</b>    
+            com/tutego/insel/junit/util/FixtureDemoTest.java, FixtureDemoTest</p>
+            
+            <p class="standard">
+                <a id="p1084"/>
+            The annotations refer to two use cases:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">@BeforeAll</samp>
+                        <a class="indexanchor" id="i22_28"/> and 
+                        <samp class="listingcharacter listingcharacter">@AfterAll</samp>
+                        <a class="indexanchor" id="i22_29"/>
+                    : Annotates static methods that are called once when the class is initialized for testing or when all tests for the class have been completed.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">@BeforeEach</samp>
+                        <a class="indexanchor" id="i22_30"/> and 
+                        <samp class="listingcharacter listingcharacter">@AfterEach</samp>
+                        <a class="indexanchor" id="i22_31"/>
+                    : Annotates object methods that are always called before or after a test method.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">When our sample program runs, the (shortened) output will therefore look as follows:</p>
+            
+            <div class="listing " id="l_none_22302"><pre>INFO: @BeforeAll<br/>INFO: @Before<br/>INFO: test 1<br/>INFO: @After<br/>INFO: @Before<br/>INFO: test 2<br/>INFO: @After<br/>INFO: @AfterAll </pre></div>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">@BeforeAll</samp> methods usually contain what is expensive to build, such as a database connection. The resources are then released again in the symmetric method 
+                <samp class="listingcharacter listingcharacter">@AfterAll</samp>; for example, database connections will be closed again. Since no artifacts should remain from the test case after a test, good 
+                <samp class="listingcharacter listingcharacter">@AfterAll/@AfterEach</samp>
+             methods perform “undo” operations, so to speak.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">If a 
+                    <samp class="listingcharacter listingcharacter">System.setProperty(...)</samp> sets “global” states or overrides predefined properties, 
+                    <samp class="listingcharacter listingcharacter">@BeforeAll</samp> is a good time to take a snapshot and restore it later at 
+                    <samp class="listingcharacter listingcharacter">@AfterAll</samp>
+                . Consider the following example:</p>
+                
+                <div class="listing  last_item" id="l_none_22310"><pre>private static String oldValue;<br/>@BeforeAll public static void beforeClass() {<br/>  oldValue = System.getProperty( "property" );<br/>  System.setProperty( "property", "newValue" );<br/>}<br/>@AfterAll public static void afterClass() {<br/>  if ( oldValue != null ) {<br/>    System.setProperty( "property", oldValue );<br/>    oldValue = null;<br/>  }<br/>}</pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h22.4.2">22.4.2    Collections of Test Classes and Class Organization</h3>
+            
+            <p class="standard">If the tests become more numerous, the question of their ideal organization arises. A proven tactic is to put the test cases in the same package as the classes under test but to 
+                <a id="p1085"/>physically separate the source code. Development environments can use different source code folders that are physically and visually separated but ultimately result in class files and resource located within in the same package. According to the Maven default directory layout, these locations are 
+                <span class="italic">src/main/java</span> and 
+                <span class="italic">src/test/java</span>
+            . The advantage of having types in the same package is that package visibility is often sufficient, and thus, you don’t need to make private members public just for testing.</p>
+            
+            <p class="standard">In IntelliJ and Eclipse, you can simply go to a branch and then select 
+                <span class="screenelement">Run </span>
+            from the context menu; this step will run all tests in the subpackages as well. Test suites do not replace this feature yet because suites are executed outside the IDE.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

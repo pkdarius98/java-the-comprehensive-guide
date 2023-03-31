@@ -1,0 +1,413 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Writing Custom Classes" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Writing Custom Classes" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Writing Custom Classes</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h6.6">6.6    Class and Object Initialization*</h2>
+        
+        <p class="standard">An important feature of good programming languages is their ability not to create uninitialized states. For local variables, the compiler pays attention to the assignment (i.e., whether a value has already been assigned a value) before the first read access. For object variables and class variables, we’ve found so far that the variables are automatically assigned 
+            <samp class="listingcharacter listingcharacter">0</samp>, 
+            <samp class="listingcharacter listingcharacter">null</samp>, 
+            <samp class="listingcharacter listingcharacter">false</samp>
+        , or their own value. Let’s now explore exactly how this works.</p>
+        
+        
+            
+            <h3 class="t3" id="h6.6.1">6.6.1    Initializing Object Variables</h3>
+            
+            <p class="standard">If the compiler sees a class with object
+                <a class="indexanchor" id="i06_62"/> or class variables, then these variables must be initialized at some point. If they’re simply declared and not initialized with a value, the virtual machine controls the default. The case gets more exciting when the variables are explicitly assigned a value (which can also be 
+                <samp class="listingcharacter listingcharacter">0</samp>
+            ). Then, the compiler automatically generates some additional lines because—to put it simply—no code is allowed outside constructors and methods.</p>
+            
+            <p class="standard">Let’s consider this scenario first with an object variable.</p>
+            
+            <div class="listing " id="l6.44"><pre><span class="">class</span><span class=""> Joystick </span><span class="">{</span><span class=""><br/></span><br/>  
+                <span class="bold"><span class="">int</span><span class=""> numberOfButtons = </span><span class="">6</span></span><span class="">;</span><br/> <br/>
+                <a id="p419"/>  <span class="">Joystick</span><span class="">() { }</span><br/><br/>  <span class="">Joystick</span><span class="">( </span><span class="">int</span><span class=""> numberOfButtons ) {</span><br/>    <span class="">this</span><span class="">.numberOfButtons = numberOfButtons;</span><br/>  }<br/><br/>  <span class="">Joystick</span><span class="">( </span><span class="">String</span><span class=""> producer ) { }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.44</b>    
+            src/main/java/com/tutego/insel/oop/Joystick.java (Snippet)</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">numberOfButtons</samp> variable is assigned 
+                <samp class="listingcharacter listingcharacter">6</samp>
+            . However, the compiler builds code that sets the initialization in each constructor, as in the following example:</p>
+            
+            <div class="listing " id="l_none_6788"><pre><span class="">class</span><span class=""> Joystick </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">int</span><span class=""> numberOfButtons</span><span class="">;</span><span class=""><br/></span> <br/>  <span class="">Joystick</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                <span class="bold"><span class="">numberOfButtons = </span><span class="">6</span></span><span class="">;</span><br/>  }<br/><br/>  <span class="">Joystick</span><span class="">( </span><span class="">int</span><span class=""> numberOfButtons ) {</span><br/>    
+                <span class="bold"><span class="">this</span><span class="">.numberOfButtons = </span><span class="">6</span></span><span class="">;</span><br/>    <span class="">this</span><span class="">.numberOfButtons = numberOfButtons;</span><br/>  }<br/><br/>  <span class="">Joystick</span><span class="">( </span><span class="">String</span><span class=""> producer ) {</span><br/>    
+                <span class="bold">numberOfButtons = <span class="">6</span></span><span class="">;</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">Note how the variable is actually not initialized until the constructor is called. The assignment is located in the first line. This potential trap arises because the order of assignment, for example, is problematic.</p>
+            
+            
+                
+                <h4 class="t4" id="h6.6.1.1">Manual Nulling</h4>
+                
+                <p class="standard">Strictly speaking, the runtime environment initializes each object and class variable first with 
+                    <samp class="listingcharacter listingcharacter">0</samp>, 
+                    <samp class="listingcharacter listingcharacter">null</samp>, or 
+                    <samp class="listingcharacter listingcharacter">false</samp>
+                 and later with a value. For this reason, you don’t need to manually null a variable, as in the following examples:</p>
+                
+                <div class="listing " id="l_none_6787"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> name  </span><span class="">=</span><span class=""> null</span><span class="">;</span><span class="">              </span><span class=""> // unnecessary</span><span class=""><br/></span>  <span class="">int</span><span class="">    price </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class="">                 </span><span class=""> // unnecessary</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <a id="p420"/>The compiler would only additionally insert the initialization 
+                    <samp class="listingcharacter listingcharacter">name = null; price = 0;</samp>
+                 into each constructor. For this reason, the following code is no masterpiece either:</p>
+                
+                <div class="listing " id="l_none_6805"><pre><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> </span>
+                    <span class="bold"><span class="">price = </span><span class="">0</span></span><span class="">;</span><br/>  <span class="">Candy</span><span class="">( </span><span class="">int</span><span class=""> price ) { </span>
+                    <span class="bold"><span class="">this</span><span class="">.price = price</span></span>; }<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">The initial assignment of 
+                    <samp class="listingcharacter listingcharacter">0</samp> for 
+                    <samp class="listingcharacter listingcharacter">price</samp>
+                 is constantly overridden.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.6.2">6.6.2    Static Blocks as Class Initializers</h3>
+            
+            <p class="standard">A kind of constructor for the class object itself (and not for the instance of the class) is a 
+                <samp class="listingcharacter listingcharacter">static</samp> block that can be put into a class once or several times. Each block is executed exactly when the class is loaded into the virtual machine by the class loader.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn06_12" id="fn06_12">[ 135 ]</a></span> The block is called 
+                <span class="italic">class initializer</span>
+                <a class="indexanchor" id="i06_63"/> or 
+                <span class="italic">static initialization block</span>
+                <a class="indexanchor" id="i06_64"/>
+            .</p>
+            
+            <div class="listing " id="l6.45"><pre><span class="">class</span><span class=""> StaticBlock </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Two fish are in a tank."</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"’How do you drive this thing?’"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">print</span><span class="">(</span><span class=""> </span><span class="">"One says, "</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 6.45</b>    
+            src/main/java/com/tutego/insel/oop/StaticBlock.java (Snippet)</p>
+            
+            <p class="standard">When the class loader loads the 
+                <samp class="listingcharacter listingcharacter">StaticBlock</samp> class, it first executes the first 
+                <samp class="listingcharacter listingcharacter">static</samp> block and then the second 
+                <samp class="listingcharacter listingcharacter">static</samp> block. Since the 
+                <samp class="listingcharacter listingcharacter">StaticBlock</samp> class also contains 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>
+            , the virtual machine then executes the startup method so that the following output is displayed on the screen:</p>
+            
+            <div class="listing " id="l_none_6829"><pre>Two fish are in a tank.<br/>One says, ’How do you drive this thing?’ </pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.6.3">6.6.3    
+                <a id="p421"/>
+            Initializing Class Variables</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i06_65"/>Finally, the question remains where class variables should be initialized. This initialization makes no sense in the constructor since no objects need to be created for class variables. For this purpose, you can use the 
+                <samp class="listingcharacter listingcharacter">static{}</samp>
+             block, which is executed whenever the class loader has loaded a class into the runtime environment. So, for a static initialization, the compiler will again insert something:</p>
+            
+            <table class="standardtable" id="t6.8">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">What We Write</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">What the Compiler Generates</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <div class="listing " id="l_none_6828"><pre>class Beer {<br/>  static String isFreeFor 
+                                <span class="bold">= "Homer"</span>;<br/>}</pre></div>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <div class="listing " id="l_none_6835"><pre>class Beer {<br/>  static String isFreeFor;<br/>  
+                                <span class="bold">static {</span><br/>    isFreeFor 
+                                <span class="bold">= "Homer";<br/>  }</span><br/>}</pre></div>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 6.8</b>    
+            How the Compiler Realizes Initialized Static Variables</p>
+            
+            <p class="standard">Class initializers aren’t completely harmless because, if the code throws an exception, a hard 
+                <samp class="listingcharacter listingcharacter">java.lang.ExceptionInitializerError</samp>
+             will be thrown. You can test this fact by changing the code shown earlier in the following way:</p>
+            
+            <div class="listing " id="l_none_6846"><pre><span class="">static</span><span class=""> </span><span class="">String</span><span class=""> isFreeFor </span><span class="">=</span><span class=""> </span><span class="">"Homer"</span><span class="">.</span><span class="">substring</span><span class="">(</span><span class=""> </span><span class="">-</span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">Then, call the code from the main program with the following statement:</p>
+            
+            <div class="listing " id="l_none_6857"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Beer</span><span class="">.</span><span class="">isFreeFor </span><span class="">);</span><span class=""> </span></pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.6.4">6.6.4    Compiled Assignments of the Class Variables</h3>
+            
+            <p class="standard">If variables are 
+                <samp class="listingcharacter listingcharacter">final</samp>, then the variable may only have a single assignment. Whether the values are calculated at runtime is not related to 
+                <samp class="listingcharacter listingcharacter">final</samp>
+             at first. In the following example, the variable is a constant that is known at compile time:</p>
+            
+            <div class="listing " id="l_none_6883"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Finance </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">int</span><span class=""> </span>
+                <span class="bold"><span class="">TAX = </span><span class="">19</span></span><span class="">;</span><br/>} <span class=""/></pre></div>
+            
+            <p class="standard">If another type accesses the 
+                <samp class="listingcharacter listingcharacter">TAX</samp> variable, this access isn’t coded in the source code as a direct variable access 
+                <samp class="listingcharacter listingcharacter">Finance.TAX</samp>, but the compiler has inserted the literal 19 directly at each call position. This change is an optimization the compiler can make according to the Java Language Specification. In this context, these expressions are called 
+                <span class="italic">compile-time constant expressions</span>
+                <a class="indexanchor" id="i06_66"/>
+            , if the following statements are true:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The data type is a primitive or 
+                        <samp class="listingcharacter listingcharacter">String</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The expression can be calculated by the compiler.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <a id="p422"/>
+            Inserting the constant values is convenient but causes problems if the final class variable is changed later in the code. Then, also each class that had referenced the constant must be translated. If the dependent classes aren’t recompiled, the old value will still be compiled into them.</p>
+            
+            <p class="standard">The solution is to recompile the related classes and get into the habit of recompiling everything when a constant is changed. Another approach transforms the final variable into a subsequently initialized form, as in the following example:</p>
+            
+            <div class="listing " id="l_none_6873"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Finance </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">int</span><span class=""> </span>
+                <span class="bold"><span class="">TAX = Integer.</span><span class="">valueOf</span><span class="">( </span><span class="">19</span><span class=""> )</span></span>;<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">The initialization takes place in the static initializer, and the constant with the literal 19 has disappeared for the time being. So, the compiler won’t find a constant 
+                <samp class="listingcharacter listingcharacter">19</samp> when accessing 
+                <samp class="listingcharacter listingcharacter">Finance.TAX</samp> and therefore can’t include the literal at the call positions. In the class file, the 
+                <samp class="listingcharacter listingcharacter">Finance.TAX</samp>
+             reference will be present, and changing the constants won’t force a new translation of the classes.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.6.5">6.6.5    Instance Initializer
+                <a class="indexanchor" id="i06_67"/>
+            </h3>
+            
+            <p class="standard">In addition to constructors, the Java language’s creators provided another way to initialize objects. This option becomes especially important for anonymous inner classes, that is, classes that are located in another class.</p>
+            
+            <p class="standard">An instance initializer is a constructor without a name. This kind of constructor consists of only a pair of curly brackets in a class declaration and resembles a static initialization block but without the 
+                <samp class="listingcharacter listingcharacter">static</samp>
+             keyword.</p>
+            
+            <div class="listing " id="l6.46"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> JavaInitializers </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"static initializer"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  
+                <span class="bold"><span class="">{</span><br/></span>    System.out.<span class="">println</span><span class="">( </span><span class="">"instance initializer"</span><span class=""> );</span><br/>  
+                <span class="bold">}<br/></span><br/>  <span class="">JavaInitializers</span><span class="">() {</span><br/>   System.out.<span class="">println</span><span class="">( </span><span class="">"constructor"</span><span class=""> );</span><br/>  }<br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">new</span><span class=""> </span><span class="">JavaInitializers</span><span class="">();</span><br/>
+                <a id="p423"/>    <span class="">new</span><span class=""> </span><span class="">JavaInitializers</span><span class="">();</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 6.46</b>    
+            src/main/java/com/tutego/insel/oop/JavaInitializers.java (Snippet)</p>
+            
+            <p class="standard">The following output is generated:</p>
+            
+            <div class="listing " id="l_none_6894"><pre>static initializer<br/>instance initializer<br/>constructor<br/>instance initializer<br/>constructor </pre></div>
+            
+            <p class="standard">The static initializer is processed only once, namely, exactly when the class is loaded. The constructor and instance initializer are processed for each construction of an instance. The program code from the instance initializer is processed before the actual program code in the constructor.</p>
+            
+            
+                
+                <h4 class="t4" id="h6.6.5.1">Simplifying Constructors with Instance Initializers</h4>
+                
+                <p class="standard">Instance initializers can be used to perform initialization work during object creation. Program code can be placed in the blocks that would otherwise have to be copied into each constructor or otherwise centralized in a separate method. With the instance initializer, the program code can be simplified because the common part can be placed in this block, and you can thus avoid code duplication in your source code. However, this technique has several disadvantages compared to a regular initialization method, such as the following:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Although the duplication is no longer present in the source code, duplication again occurs in the class file. This duplication arises because the compiler copies all the statements of the instance initializer into each constructor. This disadvantage can be avoided if a method is declared and called instead of the instance initializer.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Instance initializers are quickly overlooked. Looking at the constructor then no longer tells you what it all does since scattered instance initializers can change or add initializations. Initialization thus doesn’t contribute to clarity.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Another shortcoming is that the initialization is only performed for new objects (i.e., with 
+                            <samp class="listingcharacter listingcharacter">new</samp>). If objects are to be reused, a private method like 
+                            <samp class="listingcharacter listingcharacter">initialize(...)</samp>
+                        , which initializes the object as if freshly created, isn’t too bad. A method can always be called, and thus the object states are like new.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The API documentation doesn’t list instance initializers, so the constructors must explain the task.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h6.6.5.2">
+                    <a id="p424"/>
+                Multiple Instance Initializers</h4>
+                
+                <p class="standard">Multiple instance initializers can appear in one class. They are traversed in order, namely, before the actual constructor. The reason lies in the realization of the implementation: The program code of the instance initializers is placed at the beginning of all constructors. Object variables have already been initialized. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_6911"><pre><span class="">class</span><span class=""> WhoIsAustin </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">String</span><span class=""> </span>
+                    <span class="bold"><span class="">austinPowers = </span><span class="">"Mike Myers"</span></span><span class="">;</span><br/><br/>  {<br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"1 "</span><span class=""> + austinPowers );</span><br/>  }<br/><br/>  <span class="">WhoIsAustin</span><span class="">() {</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"2 "</span><span class=""> + austinPowers );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">This code is thus converted by the compiler into the following:</p>
+                
+                <div class="listing " id="l6.47"><pre><span class="">class</span><span class=""> WhoIsAustin </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">String</span><span class=""> austinPowers</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">WhoIsAustin</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">austinPowers = </span><span class="">"Mike Myers"</span><span class="">;</span></span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"1 "</span><span class=""> + austinPowers );</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"2 "</span><span class=""> + austinPowers );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 6.47</b>    
+            src/main/java/com/tutego/insel/oop/WhoIsAustin.java (Snippet)</p>
+                
+                <p class="standard">Finally, note that, before accessing an object variable in the instance initializer, this variable must be declared in the program and thus known to the compiler. The following code is thus correct:</p>
+                
+                <div class="listing " id="l_none_6927"><pre><span class="">class</span><span class=""> WhoIsDrEvil </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">String</span><span class=""> drEvil </span><span class="">=</span><span class=""> </span><span class="">"Mike Myers"</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">{</span><span class=""><br/></span>
+                    <a id="p425"/>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> drEvil </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The following code will result in an error:</p>
+                
+                <div class="listing " id="l_none_6955"><pre><span class="">class</span><span class=""> WhoIsDrEvil </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> drEvil </span><span class="">);</span><span class="">     </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">String</span><span class=""> drEvil </span><span class="">=</span><span class=""> </span><span class="">"Mike Myers"</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">This limitation is rather unusual because if putting the 
+                    <samp class="listingcharacter listingcharacter">print</samp>
+                 statement in the constructor would be allowed.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Instance initializers don’t replace constructors! They’re rarely used and are rather intended for inner anonymous classes, a concept which will be introduced later in 
+                        <span class="crossreference "><a href="10_001.html#h10">Chapter 10</a></span>, 
+                        <span class="crossreference "><a href="10_005.html#h10.5">Section 10.5</a></span>
+                    .</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h6.6.6">6.6.6    Setting Final Values
+                <a class="indexanchor" id="i06_68"/>
+             in the Constructor and Static Blocks</h3>
+            
+            <p class="standard">As the examples in the previous section have shown, object variables are first set in the constructor, and then static variables are set in a 
+                <samp class="listingcharacter listingcharacter">static</samp>
+             block. We must now bring this fact together with final variables, which leads us to the fact that they are also assigned in constructors or in initialization blocks. Unlike non-final variables, final variables must be set in any case, and only exactly one write access is possible.</p>
+            
+            
+                
+                <h4 class="t4" id="h6.6.6.1">Initializing a Constant with File Content</h4>
+                
+                <p class="standard">This procedure can also be used to specify “variable” constants whose assignment is only determined at runtime. You can also put values into a file and use them to assign the final static constant variable. Thus, changing the constants doesn’t force a recompilation of the Java program.</p>
+                
+                <p class="standard">In the following example, a file in the classpath is supposed to contain the calorie count for popcorn:</p>
+                
+                <div class="listing " id="l6.48"><pre><span class="">582</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.48</b>    
+            src/main/resources/calories.txt</p>
+                
+                <p class="standard">
+                    <a id="p426"/>The 
+                    <samp class="listingcharacter listingcharacter">Popcorn</samp> class reads the value from the file in a 
+                    <samp class="listingcharacter listingcharacter">static</samp> block and assigns the final static constant 
+                    <samp class="listingcharacter listingcharacter">CALORIES</samp>
+                .</p>
+                
+                <div class="listing " id="l6.49"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Popcorn </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> CALORIES</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">static</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">try</span><span class=""> </span><span class="">(</span><span class=""> Scanner scanner </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""><br/></span>        Popcorn<span class="">.</span><span class="">class</span><span class="">.</span><span class="">getResourceAsStream</span><span class="">(</span><span class=""> </span><span class="">"/calories.txt"</span><span class=""> ) ) ) {</span><br/>      CALORIES = scanner.nextInt();<br/>    }<br/>  }<br/><br/>  public static void main( String[] args ) {<br/>    System.out.printf( <span class="">"%d cal"</span><span class="">, CALORIES ); </span><span class=""> // 582 cal</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 6.49</b>    
+            src/main/java/com/tutego/insel/oop/Popcorn.java (Snippet)</p>
+                
+                <p class="standard">In this example, several classes work together to read a number. At the beginning, the 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object provides access to the file in the classpath; 
+                    <samp class="listingcharacter listingcharacter">Popcorn.class</samp> is the notation to refer to the 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object of our own class. The 
+                    <samp class="listingcharacter listingcharacter">getResourceAsStream(...)</samp> method is an object method of the 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object and returns a data stream to the file contents the 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp> class uses as an input source for reading. The object method 
+                    <samp class="listingcharacter listingcharacter">nextInt()</samp>
+                 then reads an integer from the file.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

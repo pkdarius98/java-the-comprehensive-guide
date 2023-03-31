@@ -1,0 +1,316 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Introduction to Concurrent Programming" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Introduction to Concurrent Programming" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Introduction to Concurrent Programming</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h17">17    
+        <a id="p871"/>
+    Introduction to Concurrent Programming</h1><p class="introductorynote indent_chapter_double">“Because of the emergency here, people are going to try many different solutions in parallel.”<br/>—Raul Andino-Pavlovsky</p><p class="standard">Java supports 
+        <span class="italic">concurrent programming</span>
+    , which allows several programs to be run simultaneously. In this chapter you’ll learn how Java can use threads for running concurrent programs. </p>
+        
+        <h2 class="t2" id="h17.1">17.1    Concurrency and Parallelism</h2>
+        
+        <p class="standard">Computer systems solve problems in the real world, so we’ll also stay in the real world in our approach to concurrent programming environments. As you go through the world, you notice many things happening at the same time: The sun is shining, mopeds and cars race down the street, the radio is playing. Some people are talking, maybe some are eating, and dogs are romping around on the lawn. Not only do these things happen simultaneously, but manifold dependencies exist between these events, such as in waiting situations: At the red light, some cars are waiting, while at the green light people are crossing the street—when the signal changes, these other things also change.</p>
+        
+        <p class="standard">When many things happen simultaneously, we refer to an interacting system as 
+            <span class="italic">concurrent</span>
+            <a class="indexanchor" id="i17_00"/>. At the same time, processes can be executed 
+            <a class="indexanchor" id="i17_01"/>
+            <span class="italic">in parallel .</span> Some things only seem to happen in parallel, but in reality, they happen quickly one after the other. What we then perceive in these cases is called 
+            <span class="italic">quasi-parallelism</span>
+            <a class="indexanchor" id="i17_02"/>. If two people eat at the same time, for example, it is parallel, but if someone eats and breathes, it seems simultaneous from the outside, but isn’t. Swallowing and breathing are generally sequential.
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn17_01" id="fn17_01">[ 216 ]</a></span>
+         Let’s transfer these concepts to software: The simultaneous processing of programs and use of resources is concurrent. Ultimately, depending on the technical conditions of the machine (i.e., hardware), this concurrency may actually be implemented by parallel processing—for example, across several processors or cores.</p>
+        
+        <p class="standard">In Java, concurrent programs are implemented by threads, where each thread corresponds to a task. Ideally, the processing of the threads also happens in parallel if the 
+            <a id="p872"/>
+        machine has multiple processors or cores. A program that is implemented concurrently can cut its working time in half with two processors or cores in parallel execution; however, work times don’t have to be halved: It’s still up to the operating system how it executes the threads.</p>
+        
+        <div class="imagebox figure-type"><a href="img-f17.1.html" id="f17.1"><img alt="Pit Stop: Perfect Use of the Time Window through Parallel Work" id="img-f17.1" src="bilderklein/klein17_001.png"/></a></div>
+        
+        <p class="caption "><b>Figure 17.1</b>    
+            Pit Stop: Perfect Use of the Time Window through Parallel Work</p>
+        
+        
+            
+            <h3 class="t3" id="h17.1.1">17.1.1    Multitasking, Processes, and Threads</h3>
+            
+            <p class="standard">A modern operating system gives the user the illusion that different programs are running simultaneously—operating systems support 
+                <span class="italic">multitasking</span>
+                <a class="indexanchor" id="i17_03"/> and are referred to as being
+                <a class="indexanchor" id="i17_04"/>
+                <span class="italic"> capable of multitasking</span>. When a program is executed, the operating system creates a 
+                <span class="italic">process</span>
+                <a class="indexanchor" id="i17_05"/>—all running programs consist of processes. A process is composed of the program code and the relevant data and has its own address space. Furthermore, resources such as open files or assigned interfaces are included. The management of the virtual memory of the operating system separates the address spaces of the individual processes. This separation prevents one process from corrupting the memory space of another process: A process doesn’t see the memory area of another process. To enable processes to exchange data with each other, a special memory area is marked as 
+                <span class="italic">shared memory</span>
+            . Programs running amok are possible but are stopped by the operating system.</p>
+            
+            <p class="standard">This concurrency of processes is ensured by the operating system, which switches the processes every few milliseconds on single-processor machines. The part of the operating system that handles switching is called the 
+                <span class="italic">dispatcher</span>
+                <a class="indexanchor" id="i17_06"/>. For this reason, with a processor (with only one core), the program is concurrent, but not really parallel; instead, the operating system fools us into thinking it is concurrent by interleaving the processes. If multiple processors or processor cores are at work, the program parts are actually processed in parallel. The information about which processes get which computing time comes from the
+                <a class="indexanchor" id="i17_07"/>
+                <span class="italic"> scheduler</span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.1.2">17.1.2    
+                <a id="p873"/>
+            Threads and Processes</h3>
+            
+            <p class="standard">In modern operating systems, each process has at least one 
+                <span class="italic">thread</span>
+                <a class="indexanchor" id="i17_08"/> (or 
+                <span class="italic">execution thread</span>
+                <a class="indexanchor" id="i17_09"/>) that executes the program code. Strictly speaking then, processes are no longer executed concurrently, but only the threads. Within a process, multiple threads might all run together in the same address space, as shown in 
+                <span class="crossreference "><a href="17_001.html#f17.2">Figure 17.2</a></span>
+            . The individual threads of a process can access their public data among themselves.</p>
+            
+            
+                
+                <h4 class="t4" id="h17.1.2.1">Java Threads are Native Operating System Threads</h4>
+                
+                <p class="standard">Programming threads is easy in Java, and concurrent activities give the user the impression of simultaneity. All modern operating systems support threads directly, and so the Java virtual machine (JVM) usually maps thread management to the operating system. In this case, we’re dealing with 
+                    <span class="italic">native threads</span>
+                    <a class="indexanchor" id="i17_10"/>
+                . A 1-to-1 mapping allows for easy distribution on multi-core or multi-processor systems since the operating system takes care of thread management.</p>
+                
+                <p class="standard">Whether or not the runtime environment uses native threads isn’t contained in the JVM specification. The Java Language Specification also deliberately leaves the type of implementation free. What the language can guarantee, however, is a correctly interlocked execution. Problems can occur that readers familiar with databases know from transactions. You run the risk of competing access attempts on shared resources. To avoid this problem, a programmer can ensure mutual exclusion through synchronized program blocks. 
+                    <a class="indexanchor" id="i17_11"/>However, this approach also increases the risk of 
+                    <a class="indexanchor" id="i17_12"/>
+                    <span class="italic">deadlocks</span>
+                , which a developer must avoid.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f17.2.html" id="f17.2"><img alt="Windows Displaying the Number of Running Threads in the Task Manager" id="img-f17.2" src="bilderklein/klein17_002.png"/></a></div>
+                
+                <p class="caption "><b>Figure 17.2</b>    
+            Windows Displaying the Number of Running Threads in the Task Manager</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.1.3">17.1.3    
+                <a id="p874"/>
+            How Concurrent Programs Can Increase Speed</h3>
+            
+            <p class="standard">At first glance, why the concurrent execution of a program can increase speeds on a single-processor system isn’t obvious. Therefore, let’s consider a program that executes a sequence of statements. The program sequence visualizes a database report. First, a progress indicator window is displayed. The data is then analyzed, and the progress bar is continuously updated. Finally, the results are written to a file. </p>
+            
+            <p class="standard">The steps of the program can be summarized in the following way:</p>
+            
+            <ol>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Build a window.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Open the database from the network server and read the records.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Analyze the data and visualize the progress.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Open the file and write the created report.</p>
+                
+                </li>
+            
+            </ol>
+            
+            <p class="standard">What at first glance looks like a typical sequential program can be accelerated by clever concurrency and parallel processing.</p>
+            
+            <p class="standard">To make this easier to understand, let’s once again draw a comparison with processes. Let’s assume that five users are logged on to a single-processor machine, typing source code in the editor and occasionally using the Java compiler. These users would probably not notice the load on the system created by other users because editor operations don’t load the processor. When files are compiled and thus transferred from the background memory to the main memory, the processor is already better utilized, but this step doesn’t happen regularly. Ideally, all users translate only when the others aren’t translating—in the worst case, of course, all users want to translate at the same time.</p>
+            
+            <p class="standard">Let’s apply distribution to this problem, namely, how to compile the database report faster. We’ll start by considering which operations can be performed concurrently:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Opening the window and opening the database can happen in parallel.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Reading new datasets and analyzing old data can be done simultaneously.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Old analyzed values can be written to the file during the new analysis.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">When operations are truly executed in parallel, a huge performance gain can be seen in multiprocessor systems. But interestingly, this gain can be achieved even with only one processor because tasks can be executed simultaneously on different resources. When the graphical user interface (GUI) builds the window, it of course needs some computing time to do so. The file can be opened in parallel, whereby less processor power is required since the comparatively slow hard drive is addressed. The task of opening the database is passed on to the database server on the network. The speed depends on the load on the server and the network. When the data is subsequently read, the connection to the database server must of course be established. For this reason, you should establish the connection first.</p>
+            
+            <p class="standard">Once the connection is established, data can be retrieved into a buffer via the network. The processor is not under load, but the server on the other side and the network do. Instead of the processor dozing off and getting bored, you better occupy the processor 
+                <a id="p875"/>
+            by having it analyze old data. For this purpose, we’ll use two buffers: In one buffer, a thread loads the data, while a second thread analyzes the data in the other buffer. Then, the roles of the two buffers are exchanged. Now, the processor is busy. However, it will probably have finished its work before the new data has arrived over the network. In the meantime, the report data can be written to the report—a task that again puts the load on the hard drive and less on the processor.</p>
+            
+            <p class="standard">From this example, you can see how concurrent modeling can improve performance by taking advantage of the wait times that occur during slow operations. Slow operations don’t charge the processor, and the wait time for the processor to access a database over the network can be used for other activities. 
+                <span class="crossreference "><a href="17_001.html#t17.1">Table 17.1</a></span>
+             summarizes these concepts.</p>
+            
+            <table class="standardtable" id="t17.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Resource</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Capacity Load</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Main memory accesses</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Processor</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">File operations</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Hard drive</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Database access</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Network connection</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 17.1</b>    
+            Resources That Can Work in Parallel</p>
+            
+            <p class="standard">This example also demonstrates that concurrency must be well planned. Only when interleaved activities use different resources does this concurrency result in a speed advantage on single-processor systems. For this reason, a concurrently implemented sorting algorithm with one processor (core) isn’t especially useful. The second problem is that additional synchronization requirements complicate programming. You must wait for the result of an operation so that you can proceed with the processing.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.1.4">17.1.4    How Java Can Provide for Concurrency</h3>
+            
+            <p class="standard">For concurrent programs, the Java library provides a set of classes, interfaces, and enumerations, such as the following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Thread</samp>
+                    : Each running thread is an instance of this class.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Runnable</samp>
+                    : Describes the program code that the JVM should execute concurrently.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Lock</samp>
+                    : Used to mark critical sections where only one thread may be located.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Condition</samp>
+                    : Threads can wait for the notification of other threads.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

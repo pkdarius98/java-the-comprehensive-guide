@@ -1,0 +1,341 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Interfaces, Enumerations, Sealed Classes, Records" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Interfaces, Enumerations, Sealed Classes, Records" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Interfaces, Enumerations, Sealed Classes, Records</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h8.4">8.4    Records</h2>
+        
+        <p class="standard">Besides classes, interfaces, and enumeration types, another data type is available: 
+            <span class="italic">records</span>
+            <a class="indexanchor" id="i08_29"/>.
+            <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_12" id="fn08_12">[ 157 ]</a></span> As with classes, objects can be created from records via 
+            <samp class="listingcharacter listingcharacter">new</samp>, but unlike classes, record objects are basically immutable, at least the direct fields of the record. In terms of syntax, little code is required to combine multiple data elements into a lightweight data structure; the specification refers to this code as 
+            <span class="italic">nominal tuples</span>
+            <a class="indexanchor" id="i08_30"/>
+            <a class="indexanchor" id="i08_31"/>
+        .</p>
+        
+        
+            
+            <h3 class="t3" id="h8.4.1">8.4.1    Simple Records</h3>
+            
+            <p class="standard">The syntax in the declaration is also a little different from that of classes. First, the new 
+                <samp class="listingcharacter listingcharacter">record</samp> keyword is used
+                <a class="indexanchor" id="i08_32"/>, followed by the name of the data type, and then instead of the usual curly bracket, a parenthesis. The 
+                <span class="italic">record components</span>
+             with their types and names follow in parentheses—optionally, these parameters can be annotated. The notation with parentheses is reminiscent of a constructor parameter list, which is exactly how records are instantiated later. The closing parenthesis is followed by a block in curly brackets. The body of the block can be empty.</p>
+            
+            <p class="standard">In our first example, a record named 
+                <samp class="listingcharacter listingcharacter">Location</samp>
+             is supposed to store geographic coordinates.</p>
+            
+            <div class="listing " id="l8.41"><pre>
+                <a class="indexanchor" id="i08_33"/><span class="">public</span><span class=""> record </span><span class="">Location</span><span class="">(</span><span class=""> </span><span class=""> // Name</span><span class=""><br/></span>    <span class="">double</span><span class=""> latitude</span><span class="">,</span><span class="">    </span><span class=""> // Components in header</span><span class=""><br/></span>    <span class="">double</span><span class=""> longitude</span><br/><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class="">                   </span><span class=""> // Body</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.41</b>    
+            src/main/java/com/tutego/insel/records/v1/Location.java, Location</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Location</samp> record thus has two components: 
+                <samp class="listingcharacter listingcharacter">latitude</samp> and 
+                <samp class="listingcharacter listingcharacter">longitude</samp>. Almost all identifiers are valid, but 
+                <samp class="listingcharacter listingcharacter">clone</samp>, 
+                <samp class="listingcharacter listingcharacter">finalize</samp>, 
+                <samp class="listingcharacter listingcharacter">getClass</samp>, 
+                <samp class="listingcharacter listingcharacter">hashCode</samp>, 
+                <samp class="listingcharacter listingcharacter">notify</samp>, 
+                <samp class="listingcharacter listingcharacter">notifyAll</samp>, 
+                <samp class="listingcharacter listingcharacter">toString</samp>, and 
+                <samp class="listingcharacter listingcharacter">wait</samp>
+             can’t be the names of the component.</p>
+            
+            <p class="standard">The declaration of a record is compact, and the compiler creates a single constructor automatically. While regular classes have a default constructor, records have a 
+                <span class="italic">canonical constructor</span>
+                <a class="indexanchor" id="i08_34"/>, which initializes all states. At least this one canonical constructor exists, but others can be added. Its visibility is automatically that of the record; since in our example the 
+                <samp class="listingcharacter listingcharacter">Location</samp> record is 
+                <samp class="listingcharacter listingcharacter">public</samp>, the constructor is also 
+                <samp class="listingcharacter listingcharacter">public</samp>
+            .</p>
+            
+            <p class="standard">
+                <a id="p530"/>
+            In addition, the compiler generates a number of methods. On one hand, with query methods, the notation of the getter doesn’t come into play. On the other hand, an access method is called like the component name. Mutation methods are absent because the states of a record are immutable.</p>
+            
+            <p class="standard">Each record automatically inherits from the 
+                <samp class="listingcharacter listingcharacter">java.lang.Record</samp> superclass, which documents how 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp>, 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp>, and 
+                <samp class="listingcharacter listingcharacter">toString()</samp> should behave for each record. Similar to enumeration types, an inheritance relationship to 
+                <samp class="listingcharacter listingcharacter">java.lang.Enum</samp>
+             also exists. A record can’t extend any other class or record.</p>
+            
+            <p class="standard">Consider the following example of using these methods:</p>
+            
+            <div class="listing " id="l8.42"><pre>Location manila <span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">new</span><span class=""> </span><span class="">Location</span><span class="">( </span><span class="">14.60416</span><span class="">, </span><span class="">120.98222</span><span class=""> )</span></span>;<br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"latitude=%f, longitude=%f%n"</span><span class="">,</span><br/>                   
+                <span class="bold">manila.<span class="">latitude</span><span class="">()</span></span>, 
+                <span class="bold">manila.<span class="">longitude</span><span class="">()</span></span> );<br/>System.out.<span class="">println</span><span class="">( manila );</span><br/> <br/>Location location1 = 
+                <span class="bold"><span class="">new</span><span class=""> </span><span class="">Location</span><span class="">( </span><span class="">14.60416</span><span class="">, </span><span class="">120.98222</span><span class=""> )</span></span>;<br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">location1.<span class="">equals</span><span class="">( manila )</span></span> );<br/>Location location2 = 
+                <span class="bold"><span class="">new</span><span class=""> </span><span class="">Location</span><span class="">( </span><span class="">14</span><span class="">, </span><span class="">120</span><span class=""> )</span></span>;<br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">location2.<span class="">equals</span><span class="">( manila )</span></span> ); <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.42</b>    
+            src/main/java/com/tutego/insel/records/v1/LocationDemo.java, LocationDemo</p>
+            
+            <p class="standard">The result is the following output:</p>
+            
+            <div class="listing " id="l_none_8908"><pre>latitude=14,604160, longitude=120,982220<br/>Location[latitude=14.60416, longitude=120.98222]<br/>true<br/>false </pre></div>
+            
+            <p class="standard">Records are objects that are identified by their values. Equivalence is therefore of importance, not identity. For this reason, each record has an 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> implementation, where referenced subelements must also have an 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp>
+             that makes sense.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">Decoupling from internal states isn’t possible since records aren’t made for that functionality. Storing two 
+                    <samp class="listingcharacter listingcharacter">int</samp> values in one 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                 would not be possible with a record, as shown in the following example:</p>
+                
+                <div class="listing " id="l_none_8924"><pre><span class="">class</span><span class=""> Coordinate </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">long</span><span class=""> value</span><span class="">;</span><span class=""><br/></span>  <span class="">Coordinate</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> x</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> y </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> value </span><span class="">=</span><span class=""> </span><span class="">(((</span><span class="">long</span><span class="">)</span><span class=""> x</span><span class="">)</span><span class=""> </span><span class="">&lt;&lt;</span><span class=""> </span><span class="">32</span><span class="">)</span><span class=""> </span><span class="">|</span><span class=""> </span><span class="">(</span><span class="">y </span><span class="">&amp;</span><span class=""> 0xffffffffL</span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span>  <span class="">int</span><span class=""> </span><span class="">x</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)</span><span class=""> </span><span class="">(</span><span class="">value </span><span class="">&gt;&gt;</span><span class=""> </span><span class="">32</span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span>
+                    <a id="p531"/>  <span class="">int</span><span class=""> </span><span class="">y</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)</span><span class=""> value</span><span class="">;}</span><span class=""><br/></span>}</pre></div>
+                
+                <p class="standard last">Externally, a constructor and also access methods exist, but the internal mapping of a record is quite different.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.4.2">8.4.2    Records with Methods</h3>
+            
+            <p class="standard">Our 
+                <samp class="listingcharacter listingcharacter">Location</samp> record was set up simply. The fact that the state is in the foreground of a record can be seen from the declaration of its states at the top. But records can do a bit more than hold states: They can declare object methods and static methods in the body.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_13" id="fn08_13">[ 158 ]</a></span>
+             Our next example demonstrates this feature:</p>
+            
+            <div class="listing " id="l8.43"><pre><span class="">public</span><span class=""> record </span><span class="">Location</span><span class="">(</span><span class=""><br/></span>    <span class="">double</span><span class=""> latitude</span><span class="">,</span><span class=""><br/></span>    <span class="">double</span><span class=""> longitude</span><br/><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span> <br/>  
+                <span class="bold"><span class="">Point2D.Double </span><span class="">toPoint</span><span class="">()</span></span> {<br/>    <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> Point2D.</span><span class="">Double</span><span class="">( </span>
+                <span class="bold">longitude, latitude</span> );<br/>  }<br/> <br/>  
+                <span class="bold">Location <span class="">withLatitude</span><span class="">( </span><span class="">double</span><span class=""> latitude )</span></span> {<br/>    <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Location</span><span class="">( longitude, latitude );</span><br/>  }<br/> <br/>  
+                <span class="bold">Location <span class="">withLongitude</span><span class="">( </span><span class="">double</span><span class=""> longitude )</span></span> {<br/>    <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Location</span><span class="">( longitude, latitude );</span><br/>  }<br/> <br/>  
+                <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">longitude</span><span class="">()</span></span> {<br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Access"</span><span class=""> + longitude );</span><br/>    <span class="">return</span><span class=""> longitude;</span><br/>  }<br/> <br/>  
+                <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span></span> {<br/>    <span class="">return</span><span class=""> latitude + </span><span class="">","</span><span class=""> + longitude;</span><br/>  }<br/> <br/>  
+                <span class="bold"><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isValid</span><span class="">( </span><span class="">double</span><span class=""> latitude, </span><span class="">double</span><span class=""> longitude )</span></span> {<br/>    <span class="">return</span><span class="">    ( -</span><span class="">90</span><span class=""> &lt;= latitude  &amp;&amp; latitude  &lt;= +</span><span class="">90</span><span class="">)</span><br/>
+                <a id="p532"/>           &amp;&amp; (-<span class="">180</span><span class=""> &lt;= longitude &amp;&amp; longitude &lt;= +</span><span class="">180</span><span class="">);</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.43</b>    
+            src/main/java/com/tutego/insel/records/v2/Location.java, Location</p>
+            
+            <p class="standard">The first method, 
+                <samp class="listingcharacter listingcharacter">toPoint()</samp>, converts the coordinates and returns them as a 
+                <samp class="listingcharacter listingcharacter">Point2D </samp>object, by directly accessing the—private and final—object variables that are automatically set in the canonical constructor. Within a record, direct access to the state variables is also possible. The wither methods 
+                <samp class="listingcharacter listingcharacter">withLatitude(double)</samp> and 
+                <samp class="listingcharacter listingcharacter">withLongitude(double)</samp> show a way to “change” states for immutable types, namely by creating a new immutable 
+                <samp class="listingcharacter listingcharacter">Location</samp> object with the changed states. Withers are common with immutable data types, and they are prominent with the Date-Time API. Furthermore, the example shows that the access methods can also be overridden. The 
+                <samp class="listingcharacter listingcharacter">toString()</samp>
+             method can be overridden as well. Static methods are also not a problem, but a record may of course not have any abstract methods; neither can a record be abstract since the data type is final. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_8931"><pre>Location manila <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Location</span><span class="">(</span><span class=""> </span><span class="">14.60416</span><span class="">,</span><span class=""> </span><span class="">120.98222</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> manila</span><span class="">.</span><span class="">toPoint</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> manila</span><span class="">.</span><span class="">withLatitude</span><span class="">(</span><span class=""> </span><span class="">14</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> manila</span><span class="">.</span><span class="">withLongitude</span><span class="">(</span><span class=""> </span><span class="">120</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> manila</span><span class="">.</span><span class="">longitude</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> manila </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Location</span><span class="">.</span><span class="">isValid</span><span class="">(</span><span class=""> </span><span class="">15</span><span class="">,</span><span class=""> </span><span class="">120</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Location</span><span class="">.</span><span class="">isValid</span><span class="">(</span><span class=""> </span><span class="">200</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The result is the following output:</p>
+            
+            <div class="listing " id="l8.44"><pre>Point2D.Double[120.98222, 14.60416]<br/>120.98222,14.0<br/>120.0,14.60416<br/>Access120.98222<br/>120.98222<br/>14.60416,120.98222<br/>true<br/>false </pre></div>
+            
+            <p class="caption "><b>Listing 8.44</b>    
+            src/main/java/com/tutego/insel/records/v2/LocationDemo.java, LocationDemo</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.4.3">8.4.3    Customizing Record Constructors</h3>
+            
+            <p class="standard">Records automatically have a constructor in which the state variables are initialized. Let’s look at 
+                <samp class="listingcharacter listingcharacter">record Location(double latitude, double longitude) { }</samp> again. The constructor generated by the compiler will automatically read 
+                <samp class="listingcharacter listingcharacter">
+                    <a id="p533"/>
+                this.latitude = latitude; this.longitude = longitude;</samp>
+            .</p>
+            
+            <p class="standard">You can include code in the constructor to validate or normalize the parameters, for example. In this case, you must distinguish between the following two notations:</p>
+            
+            <div class="listing " id="l8.45"><pre><span class="">public</span><span class=""> record </span><span class="">Location</span><span class="">(</span><span class=""><br/></span>    <span class="">double</span><span class=""> latitude</span><span class="">,</span><span class=""><br/></span>    <span class="">double</span><span class=""> longitude</span><br/><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span> <span class=""><br/></span>// -- Variant 1 -----------------------------------------<span class=""><br/></span>  
+                <span class="bold"><span class="">public</span><span class=""> Location {</span></span><br/>    <span class="">if</span><span class=""> ( ! </span><span class="">isValid</span><span class="">( latitude, longitude ) )</span><br/>      <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IllegalArgumentException</span><span class="">( </span><span class="">"Invalid range"</span><span class=""> );</span><br/>  
+                <span class="bold">}<br/> </span><span class=""><br/></span>// -- Variant 2 -----------------------------------------<br/>//  
+                <span class="bold">public Location( double latitude, double longitude ) {</span><br/>//    if ( ! isValid( latitude, longitude ) )<br/>//      throw new IllegalArgumentException( "Invalid range" );<br/>//    this.latitude = latitude;<br/>//    this.longitude = longitude;<br/>//  
+                <span class="bold">}<span class=""><br/></span> <br/></span>  <span class="">private</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isValid</span><span class="">( </span><span class="">double</span><span class=""> latitude, </span><span class="">double</span><span class=""> longitude ) {</span><br/>    <span class="">return</span><span class="">    ( -</span><span class="">90</span><span class=""> &lt;= latitude  &amp;&amp; latitude  &lt;= +</span><span class="">90</span><span class="">)</span><br/>           &amp;&amp; (-<span class="">180</span><span class=""> &lt;= longitude &amp;&amp; longitude &lt;= +</span><span class="">180</span><span class="">);</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.45</b>    
+            src/main/java/com/tutego/insel/records/v3/Location.java, Location</p>
+            
+            <p class="standard">With the second constructor, you can directly access, modify, and save the parameter variables. Note that the assignments 
+                <samp class="listingcharacter listingcharacter">this.latitude = latitude; this.longitude = longitude;</samp>
+             take place in any case; otherwise, a compiler error will arise because final variables must always be initialized in the constructor. In the first compact notation, the compiler automatically puts the initialization into the bytecode. One more rule applies: The visibility of the custom constructor must be at least the same as that of the record.</p>
+            
+            <p class="standard">Let’s consider the following demo of our record next:</p>
+            
+            <div class="listing " id="l8.46"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Location</span><span class="">(</span><span class=""> </span><span class="">14.60416</span><span class="">,</span><span class=""> </span><span class="">120.98222</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Location</span><span class="">(</span><span class=""> </span><span class="">-</span><span class="">1000</span><span class="">,</span><span class=""> </span><span class="">+</span><span class="">1000</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">
+                    <a id="p534"/>
+                }</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> Exception e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  e<span class="">.</span><span class="">printStackTrace</span><span class="">();</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.46</b>    
+            src/main/java/com/tutego/insel/records/v3/LocationDemo.java, LocationDemo</p>
+            
+            <p class="standard">The following result is output:</p>
+            
+            <div class="listing " id="l_none_8988"><pre>Location[latitude=14.60416, longitude=120.98222]<br/>java.lang.IllegalArgumentException: Invalid range<br/>  at com.tutego.insel.records.v3.Location.&lt;init&gt;(Location.java:12)<br/>  at com.tutego.insel.records.v3.LocationDemo.main(LocationDemo.java:9) </pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.4.4">8.4.4    Adding Constructors</h3>
+            
+            <p class="standard">Records always have a canonical constructor that accepts all record components. This constructor cannot be removed. You can add more overloaded constructors, and of course, static creator methods are an alternative as well.</p>
+            
+            <p class="standard">Let’s consider the following small application example with three constructors and a static factory method 
+                <samp class="listingcharacter listingcharacter">fromPoint(...)</samp>
+            :</p>
+            
+            <div class="listing " id="l8.47"><pre><span class="">public</span><span class=""> record </span><span class="">Location</span><span class="">(</span><span class=""><br/></span>    <span class="">double</span><span class=""> latitude</span><span class="">,</span><span class=""><br/></span>    <span class="">double</span><span class=""> longitude</span><br/><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span><span class="">Location</span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> latitude</span><span class="">,</span><span class=""> </span><span class="">double</span><span class=""> longitude </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">this</span><span class="">.</span><span class="">latitude </span><span class="">=</span><span class=""> latitude</span><span class="">;</span><span class=""><br/></span>    <span class="">this</span><span class="">.</span><span class="">longitude </span><span class="">=</span><span class=""> longitude</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span><span class="">Location</span><span class="">(</span><span class=""> Point point </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">this</span><span class="">(</span><span class=""> point</span><span class="">.</span><span class="">y</span><span class="">,</span><span class=""> point</span><span class="">.</span><span class="">x </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span><span class="">Location</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">this</span><span class="">(</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> Location </span><span class="">fromPoint</span><span class="">(</span><span class=""> Point point </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Location</span><span class="">(</span><span class=""> point</span><span class="">.</span><span class="">y</span><span class="">,</span><span class=""> point</span><span class="">.</span><span class="">x </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.47</b>    
+            src/main/java/com/tutego/insel/records/v4/Location.java, Location</p>
+            
+            <p class="standard">
+                <a id="p535"/>
+            If you write your own constructor, it’s important that it calls the canonical constructor. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_81001"><pre><span class="">public</span><span class=""> </span><span class="">Location</span><span class="">(</span><span class=""> Point point </span><span class="">)</span><span class=""> </span><span class="">{</span><span class="">   </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                </span> this.latitude = point.y;<span class=""><br/></span>  <span class="">this</span><span class="">.</span><span class="">longitude </span><span class="">=</span><span class=""> point</span><span class="">.</span><span class="">x</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">In this case, you’ll get a compiler error of the type: “Non-canonical record constructor must delegate to another constructor.”</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.4.5">8.4.5    Sealed Interfaces and Records</h3>
+            
+            <p class="standard">Records go well with sealed interfaces because records are automatically final. For example, GeoJSON
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn08_14" id="fn08_14">[ 159 ]</a></span> is an open format to express geographic data in JavaScript Object Notation (JSON). For example, we have primitives, such as points, lines, and polygons. Our next program should list the permitted subclasses through the 
+                <samp class="listingcharacter listingcharacter">GeoJSONshape</samp> interface, which are 
+                <samp class="listingcharacter listingcharacter">GeoJSONpoint</samp> and 
+                <samp class="listingcharacter listingcharacter">GeoJSONline</samp>
+             as examples:</p>
+            
+            <div class="listing " id="l8.48"><pre>sealed <span class="">interface</span><span class=""> GeoJSONshape</span><br/>    permits GeoJSONpoint<span class="">,</span><span class=""> GeoJSONline </span><span class="">{</span><span class=""><br/></span>  record <span class="">Coordinate</span><span class="">(</span><span class="">int</span><span class=""> x</span><span class="">,</span><span class=""> </span><span class="">int</span><span class=""> y</span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">'['</span><span class=""> </span><span class="">+</span><span class=""> x </span><span class="">+</span><span class=""> </span><span class="">","</span><span class=""> </span><span class="">+</span><span class=""> y </span><span class="">+</span><span class=""> </span><span class="">']'</span><span class="">;</span><span class=""> </span><span class="">}</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.48</b>    
+            src/main/java/com/tutego/insel/sealed/GeoJSONshape.java, GeoJSONshape</p>
+            
+            <p class="standard">A 
+                <samp class="listingcharacter listingcharacter">GeoJSONline</samp> record with the record components 
+                <samp class="listingcharacter listingcharacter">x</samp> and 
+                <samp class="listingcharacter listingcharacter">y</samp>
+             is declared as a nested type.</p>
+            
+            <p class="standard">Two records implement the interface. A point consists of exactly one coordinate.</p>
+            
+            <div class="listing " id="l8.49"><pre>record <span class="">GeoJSONpoint</span><span class="">(</span><span class="">Coordinate coordinate</span><span class="">)</span><span class=""> </span><span class="">implements</span><span class=""> GeoJSONshape </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.49</b>    
+            src/main/java/com/tutego/insel/sealed/GeoJSONpoint.java, GeoJSONpoint</p>
+            
+            <p class="standard">A line consists of a collection of coordinates. A particularly useful approach is to use a vararg, as in the following example:</p>
+            
+            <div class="listing " id="l8.50"><pre>record <span class="">GeoJSONline</span><span class="">(</span><span class="">Coordinate</span><span class="">...</span><span class=""> coordinates</span><span class="">)</span><span class=""> </span><span class="">implements</span><span class=""> GeoJSONshape </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.50</b>    
+            src/main/java/com/tutego/insel/sealed/GeoJSONline.java, GeoJSONline</p>
+            
+            <p class="standard">Perhaps our program shouldn’t write a complete GeoJSON document, but only the subtrees for points and lines. We would write the following code:</p>
+            
+            <div class="listing " id="l8.51"><pre><span class="">
+                    <a id="p536"/>
+                static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">printGeoJSONcoordinates</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">GeoJSONshape shape</span></span> ) {<br/>  Objects.<span class="">requireNonNull</span><span class="">( shape );</span><br/>  System.out.<span class="">print</span><span class="">( </span><span class="">"\"</span><span class="">coordinates\</span><span class="">": "</span><span class=""> );</span><br/>  <span class="">if</span><span class=""> ( </span>
+                <span class="bold">shape <span class="">instanceof</span><span class=""> GeoJSONpoint point</span></span> )<br/>    System.out.<span class="">printf</span><span class="">( </span><span class="">"{ \"</span><span class="">type\</span><span class="">": \"</span><span class="">Point\</span><span class="">", \"</span><span class="">coordinates\</span><span class="">": %s }%n"</span><span class="">,</span><br/>                       point.<span class="">coordinate</span><span class="">() );</span><br/>  <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( </span>
+                <span class="bold">shape <span class="">instanceof</span><span class=""> GeoJSONline line</span></span> )<br/>    System.out.<span class="">printf</span><span class="">( </span><span class="">"{ \"</span><span class="">type\</span><span class="">": \"</span><span class="">LineString\</span><span class="">", \"</span><span class="">coordinates\</span><span class="">": [ %s ] }%n"</span><span class="">,</span><br/>                       Arrays.<span class="">stream</span><span class="">( line.</span><span class="">coordinates</span><span class="">() )</span><br/>                             .<span class="">map</span><span class="">( GeoJSONshape.Coordinate::toString )</span><br/>                             .<span class="">collect</span><span class="">( Collectors.</span><span class="">joining</span><span class="">( </span><span class="">","</span><span class=""> ) ) );</span><br/>  <span class="">else</span><span class=""><br/></span>    <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IllegalStateException</span><span class="">( </span><span class="">"Unknown shape "</span><span class=""> + shape.</span><span class="">getClass</span><span class="">() );</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.51</b>    
+            src/main/java/com/tutego/insel/sealed/GeoJSONwriter.java, printGeoJSONcoordinates()</p>
+            
+            <p class="standard">This method would be used in the following way:</p>
+            
+            <div class="listing " id="l8.52"><pre>GeoJSONpoint point <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">GeoJSONpoint</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Coordinate</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">20</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>GeoJSONline poly <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">GeoJSONline</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Coordinate</span><span class="">(</span><span class=""> </span><span class="">20</span><span class="">,</span><span class=""> </span><span class="">30</span><span class=""> </span><span class="">),</span><span class=""><br/></span>                                    <span class="">new</span><span class=""> </span><span class="">Coordinate</span><span class="">(</span><span class=""> </span><span class="">50</span><span class="">,</span><span class=""> </span><span class="">90</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>GeoJSONwriter<span class="">.</span><span class="">printGeoJSONcoordinates</span><span class="">(</span><span class=""> point </span><span class="">);</span><span class=""><br/></span>GeoJSONwriter<span class="">.</span><span class="">printGeoJSONcoordinates</span><span class="">(</span><span class=""> poly </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.52</b>    
+            src/main/java/com/tutego/insel/sealed/GeoJSONdemo.java, main()</p>
+            
+            <p class="standard">The result is the following output:</p>
+            
+            <div class="listing " id="l_none_81055"><pre>"coordinates": { "type": "Point", "coordinates": 101,20] }<br/>"coordinates": { "type": "LineString", "coordinates": [ 111,30],141,90] ] } </pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h8.4.6">8.4.6    Records: Summary</h3>
+            
+            <p class="standard">Records are used for the simple aggregation of values, not for creating inheritance relationships; arguably, however, a record can implement interfaces, as we’ve just seen.</p>
+            
+            <p class="standard">In the best case, records are immutable down to the last link. That the component type itself can also be a record can come in handy sometimes. Consider the following examples:</p>
+            
+            <div class="listing " id="l8.53"><pre>
+                <span class="bold"><span class="">record </span><span class="">City</span></span><span class="">(</span><span class="">String</span><span class=""> name, </span><span class="">double</span><span class=""> population, </span><span class="">int</span><span class=""> area, </span>
+                <span class="bold">Location center</span>) {} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 8.53</b>    
+            src/main/java/com/tutego/insel/records/v3/City.java, City</p>
+            
+            <div class="listing " id="l8.54"><pre>
+                <a id="p537"/>City city <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">City</span><span class="">(</span><span class=""> </span><span class="">"Gothic"</span><span class="">,</span><span class=""> </span><span class="">234534</span><span class="">,</span><span class=""> </span><span class="">8374</span><span class="">,</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Location</span><span class="">(</span><span class=""> </span><span class="">14</span><span class="">,</span><span class=""> </span><span class="">120</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> city</span><span class="">.</span><span class="">center</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // Location[latitude=14.0, longitude=120.0]</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 8.54</b>    
+            src/main/java/com/tutego/insel/records/v3/CityWithLocation.java, CityWithLocation</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">Although records have immutable components, these components can be changeable. A 
+                    <samp class="listingcharacter listingcharacter">record Line(Point from, Point to) {}</samp> is not “deeply” immutable; the points themselves can’t be replaced by new 
+                    <samp class="listingcharacter listingcharacter">Point</samp>
+                 objects, but the coordinates, and thus indirectly the record, can be changed:</p>
+                
+                <div class="listing " id="l_none_81104"><pre>Line line <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Line</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(),</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>line<span class="">.</span><span class="">from</span><span class="">().</span><span class="">setLocation</span><span class="">(</span><span class=""> </span><span class="">1</span><span class="">,</span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class="">line</span><span class="">);</span><span class=""> // Line[from=[…]Point[x=1,y=1], to=[…]Point[x=0,y=0]]</span><span class=""> </span></pre></div>
+                
+                <p class="standard last">The whole concept of immutability depends on the fact that only primitive values or other immutable data types are referenced and not mutable objects.</p>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

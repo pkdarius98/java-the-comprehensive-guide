@@ -1,0 +1,1344 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Generics&lt;T&gt;" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Generics&lt;T&gt;" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Generics&lt;T&gt;</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h12">12    
+        <a id="p683"/>
+    Generics&lt;T&gt;</h1><p class="introductorynote indent_chapter_double">“Earthly happiness means: Misfortune does not visit us too regularly.”<br/>—Karl Gutzkow (1811–1878)</p><p class="standard">In this chapter, you’ll learn about generics, which make your code more stable by providing the compiler with more type information. </p>
+        
+        <h2 class="t2" id="h12.1">12.1    Introduction to Java Generics</h2>
+        
+        <p class="standard">Generics are among the most complex language constructs in Java. Because of this complexity, we’ll approach generics in two steps: first from the user’s side and then from the application programming interface (API) designer’s side. Taking advantage of generically declared types is rather easy, so let’s pick this low-hanging fruit first.</p>
+        
+        
+            
+            <h3 class="t3" id="h12.1.1">12.1.1    Man versus Machine: Type Checking of the Compiler and the Runtime Environment</h3>
+            
+            <p class="standard">An important feature of Java is that the compiler checks the types and thus knows which members are present and which aren’t. In this way, Java differs from dynamic programming languages such as Python or PHP, which perform this type check later during runtime.</p>
+            
+            <p class="standard">In Java, two instances check the types, and they’re both smart in different ways. First, the Java virtual machine (JVM) has absolute type intelligence when running your application and performing the ultimate check to ensure that no objects have been assigned to the wrong types. Then, the compiler performs a few useful checks but is sometimes a bit too gullible and follows the developer blindly. An incorrect explicit type conversion causes the JVM to throw an exception.</p>
+            
+            <p class="standard">Let’s look at an example, which at this point still looks uncomplicated:</p>
+            
+            <div class="listing " id="l_none_1219"><pre>Object o <span class="">=</span><span class=""> </span><span class="">"String"</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">String</span><span class="">)</span><span class=""> o</span><span class="">;</span><span class=""> </span></pre></div>
+            
+            <p class="standard">Via explicit type casting, 
+                <samp class="listingcharacter listingcharacter">Object o</samp> is sold to the compiler as a 
+                <samp class="listingcharacter listingcharacter">String</samp>. This scenario is fine because 
+                <samp class="listingcharacter listingcharacter">o</samp> actually references a 
+                <samp class="listingcharacter listingcharacter">String</samp> object. Problems arise if the type 
+                <span class="italic">can’t</span> be con
+                <a id="p684"/>verted to 
+                <samp class="listingcharacter listingcharacter">String</samp>
+            , even when we instruct the compiler to perform type casting, as in the following example:</p>
+            
+            <div class="listing " id="l_none_1215"><pre>Object o <span class="">=</span><span class=""> Integer</span><span class="">.</span><span class="">valueOf</span><span class="">(</span><span class=""> </span><span class="">42</span><span class=""> </span><span class="">);</span><span class="">      </span><span class=""> // or with Autoboxing: Object o = 42;</span><span class=""><br/></span><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">String</span><span class="">)</span><span class=""> o</span><span class="">;</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The compiler accepts the type casting, and no error arises at translation time. However, this adaptation clearly can’t be carried out by the JVM. For this reason, a 
+                <samp class="listingcharacter listingcharacter">ClassCastException</samp> arises at runtime since an 
+                <samp class="listingcharacter listingcharacter">Integer</samp> can’t be converted to a 
+                <samp class="listingcharacter listingcharacter">String</samp>
+            .</p>
+            
+            <p class="standard">Generics is about giving the compiler more information about types and avoiding 
+                <samp class="listingcharacter listingcharacter">ClassCastException</samp>
+             errors.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.1.2">12.1.2    Rockets</h3>
+            
+            <p class="standard">Our previous examples were all about players and candies. Let’s imagine that a player has a 
+                <span class="italic">rocket</span> for traveling, which can be loaded. Since we can’t know exactly what the rocket carries, we’ll make a base type that represents all possible object types. In our first example, we’ll start with the most general base type 
+                <samp class="listingcharacter listingcharacter">Object</samp>, so that the user can transport everything with his rocket.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn12_01" id="fn12_01">[ 180 ]</a></span>
+            </p>
+            
+            <div class="listing " id="l12.1"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Rocket </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span>
+                <span class="bold"><span class="">Object</span></span> value;<br/>  <span class="">public</span><span class=""> </span><span class="">Rocket</span><span class="">() {}</span><br/>  <span class="">public</span><span class=""> </span><span class="">Rocket</span><span class="">( </span>
+                <span class="bold">Object</span> value ) { <span class="">this</span><span class="">.value = value; }</span><br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">set</span><span class="">( </span>
+                <span class="bold">Object</span> value ) { <span class="">this</span><span class="">.value = value; }</span><br/>  <span class="">public</span><span class=""> </span>
+                <span class="bold">Object</span> <span class="">get</span><span class="">() { </span><span class="">return</span><span class=""> value; }</span><br/>  <span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isEmpty</span><span class="">() { </span><span class="">return</span><span class=""> value == null; }</span><br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">empty</span><span class="">() { value = null; }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 12.1</b>    
+            src/main/java/com/tutego/insel/nongeneric/Rocket.java, Rocket</p>
+            
+            <p class="standard">In this example, we have a standard constructor as well as a parameterized constructor. Objects can be placed into the rocket via 
+                <samp class="listingcharacter listingcharacter">set(...)</samp> and read again via the access method 
+                <samp class="listingcharacter listingcharacter">get()</samp>
+            . Let’s provide a player with two rockets, one on the right and one on the left:</p>
+            
+            <div class="listing " id="l12.2"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Player </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> Rocket rightRocket</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> Rocket leftRocket</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 12.2</b>    
+            src/main/java/com/tutego/insel/nongeneric/Player.java, Player</p>
+            
+            <p class="standard">
+                <a id="p685"/>Now, since our player has a rocket, let’s quickly write an example method. Our player 
+                <samp class="listingcharacter listingcharacter">michael</samp>
+             can transport numbers in each rocket. Then, we’ll determine which in which rocket he hides the bigger number.</p>
+            
+            <div class="listing " id="l12.3"><pre>Player michael <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">();</span><span class=""><br/></span>michael<span class="">.</span><span class="">name </span><span class="">=</span><span class=""> </span><span class="">"Omar Arnold"</span><span class="">;</span><span class=""><br/></span>Rocket rocket <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Rocket</span><span class="">();</span><span class=""><br/></span>
+                <span class="bold"><span class="">Long</span></span> aBigNumber = 11111111111111L;<br/>rocket.<span class="">set</span><span class="">( aBigNumber );                     </span><span class=""> // (1)</span><span class=""><br/></span>michael.leftRocket  = rocket;<br/>michael.rightRocket = <span class="">new</span><span class=""> </span><span class="">Rocket</span><span class="">( 2222222222222222222L );</span><br/><br/>System.out.<span class="">println</span><span class="">( michael.name + </span><span class="">" transports "</span><span class=""> +</span><br/>               michael.leftRocket.<span class="">get</span><span class="">() + </span><span class="">" and "</span><span class=""> + michael.rightRocket.</span><span class="">get</span><span class="">() );</span><br/><br/>Long val1 = 
+                <span class="bold">(Long)</span> michael.leftRocket.<span class="">get</span><span class="">();  </span><span class=""> // (2)</span><span class=""><br/></span>Long val2 = 
+                <span class="bold">(Long)</span> michael.rightRocket.<span class="">get</span><span class="">();</span><br/><br/>System.out.<span class="">println</span><span class="">( val1.</span><span class="">compareTo</span><span class="">( val2 ) &gt; </span><span class="">0</span><span class=""> ? </span><span class="">"left"</span><span class=""> : </span><span class="">"right"</span><span class=""> ); </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 12.3</b>    
+            src/main/java/com/tutego/insel/nongeneric/PlayerRocketDemo.java, main()</p>
+            
+            <p class="standard">The example has no particular pitfalls; however, two unattractive things stand out. Both of these problems stem from the fact that the 
+                <samp class="listingcharacter listingcharacter">Rocket</samp> class was declared with the 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+             type to store the contents of the rocket in such a general way that the rocket can take on anything. Consider the following points:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">During initialization, a good practice would be to say that the rocket can only take on a certain type (i.e., 
+                        <samp class="listingcharacter listingcharacter">Long</samp>). If such a restriction were possible, then in line 
+                        <samp class="listingcharacter listingcharacter">(1)</samp> really only 
+                        <samp class="listingcharacter listingcharacter">Long</samp> objects could be placed in the rocket and nothing else (such as 
+                        <samp class="listingcharacter listingcharacter">Integer</samp>
+                     objects, for example).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">When extracting in line 
+                        <samp class="listingcharacter listingcharacter">(2)</samp> the contents of the rockets via 
+                        <samp class="listingcharacter listingcharacter">get()</samp>, you must remember what you put in. If data structures require special types, then this requirement should also be documented. But if the compiler knew that 
+                        <samp class="listingcharacter listingcharacter">Long</samp> is stored in the rocket in any case, then type casting could be omitted, and the program code would be shorter. Also, the compiler could warn us if you tried to retrieve 
+                        <samp class="listingcharacter listingcharacter">Long</samp> from the rocket as an 
+                        <samp class="listingcharacter listingcharacter">Integer</samp>, but we’d need to pass this knowledge to the compiler! If a 
+                        <samp class="listingcharacter listingcharacter">Long</samp> object exists in the rocket, but we expect it to be an 
+                        <samp class="listingcharacter listingcharacter">Integer</samp> (and set an explicit type casting to 
+                        <samp class="listingcharacter listingcharacter">Integer</samp>), the compiler won’t report an error. However, at runtime, a nasty 
+                        <samp class="listingcharacter listingcharacter">ClassCastException</samp>
+                     will arise instead.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Long story short: The compiler doesn’t sufficiently consider type safety in our example. Explicit type casting is usually messy and should be avoided. But how can we make our rockets type-safe?</p>
+            
+            <p class="standard">
+                <a id="p686"/>One solution would be to declare a new class for each type to be stored in the rocket, so once a 
+                <samp class="listingcharacter listingcharacter">RocketLong</samp> for the 
+                <samp class="listingcharacter listingcharacter">long</samp> data type, then perhaps 
+                <samp class="listingcharacter listingcharacter">RocketInteger</samp> for 
+                <samp class="listingcharacter listingcharacter">int</samp>, 
+                <samp class="listingcharacter listingcharacter">RocketString</samp> for 
+                <samp class="listingcharacter listingcharacter">string</samp>, and so on. The problem with this approach is code must be copied, and the repeated code is almost identical. This solution isn’t smart since you can’t write a new class for each data type while keeping the logic unchanged. Ideally, we’d write a little code to still get type safety at compile time but not type safety at runtime where a 
+                <samp class="listingcharacter listingcharacter">ClassCastException</samp>
+             might surprise us. In general, we could keep the type free (i.e., “generic”) when declaring it, and as soon as we use the rocket, we could make the compiler pay attention to this now specified type and ensure correctness of use.</p>
+            
+            <p class="standard">The solution to this problem is called
+                <a class="indexanchor" id="i12_00"/>
+                <span class="italic"> generics</span>.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn12_02" id="fn12_02">[ 181 ]</a></span>
+             This feature offers developers completely new ways to program data structures and algorithms that are independent of a data type and are thus “generic.”</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.1.3">12.1.3    Declaring Generic Types</h3>
+            
+            <p class="standard">To convert 
+                <samp class="listingcharacter listingcharacter">Rocket</samp> into a 
+                <span class="italic">generic type</span>
+                <a class="indexanchor" id="i12_01"/>
+                <a class="indexanchor" id="i12_02"/>, you must insert a type proxy (called a 
+                <span class="italic">type parameter</span>) in the right places where the 
+                <samp class="listingcharacter listingcharacter">Object</samp> occurred; the type parameter is represented by a 
+                <span class="italic">type variable</span>
+                <a class="indexanchor" id="i12_03"/>
+            . The name of the type variable must be specified in the class declaration.</p>
+            
+            <p class="standard">The following example shows the syntax for the generic type of 
+                <samp class="listingcharacter listingcharacter">Rocket</samp>
+            :</p>
+            
+            <div class="listing " id="l12.4"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Rocket</span>
+                <span class="bold"><span class="">&lt;T&gt;</span></span> {<br/>  <span class="">private</span><span class=""> </span>
+                <span class="bold">T</span> value;<br/>  <span class="">public</span><span class=""> </span><span class="">Rocket</span><span class="">() {}</span><br/>  <span class="">public</span><span class=""> </span><span class="">Rocket</span><span class="">( </span>
+                <span class="bold">T</span> value ) { <span class="">this</span><span class="">.value = value; }</span><br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">set</span><span class="">( </span>
+                <span class="bold">T</span> value ) { <span class="">this</span><span class="">.value = value; }</span><br/>  <span class="">public</span><span class=""> </span>
+                <span class="bold">T</span> <span class="">get</span><span class="">() { </span><span class="">return</span><span class=""> value; }</span><br/>  <span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isEmpty</span><span class="">() { </span><span class="">return</span><span class=""> value == null; }</span><br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">empty</span><span class="">() { value = null; }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 12.4</b>    
+            src/main/java/com/tutego/insel/generic/Rocket.java, Rocket</p>
+            
+            <p class="standard">At this point, we’ve defined the type variable 
+                <samp class="listingcharacter listingcharacter">T</samp> and now can use it instead of 
+                <samp class="listingcharacter listingcharacter">Object</samp> in the 
+                <samp class="listingcharacter listingcharacter">Rocket</samp>
+             class.</p>
+            
+            <p class="standard">For generic types, the specification of the type variable appears only once, at the beginning of the class declaration and enclosed in angle brackets after the class name. Simply put, the type parameter can be used wherever a conventional type existed. Some limitations exist, however, because of 
+                <span class="italic">raw types</span>, which we’ll describe in detail in 
+                <span class="crossreference "><a href="12_002.html#h12.2.4">Section 12.2.4</a></span>
+            .</p>
+            
+            <p class="standard">In our example, we can directly replace 
+                <samp class="listingcharacter listingcharacter">Object</samp> with 
+                <samp class="listingcharacter listingcharacter">T</samp>
+            , and the generic class is ready.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p687"/>
+                Naming Conventions</h6>
+                
+                <p class="standard first">Type parameters are usually single capital letters like 
+                    <samp class="listingcharacter listingcharacter">T</samp> (for “type”), 
+                    <samp class="listingcharacter listingcharacter">E</samp> (for “element”), 
+                    <samp class="listingcharacter listingcharacter">K</samp> (for “key”), or 
+                    <samp class="listingcharacter listingcharacter">V</samp>
+                 (for “value”). These letters are just placeholders and not real types. The following code is possible but absolutely not recommended:</p>
+                
+                <div class="listing " id="l_none_1284"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Rocket</span><span class="">&lt;</span>
+                    <span class="bold">Elf</span>&gt; {<br/>  <span class="">private</span><span class=""> </span>
+                    <span class="bold">Elf</span> value;<br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">set</span><span class="">( </span>
+                    <span class="bold">Elf</span> value ) { <span class="">this</span><span class="">.value = value; }</span><br/>  <span class="">public</span><span class=""> </span>
+                    <span class="bold">Elf</span> <span class="">get</span><span class="">() { </span><span class="">return</span><span class=""> value; }</span><br/>}<span class=""/></pre></div>
+                
+                <p class="standard last">
+                    <samp class="listingcharacter listingcharacter">Elf</samp>
+                 looks much more like a real class type than like a type parameter, and in this construction, not only are elves allowed in the class, but all types.</p>
+            
+            </div>
+            
+            <p class="standard">Not only can a class or interface be declared generically, so can a record. Thus, an immutable alternative to making the 
+                <samp class="listingcharacter listingcharacter">Rocket</samp>
+             class generic is shown in the following example:</p>
+            
+            <div class="listing " id="l12.5"><pre><span class="">public</span><span class=""> record Rocket</span><span class="">&lt;</span>
+                <span class="bold">T</span>&gt;(<br/>    
+                <span class="bold">T</span> value<br/>) {<br/>  <span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isEmpty</span><span class="">() { </span><span class="">return</span><span class=""> value == null; }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 12.5</b>    
+            src/main/java/com/tutego/insel/records/Rocket.java, Rocket</p>
+            
+            
+                
+                <h4 class="t4" id="h12.1.3.1">Other Areas of Use for Generics</h4>
+                
+                <p class="standard">In a number of examples, memory structures like our rocket make sense not only for a data type 
+                    <samp class="listingcharacter listingcharacter">Long</samp>, but basically for all types, anywhere that the implementation is (relatively) independent of the type of the elements. This flexibility applies, for example, to a sorting algorithm that uses the order of elements. If one element is greater than, less than, or equal to another, the algorithm need only use that order. The type doesn’t matter—whether they are numbers of type 
+                    <samp class="listingcharacter listingcharacter">Long</samp>, 
+                    <samp class="listingcharacter listingcharacter">Double</samp>
+                , or even carrots or customers. The algorithm itself simply won’t be affected by the type. The most common use of generics are for containers that are made type safe.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>History Lesson</h6>
+                    
+                    <p class="standard first last">The idea of introducing generics into Java is older and goes back to the 
+                        <span class="italic">Pizza</span> project or 
+                        <span class="italic">GJ</span> subproject (A Generic Java Language Extension) by Martin Odersky (who is also the creator of the Scala programming language), Gilad Bracha, David Stoutamire, and Philip Wadler. GJ then became the basis of Java Specification Request (JSR) 14, “Add Generic Types To The Java Programming Language.”
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn12_03" id="fn12_03">[ 182 ]</a></span>
+                    </p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.1.4">12.1.4    
+                <a id="p688"/>
+            Using Generics</h3>
+            
+            <p class="standard">To use our new 
+                <samp class="listingcharacter listingcharacter">Rocket</samp> class, you’ll specify it along with type arguments, which creates 
+                <span class="italic">parameterized types</span>
+                <a class="indexanchor" id="i12_04"/>
+                <a class="indexanchor" id="i12_05"/>
+                <span class="italic">.</span>
+            </p>
+            
+            <div class="listing " id="l12.6"><pre>Rocket
+                <span class="bold"><span class="">&lt;Integer&gt;</span></span>  intRocket     = <span class="">new</span><span class=""> Rocket</span>
+                <span class="bold">&lt;Integer&gt;</span>();<br/>Rocket
+                <span class="bold">&lt;<span class="">String</span><span class="">&gt;</span></span>   stringRocket  = <span class="">new</span><span class=""> Rocket</span>
+                <span class="bold">&lt;<span class="">String</span><span class="">&gt;</span></span>(); <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 12.6</b>    
+            src/main/java/com/tutego/insel/generic/RocketPlayer.java, main(), Part 1</p>
+            
+            <p class="standard">A concrete type is always enclosed in angle brackets after the class/interface name.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn12_04" id="fn12_04">[ 183 ]</a></span> The rocket 
+                <samp class="listingcharacter listingcharacter">intRocket</samp> is an instance of a generic type with the concrete type argument 
+                <samp class="listingcharacter listingcharacter">Integer</samp>. This rocket can now officially contain only 
+                <samp class="listingcharacter listingcharacter">Integer</samp>
+             values.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f12.1.html" id="f12.1"><img alt="Rocket&lt;Integer&gt;: For Integer Only" id="img-f12.1" src="bilderklein/klein12_001.png"/></a></div>
+            
+            <p class="caption "><b>Figure 12.1</b>    
+            Rocket&lt;Integer&gt;: For Integer Only</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">stringRocket</samp>
+             rocket, on the other hand, contains only strings. The compiler also checks this consistency, and type casting is no longer needed.</p>
+            
+            <div class="listing " id="l12.7"><pre>intRocket<span class="">.</span><span class="">set</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">int</span><span class=""> x </span><span class="">=</span><span class=""> intRocket</span><span class="">.</span><span class="">get</span><span class="">();</span><span class="">        </span><span class=""> // No more type casting needed</span><span class=""><br/></span>stringRocket<span class="">.</span><span class="">set</span><span class="">(</span><span class=""> </span><span class="">"Sesquipedalian"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> stringRocket</span><span class="">.</span><span class="">get</span><span class="">();</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 12.7</b>    
+            src/main/java/com/tutego/insel/generic/RocketPlayer.java, main(), Part 2</p>
+            
+            <p class="standard">As developers, we’ve thus made it clear in the program code that the rockets contain an 
+                <samp class="listingcharacter listingcharacter">Integer</samp> and nothing else. Because program code is read more often than written, you should always put as much information as possible about the context in the program 
+                <a id="p689"/>code. Readability may suffer somewhat since, especially for instantiation, the type must be specified both on the right and on the left, and the syntax can become long with nested generics. But as we’ll discuss in 
+                <span class="crossreference "><a href="12_001.html#h12.1.5">Section 12.1.5</a></span>
+            , this code can be abbreviated.</p>
+            
+            <p class="standard">The beauty of type safety is that all members are checked with the specified type. For example, when we access the element from 
+                <samp class="listingcharacter listingcharacter">intRocket</samp> via 
+                <samp class="listingcharacter listingcharacter">get()</samp>, the element is of type 
+                <samp class="listingcharacter listingcharacter">Integer</samp> (and through unboxing equals 
+                <samp class="listingcharacter listingcharacter">int</samp>), and 
+                <samp class="listingcharacter listingcharacter">set(...)</samp> also allows only an 
+                <samp class="listingcharacter listingcharacter">Integer</samp>
+            . Thus, the program code is more robust and, by eliminating type casting, also shorter and more readable.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>No Primitives</h6>
+                
+                <p class="standard first last">Type arguments in Java can be classes, interfaces, enumerations, or arrays of classes, interfaces, or enumerations, but not primitive data types. This limits the number of options, but since autoboxing is available, this limitation is tolerable. Furthermore, if 
+                    <samp class="listingcharacter listingcharacter">null</samp> exists in the 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;Integer&gt;</samp>, unboxing at runtime will result in 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                .</p>
+            
+            </div>
+            
+            <table class="standardtable" id="t12.1">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Term</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Example</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Generic type</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Rocket&lt;T&gt;</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Formal type parameter</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">T</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Parameterized type</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Rocket&lt;Long&gt;</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Actual type parameter</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Long</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Raw type</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Rocket</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 12.1</b>    
+            Summary of Generics Terms</p>
+            
+            
+                
+                <h4 class="t4" id="h12.1.4.1">Nested Generics</h4>
+                
+                <p class="standard">If a generic type like 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;T&gt;</samp> is given, no restriction exists on 
+                    <samp class="listingcharacter listingcharacter">T</samp> for now. Thus, 
+                    <samp class="listingcharacter listingcharacter">T</samp>
+                 isn’t limited to simple class or interface types but can again be a generic type. This breadth is logical because each generic type is an independent type that can be used (almost) like any other type, as in the following example:</p>
+                
+                <div class="listing " id="l12.8"><pre>Rocket<span class="">&lt;</span>
+                    <span class="bold">Rocket&lt;<span class="">String</span><span class="">&gt;</span></span>&gt; rocketOfRockets = <span class="">new</span><span class=""> Rocket&lt;</span>
+                    <span class="bold">Rocket&lt;<span class="">String</span><span class="">&gt;</span></span>&gt;();<br/>rocketOfRockets.<span class="">set</span><span class="">( </span><span class="">new</span><span class=""> Rocket&lt;</span><span class="">String</span><span class="">&gt;() );</span><br/>rocketOfRockets.<span class="">get</span><span class="">().</span><span class="">set</span><span class="">( </span><span class="">"Inner Rocket&lt;String&gt;"</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( rocketOfRockets.</span><span class="">get</span><span class="">().</span><span class="">get</span><span class="">() );</span><span class=""> // Inner Rocket&lt;String&gt;</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 12.8</b>    
+            src/main/java/com/tutego/insel/generic/RocketPlayer.java, main(), Part 3</p>
+                
+                <p class="standard">In this case, the rocket contains an “inner rocket” that stores a string named 
+                    <samp class="listingcharacter listingcharacter">"Inner Rocket&lt;String&gt;"</samp>. With similar constructions, you can quickly see how helpful generics 
+                    <a id="p690"/>
+                can be to the compiler (and to us). Without generics, all the rockets would look the same.</p>
+                
+                <table class="standardtable" id="t12.2">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Precise with Generics</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Imprecise without Generics</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt; stringRocket;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Rocket stringRocket;</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Rocket&lt;Integer&gt; intRocket;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Rocket intRocket;</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Rocket&lt;Rocket&lt;String&gt;&gt; rocketOfRockets;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Rocket rocketOfRockets;</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 12.2</b>    
+            Clarification through Generics</p>
+                
+                <p class="standard">Only a well-chosen name and precise documentation can help with non-generically declared variables. Before the introduction of generics, developers used block comments to indicate type information, for example, in 
+                    <samp class="listingcharacter listingcharacter">Rocket/*&lt;string&gt;*/ stringRocket</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>No Arrays of Parameterized Types</h6>
+                    
+                    <p class="standard first">The following statement prepares a single rocket with an array of strings:</p>
+                    
+                    <div class="listing " id="l_none_12118"><pre>Rocket<span class="">&lt;</span><span class="">String</span>
+                        <span class="bold"><span class="">[]</span></span>&gt; rocketForArray = <span class="">new</span><span class=""> Rocket&lt;</span><span class="">String</span>
+                        <span class="bold"><span class="">[]</span></span>&gt;();<span class=""/></pre></div>
+                    
+                    <p class="standard">But can an array of multiple rockets be declared, each containing strings? Yes. However, while the declaration is still possible, the initialization is invalid, as in the following example:</p>
+                    
+                    <div class="listing " id="l_none_12146"><pre>Rocket<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span>
+                        <span class="bold">[]</span> arrayOfRocket;<br/>arrayOfRocket = 
+                        <span class="bold"><span class="">new</span><span class=""> Rocket&lt;</span><span class="">String</span><span class="">&gt;[</span><span class="">2</span><span class="">]</span></span>; <span class=""> // 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                         Compiler error</span><span class=""/><span class=""/></pre></div>
+                    
+                    <p class="standard last">The reason for this error is hidden in the implementation in bytecode, and the best solution is to use the convenient data structures available from the 
+                        <samp class="listingcharacter listingcharacter">java.util</samp> package. For developers, a 
+                        <samp class="listingcharacter listingcharacter">List&lt;Rocket&lt;String&gt;&gt;</samp> is more useful than a 
+                        <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;[]</samp> anyway and the performance is almost the same. However, since arrays are automatically used by the compiler with variable argument lists, there’s a problem if the parameter variable is a type variable. For signatures like 
+                        <samp class="listingcharacter listingcharacter">f(T... params)</samp> the 
+                        <samp class="listingcharacter listingcharacter">@SafeVarargs</samp>
+                        <a class="indexanchor" id="i12_06"/>
+                     annotation helps to suppress the compiler message.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.1.5">12.1.5    Diamonds Are Forever</h3>
+            
+            <p class="standard">When initializing a variable whose type is generic, notice that the actual type parameter must be specified twice. With nested generics, the extra work is inconvenient. Consider a list containing 
+                <samp class="listingcharacter listingcharacter">Maps</samp>, where the associative memory connects date values with 
+                <samp class="listingcharacter listingcharacter">Strings</samp>
+            , as in the following example:</p>
+            
+            <div class="listing " id="l_none_12158"><pre>List
+                <span class="bold"><span class="">&lt;Map&lt;Date,</span><span class="">String</span><span class="">&gt;&gt;</span></span> listOfMaps;<br/>listOfMaps = <span class="">new</span><span class=""> ArrayList</span>
+                <span class="bold">&lt;Map&lt;Date,<span class="">String</span><span class="">&gt;&gt;</span></span>(); <span class=""/></pre></div>
+            
+            <p class="standard">The actual type parameter 
+                <samp class="listingcharacter listingcharacter">Map&lt;Date, String&gt;</samp> is placed once on the side of the variable declaration and once after the 
+                <samp class="listingcharacter listingcharacter">new</samp>
+             keyword.</p>
+            
+            
+                
+                <h4 class="t4" id="h12.1.5.1">
+                    <a id="p691"/>
+                The Diamond Operator</h4>
+                
+                <p class="standard">If the compiler has all the available type information, generic type arguments can be omitted after 
+                    <samp class="listingcharacter listingcharacter">new</samp>
+                , and only a pair of angle brackets remains.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">You should avoid writing the following code:</p>
+                    
+                    <div class="listing " id="l_none_12150"><pre>List<span class="">&lt;</span>
+                        <span class="bold">Map&lt;Date,<span class="">String</span><span class="">&gt;</span></span>&gt; listOfMaps = <span class="">new</span><span class=""> ArrayList&lt;</span>
+                        <span class="bold">Map&lt;Date,<span class="">String</span><span class="">&gt;</span></span>&gt;();<span class=""/></pre></div>
+                    
+                    <p class="standard">Instead, you should write the following code:</p>
+                    
+                    <div class="listing " id="l_none_12171"><pre>List<span class="">&lt;</span>
+                        <span class="bold">Map&lt;Date,<span class="">String</span><span class="">&gt;</span></span>&gt; listOfMaps = <span class="">new</span><span class=""> ArrayList</span>
+                        <span class="bold">&lt;&gt;</span>();<span class=""/></pre></div>
+                    
+                    <p class="standard">You should avoid writing the following code:</p>
+                    
+                    <div class="listing " id="l_none_12190"><pre>Rocket<span class="">&lt;</span>
+                        <span class="bold">Rocket&lt;<span class="">String</span><span class="">&gt;</span></span>&gt; rocketOfRockets = <span class="">new</span><span class=""> Rocket&lt;</span>
+                        <span class="bold">Rocket&lt;<span class="">String</span><span class="">&gt;</span></span>&gt;();<span class=""/></pre></div>
+                    
+                    <p class="standard">Instead, you should write the following code:</p>
+                    
+                    <div class="listing  last_item" id="l_none_12179"><pre>Rocket<span class="">&lt;</span>
+                        <span class="bold">Rocket&lt;<span class="">String</span><span class="">&gt;</span></span>&gt; rocketOfRockets = <span class="">new</span><span class=""> Rocket&lt;&gt;();</span><span class=""/></pre></div>
+                
+                </div>
+                
+                <p class="standard">The fact that the compiler can infer the types from the context goes back to a compiler feature called 
+                    <span class="italic">type inference</span>
+                    <a class="indexanchor" id="i12_07"/>, which we’ll encounter again in 
+                    <span class="crossreference "><a href="12_001.html#h12.1.7">Section 12.1.7</a></span>. Because of the appearance of the angle brackets 
+                    <samp class="listingcharacter listingcharacter">&lt;&gt;</samp>, the type represented by the angle brackets is also referred to as the 
+                    <span class="italic">diamond type</span>
+                    <a class="indexanchor" id="i12_08"/>. The pair of angle brackets 
+                    <samp class="listingcharacter listingcharacter">&lt;&gt;</samp> is also called the 
+                    <span class="italic">diamond operator</span>
+                    <a class="indexanchor" id="i12_09"/>. This construction is an operator because it identifies the type and thus is also referred to as the 
+                    <span class="italic">diamond type inference operator</span>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.1.5.2">Areas of Use of the Diamond</h4>
+                
+                <p class="standard">In our example, the diamond replaces the entire actual type parameter, 
+                    <samp class="listingcharacter listingcharacter">Map&lt;Date,String&gt;</samp>. You cannot use this operator for nested generics. Consequently, 
+                    <samp class="listingcharacter listingcharacter">new ArrayList&lt;Map</samp>
+                    <span class="bold">
+                        <samp class="listingcharacter listingcharacter">&lt;&gt;</samp>
+                    </span>
+                    <samp class="listingcharacter listingcharacter">&gt;()</samp> fails. Also, the new diamond operator is permitted only with 
+                    <samp class="listingcharacter listingcharacter">new</samp>. Thus, an incorrect usage would be to include the diamond operator on the left side of a variable declaration as well as on the right side in the creation of the instance. A declaration like 
+                    <samp class="listingcharacter listingcharacter">List&lt;&gt; listOfMaps;</samp>
+                 would thus cause a compiler error because the compiler couldn’t derive any types on each subsequent use.</p>
+                
+                <p class="standard">Since the diamond is used with 
+                    <samp class="listingcharacter listingcharacter">new</samp>
+                , you can always use it when instances are created, with a few exceptions that we’ll cover in the following subsection. Our next example, which doesn’t make any sense, shows four areas of use:</p>
+                
+                <div class="listing " id="l_none_12199"><pre><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.*;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> WhereToUseTheDiamond </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> List</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> </span><span class="">foo</span><span class="">(</span><span class=""> List</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span>
+                    <span class="bold"><span class="">new</span><span class=""> ArrayList&lt;&gt;()</span></span>;<br/>  }<br/><br/>
+                    <a id="p692"/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    
+                    <span class="bold">List&lt;<span class="">String</span><span class="">&gt; list = </span><span class="">new</span><span class=""> ArrayList&lt;&gt;()</span></span>;<br/>    list = 
+                    <span class="bold"><span class="">new</span><span class=""> ArrayList&lt;&gt;()</span></span>;<br/>    <span class="">foo</span><span class="">( </span>
+                    <span class="bold"><span class="">new</span><span class=""> ArrayList&lt;&gt;( list )</span></span> );<br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">In this example, the diamond operator is used in four areas:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">In declarations and initializations of class/object variables and local variables</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">During initialization of class/object variables and local variables/parameter variables</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">As an argument in method/constructor calls</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">As method returns</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Without question, the first and second cases are the most useful. In almost all these cases, the diamond operator can make your code more concise. Especially in the first case, nothing speaks fundamentally against its use, but concerning the other three areas, you must carefully consider whether the readability of your program code might suffer. For example, if a data structure is initialized in the middle of a method via 
+                    <samp class="listingcharacter listingcharacter">list = new ArrayList&lt;&gt;()</samp>
+                , but the variable declaration isn’t on the same page of the screen, sometimes, a reader may miss which types are exactly contained in the list.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.1.5.3">Using the Diamond Operator Isn’t Always Possible</h4>
+                
+                <p class="standard">In some situations, the type derivation doesn’t work as expected. Often, this inconsistency stems from the use of the diamond operator in method calls or calls that build on each other. Thus, in these cases, we recommend doing away with the diamond operators, in addition for reasons of code readability.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">For the compiler, the following statement is an unsolvable case:</p>
+                    
+                    <div class="listing " id="l_none_12209"><pre>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list </span><span class="">=</span><span class=""> </span>
+                        <span class="bold"><span class="">new</span><span class=""> ArrayList&lt;&gt;()</span></span>.<span class="">subList</span><span class="">( </span><span class="">0</span><span class="">, </span><span class="">1</span><span class=""> ); </span><span class=""/></pre></div>
+                    
+                    <p class="standard last">Using the diamond operator isn’t possible, as shown in this example, because the compiler reports a “Type mismatch: cannot convert from List&lt;Object&gt; to List&lt;String&gt;.” Type inference is complex,
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn12_05" id="fn12_05">[ 184 ]</a></span> and fortunately, developers don’t need to bother about its 
+                        <a id="p693"/>internal processes. An explicit type specification solves the problem, for example, 
+                        <samp class="listingcharacter listingcharacter">new ArrayList&lt;</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">String</samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">&gt;().subList(0, 1)</samp>
+                    .</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.1.5.4">Diamond Operator versus var</h4>
+                
+                <p class="standard">The diamond operator and 
+                    <samp class="listingcharacter listingcharacter">var</samp> have similar tasks but differ in the source of the information. In the case of the diamond, for example, the left side of an assignment gives the compiler information about what type is referred to on the right side of the assignment. With 
+                    <samp class="listingcharacter listingcharacter">var</samp>
+                , on the other hand, the reverse is true: The right side has the context, and therefore the variable type can be omitted on the left. Consider the following examples:</p>
+                
+                <div class="listing " id="l_none_12228"><pre>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list1 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""> </span><span class=""> // List&lt;String&gt;</span><span class=""><br/></span>var list2 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;();</span><span class="">    </span><span class=""> // ArrayList&lt;String&gt;</span><span class=""><br/></span>var list3 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class="">          </span><span class=""> // ArrayList&lt;Object&gt; </span><span class=""> </span></pre></div>
+                
+                <p class="standard">In the final case, no compiler error arises. However, nothing is known about the actual type parameter, which is why 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 applies.</p>
+                
+                <p class="standard">To abbreviate the code, you have two options: 
+                    <samp class="listingcharacter listingcharacter">var</samp>
+                 for the “left side” or the diamond operator for the “right side.”</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.1.6">12.1.6    Generic Interfaces</h3>
+            
+            <p class="standard">An interface can be declared as a generic type in the same way as a class. Let’s look at the 
+                <samp class="listingcharacter listingcharacter">java.lang.Comparable</samp> interface and at a snippet of 
+                <samp class="listingcharacter listingcharacter">java.util.Set</samp> (which is an interface that prescribes operations for set operations; more on this topic will follow in 
+                <span class="crossreference "><a href="18_001.html#h18">Chapter 18</a></span>, 
+                <span class="crossreference "><a href="18_002.html#h18.2">Section 18.2</a></span>
+            ).</p>
+            
+            <table class="standardtable" id="t12.3">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Comparable Interface</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Set Interface</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <div class="listing " id="l_none_122288582"><pre>public interface Comparable
+                                <span class="bold">&lt;T&gt;</span> { <br/>  int compareTo(
+                                <span class="bold">T</span> o);<br/>}</pre></div>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <div class="listing " id="l_none_12245"><pre>public interface Set
+                                <span class="bold">&lt;E&gt;</span> extends Collection
+                                <span class="bold">&lt;E&gt;</span> {<br/> boolean add(
+                                <span class="bold">E</span> e);<br/> int size();<br/> boolean isEmpty();<br/> boolean contains(Object o);<br/> Iterator
+                                <span class="bold">&lt;E&gt;</span> iterator();<br/> Object[] toArray();<br/> &lt;T&gt; T[] toArray(T[] a);<br/> …<br/>}</pre></div>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 12.3</b>    
+            Generic Declaration of the Comparable and Set Interfaces</p>
+            
+            <p class="standard">
+                <a id="p694"/>As mentioned earlier, the methods access the type variables 
+                <samp class="listingcharacter listingcharacter">T</samp> and 
+                <samp class="listingcharacter listingcharacter">E</samp>. In the case of 
+                <samp class="listingcharacter listingcharacter">Set</samp>, notice how 
+                <samp class="listingcharacter listingcharacter">Set</samp>
+             itself extends a generically declared interface.</p>
+            
+            <p class="standard">When using generic interfaces, the following two usage patterns can be derived:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A non-generic type resolves generics during implementation.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A generic class type implements a generic interface and passes the parameter variable.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h12.1.6.1">Non-Generic Type Resolves Generics during Implementation</h4>
+                
+                <p class="standard">In the first case, a class implements the generically declared interface and specifies a concrete type. For example, all numeric wrapper classes implement 
+                    <samp class="listingcharacter listingcharacter">Comparable</samp>
+                , and the type argument is exactly the type of the wrapper. Consider the following example:</p>
+                
+                <div class="listing " id="l12.9"><pre><span class="">public</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> Integer </span><span class="">extends</span><span class=""> Number </span>
+                    <span class="bold"><span class="">implements</span><span class=""> Comparable&lt;Integer&gt;</span></span> {<br/>  <span class="">public</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">compareTo</span><span class="">( Integer anotherInteger ) { … }</span><br/>  …<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 12.9</b>    
+            java/lang/Integer.java (Snippet)</p>
+                
+                <p class="standard">This usage frees the 
+                    <samp class="listingcharacter listingcharacter">Integer</samp>
+                 class from generics for the user.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first">Complex generic types can be greatly simplified with custom type declarations. For example, instead of writing 
+                        <samp class="listingcharacter listingcharacter">HashMap&lt;String,List&lt;Integer&gt;&gt;</samp>
+                     over and over again, you can use the following shortcut:</p>
+                    
+                    <div class="listing  last_item" id="l_none_12274"><pre><span class="">class</span><span class=""> StringToIntListMap </span><span class="">extends</span><span class=""> HashMap</span><span class="">&lt;</span><span class="">String</span><span class="">,</span><span class="">List</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;&gt;</span><span class=""> </span><span class="">{</span><span class="">}</span></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.1.6.2">Generic Class Type Implements Generic Interface and Passes on the Parameter Variable</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Set</samp> interface prescribes operations for sets. For example, one class that implements 
+                    <samp class="listingcharacter listingcharacter">Set</samp> is 
+                    <samp class="listingcharacter listingcharacter">HashSet</samp>
+                . The following example shows the header of the type declaration:</p>
+                
+                <div class="listing " id="l_none_12263"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> HashSet</span>
+                    <span class="bold"><span class="">&lt;E&gt;</span></span><br/>    <span class="">extends</span><span class=""> AbstractSet&lt;E&gt;</span><br/>    
+                    <span class="bold"><span class="">implements</span><span class=""> Set&lt;E&gt;</span></span>, Cloneable, java.io.Serializable <span class=""/></pre></div>
+                
+                <p class="standard">Notice how 
+                    <samp class="listingcharacter listingcharacter">Set</samp> declares the type variable 
+                    <samp class="listingcharacter listingcharacter">E</samp>, and this type “propagates” to 
+                    <samp class="listingcharacter listingcharacter">HashSet</samp>, i.e. the implementation does not determine a type. However, the class 
+                    <samp class="listingcharacter listingcharacter">Properties</samp>
+                 shows that it can be done differently:</p>
+                
+                <div class="listing " id="l_none_12284"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Properties</span><br/>    <span class="">extends</span><span class=""> Hashtable</span><span class="">&lt;</span><span class="">Object</span><span class="">,</span><span class="">Object</span><span class="">&gt;</span><span class=""> </span></pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p695"/>
+                    Note</h6>
+                    
+                    <p class="standard first">In some situations, 
+                        <samp class="listingcharacter listingcharacter">void</samp> is also used as an actual type parameter. For example, if 
+                        <samp class="listingcharacter listingcharacter">interface I&lt;T&gt; { T foo(); }</samp> declares a type variable 
+                        <samp class="listingcharacter listingcharacter">T</samp> without returning anything when 
+                        <samp class="listingcharacter listingcharacter">I</samp> is implemented, then the actual type parameter can be 
+                        <samp class="listingcharacter listingcharacter">Void</samp>
+                    . Consider the following example:</p>
+                    
+                    <div class="listing " id="l_none_12287"><pre><span class="">class</span><span class=""> C </span><span class="">implements</span><span class=""> I</span><span class="">&lt;</span><span class="">Void</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> Void </span><span class="">foo</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> null</span><span class="">;</span><span class=""> </span><span class="">}</span><span class=""><br/></span>}</pre></div>
+                    
+                    <p class="standard last">However, 
+                        <samp class="listingcharacter listingcharacter">void</samp> and 
+                        <samp class="listingcharacter listingcharacter">Void</samp> are different because, with 
+                        <samp class="listingcharacter listingcharacter">Void</samp>, a return is required, which makes 
+                        <samp class="listingcharacter listingcharacter">return null</samp>
+                     necessary.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.1.7">12.1.7    Generic Methods/Constructors and Type Inference</h3>
+            
+            <p class="standard">The generic constructions we’ve covered so far can be summarized in the following ways:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">class classname</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">&lt;T&gt; </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">{ </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">… </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter">}</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">interface interfacename&lt;T&gt;</samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">{ </samp>
+                        </span>
+                        <samp class="listingcharacter listingcharacter"> </samp>
+                        <span class="bold">
+                            <samp class="listingcharacter listingcharacter">... } </samp>
+                        </span>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">A type variable specified in the class or interface declaration can be accessed in all non-static members of the type.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example code will result in an error:</p>
+                
+                <div class="listing  last_item" id="l_none_12313"><pre><span class="">class</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">static</span></span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">foo</span><span class="">( T t ) { };      </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""><br/></span>}<span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">However, some complications arise in the following scenarios:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">When (static) methods want to use their own type variables</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">When different (static) methods want to use different type variables</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">A class can be declared without generics but have 
+                <span class="italic">generic methods</span>
+                <a class="indexanchor" id="i12_10"/>
+                <a class="indexanchor" id="i12_11"/>
+            . In general, each constructor, object method, and class method can declare one or more type parameters. The type variables are then no longer located at the class, but at the method/constructor declaration and are “local” to the method or constructor. The general format for declaring a generic method is as follows:</p>
+            
+            <div class="listing " id="l_none_12324"><pre>modifier <span class="">&lt;</span>
+                <span class="bold">type <span class="">variable</span><span class="">(s)&gt;</span></span> <span class="">return</span><span class=""> type method </span><span class="">name</span><span class="">(parameter) </span><span class="">throws</span><span class=""> clause </span><span class=""/></pre></div>
+            
+            
+                
+                <h4 class="t4" id="h12.1.7.1">
+                    <a id="p696"/>
+                Quite by Chance One or the Other Argument</h4>
+                
+                <p class="standard">Generic methods are particularly useful for utility classes that provide only static methods but don’t exist as objects themselves. The following example illustrates this scenario using a 
+                    <samp class="listingcharacter listingcharacter">random()</samp>
+                 method:</p>
+                
+                <div class="listing " id="l12.10"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> GenericMethods </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">&lt;T&gt; T</span></span> <span class="">random</span><span class="">( </span>
+                    <span class="bold">T</span> m, 
+                    <span class="bold">T</span> n ) {<br/>    <span class="">return</span><span class=""> Math.</span><span class="">random</span><span class="">() &gt; </span><span class="">0.5</span><span class=""> ? m : n;</span><br/>  }<br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">String</span><span class=""> s = </span><span class="">random</span><span class="">( </span><span class="">"Woo-Hoo!"</span><span class="">, "D'Oh!" );</span><br/>    System.out.<span class="">println</span><span class="">( s );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 12.10</b>    
+            src/main/java/com/tutego/insel/generic/GenericMethods.java, GenericMethods</p>
+                
+                <p class="standard">In this case, 
+                    <samp class="listingcharacter listingcharacter">&lt;T&gt; T random(T m, T n)</samp> declares a generic method, where the return type and parameter type are determined by a type variable 
+                    <samp class="listingcharacter listingcharacter">T</samp>. The specification of 
+                    <samp class="listingcharacter listingcharacter">&lt;T&gt;</samp>
+                 with the class name has been omitted with this syntax and has been moved to the declaration of the method.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">Of course, a class can be declared as a generic type and a method contained in it can be declared as a generic method with different type. In this case, the type variables should be named differently to avoid confusing the reader. In the following example, 
+                        <samp class="listingcharacter listingcharacter">T</samp> in 
+                        <samp class="listingcharacter listingcharacter">sit(...)</samp> doesn’t refer to the parameter variable of the 
+                        <samp class="listingcharacter listingcharacter">Lupilu</samp>
+                     class, but does refer to the parameter value of the method:</p>
+                    
+                    <div class="listing  last_item" id="l_none_12331"><pre><span class="">interface</span><span class=""> Lupilu</span><span class="">&lt;</span>
+                        <span class="bold">T</span>&gt; { &lt;
+                        <span class="bold">T</span>&gt; <span class="">void</span><span class=""> </span><span class="">sit</span><span class="">( </span>
+                        <span class="bold">T</span> val ); } <span class=""> // Confusing</span><span class=""><br/></span><span class="">interface</span><span class=""> Lupilu&lt;</span>
+                        <span class="bold">T</span>&gt; { &lt;
+                        <span class="bold">V</span>&gt; <span class="">void</span><span class=""> </span><span class="">sit</span><span class="">( </span>
+                        <span class="bold">V</span> val ); } <span class=""> // Better</span><span class=""> </span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.1.7.2">The Compiler in Search of Commonalities</h4>
+                
+                <p class="standard">The type (which is important for the return) is automatically derived by the compiler from the context (i.e., from the arguments). This feature is called 
+                    <span class="italic">type inference</span>
+                    <a class="indexanchor" id="i12_12"/>
+                , which has far-reaching consequences.</p>
+                
+                <p class="standard">When declaring 
+                    <samp class="listingcharacter listingcharacter">&lt;T&gt; T random(T m, T n)</samp>, at first glance, you may think that the variable types 
+                    <samp class="listingcharacter listingcharacter">m</samp> and 
+                    <samp class="listingcharacter listingcharacter">n</samp>
+                 must absolutely be equal. But this requirement isn’t true because, with types, the compiler goes up the type hierarchy until it finds a common type.</p>
+                
+                <table class="standardtable" id="t12.4">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <a id="p697"/>
+                                Call</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">Identified Types</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Common Basic Types</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">random("Food", 1)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">String, Integer</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Object, Serializable, Comparable</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">random(1L, 1D)</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Long, Double</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Object, Number, Comparable</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">random(new Point(), new StringBuilder())</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_middle">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Point, StringBuilder</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Object, Serializable, Cloneable</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 12.4</b>    
+            Common Base Types</p>
+                
+                <p class="standard">Note that 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 always belongs in the group, which is not surprising.</p>
+                
+                <p class="standard">In the case of 
+                    <samp class="listingcharacter listingcharacter">random(...)</samp>, the valid return types are at the intersection of types. Accordingly, 
+                    <samp class="listingcharacter listingcharacter">String</samp> and 
+                    <samp class="listingcharacter listingcharacter">Integer</samp>
+                 are permitted for the parameter types, as in the following examples:</p>
+                
+                <div class="listing " id="l_none_12341"><pre>Object       s1 <span class="">=</span><span class=""> </span><span class="">random</span><span class="">(</span><span class=""> </span><span class="">"Quack"</span><span class="">,</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Serializable s2 <span class="">=</span><span class=""> </span><span class="">random</span><span class="">(</span><span class=""> </span><span class="">"Quack"</span><span class="">,</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Comparable   s3 <span class="">=</span><span class=""> </span><span class="">random</span><span class="">(</span><span class=""> </span><span class="">"Quack"</span><span class="">,</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.1.7.3">Scarce Factory Methods</h4>
+                
+                <p class="standard">The diamond operator can abbreviate variable declarations with the initialization of a reference variable. In the following example, the generic type 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 must be specified twice:</p>
+                
+                <div class="listing " id="l_none_12356"><pre>Rocket
+                    <span class="bold"><span class="">&lt;</span><span class="">String</span><span class="">&gt;</span></span> r = <span class="">new</span><span class=""> Rocket</span>
+                    <span class="bold">&lt;<span class="">String</span><span class="">&gt;</span></span>(); <span class=""/></pre></div>
+                
+                <p class="standard">Instead, the diamond operator (
+                    <samp class="listingcharacter listingcharacter">&lt;&gt;</samp>
+                ) permits the following example statement:</p>
+                
+                <div class="listing " id="l_none_12364"><pre>Rocket
+                    <span class="bold"><span class="">&lt;</span><span class="">String</span><span class="">&gt;</span></span> r = <span class="">new</span><span class=""> Rocket</span>
+                    <span class="bold">&lt;&gt;</span>(); <span class=""/></pre></div>
+                
+                <p class="standard">The type inference provides an alternative solution if we build creator methods by ourselves. Let’s give our 
+                    <samp class="listingcharacter listingcharacter">Rocket</samp>
+                 class a factory method, as shown in the following example:</p>
+                
+                <div class="listing " id="l_none_12387"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">&lt;T&gt;</span></span> Rocket
+                    <span class="bold">&lt;T&gt;</span> <span class="">newInstance</span><span class="">() {</span><br/>  <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span>
+                    <span class="bold">&lt;T&gt;</span>();<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">Thus, the following alternative is possible:</p>
+                
+                <div class="listing " id="l_none_12382"><pre>Rocket<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> r </span><span class="">=</span><span class=""> Rocket</span><span class="">.</span><span class="">newInstance</span><span class="">();</span><span class=""> </span></pre></div>
+                
+                <p class="standard">From the result type 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;</samp>, the compiler derives the actual type parameter 
+                    <samp class="listingcharacter listingcharacter">String</samp> for the rocket. Although we can’t significantly reduce the effort for writing a simple type like 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                , the code will definitely become shorter for nested data structures. If the rocket needs to store an associative memory that associates a string with a list of numbers, a compact way of writing this is shown in the following example:</p>
+                
+                <div class="listing " id="l_none_12391"><pre>
+                    <a id="p698"/>Rocket<span class="">&lt;</span><span class="">Map</span><span class="">&lt;</span><span class="">String</span><span class="">,</span><span class="">List</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;&gt;&gt;</span><span class=""> r </span><span class="">=</span><span class=""> Rocket</span><span class="">.</span><span class="">newInstance</span><span class="">();</span><span class=""> </span></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.1.7.4">Generic Methods with Explicit Actual Type Parameter*</h4>
+                
+                <p class="standard">In some situations, the compiler can’t infer the correct type from the context by means of type inference. For example, if the argument of the static method 
+                    <samp class="listingcharacter listingcharacter">Arrays.asList(...)</samp>
+                 is an array, then the explicit type argument is necessary because the compiler can’t tell if the array itself is one element of the return list or if the array is the vararg conversion and all elements of the array go into the return list. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_12411"><pre>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list11 </span><span class="">=</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"A"</span><span class="">,</span><span class=""> </span><span class="">"B"</span><span class=""> </span><span class="">}</span><span class=""> </span><span class="">);</span><span class=""><br/></span>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list12 </span><span class="">=</span><span class=""> </span><br/>  Arrays<span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">"A"</span><span class="">,</span><span class=""> </span><span class="">"B"</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // Parameter is defined as vararg</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> list11 </span><span class="">);</span><span class="">  </span><span class=""> // [A, B]</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> list12 </span><span class="">);</span><span class="">  </span><span class=""> // [A, B]</span><span class=""><br/></span>List<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> list21 </span><span class="">=</span><span class=""> Arrays</span><span class="">.</span>
+                    <span class="bold">&lt;<span class="">String</span><span class="">&gt;</span></span><span class="">asList</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">String</span><span class="">[] { </span><span class="">"A"</span><span class="">, </span><span class="">"B"</span><span class=""> } );</span><br/>List&lt;<span class="">String</span><span class="">&gt; list22 = Arrays.</span>
+                    <span class="bold">&lt;<span class="">String</span><span class="">&gt;</span></span><span class="">asList</span><span class="">( </span><span class="">"A"</span><span class="">, </span><span class="">"B"</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( list21 );  </span><span class=""> // [A, B]</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( list22 );  </span><span class=""> // [A, B]</span><span class=""><br/></span>List&lt;<span class="">String</span><span class="">[]&gt; list31 = Arrays.</span>
+                    <span class="bold">&lt;<span class="">String</span><span class="">[]&gt;</span></span><span class="">asList</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">String</span><span class="">[] { </span><span class="">"A"</span><span class="">, </span><span class="">"B"</span><span class=""> } );</span><span class=""><br/></span>// List&lt;String[]&gt; list32 = Arrays.
+                    <span class="bold">&lt;String[]&gt;</span>asList( "A", "B" );<span class=""><br/></span>System.out.<span class="">println</span><span class="">( list31 );  </span><span class=""> // [[Ljava.lang.String;@69b332]</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">First, note that the results for 
+                    <samp class="listingcharacter listingcharacter">list11</samp>, 
+                    <samp class="listingcharacter listingcharacter">list12</samp>, 
+                    <samp class="listingcharacter listingcharacter">list21</samp>, and 
+                    <samp class="listingcharacter listingcharacter">list22</samp> are identical. The compiler automatically converts a vararg as an array and passes the array to the 
+                    <samp class="listingcharacter listingcharacter">asList(...)</samp> method. Therefore, in the bytecode, the calls look the same. For 
+                    <samp class="listingcharacter listingcharacter">list21</samp> and 
+                    <samp class="listingcharacter listingcharacter">list22</samp>, the actual type parameter is explicitly specified in each case, but doing so is not really necessary since the result is like 
+                    <samp class="listingcharacter listingcharacter">list11</samp> and 
+                    <samp class="listingcharacter listingcharacter">list12</samp>, respectively. But the actual type parameter 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 makes it clear that the elements in the array (the vararg arguments) are strings. </p>
+                
+                <p class="standard">Things get really exciting with 
+                    <samp class="listingcharacter listingcharacter">list31</samp>. First, let’s consider the problem: 
+                    <samp class="listingcharacter listingcharacter">new String[]{"A", "B"}</samp> is the argument of a vararg method, which is ambiguous because this array could be the first element of the vararg array automatically built by the compiler (in which case it would be an array within an array). Alternatively, the default internal conversion may apply—the Java compiler interprets the passed array as the vararg conversion. This ambiguity is solved by 
+                    <samp class="listingcharacter listingcharacter">&lt;String[]&gt;</samp> since, in that case, it’s clear that the string array we’ve created must be the only element of a new vararg array. Furthermore, 
+                    <samp class="listingcharacter listingcharacter">Arrays.&lt;String[]&gt; asList(...)</samp> indicates that the type of the array elements is 
+                    <samp class="listingcharacter listingcharacter">String[]</samp>. For this reason, the last variable declaration doesn’t work either because, for 
+                    <samp class="listingcharacter listingcharacter">asList("A", "B")</samp>, the element type is 
+                    <samp class="listingcharacter listingcharacter">String</samp>, but not 
+                    <samp class="listingcharacter listingcharacter">String[]</samp>
+                .</p>
+                
+                <p class="standard">The syntax takes some getting used to, but in practice, explicit specifications are rarely needed.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

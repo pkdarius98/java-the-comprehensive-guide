@@ -1,0 +1,1066 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Introduction to Concurrent Programming" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Introduction to Concurrent Programming" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Introduction to Concurrent Programming</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h17.4">17.4    Enter the Executor</h2>
+        
+        <p class="standard">A thread is always required for the concurrent execution of a 
+            <samp class="listingcharacter listingcharacter">Runnable</samp>. Although the concurrent processing of program code isn’t possible without threads, the two are strongly connected in programming. Thus, ideally, the 
+            <samp class="listingcharacter listingcharacter">Runnable</samp>
+         is somewhat separated from the actual processing thread. Several reasons exist for this suggestion:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">As early as during the creation of a 
+                    <samp class="listingcharacter listingcharacter">Thread</samp> object, the 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp> object must be passed in the 
+                    <samp class="listingcharacter listingcharacter">Thread</samp> constructor. You cannot create the 
+                    <samp class="listingcharacter listingcharacter">Thread</samp> object, then later assign the 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp> object via a setter and then start the thread using 
+                    <samp class="listingcharacter listingcharacter">start()</samp>
+                .</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">If 
+                    <samp class="listingcharacter listingcharacter">start()</samp> is called twice on the 
+                    <samp class="listingcharacter listingcharacter">Thread</samp> object, the second call results in an exception. Thus, a created thread can’t process a 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp> twice by calling 
+                    <samp class="listingcharacter listingcharacter">start()</samp> twice. For this reason, a new 
+                    <samp class="listingcharacter listingcharacter">Thread</samp> object is always needed for a new processing of a 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp>. In other words, an existing thread can’t simply process a new 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp>
+                .</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">The thread starts processing the 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp> program code immediately after the call of 
+                    <samp class="listingcharacter listingcharacter">start()</samp>. The implementation of the 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp>
+                 itself must be changed if the program code shouldn’t be executed immediately, but instead later (at the next day’s show) or repeatedly (always at Christmas).</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">An abstraction that separates the execution of the 
+            <samp class="listingcharacter listingcharacter">Runnable</samp>
+         program code from the technical implementation (such as the threads) is desirable.</p>
+        
+        
+            
+            <h3 class="t3" id="h17.4.1">17.4.1    The Executor Interface</h3>
+            
+            <p class="standard">Instead of binding the 
+                <samp class="listingcharacter listingcharacter">Runnable</samp> directly to a thread and thus to its executor, an abstraction is available for all “processors.” The 
+                <samp class="listingcharacter listingcharacter">Executor</samp>
+                <a class="indexanchor" id="i17_54"/>
+             interface prescribes a method for this task:</p>
+            
+            <div class="listing " id="l_none_17274"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">concurrent</span><span class="">.</span>
+                <span class="bold">Executor</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void execute(Runnable command)</samp><br/>Will be implemented later by classes that can process a 
+                        <samp class="listingcharacter listingcharacter">Runnable</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Anyone who now processes commands via 
+                <samp class="listingcharacter listingcharacter">Runnable</samp> is an 
+                <samp class="listingcharacter listingcharacter">executor</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h17.4.1.1">Concrete Executors</h4>
+                
+                <p class="standard">Two major implementations of this interface are available so far:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">ThreadPoolExecutor</samp>
+                            <a class="indexanchor" id="i17_55"/>: The class creates a collection of threads, the 
+                            <span class="italic">thread pool</span>
+                            <a class="indexanchor" id="i17_56"/>
+                        . Execution requests are taken up by free threads.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p894"/>
+                            ScheduledThreadPoolExecutor</samp>
+                            <a class="indexanchor" id="i17_57"/>: An extension of 
+                            <samp class="listingcharacter listingcharacter">ThreadPoolExecutor</samp>
+                         to include the ability to execute commands at specific times or with specific repetitions.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The two classes have non-trivial constructors, and a utility class simplifies the construction of these special 
+                    <samp class="listingcharacter listingcharacter">Executor</samp>
+                 objects.</p>
+                
+                <div class="listing " id="l_none_17284"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">concurrent</span><span class="">.</span>
+                    <span class="bold">Executors</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static ExecutorService newCachedThreadPool()</samp><br/>Returns a thread pool with growing size.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static ExecutorService newFixedThreadPool(int nThreads)</samp><br/>Returns a thread pool with a maximum of 
+                            <samp class="listingcharacter listingcharacter">nThreads</samp>. More on this topic follows in 
+                            <span class="crossreference "><a href="17_004.html#h17.4.2">Section 17.4.2</a></span>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static ScheduledExecutorService newSingleThreadScheduledExecutor()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static ScheduledExecutorService newScheduledThreadPool(int corePoolSize)</samp><br/>Return special 
+                            <samp class="listingcharacter listingcharacter">Executor</samp> objects to set repetitions. More on this topic follows in 
+                            <span class="crossreference "><a href="17_004.html#h17.4.7">Section 17.4.7</a></span>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Over 20 methods are available in 
+                    <samp class="listingcharacter listingcharacter">Executors</samp>
+                . Our list shows only highlights some that will be relevant in the following sections.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f17.5.html" id="f17.5"><img alt="The ExecutorService Interface Extends Executor" id="img-f17.5" src="bilderklein/klein17_005.png"/></a></div>
+                
+                <p class="caption "><b>Figure 17.5</b>    
+            The ExecutorService Interface Extends Executor</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">
+                        <a id="p895"/>
+                    ExecutorService</samp>
+                    <a class="indexanchor" id="i17_58"/> is an interface that extends 
+                    <samp class="listingcharacter listingcharacter">Executor</samp>
+                 (see Figure 1.5 with UML diagram). Among other things, operations that shut down the executors can be found here. In the case of thread pools, this interface is useful because otherwise the threads wouldn’t be terminated because they’re waiting for new tasks.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">Of course, you can also write your own “executors,” for example, one that lets the Swing GUI thread execute a 
+                        <samp class="listingcharacter listingcharacter">Runnable</samp>
+                    , as in the following example:</p>
+                    
+                    <div class="listing " id="l_none_17289"><pre>Executor executor <span class="">=</span><span class=""> runnable </span><span class="">-&gt;</span><span class=""> SwingUtilities</span><span class="">.</span><span class="">invokeLater</span><span class="">(</span><span class=""> runnable </span><span class="">)</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard">Alternatively, you can write something shorter:</p>
+                    
+                    <div class="listing  last_item" id="l_none_17313"><pre>Executor executor <span class="">=</span><span class=""> SwingUtilities</span><span class="">::</span><span class="">invokeLater;</span></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.4.2">17.4.2    Happy as a Group: The Thread Pools
+                <a class="indexanchor" id="i17_59"/>
+            </h3>
+            
+            <p class="standard">Time is required to build threads, for the operating system to manage them, and then to tear them down again and take them out of the internal tables. For example, if a server’s goal is to answer a request directly without delay, the time to set up a thread can be disruptive. Also associated with a thread are resources, such as stack memory, that must be reserved by the operating system.</p>
+            
+            <p class="standard">One optimization is to build threads and keep them alive in the pool, which can be achieved in three steps:</p>
+            
+            <ol>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If a request arrives to process a 
+                        <samp class="listingcharacter listingcharacter">Runnable</samp>
+                    , a free thread is taken from the pool.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The thread processes the 
+                        <samp class="listingcharacter listingcharacter">run()</samp> method of the 
+                        <samp class="listingcharacter listingcharacter">Runnable</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">After processing, the thread puts itself back into the pool.</p>
+                
+                </li>
+            
+            </ol>
+            
+            <p class="standard">Thread pools have an additional advantage in that they can limit workloads and parallel processing. If a thread pool manages only a fixed number of threads and all threads are in progress, the system can reject new requests or force them to wait. This feature effectively prevents denial-of-service attacks. For example, with a web server, if every incoming connection opens a thread, a server can easily be bombarded with requests.</p>
+            
+            
+                
+                <h4 class="t4" id="h17.4.2.1">Executors.newCachedThreadPool(…)</h4>
+                
+                <p class="standard">An important static method of the 
+                    <samp class="listingcharacter listingcharacter">Executors</samp> class is 
+                    <samp class="listingcharacter listingcharacter">newCachedThreadPool(...)</samp>. Behind this method is a 
+                    <samp class="listingcharacter listingcharacter">ThreadPoolExecutor</samp> constructor call. The result is an 
+                    <samp class="listingcharacter listingcharacter">ExecutorService</samp> object, that is, an implementation of the 
+                    <samp class="listingcharacter listingcharacter">Executor</samp> interface with the 
+                    <samp class="listingcharacter listingcharacter">execute(Runnable)</samp>
+                 method. Consider the following example:</p>
+                
+                <div class="listing " id="l17.6"><pre>Runnable r1 <span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"1.1 "</span><span class=""> </span><span class="">+</span><span class=""> Thread</span><span class="">.</span><span class="">currentThread</span><span class="">().</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"1.2 "</span><span class=""> </span><span class="">+</span><span class=""> Thread</span><span class="">.</span><span class="">currentThread</span><span class="">().</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">};</span><span class=""><br/></span><br/>
+                    <a id="p896"/>Runnable r2 <span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"2.1 "</span><span class=""> </span><span class="">+</span><span class=""> Thread</span><span class="">.</span><span class="">currentThread</span><span class="">().</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"2.2 "</span><span class=""> </span><span class="">+</span><span class=""> Thread</span><span class="">.</span><span class="">currentThread</span><span class="">().</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">};</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 17.6</b>    
+            src/main/java/com/tutego/insel/thread/concurrent/ThreadPoolDemo.java, main(), Part 1</p>
+                
+                <p class="standard">Now, the thread pool can be obtained as 
+                    <samp class="listingcharacter listingcharacter">ExecutorService</samp>, and the two command objects can be executed as 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp> via 
+                    <samp class="listingcharacter listingcharacter">execute(...)</samp>
+                .</p>
+                
+                <div class="listing " id="l17.7"><pre>ExecutorService executor <span class="">=</span><span class=""> Executors</span><span class="">.</span><span class="">newCachedThreadPool</span><span class="">();</span><span class=""><br/></span><br/>executor<span class="">.</span><span class="">execute</span><span class="">(</span><span class=""> r1 </span><span class="">);</span><span class=""><br/></span>executor<span class="">.</span><span class="">execute</span><span class="">(</span><span class=""> r2 </span><span class="">);</span><span class=""><br/></span><br/>Thread<span class="">.</span><span class="">sleep</span><span class="">(</span><span class=""> </span><span class="">500</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>executor<span class="">.</span><span class="">execute</span><span class="">(</span><span class=""> r1 </span><span class="">);</span><span class=""><br/></span>executor<span class="">.</span><span class="">execute</span><span class="">(</span><span class=""> r2 </span><span class="">);</span><span class=""><br/></span><br/>executor<span class="">.</span><span class="">shutdown</span><span class="">();</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 17.7</b>    
+            src/main/java/com/tutego/insel/thread/concurrent/ThreadPoolDemo.java, main(), Part 2</p>
+                
+                <p class="standard">The following output indicates the good reuse of the threads:</p>
+                
+                <div class="listing " id="l_none_17339"><pre>1.1 pool-1-thread-1<br/>2.1 pool-1-thread-2<br/>2.2 pool-1-thread-2<br/>1.2 pool-1-thread-1<br/>2.1 pool-1-thread-2<br/>2.2 pool-1-thread-2<br/>1.1 pool-1-thread-1<br/>1.2 pool-1-thread-1 </pre></div>
+                
+                <p class="standard">The name of the thread indicates that two threads from a thread pool named 
+                    <samp class="listingcharacter listingcharacter">pool-1</samp> are used in our case: 
+                    <samp class="listingcharacter listingcharacter">thread-1</samp> and 
+                    <samp class="listingcharacter listingcharacter">thread-2</samp>. After executing the first two jobs (
+                    <samp class="listingcharacter listingcharacter">r1</samp> and 
+                    <samp class="listingcharacter listingcharacter">r2</samp>) and after the short wait, the threads 
+                    <samp class="listingcharacter listingcharacter">pool-1-thread-1</samp> and 
+                    <samp class="listingcharacter listingcharacter">pool-1-thread-2</samp> are free again, so 
+                    <samp class="listingcharacter listingcharacter">r1</samp> and 
+                    <samp class="listingcharacter listingcharacter">r2</samp>
+                 are processed by these two threads again. The following three operations to control the pool end can be useful:</p>
+                
+                <div class="listing " id="l_none_17344"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">concurrent</span><span class="">.</span>
+                    <span class="bold">ExecutorService</span><br/><span class="">extends</span><span class=""> Executor </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p897"/>
+                            void shutdown()</samp><br/>Shuts down the thread pool. Running threads aren’t terminated, but new requests aren’t accepted.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean isShutdown()</samp><br/>Determines if the 
+                            <samp class="listingcharacter listingcharacter">Executor</samp>
+                         been shut down.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">List&lt;Runnable&gt; shutdownNow()</samp><br/>Currently running 
+                            <samp class="listingcharacter listingcharacter">Runnables</samp> are encouraged to stop. The return is a list of 
+                            <samp class="listingcharacter listingcharacter">Runnables</samp>
+                         to be terminated.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.4.3">17.4.3    Threads with return via Callable</h3>
+            
+            <p class="standard">The concurrent thread can only return results via detours. In a separate class that extends 
+                <samp class="listingcharacter listingcharacter">Runnable</samp>
+            , for example, a data structure can be passed in the constructor into which the thread places a calculated result. The data structure can then be examined by the caller for changes.</p>
+            
+            <p class="standard">The Java library provides yet another option because, while 
+                <samp class="listingcharacter listingcharacter">run()</samp> in 
+                <samp class="listingcharacter listingcharacter">Runnable</samp> has 
+                <samp class="listingcharacter listingcharacter">void</samp> as return, 
+                <samp class="listingcharacter listingcharacter">call()</samp> transmits a return to another interface named 
+                <samp class="listingcharacter listingcharacter">Callable</samp>
+                <a class="indexanchor" id="i17_60"/>, as shown in 
+                <span class="crossreference "><a href="17_004.html#f17.6">Figure 17.6</a></span>
+            , and can also throw an exception. Let’s look at some examples:</p>
+            
+            <table class="standardtable" id="t17.3">
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item">
+                                <samp class="listingcharacter listingcharacter">interface java.lang.<br/></samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Runnable</samp>
+                                </span>
+                            </p>
+                            
+                            <ul>
+                                
+                                <li>
+                                    
+                                    <p class="standard first-item last-item"><samp class="listingcharacter listingcharacter">void run()</samp><br/>This method contains the program code to be executed concurrently.</p>
+                                
+                                </li>
+                            
+                            </ul>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item">
+                                <samp class="listingcharacter listingcharacter">interface java.util.concurrent.<br/></samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Callable&lt;V&gt;</samp>
+                                </span>
+                            </p>
+                            
+                            <ul>
+                                
+                                <li>
+                                    
+                                    <p class="standard first-item last-item"><samp class="listingcharacter listingcharacter">V call() throws Exception</samp><br/>This method contains the program code to be executed concurrently and returns a type <samp class="listingcharacter listingcharacter">V</samp> return.</p>
+                                
+                                </li>
+                            
+                            </ul>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 17.3</b>    
+            Methods in Runnable and Callable</p>
+            
+            <div class="imagebox figure-type"><a href="img-f17.6.html" id="f17.6"><img alt="The Simple Interface Callable with an Operation" id="img-f17.6" src="bilderklein/klein17_006.png"/></a></div>
+            
+            <p class="caption "><b>Figure 17.6</b>    
+            The Simple Interface Callable with an Operation</p>
+            
+            
+                
+                <h4 class="t4" id="h17.4.3.1">Example: Sorting Fields via Callable</h4>
+                
+                <p class="standard">Let’s implement an example that sorts a field. The sorting should be performed by a 
+                    <samp class="listingcharacter listingcharacter">Callable</samp> in the background. When the operation is finished, the reference to the sorted field should be returned. Sorting is performed as usual by 
+                    <samp class="listingcharacter listingcharacter">Arrays.sort(...)</samp>
+                .</p>
+                
+                <div class="listing " id="l17.8"><pre><span class="">class</span><span class=""> SorterCallable </span><span class="">implements</span><span class=""> </span>
+                    <span class="bold"><span class="">Callable&lt;</span><span class="">byte</span><span class="">[]&gt;</span></span> {<br/>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">byte</span><span class="">[] b;</span><br/><br/>
+                    <a id="p898"/>  <span class="">SorterCallable</span><span class="">( </span><span class="">byte</span><span class="">[] b ) {</span><br/>    <span class="">this</span><span class="">.b = b;</span><br/>  }<br/><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">byte</span><span class="">[] </span><span class="">call</span><span class="">()</span></span> {<br/>    Arrays.<span class="">sort</span><span class="">( b );</span><br/>    <span class="">return</span><span class=""> b;</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 17.8</b>    
+            src/main/java/com/tutego/insel/thread/concurrent/SorterCallable.java, SorterCallable</p>
+                
+                <p class="standard">Of course, creating the 
+                    <samp class="listingcharacter listingcharacter">Callable</samp> object and calling 
+                    <samp class="listingcharacter listingcharacter">call()</samp> yourself doesn’t make much sense because a thread is supposed to do the job in the background. For this purpose, however, you don’t need to use the 
+                    <samp class="listingcharacter listingcharacter">Thread</samp> class itself, but instead, you can use an 
+                    <samp class="listingcharacter listingcharacter">ExecutorService</samp>, available via 
+                    <samp class="listingcharacter listingcharacter">Executors. newCachedThreadPool()</samp>
+                . Consider the following example:</p>
+                
+                <div class="listing " id="l17.9"><pre><span class="">byte</span><span class="">[]</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">byte</span><span class="">[</span><span class=""> </span><span class="">4000000</span><span class=""> </span><span class="">];</span><span class=""><br/></span><span class="">new</span><span class=""> </span><span class="">Random</span><span class="">().</span><span class="">nextBytes</span><span class="">(</span><span class=""> b </span><span class="">);</span><span class=""><br/></span>
+                    <span class="bold"><span class="">Callable&lt;</span><span class="">byte</span><span class="">[]&gt; c</span></span> = <span class="">new</span><span class=""> </span><span class="">SorterCallable</span><span class="">( b );</span><br/>ExecutorService executor = Executors.<span class="">newCachedThreadPool</span><span class="">();</span><br/>Future&lt;<span class="">byte</span><span class="">[]&gt; result = </span>
+                    <span class="bold">executor.<span class="">submit</span><span class="">( c )</span></span>; <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 17.9</b>    
+            src/main/java/com/tutego/insel/thread/concurrent/CallableGetDemo.java, main() (Snippet)</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">ExecutorService</samp> provides a 
+                    <samp class="listingcharacter listingcharacter">submit(Callable)</samp> method that accepts our 
+                    <samp class="listingcharacter listingcharacter">Callable</samp> and selects a thread for processing. The return is a mysterious 
+                    <samp class="listingcharacter listingcharacter">Future</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h17.4.3.2">ExecutorService Executes: Callable and Runnable with Future</h4>
+                
+                <p class="standard">For reasons of symmetry, two 
+                    <samp class="listingcharacter listingcharacter">submit(...)</samp> methods exist in addition to 
+                    <samp class="listingcharacter listingcharacter">submit(Callable)</samp>, which also accept a 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp>
+                . Together, they add up to the following methods:</p>
+                
+                <div class="listing " id="l_none_17376"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">concurrent</span><span class="">.</span>
+                    <span class="bold">ExecutorService<br/></span><span class="">extends</span><span class=""> Executor </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task)</samp><br/>
+                            <samp class="listingcharacter listingcharacter">ExecutorService</samp>
+                         is supposed to process the task and give access to the result via the return.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Future&lt;?&gt; submit(Runnable task)</samp><br/>
+                            <samp class="listingcharacter listingcharacter">ExecutorService</samp> processes the 
+                            <samp class="listingcharacter listingcharacter">Runnable</samp> and enables you to query, via the 
+                            <samp class="listingcharacter listingcharacter">Future</samp> object, whether the output has already been processed or not. 
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p899"/>
+                            get()</samp> returns 
+                            <samp class="listingcharacter listingcharacter">null</samp>
+                         at the end.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">&lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result)</samp><br/>Like 
+                            <samp class="listingcharacter listingcharacter">submit(task)</samp> but the 
+                            <samp class="listingcharacter listingcharacter">get(...)</samp> query over 
+                            <samp class="listingcharacter listingcharacter">Future</samp> returns 
+                            <samp class="listingcharacter listingcharacter">result</samp>
+                        .</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">To convert a 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp> into a 
+                    <samp class="listingcharacter listingcharacter">Callable</samp>, some auxiliary methods in the 
+                    <samp class="listingcharacter listingcharacter">Executors</samp> class can be used. These methods include the static method 
+                    <samp class="listingcharacter listingcharacter">callable(Runnable task)</samp>, which returns a 
+                    <samp class="listingcharacter listingcharacter">Callable&lt;Object&gt;</samp>, and the method 
+                    <samp class="listingcharacter listingcharacter">callable(Runnable task, T result)</samp>, which returns a 
+                    <samp class="listingcharacter listingcharacter">Callable&lt;T&gt;</samp>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.4.4">17.4.4    Memories of the Future: The Future Return</h3>
+            
+            <p class="standard">Because the result arrives asynchronously, 
+                <samp class="listingcharacter listingcharacter">submit(Callable)</samp> returns a 
+                <samp class="listingcharacter listingcharacter">Future</samp>
+                <a class="indexanchor" id="i17_61"/> object that you can use to determine whether the result is already available or if the process still must wait. Actually, after a 
+                <samp class="listingcharacter listingcharacter">submit(...)</samp> is the best time to trigger other concurrent tasks, and then you can later collect the result using 
+                <samp class="listingcharacter listingcharacter">get(...)</samp>. The programming pattern is always the same: first, pass work to 
+                <samp class="listingcharacter listingcharacter">ExecutorService</samp>, then do something else and come back later. However, since in our example we have nothing to do in the meantime but sort a byte field, we’ll drop the 
+                <samp class="listingcharacter listingcharacter">Callable</samp> and immediately wait for the sorted field via 
+                <samp class="listingcharacter listingcharacter">get()</samp>
+            , as shown in the following example:</p>
+            
+            <div class="listing " id="l17.10"><pre><span class="">byte</span><span class="">[]</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">byte</span><span class="">[</span><span class=""> </span><span class="">4000000</span><span class=""> </span><span class="">];</span><span class=""><br/></span><span class="">new</span><span class=""> </span><span class="">Random</span><span class="">().</span><span class="">nextBytes</span><span class="">(</span><span class=""> b </span><span class="">);</span><span class=""><br/></span>Callable<span class="">&lt;</span><span class="">byte</span><span class="">[]&gt;</span><span class=""> c </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">SorterCallable</span><span class="">(</span><span class=""> b </span><span class="">);</span><span class=""><br/></span>ExecutorService executor <span class="">=</span><span class=""> Executors</span><span class="">.</span><span class="">newCachedThreadPool</span><span class="">();</span><span class=""><br/></span>Future<span class="">&lt;</span><span class="">byte</span><span class="">[]&gt;</span><span class=""> </span>
+                <span class="bold"><span class="">result</span></span> = 
+                <span class="bold">executor.<span class="">submit</span><span class="">( c )</span></span>;<span class=""><br/></span>// Now other things can be done first, and later ...<span class=""><br/></span><span class="">try</span><span class=""> {</span><br/>  <span class="">byte</span><span class="">[] bs = </span>
+                <span class="bold">result.<span class="">get</span><span class="">()</span></span>;<br/>  System.out.<span class="">printf</span><span class="">( </span><span class="">"%d, %d, %d%n"</span><span class="">,</span><br/>                     bs[<span class="">0</span><span class="">], bs[</span><span class="">1</span><span class="">], bs[bs.length - </span><span class="">1</span><span class="">] );</span><span class=""> // -128, -128, 127</span><span class=""><br/></span>}<br/><span class="">catch</span><span class=""> ( InterruptedException | ExecutionException e ) {</span><br/>  e.<span class="">printStackTrace</span><span class="">();</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 17.10</b>    
+            src/main/java/com/tutego/insel/thread/concurrent/CallableGetDemo.java, main()</p>
+            
+            <p class="standard">Since the field is sorted and the value range of a byte is small (–128 to +127), with 4,000,000 values, the smallest element of the random numbers is –128, and the largest, 127.</p>
+            
+            <p class="standard">
+                <a id="p900"/>Let’s look at the operations of the 
+                <samp class="listingcharacter listingcharacter">Future</samp>
+             interface in detail next:</p>
+            
+            <div class="listing " id="l_none_17390"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">concurrent</span><span class="">.</span>
+                <span class="bold">Future&lt;V&gt;</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">V get() throws InterruptedException, ExecutionException</samp><br/>Waits for the result and then returns it. This method blocks processing until the result is available. Exceptions may occur, for instance, 
+                        <samp class="listingcharacter listingcharacter">CancellationException</samp> if the calculation was canceled, 
+                        <samp class="listingcharacter listingcharacter">ExecutionException</samp> if the calculation threw an exception, or 
+                        <samp class="listingcharacter listingcharacter">InterruptedException</samp>
+                     if the current thread was interrupted while waiting.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">V get(long timeout, TimeUnit unit)<br/>throws InterruptedException, ExecutionException, TimeoutException</samp><br/>Waits a given time for the result and then returns the result. If a result doesn’t arrive in the given duration, a 
+                        <samp class="listingcharacter listingcharacter">TimeoutException</samp>
+                     will occur.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean isDone()</samp><br/>Determines if the work has finished or was canceled.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean cancel(boolean mayInterruptIfRunning)</samp><br/>Aborts the job.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean isCancelled()</samp><br/>Determines if the job stopped before the end.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h17.4.4.1">Waiting with Time Limit</h4>
+                
+                <p class="standard">Potentially infinite blocking isn’t always desirable. For this case, the overloaded method of 
+                    <samp class="listingcharacter listingcharacter">get(...)</samp>
+                 permits a parameterization with a wait time and time unit.</p>
+                
+                <div class="listing " id="l17.11"><pre><span class="">byte</span><span class="">[]</span><span class=""> bs </span><span class="">=</span><span class=""> result</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> TimeUnit</span><span class="">.</span><span class="">SECONDS </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 17.11</b>    
+            src/main/java/com/tutego/insel/thread/concurrent/CallableGetTimeUnitDemo.java (Snippet)</p>
+                
+                <p class="standard">If the result isn’t available within 2 seconds, the method will throw a 
+                    <samp class="listingcharacter listingcharacter">TimeoutException</samp>
+                 with, for instance, the following message:</p>
+                
+                <div class="listing " id="l_none_17414"><pre>java.util.concurrent.TimeoutException<br/>  at java.util.concurrent.FutureTask$Sync.innerGet(FutureTask.java:228)<br/>  at java.util.concurrent.FutureTask.get(FutureTask.java:91)<br/>  at com.tutego.insel.thread.concurrent.CallableDemo.main(CallableDemo.java:27) </pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Generally, enough time exists between sending the task and picking up the result so that no blocking wait situation occurs when picking the task up, which is perfect. What’s unfavorable is if 
+                        <samp class="listingcharacter listingcharacter">submit(...)</samp> is almost immediately followed by 
+                        <samp class="listingcharacter listingcharacter">get(...)</samp>, but the result isn’t yet available because then 
+                        <samp class="listingcharacter listingcharacter">Future</samp> can’t help much. An interesting 
+                        <a id="p901"/>solution is provided by an implementation of 
+                        <samp class="listingcharacter listingcharacter">Future</samp> (the
+                        <samp class="listingcharacter listingcharacter"> CompletableFuture</samp>
+                     implementation), which puts tasks in a sequence. The idea is simple: To avoid wait times, when the result is calculated by one step, that result is directly forwarded to the next processing step.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h17.4.4.2">Wrapping Callable or Runnable with FutureTask</h4>
+                
+                <p class="standard">Taking a closer look at the stack call we just made, the type 
+                    <samp class="listingcharacter listingcharacter">java.util.concurrent.FutureTask</samp>
+                    <a class="indexanchor" id="i17_62"/> catches our eye. The class implements 
+                    <samp class="listingcharacter listingcharacter">Future</samp>, 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp>, and 
+                    <samp class="listingcharacter listingcharacter">RunnableFuture</samp> and is used internally by the Java library when we use 
+                    <samp class="listingcharacter listingcharacter">submit(...)</samp> to transfer something to the 
+                    <samp class="listingcharacter listingcharacter">ExecutorService</samp>. In addition, we can use the type directly as a wrapper around a 
+                    <samp class="listingcharacter listingcharacter">Callable</samp> or 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp> because some useful callback methods can be overridden, such as 
+                    <samp class="listingcharacter listingcharacter">done()</samp>
+                 when a calculation is done.</p>
+                
+                <p class="standard">Let’s consider an example: A 
+                    <samp class="listingcharacter listingcharacter">Callable</samp> returns the name of the user. A 
+                    <samp class="listingcharacter listingcharacter">FutureTask</samp> wraps itself around this 
+                    <samp class="listingcharacter listingcharacter">Callable</samp>, learns when the 
+                    <samp class="listingcharacter listingcharacter">Callable</samp>
+                 is done, then modifies the user name, and also outputs a message.</p>
+                
+                <div class="listing " id="l17.12"><pre>Callable<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> user name </span><span class="">=</span><span class=""> </span><span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">getProperty</span><span class="">(</span><span class=""> </span><span class="">"user.name"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>
+                    <span class="bold"><span class="">FutureTask&lt;</span><span class="">String</span><span class="">&gt; wrappedUser name = </span><span class="">new</span><span class=""> FutureTask&lt;&gt;( user name )</span></span> {<br/>  <span class="">@Override</span><span class=""> </span><span class="">protected</span><span class=""> </span>
+                    <span class="bold"><span class="">void</span><span class=""> </span><span class="">done</span><span class="">()</span></span> {<br/>    <span class="">try</span><span class=""> {</span><br/>      System.out.<span class="">printf</span><span class="">( </span><span class="">"done: isDone=%s, isCancelled=%s%n"</span><span class="">, </span>
+                    <span class="bold"><span class="">isDone</span><span class="">()</span></span>, 
+                    <span class="bold"><span class="">isCancelled</span><span class="">()</span></span> );<br/>      System.out.<span class="">println</span><span class="">( </span><span class="">"done: get="</span><span class=""> + </span>
+                    <span class="bold"><span class="">get</span><span class="">()</span></span> );<br/>    }<br/>    <span class="">catch</span><span class=""> ( InterruptedException | ExecutionException e ) {</span><span class=""> /* Ignore */</span><span class=""> }</span><br/>  }<br/>  <span class="">@Override</span><span class=""> </span><span class="">protected</span><span class=""> </span>
+                    <span class="bold"><span class="">void</span><span class=""> </span><span class="">set</span><span class="">( </span><span class="">String</span><span class=""> v )</span></span> {<br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"set: "</span><span class=""> + v );</span><br/>    
+                    <span class="bold"><span class="">super</span><span class="">.</span><span class="">set</span></span><span class="">( v.</span><span class="">toUpperCase</span><span class="">() );</span><br/>  }<br/>};<br/>ExecutorService scheduler = Executors.<span class="">newCachedThreadPool</span><span class="">();</span><br/>scheduler.<span class="">submit</span><span class="">( wrappedUser name );</span><br/>System.out.<span class="">println</span><span class="">( </span><span class="">"main: "</span><span class=""> + </span>
+                    <span class="bold">wrappedUser name.<span class="">get</span><span class="">()</span></span> );<br/>scheduler.<span class="">shutdown</span><span class="">(); </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 17.12</b>    
+            src/main/java/com/tutego/insel/thread/concurrent/WrappedUser name.java (Snippet)</p>
+                
+                <p class="standard">What’s important about the usage is not to evaluate the return from the 
+                    <samp class="listingcharacter listingcharacter">submit(...)</samp>, which we normally do, but instead to query the passed 
+                    <samp class="listingcharacter listingcharacter">FutureTask</samp>
+                .</p>
+                
+                <p class="standard">
+                    <a id="p902"/>
+                The outputs of the program are often a bit jumbled, as shown in the following example:</p>
+                
+                <div class="listing " id="l_none_17442"><pre>set: Christian<br/>done: isDone=true, isCancelled=false<br/>done: get=CHRISTIAN<br/>main: CHRISTIAN </pre></div>
+                
+                <p class="standard">The order in the calls always follows a particular sequence: The 
+                    <samp class="listingcharacter listingcharacter">FutureTask</samp> detects the completion of the 
+                    <samp class="listingcharacter listingcharacter">Callable</samp> and calls 
+                    <samp class="listingcharacter listingcharacter">set(...)</samp>. Then, 
+                    <samp class="listingcharacter listingcharacter">done()</samp>
+                 is executed.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.4.5">17.4.5    Processing Multiple Callable Objects
+                <a class="indexanchor" id="i17_63"/>
+            </h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">submit(Callable)</samp> method of the 
+                <samp class="listingcharacter listingcharacter">ExecutorService</samp> accepts and executes exactly one 
+                <samp class="listingcharacter listingcharacter">Callable</samp>
+            :</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Of course, if an application needs to process multiple 
+                <samp class="listingcharacter listingcharacter">Callable</samp> objects, multiple calls of 
+                <samp class="listingcharacter listingcharacter">submit(Callable)</samp> may be required. But an 
+                <samp class="listingcharacter listingcharacter">ExecutorService</samp> can process multiple 
+                <samp class="listingcharacter listingcharacter">Callable</samp>
+             objects by itself. Two alternative variants are available:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">All 
+                        <samp class="listingcharacter listingcharacter">Callable</samp> objects in a list are executed, and the result is a list of 
+                        <samp class="listingcharacter listingcharacter">Future</samp>
+                     objects.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">All 
+                        <samp class="listingcharacter listingcharacter">Callable</samp>
+                     objects in a list will be executed, but the first one to finish will return the result.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">At base are two methods, but since they are also given time constraints, four methods in total can be used:</p>
+            
+            <div class="listing " id="l_none_17462"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">concurrent</span><span class="">.</span>
+                <span class="bold">ExecutorService</span><br/><span class="">extends</span><span class=""> Executor </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks)<br/>throws InterruptedException</samp><br/>Performs all tasks and returns a list of 
+                        <samp class="listingcharacter listingcharacter">Future</samp>
+                     objects representing the results.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;T&gt; List&lt;Future&lt;T&gt;&gt; invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,<br/>long timeout, TimeUnit unit) throws InterruptedException</samp><br/>Executes all tasks and will return the results as a list of 
+                        <samp class="listingcharacter listingcharacter">Future</samp> objects as long as the 
+                        <samp class="listingcharacter listingcharacter">timeout</samp>
+                     time isn’t exceeded in the given time unit.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks)<br/>throws InterruptedException, ExecutionException</samp><br/>Executes all tasks but returns the result of an executor that finishes first. Thus, 
+                        <samp class="listingcharacter listingcharacter">get(...)</samp>
+                     will never have to wait.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;T&gt; T invokeAny(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,long timeout, TimeUnit unit)<br/>
+                            <a id="p903"/>
+                        throws InterruptedException, ExecutionException, TimeoutException</samp><br/>Performs all tasks but is valid only for a limited time. The first result of a 
+                        <samp class="listingcharacter listingcharacter">Callable</samp> object that finishes in time returns 
+                        <samp class="listingcharacter listingcharacter">invokeAny(...)</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">The 
+                    <samp class="listingcharacter listingcharacter">get(long timeout, TimeUnit unit)</samp> method of 
+                    <samp class="listingcharacter listingcharacter">Future</samp> won’t send an interrupt to the thread if it fails to produce a result in time. In contrast, one advantage of 
+                    <samp class="listingcharacter listingcharacter">*Any(..., TimeUnit)</samp>
+                 methods is that they trigger an interrupt.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.4.6">17.4.6    CompletionService and ExecutorCompletionService</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">invokeAll(...)</samp> methods from the 
+                <samp class="listingcharacter listingcharacter">ExecutorService</samp> are useful for submitting multiple tasks concurrently and collecting the results later. However, the return is of type 
+                <samp class="listingcharacter listingcharacter">List&lt;Future&lt;T&gt;&gt;</samp>, and you won’t be notified when a result is available. You could run the list over and over again and ask each 
+                <samp class="listingcharacter listingcharacter">Future</samp> object if it’s done via 
+                <samp class="listingcharacter listingcharacter">isDone()</samp>
+            , but this approach isn’t an ideal solution.</p>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">java.util.concurrent.CompletionService</samp>
+                <a class="indexanchor" id="i17_64"/> is another Java interface (which doesn’t extend any base type) that you can use to make a 
+                <samp class="listingcharacter listingcharacter">Callable</samp> or 
+                <samp class="listingcharacter listingcharacter">Runnable</samp> work and later sequentially collect the results that have been completed. The Java library contains an implementation of the interface, 
+                <samp class="listingcharacter listingcharacter">ExecutorCompletionService</samp>
+                <a class="indexanchor" id="i17_65"/>
+            , which internally collects the completed results in a queue, and you can query the queue. Let’s look at this interface through an example:</p>
+            
+            <div class="listing " id="l17.13"><pre>ExecutorService executor <span class="">=</span><span class=""> Executors</span><span class="">.</span><span class="">newCachedThreadPool</span><span class="">();</span><span class=""><br/></span>
+                <span class="bold"><span class="">CompletionService&lt;Integer&gt; completionService =</span><br/>  <span class="">new</span><span class=""> ExecutorCompletionService&lt;&gt;( executor )</span></span>;<br/>List.<span class="">of</span><span class="">( </span><span class="">4</span><span class="">, </span><span class="">3</span><span class="">, </span><span class="">2</span><span class="">, </span><span class="">1</span><span class=""> ).</span><span class="">forEach</span><span class="">( duration -&gt; </span>
+                <span class="bold">completionService.<span class="">submit</span></span><span class="">( () -&gt; {</span><br/>  TimeUnit.SECONDS.<span class="">sleep</span><span class="">( duration );</span><br/>  <span class="">return</span><span class=""> duration;</span><br/>} ) );<br/> <br/><span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> i = </span><span class="">0</span><span class="">; i &lt; </span><span class="">4</span><span class="">; i++ ) {</span><br/>  <span class="">try</span><span class=""> {</span><br/>    System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">completionService.<span class="">take</span><span class="">()</span></span>.<span class="">get</span><span class="">() );</span><br/>  }<br/>  <span class="">catch</span><span class=""> ( InterruptedException | ExecutionException e ) {</span><br/>    e.<span class="">printStackTrace</span><span class="">();</span><br/>  }<br/>}<br/> <br/>executor.<span class="">shutdown</span><span class="">(); </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 17.13</b>    
+            src/main/java/com/tutego/insel/thread/concurrent/ExecutorCompletionServiceDemo.java (Snippet)</p>
+            
+            <p class="standard">
+                <a id="p904"/>The 
+                <samp class="listingcharacter listingcharacter">ExecutorCompletionService</samp> type expects an executor in the constructor to execute the code. For our example, we’ll use a thread pool. 
+                <samp class="listingcharacter listingcharacter">CompletionService</samp> has two 
+                <samp class="listingcharacter listingcharacter">submit(...)</samp>
+             methods:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Future&lt;V&gt; submit(Runnable task, V result)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Future&lt;V&gt; submit(Callable&lt;V&gt; task)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Four 
+                <samp class="listingcharacter listingcharacter">Callable</samp> instances are sent that wait 4, 3, 2, and 1 seconds and return their wait times at the end. Of course, the first thing to finish is the 
+                <samp class="listingcharacter listingcharacter">Callable</samp>
+             with return 1, then return 2, and so on.</p>
+            
+            <p class="standard">Our program isn’t interested in the returns because we’re using the 
+                <samp class="listingcharacter listingcharacter">take()</samp> method. In total, 
+                <samp class="listingcharacter listingcharacter">CompletionService</samp>
+             has three removal methods:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Future&lt;V&gt; take()</samp><br/>Returns the result from the first completed task and removes it from the internal queue. If no result is available, the method will wait.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Future&lt;V&gt; poll()</samp><br/>Returns the result from the first completed task and removes it from the internal queue. If no result is available, 
+                        <samp class="listingcharacter listingcharacter">poll()</samp> won’t wait but will instead return 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Future&lt;V&gt; poll (long timeout, TimeUnit unit)</samp><br/>If 
+                        <samp class="listingcharacter listingcharacter">take()</samp> waits for a result, but one doesn’t appear after the 
+                        <samp class="listingcharacter listingcharacter">timeout</samp> expires, the method will return 
+                        <samp class="listingcharacter listingcharacter">null</samp>, much like 
+                        <samp class="listingcharacter listingcharacter">poll()</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">What the interface lacks is a method that returns the remaining number. Therefore, we’ll need to introduce a counter as an extra variable in our code.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.4.7">17.4.7    ScheduledExecutorService: Repetitive Tasks and Time Controls</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">ScheduledThreadPoolExecutor</samp> class
+                <a class="indexanchor" id="i17_66"/> is another class besides 
+                <samp class="listingcharacter listingcharacter">ThreadPoolExecutor</samp> that implements the 
+                <samp class="listingcharacter listingcharacter">Executor</samp> and 
+                <samp class="listingcharacter listingcharacter">ExecutorService</samp> interfaces. However, the important interface also implemented by this class is 
+                <samp class="listingcharacter listingcharacter">ScheduledExecutorService</samp>
+                <a class="indexanchor" id="i17_67"/>, a direct subtype of 
+                <samp class="listingcharacter listingcharacter">ExecutorService</samp>. Several 
+                <samp class="listingcharacter listingcharacter">schedule*(...)</samp> operations are declared in this class, which can execute a 
+                <samp class="listingcharacter listingcharacter">Runnable</samp> or 
+                <samp class="listingcharacter listingcharacter">Callable</samp> at specific times and in repetition. (Although something similar exists with 
+                <samp class="listingcharacter listingcharacter">java.util.Timer</samp>, the 
+                <samp class="listingcharacter listingcharacter">ScheduledThreadPoolExecutor</samp>
+             uses threads from the pool.)</p>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">Executors</samp> provide several static methods for producing readily configured 
+                <samp class="listingcharacter listingcharacter">ScheduledExecutorService</samp> objects, for example, 
+                <samp class="listingcharacter listingcharacter">newScheduledThreadPool(int corePoolSize)</samp>
+            .</p>
+            
+            <p class="standard">The following example executes an output every 2 seconds after a start time delay of 1 second:</p>
+            
+            <div class="listing " id="l17.14"><pre>ScheduledExecutorService scheduler <span class="">=</span><span class=""> Executors</span><span class="">.</span><span class="">newScheduledThreadPool</span><span class="">(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span><br/>scheduler<span class="">.</span><span class="">scheduleAtFixedRate</span><span class="">(</span><span class=""><br/></span>    <span class="">()</span><span class=""> </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Tata"</span><span class=""> </span><span class="">),</span><span class=""><br/></span>
+                <a id="p905"/>    <span class="">1</span><span class=""> /* initial delay */</span><span class="">,</span><br/>    2<span class=""> /* period */</span><span class="">,</span><span class=""><br/></span>    TimeUnit<span class="">.</span><span class="">SECONDS </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 17.14</b>    
+            src/main/java/com/tutego/insel/thread/concurrent/ScheduledExecutorServiceDemo.java. main()</p>
+            
+            <p class="standard">After the 1-second start delay, you’ll see a “Tata” every other second.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h17.4.8">17.4.8    Asynchronous Programming with CompletableFuture (CompletionStage)</h3>
+            
+            <p class="standard">One nice thing about 
+                <samp class="listingcharacter listingcharacter">Future</samp> objects is that they’re processed in the background, and you can query them later to see if a result is already available. However, the 
+                <samp class="listingcharacter listingcharacter">Future</samp> interface lacks a method to automatically process a follow-up job after completion. For this purpose, the Java library provides a special subclass: 
+                <samp class="listingcharacter listingcharacter">CompletableFuture</samp>
+                <a class="indexanchor" id="i17_68"/>. This class implements the 
+                <samp class="listingcharacter listingcharacter">CompletionStage</samp> interface
+                <a class="indexanchor" id="i17_69"/>, which probably contains the largest number of operations throughout Java SE. The type’s name expresses that it’s concerned with the 
+                <span class="italic">completion</span> of 
+                <span class="italic">stages</span>
+            .</p>
+            
+            <p class="standard">Let’s consider an example of a hard-drinking but brave pirate:</p>
+            
+            <div class="listing " id="l17.15"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">thread</span><span class="">.</span><span class="">concurrent</span><span class="">;</span><span class=""><br/></span> <br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">time</span><span class="">.</span><span class="">LocalTime</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">concurrent</span><span class="">.</span><span class="">CompletableFuture</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">concurrent</span><span class="">.</span><span class="">TimeUnit</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">logging</span><span class="">.</span><span class="">Logger</span><span class="">;</span><span class=""><br/></span> <br/><span class="">class</span><span class=""> Pirate </span><span class="">{</span><span class=""><br/></span> <br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> arg </span><span class="">)</span><span class=""> </span><span class="">throws</span><span class=""> Throwable </span><span class="">{</span><span class=""><br/></span> <br/>    System<span class="">.</span><span class="">setProperty</span><span class="">(</span><span class=""> </span><span class="">"java.util.logging.SimpleFormatter.format"</span><span class="">,</span><span class=""> </span><br/>                        <span class="">"-&gt; %2$s: %5$s %6$s%n"</span><span class="">);</span><span class=""><br/></span> <br/>    <span class="">String</span><span class=""> result </span><span class="">=</span><span class=""><br/></span>      
+                <span class="bold"><span class="">CompletableFuture.</span><span class="">supplyAsync</span></span><span class="">( Pirate::newName )</span><br/>                       .
+                <span class="bold"><span class="">thenApply</span></span><span class="">( Pirate::swear )</span><br/>                       .
+                <span class="bold"><span class="">thenCombine</span></span><span class="">( </span><span class="">drinkRum</span><span class="">(), Pirate::combinePirateAndDrinks )</span><br/>                       .
+                <span class="bold"><span class="">thenCombine</span></span><span class="">( </span><span class="">drinkRum</span><span class="">(), Pirate::combinePirateAndDrinks )</span><br/>                       .
+                <span class="bold"><span class="">exceptionally</span></span><span class="">( e -&gt; </span><span class="">"Pirate Guybrush did not survive"</span><span class=""><br/></span>                                            + <span class="">"the death curse  '"</span><span class=""><br/></span>                                            + e.<span class="">getCause</span><span class="">().</span><span class="">getMessage</span><span class="">() + </span><span class="">"'"</span><span class=""> )</span><br/>
+                <a id="p906"/>                       .<span class="">get</span><span class="">();</span><br/>    System.out.<span class="">println</span><span class="">( result );</span><br/>   <span class=""> // Pirate Guybrush swears and then drinks 10 bottles of rum and then drinks </span><span class=""><br/></span>   <span class=""> // 11 bottles of rum</span><span class=""><br/></span>   <span class=""> // Pirate Guybrush did not survive the death curse 'Avada Kedavra'</span><span class=""><br/></span>  }<br/> <br/>  <span class="">static</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">newName</span><span class="">() {</span><br/>    Logger.<span class="">getGlobal</span><span class="">().</span><span class="">info</span><span class="">( Thread.</span><span class="">currentThread</span><span class="">().</span><span class="">getName</span><span class="">() );</span><br/>    <span class="">return</span><span class=""> </span><span class="">"Pirate Guybrush"</span><span class="">;</span><br/>  }<br/> <br/>  <span class="">static</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">swear</span><span class="">( </span><span class="">String</span><span class=""> pirate ) {</span><br/>    Logger.<span class="">getGlobal</span><span class="">().</span><span class="">info</span><span class="">( Thread.</span><span class="">currentThread</span><span class="">().</span><span class="">getName</span><span class="">() );</span><br/>    <span class="">if</span><span class=""> ( Math.</span><span class="">random</span><span class="">() &lt; </span><span class="">0.4</span><span class=""> )</span><br/>      <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">IllegalStateException</span><span class="">( </span><span class="">"Avada Kedavra"</span><span class=""> );</span><br/>    <span class="">return</span><span class=""> pirate + </span><span class="">" curses"</span><span class="">;</span><br/>  }<br/> <br/>  <span class="">static</span><span class=""> CompletableFuture&lt;Integer&gt; </span><span class="">drinkRum</span><span class="">() </span><span class="">throws</span><span class=""> InterruptedException {</span><br/>    Logger.<span class="">getGlobal</span><span class="">().</span><span class="">info</span><span class="">( Thread.</span><span class="">currentThread</span><span class="">().</span><span class="">getName</span><span class="">() );</span><br/>    TimeUnit.SECONDS.<span class="">sleep</span><span class="">( </span><span class="">1</span><span class=""> );</span><br/>    <span class="">return</span><span class=""> CompletableFuture.</span><span class="">supplyAsync</span><span class="">( () -&gt; LocalTime.</span><span class="">now</span><span class="">().</span><span class="">getSecond</span><span class="">() );</span><br/>  }<br/> <br/>  <span class="">static</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">combinePirateAndDrinks</span><span class="">( </span><span class="">String</span><span class=""> pirate, </span><span class="">int</span><span class=""> bottlesOfRum ) {</span><br/>    Logger.<span class="">getGlobal</span><span class="">().</span><span class="">info</span><span class="">( Thread.</span><span class="">currentThread</span><span class="">().</span><span class="">getName</span><span class="">() );</span><br/>    <span class="">return</span><span class=""> pirate + </span><span class="">" and then drinks "</span><span class=""> + bottlesOfRum + </span><span class="">" bottles of rum"</span><span class="">;</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 17.15</b>    
+            src/main/java/com/tutego/insel/thread/concurrent/Pirate.java</p>
+            
+            <p class="standard">The following output doesn’t contain an exception:</p>
+            
+            <div class="listing " id="l_none_17504"><pre>-&gt; com.tutego.insel.thread.concurrent.Pirate drinkRum: main <br/>-&gt; com.tutego.insel.thread.concurrent.Pirate newName: ForkJoinPool.commonPool-worker-1 <br/>-&gt; com.tutego.insel.thread.concurrent.Pirate swear: ForkJoinPool.commonPool-worker-1 <br/>-&gt; com.tutego.insel.thread.concurrent.Pirate combinePirateAndDrinks: main <br/>-&gt; com.tutego.insel.thread.concurrent.Pirate drinkRum: main <br/>-&gt; com.tutego.insel.thread.concurrent.Pirate combinePirateAndDrinks: main <br/>Pirate Guybrush curses and then drinks 18 bottles of rum and then drinks 19 bottles of rum </pre></div>
+            
+            <p class="standard">
+                <a id="p907"/>
+            Let’s walk through the steps of this program:</p>
+            
+            <ol>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">supplyAsync(…)</samp>: First, you need to build the chain of sections either with the default constructor or with static methods. In our case, we used 
+                        <samp class="listingcharacter listingcharacter">supplyAsync(Supplier&lt;U&gt; supplier)</samp>. This method takes a free thread from the 
+                        <samp class="listingcharacter listingcharacter">ForkJoinPool.commonPool()</samp> and lets the thread process the 
+                        <samp class="listingcharacter listingcharacter">supplier</samp>. The result can be retrieved via the return, which is a 
+                        <samp class="listingcharacter listingcharacter">CompletableFuture</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">thenApply(…)</samp>: Next, we apply 
+                        <samp class="listingcharacter listingcharacter">thenApply(Function&lt;? super T,? extends U&gt; fn)</samp>, which is comparable to a 
+                        <samp class="listingcharacter listingcharacter">map(...)</samp>
+                     operation of a stream.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">thenCombine(…)</samp>: Things get interesting with 
+                        <samp class="listingcharacter listingcharacter">thenCombine(CompletionStage&lt;? extends U&gt; other, BiFunction&lt;? super T,? super U,? extends V&gt; fn)</samp>. This method combines the result of its own 
+                        <samp class="listingcharacter listingcharacter">CompletionStage</samp> via a bifunction (
+                        <samp class="listingcharacter listingcharacter">combinePirateAndDrinks(...)</samp>) with another 
+                        <samp class="listingcharacter listingcharacter">CompletionStage</samp> (supplied by 
+                        <samp class="listingcharacter listingcharacter">drinkRum(...)</samp>), which in our case we also build up again with 
+                        <samp class="listingcharacter listingcharacter">supplyAsync(...)</samp>. Thus, we combine two independent 
+                        <samp class="listingcharacter listingcharacter">CompletionStage</samp>s
+                        <samp class="listingcharacter listingcharacter"> </samp>and synchronize the result. From the output, you can easily see that 
+                        <samp class="listingcharacter listingcharacter">drinkRum</samp> is already executed at the beginning, by the 
+                        <samp class="listingcharacter listingcharacter">thread[main,5,main]</samp>, not by the 
+                        <samp class="listingcharacter listingcharacter">ForkJoinPool</samp>
+                    , because it runs independently of the others.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">exceptionally(…)</samp>: Several methods can handle possible exceptions during the processing chain. One of these methods is 
+                        <samp class="listingcharacter listingcharacter">exception(Function&lt;Throwable,? extends T&gt; fn)</samp>, which catches an exception and returns a default value. Our handling takes out the reason from the internally redirected 
+                        <samp class="listingcharacter listingcharacter">java.util.concurrent.CompletionException</samp> with 
+                        <samp class="listingcharacter listingcharacter">getCause()</samp>, and so we obtain the 
+                        <samp class="listingcharacter listingcharacter">IllegalStateException</samp>
+                     that was actually thrown.</p>
+                
+                </li>
+            
+            </ol>
+            
+            <p class="standard">The missing processing of 
+                <samp class="listingcharacter listingcharacter">combinePirateAndDrinks(...) </samp>
+            in shown in output of the error case:</p>
+            
+            <div class="listing " id="l_none_17514"><pre>-&gt; com.tutego.insel.thread.concurrent.Pirate newName: ForkJoinPool.commonPool-worker-1 <br/>-&gt; com.tutego.insel.thread.concurrent.Pirate drinkRum: main <br/>-&gt; com.tutego.insel.thread.concurrent.Pirate swear: ForkJoinPool.commonPool-worker-1 <br/>-&gt; com.tutego.insel.thread.concurrent.Pirate drinkRum: main <br/>Pirate Guybrush did not survivethe death curse  'Avada Kedavra' </pre></div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

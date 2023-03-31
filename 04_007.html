@@ -1,0 +1,237 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Arrays and Their Areas of Use" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Arrays and Their Areas of Use" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Arrays and Their Areas of Use</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h4.7">4.7    The Entry Point for the Runtime System: main(...)</h2>
+        
+        <p class="standard">In Java classes, the special static method 
+            <samp class="listingcharacter listingcharacter">main(...)</samp>
+         calls the runtime system in the specified main class (or start class) of the program.</p>
+        
+        
+            
+            <h3 class="t3" id="h4.7.1">4.7.1    Correct Declaration of the Start Method</h3>
+            
+            <p class="standard">For the JVM to start a Java program, you must use the special method 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>. Since case sensitivity is relevant in Java, this method must be 
+                <samp class="listingcharacter listingcharacter">main</samp>, not 
+                <samp class="listingcharacter listingcharacter">Main</samp> or 
+                <samp class="listingcharacter listingcharacter">MAIN</samp>. Visibility must be set to 
+                <samp class="listingcharacter listingcharacter">public</samp>
+            , and the method must be static because the JVM wants to call the method even without a copy of the class. </p>
+            
+            <p class="standard">An array of 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             objects is accepted as a parameter. The parameters passed in the command line are stored in the array.</p>
+            
+            <p class="standard">Two variants are available for declaring the start method:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">public static void main( String[] args )</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">public static void main( String... args )</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h4.7.1.1">Incorrect Declarations</h4>
+                
+                <p class="standard">Only a method with the head 
+                    <samp class="listingcharacter listingcharacter">public static void main(String[] args)</samp> is accepted as a start method. A method header like 
+                    <samp class="listingcharacter listingcharacter">public static void Main(String[] args)</samp>
+                 is syntactically valid, but the JVM will not call this method to start. If the JVM doesn’t find the start method, it issues an (internationalized) error message, such as the following example in English:</p>
+                
+                <div class="listing " id="l_none_41080"><pre>Error: Main method not found in class ***, please define the main method as:<br/>   public static void main(String[] args)<br/>or a JavaFX application class must extend javafx.application.Application </pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p282"/>
+                    Note</h6>
+                    
+                    <p class="standard first last">In contrast to C(++), the first element of the argument array with index 0 doesn’t contain the program name (i.e., the name of the main class), but the first program parameter of the command line.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.7.2">4.7.2    Processing Command Line Arguments</h3>
+            
+            <p class="standard">A special variable for the number of arguments passed to the command line
+                <a class="indexanchor" id="i04_36"/> isn’t necessary because the string array object tells us this information via 
+                <samp class="listingcharacter listingcharacter">length</samp>
+            .</p>
+            
+            <p class="standard">Let’s write a program that accepts prices from the command line, sorts them, and finally outputs them one below the other:</p>
+            
+            <div class="listing " id="l4.14"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">array</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Arrays</span><span class="">;</span><span class=""><br/></span><br/><span class="">class</span><span class=""> SortNumbers </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> args</span><span class="">.</span><span class="">length </span><span class="">&gt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      <span class="">double</span><span class="">[]</span><span class=""> numbers </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">double</span><span class="">[</span><span class=""> args</span><span class="">.</span><span class="">length </span><span class="">];</span><span class=""><br/></span>      <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> i </span><span class="">&lt;</span><span class=""> args</span><span class="">.</span><span class="">length</span><span class="">;</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""><br/></span>        numbers<span class="">[</span><span class=""> i </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> Double</span><span class="">.</span><span class="">parseDouble</span><span class="">(</span><span class=""> args</span><span class="">[</span><span class=""> i </span><span class="">]</span><span class=""> </span><span class="">);</span><span class=""><br/></span>      Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> numbers </span><span class="">);</span><span class=""><br/></span>      <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> number </span><span class="">:</span><span class=""> numbers </span><span class="">)</span><span class=""><br/></span>        System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> number </span><span class="">);</span><span class=""><br/></span>    <span class="">}</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 4.14</b>    
+            src/main/java/com/tutego/insel/array/SortNumbers.java</p>
+            
+            <p class="standard">The program can be called on the command line as follows and results in the corresponding output:</p>
+            
+            <div class="listing " id="l_none_41113"><pre>$ java com.tutego.insel.array.SortNumbers 10.9 1.90 111.20<br/>
+                <span class="bold">1.9</span><br/>
+                <span class="bold">10.9</span><br/>
+                <span class="bold">111.2 </span>
+             </pre></div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Library</h6>
+                
+                <p class="standard first last">For parsing command line arguments, the 
+                    <span class="italic">Commons CLI</span>
+                    <a class="indexanchor" id="i04_37"/> (<span class="url"><a href="https://commons.apache.org/proper/commons-cli">https://commons.apache.org/proper/commons-cli</a></span>) or 
+                    <span class="italic">picocli</span> (<span class="url"><a href="https://picocli.info">https://picocli.info</a></span>) libraries are especially useful.</p>
+            
+            </div>
+            
+            <p class="standard">
+                <a id="p283"/>In IntelliJ, by following the menu path 
+                <span class="screenelement">Run </span>• 
+                <span class="screenelement">Edit Configuration…</span>, a dialog box appears where the arguments can be set via the development environment (in the 
+                <span class="screenelement">Program Argument</span>
+             text field).</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h4.7.3">4.7.3    The Return Type of main(...) and System.exit(int)*</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">void</samp> return type of the start method 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>
+             is certainly worthy of discussion, since Java’s developers could have also required that a program always return a status code to the calling program. However, they didn’t opt for this requirement since Java programs are supposed to interact minimally with the surrounding operating system and because true platform independence is required, for example, in Java for programs on smartphones.</p>
+            
+            <p class="standard">When a status code should be returned, the static method 
+                <samp class="listingcharacter listingcharacter">System.exit(status)</samp>
+                <a class="indexanchor" id="i04_38"/> is available; this method terminates an application. The argument passed to 
+                <samp class="listingcharacter listingcharacter">exit(int)</samp> is called the 
+                <span class="italic">status value</span> (also called an 
+                <span class="italic">exit status</span> or 
+                <span class="italic">exit code</span>
+                <a class="indexanchor" id="i04_39"/>) and is returned to the command line. The value is important for script programs because they can react to the success or failure of the Java program via this return value. A value of 0 indicates success by definition, and a value not equal to 0 indicates an error. The value range should be between 0 and 255. On the Unix command line, the return value of a program is available via 
+                <samp class="listingcharacter listingcharacter">$?</samp>; and in the Windows 
+                <span class="italic">cmd.exe</span>, via 
+                <samp class="listingcharacter listingcharacter">%ERRORLEVEL%</samp>
+            , a kind of dynamic environment variable.</p>
+            
+            <p class="standard">Let’s look at an example of a Java program that returns the status value 
+                <samp class="listingcharacter listingcharacter">42</samp>
+            .</p>
+            
+            <div class="listing " id="l4.15"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">array</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> SystemExitDemo </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                <span class="bold"><span class="">System.</span><span class="">exit</span><span class="">( </span><span class="">42</span><span class=""> )</span></span>;<br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 4.15</b>    
+            src/main/java/com/tutego/insel/array/SystemExitDemo.java</p>
+            
+            <div class="imagebox figure-type"><a href="img-f4.3.html" id="f4.3"><img alt="IntelliJ Displays the Exit Code in the Console Window" id="img-f4.3" src="bilderklein/klein04_003.png"/></a></div>
+            
+            <p class="caption "><b>Figure 4.3</b>    
+            IntelliJ Displays the Exit Code in the Console Window</p>
+            
+            <p class="standard">
+                <a id="p284"/>
+            The following shell program first outputs the status value and also shows which case distinction the shell provides for status values:</p>
+            
+            <div class="listing " id="l4.16"><pre>@echo off<br/>cd target\classes<br/>java com.tutego.insel.array.SystemExitDemo<br/>echo %ERRORLEVEL%<br/>if errorlevel 10 (<br/>   echo Exit code is above 10, exactly %ERRORLEVEL%.<br/>) </pre></div>
+            
+            <p class="caption "><b>Listing 4.16</b>    
+            showreturn.bat</p>
+            
+            <p class="standard">The JVM starts the Java program and terminates the program via 
+                <samp class="listingcharacter listingcharacter">System.exit(int)</samp>, which results in the variable 
+                <samp class="listingcharacter listingcharacter">%ERRORLEVEL%</samp> being assigned 
+                <samp class="listingcharacter listingcharacter">42</samp>. The script first outputs the assignment of the variables. The Windows shell has a special variant for case distinctions with exit codes with 
+                <samp class="listingcharacter listingcharacter">if errorlevel value</samp>, which takes effect exactly when the current exit code is greater than or equal to the specified value. In our example, an output is shown if the exit code is greater than 
+                <samp class="listingcharacter listingcharacter">10</samp>, and with 
+                <samp class="listingcharacter listingcharacter">42</samp>
+            , it is. Therefore, our small script will result in the following output:</p>
+            
+            <div class="listing " id="l_none_41143"><pre>&gt;
+                <span class="bold">showreturn.bat</span><br/>42<br/>Error level is above 10, exactly 42 </pre></div>
+            
+            <p class="standard">Keep in mind that 
+                <samp class="listingcharacter listingcharacter">%ERRORLEVEL%</samp> will naturally be overridden when commands follow. So, the following only outputs 0 because 
+                <samp class="listingcharacter listingcharacter">dir</samp> can be completed successfully and 
+                <samp class="listingcharacter listingcharacter">dir</samp>
+             sets the exit code to 0 after execution:</p>
+            
+            <div class="listing " id="l_none_41143189941561651"><pre>java SystemExitDemo<br/>dir<br/>echo %ERRORLEVEL% </pre></div>
+            
+            <p class="standard">If calls exist between the call of the JVM and the evaluation of the variables, which might change the exit code, then storing the content of 
+                <samp class="listingcharacter listingcharacter">%ERRORLEVEL%</samp>
+             temporarily makes sense and can be achieved with the following code:</p>
+            
+            <div class="listing " id="l4.17"><pre>@echo off<br/>cd target\classes<br/>java SystemExitDemo<br/>SET EXITCODE=%ERRORLEVEL%<br/>dir &gt; NUL:<br/>echo %ERRORLEVEL%<br/>echo %EXITCODE% </pre></div>
+            
+            <p class="caption "><b>Listing 4.17</b>    
+            showreturn2.bat</p>
+            
+            <p class="standard">
+                <a id="p285"/>
+            This code will result in the following output:</p>
+            
+            <div class="listing  listing_no_margin_bottom" id="l_ohne_41171"><pre><span class="">0</span><span class=""><br/></span><span class="">42</span></pre></div>
+            
+            <div class="listing " id="l_none_41182"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">System</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static void exit(int status)</samp><br/>Terminates the current JVM and returns the argument of the method as a state value. A value not equal to 0 indicates an error. So, the return value for the normal error-free exit is 0. A 
+                        <samp class="listingcharacter listingcharacter">SecurityException</samp>
+                     is thrown if the calling code isn’t allowed to exit the JVM. This scenario is especially true for programs in a container, such as a web server.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

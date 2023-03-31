@@ -1,0 +1,640 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Generics&lt;T&gt;" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Generics&lt;T&gt;" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Generics&lt;T&gt;</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h12.2">12.2    
+            <a id="p699"/>
+        Implementing Generics, Type Erasure, and Raw Types</h2>
+        
+        <p class="standard">To understand generics and learn what information is available at runtime, let’s now look at how the compiler translates generics into bytecode.</p>
+        
+        
+            
+            <h3 class="t3" id="h12.2.1">12.2.1    Implementation Options</h3>
+            
+            <p class="standard">In general, two ways to implement generic types exist:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Heterogeneous variant</span>: <br/>Individual code is generated for each type (such as 
+                        <samp class="listingcharacter listingcharacter">String</samp>, 
+                        <samp class="listingcharacter listingcharacter">Integer</samp>, or 
+                        <samp class="listingcharacter listingcharacter">Point</samp>, which results in three class files). This variant is also called 
+                        <span class="italic">code specialization</span>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Homogeneous translation</span><br/>From the parameterized class, a class is created that only uses 
+                        <samp class="listingcharacter listingcharacter">Object</samp>
+                    , for example, instead of the type parameter. For the actual type parameter, the compiler places type castings into the statements.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Java uses homogeneous translation, and the compiler generates only one class file. Multiple instances of the class don’t exist, either in bytecode or in memory.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.2.2">12.2.2    Type Erasure</h3>
+            
+            <p class="standard">Recall that Java has two type systems: one in the compiler and one in the Java Runtime Environment (JRE). Although generic type information exists in the bytecode—in what’s called 
+                <span class="italic">signature attributes</span>
+            —the JVM can generally do little with generics. Therefore, the Java compiler must rewrite the bytecode so that the JVM can process it.</p>
+            
+            <p class="standard">This rewriting process is referred to as 
+                <span class="italic">type erasure</span>
+                <a class="indexanchor" id="i12_13"/>. Think of it as dropping everything enclosed in angle brackets and making every type variable an 
+                <samp class="listingcharacter listingcharacter">Object</samp>.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn12_06" id="fn12_06">[ 185 ]</a></span>
+            </p>
+            
+            <table class="standardtable" id="t12.5">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">With Generics</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">After Type Erasure</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <div class="listing " id="l_none_12414"><pre>public class Rocket
+                                <span class="bold">&lt;T&gt;</span> {<br/>  private 
+                                <span class="bold">T</span> value;<br/>  public void set( 
+                                <span class="bold">T</span> value ) {<br/>    this.value = value; }<br/><br/>  public 
+                                <span class="bold">T</span> get() { return vale; }<br/>}</pre></div>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <div class="listing " id="l_none_12434"><pre>public class Rocket {<br/>  private 
+                                <span class="bold">Object</span> value;<br/>  public void set( 
+                                <span class="bold">Object</span> value ) {<br/>    this.value = value; }<br/><br/>  public 
+                                <span class="bold">Object</span> get() { return value; }<br/>}</pre></div>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 12.5</b>    
+            Generic Class before and after Type Erasure</p>
+            
+            <p class="standard">
+                <a id="p700"/>
+            Thus, after the type erasure, the program code corresponds exactly to what you would have programmed without generics. The erasure is also performed in the code that uses the generic:</p>
+            
+            <table class="standardtable" id="t12.6">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">With Generics</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">After Type Erasure</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <div class="listing " id="l_none_12431"><pre>Rocket
+                                <span class="bold">&lt;Integer&gt;</span> r  = new Rocket
+                                <span class="bold">&lt;Integer&gt;</span>( 1 );<br/>r.set( 1 );<br/>Integer i = r.get();</pre></div>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <div class="listing " id="l_none_12445"><pre>Rocket r = new Rocket( 1 );<br/>r.set( 1 );<br/>Integer i = 
+                                <span class="bold">(Integer)</span>
+                             r.get();</pre></div>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 12.6</b>    
+            Using Generic Classes before and after Type Erasure</p>
+            
+            <p class="standard">In the 
+                <samp class="listingcharacter listingcharacter">r.get()</samp>
+             expression, the compiler inserts exactly the explicit type casting we inserted manually in our first example.</p>
+            
+            <p class="standard">This type erasure is somewhat disappointing but has historical reasons. Planned for a future Java version are 
+                <span class="italic">reified generics</span>
+            , that is, generic information that is also completely accessible at runtime.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Java Generics and C++ Templates</h6>
+                
+                <p class="standard first last">Java generics go far beyond what C++ templates offer in terms of type descriptions. In C++, any type argument can be used, which leads to incredible error messages. Thus, the C++ compiler performs rather a simple substitution. But due to the heterogeneous implementation, the C++ compiler generates different (and wonderfully optimized) machine code for each template type used. In the case of Java, the heterogeneous variant would result in a great many similar classes that differ only in a few type conversions. Anyway, since in Java only references are possible as type variables (and no primitive types), no special optimization is possible at this point. However, code specialization makes other things doable in C++ that are impossible in Java, for example, template metaprogramming. In this case, the compiler is used as a kind of interpreter for recursive template calls to generate optimal program code later, which is essentially functional programming with a compiler.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.2.3">12.2.3    Problems with Type Erasure
+                <a class="indexanchor" id="i12_14"/>
+            </h3>
+            
+            <p class="standard">Due to type erasure, some things in the code simply aren’t possible; let’s look at a few examples.</p>
+            
+            
+                
+                <h4 class="t4" id="h12.2.3.1">No New T()</h4>
+                
+                <p class="standard">Since type erasure in declarations such as 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;T&gt;</samp> replaces the parameter variable with 
+                    <samp class="listingcharacter listingcharacter">Object</samp>, the following 
+                    <span class="italic">can’t</span> be written inside the 
+                    <samp class="listingcharacter listingcharacter">Rocket</samp> class, for example, to create a new type 
+                    <samp class="listingcharacter listingcharacter">T</samp>
+                 transport:</p>
+                
+                <table class="standardtable" id="t12.7">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <a id="p701"/>
+                                Planned: With Generics (Compiler Error!)</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Consequence of the Type Erasure</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <div class="listing " id="l_none_12464"><pre>class Rocket&lt;T&gt; {<br/> T newRocketContent() {<br/>   return new T(); } // 
+                                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/><br/>}</pre></div>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <div class="listing " id="l_none_12479"><pre>class Rocket&lt;T&gt; {<br/> Object newRocketContent() {<br/>   return new Object(); }<br/>}</pre></div>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 12.7</b>    
+            Why new T() Can’t Work: Only a new Object() Would Be Created</p>
+                
+                <p class="standard">As the caller of 
+                    <samp class="listingcharacter listingcharacter">newRocketContent()</samp>, however, we don’t always expect a ridiculous 
+                    <samp class="listingcharacter listingcharacter">Object</samp>, but an object of type 
+                    <samp class="listingcharacter listingcharacter">T</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.2.3.2">No instanceof</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">instanceof</samp>
+                 operator is invalid for parameterized types, even though its use would be handy, for example, to make case distinctions based on the actual types:</p>
+                
+                <div class="listing " id="l_none_12491"><pre><span class="">void</span><span class=""> </span><span class="">printType</span><span class="">(</span><span class=""> Rocket</span><span class="">&lt;?&gt;</span><span class=""> p </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">p </span><span class="">instanceof</span><span class=""> Rocket&lt;Number&gt;</span></span> )      <span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     illegal generic type for instanceof</span><span class=""><br/></span>    System.out.<span class="">println</span><span class="">( </span><span class="">"Rocket with Number"</span><span class=""> );</span><br/>  <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( </span>
+                    <span class="bold">p <span class="">instanceof</span><span class=""> Rocket&lt;</span><span class="">String</span><span class="">&gt;</span></span> ) <span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     illegal generic type for instanceof</span><span class=""><br/></span>    System.out.<span class="">println</span><span class="">( </span><span class="">"Rocket with String"</span><span class=""> );</span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">The compiler rightly reports an error—not just a warning—because the 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;</samp> and 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;Number&gt;</samp> types don’t exist at runtime; only type-erased 
+                    <samp class="listingcharacter listingcharacter">Rocket</samp>
+                 objects exist. After the type erasure, code would be created that wouldn’t make any sense:</p>
+                
+                <div class="listing " id="l_none_12493"><pre><span class="">void</span><span class=""> </span><span class="">printType</span><span class="">(</span><span class=""> Rocket r </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">r </span><span class="">instanceof</span><span class=""> Rocket</span></span> )<br/>    …<br/>  <span class="">else</span><span class=""> </span><span class="">if</span><span class=""> ( </span>
+                    <span class="bold">r <span class="">instanceof</span><span class=""> Rocket</span></span> )<br/>    …<br/>} <span class=""/></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.2.3.3">No Typecasting to a Parameterized Type</h4>
+                
+                <p class="standard">Typecastings like the following example are illegal:</p>
+                
+                <div class="listing " id="l_none_12506"><pre>Rocket<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> r </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">Rocket</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;)</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;();</span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""> </span></pre></div>
+                
+                <p class="standard">With generics, the compiler tests the types, and the type erasure makes the actual type parameter disappear. Thus, the compiler would generate the following code:</p>
+                
+                <div class="listing " id="l_none_12516"><pre>Rocket r <span class="">=</span><span class=""> </span><span class="">(</span><span class="">Rocket</span><span class="">)</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Rocket</span><span class="">();</span><span class=""> </span></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.2.3.4">
+                    <a id="p702"/>
+                No .class for Generic Types and No Class Objects with Actual Type Parameter at Runtime</h4>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">.class</samp> placed after a type returns the 
+                    <samp class="listingcharacter listingcharacter">Class</samp>
+                 for the object of the respective type:</p>
+                
+                <div class="listing " id="l_none_12536"><pre>Class<span class="">&lt;</span><span class="">Object</span><span class="">&gt;</span><span class=""> objectClass </span><span class="">=</span><span class=""> Object</span><span class="">.</span><span class="">class</span><span class="">;</span><span class=""><br/></span>Class<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> stringClass </span><span class="">=</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">class</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">Class</samp>
+                 itself is declared as a generic type.</p>
+                
+                <p class="standard">For generic types, 
+                    <samp class="listingcharacter listingcharacter">.class</samp>
+                 isn’t permitted. Note that the following code is still valid (with a warning):</p>
+                
+                <div class="listing " id="l_none_12542"><pre>Class<span class="">&lt;</span><span class="">Rocket</span><span class="">&gt;</span><span class=""> rocketClass </span><span class="">=</span><span class=""> Rocket</span><span class="">.</span><span class="">class</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">But the following code is no longer valid:</p>
+                
+                <div class="listing " id="l_none_12540"><pre>Class<span class="">&lt;</span><span class="">Rocket</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;&gt;</span><span class=""> rocketClass </span><span class="">=</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;.</span><span class="">class</span><span class="">;</span><span class="">  </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The reason for this error is the type erasure itself: All 
+                    <samp class="listingcharacter listingcharacter">Class</samp>
+                 objects for a type are the same and have no information about the actual type parameter at runtime. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_12568"><pre>Rocket<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class="">  r1 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;();</span><span class=""><br/></span>Rocket<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> r2 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> r1</span><span class="">.</span><span class="">getClass</span><span class="">()</span><span class=""> </span><span class="">==</span><span class=""> r2</span><span class="">.</span><span class="">getClass</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">      </span><span class=""> // true</span><span class=""> </span></pre></div>
+                
+                <p class="standard">All instances of generic types are represented by the same 
+                    <samp class="listingcharacter listingcharacter">Class</samp> object at runtime. So, behind 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;</samp> and 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;Integer&gt;</samp>, only 
+                    <samp class="listingcharacter listingcharacter">Rocket</samp>
+                 exists. In a nutshell, everything in angle brackets disappears at runtime.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.2.3.5">No Generic Exceptions</h4>
+                
+                <p class="standard">Basically, a construction like 
+                    <samp class="listingcharacter listingcharacter">class MyClass&lt;T&gt; extends SuperClass</samp> is allowed. But the compiler includes a special rule that prevents a generic class from extending 
+                    <samp class="listingcharacter listingcharacter">Throwable</samp> (
+                    <samp class="listingcharacter listingcharacter">Exception</samp> and 
+                    <samp class="listingcharacter listingcharacter">Error</samp> are subclasses of 
+                    <samp class="listingcharacter listingcharacter">Throwable</samp>
+                ). Consider the following example:</p>
+                
+                <div class="listing " id="l_none_12559"><pre><span class="">class</span><span class=""> MyException</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">extends</span><span class=""> Exception </span><span class="">{</span><span class=""> </span><span class="">}</span><span class="">  </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If this statement were permitted, the source code could perhaps contain the following expressions:</p>
+                
+                <div class="listing " id="l_none_12589"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">MyException&lt;Type1&gt; e</span></span> ) { }<br/><span class="">catch</span><span class=""> ( </span>
+                    <span class="bold">MyException&lt;Type2&gt; e</span> ) { } <span class=""/></pre></div>
+                
+                <p class="standard">However, type erasure would result in two identical 
+                    <samp class="listingcharacter listingcharacter">catch</samp>
+                 blocks, which isn’t allowed.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.2.3.6">
+                    <a id="p703"/>
+                No Static Members</h4>
+                
+                <p class="standard">Static members aren’t connected to individual objects, but to classes. For example, 
+                    <samp class="listingcharacter listingcharacter">Rocket</samp> can appear once as a parameterized type 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;</samp> and once as 
+                    <samp class="listingcharacter listingcharacter">Rocket &lt;Integer&gt;—</samp>that is, as two instances. But can 
+                    <samp class="listingcharacter listingcharacter">Rocket</samp> also declare a static method that accesses the type parameter of the class? No. The following static method in 
+                    <samp class="listingcharacter listingcharacter">Rocket</samp>, would get the error message for 
+                    <samp class="listingcharacter listingcharacter">T</samp>
+                : “Cannot make a static reference to the non-static type T”:</p>
+                
+                <div class="listing " id="l_none_12592"><pre><span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">static</span></span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isEmpty</span><span class="">( T value ) { </span><span class="">return</span><span class=""> value == null; }  </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                    </span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard">Static variables and the parameters/returns of static methods aren’t bound to an instance. A type variable, however, as we’ve used so far, is always associated with the instance. The 
+                    <samp class="listingcharacter listingcharacter">T</samp> for the 
+                    <samp class="listingcharacter listingcharacter">value</samp> isn’t set until we connect 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;</samp> or 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;Integer&gt;</samp> to an instance, for example. With 
+                    <samp class="listingcharacter listingcharacter">Rocket.isEmpty("");</samp> for example, the compiler can’t know what type is meant, since no instances are necessary for static method calls. In other words, a parameterized type has never been specified. Using code like 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;.isEmpty("")</samp>
+                 will result in a compiler error because this syntax isn’t allowed.</p>
+                
+                <p class="standard">Static generic methods are of course possible: As discussed earlier, they then have their own type variables.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.2.3.7">No Overloading with Type Variables</h4>
+                
+                <p class="standard">If after the type erasure only 
+                    <samp class="listingcharacter listingcharacter">Object</samp> comes out, of course, no method can be parameterized once with a type variable and once with 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                . This overloading is not permitted.</p>
+                
+                <div class="listing " id="l_none_12607"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> T value</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">set</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">T</span></span> value ) { <span class="">this</span><span class="">.value = value; }</span><br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">set</span><span class="">( </span>
+                    <span class="bold">Object</span> value ) { <span class="">this</span><span class="">.value = value; }  </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error!</span><span class=""><br/></span>} <span class=""/></pre></div>
+                
+                <p class="standard">The compiler returns the warning “Method set(T) has the same erasure set(Object) as another method in type Rocket&lt;T&gt;“.</p>
+                
+                <p class="standard">If the type is more specific, such as 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                , the situation is different again.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.2.3.8">Arrays of Generic Classes Can’t Be Created</h4>
+                
+                <p class="standard">The compiler also restricts the use of generics in arrays. The following statement is valid but results in a warning:</p>
+                
+                <div class="listing " id="l_none_12619"><pre>Rocket<span class="">[]</span><span class=""> rockets </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">[</span><span class="">1</span><span class="">];</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <a id="p704"/>Further, the line 
+                    <samp class="listingcharacter listingcharacter">(2)</samp>
+                of the following example results in the compiler error “Cannot create a generic array of Rocket&lt;String&gt;”:</p>
+                
+                <div class="listing " id="l_none_126195851551"><pre>Rocket<span class="">&lt;</span><span class="">String</span><span class="">&gt;[]</span><span class=""> rockets</span><span class="">;</span><span class="">                        </span><span class=""> // (1)</span><span class=""><br/></span>rockets <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;[</span><span class="">1</span><span class="">];</span><span class="">                 </span><span class=""> // (2) 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""/></pre></div>
+                
+                <p class="standard">This example can’t be used in a type-safe way, but three quick solutions are conceivable:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Don’t use generics at all and append a 
+                            <samp class="listingcharacter listingcharacter">@SuppressWarnings("unchecked")</samp>
+                         to the array variable.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Replace the type with a wildcard, resulting in something like 
+                            <samp class="listingcharacter listingcharacter">Rocket&lt;</samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">?</samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">&gt;[] rockets = new Rocket&lt;</samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">?</samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">&gt;[1];</samp>. Wildcards are placeholders that we’ll describe in more detail in 
+                            <span class="crossreference "><a href="12_005.html#h12.5.3">Section 12.5.3</a></span>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Switch directly to Collection API data structures, where a 
+                            <samp class="listingcharacter listingcharacter">Collection &lt;String&gt; rockets = new ArrayList&lt;&gt;();</samp>
+                         doesn’t cause any problem.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">In summary, array variables of generic types can be declared , as shown in line
+                    <samp class="listingcharacter listingcharacter">(1)</samp>, but array objects can’t be created, as shown in line 
+                    <samp class="listingcharacter listingcharacter">(2</samp>
+                ). With the following trick, you can create the array:</p>
+                
+                <div class="listing " id="l_none_12635"><pre><span class="">class</span><span class=""> RocketFullOfMoney </span><span class="">extends</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">BigInteger</span><span class="">&gt;</span><span class=""> </span><span class="">{}</span><span class=""><br/></span>Rocket<span class="">&lt;</span><span class="">BigInteger</span><span class="">&gt;[]</span><span class=""> rockets </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> RocketFullOfMoney</span><span class="">[</span><span class="">1</span><span class="">];</span><span class=""> </span></pre></div>
+                
+                <p class="standard">This approach not ideal, because you must create an extra temporary class 
+                    <samp class="listingcharacter listingcharacter">RocketFullOfMoney</samp>
+                . But it’s common in the Java world.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.2.4">12.2.4    Raw Types</h3>
+            
+            <p class="standard">Generically declared types don’t necessarily need to be parameterized, but in general, you should give the compiler as much type information as possible. The following example of a generically declared 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;T&gt;</samp>
+             class is perfectly legal: </p>
+            
+            <div class="listing " id="l_none_12651"><pre>Rocket r <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Rocket</span><span class="">();</span><span class="">      </span><span class=""> // Dangerous, as we'll see momentarily</span><span class=""><br/></span>r<span class="">.</span><span class="">set</span><span class="">(</span><span class=""> </span><span class="">"What’s the phone number of NASA? 10 9 8 7 6 5 4 3 2 1."</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">String</span><span class=""> content </span><span class="">=</span><span class=""> </span><span class="">(</span><span class="">String</span><span class="">)</span><span class=""> r</span><span class="">.</span><span class="">get</span><span class="">();</span><span class=""> </span></pre></div>
+            
+            <p class="standard">A generic type that isn’t used as a parameterized type (i.e., without an actual type parameter) is referred to as a 
+                <span class="italic">raw type</span>
+                <a class="indexanchor" id="i12_15"/>. In our example, 
+                <samp class="listingcharacter listingcharacter">Rocket</samp> is the raw type of 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;T&gt;</samp>. With a raw type, the compiler can no longer check type conformity because the raw type is the type used after the type erasure. Thus, 
+                <samp class="listingcharacter listingcharacter">get()</samp> returns 
+                <samp class="listingcharacter listingcharacter">Object</samp>, and 
+                <samp class="listingcharacter listingcharacter">set(Object)</samp>
+             can accept anything.</p>
+            
+            <p class="standard">If a compiler encounters program code that doesn’t use a generic type as a parameterized type, warnings will be issued because the compiler wants the type to be used generically, as shown in 
+                <span class="crossreference "><a href="12_002.html#f12.2">Figure 12.2</a></span>
+            .</p>
+            
+            <div class="imagebox figure-type"><a href="img-f12.2.html" id="f12.2"><img alt="&#10;                &#10;            Development Environments Warn about Raw Types by Default" id="img-f12.2" src="bilderklein/klein12_002.png"/></a></div>
+            
+            <p class="caption "><b>Figure 12.2</b>    
+            
+                <a id="p705"/>
+            Development Environments Warn about Raw Types by Default</p>
+            
+            <p class="standard">Also, with 
+                <samp class="listingcharacter listingcharacter">set(...)</samp>, the compiler issues a warning because it recognizes that type safety is in danger. The 
+                <samp class="listingcharacter listingcharacter">set(...)</samp> method is designed to accept an argument of the type with which it was parameterized. If the concrete type is missing due to the use of the raw type, 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+             will remain, and the compiler will issue a warning for the methods otherwise specified with a type. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_12648"><pre>p<span class="">.</span><span class="">set</span><span class="">(</span><span class=""> </span><span class="">"Type safety: The method set(Object) belongs to the "</span><span class=""> </span><span class="">+</span><span class=""><br/></span>       <span class="">"raw type Rocket. References to generic type "</span><span class=""> </span><span class="">+</span><span class=""><br/></span>       <span class="">"Rocket&lt;T&gt; should be parameterized"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The note states that the rocket should have been typed. If we don’t pay attention to this warning, we can quickly run into problems, as in the following example:</p>
+            
+            <div class="listing " id="l_none_12652"><pre>Rocket<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> r1 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;&gt;();</span><span class=""><br/></span>Rocket r2 <span class="">=</span><span class=""> r1</span><span class="">;</span><span class="">                    </span><span class=""> // Compiler warning</span><span class=""><br/></span>r2<span class="">.</span><span class="">set</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">Date</span><span class="">()</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> // Compiler warning</span><span class=""><br/></span><span class="">String</span><span class=""> string </span><span class="">=</span><span class=""> r1</span><span class="">.</span><span class="">get</span><span class="">();</span><span class="">          </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 ClassCastException at runtime</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> string </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The compiler doesn’t issue an error but does issue some warnings. The third line is highly problematic because you could wrap an arbitrary number of objects via our non-parameterized rocket. But since the object behind 
+                <samp class="listingcharacter listingcharacter">r2</samp> and the type-erased 
+                <samp class="listingcharacter listingcharacter">r1</samp> are identical, we now have a type problem that leads to a 
+                <samp class="listingcharacter listingcharacter">ClassCastException</samp>
+             at runtime:</p>
+            
+            <div class="listing " id="l_none_12677"><pre>Exception in thread "main" java.lang.ClassCastException: java.util.Date 
+                <img alt="inline image" class="inline_image" src="bilder/umbruchzeichen.png"/><br/>cannot be cast to java.lang.String </pre></div>
+            
+            <p class="standard">So, our only recommendation is to avoid raw types in new programs since their use can lead to exceptions that only become apparent at runtime.</p>
+            
+            
+                
+                <h4 class="t4" id="h12.2.4.1">Type Castings</h4>
+                
+                <p class="standard">A raw type can be automatically converted to a more special form, with warnings from the compiler, of course. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_12675"><pre>
+                    <a id="p706"/>Rocket r <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Rocket</span><span class="">();</span><span class="">             </span><span class=""> // (1) Warning</span><span class=""><br/></span>r<span class="">.</span><span class="">set</span><span class="">(</span><span class=""> </span><span class="">"Get enough sleep"</span><span class=""> </span><span class="">);</span><span class="">         </span><span class=""> // (2) Warning</span><span class=""><br/></span>Rocket<span class="">&lt;</span><span class="">Point</span><span class="">&gt;</span><span class=""> stringRocket </span><span class="">=</span><span class=""> r</span><span class="">;</span><span class="">      </span><span class=""> // (3) Warning</span><span class=""><br/></span>Point result <span class="">=</span><span class=""> stringRocket</span><span class="">.</span><span class="">get</span><span class="">();</span><span class="">   </span><span class=""> // (4) ClassCastException at runtime</span><span class=""> </span></pre></div>
+                
+                <p class="standard">In the case of the 
+                    <samp class="listingcharacter listingcharacter">r</samp> variable, used via the raw type in line 
+                    <samp class="listingcharacter listingcharacter">(2)</samp>, the compiler doesn’t check any types in 
+                    <samp class="listingcharacter listingcharacter">set(...)</samp>
+                 at all because the compiler never recognized the existence of these types.</p>
+                
+                <p class="standard">Line 
+                    <samp class="listingcharacter listingcharacter">(3)</samp> sells the raw type to the compiler as a parameterized type. Explicit type casting isn’t necessary because type castings are only valid between “real” types (like 
+                    <samp class="listingcharacter listingcharacter">Object</samp> to 
+                    <samp class="listingcharacter listingcharacter">Rocket</samp>), not from 
+                    <samp class="listingcharacter listingcharacter">Rocket</samp> to 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;</samp> since 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;</samp> is the same 
+                    <samp class="listingcharacter listingcharacter">Class</samp> type (
+                    <span class="crossreference "><a href="12_002.html#h12.2.3">Section 12.2.3</a></span>
+                ).</p>
+                
+                <p class="standard">The statement in line 
+                    <samp class="listingcharacter listingcharacter">(4)</samp> doesn’t fetch a 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 type from the rocket but also doesn’t result in an error at translation time. This statement, however, will cause a problem in internal type casting at runtime. So, the wrong type can get into the rocket via this “raw-not-raw” backdoor.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.2.4.2">SuppressWarnings Annotation</h4>
+                
+                <p class="standard">In rare cases, converting to the type is necessary. Let’s look at 
+                    <samp class="listingcharacter listingcharacter">cast(Object)</samp>
+                 as an example:</p>
+                
+                <div class="listing " id="l_none_12698"><pre><span class="">public</span><span class=""> </span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> T </span><span class="">cast</span><span class="">(</span><span class=""> Object obj </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">(</span><span class="">T</span><span class="">)</span><span class=""> obj</span><span class="">;</span><span class=""> // Compiler warning: Type safety: Unchecked cast from Object to T</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If the cast can’t be avoided, you can set a 
+                    <samp class="listingcharacter listingcharacter">@SuppressWarnings </samp>
+                annotation to give the compiler the type to keep it happy, as in the following example:</p>
+                
+                <div class="listing " id="l_none_1269895151"><pre><span class="">@SuppressWarnings</span><span class="">(</span><span class="">"unchecked"</span><span class="">)</span><span class=""><br/></span><span class="">public</span><span class=""> </span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> T </span><span class="">cast</span><span class="">(</span><span class=""> Object obj </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">(</span><span class="">T</span><span class="">)</span><span class=""> obj</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Ultimately, generics provide ways to make source code more secure. You shouldn’t break that security with raw types.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

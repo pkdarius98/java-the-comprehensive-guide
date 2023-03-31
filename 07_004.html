@@ -1,0 +1,435 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Object-Oriented Relationship" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Object-Oriented Relationship" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Object-Oriented Relationship</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h7.4">7.4    Overriding Methods
+            <a class="indexanchor" id="i07_40"/>
+            <a class="indexanchor" id="i07_41"/>
+        </h2>
+        
+        <p class="standard">We’ve seen that a subclass inherits the visible members of its superclass through inheritance. The subclass can now in turn add methods. In this context, overloaded methods, that is, methods that have the same name as another method from a superclass but have a different number of parameters or different parameter types, count as completely normal, added methods.</p>
+        
+        
+            
+            <h3 class="t3" id="h7.4.1">7.4.1    Providing Methods in Subclasses with a New Behavior</h3>
+            
+            <p class="standard">The methods are the offer of an object and the interface to the outside. First and foremost, it’s a what, but not a how. Subclasses must unconditionally be able to do the same as their superclass, but the how may differ. In such a case, the subclass can 
+                <span class="italic">override</span> a method of the superclass. If the subclass implements the method anew, it says: “I can do it better.” The 
+                <span class="italic">overriding method</span> of the subclass can thus specialize the program code and use members that aren’t known in the superclass. The 
+                <span class="italic">overridden method</span>
+             of the superclass is then out of the race for the time being, and a method call on an object of the subclass would get caught in the overridden method.</p>
+            
+            <p class="standard">For a method to override another method, the subclass must have a method with the same method name and the exact same parameter list (i.e., the same signature). The name of the parameter variable is irrelevant. If the return type is 
+                <samp class="listingcharacter listingcharacter">void</samp> or a primitive type, the type must be the same in the overriding method. For reference types, the return type may vary somewhat, which we’ll discuss in more detail in 
+                <span class="crossreference "><a href="07_008.html#h7.8.2">Section 7.8.2</a></span>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Generally, we speak of overridden methods, but not of overridden object/class variables, since variables aren’t overridden. They are only 
+                    <span class="italic">covered</span>.
+                    <a class="indexanchor" id="i07_42"/>
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn07_09" id="fn07_09">[ 144 ]</a></span> Object variables are also not dynamically bound, a virtue that will be explained in more detail in 
+                    <span class="crossreference "><a href="07_008.html#h7.8.5">Section 7.8.5</a></span>
+                .</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h7.4.1.1">
+                    <a id="p458"/>
+                Overriding toString()</h4>
+                
+                <p class="standard">The absolute base class 
+                    <samp class="listingcharacter listingcharacter">java.lang.Object</samp> transmits a 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                    <a class="indexanchor" id="i07_43"/>
+                 method to all subclasses, which outputs an object identifier, mostly for debugging purposes.</p>
+                
+                <div class="listing " id="l7.26"><pre><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">getClass</span><span class="">().</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">"@"</span><span class=""> </span><span class="">+</span><span class=""> Integer</span><span class="">.</span><span class="">toHexString</span><span class="">(</span><span class="">hashCode</span><span class="">());</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.26</b>    
+            java/lang/Object.java, toString()</p>
+                
+                <p class="standard">The method returns the name of the class followed by a 
+                    <samp class="listingcharacter listingcharacter">@</samp> and a hexadecimal identifier. The 
+                    <samp class="listingcharacter listingcharacter">Event</samp> class without its own 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                 is supposed to test the effect.</p>
+                
+                <div class="listing " id="l7.27"><pre><span class="">class</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> about</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    duration</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.27</b>    
+            src/main/java/com/tutego/insel/game/c/vm/Event.java, Event</p>
+                
+                <p class="standard">On an 
+                    <samp class="listingcharacter listingcharacter">Event</samp> object, 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                 returns a somewhat cryptic identifier.</p>
+                
+                <div class="listing " id="l7.28"><pre>Event e <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Event</span><span class="">();</span><span class=""><br/></span><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> e</span><span class="">.</span><span class="">toString</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s </span><span class="">);</span><span class=""> // com.tutego.insel.game.vm.Event@1a2b3c4d</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.28</b>    
+            src/main/java/com/tutego/insel/game/c/vm/Application.java (Snippet)</p>
+                
+                <p class="standard">So, overriding 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> in the subclasses is a good idea. A textual object identifier should include the name of the class and the states of an object. For a 
+                    <samp class="listingcharacter listingcharacter">Workout</samp> that has an (inherited) 
+                    <samp class="listingcharacter listingcharacter">about</samp> and 
+                    <samp class="listingcharacter listingcharacter">duration</samp> as well as 
+                    <samp class="listingcharacter listingcharacter">caloriesBurned</samp>
+                , this code can be written in the following way:</p>
+                
+                <div class="listing " id="l7.29"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Workout </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> caloriesBurned</span><span class="">;</span><span class=""><br/></span> <br/>  
+                    <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">format</span><span class="">( </span><span class="">"%s[about=%s, duration=%d, caloriesBurned=%d]"</span><span class="">,</span><br/>                          <span class="">getClass</span><span class="">().</span><span class="">getSimpleName</span><span class="">(),</span><br/>                          about, duration, caloriesBurned );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.29</b>    
+            src/main/java/com/tutego/insel/game/c/vm/Workout.java, Workout</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">getClass().getSimpleName()</samp> expression is taken over by the implementation from the 
+                    <samp class="listingcharacter listingcharacter">Object</samp> class, and thus the class name is received dynamically, which means you 
+                    <a id="p459"/>
+                don’t need to hard-code the class name as a string. This approach is useful especially if the class name changes later.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f7.11.html" id="f7.11"><img alt="Workout as a Subclass of Event and Has Its Own toString(). The UML Stereotype Identifies the Override." id="img-f7.11" src="bilderklein/klein07_011.png"/></a></div>
+                
+                <p class="caption "><b>Figure 7.11</b>    
+            Workout as a Subclass of Event and Has Its Own toString(). The UML Stereotype Identifies the Override.</p>
+                
+                <p class="standard">Let’s look at the test next.</p>
+                
+                <div class="listing " id="l7.30"><pre>Workout running <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><span class=""><br/></span>running<span class="">.</span><span class="">about </span><span class="">=</span><span class=""> </span><span class="">"Go for a run"</span><span class="">;</span><span class=""><br/></span>running<span class="">.</span><span class="">duration </span><span class="">=</span><span class=""> </span><span class="">60</span><span class="">;</span><span class=""><br/></span>running<span class="">.</span><span class="">caloriesBurned </span><span class="">=</span><span class=""> </span><span class="">250</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> running </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.30</b>    
+            src/main/java/com/tutego/insel/game/c/vm/Application.java (Snippet)</p>
+                
+                <p class="standard">Remember: A 
+                    <samp class="listingcharacter listingcharacter">println(Object)</samp> on any object calls the 
+                    <samp class="listingcharacter listingcharacter">toString()</samp>
+                 method from that object. The following result is output:</p>
+                
+                <div class="listing " id="l_none_7648"><pre>Workout[about=Go for a run, duration=60, caloriesBurned=250] </pre></div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Side Note on Annotations</h6>
+                    
+                    <p class="standard first">So far, you’ve used numerous modifiers, such as 
+                        <samp class="listingcharacter listingcharacter">static</samp> or 
+                        <samp class="listingcharacter listingcharacter">public</samp>. A special feature of these modifiers is that they don’t affect the program control but still represent important additional information. For instance, modifiers introduce semantics into your code. This information is referred to as 
+                        <span class="italic">metadata</span>
+                        <a class="indexanchor" id="i07_44"/>. The 
+                        <samp class="listingcharacter listingcharacter">static</samp> and 
+                        <samp class="listingcharacter listingcharacter">public</samp> modifiers are metadata for the compiler, but with a little imagination, you can easily imagine metadata that’s not evaluated by the compiler but by a Java library. For example, just as 
+                        <samp class="listingcharacter listingcharacter">public</samp>
+                     tells the compiler that an element is visible to everyone, on the other hand, special metadata can be attached to an element to express that the element can only take on certain ranges of values.</p>
+                    
+                    <p class="standard">Java provides a built-in capability for metadata, called 
+                        <span class="italic">annotations</span>
+                        <a class="indexanchor" id="i07_45"/>
+                    . Consider annotations like custom modifiers. Although you cannot invent a new visibility, you can still provide additional information to the compiler, to specific tools, or to the runtime environment through annotations. Let’s look at a few examples of annotations and use cases.</p>
+                    
+                    <table class="boxtable" id="t7.2">
+                        
+                        <thead>
+                            
+                            <tr>
+                                
+                                <th class="tablehead tablecell_first top_border_cell">
+                                    
+                                    <p class="standard first-item last-item"><a id="p460"/>Annotation</p>
+                                
+                                </th>
+                                
+                                <th class="tablehead tablecell_last top_border_cell">
+                                    
+                                    <p class="standard first-item last-item">Explanation</p>
+                                
+                                </th>
+                            
+                            </tr>
+                        
+                        </thead>
+                        
+                        <tbody>
+                            
+                            <tr>
+                                
+                                <td class="tablecell tablecell_first top_border_cell">
+                                    
+                                    <p class="standard first-item last-item"><span class="bold"><samp class="listingcharacter listingcharacter">@WebService </samp></span><samp class="listingcharacter listingcharacter">class Calculator {<br/></samp><span class="bold"><samp class="listingcharacter listingcharacter">@WebMethod </samp></span><samp class="listingcharacter listingcharacter">int add( int x, int y )</samp> …</p>
+                                
+                                </td>
+                                
+                                <td class="tablecell tablecell_last top_border_cell">
+                                    
+                                    <p class="standard first-item last-item">Defines a web service with a web service method.</p>
+                                
+                                </td>
+                            
+                            </tr>
+                            
+                            <tr class="light">
+                                
+                                <td class="tablecell tablecell_first">
+                                    
+                                    <p class="standard first-item last-item"><span class="bold"><samp class="listingcharacter listingcharacter">@Override </samp></span><samp class="listingcharacter listingcharacter">public String toString()</samp>…</p>
+                                
+                                </td>
+                                
+                                <td class="tablecell tablecell_last">
+                                    
+                                    <p class="standard first-item last-item">Overrides a method of the superclass.</p>
+                                
+                                </td>
+                            
+                            </tr>
+                            
+                            <tr>
+                                
+                                <td class="tablecell tablecell_first">
+                                    
+                                    <p class="standard first-item last-item"><span class="bold"><samp class="listingcharacter listingcharacter">@XmlRoot </samp></span><samp class="listingcharacter listingcharacter">class Person {</samp> …</p>
+                                
+                                </td>
+                                
+                                <td class="tablecell tablecell_last">
+                                    
+                                    <p class="standard first-item last-item">Enables the mapping of an object to an XML file.</p>
+                                
+                                </td>
+                            
+                            </tr>
+                        
+                        </tbody>
+                    
+                    </table>
+                    
+                    <p class="caption "><b>Table 7.2</b>    
+            Examples of Annotations and Their Use Cases</p>
+                    
+                    <p class="standard">Annotations can be used like additional modifiers, but they are distinguished by a preceding 
+                        <samp class="listingcharacter listingcharacter">@</samp> character. (The 
+                        <samp class="listingcharacter listingcharacter">@</samp> character, meaning “at,” is also a good abbreviation for 
+                        <span class="italic">annotation type</span>
+                    .) For this reason, the order doesn’t matter, so that you can, for example, write either of the following lines of code:</p>
+                    
+                    <ul>
+                        
+                        <li>
+                            
+                            <p class="standard first-item last-item">
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">@Override </samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">public String toString()</samp>
+                            </p>
+                        
+                        </li>
+                        
+                        <li>
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">public </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">@Override </samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">String toString()</samp>
+                            </p>
+                        
+                        </li>
+                    
+                    </ul>
+                    
+                    <p class="standard">However, a common practice is to place annotations at the beginning. When annotations are placed on types, the annotation usually gets its own line.</p>
+                    
+                    <p class="standard last">
+                        <span class="italic">Annotation types</span> are the declarations, much like a class type. If attached to an element, an annotation is called a 
+                        <span class="italic">concrete annotation</span>. So, while 
+                        <samp class="listingcharacter listingcharacter">Override</samp> itself is the annotation type, 
+                        <samp class="listingcharacter listingcharacter">@Override</samp> before 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>
+                     is a concrete annotation.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.4.1.2">The @Override Annotation</h4>
+                
+                <p class="standard">Our sample class 
+                    <samp class="listingcharacter listingcharacter">Workout</samp> uses the annotation 
+                    <samp class="listingcharacter listingcharacter">@Override</samp>
+                    <a class="indexanchor" id="i07_46"/> for the 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> method and makes it clear in this way that the 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> method of the class overrides the method of the supertype. The 
+                    <samp class="listingcharacter listingcharacter">@Override</samp> annotation doesn’t mean that this method must be overridden in subclasses, only that it overrides a method itself. Annotations are additional modifiers that are either checked by the compiler or can be queried later. Although you don’t need to use the 
+                    <samp class="listingcharacter listingcharacter">@Override</samp>
+                 annotation, it has two advantages:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Although the runtime environment knows that a method is being overridden, code should also give a programmer all the necessary information about what is happening. A method being overridden is something significant enough that it should be documented in the code.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">In addition, the compiler checks whether we are actually overriding a method from the superclass. For example, if we made a mistake in the method name and thus unintentionally added a new method to the subclass, the compiler would report this as an error based on its knowledge of 
+                            <samp class="listingcharacter listingcharacter">@Override</samp>. Simple typos like 
+                            <samp class="listingcharacter listingcharacter">tostring()</samp> will be quickly noticed. Overloaded methods and overridden methods are different: An 
+                            <a id="p461"/>overloaded method only “happens” to share a name with the original method but otherwise has no relation to the logic. Thus, 
+                            <samp class="listingcharacter listingcharacter">@Override</samp>
+                         helps developers to really override methods and not accidentally overload methods with the wrong parameters.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.4.1.3">final Parameters in Inheritance*</h4>
+                
+                <p class="standard">If a method is overridden, then the types of the parameter list are the determining factors, not the names. Also, whether the parameter variables are final or not doesn’t matter. Consider this additional information for the particular method. A subclass can therefore arbitrarily add or remove the 
+                    <samp class="listingcharacter listingcharacter">final</samp>
+                . Old libraries can thus be easily reused.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.4.2">7.4.2    With super to the Parents</h3>
+            
+            <p class="standard">When you override a method, you’re opting for an entirely new implementation. But what if the functionality as a whole was good and only one little thing was missing? In the case of the overridden 
+                <samp class="listingcharacter listingcharacter">toString()</samp>
+             method, the subclass realizes a completely new implementation and doesn’t refer to the logic of the superclass.</p>
+            
+            <p class="standard">If a subclass wants to say, “What my parents can do isn’t so bad after all,” you can use the special reference 
+                <samp class="listingcharacter listingcharacter">super</samp>
+                <a class="indexanchor" id="i07_47"/> to access members in the superclass namespace. (Of course, the object behind 
+                <samp class="listingcharacter listingcharacter">super</samp> and 
+                <samp class="listingcharacter listingcharacter">this</samp>
+             is the same, only the namespace is different.) In this way, subclasses can still do something of their own, but the realization from the parent class is still available.</p>
+            
+            <p class="standard">In our game, 
+                <samp class="listingcharacter listingcharacter">Event</samp> had no 
+                <samp class="listingcharacter listingcharacter">toString()</samp>
+            , which we’ll change next.</p>
+            
+            <div class="listing " id="l7.31"><pre><span class="">class</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> about</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    duration</span><span class="">;</span><span class=""><br/></span> <br/>  
+                <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">format</span><span class="">( </span><span class="">"%s[about=%s, duration=%d]"</span><span class="">,</span><br/>                          <span class="">getClass</span><span class="">().</span><span class="">getSimpleName</span><span class="">(),</span><br/>                          about, duration );<br/>  }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.31</b>    
+            src/main/java/com/tutego/insel/game/c/vn/Event.java, Event</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Workout</samp> subclass extends 
+                <samp class="listingcharacter listingcharacter">Event</samp> and should override 
+                <samp class="listingcharacter listingcharacter">toString()</samp> because 
+                <samp class="listingcharacter listingcharacter">Workout</samp> has an additional object variable: 
+                <samp class="listingcharacter listingcharacter">caloriesBurned</samp>. However, if 
+                <samp class="listingcharacter listingcharacter">toString()</samp> is overridden in 
+                <samp class="listingcharacter listingcharacter">Workout</samp>, 
+                <samp class="listingcharacter listingcharacter">toString()</samp> must also take care of the inherited members (i.e., 
+                <samp class="listingcharacter listingcharacter">about</samp> and 
+                <samp class="listingcharacter listingcharacter">duration</samp>). This situation is undesirable because if, for example, an object variable is added or deleted in the 
+                <samp class="listingcharacter listingcharacter">Event</samp> superclass, all 
+                <samp class="listingcharacter listingcharacter">toString()</samp> methods of all subclasses must be changed if the subclasses want to include all assignments of the object variables in 
+                <a id="p462"/>
+            the string identifier, which is inconvenient. Generally speaking, a subclass shouldn’t take responsibility for the superclass.</p>
+            
+            <p class="standard">One solution to the problem is to simply access the 
+                <samp class="listingcharacter listingcharacter">toString()</samp> method of the 
+                <samp class="listingcharacter listingcharacter">Event</samp> superclass in 
+                <samp class="listingcharacter listingcharacter">toString()</samp> of a subclass like 
+                <samp class="listingcharacter listingcharacter">Workout</samp>
+             and then include the possible states from the base type:</p>
+            
+            <div class="listing " id="l7.32"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Workout </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> caloriesBurned</span><span class="">;</span><span class=""><br/></span> <br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">format</span><span class="">(</span><span class=""> </span><span class="">"%s[caloriesBurned=%d]"</span><span class="">,</span><span class=""><br/></span>                          
+                <span class="bold"><span class="">super</span><span class="">.</span><span class="">toString</span><span class="">()</span></span>,<br/>                          caloriesBurned );<br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.32</b>    
+            src/main/java/com/tutego/insel/game/c/vn/Event.java (Snippet)</p>
+            
+            <p class="standard">If instead of 
+                <samp class="listingcharacter listingcharacter">super.toString()</samp>, only 
+                <samp class="listingcharacter listingcharacter">toString()</samp> existed in the body, the method call would lead to an endless recursion. For this reason, this code doesn’t work without a 
+                <samp class="listingcharacter listingcharacter">super</samp>
+             reference.</p>
+            
+            <p class="standard">The following test shows the result:</p>
+            
+            <div class="listing " id="l7.33"><pre>Workout running <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><span class=""><br/></span>running<span class="">.</span><span class="">about </span><span class="">=</span><span class=""> </span><span class="">"Go for a run"</span><span class="">;</span><span class=""><br/></span>running<span class="">.</span><span class="">duration </span><span class="">=</span><span class=""> </span><span class="">60</span><span class="">;</span><span class=""><br/></span>running<span class="">.</span><span class="">caloriesBurned </span><span class="">=</span><span class=""> </span><span class="">250</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> running </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 7.33</b>    
+            src/main/java/com/tutego/insel/game/c/vn/Application.java (Snippet)</p>
+            
+            <p class="standard">The result is the following output:</p>
+            
+            <div class="listing " id="l_none_7691"><pre>Workout[about=Go for a run, duration=60][caloriesBurned=250] </pre></div>
+            
+            
+                
+                <h4 class="t4" id="h7.4.2.1">Properties of the super Reference*</h4>
+                
+                <p class="standard">In overridden methods, the 
+                    <samp class="listingcharacter listingcharacter">super</samp> reference can be usefully deployed, but other applications also exist. An interesting scenario is when methods of the superclass should be called instead of the custom overridden methods. Thus, the following example makes it clear that, in any case, the 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> method of the 
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                 superclass should be called and not its overridden custom variant:</p>
+                
+                <div class="listing " id="l7.34"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> ToStringFromSuper </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">ToStringFromSuper</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>
+                    <a id="p463"/>    
+                    <span class="bold"><span class="">System.out.</span><span class="">println</span><span class="">( </span><span class="">super</span><span class="">.</span><span class="">toString</span><span class="">() );</span></span> <span class=""> // Call toString() object</span><span class=""><br/></span>  }<br/><br/>  
+                    <span class="bold"><span class="">@Override</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span></span> {<br/>    <span class="">return</span><span class=""> </span><span class="">"(._.)"</span><span class="">;</span><br/>  }<br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">new</span><span class=""> </span><span class="">ToStringFromSuper</span><span class="">();      </span><span class=""> // ToStringFromSuper@3e25a5</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.34</b>    
+            src/main/java/com/tutego/insel/oop/ToStringFromSuper.java</p>
+                
+                <p class="standard">Of course, you can only use 
+                    <samp class="listingcharacter listingcharacter">super</samp>
+                 if the method has a valid visibility in the superclass. Therefore, you cannot break the principle of secrecy with this construct.</p>
+                
+                <p class="standard">A concatenation of 
+                    <samp class="listingcharacter listingcharacter">super</samp> keywords at a deeper inheritance hierarchy isn’t possible. 
+                    <samp class="listingcharacter listingcharacter">super</samp> must be followed by an object member and thus applies to an overridden method or an overridden object variable. Code like 
+                    <samp class="listingcharacter listingcharacter">super.super.lol()</samp>
+                 are therefore always invalid. A subclass receives all members of its superclasses as a unit and doesn’t distinguish from which hierarchy something originates.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,109 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Nested Types" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Nested Types" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Nested Types</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h10.4">10.4    Local Classes</h2>
+        
+        <p class="standard">Local classes
+            <a class="indexanchor" id="i10_16"/>
+            <a class="indexanchor" id="i10_17"/>
+         are also inner classes, but these classes aren’t simply set like a property in the body of a class. Instead, you’ll directly define local classes in statement blocks consisting of methods, constructors, and initialization blocks. Local interfaces aren’t possible.</p>
+        
+        
+            
+            <h3 class="t3" id="h10.4.1">10.4.1    
+                <a id="p606"/>
+            Example with a Custom Declaration</h3>
+            
+            <p class="standard">In the following example, the 
+                <samp class="listingcharacter listingcharacter">main(...)</samp> method declares an inner class named 
+                <samp class="listingcharacter listingcharacter">Snowden</samp> with a constructor that accesses the final variable 
+                <samp class="listingcharacter listingcharacter">PRISM</samp>
+            :</p>
+            
+            <div class="listing " id="l10.6"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> NSA </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                <span class="bold"><span class="">final</span><span class=""> </span><span class="">int</span><span class=""> PRISM = </span><span class="">1</span><span class="">;</span></span><br/>    <span class="">int</span><span class=""> tempora = </span><span class="">2</span><span class="">;</span><br/>    tempora++;                         <span class=""> // (*)</span><span class=""><br/></span><br/>    
+                <span class="bold"><span class="">class</span><span class=""> Snowden {</span><br/>      <span class="">Snowden</span><span class="">() {</span><br/>        System.out.<span class="">println</span><span class="">( PRISM );</span><span class=""><br/></span>//        System.out.println( tempora ); // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/> Commented out a compiler error<span class=""><br/></span>      }</span><br/>    }<br/>    <span class="">new</span><span class=""> </span><span class="">Snowden</span><span class="">();</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 10.6</b>    
+            src/main/java/com/tutego/insel/nested/NSA.java, NSA</p>
+            
+            <p class="standard">In this case, the declaration of the local class 
+                <samp class="listingcharacter listingcharacter">Snowden</samp>
+             is used like a statement. A visibility modifier is invalid for local classes, and the class must not declare class methods and general static variables. (Final constants are permitted.)</p>
+            
+            <p class="standard">Any local class can access methods of the outer class. Additionally, a local class can access local variables and parameters, but only if the variables are 
+                <samp class="listingcharacter listingcharacter">final</samp>. In this context, final variables don’t necessarily require the presence of the 
+                <samp class="listingcharacter listingcharacter">final</samp> modifier to be final. If no write access is available to variables, they are 
+                <span class="italic">effectively final</span>
+                <a class="indexanchor" id="i10_18"/>. The 
+                <samp class="listingcharacter listingcharacter">PRISM</samp> variable is explicitly marked with the 
+                <samp class="listingcharacter listingcharacter">final</samp> modifier, so the inner class can access it. 
+                <samp class="listingcharacter listingcharacter">tempora</samp> isn’t final (
+                <samp class="listingcharacter listingcharacter">tempora++</samp> is a write access), and therefore, a read access in the inner class at 
+                <samp class="listingcharacter listingcharacter">println(tempora)</samp> leads to a compiler error. This scenario is tested in the example: If the line 
+                <samp class="listingcharacter listingcharacter">(*)</samp> is commented out with 
+                <samp class="listingcharacter listingcharacter">tempora++;</samp>, then 
+                <samp class="listingcharacter listingcharacter">tempora</samp> is effectively final, and 
+                <samp class="listingcharacter listingcharacter">Snowden</samp> can access 
+                <samp class="listingcharacter listingcharacter">tempora</samp>
+            .</p>
+            
+            <p class="standard">If the inner class is in a static method, the inner class cannot call object methods of the outer class.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h10.4.2">10.4.2    Using a Local Class for a Timer</h3>
+            
+            <p class="standard">To make these examples a bit more concrete for real-life situations, let’s look at how a timer can perform repetitive tasks. The Java library already provides everything you need. Our task is to create an instance of 
+                <samp class="listingcharacter listingcharacter">java.util.Timer()</samp> and to pass an instance of the 
+                <samp class="listingcharacter listingcharacter">TimerTask</samp> type to the 
+                <samp class="listingcharacter listingcharacter">scheduleAtFixedRate(...)</samp> object method. The 
+                <samp class="listingcharacter listingcharacter">TimerTask</samp> class 
+                <a id="p607"/>prescribes an abstract method 
+                <samp class="listingcharacter listingcharacter">run()</samp>
+            , in which the concurrent program code to be processed regularly is placed.</p>
+            
+            <p class="standard">Let’s use this feature for a program that reminds us, immediately and then at regular intervals, to exercise.</p>
+            
+            <div class="listing " id="l10.7"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> SportReminder </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                <span class="bold"><span class="">class</span><span class=""> SportReminderTask </span><span class="">extends</span><span class=""> TimerTask {</span><br/>      <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">run</span><span class="">() {</span><br/>        System.out.<span class="">println</span><span class="">( </span><span class="">"Come on, you candy-ass!"</span><span class=""> );</span><br/>      }<br/>    }</span><br/>    <span class="">new</span><span class=""> </span><span class="">Timer</span><span class="">().</span><span class="">scheduleAtFixedRate</span><span class="">( </span>
+                <span class="bold"><span class="">new</span><span class=""> </span><span class="">SportReminderTask</span><span class="">()</span></span>, <br/>                                     <span class="">0</span><span class=""> </span><span class="">/* ms delay */</span><span class="">, </span><br/>                                     <span class="">1000</span><span class=""> </span><span class="">/* ms period */</span><span class=""> );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 10.7</b>    
+            src/main/java/com/tutego/insel/nested/SportReminder.java, SportReminder</p>
+            
+            <p class="standard">Our 
+                <samp class="listingcharacter listingcharacter">SportReminderTask</samp> class, which extends 
+                <samp class="listingcharacter listingcharacter">TimerTask</samp>, is declared directly in 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>. The generated object follows later in 
+                <samp class="listingcharacter listingcharacter">scheduleAtFixedRate(...)</samp>, and the timer runs to remind us every second of the importance of exercise. The advantage of the local class declaration is that no one else can see the local class except 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>
+            .</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

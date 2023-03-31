@@ -1,0 +1,1073 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Generics&lt;T&gt;" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Generics&lt;T&gt;" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Generics&lt;T&gt;</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h12.5">12.5    Inheritance and Invariance with Generics</h2>
+        
+        <p class="standard">Inheritance and substitution are commonplace concepts for Java developers, so their extension to generics isn’t surprising. The 
+            <samp class="listingcharacter listingcharacter">toString()</samp> method, for example, is called naturally on all objects, and the call is dynamically bound. Similarly, 
+            <samp class="listingcharacter listingcharacter">String.toString(Object o)</samp> lets you pass any object, and the static method calls the object method 
+            <samp class="listingcharacter listingcharacter">toString()</samp>
+        .</p>
+        
+        
+            
+            <h3 class="t3" id="h12.5.1">12.5.1    Arrays Are Covariant</h3>
+            
+            <p class="standard">Let’s take the hierarchy of the wrapper classes as an example. Of course, 
+                <samp class="listingcharacter listingcharacter">Object</samp> is at the top. The numeric wrapper classes all extend the abstract 
+                <samp class="listingcharacter listingcharacter">Number</samp> class. Under these wrapper classes are, for example, 
+                <samp class="listingcharacter listingcharacter">Integer</samp>, 
+                <samp class="listingcharacter listingcharacter">Double</samp>
+            , and the other numeric wrappers. No headaches should arise in the following example code:</p>
+            
+            <div class="listing " id="l_none_12881"><pre>Number number <span class="">=</span><span class=""> </span>
+                <span class="bold"><span class="">Integer</span></span>.<span class="">valueOf</span><span class="">( </span><span class="">10</span><span class=""> );</span><br/>number = 
+                <span class="bold">Double</span>.<span class="">valueOf</span><span class="">( </span><span class="">1.1</span><span class=""> ); </span><span class=""/></pre></div>
+            
+            <p class="standard">First, 
+                <samp class="listingcharacter listingcharacter">number</samp> points to an 
+                <samp class="listingcharacter listingcharacter">Integer</samp>, then to a 
+                <samp class="listingcharacter listingcharacter">Double</samp>
+             object.</p>
+            
+            <p class="standard">
+                <a id="p714"/>But what’s the situation with arrays? Since a 
+                <samp class="listingcharacter listingcharacter">Number</samp> array is the base type of a 
+                <samp class="listingcharacter listingcharacter">Double</samp>
+             array, we could have the following statements:</p>
+            
+            <div class="listing " id="l_none_12872"><pre>Number<span class="">[]</span><span class=""> numbers </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Double</span><span class="">[</span><span class=""> </span><span class="">100</span><span class=""> </span><span class="">];</span><span class=""><br/></span>numbers<span class="">[</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">]</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">1.1</span><span class="">;</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The fact that an array of type 
+                <samp class="listingcharacter listingcharacter">Double[]</samp> is a subtype of 
+                <samp class="listingcharacter listingcharacter">Number[]</samp> and that 
+                <samp class="listingcharacter listingcharacter">Object[]</samp> is above all non-primitive fields is referred to as 
+                <span class="italic">covariance</span>
+                <a class="indexanchor" id="i12_19"/>
+            . But how can this concept be applied to generics?</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.5.2">12.5.2    Generics Aren’t Covariant, but Invariant</h3>
+            
+            <p class="standard">You can write the following code:</p>
+            
+            <div class="listing " id="l_none_12891"><pre>
+                <span class="bold"><span class="">Set</span></span>&lt;<span class="">String</span><span class="">&gt; set = </span><span class="">new</span><span class=""> </span>
+                <span class="bold">HashSet</span>&lt;<span class="">String</span><span class="">&gt;(); </span><span class=""/></pre></div>
+            
+            <p class="standard">A 
+                <samp class="listingcharacter listingcharacter">HashSet</samp> with 
+                <samp class="listingcharacter listingcharacter">Strings</samp> is a type of 
+                <samp class="listingcharacter listingcharacter">Set</samp> with 
+                <samp class="listingcharacter listingcharacter">Strings</samp>. However, a 
+                <samp class="listingcharacter listingcharacter">HashSet</samp> with 
+                <samp class="listingcharacter listingcharacter">Strings</samp> isn’t a 
+                <samp class="listingcharacter listingcharacter">HashSet</samp> with 
+                <samp class="listingcharacter listingcharacter">Objects</samp>
+            . Thus, the following statement would be wrong:</p>
+            
+            <div class="listing " id="l_none_12897"><pre>HashSet<span class="">&lt;</span>
+                <span class="bold">Object</span>&gt; set = <span class="">new</span><span class=""> HashSet&lt;</span>
+                <span class="bold"><span class="">String</span></span><span class="">&gt;();       </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Compiler error!</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="standard">Generics aren’t covariant; they’re 
+                <span class="italic">invariant</span>
+                <a class="indexanchor" id="i12_20"/>. This feature isn’t intuitive at first glance, but an example can quickly set us straight. Let’s stay with our 
+                <samp class="listingcharacter listingcharacter">Rocket</samp> example and with wrapper classes. Even though 
+                <samp class="listingcharacter listingcharacter">Number</samp> is the superclass of 
+                <samp class="listingcharacter listingcharacter">Integer</samp>, 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;Number&gt;</samp> is not a supertype of 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;Integer&gt;</samp>
+            . If it were, the following code would be possible and cause a problem at runtime:</p>
+            
+            <div class="listing " id="l_none_12921"><pre>Rocket<span class="">&lt;</span><span class="">Number</span><span class="">&gt;</span><span class=""> r</span><span class="">;</span><span class=""><br/></span>r <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;();</span><span class="">        </span><span class=""> // Is this OK?</span><span class=""><br/></span>r<span class="">.</span><span class="">set</span><span class="">(</span><span class=""> </span><span class="">2.2</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The argument 
+                <samp class="listingcharacter listingcharacter">2.2</samp> is about autoboxing a 
+                <samp class="listingcharacter listingcharacter">Double</samp> and thus seems to fit 
+                <samp class="listingcharacter listingcharacter">Number</samp>. However, 
+                <samp class="listingcharacter listingcharacter">Double</samp> shouldn’t be permitted at all since we created a rocket for 
+                <samp class="listingcharacter listingcharacter">Integer</samp> with 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;Integer&gt;</samp>, and a 
+                <samp class="listingcharacter listingcharacter">Double</samp> isn’t permitted in the 
+                <samp class="listingcharacter listingcharacter">Integer</samp> rocket. From this example, it follows that the derivation relationship between types isn’t transmitted to generic classes. So, a 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;Number&gt;</samp>
+             isn’t a superclass that permits all conceivable numeric types in the rocket. The compiler immediately grumbles at the following attempt:</p>
+            
+            <div class="listing " id="l_none_12922"><pre>Rocket<span class="">&lt;</span><span class="">Number</span><span class="">&gt;</span><span class=""> r</span><span class="">;</span><span class=""><br/></span>r <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;();<br/></span><span class="">// 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Type mismatch: cannot convert from Rocket&lt;Integer&gt;  // to Rocket&lt;Number&gt;</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The compiler can’t be misled even by the following alternative notation:</p>
+            
+            <div class="listing " id="l_none_12942"><pre>Rocket<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> r1 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;&gt;();</span><span class=""><br/></span>Rocket<span class="">&lt;</span><span class="">Number</span><span class="">&gt;</span><span class=""> r2 </span><span class="">=</span><span class=""> r1</span><span class="">;</span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Type mismatch: cannot convert</span><span class=""><br/></span>                       <span class=""> // from Rocket&lt;Integer&gt; to Rocket&lt;Number&gt;</span><span class=""> </span></pre></div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p715"/>
+                Note</h6>
+                
+                <p class="standard first">In the case of read-only immutable objects, no reason exists for covariance. Let’s assume that the following declaration is correct:</p>
+                
+                <div class="listing " id="l_none_12945"><pre>Rocket<span class="">&lt;</span><span class="">Number</span><span class="">&gt;</span><span class=""> r </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;(</span><span class=""> </span><span class="">1</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Number n <span class="">=</span><span class=""> r</span><span class="">.</span><span class="">get</span><span class="">()</span><span class="">;</span></pre></div>
+                
+                <p class="standard last">Then, 
+                    <samp class="listingcharacter listingcharacter">p.set(2.2)</samp> isn’t OK, for example, because 
+                    <samp class="listingcharacter listingcharacter">Double</samp> isn’t compatible with 
+                    <samp class="listingcharacter listingcharacter">Integer</samp>. However, if the object was initialized via a constructor, for example, no objection arises to reading from it with a base type, (i.e., 
+                    <samp class="listingcharacter listingcharacter">Number</samp>
+                 in this case). However, Java can’t tell if a type is immutable and therefore can’t make such exceptions for generics. The compiler always assumes both read and write access.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.5.3">12.5.3    Wildcards with ?</h3>
+            
+            <p class="standard">Let’s write a method named 
+                <samp class="listingcharacter listingcharacter">isOneRocketEmpty(...)</samp>
+             that gets a variable number of rockets; what the rockets are carrying shouldn’t matter. The method should also test if a rocket is empty. For this example, you might write the following method call:</p>
+            
+            <div class="listing " id="l_none_12966"><pre>Rocket<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class="">  r1 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;&gt;(</span><span class=""> </span><span class="">"Bad-Bank"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Rocket<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> r2 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;&gt;(</span><span class=""> </span><span class="">1500000</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">isOneRocketEmpty</span><span class="">( r1, r2 )</span></span> );                    <span class=""> // false</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="standard">For the method head, we might try to write the following code:</p>
+            
+            <div class="listing " id="l_none_12970"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isOneRocketEmpty</span><span class="">(</span><span class=""> Rocket</span>
+                <span class="bold"><span class="">&lt;Object&gt;</span></span>... rockets ) <span class=""/></pre></div>
+            
+            <p class="standard">But stop! Since 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;Object&gt;</samp> doesn’t include rockets with all types, but only hits exactly one rocket containing an 
+                <samp class="listingcharacter listingcharacter">Object</samp> object, this parameterization isn’t useful for 
+                <samp class="listingcharacter listingcharacter">isOneRocketEmpty(...)</samp>, as mentioned earlier. If that parameterization were possible, type safety would be jeopardized. If this method really accepted all contents for rockets, a value with the wrong type could easily be foisted onto a rocket. When 
+                <samp class="listingcharacter listingcharacter">isOneRocketEmpty(...)</samp> is called with a 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;String&gt;</samp> then, because of 
+                <samp class="listingcharacter listingcharacter">isOneRocketEmpty(Rocket&lt;</samp>
+                <span class="bold">
+                    <samp class="listingcharacter listingcharacter">Object</samp>
+                </span>
+                <samp class="listingcharacter listingcharacter">&gt;… rockets)</samp>, the call of 
+                <samp class="listingcharacter listingcharacter">set(12)</samp> on the 
+                <samp class="listingcharacter listingcharacter">Rocket</samp> would also be valid. Now, suddenly instead of the desired contents of the rocket (
+                <samp class="listingcharacter listingcharacter">String</samp>), an 
+                <samp class="listingcharacter listingcharacter">Integer</samp>
+             would be placed in the rocket, which should not be valid!</p>
+            
+            <p class="standard">If the type doesn’t matter, think of the original type (raw type). One the drawback with raw types is that the compiler doesn’t check anything at all, but we want some kind of checking. So, the 
+                <samp class="listingcharacter listingcharacter">isOneRocketEmpty(...)</samp> method should accept arbitrary rocket contents, but at the same time, we should forbid the method from putting the wrong things into the rocket. So, an 
+                <samp class="listingcharacter listingcharacter">isOneRocketEmpty(Rocket... rockets)</samp>
+             isn’t a good idea and also causes various warnings.</p>
+            
+            <p class="standard">
+                <a id="p716"/>The solution is to use the 
+                <span class="italic">wildcard type (</span>
+                <a class="indexanchor" id="i12_21"/>
+                <samp class="listingcharacter listingcharacter">?</samp>
+                <span class="italic">)</span>
+                <a class="indexanchor" id="i12_22"/>, which then represents a family of types. If 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;Object&gt;</samp> isn’t the base type of all rocket contents, then the base type is 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;?&gt;</samp>. Note that 
+                <samp class="listingcharacter listingcharacter">?</samp> doesn’t stand for 
+                <samp class="listingcharacter listingcharacter">Object</samp> but for an unknown type! This wildcard can now be used to implement 
+                <samp class="listingcharacter listingcharacter">isOneRocketEmpty(...)</samp>
+            .</p>
+            
+            <div class="listing " id="l12.17"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">isOneRocketEmpty</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">Rocket&lt;?&gt;</span></span>... rockets ) {<br/>  <span class="">for</span><span class=""> ( </span>
+                <span class="bold">Rocket&lt;?&gt;</span> rocket : rockets )<br/>    <span class="">if</span><span class=""> ( rocket.</span><span class="">isEmpty</span><span class="">() )</span><br/>      <span class="">return</span><span class=""> true;</span><br/><br/>  <span class="">return</span><span class=""> false;</span><br/>}<br/><br/><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>  Rocket&lt;<span class="">String</span><span class="">&gt;  r1 = </span><span class="">new</span><span class=""> Rocket&lt;&gt;( </span><span class="">"Bad-Bank"</span><span class=""> );</span><br/>  Rocket&lt;Integer&gt; r2 = <span class="">new</span><span class=""> Rocket&lt;&gt;( </span><span class="">1500000</span><span class=""> );</span><br/>  System.out.<span class="">println</span><span class="">( </span><span class="">isOneRocketEmpty</span><span class="">( r1, r2 ) );                    </span><span class=""> // false</span><span class=""><br/></span>  System.out.<span class="">println</span><span class="">( </span><span class="">isOneRocketEmpty</span><span class="">( r1, r2, </span><span class="">new</span><span class=""> Rocket&lt;Byte&gt;() ) );</span><span class=""> // true</span><span class=""><br/></span>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 12.17</b>    
+            src/main/java/com/tutego/insel/generic/RocketsEmpty.java</p>
+            
+            <p class="standard">Calling 
+                <samp class="listingcharacter listingcharacter">isOneRocketEmpty()</samp> doesn’t result in 
+                <samp class="listingcharacter listingcharacter">false</samp>
+             if no rocket is passed, which you can assume at this point.</p>
+            
+            <p class="standard">Mentally, you must strictly separate wildcards from type variables. Instantiations with wildcards aren’t permitted since a wildcard doesn’t stand for a concrete type but instead for a whole series of possible types. In addition, wildcards can’t be used in methods like type variables, even if the type is arbitrary.</p>
+            
+            <table class="standardtable" id="t12.8">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Correct Use with Type Variables</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Incorrect Use with Wildcards (Compiler Error!)</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Rocket&lt;</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">?</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">&gt; r = new Rocket&lt;</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">Byte</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">&gt;();</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Rocket&lt;</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">?</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">&gt; r = new Rocket&lt;</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">?</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">&gt;();</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">static &lt;</samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">T</samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">&gt; T random( </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">T </samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">m, </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">T </samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">n ) { … }</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">static &lt;?&gt; </samp>
+                                <span class="bold">
+                                    <samp class="listingcharacter listingcharacter">? </samp>
+                                </span>
+                                <samp class="listingcharacter listingcharacter">random( ? m, ? n ) { … }</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 12.8</b>    
+            Using Wildcards Correctly</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Application Programming Interface Design</h6>
+                
+                <p class="standard first last">In many places, a type variable could be used instead of 
+                    <samp class="listingcharacter listingcharacter">?</samp>, but if the type doesn’t need to be caught, then no reason exists for using a type variable. Let’s consider an example from the 
+                    <samp class="listingcharacter listingcharacter">java.util.Collections</samp> class: The static method 
+                    <samp class="listingcharacter listingcharacter">int frequency(Collection&lt;?&gt; c, Object o);</samp> determines how often an equivalent object 
+                    <samp class="listingcharacter listingcharacter">o</samp> occurs in the collection 
+                    <samp class="listingcharacter listingcharacter">c</samp>
+                . The collection type isn’t relevant and isn’t used for the second parameter or for the return type.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h12.5.3.1">
+                    <a id="p717"/>
+                Effects on Read/Write Operations</h4>
+                
+                <p class="standard">If we use a wildcard type, as in 
+                    <samp class="listingcharacter listingcharacter">Rocket&lt;?&gt;</samp>
+                , we don’t know anything about the type, and the compiler will lose all information. For example, consider the following declarations:</p>
+                
+                <div class="listing " id="l_none_12993"><pre>Rocket<span class="">&lt;?&gt;</span><span class="">        r1 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;();</span><span class=""> </span></pre></div>
+                
+                <p class="standard">or</p>
+                
+                <div class="listing " id="l_none_121000"><pre>Rocket<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class="">  r2 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Rocket</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;();</span><span class=""><br/></span>Rocket<span class="">&lt;?&gt;</span><span class="">        r3 </span><span class="">=</span><span class=""> r2</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Nothing is known about the real actual type parameters with 
+                    <samp class="listingcharacter listingcharacter">r1</samp> and 
+                    <samp class="listingcharacter listingcharacter">r3</samp>. This lack of information has important implications for the methods you can call on 
+                    <samp class="listingcharacter listingcharacter">Rocket</samp>
+                , such as the following:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Calling 
+                            <samp class="listingcharacter listingcharacter">r1.get()</samp> is legal because everything the method will return is always an 
+                            <samp class="listingcharacter listingcharacter">Object</samp>, even if it’s 
+                            <samp class="listingcharacter listingcharacter">null</samp>. Accordingly, the statement 
+                            <samp class="listingcharacter listingcharacter">Object v = r1.get();</samp>
+                         is correct.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">r1.set(value)</samp> isn’t permitted because the compiler lacks the actual type parameters of 
+                            <samp class="listingcharacter listingcharacter">r1</samp> and can’t check types. In 
+                            <samp class="listingcharacter listingcharacter">r1</samp>, you cannot use a 
+                            <samp class="listingcharacter listingcharacter">Double</samp> because 
+                            <samp class="listingcharacter listingcharacter">Rocket</samp> should only store 
+                            <samp class="listingcharacter listingcharacter">Integers</samp>. The only exception is 
+                            <samp class="listingcharacter listingcharacter">null</samp> since 
+                            <samp class="listingcharacter listingcharacter">null</samp> has any type. 
+                            <samp class="listingcharacter listingcharacter">r1.set(null)</samp> is therefore a valid statement, which also means that objects created with 
+                            <samp class="listingcharacter listingcharacter">&lt;?&gt;</samp>
+                         are not automatically immutable.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.5.4">12.5.4    Bounded Wildcards</h3>
+            
+            <p class="standard">Specifying the actual type parameter as in 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;Integer&gt;</samp> and the wildcard variant 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;?&gt;</samp> represent two extremes. 
+                <samp class="listingcharacter listingcharacter">Rocket&lt;Integer&gt;</samp> rocket takes only integers; 
+                <samp class="listingcharacter listingcharacter">Rocket &lt;?&gt;</samp>
+            , on the other hand, takes everything. But something must also exist in between, for example, to express that the rocket should only contain a number or a string.</p>
+            
+            <p class="standard">For this reason, type restrictions with 
+                <samp class="listingcharacter listingcharacter">extends</samp> and 
+                <samp class="listingcharacter listingcharacter">super</samp>
+             are possible. This results in three types of wildcards.</p>
+            
+            <table class="standardtable" id="t12.9">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Wildcard</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Name</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Actual Type Parameter</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">?</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Wildcard type</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Is arbitrary</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">? extends </samp>
+                                <span class="italic">
+                                    <samp class="listingcharacter listingcharacter">Type</samp>
+                                </span>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Upper-bounded wildcard type
+                                <a class="indexanchor" id="i12_23"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">Everything that extends 
+                                <samp class="listingcharacter listingcharacter">Type</samp> (i.e., subtypes) and 
+                                <samp class="listingcharacter listingcharacter">Type</samp>
+                             itself</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">? super </samp>
+                                <span class="italic">
+                                    <samp class="listingcharacter listingcharacter">Type</samp>
+                                </span>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">Lower-bounded wildcard type
+                                <a class="indexanchor" id="i12_24"/>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">All supertypes of 
+                                <samp class="listingcharacter listingcharacter">Type</samp> and 
+                                <samp class="listingcharacter listingcharacter">Type</samp>
+                             itself</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 12.9</b>    
+            The Three Wildcard Types</p>
+            
+            <p class="standard">A wildcard thus describes the feature of an actual type parameter. Consider the following notation:</p>
+            
+            <div class="listing " id="l_none_121013"><pre>
+                <a id="p718"/>Rocket<span class="">&lt;</span>
+                <span class="bold">? <span class="">extends</span><span class=""> Number</span></span>&gt; r; <span class=""/></pre></div>
+            
+            <p class="standard">All possible 
+                <samp class="listingcharacter listingcharacter">Number</samp> objects can be in the rocket 
+                <samp class="listingcharacter listingcharacter">p</samp>. Let’s clarify 
+                <samp class="listingcharacter listingcharacter">extends</samp> and 
+                <samp class="listingcharacter listingcharacter">super</samp>
+             with another example that shows what family of types is described by the syntax.</p>
+            
+            <table class="standardtable" id="t12.10">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">? Extends CharSequence</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">? super String</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">CharSequence</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">String</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">String</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">CharSequence</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">StringBuffer</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Object</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last"/>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">…</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last"/>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 12.10</b>    
+            Some Included Types with extends and super</p>
+            
+            <p class="standard">The first table row provides clear examples of 
+                <samp class="listingcharacter listingcharacter">extends</samp> and 
+                <samp class="listingcharacter listingcharacter">super</samp> including the specified type itself. In 
+                <samp class="listingcharacter listingcharacter">&lt;? extends CharSequence&gt;</samp>, 
+                <samp class="listingcharacter listingcharacter">CharSequence</samp> is exactly the upper bound of the wildcard, and in 
+                <samp class="listingcharacter listingcharacter">&lt;? super String&gt;</samp>, 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             is the lower bound of the wildcard. While the number of types with the lower bound is limited (the number of superclasses can’t expand), the number of types with the upper bound is basically unknown since new subclasses can always be created.</p>
+            
+            
+                
+                <h4 class="t4" id="h12.5.4.1">Areas of Use</h4>
+                
+                <p class="standard">Each of these wildcard types has an area of use. The upper-bounded wildcard and the lower-bounded wildcard can be found in the sorting methods of data structures and algorithms, for instance.</p>
+                
+                <table class="standardtable" id="t12.11">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Example</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Meaning</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Rocket&lt;?&gt; p;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Rockets with any content.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Rocket&lt;? extends Number&gt; p;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">Rockets only with numbers, that is, subclasses of 
+                                    <samp class="listingcharacter listingcharacter">Number</samp>, like 
+                                    <samp class="listingcharacter listingcharacter">Integer</samp>, 
+                                    <samp class="listingcharacter listingcharacter">Double</samp>, 
+                                    <samp class="listingcharacter listingcharacter">BigDecimal</samp>
+                                , etc.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Comparator&lt;? super String&gt; comp;</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">Comparator</samp> that compares objects of type 
+                                    <samp class="listingcharacter listingcharacter">String</samp>, 
+                                    <samp class="listingcharacter listingcharacter">Object</samp>, or 
+                                    <samp class="listingcharacter listingcharacter">CharSequence</samp>, that is, supertypes of 
+                                    <samp class="listingcharacter listingcharacter">String</samp>. : For example, a 
+                                    <samp class="listingcharacter listingcharacter">Comparator</samp> that can compare 
+                                    <samp class="listingcharacter listingcharacter">CharSequence</samp> objects can also compare 
+                                    <samp class="listingcharacter listingcharacter">Strings</samp> because inheritance makes a 
+                                    <samp class="listingcharacter listingcharacter">String</samp> a kind of 
+                                    <samp class="listingcharacter listingcharacter">CharSequence</samp>. All 
+                                    <samp class="listingcharacter listingcharacter">&lt;? super String&gt;</samp>
+                                 comparator types can (somehow) compare strings.</p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 12.11</b>    
+            Examples of All Three Wildcard Types</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h12.5.4.2">
+                    <a id="p719"/>
+                Example with Upper-Bounded Wildcard Type</h4>
+                
+                <p class="standard">The upper-bounded wildcard is more common than the lower-bounded variant. For this reason, let’s look at an example that clarifies the common use of the upper-bounded wildcard. Our 
+                    <samp class="listingcharacter listingcharacter">Player</samp> had a right rocket and a left rocket. However, now the rockets shouldn’t store any sort of things, only special game objects of the 
+                    <span class="italic">Portable</span> type. 
+                    <samp class="listingcharacter listingcharacter">Portable</samp> is an interface that prescribes a weight for the objects that are portable. Two types should be portable: 
+                    <samp class="listingcharacter listingcharacter">Pen</samp> and 
+                    <samp class="listingcharacter listingcharacter">Cup</samp>. You could implement the 
+                    <samp class="listingcharacter listingcharacter">Portable</samp>
+                 interface in the following way:</p>
+                
+                <div class="listing " id="l12.18"><pre><span class="">interface</span><span class=""> Portable </span><span class="">{</span><span class=""><br/></span>  <span class="">double</span><span class=""> </span><span class="">getWeight</span><span class="">();</span><span class=""><br/></span>  <span class="">void</span><span class="">   </span><span class="">setWeight</span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> weight </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><br/><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> AbstractPortable </span><span class="">implements</span><span class=""> Portable </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">private</span><span class=""> </span><span class="">double</span><span class=""> weight</span><span class="">;</span><span class=""><br/></span><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">getWeight</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> weight</span><span class="">;</span><span class=""> </span><span class="">}</span><span class=""><br/></span><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">setWeight</span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> weight </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">this</span><span class="">.</span><span class="">weight </span><span class="">=</span><span class=""> weight</span><span class="">;</span><span class=""> </span><span class="">}</span><span class=""><br/></span><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">toString</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">getClass</span><span class="">().</span><span class="">getName</span><span class="">()</span><span class=""> </span><span class="">+</span><span class=""><br/></span>                                         <span class="">"[weight="</span><span class=""> </span><span class="">+</span><span class=""> weight </span><span class="">+</span><span class=""> </span><span class="">"]"</span><span class="">;</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">class</span><span class=""> Pen </span><span class="">extends</span><span class=""> AbstractPortable </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><br/><span class="">class</span><span class=""> Cup </span><span class="">extends</span><span class=""> AbstractPortable </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 12.18</b>    
+            src/main/java/com/tutego/insel/generic/PortableDemo.java (Snippet)</p>
+                
+                <p class="standard">To test whether the player is carrying too many things, an 
+                    <samp class="listingcharacter listingcharacter">areLighterThan(...)</samp>
+                 method will check if the weight of a list of portable things stays below a given limit. Our first attempt at this method could look like the following statement:</p>
+                
+                <div class="listing " id="l_none_121032"><pre><span class="">boolean</span><span class=""> </span><span class="">areLighterThan</span><span class="">(</span><span class=""> List</span><span class="">&lt;</span><span class="">Portable</span><span class="">&gt;</span><span class=""> collection</span><span class="">,</span><span class=""> </span><span class="">double</span><span class=""> maxWeight </span><span class="">)</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Hang on! This method would again only accept 
+                    <samp class="listingcharacter listingcharacter">Portable</samp> objects because covariance doesn’t apply. If this method did work, then maybe a 
+                    <samp class="listingcharacter listingcharacter">Pen</samp> can be added via 
+                    <samp class="listingcharacter listingcharacter">collection.add(...)</samp>, even if the passed list was declared with 
+                    <samp class="listingcharacter listingcharacter">Cup</samp>. Then, the list would suddenly contain something wrong. Also, 
+                    <samp class="listingcharacter listingcharacter">Portable</samp> is an interface, so the 
+                    <samp class="listingcharacter listingcharacter">areLighterThan(...)</samp> method with a 
+                    <samp class="listingcharacter listingcharacter">List&lt;Portable&gt;</samp>
+                 parameter type makes no sense at all. A reasonable notation is only possible with an upper-bounded wildcard type as in the following example:</p>
+                
+                <div class="listing " id="l_none_121032851951"><pre><span class="">boolean</span><span class=""> </span><span class="">areLighterThan</span><span class="">(</span><span class=""> List</span>
+                    <span class="bold"><span class="">&lt;? </span><span class="">extends</span><span class=""> Portable&gt;</span></span> list, <span class="">double</span><span class=""> maxWeight ) </span><span class=""/></pre></div>
+                
+                <p class="standard">
+                    <a id="p720"/>In this way, the method accepts only lists of 
+                    <samp class="listingcharacter listingcharacter">Portable</samp> objects. This limitation is necessary because 
+                    <samp class="listingcharacter listingcharacter">Portable</samp>
+                 objects have a weight, and the weight property is required.</p>
+                
+                <div class="listing " id="l12.19"><pre><span class="">class</span><span class=""> PortableUtils </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">areLighterThan</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">List&lt;? </span><span class="">extends</span><span class=""> Portable&gt;</span></span> list,<br/>                                        <span class="">double</span><span class=""> maxWeight ) {</span><br/>    <span class="">double</span><span class=""> accumulatedWeight = </span><span class="">0.0</span><span class="">;</span><br/><br/>    <span class="">for</span><span class=""> ( Portable portable : list )</span><br/>      accumulatedWeight += portable.<span class="">getWeight</span><span class="">();</span><br/><br/>    <span class="">return</span><span class=""> accumulatedWeight &lt; maxWeight;</span><br/>  }<br/>}<br/><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> PortableDemo {</span><br/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    Pen pen = <span class="">new</span><span class=""> </span><span class="">Pen</span><span class="">();</span><br/>    pen.<span class="">setWeight</span><span class="">( </span><span class="">10</span><span class=""> );</span><br/>    Cup cup = <span class="">new</span><span class=""> </span><span class="">Cup</span><span class="">();</span><br/>    cup.<span class="">setWeight</span><span class="">( </span><span class="">100</span><span class=""> );</span><br/>    System.out.<span class="">println</span><span class="">( PortableUtils.</span><span class="">areLighterThan</span><span class="">( Arrays.</span><span class="">asList</span><span class="">( pen, cup ),</span><br/>                                                      <span class="">10</span><span class=""> ) );</span><span class=""> //false</span><span class=""><br/></span>    System.out.<span class="">println</span><span class="">( PortableUtils.</span><span class="">areLighterThan</span><span class="">( Arrays.</span><span class="">asList</span><span class="">( pen, cup ),</span><br/>                                                      <span class="">120</span><span class=""> ) ); </span><span class=""> //true</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 12.19</b>    
+            src/main/java/com/tutego/insel/generic/PortableDemo.java (Snippet)</p>
+                
+                <p class="standard">As described earlier, the 
+                    <samp class="listingcharacter listingcharacter">List&lt;? extends Portable&gt;</samp>
+                 data structure declared with upper-bounded wildcards can only be read. This data structure cannot be changed.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.5.5">12.5.5    Bounded Wildcard Types and Bounded Type Variables</h3>
+            
+            <p class="standard">Of course, a connection exists between bounded wildcard types and bounded type variables, and two variants are selectable in the declaration. Let’s demonstrate these options with our 
+                <samp class="listingcharacter listingcharacter">areLighterThan(...)</samp>
+             method. Originally, we declared our method in the following way:</p>
+            
+            <div class="listing " id="l_none_121068"><pre><span class="">boolean</span><span class=""> </span><span class="">areLighterThan</span><span class="">(</span><span class=""> List</span>
+                <span class="bold"><span class="">&lt;? </span><span class="">extends</span><span class=""> Portable&gt;</span></span> list, <span class="">double</span><span class=""> maxWeight ) </span><span class=""/></pre></div>
+            
+            <p class="standard">
+                <a id="p721"/>
+            You could also have declared a type parameter locally for the method in the following way:</p>
+            
+            <div class="listing " id="l_none_121077"><pre>
+                <span class="bold"><span class="">&lt;T </span><span class="">extends</span><span class=""> Portable&gt;</span></span> <span class="">boolean</span><span class=""> </span><span class="">areLighterThan</span><span class="">( </span>
+                <span class="bold">List&lt;T&gt;</span> list, <span class="">double</span><span class=""> maxWeight ) </span><span class=""/></pre></div>
+            
+            <p class="standard">Both variants serve the same purpose. However, the first option is preferable to the second.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Best Practice</h6>
+                
+                <p class="standard first last">Whenever the type parameter (such as 
+                    <samp class="listingcharacter listingcharacter">T</samp>) appears only in the signature (the signature consists of the method name, the parameter list, and the exceptions) and no recourse for the 
+                    <samp class="listingcharacter listingcharacter">T</samp>
+                 type exists in the method itself, you should choose the first variant, with the wildcard. This variant is shorter and also makes it more clear that this type won’t appear again, for example, in a second parameter or the return.</p>
+            
+            </div>
+            
+            <p class="standard">Type parameters are a good way to create dependencies between the individual arguments including the return type. The next example includes some new methods to return the lightest object in a collection of rockets.</p>
+            
+            <div class="listing " id="l12.20"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                <span class="bold"><span class="">&lt;T </span><span class="">extends</span><span class=""> Portable&gt; T</span></span> <span class="">lightest</span><span class="">( </span>
+                <span class="bold">Collection&lt;T&gt;</span> collection ) {<br/>  
+                <span class="bold">Iterator&lt;T&gt;</span> iterator = collection.<span class="">iterator</span><span class="">();</span><br/>  
+                <span class="bold">T</span> lightest = iterator.<span class="">next</span><span class="">();</span><br/><br/>  <span class="">while</span><span class=""> ( iterator.</span><span class="">hasNext</span><span class="">() ) {</span><br/>    
+                <span class="bold">T</span> next = iterator.<span class="">next</span><span class="">();</span><br/><br/>    <span class="">if</span><span class=""> ( next.</span><span class="">getWeight</span><span class="">() &lt; lightest.</span><span class="">getWeight</span><span class="">() )</span><br/>      lightest = next;<br/>  }<br/><br/>  <span class="">return</span><span class=""> lightest;</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 12.20</b>    
+            src/main/java/com/tutego/insel/generic/PortableDemo.java, PortableUtils</p>
+            
+            <p class="standard">The compiler makes sure that the type of the return matches the type of the collection.</p>
+            
+            
+                
+                <h4 class="t4" id="h12.5.5.1">Waiving Bounded Wildcard Types in Returns</h4>
+                
+                <p class="standard">If you can use either bounded wildcard types or bounded type variables, bounded type variables are always preferable, unless the best practice in the box earlier applies. Wildcard types don’t provide type information, and thus, letting the compiler give you a more precise type via type inference is generally preferable.</p>
+                
+                <p class="standard">
+                    <a id="p722"/>Let’s assume we have a static method 
+                    <samp class="listingcharacter listingcharacter">leftSublist(...)</samp>
+                 that returns a sublist from a list. The sublist starts at the first position and goes halfway down.</p>
+                
+                <p class="standard">Our first attempt at this method is shown in the following example:</p>
+                
+                <div class="listing " id="l_none_121090"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">List&lt;?&gt;</span></span> <span class="">leftSublist</span><span class="">( List&lt;? </span><span class="">extends</span><span class=""> Portable&gt; list ) {</span><br/>  <span class="">return</span><span class=""> list.</span><span class="">subList</span><span class="">( </span><span class="">0</span><span class="">, list.</span><span class="">size</span><span class="">() / </span><span class="">2</span><span class=""> );</span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">The return type 
+                    <samp class="listingcharacter listingcharacter">List&lt;?&gt;</samp>
+                 is the worst option we can choose because the caller of the method can do nothing at all with the return. The caller knows nothing about the contents of the list.</p>
+                
+                <p class="standard">Let’s try again with the following example:</p>
+                
+                <div class="listing " id="l_none_121113"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">List&lt;? </span><span class="">extends</span><span class=""> Portable&gt;</span></span> <span class="">leftSublist</span><span class="">( List&lt;? </span><span class="">extends</span><span class=""> Portable&gt; list ) </span><span class=""/></pre></div>
+                
+                <p class="standard">This version is already slightly better because, in this variant, the recipient at least gets back the information that the list contains any portable things.</p>
+                
+                <p class="standard">Even better, of course, is to rely on the compiler’s type inference and return to the caller exactly the type with which it provided the parameter type. For this purpose, however, you must insert a type variable because, f a method declares parameters or a return with multiple wildcard types, the real type arguments are completely arbitrary and unrelated.</p>
+                
+                <div class="listing " id="l12.21"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                    <span class="bold"><span class="">&lt;T </span><span class="">extends</span><span class=""> Portable&gt;</span></span> List
+                    <span class="bold">&lt;T&gt;</span> <span class="">leftSublist</span><span class="">( List</span>
+                    <span class="bold">&lt;T&gt;</span> list ) {<br/>  <span class="">return</span><span class=""> list.</span><span class="">subList</span><span class="">( </span><span class="">0</span><span class="">, list.</span><span class="">size</span><span class="">() / </span><span class="">2</span><span class=""> );</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 12.21</b>    
+            src/main/java/com/tutego/insel/generic/PortableDemo.java, PortableUtils</p>
+                
+                <p class="standard">Now, the type of the list coming in is the same as the type of the list going out. With 
+                    <samp class="listingcharacter listingcharacter">extends</samp>
+                , the list can only be read-only.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Especially in the 
+                        <samp class="listingcharacter listingcharacter">Collections</samp> class from the Java standard API, many methods could also be written differently. For example, instead of 
+                        <samp class="listingcharacter listingcharacter">&lt;T extends E&gt; boolean addAll(Collection&lt;T&gt; c)</samp>, the authors chose 
+                        <samp class="listingcharacter listingcharacter">boolean addAll(Collection&lt;? extends E&gt; c)</samp>
+                    .</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h12.5.6">12.5.6    The PECS Principle</h3>
+            
+            <p class="standard">While types restricted with 
+                <samp class="listingcharacter listingcharacter">extends</samp> allow read operations, the opposite is true for 
+                <samp class="listingcharacter listingcharacter">super</samp>. In this case, reading isn’t permitted, but writing is. A good mnemonic for this concept is the PECS principle,
+                <a class="indexanchor" id="i12_25"/>
+             defined in the following way:</p>
+            
+            <p class="standard">
+                <span class="bold">
+                    <a id="p723"/>
+                P</span>roducer = 
+                <span class="bold">E</span>xtends, 
+                <span class="bold">C</span>onsumer = 
+                <span class="bold">S</span>uper
+                <span class="bold"> </span>
+            (PECS)</p>
+            
+            <p class="standard">Let’s look at an example: A static method named 
+                <samp class="listingcharacter listingcharacter">copyLighterThan(...)</samp>
+             should copy only those elements from one list to another that are lighter than a given upper limit. </p>
+            
+            <p class="standard">Our first attempt at this method is shown in the following example:</p>
+            
+            <div class="listing " id="l_none_121135"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">copyLighterThan</span><span class="">(</span><span class=""> List</span><span class="">&lt;?</span><span class=""> </span><span class="">extends</span><span class=""> Portable</span><span class="">&gt;</span><span class=""> src</span><span class="">,</span><span class=""><br/></span>                                    List<span class="">&lt;?</span><span class=""> </span><span class="">extends</span><span class=""> Portable</span><span class="">&gt;</span><span class=""> dest</span><span class="">,</span><span class=""> </span><span class="">double</span><span class=""> maxWeight </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> Portable portable </span><span class="">:</span><span class=""> src </span><span class="">)</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> portable</span><span class="">.</span><span class="">getWeight</span><span class="">()</span><span class=""> </span><span class="">&lt;</span><span class=""> maxWeight </span><span class="">)</span><span class=""><br/></span>      dest<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> portable </span><span class="">);</span><span class="">          </span><span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                 Compiler error !!</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">At first glance, our code looks sound, but the program can’t translate it. The problem is the 
+                <samp class="listingcharacter listingcharacter">dest.add(portable)</samp> statement. Recall that write operations cannot occur with an upper-bounded wildcard. This limitation makes sense because the 
+                <samp class="listingcharacter listingcharacter">src</samp> list can be a list of 
+                <samp class="listingcharacter listingcharacter">Cup</samp> objects, for example, and 
+                <samp class="listingcharacter listingcharacter">dest</samp> can be a list of 
+                <samp class="listingcharacter listingcharacter">Pen</samp> objects. Both are 
+                <samp class="listingcharacter listingcharacter">Portable</samp> but still incompatible since 
+                <samp class="listingcharacter listingcharacter">Cup</samp>s can’t be copied to 
+                <samp class="listingcharacter listingcharacter">Pen</samp>s. So, what should be the type of the result list? Let’s start with the source list. In this context, 
+                <samp class="listingcharacter listingcharacter">List &lt;? extends Portable&gt;</samp> is correct because the list can contain everything that’s portable. But what are the requirements for the target list? What must the type look like so that everything of the 
+                <samp class="listingcharacter listingcharacter">Portable</samp> type, like 
+                <samp class="listingcharacter listingcharacter">Cup</samp> or 
+                <samp class="listingcharacter listingcharacter">Pen</samp> (or even still subclasses of 
+                <samp class="listingcharacter listingcharacter">Cup</samp>s and 
+                <samp class="listingcharacter listingcharacter">Pen</samp>s) can be stored? The answer is simple: any type above 
+                <samp class="listingcharacter listingcharacter">Portable</samp>! These types would include 
+                <samp class="listingcharacter listingcharacter">Portable</samp> itself and 
+                <samp class="listingcharacter listingcharacter">Object</samp>, that is, all supertypes. However, 
+                <samp class="listingcharacter listingcharacter">Portable</samp> is the lower-bounded wildcard type, which we write as 
+                <samp class="listingcharacter listingcharacter">super</samp>
+            . The result is:</p>
+            
+            <div class="listing " id="l12.22"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">copyLighterThan</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">List&lt;? </span><span class="">extends</span><span class=""> Portable&gt;</span></span> src, <br/>                                    
+                <span class="bold">List&lt;? <span class="">super</span><span class=""> Portable&gt;</span></span> dest, <span class="">double</span><span class=""> maxWeight ) {</span><br/>  <span class="">for</span><span class=""> ( Portable portable : src )</span><br/>    <span class="">if</span><span class=""> ( portable.</span><span class="">getWeight</span><span class="">() &lt; maxWeight )</span><br/>      dest.<span class="">add</span><span class="">( portable );</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 12.22</b>    
+            src/main/java/com/tutego/insel/generic/PortableDemo.java, PortableUtils</p>
+            
+            <p class="standard">The following example calls our method:</p>
+            
+            <div class="listing " id="l12.23"><pre>List<span class="">&lt;?</span><span class=""> </span><span class="">extends</span><span class=""> Portable</span><span class="">&gt;</span><span class=""> src </span><span class="">=</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> pen</span><span class="">,</span><span class=""> cup </span><span class="">);</span><span class=""><br/></span>List<span class="">&lt;?</span><span class=""> </span><span class="">super</span><span class=""> Portable</span><span class="">&gt;</span><span class="">   dest </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;();</span><span class=""><br/></span>PortableUtils<span class="">.</span><span class="">copyLighterThan</span><span class="">(</span><span class=""> src</span><span class="">,</span><span class=""> dest</span><span class="">,</span><span class=""> </span><span class="">20</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> dest</span><span class="">.</span><span class="">size</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> // 1</span><span class=""><br/></span>Object result <span class="">=</span><span class=""> dest</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> result </span><span class="">);</span><span class="">     </span><span class=""> // com.tutego.insel.generic.Pen[weight=10.0]</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 12.23</b>    
+            src/main/java/com/tutego/insel/generic/PortableDemo.java, main() (Snippet)</p>
+            
+            <p class="standard">
+                <a id="p724"/>The 
+                <samp class="listingcharacter listingcharacter">dest</samp> list is writable, but the readable type is only 
+                <samp class="listingcharacter listingcharacter">Object</samp>—the compiler doesn’t know what is actually in the list. The compiler only knows that any supertypes of 
+                <samp class="listingcharacter listingcharacter">Portable</samp> might be included, and the most general type available is 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h12.5.6.1">Wildcard Capture</h4>
+                
+                <p class="standard">The PECS principle has an important consequence that’s particularly noticeable in list operations: A list parameterized with a wildcard can’t be modified. But how can you write a method that reverses a list, for example? From the API design point of view, a 
+                    <samp class="listingcharacter listingcharacter">reverse(...)</samp>
+                 method could be written in the following way:</p>
+                
+                <div class="listing " id="l_none_121167"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">reverse</span><span class="">(</span><span class=""> List</span><span class="">&lt;?&gt;</span><span class=""> list </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Or the same method could be written in the following way:</p>
+                
+                <div class="listing " id="l_none_121169"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">reverse</span><span class="">(</span><span class=""> List</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> list </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">As mentioned earlier, we should opt for the wildcard notation for completely free types, but now, we’re facing a dilemma.</p>
+                
+                <div class="listing " id="l_none_121170"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">reverse</span><span class="">(</span><span class=""> List</span>
+                    <span class="bold"><span class="">&lt;?&gt;</span></span> list ) {<br/>  <span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> i = </span><span class="">0</span><span class="">; i &lt; list.</span><span class="">size</span><span class="">()</span><span class=""> / 2; i++ ) {</span><br/>    int j = list.size() - i - 1;<br/>    
+                    <span class="bold">?</span> tmp = list.get( i );               <span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""><br/></span>    list.<span class="">set</span><span class="">( i, list.</span><span class="">get</span><span class="">( j ) );</span><br/>    list.<span class="">set</span><span class="">( j, tmp );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="standard">We have no choice but to choose the variant with the type variable after all, so that we have access to the type 
+                    <samp class="listingcharacter listingcharacter">T</samp>
+                .</p>
+                
+                <p class="standard">Since 
+                    <samp class="listingcharacter listingcharacter">reverse(List&lt;?&gt; list)</samp> is now preferred by the API design, but 
+                    <samp class="listingcharacter listingcharacter">reverse(List&lt;T&gt; list)</samp> is necessary in the implementation, the question arises how to combine both. 
+                    <samp class="listingcharacter listingcharacter">reverse(List&lt;?&gt; list)</samp> can redirect to an internal reverse method, 
+                    <samp class="listingcharacter listingcharacter">reverse_(List&lt;T&gt;)</samp>. Although the methods have to be named differently, the mapping from a wildcard to a type variable works because of the so-called 
+                    <span class="italic">wildcard capture</span>.
+                    <span class="italic"/>
+                </p>
+                
+                <div class="listing " id="l12.24"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> WildcardCapture </span><span class="">{</span><span class=""><br/></span><br/>  
+                    <span class="bold"><span class="">private</span><span class=""> </span><span class="">static</span><span class=""> &lt;T&gt; </span><span class="">void</span><span class=""> </span><span class="">reverse_</span><span class="">( List&lt;T&gt; list )</span></span> {<br/>    <span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> i = </span><span class="">0</span><span class="">; i &lt; list.</span><span class="">size</span><span class="">() / </span><span class="">2</span><span class="">; i++ ) {</span><br/>      <span class="">int</span><span class=""> j = list.</span><span class="">size</span><span class="">() - i - </span><span class="">1</span><span class="">;</span><br/>      T tmp = list.<span class="">get</span><span class="">( i );</span><br/>      list.<span class="">set</span><span class="">( i, list.</span><span class="">get</span><span class="">( j ) );</span><br/>      list.<span class="">set</span><span class="">( j, tmp );</span><br/>
+                    <a id="p725"/>    }<br/>  }<br/><br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">reverse</span><span class="">( List&lt;?&gt; list ) {</span><br/>    <span class="">reverse_</span><span class="">( list );</span><br/>  }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 12.24</b>    
+            src/main/java/com/tutego/insel/generic/WildcardCapture, WildcardCapture</p>
+                
+                <p class="standard">The compiler “catches” the unknown type of the list at 
+                    <samp class="listingcharacter listingcharacter">reverse(list)</samp> and “fills” the type variable at 
+                    <samp class="listingcharacter listingcharacter">reverse_(list)</samp>
+                .</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,894 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Introduction to Data Structures and Algorithms" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Introduction to Data Structures and Algorithms" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Introduction to Data Structures and Algorithms</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h18.2">18.2    Sets</h2>
+        
+        <p class="standard">A set is an (initially) unordered collection of elements. Each element may occur only once. For sets, the Java library provides the interface 
+            <samp class="listingcharacter listingcharacter">java.util.Set</samp>
+            <a class="indexanchor" id="i18_23"/>
+        . Popular implementing classes include the following:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">HashSet</samp>: For fast set implementation by hashing method (based on 
+                    <samp class="listingcharacter listingcharacter">HashMap</samp>
+                ).</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">TreeSet</samp>
+                : Sets are implemented by balanced binary trees that allow sorting.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">LinkedHashSet</samp>
+                : Fast set implementation while maintaining insertion order.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">EnumSet</samp>
+                : A special set exclusively for enumerations.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">CopyOnWriteArraySet</samp>
+                : For fast, thread-safe data structures, optimized for many read operations but few write operations.</p>
+            
+            </li>
+        
+        </ul>
+        
+        
+            
+            <h3 class="t3" id="h18.2.1">18.2.1    A First Example of a Set</h3>
+            
+            <p class="standard">Our next example program analyzes a text and recognizes cities that were previously entered into a data structure. All cities that appear in the text are collected and subsequently output.</p>
+            
+            <div class="listing " id="l18.7"><pre><span class="">
+                    <a id="p929"/>
+                package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">set</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">text</span><span class="">.</span><span class="">BreakIterator</span><span class="">;</span><span class=""><br/></span><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.*;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> WhereHaveYouBeen </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>   <span class=""> // Build set with cities</span><span class=""><br/></span><br/>    
+                <span class="bold"><span class="">Set&lt;</span><span class="">String</span><span class="">&gt; allCities = </span><span class="">new</span><span class=""> HashSet&lt;&gt;();</span><br/>    allCities.<span class="">add</span><span class="">( </span><span class="">"Seattle"</span><span class=""> );</span><br/>    allCities.<span class="">add</span><span class="">( </span><span class="">"Denver"</span><span class=""> );</span><br/>    allCities.<span class="">add</span><span class="">( </span><span class="">"Manila"</span><span class=""> );</span><br/>    allCities.<span class="">add</span><span class="">( </span><span class="">"Seoul"</span><span class=""> );</span><br/>    allCities.<span class="">add</span><span class="">( </span><span class="">"Siquijor"</span><span class=""> );</span><br/></span><br/>   <span class=""> // Build set for visited cities</span><span class=""><br/></span><br/>    
+                <span class="bold">Set&lt;<span class="">String</span><span class="">&gt; visitedCities = </span><span class="">new</span><span class=""> TreeSet&lt;&gt;();</span><br/><br/></span>   <span class=""> // Parse sentence and break it into words. All cities found</span><span class=""><br/></span>   <span class=""> // include in new data structure</span><span class=""><br/></span>    <span class="">String</span><span class=""> sentence = </span><span class="">"From Seattle I drive to Denver and fly to Manila."</span><span class="">;</span><br/>    BreakIterator iter = BreakIterator.<span class="">getWordInstance</span><span class="">();</span><br/>    iter.<span class="">setText</span><span class="">( sentence );</span><br/><br/>    <span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> first = iter.</span><span class="">first</span><span class="">(), last = iter.</span><span class="">next</span><span class="">();</span><br/>          last != BreakIterator.DONE;<br/>          first = last, last = iter.<span class="">next</span><span class="">() ) {</span><br/>      <span class="">String</span><span class=""> word = sentence.</span><span class="">substring</span><span class="">( first, last );</span><br/>      <span class="">if</span><span class=""> ( </span>
+                <span class="bold">allCities.<span class="">contains</span><span class="">( word )</span></span> )<br/>        
+                <span class="bold">visitedCities.<span class="">add</span><span class="">( word );</span></span><br/>    }<br/><br/>   <span class=""> // Some statistics</span><span class=""><br/></span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Number of visited cities: "</span><span class=""> + visitedCities.</span><span class="">size</span><span class="">() );</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Number of unvisited cities: "</span><span class=""> +</span><br/>                        (
+                <span class="bold">allCities.<span class="">size</span><span class="">() - visitedCities.</span><span class="">size</span><span class="">()</span></span>) );<br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Visited cities: "</span><span class=""> + </span><span class="">String</span><span class="">.</span><span class="">join</span><span class="">( </span><span class="">", "</span><span class="">, visitedCities ) );</span><br/>    
+                <span class="bold">Set&lt;<span class="">String</span><span class="">&gt; unvisitedCities = </span><span class="">new</span><span class=""> TreeSet&lt;&gt;( allCities );</span></span><br/>    unvisitedCities.<span class="">removeAll</span><span class="">( visitedCities );</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Unvisited cities: "</span><span class=""> + </span><span class="">String</span><span class="">.</span><span class="">join</span><span class="">( </span><span class="">", "</span><span class="">, unvisitedCitie
+                    <a id="p930"/>
+                s ) );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 18.7</b>    
+            src/main/java/com/tutego/insel/util/set/WhereHaveYouBeen.java</p>
+            
+            <p class="standard">A total of three sets occur in this program:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">allCities</samp> stores all possible cities. The choice falls on the 
+                        <samp class="listingcharacter listingcharacter">HashSet</samp> type because the set doesn’t need to be sorted, concurrency is not an issue, and 
+                        <samp class="listingcharacter listingcharacter">HashSet</samp>
+                     provides a good access time.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A 
+                        <samp class="listingcharacter listingcharacter">TreeSet visitedCities</samp> memorizes the visited cities. This 
+                        <samp class="listingcharacter listingcharacter">Set</samp>
+                     is also fast but has the advantage of keeping the elements sorted, which will help our later output.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">To determine all unvisited cities, the program calculates the difference set between all cities and visited cities. No method in the 
+                        <samp class="listingcharacter listingcharacter">Set</samp> interface does this directly—in fact, no operation in 
+                        <samp class="listingcharacter listingcharacter">Set</samp> has the return type 
+                        <samp class="listingcharacter listingcharacter">Set</samp> or 
+                        <samp class="listingcharacter listingcharacter">Collection</samp>. So, you can only use a method like 
+                        <samp class="listingcharacter listingcharacter">removeAll(...)</samp>, which removes the visited cities from the set of all cities to determine which cities haven’t been visited yet. But a “problem” with the 
+                        <samp class="listingcharacter listingcharacter">removeAll(...)</samp> method is its destructive nature: The elements are deleted from the set. However, because the original set shouldn’t be changed, we’ll copy all cities to a cache (
+                        <samp class="listingcharacter listingcharacter">unvisitedCities</samp>
+                    ) and delete elements from this cache, leaving the original set untouched.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Regular expressions are an option for decomposing sentences and occur elsewhere in the book as well. However, the 
+                    <samp class="listingcharacter listingcharacter">BreakIterator</samp>
+                 has an advantage in that it can correctly classify every single Unicode character.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.2.2">18.2.2    Methods of the Set Interface</h3>
+            
+            <p class="standard">In addition to operations for requesting and inserting elements, a set class declares methods for intersecting and joining sets.</p>
+            
+            <div class="listing " id="l_none_18352"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Set</span>&lt;E&gt;<br/><span class="">extends</span><span class=""> Collection&lt;E&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean add(E o)</samp><br/>Places 
+                        <samp class="listingcharacter listingcharacter">o</samp> in the set if no 
+                        <samp class="listingcharacter listingcharacter">equals</samp>-equals object exists in the set yet. Returns 
+                        <samp class="listingcharacter listingcharacter">true</samp>
+                     on successful insertion.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean addAll(Collection&lt;? extends E&gt; c)</samp><br/>Inserts all elements of 
+                        <samp class="listingcharacter listingcharacter">c</samp> into the 
+                        <samp class="listingcharacter listingcharacter">Set</samp>. If 
+                        <samp class="listingcharacter listingcharacter">c</samp> is a different 
+                        <samp class="listingcharacter listingcharacter">Set</samp>, 
+                        <samp class="listingcharacter listingcharacter">addAll(...)</samp> stands for the 
+                        <a id="p931"/>set union. In essence, this method is similar to 
+                        <samp class="listingcharacter listingcharacter">for (E e : c) add(e);</samp>. The return is 
+                        <samp class="listingcharacter listingcharacter">true</samp>
+                     if the collection has changed in any way.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void clear()</samp><br/>Deletes the 
+                        <samp class="listingcharacter listingcharacter">Set</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean contains(Object o)</samp><br/>Determines if the element 
+                        <samp class="listingcharacter listingcharacter">o</samp>
+                     is included in the set.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean containsAll(Collection&lt;?&gt; c)</samp><br/>Determines if 
+                        <samp class="listingcharacter listingcharacter">c</samp> a subset of 
+                        <samp class="listingcharacter listingcharacter">Set</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;E&gt; Set&lt;E&gt; copyOf (Collection&lt;? extends E&gt; coll) </samp><br/>Creates an unmodifiable copy.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean isEmpty()</samp><br/>Determines if the 
+                        <samp class="listingcharacter listingcharacter">Set</samp>
+                     empty.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Iterator&lt;E&gt; iterator()</samp><br/>Returns an iterator for the 
+                        <samp class="listingcharacter listingcharacter">Set</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean remove(Object o)</samp><br/>Deletes 
+                        <samp class="listingcharacter listingcharacter">o</samp> from the 
+                        <samp class="listingcharacter listingcharacter">Set</samp> and returns 
+                        <samp class="listingcharacter listingcharacter">true</samp> if the deletion was successful; otherwise, returns 
+                        <samp class="listingcharacter listingcharacter">false</samp> if no 
+                        <samp class="listingcharacter listingcharacter">equals</samp>
+                    -like object exists in the set.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean removeAll(Collection&lt;?&gt; c)</samp><br/>Deletes all elements of the 
+                        <samp class="listingcharacter listingcharacter">Collection</samp> from the 
+                        <samp class="listingcharacter listingcharacter">Set</samp> and returns 
+                        <samp class="listingcharacter listingcharacter">true</samp>
+                     on successful deletion.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean retainAll(Collection&lt;?&gt; c)</samp><br/>The set 
+                        <span class="italic">retains</span> all elements that are also contained in 
+                        <samp class="listingcharacter listingcharacter">c</samp>—in other words, all elements of the current set that aren’t also present in 
+                        <samp class="listingcharacter listingcharacter">c</samp> are deleted. No change occurs to the data structure 
+                        <samp class="listingcharacter listingcharacter">c</samp>. The own set is then the intersection with 
+                        <samp class="listingcharacter listingcharacter">c</samp>, but 
+                        <samp class="listingcharacter listingcharacter">c</samp>
+                     may contain many more elements.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">int size()</samp><br/>Returns the number of elements in the set.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Object[] toArray()</samp><br/>First creates a new array to store all the elements of the set and then copies the elements into the array.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;T&gt; T[] toArray(T[] a)</samp><br/>If the passed array is large enough for all elements of the set, then all elements of the set are copied into the array, and 
+                        <samp class="listingcharacter listingcharacter">a</samp> is returned. If the array is too small, a new array of type 
+                        <samp class="listingcharacter listingcharacter">T</samp>
+                     is created, and all elements are copied from the set to the array and returned.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">default &lt;T&gt; T[] toArray(IntFunction&lt;T[]&gt; generator)</samp><br/>As documented in 
+                        <samp class="listingcharacter listingcharacter">Collection</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">In the 
+                <samp class="listingcharacter listingcharacter">Set</samp> interface, the 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> and 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp> methods originating from 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+             are specified with their functionalities related to sets in the API documentation.</p>
+            
+            <p class="standard">
+                <a id="p932"/>
+            In addition, several static methods for creating immutable sets are available:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;E&gt; Set&lt;E&gt; copyOf(Collection&lt;? extends E&gt; coll)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;E&gt; Set&lt;E&gt; of()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;E&gt; Set&lt;E&gt; of(E... elements)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Elements stored in a 
+                    <samp class="listingcharacter listingcharacter">Set</samp>
+                 must remain immutable. On one hand, they may not be retrievable after a change; on the other hand, elements may appear twice in the set in this way, which contradicts the philosophy of the interface.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h18.2.2.1">Adding Another Element</h4>
+                
+                <p class="standard">If an element isn’t yet contained in a set, 
+                    <samp class="listingcharacter listingcharacter">add(...)</samp> inserts the element and returns 
+                    <samp class="listingcharacter listingcharacter">true</samp>. If already present, 
+                    <samp class="listingcharacter listingcharacter">add(...)</samp> does nothing and returns 
+                    <samp class="listingcharacter listingcharacter">false</samp>. (This scenario is different for a 
+                    <samp class="listingcharacter listingcharacter">Map</samp> because in that case 
+                    <samp class="listingcharacter listingcharacter">put(...)</samp> overrides the key.) Whether an element to be added matches an existing element already in the set is determined by the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                 method, in which case equivalence matters instead of identity.</p>
+                
+                <div class="listing " id="l18.8"><pre>Set<span class="">&lt;</span><span class="">Point</span><span class="">&gt;</span><span class=""> set </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> HashSet</span><span class="">&lt;&gt;();</span><span class=""><br/></span>Point p1 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">(),</span><span class=""> p2 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Point</span><span class="">();</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> set</span><span class="">.</span><span class="">add</span><span class="">(</span><span class="">p1</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">     </span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> set</span><span class="">.</span><span class="">add</span><span class="">(</span><span class="">p1</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">     </span><span class=""> // false</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> set</span><span class="">.</span><span class="">add</span><span class="">(</span><span class="">p2</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">     </span><span class=""> // false</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> set</span><span class="">.</span><span class="">contains</span><span class="">(</span><span class="">p1</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // true</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> set</span><span class="">.</span><span class="">contains</span><span class="">(</span><span class="">p2</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // true</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 18.8</b>    
+            src/main/java/com/tutego/insel/util/set/HashSetDoubleAdd.java, main()</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.2.3">18.2.3    HashSet</h3>
+            
+            <p class="standard">A 
+                <samp class="listingcharacter listingcharacter">java.util.HashSet</samp>
+                <a class="indexanchor" id="i18_24"/> class manages elements in a fast hash-based data structure. As a result, elements are quickly sorted and easily found. If sorting the elements in the 
+                <samp class="listingcharacter listingcharacter">HashSet</samp> is necessary, elements must be copied into a 
+                <samp class="listingcharacter listingcharacter">List</samp> or a 
+                <samp class="listingcharacter listingcharacter">TreeSet</samp>
+             and then sorted.</p>
+            
+            <div class="listing " id="l_none_18371"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">HashSet</span>&lt;E&gt;<br/><span class="">extends</span><span class=""> AbstractSet&lt;E&gt;</span><br/><span class="">implements</span><span class=""> Set&lt;E&gt;, Cloneable, Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">HashSet()</samp><br/>Creates an empty 
+                        <samp class="listingcharacter listingcharacter">HashSet</samp>
+                     object.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">HashSet(Collection&lt;? extends E&gt; c)</samp><br/>Creates a new unsorted 
+                        <samp class="listingcharacter listingcharacter">HashSet</samp> from the collection 
+                        <samp class="listingcharacter listingcharacter">c</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p933"/>
+                        HashSet(int initialCapacity)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">HashSet(int initialCapacity, float loadFactor)</samp><br/>These two constructors are meant for optimization. 
+                        <samp class="listingcharacter listingcharacter">HashSet</samp> is internally based on the 
+                        <samp class="listingcharacter listingcharacter">HashMap</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.2.4">18.2.4    TreeSet: The Sorted Set</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">java.util.TreeSet</samp>
+                <a class="indexanchor" id="i18_25"/> class also implements the 
+                <samp class="listingcharacter listingcharacter">Set</samp> interface like 
+                <samp class="listingcharacter listingcharacter">HashSet</samp> but follows a different implementation strategy. A 
+                <samp class="listingcharacter listingcharacter">TreeSet</samp> always manages the items sorted.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn18_03" id="fn18_03">[ 221 ]</a></span> If 
+                <samp class="listingcharacter listingcharacter">TreeSet</samp> saves a new element, 
+                <samp class="listingcharacter listingcharacter">TreeSet</samp> automatically inserts the element sorted into the data structure. This operation costs a little more time than a 
+                <samp class="listingcharacter listingcharacter">HashSet</samp>, but this kind of sorting is permanent. For this reason, outputting all elements in an orderly fashion later isn’t time consuming. However, searching for a single element is somewhat slower than in the 
+                <samp class="listingcharacter listingcharacter">HashSet</samp>
+            . But the term “slower” must be put into perspective: The search is logarithmic in time and therefore not really “slow.” When inserting and deleting, a reorganization of the tree must be accepted for certain constellations, which worsens the insertion or deletion time. However, these costs also exist in re-hashing, but these costs can be avoided by using the appropriate starting size.</p>
+            
+            <div class="listing " id="l_none_18378"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">TreeSet</span>&lt;E&gt;<br/><span class="">extends</span><span class=""> AbstractSet&lt;E&gt;</span><br/><span class="">implements</span><span class=""> NavigableSet&lt;E&gt;, Cloneable, Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">TreeSet()</samp><br/>Creates a new, empty 
+                        <samp class="listingcharacter listingcharacter">TreeSet</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">TreeSet(Collection&lt;? extends E&gt; c)</samp><br/>Creates a new 
+                        <samp class="listingcharacter listingcharacter">TreeSet</samp> from the given 
+                        <samp class="listingcharacter listingcharacter">Collection</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">TreeSet(Comparator&lt;? super E&gt; c)</samp><br/>Creates an empty 
+                        <samp class="listingcharacter listingcharacter">TreeSet</samp> with a given 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp>
+                     that does the comparisons for sorting the internal data structure.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">TreeSet(SortedSet&lt;E&gt; s)</samp><br/>Creates a new 
+                        <samp class="listingcharacter listingcharacter">TreeSet</samp> and takes over all elements of 
+                        <samp class="listingcharacter listingcharacter">s</samp> and also the sorting of 
+                        <samp class="listingcharacter listingcharacter">s</samp>. (No constructor is available with 
+                        <samp class="listingcharacter listingcharacter">NavigableSet</samp>
+                    .)</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following code tests whether a list of date values, each of which can occur only once in the list, is sorted in ascending order:</p>
+                
+                <div class="listing " id="l_none_18395"><pre>
+                    <a id="p934"/>List<span class="">&lt;</span><span class="">Instant</span><span class="">&gt;</span><span class=""> dates </span><span class="">=</span><span class=""> List</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> Instant</span><span class="">.</span><span class="">ofEpochMilli</span><span class="">(</span><span class=""> 2L </span><span class="">),</span><span class=""><br/></span>                               Instant<span class="">.</span><span class="">ofEpochMilli</span><span class="">(</span><span class=""> 3L </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">boolean</span><span class=""> isSorted </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;(</span><span class=""> </span><span class="">new</span><span class=""> TreeSet</span><span class="">&lt;&gt;(</span><span class=""> dates </span><span class="">)</span><span class=""> </span><span class="">).</span><span class="">equals</span><span class="">(</span><span class=""> dates </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">If the constructor of 
+                    <samp class="listingcharacter listingcharacter">TreeSet</samp> accepts another collection, the result is a sorted collection of all elements. This collection can in turn be passed into another constructor that accepts arbitrary 
+                    <samp class="listingcharacter listingcharacter">Collection</samp> objects. Our example compares two 
+                    <samp class="listingcharacter listingcharacter">List</samp> instances via 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>
+                , where lists have an order. If the order after sorting matches the order before sorting, the list was already sorted.</p>
+                
+                <p class="standard last">Of course, better implementations can be conceived. For example, you could use an iterator to run the collection and see if the next element is always greater than or equal to.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h18.2.4.1">Significance of Sorting</h4>
+                
+                <p class="standard">Due to internal sorted storage, two particularly important conditions should be kept in mind:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">Comparing the elements must be possible. For example, if 
+                            <samp class="listingcharacter listingcharacter">Player</samp> objects come into the 
+                            <samp class="listingcharacter listingcharacter">TreeSet</samp>, but 
+                            <samp class="listingcharacter listingcharacter">Player</samp> doesn’t implement the 
+                            <samp class="listingcharacter listingcharacter">Comparable</samp> interface, 
+                            <samp class="listingcharacter listingcharacter">TreeSet</samp> throws an exception because 
+                            <samp class="listingcharacter listingcharacter">TreeSet</samp>
+                         doesn’t know what order the players should be in.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The elements must be of the same type. How can a church object be compared with a vacuum cleaner object?</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In this example, words should be considered the same even if they differ in capitalization or have whitespace at the beginning and end. The following code sorts strings into a set (case-insensitive) and ignores whether the word was preceded or followed by whitespace:</p>
+                    
+                    <div class="listing  last_item" id="l_none_18406"><pre>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> comparator </span><span class="">=</span><span class=""> </span><br/>  <span class="">(</span><span class="">s1</span><span class="">,</span><span class=""> s2</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">CASE_INSENSITIVE_ORDER</span><span class="">.</span><span class="">compare</span><span class="">(</span><span class=""> s1</span><span class="">.</span><span class="">trim</span><span class="">(),</span><span class=""> s2</span><span class="">.</span><span class="">trim</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Set<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> set </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> TreeSet</span><span class="">&lt;&gt;(</span><span class=""> comparator </span><span class="">);</span><span class=""><br/></span>Collections<span class="">.</span><span class="">addAll</span><span class="">(</span><span class=""> set</span><span class="">,</span><span class=""> </span><span class="">"xxx "</span><span class="">,</span><span class=""> </span><span class="">" </span>
+                        <span class="bold">XXX</span>"<span class="">, </span><span class="">"tang"</span><span class="">, </span><span class="">" xXx"</span><span class="">, </span><span class="">" QUEEN "</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( set );</span><span class=""> // [ QUEEN , tang, xxx ]</span><span class=""/><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h18.2.4.2">The equals(...) Method and the Comparison Methods</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method plays a major role in many data structures. The 
+                    <samp class="listingcharacter listingcharacter">TreeSet</samp> is different because it uses an external 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> or the 
+                    <samp class="listingcharacter listingcharacter">compareTo(...)</samp> method for classification if the elements are 
+                    <samp class="listingcharacter listingcharacter">Comparable</samp>. If the compare method returns 0, the elements are equal, and equal elements aren’t permitted in the set. 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> isn’t used in this case, although of course the 
+                    <samp class="listingcharacter listingcharacter">equals</samp> implementation should return 
+                    <samp class="listingcharacter listingcharacter">true</samp> if 
+                    <samp class="listingcharacter listingcharacter">compare(...)</samp> or 
+                    <samp class="listingcharacter listingcharacter">compareTo(...)</samp>
+                 returns 0.</p>
+                
+                <p class="standard">
+                    <a id="p935"/>For example, let’s use the 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> from our previous example for 
+                    <samp class="listingcharacter listingcharacter">String</samp> objects, which makes case-insensitive comparisons and ignores whitespace. Then, according to 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> the strings “
+                    <samp class="listingcharacter listingcharacter">xxx</samp>” and “
+                    <samp class="listingcharacter listingcharacter">XXX</samp>” are certainly not equal, but our own 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp>
+                 would indicate equivalence:</p>
+                
+                <div class="listing " id="l_none_18414"><pre>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> comparator </span><span class="">=</span><span class=""> </span><br/>  <span class="">(</span><span class="">s1</span><span class="">,</span><span class=""> s2</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> </span><span class="">String</span><span class="">.</span><span class="">CASE_INSENSITIVE_ORDER</span><span class="">.</span><span class="">compare</span><span class="">(</span><span class=""> s1</span><span class="">.</span><span class="">trim</span><span class="">(),</span><span class=""> s2</span><span class="">.</span><span class="">trim</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>Set<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> set </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> TreeSet</span><span class="">&lt;&gt;(</span><span class=""> comparator </span><span class="">);</span><span class=""><br/></span>set<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span><span class="">"xxx "</span><span class=""> </span><span class="">);</span><span class=""><br/></span>set<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> </span><span class="">"XXX"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> set </span><span class="">);</span><span class="">                       </span><span class=""> // [xxx ]</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> set</span><span class="">.</span><span class="">contains</span><span class="">(</span><span class=""> </span><span class="">"  XXX   "</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // true</span><span class=""> </span></pre></div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.2.5">18.2.5    The Interfaces NavigableSet and SortedSet</h3>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">TreeSet</samp> implements the interface 
+                <samp class="listingcharacter listingcharacter">NavigableSet</samp>
+                <a class="indexanchor" id="i18_26"/>
+             and provides methods that return the next higher or next lower element for a given element. Thus, not only are the usual queries about set affiliation conceivable on sets, but also queries like “Give me the element that is greater than or equal to a given element.”</p>
+            
+            <p class="standard">The following example queues up three 
+                <samp class="listingcharacter listingcharacter">LocalDate</samp> objects in a 
+                <samp class="listingcharacter listingcharacter">TreeSet</samp>. The 
+                <samp class="listingcharacter listingcharacter">LocalDate</samp> class implements 
+                <samp class="listingcharacter listingcharacter">Comparable&lt;LocalDate&gt;</samp> because these objects have a natural order. The methods 
+                <samp class="listingcharacter listingcharacter">lower(…)</samp>, 
+                <samp class="listingcharacter listingcharacter">ceiling(…)</samp>, 
+                <samp class="listingcharacter listingcharacter">floor(…)</samp>, and 
+                <samp class="listingcharacter listingcharacter">higher(…)</samp>
+             select the requested object from the set.</p>
+            
+            <div class="listing " id="l18.9"><pre>NavigableSet<span class="">&lt;</span><span class="">LocalDate</span><span class="">&gt;</span><span class=""> set </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> TreeSet</span><span class="">&lt;&gt;();</span><span class=""><br/></span>set<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> LocalDate</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">2018</span><span class="">,</span><span class=""> Month</span><span class="">.</span><span class="">MARCH</span><span class="">,</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>set<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> LocalDate</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">2018</span><span class="">,</span><span class=""> Month</span><span class="">.</span><span class="">MARCH</span><span class="">,</span><span class=""> </span><span class="">12</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>set<span class="">.</span><span class="">add</span><span class="">(</span><span class=""> LocalDate</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">2018</span><span class="">,</span><span class=""> Month</span><span class="">.</span><span class="">MARCH</span><span class="">,</span><span class=""> </span><span class="">14</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span> <br/>LocalDate cal1 <span class="">=</span><span class=""> set</span><span class="">.</span>
+                <span class="bold"><span class="">lower</span></span><span class="">( LocalDate.</span><span class="">of</span><span class="">( </span><span class="">2018</span><span class="">, Month.MARCH, </span><span class="">12</span><span class=""> ) );</span><br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%tF%n"</span><span class="">, cal1 );  </span><span class=""> // 2018-03-10</span><span class=""><br/></span> <br/>LocalDate cal2 = set.
+                <span class="bold"><span class="">ceiling</span></span><span class="">( LocalDate.</span><span class="">of</span><span class="">( </span><span class="">2018</span><span class="">, Month.MARCH, </span><span class="">12</span><span class=""> ) );</span><br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%tF%n"</span><span class="">, cal2 );  </span><span class=""> // 2018-03-12</span><span class=""><br/></span> <br/>LocalDate cal3 = set.
+                <span class="bold"><span class="">floor</span></span><span class="">( LocalDate.</span><span class="">of</span><span class="">( </span><span class="">2018</span><span class="">, Month.MARCH, </span><span class="">12</span><span class=""> ) );</span><br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%tF%n"</span><span class="">, cal3 );  </span><span class=""> // 2018-03-12</span><span class=""><br/></span> <br/>LocalDate cal4 = set.
+                <span class="bold"><span class="">higher</span></span><span class="">( LocalDate.</span><span class="">of</span><span class="">( </span><span class="">2018</span><span class="">, Month.MARCH, </span><span class="">12</span><span class=""> ) );</span><br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%tF%n"</span><span class="">, cal4 );  </span><span class=""> // 2018-03-14</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 18.9</b>    
+            src/main/java/com/tutego/insel/util/set/SortedSetDemo.java</p>
+            
+            <p class="standard">
+                <a id="p936"/>A method like 
+                <samp class="listingcharacter listingcharacter">tailSet(...)</samp>
+             is useful especially for date objects because it can return all time points after a specified start date.</p>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">TreeSet</samp> implements the 
+                <samp class="listingcharacter listingcharacter">NavigableSet</samp> interface, which in turn extends 
+                <samp class="listingcharacter listingcharacter">SortedSet</samp>—a historical legacy. In total, 
+                <samp class="listingcharacter listingcharacter">NavigableSet</samp> provides 15 operations, adding from 
+                <samp class="listingcharacter listingcharacter">SortedSet</samp> the methods 
+                <samp class="listingcharacter listingcharacter">headSet(…)</samp>, 
+                <samp class="listingcharacter listingcharacter">tailSet(…)</samp>, and 
+                <samp class="listingcharacter listingcharacter">subSet(…)</samp>
+             with overloaded version of methods that allow the bounds to be exclusive or inclusive.</p>
+            
+            <div class="listing " id="l_none_18437"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">NavigableSet</span>&lt;E&gt;<br/><span class="">extends</span><span class=""> SortedSet&lt;E&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">NavigableSet&lt;E&gt; headSet(E toElement)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">NavigableSet&lt;E&gt; tailSet(E fromElement)</samp><br/>Return a subset of elements that are genuinely smaller/larger than 
+                        <samp class="listingcharacter listingcharacter">toElement/fromElement</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">NavigableSet&lt;E&gt; headSet(E toElement, boolean inclusive)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">NavigableSet&lt;E&gt; tailSet(E fromElement, boolean inclusive)</samp><br/>Compared to the upper methods, additionally determine whether the output element may belong to the result set.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">NavigableSet&lt;E&gt; subSet(E fromElement, E toElement)</samp><br/>Returns a subset in the desired range.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">E pollFirst()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">E pollLast()</samp><br/>Retrieves and removes the first or last element. The return is 
+                        <samp class="listingcharacter listingcharacter">null</samp> if the 
+                        <samp class="listingcharacter listingcharacter">set</samp>
+                     is empty.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">E higher(E e)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">E lower(E e)</samp><br/>Returns the subsequent or preceding element in the 
+                        <samp class="listingcharacter listingcharacter">Set</samp> that’s genuinely greater or less than 
+                        <samp class="listingcharacter listingcharacter">E</samp>, respectively; otherwise, 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                     is returned if no such element exists.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">E ceiling(E e)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">E floor(E e)</samp><br/>Returns the subsequent or preceding element in the 
+                        <samp class="listingcharacter listingcharacter">Set</samp> that’s greater than or less than or equal to 
+                        <samp class="listingcharacter listingcharacter">E</samp>; otherwise, 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                     is returned if no such element exists.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Iterator&lt;E&gt; descendingIterator()</samp><br/>Returns the elements in reverse order.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">From the 
+                <samp class="listingcharacter listingcharacter">SortedSet</samp> interface, 
+                <samp class="listingcharacter listingcharacter">NavigableSet</samp> basically inherits only three operations because 
+                <samp class="listingcharacter listingcharacter">subSet(…)</samp>, 
+                <samp class="listingcharacter listingcharacter">headSet(…)</samp>, and 
+                <samp class="listingcharacter listingcharacter">tailSet(…)</samp> are redefined with covariant return type in 
+                <samp class="listingcharacter listingcharacter">NavigableSet</samp>
+            .</p>
+            
+            <div class="listing " id="l_none_18449"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">SortedSet</span>&lt;E&gt;<br/><span class="">extends</span><span class=""> Set&lt;E&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p937"/>
+                        E first()</samp><br/>Returns the smallest element in the list.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">E last()</samp><br/>Returns the largest element.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Comparator&lt;? super E&gt; comparator()</samp><br/>Returns the 
+                        <samp class="listingcharacter listingcharacter">Comparator</samp> associated with the set. The return can be 
+                        <samp class="listingcharacter listingcharacter">null</samp> if the objects can compare themselves via 
+                        <samp class="listingcharacter listingcharacter">Comparable</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">SortedSet&lt;E&gt; subSet(E fromElement, E toElement)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">SortedSet&lt;E&gt; headSet(E toElement)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">SortedSet&lt;E&gt; tailSet(E fromElement)</samp><br/>Returns subsets as live views.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Unlike 
+                <samp class="listingcharacter listingcharacter">HashSet</samp>, the 
+                <samp class="listingcharacter listingcharacter">TreeSet</samp> iterator returns the elements sorted in ascending order. The two 
+                <samp class="listingcharacter listingcharacter">toArray(...)</samp>
+             methods also benefit from this feature since they use the iterator to return a sorted array.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.2.6">18.2.6    LinkedHashSet</h3>
+            
+            <p class="standard">A 
+                <samp class="listingcharacter listingcharacter">LinkedHashSet</samp>
+                <a class="indexanchor" id="i18_27"/> combines the order fidelity of a list with the high performance of set operations of 
+                <samp class="listingcharacter listingcharacter">HashSet</samp>. This class doesn’t provide list methods like 
+                <samp class="listingcharacter listingcharacter">first() </samp>or 
+                <samp class="listingcharacter listingcharacter">get(int index)</samp> but is an implementation of the 
+                <samp class="listingcharacter listingcharacter">Set</samp>
+             interface only, where the iterator returns the elements in the insertion order. Consider the following example:</p>
+            
+            <div class="listing " id="l18.10"><pre>
+                <span class="bold"><span class="">Set</span></span>&lt;Integer&gt; set = <span class="">new</span><span class=""> </span>
+                <span class="bold">LinkedHashSet</span>&lt;&gt;(<br/>  Arrays.<span class="">asList</span><span class="">( </span><span class="">9</span><span class="">, </span><span class="">8</span><span class="">, </span><span class="">7</span><span class="">, </span><span class="">6</span><span class="">, </span><span class="">9</span><span class="">, </span><span class="">8</span><span class=""> )</span><br/>);<br/><br/><span class="">for</span><span class=""> ( Integer i : set )</span><br/>  System.out.<span class="">print</span><span class="">( i + </span><span class="">" "</span><span class=""> );     </span><span class=""> // 9 8 7 6</span><span class=""><br/></span><br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%n%s"</span><span class="">, set );  </span><span class=""> // [9, 8, 7, 6]</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 18.10</b>    
+            src/main/java/com/tutego/insel/util/set/LinkedHashSetDemo.java, main()</p>
+            
+            <p class="standard">Since a 
+                <samp class="listingcharacter listingcharacter">Set</samp>
+             can contain each element only once, as a result, you’ll get each element only once, but at the same time, the order of insertion isn’t lost. The iterator returns the elements according to the exact insertion order.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The fact that a 
+                    <samp class="listingcharacter listingcharacter">LinkedHashSet</samp>
+                 is a set that contains elements only once but behaves like a list when inserted is useful for deleting duplicate elements from a list, as in the following example code:</p>
+                
+                <div class="listing " id="l_none_18465"><pre><span class="">
+                        <a id="p938"/>
+                    public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> List</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">removeDuplicate</span><span class="">(</span><span class=""> List</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> list </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;(</span><span class=""> </span><span class="">new</span><span class=""> LinkedHashSet</span><span class="">&lt;&gt;(</span><span class=""> list </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>}</pre></div>
+                
+                <p class="standard last">The result is a new list, and 
+                    <samp class="listingcharacter listingcharacter">list</samp> itself isn’t modified. For example, 
+                    <samp class="listingcharacter listingcharacter">removeDuplicate( Arrays.asList( 1,2,1,3,1,2,4 ) )</samp> results in the list 
+                    <samp class="listingcharacter listingcharacter">[1, 2, 3, 4]</samp>
+                .</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h18.2.6.1">LinkedHashSet and Iterator</h4>
+                
+                <p class="standard">An iterator can be used to list each element of 
+                    <samp class="listingcharacter listingcharacter">LinkedHashSet</samp> by order of insertion. The iterator of 
+                    <samp class="listingcharacter listingcharacter">LinkedHashSet</samp> also supports the 
+                    <samp class="listingcharacter listingcharacter">remove()</samp>
+                 method. You can use this method to delete the oldest entries and keep only the newest two elements in the following way:</p>
+                
+                <div class="listing " id="l_none_1846595195198"><pre>LinkedHashSet<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> set </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> LinkedHashSet</span><span class="">&lt;&gt;();</span><span class=""><br/></span>set<span class="">.</span><span class="">addAll</span><span class="">(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">6</span><span class="">,</span><span class=""> </span><span class="">5</span><span class="">,</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> set </span><span class="">);</span><span class=""> </span><span class=""> // [3, 2, 1, 6, 5, 4]</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> Iterator</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> iter </span><span class="">=</span><span class=""> set</span><span class="">.</span><span class="">iterator</span><span class="">();</span><span class=""> iter</span><span class="">.</span><span class="">hasNext</span><span class="">();</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  iter<span class="">.</span><span class="">next</span><span class="">();</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> set</span><span class="">.</span><span class="">size</span><span class="">()</span><span class=""> </span><span class="">&gt;</span><span class=""> </span><span class="">2</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    iter<span class="">.</span><span class="">remove</span><span class="">();</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> set </span><span class="">);</span><span class=""> </span><span class=""> // [5, 4]</span><span class=""> </span></pre></div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

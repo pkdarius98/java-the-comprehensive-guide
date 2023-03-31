@@ -1,0 +1,1076 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Introduction to Data Structures and Algorithms" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Introduction to Data Structures and Algorithms" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Introduction to Data Structures and Algorithms</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h18.6">18.6    Terminal Operations
+            <a class="indexanchor" id="i18_51"/>
+            <a class="indexanchor" id="i18_52"/>
+        </h2>
+        
+        <p class="standard">As mentioned earlier in 
+            <span class="crossreference "><a href="18_004.html#h18.4.3">Section 18.4.3</a></span>, operations can be intermediary or terminal. The 
+            <samp class="listingcharacter listingcharacter">Stream</samp> interface provides a total of 18 terminal operations, and the returns of these methods might be something like 
+            <samp class="listingcharacter listingcharacter">void</samp> or an array. For intermediary operations, returns are all new 
+            <samp class="listingcharacter listingcharacter">Stream</samp>
+         instances. Let’s look at the available terminal operations one by one.</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+            
+            <p class="standard first last">Once a stream has been consumed, it can’t be reused!</p>
+        
+        </div>
+        
+        
+            
+            <h3 class="t3" id="h18.6.1">18.6.1    Number of Elements</h3>
+            
+            <p class="standard">Perhaps the simplest terminal operation is 
+                <samp class="listingcharacter listingcharacter">count()</samp>. This operation provides a 
+                <samp class="listingcharacter listingcharacter">long</samp>
+             with the number of elements that exist in the stream.</p>
+            
+            <div class="listing " id="l_none_18669"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T,Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">long count()</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example determines how many elements an array of references has, apart from 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                :</p>
+                
+                <div class="listing  last_item" id="l_none_18671"><pre>Object<span class="">[]</span><span class=""> array </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> null</span><span class="">,</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> null</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">long</span><span class=""> size </span><span class="">=</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> array </span><span class="">)</span><span class=""><br/></span>                  <span class="">.</span><span class="">filter</span><span class="">(</span><span class=""> Objects</span><span class="">::</span><span class="">nonNull </span><span class="">).</span>
+                    <span class="bold"><span class="">count</span><span class="">()</span></span>;<br/>System.out.<span class="">println</span><span class="">( size ); </span><span class=""> // </span><span class="">3</span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.6.2">18.6.2    And Now All: forEach*(…)</h3>
+            
+            <p class="standard">The Stream API provides two 
+                <samp class="listingcharacter listingcharacter">forEach*(...)</samp>
+             methods to run the results:</p>
+            
+            <div class="listing " id="l_none_18680"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T,Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p952"/>
+                        void forEach(Consumer&lt;? super T&gt; action)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void forEachOrdered(Consumer&lt;? super T&gt; action)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">A code block of the 
+                <samp class="listingcharacter listingcharacter">Consumer</samp> type is always passed. The functional interface 
+                <samp class="listingcharacter listingcharacter">Consumer</samp> has one parameter, and 
+                <samp class="listingcharacter listingcharacter">forEach*(...)</samp> passes element by element to the 
+                <samp class="listingcharacter listingcharacter">Consumer</samp>
+             as it runs.</p>
+            
+            <p class="standard">Running with 
+                <samp class="listingcharacter listingcharacter">forEach(...)</samp> is an implementation detail. The order isn’t necessarily deterministic, which is especially noticeable in parallel streams. 
+                <samp class="listingcharacter listingcharacter">forEachOrdered(...)</samp> behaves differently, respecting the order of the stream source even if the stream is processed in parallel in between. However, sometimes, the stream framework doesn’t use internal parallelization when 
+                <samp class="listingcharacter listingcharacter">forEachOrdered(...)</samp>
+             queries the elements.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the first case, the output of the values is unordered (for example, 
+                    <samp class="listingcharacter listingcharacter">rfAni</samp>); in the second case, ordered (
+                    <samp class="listingcharacter listingcharacter">Afrin</samp>
+                ):</p>
+                
+                <div class="listing  last_item" id="l_none_18705"><pre><span class="">"Afrin"</span><span class="">.</span><span class="">chars</span><span class="">().</span><span class="">parallel</span><span class="">().</span>
+                    <span class="bold"><span class="">forEach</span></span><span class="">( c -&gt; System.out.</span><span class="">print</span><span class="">( (</span><span class="">char</span><span class="">) c ) );</span><br/>System.out.<span class="">println</span><span class="">();</span><br/><span class="">"Afrin"</span><span class="">.</span><span class="">chars</span><span class="">().</span><span class="">parallel</span><span class="">().</span>
+                    <span class="bold"><span class="">forEachOrdered</span></span><span class="">(  c -&gt; System.out.</span><span class="">print</span><span class="">( (</span><span class="">char</span><span class="">) c ) );</span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.6.3">18.6.3    Getting Individual Elements from the Stream</h3>
+            
+            <p class="standard">If the stream produces multiple data points in order, 
+                <samp class="listingcharacter listingcharacter">findFirst()</samp> returns the first element in the stream, whereas 
+                <samp class="listingcharacter listingcharacter">findAny()</samp>
+             can return any element from the stream. The latter method is especially interesting for parallel operations, although which element is returned is completely open. Both methods have an advantage in that they are abbreviating operations and thus save you some work.</p>
+            
+            <p class="standard">Since a stream of elements can be empty, the return of the following methods is always an 
+                <samp class="listingcharacter listingcharacter">Optional</samp>
+            :</p>
+            
+            <div class="listing " id="l_none_18696"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T,Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Optional&lt;T&gt; findFirst()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Optional&lt;T&gt; findAny()</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Example for both 
+                    <samp class="listingcharacter listingcharacter">find*(…)</samp>
+                -methods:</p>
+                
+                <div class="listing " id="l_none_18707"><pre>Consumer<span class="">&lt;</span><span class="">Character</span><span class="">&gt;</span><span class=""> print </span><span class="">=</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println</span><span class="">;</span><span class=""><br/></span>List<span class="">&lt;</span><span class="">Character</span><span class="">&gt;</span><span class=""> chars </span><span class="">=</span><span class=""> List</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">'1'</span><span class="">,</span><span class=""> </span><span class="">'a'</span><span class="">,</span><span class=""> </span><span class="">'2'</span><span class="">,</span><span class=""> </span><span class="">'b'</span><span class="">,</span><span class=""> </span><span class="">'3'</span><span class="">,</span><span class=""> </span><span class="">'c'</span><span class=""> </span><span class="">);</span><span class=""><br/></span>
+                    <a id="p953"/>chars<span class="">.</span><span class="">parallelStream</span><span class="">().</span><span class="">findFirst</span><span class="">().</span><span class="">ifPresent</span><span class="">(</span><span class=""> print </span><span class="">);</span><span class=""> // 1</span><span class=""><br/></span>chars<span class="">.</span><span class="">parallelStream</span><span class="">().</span><span class="">findAny</span><span class="">().</span><span class="">ifPresent</span><span class="">(</span><span class=""> print </span><span class="">);</span><span class="">  </span><span class=""> // b</span><span class=""/></pre></div>
+                
+                <p class="standard last">
+                    <samp class="listingcharacter listingcharacter">findFirst()</samp> always returns the first element 
+                    <samp class="listingcharacter listingcharacter">1</samp>, but 
+                    <samp class="listingcharacter listingcharacter">findAny()</samp> could return any. In the output that result could be 
+                    <samp class="listingcharacter listingcharacter">b</samp>
+                , for example.</p>
+            
+            </div>
+            
+            <p class="standard">If other stateful operations are in between, an optimization with 
+                <samp class="listingcharacter listingcharacter">findAny()</samp> is sometimes invalid. So, 
+                <samp class="listingcharacter listingcharacter">stream.sorted().findAny()</samp>
+             won’t be able to bypass sorting.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.6.4">18.6.4    Existence Tests with Predicates</h3>
+            
+            <p class="standard">Three methods determine whether the elements of a stream fulfill a condition:</p>
+            
+            <div class="listing " id="l_none_18719"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T, Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean anyMatch(Predicate&lt;? super T&gt; predicate)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean allMatch(Predicate&lt;? super T&gt; predicate)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean noneMatch(Predicate&lt;? super T&gt; predicate)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The condition is always formulated as a 
+                <samp class="listingcharacter listingcharacter">Predicate</samp>
+            .</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">For a stream with two strings, the following code tests whether either all, any, or none of the elements are empty:</p>
+                
+                <div class="listing  last_item" id="l_none_18727"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class="">""</span><span class="">,</span><span class=""> </span><span class="">""</span><span class="">).</span>
+                    <span class="bold"><span class="">allMatch</span></span><span class="">( </span><span class="">String</span><span class="">::isEmpty ) );  </span><span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Stream.</span><span class="">of</span><span class="">(</span><span class="">""</span><span class="">, </span><span class="">"a"</span><span class="">).</span>
+                    <span class="bold"><span class="">anyMatch</span></span><span class="">( </span><span class="">String</span><span class="">::isEmpty ) ); </span><span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Stream.</span><span class="">of</span><span class="">(</span><span class="">""</span><span class="">, </span><span class="">"a"</span><span class="">).</span>
+                    <span class="bold"><span class="">noneMatch</span></span><span class="">( </span><span class="">String</span><span class="">::isEmpty ) );</span><span class=""> // false</span><span class=""/><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.6.5">18.6.5    Reducing a Stream to Its Smallest or Largest Element</h3>
+            
+            <p class="standard">A stream can consist of any number of elements, which can be reduced to one value by means of reduction functions. A well-known example is the 
+                <samp class="listingcharacter listingcharacter">Math.max(a, b)</samp> method, which maps two values to the maximum. These maximum/minimum methods also exist in the 
+                <samp class="listingcharacter listingcharacter">Stream</samp>
+            :</p>
+            
+            <div class="listing " id="l_none_18757"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T, Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Optional&lt;T&gt; min(Comparator&lt;? super T&gt; comparator)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Optional&lt;T&gt; max(Comparator&lt;? super T&gt; comparator)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <a id="p954"/>Note that a 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> must always be passed, and the methods never draw on the natural order. Helpful in this regard is a 
+                <samp class="listingcharacter listingcharacter">Comparator</samp> utility method that returns a natural 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>. The methods return an 
+                <samp class="listingcharacter listingcharacter">Optional.empty()</samp>
+             if the stream is empty.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">What’s the largest number in the stream?</p>
+                
+                <div class="listing  last_item" id="l_none_18756"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">4</span><span class="">,</span><span class=""> </span><span class="">11</span><span class=""> </span><span class="">).</span><span class="">max</span><span class="">(</span><span class=""> Comparator</span><span class="">.</span><span class="">naturalOrder</span><span class="">()</span><span class=""> </span><span class="">).</span><span class=""> </span><br/><span class="">get</span><span class="">()</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            <p class="standard">Determining the minimum and maximum are just two examples of reduction. In general, each pair of values can be reduced to one value, for instance, with a minimum function.</p>
+            
+            <table class="standardtable" id="t18.3">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Stream (4, 2, 3, 1)</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Function Application</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Result (Minimum)</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">4</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">-</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">4</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">2</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">min</span>
+                            (4, 2)</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">2</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">3</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">min</span>
+                            (2, 3)</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">2</p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <span class="italic">min</span>
+                            (2, 1)</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">1</p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 18.3</b>    
+            Minimum Calculation for the Stream via Reduction</p>
+            
+            <p class="standard">In the first case, no function is applied, and the stream is not reduced. The individual element thus remains present.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.6.6">18.6.6    Reducing a Stream with Its Own Functions</h3>
+            
+            <p class="standard">Java uses the functional interfaces 
+                <samp class="listingcharacter listingcharacter">BiFunction&lt;T,U,R&gt;</samp> or 
+                <samp class="listingcharacter listingcharacter">BinaryOperator&lt;T&gt;</samp> for reductions. (
+                <samp class="listingcharacter listingcharacter">BinaryOperator&lt;T&gt;</samp> is a 
+                <samp class="listingcharacter listingcharacter">BiFunction&lt;T,T,T&gt;</samp>
+             by inheritance.)</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Stream</samp> type declares three 
+                <samp class="listingcharacter listingcharacter">reduce(...)</samp> methods that use these functional interfaces. Note that this reduction function is associative, that is, 
+                <span class="italic">f(a, f(b, c)) = f(f(a, b), c</span>
+            ) holds because arbitrary pairs can be formed and reduced, especially in concurrent processing.</p>
+            
+            <div class="listing " id="l_none_18761"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T,Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Optional&lt;T&gt; reduce(BinaryOperator&lt;T&gt; accumulator)</samp><br/>Gradually reduces all pairs of values to one value using the 
+                        <samp class="listingcharacter listingcharacter">accumulator</samp>. If the 
+                        <samp class="listingcharacter listingcharacter">Stream</samp> is empty, the 
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p955"/>
+                        Optional.empty()</samp>
+                     method returns. If only one element exists, that element forms the return.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">T reduce(T identity, BinaryOperator&lt;T&gt; accumulator)</samp><br/>Reduces the values, reducing the first element with 
+                        <samp class="listingcharacter listingcharacter">identity</samp> over the 
+                        <samp class="listingcharacter listingcharacter">accumulator</samp>. If the stream is empty, 
+                        <samp class="listingcharacter listingcharacter">identity</samp>
+                     forms the return.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;U&gt; U reduce(U identity, BiFunction&lt;U,? super T,U&gt; accumulator, BinaryOperator&lt;U&gt; combiner)</samp><br/>The first two methods always return the element type 
+                        <samp class="listingcharacter listingcharacter">T</samp> of the stream as the result type. With this method, the result type is not 
+                        <samp class="listingcharacter listingcharacter">T</samp>, but 
+                        <samp class="listingcharacter listingcharacter">U</samp>, since the 
+                        <samp class="listingcharacter listingcharacter">accumulator</samp> maps the types 
+                        <samp class="listingcharacter listingcharacter">(U, T)</samp> to 
+                        <samp class="listingcharacter listingcharacter">U</samp>. The 
+                        <samp class="listingcharacter listingcharacter">combiner</samp> is 
+                        <span class="italic">only</span> necessary if two results are merged in parallel processing; otherwise, the 
+                        <samp class="listingcharacter listingcharacter">combiner</samp> is superfluous. However, because the value must not be 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                    ; unfortunately, you must pass something, even if that value is unnecessary in later processing. The combiner is always invoked after the function.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following code tries to determine the largest element in a stream of positive numbers:</p>
+                
+                <div class="listing " id="l_none_18778"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">9</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">4</span><span class="">,</span><span class=""> </span><span class="">11</span><span class=""> </span><span class="">).</span><span class="">reduce</span><span class="">(</span><span class=""> </span><span class="">0</span><span class="">,</span><span class=""> Math</span><span class="">::</span><span class="">max </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 11</span><span class=""/></pre></div>
+                
+                <p class="standard last">Unlike the 
+                    <samp class="listingcharacter listingcharacter">max(...)</samp> method of 
+                    <samp class="listingcharacter listingcharacter">Stream</samp>, 
+                    <samp class="listingcharacter listingcharacter">reduce(...)</samp> directly returns an 
+                    <samp class="listingcharacter listingcharacter">Integer</samp> and not an 
+                    <samp class="listingcharacter listingcharacter">Optional</samp> because if 
+                    <samp class="listingcharacter listingcharacter">Stream</samp> is empty, 
+                    <samp class="listingcharacter listingcharacter">0</samp>
+                 (the identity, here the neutral element) will be returned. This result is problematic because 0 is not the largest element of an empty stream.</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example reduces a stream of 
+                    <samp class="listingcharacter listingcharacter">Dimension</samp>
+                 objects to the sum of their areas:</p>
+                
+                <div class="listing  last_item" id="l_none_18797"><pre>Dimension<span class="">[]</span><span class=""> dims </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Dimension</span><span class="">(</span><span class=""> </span><span class="">10</span><span class="">,</span><span class=""> </span><span class="">10</span><span class=""> </span><span class="">),</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Dimension</span><span class="">(</span><span class=""> </span><span class="">100</span><span class="">,</span><span class=""> </span><span class="">100</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">};</span><span class=""><br/></span>BiFunction<span class="">&lt;</span><span class="">Integer</span><span class="">,</span><span class=""> Dimension</span><span class="">,</span><span class=""> Integer</span><span class="">&gt;</span><span class=""> accumulator </span><span class="">=</span><span class=""><br/></span>    <span class="">(</span><span class="">area</span><span class="">,</span><span class=""> dim</span><span class="">)</span><span class=""> </span><span class="">-&gt;</span><span class=""> area </span><span class="">+</span><span class=""> dim</span><span class="">.</span><span class="">height </span><span class="">*</span><span class=""> dim</span><span class="">.</span><span class="">width</span><span class="">;</span><span class=""><br/></span>BinaryOperator<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> combiner </span><span class="">=</span><span class=""> Integer</span><span class="">::</span><span class="">sum</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""><br/></span>  Arrays<span class="">.</span><span class="">stream</span><span class="">(</span><span class=""> dims </span><span class="">).</span>
+                    <span class="bold"><span class="">reduce</span><span class="">( </span><span class="">0</span><span class="">, accumulator, combiner )</span></span><br/>);<span class=""> // 10100</span><span class=""/><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">The result of a reduction is always a new value, where “value” can of course be anything: a number, a string, a date, and so on.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.6.7">18.6.7    
+                <a id="p956"/>
+            Writing Results to a Container, Part 1: collect(...)</h3>
+            
+            <p class="standard">While the 
+                <samp class="listingcharacter listingcharacter">reduce(...)</samp> methods always produce new values in each processing step due to the accumulator, the 
+                <samp class="listingcharacter listingcharacter">Stream</samp> method 
+                <samp class="listingcharacter listingcharacter">collect(...)</samp> can work somewhat differently. Simply put, 
+                <samp class="listingcharacter listingcharacter">collect(...)</samp>
+             allows you to put data from a stream into a container (a data structure or even a string) and return that container.</p>
+            
+            <div class="listing " id="l_none_18809"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T,Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item">
+                        <samp class="listingcharacter listingcharacter">&lt;R&gt; R collect(Supplier&lt;R&gt; resultFactory, BiConsumer&lt;R,? super T&gt; accumulator,</samp><br/>
+                        <samp class="listingcharacter listingcharacter">BiConsumer&lt;R,R&gt; combiner)</samp><br/>Collects the elements in a container. These three parameters all have different tasks:</p>
+                    
+                    <ul>
+                        
+                        <li>
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">resultFactory</samp>: The 
+                                <samp class="listingcharacter listingcharacter">Supplier</samp>
+                             sets up the container. This value is also the return type.</p>
+                        
+                        </li>
+                        
+                        <li>
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Accumulator</samp>: The 
+                                <samp class="listingcharacter listingcharacter">BiConsumer</samp>
+                             gets two arguments (the container and the element) and then must add the element to the container.</p>
+                        
+                        </li>
+                        
+                        <li>
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">combiner</samp>
+                            : The container is only necessary for parallel processing and is responsible for merging two containers.</p>
+                        
+                        </li>
+                    
+                    </ul>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following example, four numbers of a stream should end up in the 
+                    <samp class="listingcharacter listingcharacter">LinkedHashSet</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_18810"><pre>LinkedHashSet<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> set </span><span class="">=</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">4</span><span class=""> </span><span class="">)</span><span class=""><br/></span>          <span class="">.</span><span class="">collect</span><span class="">(</span><span class="">LinkedHashSet</span><span class="">::</span><span class="">new</span><span class="">,</span><span class=""> LinkedHashSet</span><span class="">::</span><span class="">add</span><span class="">,</span><span class=""> LinkedHashSet</span><span class="">::</span><span class="">addAll</span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> set </span><span class="">);</span><span class=""> </span><span class=""> // [2, 3, 1, 4]</span><span class=""/></pre></div>
+                
+                <p class="standard last">For the general initialization of a 
+                    <samp class="listingcharacter listingcharacter">LinkedHashSet</samp>, we still have a bit too much code. An easier approach is to add the elements with 
+                    <samp class="listingcharacter listingcharacter">Collection.addAll(...)</samp>
+                .</p>
+            
+            </div>
+            
+            <p class="standard">As with 
+                <samp class="listingcharacter listingcharacter">reduce(...)</samp>, the 
+                <samp class="listingcharacter listingcharacter">collect(...)</samp> method gets each element, but the latter method doesn’t combine that element into a combination but set the elements usually in a container. For this reason, the used types aren’t 
+                <samp class="listingcharacter listingcharacter">BinaryOperator</samp>/
+                <samp class="listingcharacter listingcharacter">BiFunction</samp> (get something and return something) but 
+                <samp class="listingcharacter listingcharacter">BiConsumer</samp>
+             (get something but return nothing). The condition is thus located in the container and not in the intermediate processing steps.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">A separate class makes this state keeping necessary, for example, when a stream of integers is queried for how many numbers were positive, negative, or zero. You could thus write the following collector:</p>
+                
+                <div class="listing " id="l_none_18825"><pre><span class="">
+                        <a id="p957"/>
+                    class</span><span class=""> NegZeroPosCollector </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">long</span><span class=""> neg</span><span class="">,</span><span class=""> zero</span><span class="">,</span><span class=""> pos</span><span class="">;</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">accept</span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> i </span><span class="">&gt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""> pos</span><span class="">++;</span><span class=""> </span><span class="">else</span><span class=""> </span><span class="">if</span><span class=""> </span><span class="">(</span><span class=""> i </span><span class="">&lt;</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""> neg</span><span class="">++;</span><span class=""> </span><span class="">else</span><span class=""> zero</span><span class="">++;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">combine</span><span class="">(</span><span class=""> NegZeroPosCollector other </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    neg <span class="">+=</span><span class=""> other</span><span class="">.</span><span class="">neg</span><span class="">;</span><span class=""> zero </span><span class="">+=</span><span class=""> other</span><span class="">.</span><span class="">zero</span><span class="">;</span><span class=""> pos </span><span class="">+=</span><span class=""> other</span><span class="">.</span><span class="">pos</span><span class="">;</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span>}</pre></div>
+                
+                <p class="standard">During usage, the collector must be built, and the accumulator and combiner must be specified in the following way:</p>
+                
+                <div class="listing  last_item" id="l_none_18829"><pre>
+                    <span class="bold"><span class="">NegZeroPosCollector col</span></span> = Stream.<span class="">of</span><span class="">( </span><span class="">1</span><span class="">, -</span><span class="">2</span><span class="">, </span><span class="">4</span><span class="">, </span><span class="">0</span><span class="">, </span><span class="">4</span><span class=""> )</span><br/>                                .<span class="">collect</span><span class="">( NegZeroPosCollector::</span><span class="">new</span><span class="">,</span><br/>                                          NegZeroPosCollector::accept,<br/>                                          NegZeroPosCollector::combine );<br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"-:%d, 0:%d, +:%d"</span><span class="">, col.neg, col.zero, col.pos );  </span><span class=""><br/></span>// -:1, 0:1, +:3<span class=""/><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.6.8">18.6.8    Writing Results to a Container, Part 2: Collector and Collectors</h3>
+            
+            <p class="standard">Two variants of the 
+                <samp class="listingcharacter listingcharacter">collect(...)</samp>
+             method exist, and the second variant is defined in the following way:</p>
+            
+            <div class="listing " id="l_none_18834"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T,Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;R&gt; R collect(Collector&lt;? super T,R&gt; collector)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">A 
+                <samp class="listingcharacter listingcharacter">Collector</samp> combines supplier, accumulator, and combiner. The static 
+                <samp class="listingcharacter listingcharacter">Collector.of(...)</samp> method builds a 
+                <samp class="listingcharacter listingcharacter">Collector</samp>, which you can also pass to 
+                <samp class="listingcharacter listingcharacter">collect(Collector)</samp>
+            . Returning to our earlier example, you could write the following identical code:</p>
+            
+            <div class="listing " id="l_none_18841"><pre> <span class="">.</span><span class="">collect</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">Collector.</span><span class="">of</span><span class="">( LinkedHashSet::</span><span class="">new</span><span class="">,</span><br/>                         LinkedHashSet::add, LinkedHashSet::addAll)</span> ); <span class=""/></pre></div>
+            
+            <p class="standard">The advantage of using 
+                <samp class="listingcharacter listingcharacter">Collector</samp> is that it combines three objects (actually, also a fourth one, 
+                <samp class="listingcharacter listingcharacter">Collector.Characteristics</samp>). This interface declares two static 
+                <samp class="listingcharacter listingcharacter">of(...)</samp> methods, as well as other methods, each of which queries the functions from the 
+                <samp class="listingcharacter listingcharacter">Collector</samp>. Some relevant methods include the 
+                <samp class="listingcharacter listingcharacter">accumulator()</samp>, 
+                <samp class="listingcharacter listingcharacter">characteristics()</samp>, 
+                <samp class="listingcharacter listingcharacter">combiner()</samp>, 
+                <samp class="listingcharacter listingcharacter">finisher()</samp>, and 
+                <samp class="listingcharacter listingcharacter">supplier() </samp>
+            methods.</p>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">
+                    <a id="p958"/>
+                Collector.Characteristics</samp> is an enumeration type with three elements (
+                <samp class="listingcharacter listingcharacter">CONCURRENT</samp>, 
+                <samp class="listingcharacter listingcharacter">IDENTITY_FINISH</samp>, and 
+                <samp class="listingcharacter listingcharacter">UNORDERED</samp>) that describe the properties of a 
+                <samp class="listingcharacter listingcharacter">Collector</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h18.6.8.1">The Collectors Utility Class</h4>
+                
+                <p class="standard">For standard cases, you won’t need to assemble a 
+                    <samp class="listingcharacter listingcharacter">Collector</samp> with 
+                    <samp class="listingcharacter listingcharacter">Collector.of(...)</samp>. Instead, you can use a utility class, 
+                    <samp class="listingcharacter listingcharacter">Collectors</samp>, with almost 40 static methods, each of which returns 
+                    <samp class="listingcharacter listingcharacter">Collector</samp>
+                 instances. These methods can be roughly grouped in the following way:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">toSet()</samp>, 
+                            <samp class="listingcharacter listingcharacter">toList()</samp>, 
+                            <samp class="listingcharacter listingcharacter">to*Map(...)</samp>
+                        , etc. for collections</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">toUnmodifiable*()</samp>
+                         for unmodifiable collections where elements can’t be added, deleted, or replaced.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">groupingBy*(...)</samp> and 
+                            <samp class="listingcharacter listingcharacter">partitioningBy(...)</samp>
+                         for creating groups</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">averagingLong(...)</samp>
+                        , among others, for simple returns</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">String 
+                            <samp class="listingcharacter listingcharacter">Collectors</samp> like 
+                            <samp class="listingcharacter listingcharacter">joining(...)</samp>
+                        , which concatenate strings in a stream</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example combines several strings in a stream to create a single string:</p>
+                    
+                    <div class="listing " id="l_none_18859"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"192"</span><span class="">,</span><span class=""> </span><span class="">"0"</span><span class="">,</span><span class=""> </span><span class="">"0"</span><span class="">,</span><span class=""> </span><span class="">"1"</span><span class=""> </span><span class="">)</span><span class=""><br/></span>                 <span class="">.</span><span class="">collect</span><span class="">(</span><span class=""> </span>
+                        <span class="bold"><span class="">Collectors.</span><span class="">joining</span><span class="">(</span></span><span class="">"."</span>
+                        <span class="bold"><span class="">)</span></span> );<br/>System.out.<span class="">println</span><span class="">( s ); </span><span class=""> // 192.0.0.1</span><span class=""/><span class=""/></pre></div>
+                    
+                    <p class="standard">The following example builds a 
+                        <samp class="listingcharacter listingcharacter">set&lt;string&gt;</samp>
+                     with two start values:</p>
+                    
+                    <div class="listing " id="l_none_18876"><pre>Set<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> set </span><span class="">=</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"a"</span><span class="">,</span><span class=""> </span><span class="">"b"</span><span class=""> </span><span class="">).</span><span class="">collect</span><span class="">(</span><span class=""> </span>
+                        <span class="bold"><span class="">Collectors.</span><span class="">toSet</span><span class="">()</span></span> );<span class=""/></pre></div>
+                    
+                    <p class="standard last">The following example builds a 
+                        <samp class="listingcharacter listingcharacter">Map&lt;Integer, String&gt;</samp>
+                     consisting of two key-value pairs:</p>
+                
+                </div>
+                
+                <div class="listing " id="l_none_18894"><pre>Map<span class="">&lt;</span><span class="">Integer</span><span class="">,</span><span class="">String</span><span class="">&gt;</span><span class=""> map </span><span class="">=</span><span class=""><br/></span>  Stream<span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"1=one"</span><span class="">,</span><span class=""> </span><span class="">"2=two"</span><span class=""> </span><span class="">)</span><span class=""><br/></span>        <span class="">.</span><span class="">collect</span><span class="">(</span><span class=""> Collectors</span><span class="">.</span><span class="">toMap</span><span class="">(</span><span class=""> k </span><span class="">-&gt;</span><span class=""> Integer</span><span class="">.</span><span class="">parseInt</span><span class="">(</span><span class="">k</span><span class="">.</span><span class="">split</span><span class="">(</span><span class="">"="</span><span class="">)[</span><span class="">0</span><span class="">]),</span><span class=""><br/></span>                                    v <span class="">-&gt;</span><span class=""> v</span><span class="">.</span><span class="">split</span><span class="">(</span><span class="">"="</span><span class="">)[</span><span class="">1</span><span class="">]</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                    <span class="bold">Collectors</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T&gt; Collector&lt;T,?,List&lt;T&gt;&gt; toList()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static &lt;T&gt; Collector&lt;T,?,Set&lt;T&gt;&gt; toSet()</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">We recommend closely studying the other methods in the Javadoc.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">A 
+                        <samp class="listingcharacter listingcharacter">Collector</samp> is the only reasonable means to transfer stream elements into a container. Developers should avoid the side effects of any intermediary or terminal operations for 
+                        <a id="p959"/>two reasons: First, you would lose the advantage of functional programming (where operations have no side effects), and second, chaos could break out from the parallel processing of non-synchronized data structures. So, 
+                        <span class="italic">no</span> alternative to the charming 
+                        <samp class="listingcharacter listingcharacter">Collectors.joining(".")</samp>
+                     can be written in the following way:</p>
+                    
+                    <div class="listing " id="l_none_18894951818"><pre>StringBuilder 
+                        <span class="bold"><span class="">res</span></span> = <span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">();</span><br/>Stream.<span class="">of</span><span class="">( </span><span class="">"192"</span><span class="">, </span><span class="">"0"</span><span class="">, </span><span class="">"0"</span><span class="">, </span><span class="">"1"</span><span class=""> )</span><br/>      .<span class="">forEach</span><span class="">( s -&gt;</span><br/>                
+                        <span class="bold">res</span>.<span class="">append</span><span class="">( </span>
+                        <span class="bold">res</span>.<span class="">length</span><span class="">() == </span><span class="">0</span><span class=""> ? </span><span class="">""</span><span class=""> : </span><span class="">"."</span><span class=""> ).</span><span class="">append</span><span class="">( s ) );</span><br/>System.out.<span class="">print</span><span class="">( </span>
+                        <span class="bold">res</span> );<span class=""/></pre></div>
+                    
+                    <p class="standard last">If a lambda expression requires write access to external variables, alarm bells should ring. Incidentally, the same rule applies to reductions. Although basically 
+                        <samp class="listingcharacter listingcharacter">forEach(...)</samp> can write anything in a, for example, thread-safe atomic data type, a call to 
+                        <samp class="listingcharacter listingcharacter">reduce(...)</samp>
+                     is very much preferred because this the functional style of programing.</p>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first">Since data of a stream is often written to a list at the end, the default method 
+                        <samp class="listingcharacter listingcharacter">toList()</samp> can be used directly on the 
+                        <samp class="listingcharacter listingcharacter">Stream</samp> type. Even though you might imagine an implementation using a 
+                        <samp class="listingcharacter listingcharacter">Collector</samp>
+                    , the OpenJDK implementation is different, as shown in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_18914"><pre><span class="">default</span><span class=""> List</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;</span><span class=""> </span><span class="">toList</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">(</span><span class="">List</span><span class="">&lt;</span><span class="">T</span><span class="">&gt;)</span><span class=""> Collections</span><span class="">.</span><span class="">unmodifiableList</span><span class="">(</span><span class=""><br/></span>      <span class="">new</span><span class=""> ArrayList</span><span class="">&lt;&gt;(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">this</span><span class="">.</span><span class="">toArray</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  <span class="">);</span><span class=""><br/></span>}</pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.6.9">18.6.9    Writing Results to a Container, Part 3: Groupings</h3>
+            
+            <p class="standard">Objects can often be divided into groups by the fact that referenced subobjects determine a category. Since this concept sounds terribly abstract, let’s consider a few examples:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Accounts have an account type, and we want to search for a listing of all accounts by account type. So, 
+                        <span class="italic">n</span>
+                     accounts associated with an account type, all of which have the same account type.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">People may have a profession, and we want to search a list of all people by profession.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Threads can be in different states (waiting, sleeping, etc.); what you’re searching for is an association between a state and threads in that state.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <a id="p960"/>To solve these problems with the Stream API, 
+                <samp class="listingcharacter listingcharacter">collect(...)</samp> can be used with a special 
+                <samp class="listingcharacter listingcharacter">Collector</samp> provided by the 
+                <samp class="listingcharacter listingcharacter">groupingBy*(...)</samp> methods of 
+                <samp class="listingcharacter listingcharacter">Collectors</samp>
+            . We’ll deal only with the simplest variant.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example outputs all running threads:</p>
+                
+                <div class="listing " id="l_none_18904"><pre>Map<span class="">&lt;</span><span class="">Thread</span><span class="">.</span><span class="">State</span><span class="">,</span><span class=""> List</span><span class="">&lt;</span><span class="">Thread</span><span class="">&gt;&gt;</span><span class=""> map </span><span class="">=</span><span class=""><br/></span>  Thread<span class="">.</span><span class="">getAllStackTraces</span><span class="">().</span><span class="">keySet</span><span class="">().</span><span class="">stream</span><span class="">()</span><span class=""><br/></span>        <span class="">.</span><span class="">collect</span><span class="">(</span><span class=""> Collectors</span><span class="">.</span><span class="">groupingBy</span><span class="">(</span><span class=""> Thread</span><span class="">::</span><span class="">getState </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> map</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> Thread</span><span class="">.</span><span class="">State</span><span class="">.</span><span class="">RUNNABLE </span><span class="">)</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard last">First, 
+                    <samp class="listingcharacter listingcharacter">Thread.getAllStackTraces().keySet()</samp> returns a 
+                    <samp class="listingcharacter listingcharacter">set&lt;threads&gt;</samp> with all active threads. From this set, you can derive a stream and use a collector that groups by thread status. The result is an association between 
+                    <samp class="listingcharacter listingcharacter">Thread.State</samp> and a 
+                    <samp class="listingcharacter listingcharacter">List&lt;Threads&gt;</samp>
+                .</p>
+            
+            </div>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Collectors</samp>
+             class uses a lot of Generics: </p>
+            
+            <div class="listing " id="l_none_18930"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Collectors</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T,K&gt; Collector&lt;T,?,Map&lt;K,List&lt;T&gt;&gt;&gt; groupingBy(Function&lt;? super T,? extends K&gt; classifier)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T,K,A,D&gt; Collector&lt;T,?,Map&lt;K,D&gt;&gt; groupingBy(Function&lt;? super T,? extends K&gt; classifier, Collector&lt;? super T,A,D&gt; downstream)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T,K,D,A,M extends Map&lt;K,D&gt;&gt; Collector&lt;T,?,M&gt; groupingBy(Function&lt;? super T,? <br/>extends K&gt; classifier, Supplier&lt;M&gt; mapFactory, Collector&lt;? super T,A,D&gt; downstream)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T,K&gt; Collector&lt;T,?,ConcurrentMap&lt;K,List&lt;T&gt;&gt;&gt; groupingByConcurrent(Function&lt;? super T,? extends K&gt; classifier)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T,K,A,D&gt; Collector&lt;T,?,ConcurrentMap&lt;K,D&gt;&gt; groupingByConcurrent(Function&lt;? super T,? extends K&gt; classifier, Collector&lt;? super T,A,D&gt; downstream)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static &lt;T,K,A,D,M extends ConcurrentMap&lt;K,D&gt;&gt; Collector&lt;T,?,M&gt; <br/>groupingByConcurrent(Function&lt;? super T,? extends K&gt; classifier, Supplier&lt;M&gt; <br/>mapFactory, Collector&lt;? super T,A,D&gt; downstream)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The function that extracts the key for the associative memory is the 
+                <samp class="listingcharacter listingcharacter">classifier</samp> in the API. This function must always be specified. We’ve looked at the simplest method—the first one—in an example; it always returns a 
+                <samp class="listingcharacter listingcharacter">Map </samp>of lists. The other methods can also return a 
+                <samp class="listingcharacter listingcharacter">Map</samp> with other data structures (or simple accumulated values instead of lists), which is the intention of 
+                <samp class="listingcharacter listingcharacter">downstream</samp>. Also, concrete 
+                <samp class="listingcharacter listingcharacter">Map</samp> implementations can be specified (such as 
+                <samp class="listingcharacter listingcharacter">TreeMap</samp>), as in the 
+                <samp class="listingcharacter listingcharacter">mapFactory</samp>. Otherwise, 
+                <samp class="listingcharacter listingcharacter">groupingBy(Function)</samp> would select a 
+                <samp class="listingcharacter listingcharacter">Map</samp>
+             class for you.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p961"/>
+                Example</h6>
+                
+                <p class="standard first">The following example collects the names of all threads by status:</p>
+                
+                <div class="listing " id="l_none_18938"><pre>Map<span class="">&lt;</span><span class="">Thread</span><span class="">.</span><span class="">State</span><span class="">,</span><span class=""> List</span><span class="">&lt;</span><span class="">String</span><span class="">&gt;&gt;</span><span class=""> map </span><span class="">=</span><span class=""><br/></span>  Thread<span class="">.</span><span class="">getAllStackTraces</span><span class="">().</span><span class="">keySet</span><span class="">().</span><span class="">stream</span><span class="">()</span><span class=""><br/></span>        <span class="">.</span><span class="">collect</span><span class="">(</span><span class=""> Collectors</span><span class="">.</span><span class="">groupingBy</span><span class="">(</span><span class=""><br/></span>             Thread<span class="">::</span><span class="">getState</span><span class="">,</span><span class=""><br/></span>             Collectors<span class="">.</span><span class="">mapping</span><span class="">(</span><span class=""> Thread</span><span class="">::</span><span class="">getName</span><span class="">,</span><span class=""> Collectors</span><span class="">.</span><span class="">toList</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> map</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> Thread</span><span class="">.</span><span class="">State</span><span class="">.</span><span class="">RUNNABLE </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The following example builds an associative memory that doesn’t associate the thread state with the threads themselves, but simply with the number of threads:</p>
+                
+                <div class="listing " id="l_none_18944"><pre>Map<span class="">&lt;</span><span class="">Thread</span><span class="">.</span><span class="">State</span><span class="">,</span><span class=""> Long</span><span class="">&gt;</span><span class=""> map </span><span class="">=</span><span class=""><br/></span>  Thread<span class="">.</span><span class="">getAllStackTraces</span><span class="">().</span><span class="">keySet</span><span class="">().</span><span class="">stream</span><span class="">()</span><span class=""><br/></span>         <span class="">.</span><span class="">collect</span><span class="">(</span><span class=""> Collectors</span><span class="">.</span><span class="">groupingBy</span><span class="">(</span><span class=""> Thread</span><span class="">::</span><span class="">getState</span><span class="">,</span><span class=""><br/></span>                                          Collectors<span class="">.</span><span class="">counting</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> map</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> Thread</span><span class="">.</span><span class="">State</span><span class="">.</span><span class="">RUNNABLE </span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">   </span><span class=""> /3 </span><span class="">3</span></pre></div>
+                
+                <p class="standard">The following example associates each thread status with an average value of the priorities of threads of the same status:</p>
+                
+                <div class="listing  last_item" id="l_none_18954"><pre>Map<span class="">&lt;</span><span class="">Thread</span><span class="">.</span><span class="">State</span><span class="">,</span><span class="">Double</span><span class="">&gt;</span><span class=""> map </span><span class="">=</span><span class=""><br/></span>  Thread<span class="">.</span><span class="">getAllStackTraces</span><span class="">().</span><span class="">keySet</span><span class="">().</span><span class="">stream</span><span class="">().</span><span class="">collect</span><span class="">(</span><span class=""><br/></span>    Collectors<span class="">.</span><span class="">groupingBy</span><span class="">(</span><span class=""> Thread</span><span class="">::</span><span class="">getState</span><span class="">,</span><span class=""><br/></span>                           Collectors<span class="">.</span><span class="">averagingInt</span><span class="">(</span><span class="">Thread</span><span class="">::</span><span class="">getPriority</span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>        System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> map</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> Thread</span><span class="">.</span><span class="">State</span><span class="">.</span><span class="">RUNNABLE </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> // 7.25</span><span class=""><br/></span>        System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> map</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> Thread</span><span class="">.</span><span class="">State</span><span class="">.</span><span class="">WAITING </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span><span class=""> // 8.0</span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h18.6.10">18.6.10    Transferring Stream Elements to an Array or an Iterator</h3>
+            
+            <p class="standard">Finally, let’s consider the last three aggregating methods. Two 
+                <samp class="listingcharacter listingcharacter">toArray(...)</samp> methods of 
+                <samp class="listingcharacter listingcharacter">Stream</samp> transfer the stream’s data into an array. 
+                <samp class="listingcharacter listingcharacter">iterator()</samp> on 
+                <samp class="listingcharacter listingcharacter">Stream </samp>in turn returns an 
+                <samp class="listingcharacter listingcharacter">Iterator</samp> with all the data (the method comes from the 
+                <samp class="listingcharacter listingcharacter">BaseStream</samp>
+             supertype).</p>
+            
+            <div class="listing " id="l_none_18970"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">stream</span><span class="">.</span>
+                <span class="bold">Stream</span>&lt;T&gt;<br/><span class="">extends</span><span class=""> BaseStream&lt;T,Stream&lt;T&gt;&gt; </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Object[] toArray()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">&lt;A&gt; A[] toArray(IntFunction&lt;A[]&gt; generator)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Iterator&lt;T&gt; iterator()</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The two 
+                <samp class="listingcharacter listingcharacter">toArray(...)</samp> methods are necessary because, in the first case, the type the array is unclear—only 
+                <samp class="listingcharacter listingcharacter">Object[]</samp> is known to be true by default. The 
+                <samp class="listingcharacter listingcharacter">IntFunction</samp> is passed the size of the stream, and the result is usually an array of that size. Constructor 
+                <a id="p962"/>
+            references can come in handy in this context. Primitive arrays can never form a return—for this scenario, you would need to use special primitive stream classes.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example puts all elements of a stream into a 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 array:</p>
+                
+                <div class="listing  last_item" id="l_none_18985"><pre><span class="">String</span><span class="">[]</span><span class=""> strings </span><span class="">=</span><span class=""> Stream</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"well"</span><span class="">,</span><span class=""> </span><span class="">"Hmm"</span><span class="">,</span><span class=""> </span><span class="">"Like"</span><span class=""> </span><span class="">).</span>
+                    <span class="bold"><span class="">toArray</span><span class="">( </span><span class="">String</span><span class="">[]::</span><span class="">new</span><span class=""> );</span></span><span class=""/></pre></div>
+            
+            </div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

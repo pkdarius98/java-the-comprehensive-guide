@@ -1,0 +1,1258 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Bits and Bytes, Mathematics and Money" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Bits and Bytes, Mathematics and Money" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Bits and Bytes, Mathematics and Money</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h21.3">21.3    The Members of the Math Class</h2>
+        
+        <p class="standard">The 
+            <samp class="listingcharacter listingcharacter">java.lang.Math</samp>
+            <a class="indexanchor" id="i21_54"/> class is a typical utility class that declares only static methods and class variables for constants. The private constructor can’t be used to create instances of 
+            <samp class="listingcharacter listingcharacter">Math</samp>
+        . All operations take place strictly according to the IEEE-754 specification.</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[»]  </span>History Lesson</h6>
+            
+            <p class="standard first last">Between Java 1.2 and Java 16, the Java compiler supported the 
+                <samp class="listingcharacter listingcharacter">strictfp</samp> keyword. The distinction was supposed to allow the JVM to not strictly follow the IEEE-754 specification and thus execute Java programs more quickly on local hardware. However, for the last 20 years, all processors have supported IEEE-754, and the distinction has become irrelevant—all mathematical operations performed by the JVM are as described in the IEEE-754 standard. With the removal of 
+                <samp class="listingcharacter listingcharacter">strictfp</samp>, the 
+                <samp class="listingcharacter listingcharacter">StrictMath</samp>
+             class also became irrelevant.</p>
+        
+        </div>
+        
+        
+            
+            <h3 class="t3" id="h21.3.1">21.3.1    Object Variables of the Math Class</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Math</samp>
+             class has two public class variables:</p>
+            
+            <div class="listing " id="l_none_21377"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Math</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static final double E</samp><br/>The Euler number
+                        <a class="indexanchor" id="i21_55"/>
+                        <a class="indexanchor" id="i21_56"/>
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn21_06" id="fn21_06">[ 233 ]</a></span> 
+                        <span class="italic">e</span>
+                     = 2.7182818284590452354.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static final double PI</samp><br/>The number
+                        <a class="indexanchor" id="i21_57"/> pi
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn21_07" id="fn21_07">[ 234 ]</a></span>
+                     = 3.14159265358979323846.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.3.2">21.3.2    
+                <a id="p1032"/>
+            Absolute Values and Signs</h3>
+            
+            <p class="standard">The two static 
+                <samp class="listingcharacter listingcharacter">abs(...)</samp>
+                <a class="indexanchor" id="i21_58"/> methods return the amount
+                <a class="indexanchor" id="i21_59"/> of the argument (mathematical amount function: y = |
+                <span class="italic">x</span>|). If a negative value is passed as an argument, 
+                <samp class="listingcharacter listingcharacter">abs(...)</samp>
+             converts it to a positive value.</p>
+            
+            <p class="standard">A special method is also 
+                <samp class="listingcharacter listingcharacter">copySign(double, double)</samp>
+            . It determines the sign of a float and transfers it to another number.</p>
+            
+            <div class="listing " id="l_none_21373"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Math</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int abs(int x)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long abs(long x)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static float abs(float x)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double abs(double x)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double copySign(double magnitude, double sign)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static float copySign(float magnitude, float sign)</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">magnitude</samp>, but with the sign of 
+                        <samp class="listingcharacter listingcharacter">sign</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">For exactly one value, 
+                    <samp class="listingcharacter listingcharacter">Math.abs(int)</samp> can’t return a positive, and the result is truly negative: –2,147,483,648. This number is the smallest representable 
+                    <samp class="listingcharacter listingcharacter">int</samp> number (
+                    <samp class="listingcharacter listingcharacter">Integer.MIN_VALUE</samp>), while +2,147,483,648 doesn’t fit into an 
+                    <samp class="listingcharacter listingcharacter">int</samp> at all! The largest 
+                    <samp class="listingcharacter listingcharacter">int</samp> number that can be represented is 2,147,483,647 (
+                    <samp class="listingcharacter listingcharacter">Integer.MAX_VALUE</samp>). What should 
+                    <samp class="listingcharacter listingcharacter">abs(-2147483648)</samp>
+                 actually result in?</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h21.3.2.1">Querying Signs</h4>
+                
+                <p class="standard">The static method 
+                    <samp class="listingcharacter listingcharacter">signum(value)</samp> returns a numeric return for the sign of 
+                    <samp class="listingcharacter listingcharacter">value</samp>, namely, “+1” for positive, “–1” for negative numbers, and “0” for 0. The method isn’t quite logically distributed between the classes 
+                    <samp class="listingcharacter listingcharacter">Math</samp> for floats and 
+                    <samp class="listingcharacter listingcharacter">Integer</samp>/
+                    <samp class="listingcharacter listingcharacter">Long</samp>
+                 for integers. Consider the following examples:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">java.lang.</samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">Integer</samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">.signum(int i), java.lang.</samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">Long</samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">.signum(long i) </samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">java.lang.</samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">Math</samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">.signum(double d), java.lang.</samp>
+                            <span class="bold">
+                                <samp class="listingcharacter listingcharacter">Math</samp>
+                            </span>
+                            <samp class="listingcharacter listingcharacter">.signum(float f) </samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.3.3">21.3.3    Maximums
+                <a class="indexanchor" id="i21_60"/>/Minimums
+                <a class="indexanchor" id="i21_61"/>
+            </h3>
+            
+            <p class="standard">The static 
+                <samp class="listingcharacter listingcharacter">max(...)</samp>
+                <a class="indexanchor" id="i21_62"/> methods return the larger of the passed values. The static 
+                <samp class="listingcharacter listingcharacter">min(...)</samp>
+                <a class="indexanchor" id="i21_63"/>
+             methods return the smaller of two values.</p>
+            
+            <div class="listing " id="l_none_21395"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Math</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p1033"/>
+                        static int max(int x, int y)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long max(long x, long y)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static float max( float x, float y )</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double max(double x, double y)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int min(int x, int y)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long min(long x, long y)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static float min(float x, float y)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double min(double x, double y)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">These methods aren’t declared with varargs, and no min-max methods exist that can take three or more arguments. If arrays are present, a different solution must be chosen, such as using 
+                <samp class="listingcharacter listingcharacter">Arrays.stream(value).min().getAsInt()</samp>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.3.4">21.3.4    Rounding
+                <a class="indexanchor" id="i21_64"/>
+             Values</h3>
+            
+            <p class="standard">To round values, the 
+                <samp class="listingcharacter listingcharacter">Math</samp>
+             class provides five static methods:</p>
+            
+            <div class="listing " id="l_none_21410"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Math</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double ceil(double a)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double floor(double a)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static int round(float a)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long round(double a)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double rint(double a)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h21.3.4.1">Rounding Up and Down with ceil(double) and floor(double)</h4>
+                
+                <p class="standard">The static method 
+                    <samp class="listingcharacter listingcharacter">ceil(double)</samp>
+                    <a class="indexanchor" id="i21_65"/> rounds a value up
+                    <a class="indexanchor" id="i21_66"/> and returns the next higher integer (but as a 
+                    <samp class="listingcharacter listingcharacter">double</samp>, not a 
+                    <samp class="listingcharacter listingcharacter">long</samp>) if the number isn’t already an integer. The static method 
+                    <samp class="listingcharacter listingcharacter">floor(double)</samp>
+                    <a class="indexanchor" id="i21_67"/> rounds down
+                    <a class="indexanchor" id="i21_68"/>
+                 to the next lower integer. Consider the following examples:</p>
+                
+                <div class="listing " id="l21.2"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span>
+                    <span class="bold"><span class="">ceil</span></span><span class="">(-</span><span class="">99.1</span><span class="">) );   </span><span class=""> //  -99.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">floor</span></span><span class="">(-</span><span class="">99.1</span><span class="">) );  </span><span class=""> // -100.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">ceil</span></span><span class="">(-</span><span class="">99</span><span class="">) );     </span><span class=""> //  -99.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">floor</span></span><span class="">(-</span><span class="">99</span><span class="">) );    </span><span class=""> //  -99.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">ceil</span></span><span class="">(-.</span><span class="">5</span><span class="">) );     </span><span class=""> //   -0.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">floor</span></span><span class="">(-.</span><span class="">5</span><span class="">) );    </span><span class=""> //   -1.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">ceil</span></span><span class="">(-.</span><span class="">01</span><span class="">) );    </span><span class=""> //   -0.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">floor</span></span><span class="">(-.</span><span class="">01</span><span class="">) );   </span><span class=""> //   -1.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">ceil</span></span><span class="">(</span><span class="">0.1</span><span class="">) );     </span><span class=""> //    1.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">floor</span></span><span class="">(</span><span class="">0.1</span><span class="">) );    </span><span class=""> //    0.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">ceil</span></span><span class="">(.</span><span class="">5</span><span class="">) );      </span><span class=""> //    1.0</span><span class=""><br/></span>
+                    <a id="p1034"/>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">floor</span></span><span class="">(.</span><span class="">5</span><span class="">) );     </span><span class=""> //    0.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">ceil</span></span><span class="">(</span><span class="">99</span><span class="">) );      </span><span class=""> //   99.0</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( Math.</span>
+                    <span class="bold"><span class="">floor</span></span><span class="">(</span><span class="">99</span><span class="">) );     </span><span class=""> //   99.0</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 21.2</b>    
+            src/main/java/com/tutego/insel/math/Rounding1Demo.java, main()</p>
+                
+                <p class="standard">These static methods have no effect on integers.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.3.4.2">Commercial Rounding via round(...)</h4>
+                
+                <p class="standard">The static methods 
+                    <samp class="listingcharacter listingcharacter">round(double)</samp>
+                    <a class="indexanchor" id="i21_69"/> and 
+                    <samp class="listingcharacter listingcharacter">round(float)</samp> round to the nearest integer of type 
+                    <samp class="listingcharacter listingcharacter">long</samp> or 
+                    <samp class="listingcharacter listingcharacter">int</samp>
+                    <a class="indexanchor" id="i21_70"/>
+                    <a class="indexanchor" id="i21_71"/>. Whole numbers aren’t rounded up. This is called 
+                    <span class="italic">commercial rounding</span>. You can use 
+                    <samp class="listingcharacter listingcharacter">round(...)</samp> as a counterpart to the typecasting 
+                    <samp class="listingcharacter listingcharacter">(long) doublevalue</samp>
+                , as in the following examples:</p>
+                
+                <div class="listing " id="l21.3"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(</span><span class="">1.01</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> //  1</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(</span><span class="">1.4</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">     </span><span class=""> //  1</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(</span><span class="">1.5</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">     </span><span class=""> //  2</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(</span><span class="">1.6</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">     </span><span class=""> //  2</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)</span><span class=""> </span><span class="">1.6</span><span class=""> </span><span class="">);</span><span class="">           </span><span class=""> //  1</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(</span><span class="">30</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">      </span><span class=""> // 30</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(-</span><span class="">2.1</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> // -2</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(-</span><span class="">2.9</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> // -3</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">(</span><span class="">int</span><span class="">)</span><span class=""> </span><span class="">-</span><span class="">2.9</span><span class=""> </span><span class="">);</span><span class="">          </span><span class=""> // -2</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 21.3</b>    
+            src/main/java/com/tutego/insel/math/Rounding2Demo.java, main()</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Internal Affairs</h6>
+                    
+                    <p class="standard first">The 
+                        <samp class="listingcharacter listingcharacter">Math.round(int)</samp> and 
+                        <samp class="listingcharacter listingcharacter">Math.round(long)</samp> methods are programmed into Java. They add 0.5 to the current parameter and pass the result to the static 
+                        <samp class="listingcharacter listingcharacter">floor( double)</samp>
+                     method.</p>
+                    
+                    <div class="listing " id="l21.4"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">long</span><span class=""> </span><span class="">round</span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> a </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> </span><span class="">(</span><span class="">long</span><span class="">)</span><span class=""> </span><span class="">floor</span><span class="">(</span><span class=""> a </span><span class="">+</span><span class=""> </span><span class="">0.5</span><span class=""> </span><span class="">);</span><span class=""><br/></span>}</pre></div>
+                    
+                    <p class="caption last"><b>Listing 21.4</b>    
+            java.lang.Math, round(double) (Slightly Shortened)</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.3.4.3">Fair Rounding with rint(double)</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">rint(double)</samp>
+                    <a class="indexanchor" id="i21_72"/> is comparable to 
+                    <samp class="listingcharacter listingcharacter">round(...)</samp>, except that 
+                    <samp class="listingcharacter listingcharacter">rint(double)</samp>
+                    <a class="indexanchor" id="i21_73"/> is “fair,” meaning that 
+                    <samp class="listingcharacter listingcharacter">rint(double)</samp>
+                 rounds up or down at 0.5 depending on whether the adjacent number is odd or even. </p>
+                
+                <div class="listing " id="l21.5"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(-</span><span class="">1.5</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> //   -1</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">rint</span><span class="">(</span><span class=""> </span><span class="">-</span><span class="">1.5</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> // -2.0</span><span class=""><br/></span>
+                    <a id="p1035"/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(-</span><span class="">2.5</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> //   -2</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">rint</span><span class="">(</span><span class=""> </span><span class="">-</span><span class="">2.5</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> // -2.0</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(</span><span class=""> </span><span class="">1.5</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> //    2</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">rint</span><span class="">(</span><span class="">  </span><span class="">1.5</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> //  2.0</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(</span><span class=""> </span><span class="">2.5</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> //    3</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">rint</span><span class="">(</span><span class="">  </span><span class="">2.5</span><span class="">)</span><span class=""> </span><span class="">);</span><span class="">    </span><span class=""> //  2.0</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 21.5</b>    
+            src/main/java/com/tutego/insel/math/Rounding3Demo.java, main()</p>
+                
+                <p class="standard">With a consistent rounding up or down, errors naturally propagate more awkwardly than with this 50/50 strategy.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first last">The static 
+                        <samp class="listingcharacter listingcharacter">rint(double)</samp> method can also be used when numbers should be rounded to two decimal places. If 
+                        <samp class="listingcharacter listingcharacter">d</samp> is of type 
+                        <samp class="listingcharacter listingcharacter">double</samp>, the expression 
+                        <samp class="listingcharacter listingcharacter">Math.rint(d*100.0)/100.0</samp>
+                     returns the rounded number.</p>
+                
+                </div>
+                
+                <div class="listing " id="l21.6"><pre><span class="">class</span><span class=""> Round2Scales </span><span class="">{</span><span class=""/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">roundScale2</span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> d </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""/><br/>    <span class="">return</span><span class=""> Math</span><span class="">.</span><span class="">rint</span><span class="">(</span><span class=""> d </span><span class="">*</span><span class=""> </span><span class="">100</span><span class=""> </span><span class="">)</span><span class=""> / </span><span class="">100</span><span class="">.;</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><br/><span class="">  </span><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span><span class="">roundScale2</span><span class="">(+</span><span class="">1.341</span><span class=""> ) );    </span><span class="">//  1.34</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span><span class="">roundScale2</span><span class="">(-</span><span class="">1.341</span><span class=""> ) );    </span><span class="">// -1.34</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span><span class="">roundScale2</span><span class="">(+</span><span class="">1.345</span><span class=""> ) );    </span><span class="">//  1.34</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span><span class="">roundScale2</span><span class="">(-</span><span class="">1.345</span><span class=""> ) );    </span><span class="">// -1.34</span><span class=""/><br/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span><span class="">roundScale2</span><span class="">(+</span><span class="">1.347</span><span class=""> ) );    </span><span class="">//  1.35</span><span class=""/><br/><span class="">    System.out.</span><span class="">println</span><span class="">( </span><span class="">roundScale2</span><span class="">(-</span><span class="">1.347</span><span class=""> ) );    </span><span class="">// -1.35</span><span class=""/><br/><span class="">  }</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 21.6</b>    
+            Round2Scales.java</p>
+                
+                <p class="standard">If you use 
+                    <samp class="listingcharacter listingcharacter">round(...)</samp> instead of 
+                    <samp class="listingcharacter listingcharacter">rint(double</samp> ), the number 1.345 won’t be rounded to 1.34, but to 1.35 instead. You can test how the format string 
+                    <samp class="listingcharacter listingcharacter">%.2f</samp> rounds with 
+                    <samp class="listingcharacter listingcharacter">printf(...)</samp>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.3.5">21.3.5    Remainder of an Integer Division*</h3>
+            
+            <p class="standard">Besides the remainder operator
+                <a class="indexanchor" id="i21_74"/>
+                <samp class="listingcharacter listingcharacter"> %</samp>
+                <a class="indexanchor" id="i21_75"/>, which calculates the remainder of the division, a static method named 
+                <samp class="listingcharacter listingcharacter">Math.IEEEremainder(double, double)</samp>
+                <a class="indexanchor" id="i21_76"/>
+             can also calculate the remainder.</p>
+            
+            <div class="listing " id="l21.7"><pre><span class="">
+                    <a id="p1036"/>
+                double</span><span class=""> a </span><span class="">=</span><span class=""> </span><span class="">44.0</span><span class="">;</span><span class=""/><br/><span class="">double</span><span class=""> b </span><span class="">=</span><span class=""> </span><span class="">2.2</span><span class="">;</span><span class=""/><br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> a </span><span class="">/</span><span class=""> b </span><span class="">);</span><span class="">                     </span><span class=""> // 20.0</span><span class=""/><br/><span class="">System.out.</span><span class="">println</span><span class="">( </span>
+                <span class="bold">a % b</span> );                     <span class=""> // 2.1999999999999966</span><span class=""/><br/><span class="">System.out.</span><span class="">println</span><span class="">( </span>
+                <span class="bold">Math.<span class="">IEEEremainder</span><span class="">( a, b )</span></span> );<span class=""> // -3.552713678800501E-15</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 21.7</b>    
+            src/main/java/com/tutego/insel/math/IEEEremainder.java, main()</p>
+            
+            <p class="standard">The second result is almost 2.2 with the mathematical inaccuracy, but slightly smaller, so the algorithm couldn’t subtract another 2.2. The static method 
+                <samp class="listingcharacter listingcharacter">IEEEremainder(double, double)</samp>
+             returns a result close to zero (–0.0000000000000035527136788005), which is better because 44.0 can be divided by 2.2 without a remainder, so the remainder would actually be 0.</p>
+            
+            <div class="listing " id="l_none_21482"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Math</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double IEEEremainder(double dividend, double divisor)</samp><br/>Returns the remainder of the division
+                        <a class="indexanchor" id="i21_77"/>
+                        <a class="indexanchor" id="i21_78"/>
+                     of the dividend and divisor, as required by the IEEE-754 standard.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">A separate static method that sometimes returns better results—with the values 44 and 2.2 being actually 0.0—is shown in the following example:</p>
+            
+            <div class="listing " id="l_none_21477"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">remainder</span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> a</span><span class="">,</span><span class=""> </span><span class="">double</span><span class=""> b </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> Math</span><span class="">.</span><span class="">signum</span><span class="">(</span><span class="">a</span><span class="">)</span><span class=""> </span><span class="">*</span><span class=""><br/></span>         <span class="">(</span><span class="">Math</span><span class="">.</span><span class="">abs</span><span class="">(</span><span class="">a</span><span class="">)</span><span class=""> </span><span class="">-</span><span class=""> Math</span><span class="">.</span><span class="">abs</span><span class="">(</span><span class="">b</span><span class="">)</span><span class=""> </span><span class="">*</span><span class=""> Math</span><span class="">.</span><span class="">floor</span><span class="">(</span><span class="">Math</span><span class="">.</span><span class="">abs</span><span class="">(</span><span class="">a</span><span class="">)/</span><span class="">Math</span><span class="">.</span><span class="">abs</span><span class="">(</span><span class="">b</span><span class="">)));</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.3.6">21.3.6    Division with Rounding toward Negative Infinity and Alternative Remainders*</h3>
+            
+            <p class="standard">Integer division in Java is simple: convert the integers to floats, perform the division, and truncate everything after the decimal point. For example, 
+                <samp class="listingcharacter listingcharacter">3 / 2</samp> = 
+                <samp class="listingcharacter listingcharacter">1</samp> and 
+                <samp class="listingcharacter listingcharacter">9 / 2</samp> = 
+                <samp class="listingcharacter listingcharacter">4</samp>. If the result is negative, either because of a negative dividend or because of a negative divisor, the same thing happens: 
+                <samp class="listingcharacter listingcharacter">-9 / 2</samp> = 
+                <samp class="listingcharacter listingcharacter">-4</samp> and 
+                <samp class="listingcharacter listingcharacter">9 / -2</samp> = 
+                <samp class="listingcharacter listingcharacter">-4</samp>
+            . Let’s look at rounding these numbers.</p>
+            
+            <p class="standard">If the result of a division is positive and has a decimal part, the result is made a little smaller by truncating the decimal places (i.e., by rounding down). If 
+                <samp class="listingcharacter listingcharacter">3 / 2</samp> would be 1.5 for floats, it’s 
+                <samp class="listingcharacter listingcharacter">1</samp> for an integer division rounded down. With negative results of a division, the reverse is true because, by truncating the decimal places, the number becomes slightly greater. Thus, 
+                <samp class="listingcharacter listingcharacter">-3 / 2</samp> is, strictly speaking, –1.5, but in integer division, it is 
+                <samp class="listingcharacter listingcharacter">-1</samp>. But 
+                <samp class="listingcharacter listingcharacter">-1</samp>
+             is greater than –1.5, and therefore, Java applies a procedure that rounds to zero.</p>
+            
+            
+                
+                <h4 class="t4" id="h21.3.6.1">
+                    <a id="p1037"/>
+                The floorDiv(...) Method to Round to Negative Infinity</h4>
+                
+                <p class="standard">Three methods don’t round to zero if the result of a division is negative but instead round to negative infinity (i.e., also in the direction of the smaller number, as is the case with positive results).</p>
+                
+                <div class="listing " id="l_none_21492"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Math</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int floorDiv(int x, int y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long floorDiv(long x, long y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long floorDiv(long x, int y)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">In practical terms, 
+                    <samp class="listingcharacter listingcharacter">4/3</samp> = 
+                    <samp class="listingcharacter listingcharacter">Math.floorDiv(4, 3)</samp> = 
+                    <samp class="listingcharacter listingcharacter">1</samp>, but where 
+                    <samp class="listingcharacter listingcharacter">-4 / 3</samp> = 
+                    <samp class="listingcharacter listingcharacter">-1</samp>, in contrast, 
+                    <samp class="listingcharacter listingcharacter">Math.floorDiv(-4, 3)</samp> = 
+                    <samp class="listingcharacter listingcharacter">-2</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.3.6.2">The floorMod(...) Method to Round to Negative Infinity</h4>
+                
+                <p class="standard">The division also appears indirectly in the calculation of the remainder. Remember: The relationship between the division 
+                    <samp class="listingcharacter listingcharacter">a/b</samp> and the remainder 
+                    <samp class="listingcharacter listingcharacter">a%b</samp> (
+                    <samp class="listingcharacter listingcharacter">a</samp> is called 
+                    <span class="italic">dividend</span>
+                    <a class="indexanchor" id="i21_79"/>, 
+                    <samp class="listingcharacter listingcharacter">b </samp>
+                    <span class="italic">divisor</span>
+                    <a class="indexanchor" id="i21_80"/>) is 
+                    <samp class="listingcharacter listingcharacter">(int)(a/b) * b + (a%b) = a</samp>. A division exists in the equation, but with two kinds of divisions (
+                    <samp class="listingcharacter listingcharacter">a / b</samp> and 
+                    <samp class="listingcharacter listingcharacter">floorDiv(a, b)</samp>), consequently, two kinds of remainders must also exist, which differ if the signs are different. For this reason, besides 
+                    <samp class="listingcharacter listingcharacter">a % b</samp>, the library method 
+                    <samp class="listingcharacter listingcharacter">floorMod(a, b)</samp> is available, and the relationship between 
+                    <samp class="listingcharacter listingcharacter">floorMod(...)</samp> and 
+                    <samp class="listingcharacter listingcharacter">floorDiv(...)</samp> is 
+                    <samp class="listingcharacter listingcharacter">floorDiv(a, b) * b + floorMod(a, b) == b</samp>. A transformation of the equation is followed by 
+                    <samp class="listingcharacter listingcharacter">floorMod(a, b) = a - (floorDiv(a, b) * b)</samp>. The result is in the range 
+                    <samp class="listingcharacter listingcharacter">-abs(b)</samp> and 
+                    <samp class="listingcharacter listingcharacter">abs(b)</samp>, and the sign of the result is determined by the divisor 
+                    <samp class="listingcharacter listingcharacter">b</samp> (for the 
+                    <samp class="listingcharacter listingcharacter">%</samp> operator, the dividend 
+                    <samp class="listingcharacter listingcharacter">a</samp>
+                ).</p>
+                
+                <p class="standard">The Javadoc for 
+                    <samp class="listingcharacter listingcharacter">floorMod(…)</samp>
+                 shows an example with the values 4 and 3 with different signs.</p>
+                
+                <table class="standardtable" id="t21.11">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">floorMod(…) Method</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">% Operator</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">floorMod(+4, +3) == +1</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">+4 % +3 == +1</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">floorMod(+4, -3) == -2</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">+4 % -3 == +1</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">floorMod(-4, +3) == +2</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">-4 % +3 == -1</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">floorMod(-4, -3) == -1</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">-4 % -3 == -1</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 21.11</b>    
+            Results of Different Ways to Calculate a Remainder</p>
+                
+                <p class="standard">If the signs for 
+                    <samp class="listingcharacter listingcharacter">a</samp> and 
+                    <samp class="listingcharacter listingcharacter">b</samp> are identical, the results of 
+                    <samp class="listingcharacter listingcharacter">floorMod(a, b)</samp> and 
+                    <samp class="listingcharacter listingcharacter">a % b</samp> will also be the same. The examples in the table also demonstrate the difference in the result sign, which comes once from the dividend (
+                    <samp class="listingcharacter listingcharacter">%</samp>) and once from the divisor (
+                    <samp class="listingcharacter listingcharacter">floorMod(...)</samp>). The 
+                    <a id="p1038"/>
+                completely different events (apart from the sign) in the pairs (+4, –3) and (–4, +3) simply result from different results of the division.</p>
+                
+                <div class="listing " id="l_none_21506"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Math</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static int floorMod(int x, int y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long floorMod(long x, long y)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long floorMod(long x, int y)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The implementation is relatively simple with 
+                    <samp class="listingcharacter listingcharacter">x - floorDiv(x, y) * y</samp>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.3.7">21.3.7    Multiply-Accumulate</h3>
+            
+            <p class="standard">The mathematical operation 
+                <span class="italic">a</span> × 
+                <span class="italic">b</span> + 
+                <span class="italic">c</span> occurs frequently in calculations, so that processors today can perform this calculation in an optimized way, that is, faster and with a higher accuracy. 
+                <samp class="listingcharacter listingcharacter">Math</samp> has the 
+                <samp class="listingcharacter listingcharacter">fma(...)</samp> method for the 
+                <span class="italic">fused multiply-accumulate function</span>
+             from the IEEE-754 standard.</p>
+            
+            <div class="listing " id="l_none_21507"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Math</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double fma(double a, double b, double c)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static float fma(float a, float b, float c)</samp><br/>Performs 
+                        <span class="italic">a</span> × 
+                        <span class="italic">b</span> + 
+                        <span class="italic">c</span> using 
+                        <samp class="listingcharacter listingcharacter">RoundingMode.HALF_EVEN</samp>. Compared to a simple 
+                        <samp class="listingcharacter listingcharacter">a * b + c</samp>, 
+                        <samp class="listingcharacter listingcharacter">fma(...)</samp>
+                     takes into account the special features (i.e., infinity and NaN).</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.3.8">21.3.8    Square Root and Exponential Methods</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Math</samp>
+             class also provides methods for calculating the square root and other exponential methods:</p>
+            
+            <div class="listing " id="l_none_21528"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Math</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double sqrt(double x)</samp><br/>Returns the square root
+                        <a class="indexanchor" id="i21_81"/> of 
+                        <samp class="listingcharacter listingcharacter">x</samp>; 
+                        <samp class="listingcharacter listingcharacter">sqrt</samp> stands for 
+                        <span class="italic">square root</span>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double cbrt(double a)</samp><br/>Calculates the cube root of 
+                        <samp class="listingcharacter listingcharacter">a</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double hypot(double x, double y)</samp><br/>Calculates the square root of 
+                        <span class="italic">x</span>
+                        <sup>2</sup> + 
+                        <span class="italic">y</span>
+                        <sup>2</sup>, also called 
+                        <span class="italic">Euclidean distance</span>. Could be rewritten as 
+                        <samp class="listingcharacter listingcharacter">sqrt(x*x + y*y)</samp>, but 
+                        <samp class="listingcharacter listingcharacter">hypot(...)</samp>
+                     provides better accuracy and performance.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double scalb(double d, double scaleFactor)</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">d</samp> times 
+                        <samp class="listingcharacter listingcharacter">2</samp> to the power of 
+                        <samp class="listingcharacter listingcharacter">scaleFactor</samp>. Can in principle also be written as 
+                        <samp class="listingcharacter listingcharacter">d * Math.pow(2, scaleFactor)</samp>, but 
+                        <samp class="listingcharacter listingcharacter">scalb(...)</samp>
+                     provides better performance.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">
+                            <a id="p1039"/>
+                        static double exp(double x)</samp><br/>Returns the exponential value
+                        <a class="indexanchor" id="i21_82"/> of 
+                        <samp class="listingcharacter listingcharacter">x</samp> to the base 
+                        <span class="italic">e</span> (of the Euler number 
+                        <span class="italic">e</span> = 2.71828...), for instance, e
+                        <sup>x</sup>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double expm1(double x)</samp><br/>Returns the exponential value
+                        <a class="indexanchor" id="i21_83"/> of 
+                        <samp class="listingcharacter listingcharacter">x</samp> to the base 
+                        <span class="italic">e</span> minus 1 (i.e., 
+                        <span class="italic">e</span>
+                        <sup>x</sup> – 1). Calculations near zero can express 
+                        <samp class="listingcharacter listingcharacter">expm1(x) + 1</samp> more precisely than 
+                        <samp class="listingcharacter listingcharacter">exp(x)</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double pow(double x, double y)</samp><br/>Returns the value of the power
+                        <a class="indexanchor" id="i21_84"/>
+                        <span class="italic"> x</span>
+                        <sup>y</sup>
+                    . No separate method for integer values exists.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h21.3.8.1">The Question of 0.0/0.0 and 0.0^0.0*</h4>
+                
+                <p class="standard">As you’ve learned, 0.0/0.0 results in a straightforward NaN. In contrast to the integer values, however, we don’t get an exception in this case because the special number NaN has been introduced especially for this purpose. You might ask what exactly results in 
+                    <samp class="listingcharacter listingcharacter">(long)(double)(0.0/0.0)</samp>. The Java Language Specification (JLS) states
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn21_08" id="fn21_08">[ 235 ]</a></span> that converting a floating point value NaN to an 
+                    <samp class="listingcharacter listingcharacter">int</samp> 0 or to a 
+                    <samp class="listingcharacter listingcharacter">long</samp>
+                 results in 0.</p>
+                
+                <p class="standard">Another exciting question concerns the result of 0.0
+                    <sup>0.0</sup>. To calculate general powers, the static function 
+                    <samp class="listingcharacter listingcharacter">Math.pow(double a, double b)</samp> is used. From your school days, you may recall that we take the square root of a number when the exponent 
+                    <samp class="listingcharacter listingcharacter">b</samp> is exactly ½. But now we want to know what happens if 
+                    <samp class="listingcharacter listingcharacter">a = b = 0</samp>. The JLS requires that the result is always 1.0 if the exponent 
+                    <samp class="listingcharacter listingcharacter">b</samp> is equal to –0.0 or 0.0. Thus, in this case, base 
+                    <samp class="listingcharacter listingcharacter">a</samp> doesn’t matter at all. In some algebra books, 0
+                    <sup>0</sup> is treated as undefined. However, it makes perfect sense to define 0
+                    <sup>0</sup> as 1 since otherwise numerous special treatments for 0 would be required.
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn21_09" id="fn21_09">[ 236 ]</a></span>
+                </p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.3.9">21.3.9    The Logarithm*</h3>
+            
+            <p class="standard">The logarithm is the inverse function of the exponential function. The exponential function and the logarithm are related by the following relationship: If 
+                <span class="italic">y</span> = 
+                <span class="italic">a</span>
+                <sup>x</sup>, then 
+                <span class="italic">x</span> = log
+                <sub>a</sub>(
+                <span class="italic">y</span>). The logarithm calculated by 
+                <samp class="listingcharacter listingcharacter">Math.log(double)</samp>
+                <a class="indexanchor" id="i21_85"/> is the natural logarithm to base 
+                <span class="italic">e</span>. In mathematics, this relationship is indicated by 
+                <span class="italic">ln</span> (
+                <span class="italic">logarithmus naturalis, natural logarithm</span>). Logarithms with base 10 are referred to as common logarithm or 
+                <span class="italic">Briggsian logarithm</span> and are abbreviated as 
+                <span class="italic">lg</span>, while logarithms with base 2 (
+                <span class="italic">binary logarithm</span>, 
+                <span class="italic">dual logarithm</span>) are abbreviated as 
+                <span class="italic">lb.</span> In Java, the static method 
+                <samp class="listingcharacter listingcharacter">log10(double)</samp> exists for the brig logarithm lg, but not for the binary logarithm lb, which must still be emulated. In general, the following conversion applies: log
+                <sub>b</sub>(
+                <span class="italic">x</span>) = log
+                <sub>a</sub>(
+                <span class="italic">x</span>) ÷ log
+                <sub>a</sub>(
+                <span class="italic">b</span>
+            ).</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                    <a id="p1040"/>
+                Example</h6>
+                
+                <p class="standard first last">In the following example, a custom static method calculates the logarithm for base 2:</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_21542"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">double</span><span class=""> </span><span class="">lb</span><span class="">(</span><span class=""> </span><span class="">double</span><span class=""> x </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> Math</span><span class="">.</span><span class="">log</span><span class="">(</span><span class=""> x </span><span class="">)</span><span class=""> </span><span class="">/</span><span class=""> Math</span><span class="">.</span><span class="">log</span><span class="">(</span><span class=""> </span><span class="">2.0</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Math</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double log(double a)</samp><br/>Calculates the logarithm of 
+                        <samp class="listingcharacter listingcharacter">a</samp> to the base 
+                        <span class="italic">e</span>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double log10(double a)</samp><br/>Returns the logarithm of 
+                        <samp class="listingcharacter listingcharacter">a</samp>
+                     to the base 10.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double log1p(double x)</samp><br/>Returns log (
+                        <span class="italic">x</span>
+                    ) + 1.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.3.10">21.3.10    Angle Methods*</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Math</samp> class provides some angle-related methods
+                <a class="indexanchor" id="i21_86"/> and their reversals. In contrast school mathematics, the angles for 
+                <samp class="listingcharacter listingcharacter">sin(double)</samp>
+                <a class="indexanchor" id="i21_87"/>, 
+                <samp class="listingcharacter listingcharacter">cos(double)</samp>,
+                <a class="indexanchor" id="i21_88"/> and 
+                <samp class="listingcharacter listingcharacter">tan(double)</samp>
+                <a class="indexanchor" id="i21_89"/>
+             are passed as radians (2ð corresponds to a full circle), not in degrees (360 degrees corresponds to a full circle).</p>
+            
+            <div class="listing " id="l_none_21555"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Math</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double sin(double x)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double cos(double x)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static double tan(double x)</samp><br/>Returns the sine, cosine,
+                        <a class="indexanchor" id="i21_90"/> and tangent
+                        <a class="indexanchor" id="i21_91"/> of 
+                        <samp class="listingcharacter listingcharacter">x</samp>
+                    , respectively.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h21.3.10.1">Arc Methods</h4>
+                
+                <p class="standard">Arc methods
+                    <a class="indexanchor" id="i21_92"/> implement the inverse functions
+                    <a class="indexanchor" id="i21_93"/> to trigonometric methods. The argument is not an angle, but, for example with 
+                    <samp class="listingcharacter listingcharacter">asin(double)</samp>
+                    <a class="indexanchor" id="i21_94"/>
+                , a sine value between –1 and 1. The result is an angle in radians, approximately between –π/2 and π/2.</p>
+                
+                <div class="listing " id="l_none_21550"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Math</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static double asin(double x)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static double acos(double x)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p1041"/>
+                            static double atan(double x)</samp><br/>Returns the arc sine, arc cosine, or arc tangent of 
+                            <samp class="listingcharacter listingcharacter">x</samp>
+                        , respectively.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static double atan2(double x, double y)</samp><br/>Returns the angle 
+                            <span class="italic">theta</span> (i.e., a component of the polar coordinate tuple), when converting rectangular coordinates to polar coordinates. The static method takes into account the sign of the parameters 
+                            <samp class="listingcharacter listingcharacter">x</samp> and 
+                            <samp class="listingcharacter listingcharacter">y</samp>
+                        , and the free leg of the angle is in the correct quadrant.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Hyperbolic functions are provided by the Java methods 
+                    <samp class="listingcharacter listingcharacter">sinh(double)</samp>
+                    <a class="indexanchor" id="i21_95"/>, 
+                    <samp class="listingcharacter listingcharacter">tanh(double)</samp>
+                    <a class="indexanchor" id="i21_96"/>, and 
+                    <samp class="listingcharacter listingcharacter">cosh(double)</samp>
+                    <a class="indexanchor" id="i21_97"/>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h21.3.10.2">Conversions from Degrees to Radians</h4>
+                
+                <p class="standard">Two static methods exist for converting an angle from the degree measure
+                    <a class="indexanchor" id="i21_98"/> to the radian measure,
+                    <a class="indexanchor" id="i21_99"/>
+                 and vice versa:</p>
+                
+                <div class="listing " id="l_none_21563"><pre><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Math</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static double toRadians(double angdeg)</samp><br/>Converts an angle from degrees to radians.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static double toDegrees(double angrad)</samp><br/>Converts an angle from radians to degrees.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h21.3.11">21.3.11    Random Numbers</h3>
+            
+            <p class="standard">Positive random floats
+                <a class="indexanchor" id="i21_100"/> between greater than or equal to 0.0 and truly less than 1.0 are returned by the static method 
+                <samp class="listingcharacter listingcharacter">Math.random()</samp>
+                <a class="indexanchor" id="i21_101"/>. The return value is 
+                <samp class="listingcharacter listingcharacter">double</samp>, and a type conversion to 
+                <samp class="listingcharacter listingcharacter">int</samp>
+             always leads to the result 0.</p>
+            
+            <p class="standard">To have values in a different range of values, a simple solution is to expand the random numbers from 
+                <samp class="listingcharacter listingcharacter">Math.random()</samp> to the desired range of values by multiplication (scaling) and shift them appropriately by addition (an offset). To obtain random integer numbers between 
+                <samp class="listingcharacter listingcharacter">min</samp> (inclusive) and 
+                <samp class="listingcharacter listingcharacter">max</samp>
+             (inclusive), you can write the following code:</p>
+            
+            <div class="listing " id="l21.8"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">long</span><span class=""> </span><span class="">random</span><span class="">(</span><span class=""> </span><span class="">long</span><span class=""> min</span><span class="">,</span><span class=""> </span><span class="">long</span><span class=""> max </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">return</span><span class=""> min </span><span class="">+</span><span class=""> Math</span><span class="">.</span><span class="">round</span><span class="">(</span><span class=""> Math</span><span class="">.</span><span class="">random</span><span class="">()</span><span class=""> </span><span class="">*</span><span class=""> </span><span class="">(</span><span class="">max </span><span class="">-</span><span class=""> min</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 21.8</b>    
+            src/main/java/com/tutego/insel/math/RandomIntInRange.java</p>
+            
+            <p class="standard">A custom implementation isn’t necessary because the 
+                <samp class="listingcharacter listingcharacter">Random</samp> class—and its subclasses—provide several useful object methods like 
+                <samp class="listingcharacter listingcharacter">nextInt(n)</samp>. The implementation is not in the 
+                <samp class="listingcharacter listingcharacter">Math</samp> class itself, but in 
+                <samp class="listingcharacter listingcharacter">Random</samp>, which we’ll take a closer look at in 
+                <span class="crossreference "><a href="21_005.html#h21.5">Section 21.5</a></span>
+            .</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

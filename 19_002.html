@@ -1,0 +1,935 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Files and Data Streams" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Files and Data Streams" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Files and Data Streams</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h19.2">19.2    File Systems and Paths</h2>
+        
+        <p class="standard">At the center of NIO.2 are the 
+            <samp class="listingcharacter listingcharacter">FileSystem</samp> and 
+            <samp class="listingcharacter listingcharacter">Path</samp>
+         types:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">FileSystem</samp>
+                    <a class="indexanchor" id="i19_01"/> describes a data system and is an abstract class. This type is implemented by concrete file systems, such as the local file system or a ZIP archive. To access the current file system, the 
+                    <samp class="listingcharacter listingcharacter">FileSystems</samp> class declares a static method: 
+                    <samp class="listingcharacter listingcharacter">FileSystems.getDefault()</samp>
+                .</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">Path</samp>
+                    <a class="indexanchor" id="i19_02"/> represents a path to a file or directory, where paths can be relative or absolute. These methods are somewhat reminiscent of the old 
+                    <samp class="listingcharacter listingcharacter">File</samp> class, but one big difference is that 
+                    <samp class="listingcharacter listingcharacter">File</samp> itself represents the file or directory and declares query methods like 
+                    <samp class="listingcharacter listingcharacter">isDirectory()</samp> or 
+                    <samp class="listingcharacter listingcharacter">lastModified()</samp>. In contrast, 
+                    <samp class="listingcharacter listingcharacter">Path</samp> represents only the path and 
+                    <a id="p971"/>provides only path-related methods. Modification methods aren’t included; extra types like 
+                    <samp class="listingcharacter listingcharacter">BasicFileAttributes</samp>
+                 for attributes must be used in these cases.</p>
+            
+            </li>
+        
+        </ul>
+        
+        
+            
+            <h3 class="t3" id="h19.2.1">19.2.1    FileSystem and Path</h3>
+            
+            <p class="standard">A 
+                <samp class="listingcharacter listingcharacter">Path</samp> object can’t be created via a constructor like 
+                <samp class="listingcharacter listingcharacter">File</samp> because the class is abstract. However, 
+                <samp class="listingcharacter listingcharacter">File</samp> and 
+                <samp class="listingcharacter listingcharacter">Path</samp> have a few things in common, for example, being immutable. The 
+                <samp class="listingcharacter listingcharacter">FileSystem</samp> object provides the corresponding 
+                <samp class="listingcharacter listingcharacter">getPath(...)</samp> method, and a 
+                <samp class="listingcharacter listingcharacter">FileSystem</samp> is retrieved from 
+                <samp class="listingcharacter listingcharacter">FileSystems</samp>
+             via a factory method.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example creates a 
+                    <samp class="listingcharacter listingcharacter">Path</samp>
+                 object:</p>
+                
+                <div class="listing " id="l_none_197"><pre>FileSystem fs <span class="">=</span><span class=""> FileSystems</span><span class="">.</span><span class="">getDefault</span><span class="">();</span><span class=""><br/></span>Path p <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">fs.</span><span class="">getPath</span></span><span class="">( </span><span class="">"C:/Windows/Fonts/"</span><span class=""> );</span><span class=""/></pre></div>
+                
+                <p class="standard">With a shortcut, you can write the following code:</p>
+                
+                <div class="listing  last_item" id="l_none_1917"><pre>Path p <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">Paths.</span><span class="">get</span></span><span class="">( </span><span class="">"C:/Windows/Fonts/"</span><span class=""> );</span><span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">Since the expression 
+                <samp class="listingcharacter listingcharacter">FileSystems.getDefault().getPath(...)</samp>
+             is a bit clumsy, three shorter options are available:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Using the utility class 
+                        <samp class="listingcharacter listingcharacter">Paths</samp>. A call of 
+                        <samp class="listingcharacter listingcharacter">Paths.get(...)</samp>
+                        <a class="indexanchor" id="i19_03"/> returns the 
+                        <samp class="listingcharacter listingcharacter">Path</samp> (see 
+                        <span class="crossreference "><a href="07_001.html#h7">Chapter 7</a></span>, 
+                        <span class="crossreference "><a href="07_001.html#h7.1.2">Section 7.1.2</a></span>
+                    ).</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Using the two static 
+                        <samp class="listingcharacter listingcharacter">of(...)</samp> methods that exist in 
+                        <samp class="listingcharacter listingcharacter">Path</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A 
+                        <samp class="listingcharacter listingcharacter">Path</samp> can also be derived from a 
+                        <samp class="listingcharacter listingcharacter">File object</samp> with 
+                        <samp class="listingcharacter listingcharacter">toPath()</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="listing " id="l_none_1941"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">nio</span><span class="">.</span><span class="">file</span><span class="">.</span>
+                <span class="bold">Paths</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static Path get(String first, String… more)</samp><br/>Creates a path from segments. For example, if the backslash 
+                        <samp class="listingcharacter listingcharacter">\</samp> is the path separator on your file system, then 
+                        <samp class="listingcharacter listingcharacter">Paths.get("a", "b", "c ")</samp> is equal to 
+                        <samp class="listingcharacter listingcharacter">Paths.get("a\b\c")</samp>
+                    .</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static Path get(URI uri)</samp><br/>Creates a path from a URI.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="listing " id="l_none_1939"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">nio</span><span class="">.</span><span class="">file</span>
+                <span class="bold"><span class="">.Path</span></span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static Path of(String first, String... more)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static Path of(URI uri)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Each 
+                <samp class="listingcharacter listingcharacter">Path</samp> object also has a 
+                <samp class="listingcharacter listingcharacter">getFileSystem()</samp> method, which you can use to get back to the 
+                <samp class="listingcharacter listingcharacter">FileSystem</samp>
+            .</p>
+            
+            <div class="imagebox figure-type"><a href="img-f19.1.html" id="f19.1"><img alt="&#10;                &#10;            Dependencies of the Paths and Path Types" id="img-f19.1" src="bilderklein/klein19_001.png"/></a></div>
+            
+            <p class="caption "><b>Figure 19.1</b>    
+            
+                <a id="p972"/>
+            Dependencies of the Paths and Path Types</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The path string must not contain 
+                    <samp class="listingcharacter listingcharacter">\u0000</samp> in Java; otherwise, an exception will be thrown. Thus, 
+                    <samp class="listingcharacter listingcharacter">Paths.get("my.php\u0000.jpg")</samp> leads to the exception “java.nio.file.InvalidPathException: Illegal char &lt; &gt; at index 6: my.php.” This exception is an important security feature, for example, to protect a web server from accepting false files. The filename looks like a JPG file via 
+                    <samp class="listingcharacter listingcharacter">"my.php\u0000.jpg".endsWith(".jpg")</samp>, but if everything after the null string were truncated (which some file systems do), a 
+                    <span class="italic">my.php</span>
+                 file would suddenly be created.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h19.2.1.1">Features of a Path</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Path</samp> type declares various 
+                    <samp class="listingcharacter listingcharacter">get*(...)</samp> methods and an 
+                    <samp class="listingcharacter listingcharacter">isAbsolute()</samp> method, which have some similarity to the methods from 
+                    <samp class="listingcharacter listingcharacter">File</samp>, as shown in 
+                    <span class="crossreference "><a href="19_002.html#f19.2">Figure 19.2</a></span>. 
+                    <span class="crossreference "><a href="19_002.html#l19.1">Listing 19.1</a></span>
+                 shows a few examples of usage.</p>
+                
+                <div class="listing " id="l19.1"><pre>Path p <span class="">=</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"C:/Windows/Fonts/"</span><span class=""> </span><span class="">);</span><br/>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">p.<span class="">toString</span><span class="">()</span></span> );                 <span class=""> // C:\Windows\Fonts</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">p.<span class="">isAbsolute</span><span class="">()</span></span> );               <span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">p.<span class="">getRoot</span><span class="">()</span></span> );                  <span class=""> // C:\</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">p.<span class="">getParent</span><span class="">()</span></span> );                <span class=""> // C:\Windows</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">p.<span class="">getNameCount</span><span class="">()</span></span> );             <span class=""> // 2</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( p.</span><span class="">getName</span><span class="">(</span>
+                    <span class="bold">p.<span class="">getNameCount</span><span class="">()</span></span>-<span class="">1</span><span class="">) );</span><span class=""> // Fonts</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 19.1</b>    
+            src/main/java/com/tutego/insel/nio2/FileSystemPathFileDemo1.java, main()</p>
+                
+                <p class="standard">Methods such as 
+                    <samp class="listingcharacter listingcharacter">getPath()</samp>, 
+                    <samp class="listingcharacter listingcharacter">getRoot()</samp>, and 
+                    <samp class="listingcharacter listingcharacter">getParent()</samp> all return 
+                    <samp class="listingcharacter listingcharacter">Path</samp> objects from the components of a given path. Three methods will not result in a 
+                    <samp class="listingcharacter listingcharacter">Path</samp>
+                :</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">toString()</samp>
+                         returns a string representation.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">toUri()</samp> returns a 
+                            <samp class="listingcharacter listingcharacter">URI</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">toFile()</samp> returns a traditional 
+                            <samp class="listingcharacter listingcharacter">File</samp>
+                         object.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Because 
+                    <samp class="listingcharacter listingcharacter">Path</samp> stores a hierarchical list of names for the path, each segment of the path can be queried. This task of 
+                    <samp class="listingcharacter listingcharacter">getName(int n)</samp> in turn returns a 
+                    <samp class="listingcharacter listingcharacter">Path</samp>. The 
+                    <samp class="listingcharacter listingcharacter">subpath(int beginIndex, int endIndex)</samp> method returns a 
+                    <samp class="listingcharacter listingcharacter">Path</samp> with the segments of the specified 
+                    <a id="p973"/>range. 
+                    <samp class="listingcharacter listingcharacter">Path</samp> implements the 
+                    <samp class="listingcharacter listingcharacter">Iterable</samp> interface, which imposes an 
+                    <samp class="listingcharacter listingcharacter">iterator()</samp> method, which in turn means that 
+                    <samp class="listingcharacter listingcharacter">Path</samp> can appear to the right of the colon in the extended 
+                    <samp class="listingcharacter listingcharacter">for</samp>
+                .</p>
+                
+                <div class="imagebox figure-type"><a href="img-f19.2.html" id="f19.2"><img alt="The Class Diagram of Path" id="img-f19.2" src="bilderklein/klein19_002.png"/></a></div>
+                
+                <p class="caption "><b>Figure 19.2</b>    
+            The Class Diagram of Path</p>
+                
+                <p class="standard">The check methods 
+                    <samp class="listingcharacter listingcharacter">startsWith(Path other)</samp> and 
+                    <samp class="listingcharacter listingcharacter">endsWith(Path other)</samp>, which determine whether the path starts or ends with a certain other path, are quite convenient. 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> is overridden from within 
+                    <samp class="listingcharacter listingcharacter">Object</samp>. Since 
+                    <samp class="listingcharacter listingcharacter">Path</samp> implements the 
+                    <samp class="listingcharacter listingcharacter">Comparable&lt;Path&gt;</samp> interface, 
+                    <samp class="listingcharacter listingcharacter">compareTo(Path)</samp> is implemented as well. The 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method doesn’t resolve the paths, but only looks at their names; the static method 
+                    <samp class="listingcharacter listingcharacter">isSameFile(Path, Path)</samp> of the 
+                    <samp class="listingcharacter listingcharacter">Files</samp> class performs this test and resolves relative references. Besides 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>, 
+                    <samp class="listingcharacter listingcharacter">Path</samp> also overrides 
+                    <samp class="listingcharacter listingcharacter">hashCode()</samp>
+                .</p>
+                
+                <div class="listing " id="l_none_1964"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">nio</span><span class="">.</span><span class="">file</span><span class="">.</span>
+                    <span class="bold">Path</span><br/><span class="">extends</span><span class=""> Comparable&lt;Path&gt;, Iterable&lt;Path&gt;, Watchable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String toString()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">File toFile()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">URI toUri()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path getFileName()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path getParent()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p974"/>
+                            Path getRoot()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean isAbsolute()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int getNameCount()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path getName(int index)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Iterator&lt;Path&gt; iterator()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path subpath(int beginIndex, int endIndex)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean endsWith(Path other)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean endsWith(String other)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean startsWith(Path other)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean startsWith(String other)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean equals(Object other)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int compareTo(Path other)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int hashCode()</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="imagebox figure-type"><a href="img-f19.3.html" id="f19.3"><img alt="The Inheritance Relationship of Path" id="img-f19.3" src="bilderklein/klein19_003.png"/></a></div>
+                
+                <p class="caption "><b>Figure 19.3</b>    
+            The Inheritance Relationship of Path</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">The 
+                        <samp class="listingcharacter listingcharacter">getFileName()</samp> method doesn’t return a 
+                        <samp class="listingcharacter listingcharacter">String</samp> but instead a 
+                        <samp class="listingcharacter listingcharacter">Path</samp> object with only the file name with 
+                        <samp class="listingcharacter listingcharacter">getNameCount() == 1</samp>. Therefore, using 
+                        <samp class="listingcharacter listingcharacter">path.getFileName().endsWith(".xml")</samp> to check whether a filename like 
+                        <span class="italic">trainings.xml</span> ends in “.xml” isn’t helpful because 
+                        <samp class="listingcharacter listingcharacter">endsWith(...)</samp> tests whether the last segment in the path (in this case, the complete filename without directory specification) has exactly this name. For example, 
+                        <samp class="listingcharacter listingcharacter">path.getFileName().toString().endsWith(".xml")</samp>
+                     is valid as a solution.</p>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Different file systems have their own limitations and notations. Sometimes, the folder separator character is a “/” and sometimes a “\.” Wikipedia
+                        <span class="footnote_anchor"><a href="footnotes.html#ftn-fn19_02" id="fn19_02">[ 225 ]</a></span> provides an overview of 
+                        <a id="p975"/>
+                    how different operating systems define separators or define the root directory. Java also accepts the slash as a folder separator on Windows.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h19.2.1.2">Creating New Paths</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">resolve*(...)</samp> methods create new paths from existing ones. These methods accept the parameter types 
+                    <samp class="listingcharacter listingcharacter">String</samp> and 
+                    <samp class="listingcharacter listingcharacter">Path</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example joins a user directory with an image directory:</p>
+                    
+                    <div class="listing " id="l_none_1964851951"><pre>Path picturePath <span class="">=</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">getProperty</span><span class="">(</span><span class="">"user.home"</span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>                        <span class="">.</span>
+                        <span class="bold"><span class="">resolve</span><span class="">( </span><span class="">"Pictures"</span><span class=""> )</span><br/>                        .<span class="">resolve</span><span class="">( </span><span class="">"Squid Game"</span><span class=""> )</span></span>;<br/>System.out.<span class="">println</span><span class="">( picturePath );</span><span class=""> // e.g., C:\Users\Chris\Pictures\Squid Game</span><span class=""/><span class=""/></pre></div>
+                    
+                    <p class="standard">The subdirectories can also be entered directly in 
+                        <samp class="listingcharacter listingcharacter">get(...)</samp>
+                    .</p>
+                    
+                    <p class="standard">In the same folder as 
+                        <span class="italic">Haldeman.jpg</span>, a new path for the file 
+                        <span class="italic">nixon.tar</span>
+                     is requested:</p>
+                    
+                    <div class="listing  last_item" id="l_none_1989"><pre>Path haldeman <span class="">=</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"d:/smoking gun tapes/Haldeman.jpg"</span><span class=""> </span><span class="">);</span><br/>Path nixon    = haldeman.<span class="">resolveSibling</span><span class="">( </span><span class="">"nixon.tar"</span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( nixon ); </span><span class=""> // d:\smoking gun tapes\nixon.tar</span><span class=""> </span><span class=""/></pre></div>
+                
+                </div>
+                
+                <p class="standard">An interesting method is also 
+                    <samp class="listingcharacter listingcharacter">relativize(Path)</samp>
+                , which returns a relative path from a base specification that leads to another path.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first last">As shown in the following example, the relative path 
+                        <samp class="listingcharacter listingcharacter">..\Cursors</samp> leads from 
+                        <span class="italic">c:/Windows/Fonts</span> to 
+                        <span class="italic">c:/Windows/Cursors</span>
+                    :</p>
+                
+                </div>
+                
+                <div class="listing " id="l_none_1988"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"C:/Windows/Fonts"</span><span class=""> </span><span class="">)</span><br/>                         .
+                    <span class="bold"><span class="">relativize</span></span><span class="">( Paths.</span><span class="">get</span><span class="">(</span><span class="">"C:/Windows/Cursors"</span><span class="">) )</span><br/>);<span class=""> // ..\Cursors</span><span class=""><br/></span><span class="">interface</span><span class=""> java.nio.file.</span>
+                    <span class="bold">Path</span><br/><span class="">extends</span><span class=""> Comparable&lt;Path&gt;, Iterable&lt;Path&gt;, Watchable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path relativize(Path other)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path resolve(Path other)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path resolve(String other)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path resolveSibling(Path other)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path resolveSibling(String other)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h19.2.1.3">
+                    <a id="p976"/>
+                Normalization and Path Resolution</h4>
+                
+                <p class="standard">As with the 
+                    <samp class="listingcharacter listingcharacter">File</samp> class, the 
+                    <samp class="listingcharacter listingcharacter">Path</samp>
+                 class symbolizes a path but doesn’t have to point to a concrete file or directory. For this reason, the methods we’ve described so far only provide information that can be inferred from the given name without resorting to the file system. Thus, for relative paths, the query methods provide little that’s exciting. Consider the following example:</p>
+                
+                <div class="listing " id="l19.2"><pre>Path p <span class="">=</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"../.."</span><span class=""> </span><span class="">);</span><br/>System.out.<span class="">println</span><span class="">( p.</span><span class="">toString</span><span class="">() );                 </span><span class=""> // ..\..</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( p.</span><span class="">isAbsolute</span><span class="">() );               </span><span class=""> // false</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( p.</span><span class="">getRoot</span><span class="">() );                  </span><span class=""> // null</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( p.</span><span class="">getParent</span><span class="">() );                </span><span class=""> // ..</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( p.</span><span class="">getNameCount</span><span class="">() );             </span><span class=""> // 2</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( p.</span><span class="">getName</span><span class="">(p.</span><span class="">getNameCount</span><span class="">()-</span><span class="">1</span><span class="">) );</span><span class=""> // ..</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 19.2</b>    
+            src/main/java/com/tutego/insel/nio2/FileSystemPathFileDemo2.java, main()</p>
+                
+                <p class="standard">To bring some order into relative path specifications, the 
+                    <samp class="listingcharacter listingcharacter">Path</samp> class provides the 
+                    <samp class="listingcharacter listingcharacter">normalize()</samp> method, which removes the references “.” and “..” without accessing the file system. To resolve the relative addressing with access to the file system, the 
+                    <samp class="listingcharacter listingcharacter">Path</samp> class provides the two methods, 
+                    <samp class="listingcharacter listingcharacter">toAbsolutePath()</samp> or 
+                    <samp class="listingcharacter listingcharacter">toRealPath(...)</samp>
+                , as shown in the following example:</p>
+                
+                <div class="listing " id="l19.3"><pre>Path dotDotSlashDotDot <span class="">=</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"../.."</span><span class=""> </span><span class="">);</span><br/>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">dotDotSlashDotDot.<span class="">toAbsolutePath</span><span class="">()</span></span> );<span class=""><br/></span>// e.g., C:\Users\Christian\Dropbox\workspace\..\..<span class=""><br/></span><br/><span class="">try</span><span class=""> {</span><br/>  System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">dotDotSlashDotDot.<span class="">toRealPath</span><span class="">( LinkOption.NOFOLLOW_LINKS )</span></span> );<span class=""><br/></span>// e.g., C:\Users\Christian\<span class=""><br/></span><br/>  System.out.<span class="">println</span><span class="">( Paths.</span><span class="">get</span><span class="">( </span><span class="">"../♡"</span><span class=""> ).</span><span class="">toRealPath</span><span class="">( LinkOption.NOFOLLOW_LINKS ) );</span><br/>}<br/><span class="">catch</span><span class=""> ( IOException e ) {</span><br/>  e.<span class="">printStackTrace</span><span class="">();</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 19.3</b>    
+            src/main/java/com/tutego/insel/nio2/RealAndAbsolutePath.java, main()</p>
+                
+                <p class="standard">The first method 
+                    <samp class="listingcharacter listingcharacter">toAbsolutePath()</samp> doesn’t normalize; the method simply resolves the relative path to an absolute path. The resolution of 
+                    <samp class="listingcharacter listingcharacter">../..</samp> is performed by 
+                    <samp class="listingcharacter listingcharacter">toRealPath(LinkOption...)</samp>
+                , where the (optional) argument expresses whether links should be followed or not.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p977"/>
+                    Note</h6>
+                    
+                    <p class="standard first last">The 
+                        <samp class="listingcharacter listingcharacter">toRealPath(...)</samp> method raises an exception when trying to resolve a path to a file that doesn’t exist. For example, 
+                        <samp class="listingcharacter listingcharacter">Paths.get("../♡").toRealPath(…)</samp> links to “java.nio.file.NoSuchFileException,” whether with or without 
+                        <samp class="listingcharacter listingcharacter">LinkOption.NOFOLLOW_LINKS</samp>. In contrast, 
+                        <samp class="listingcharacter listingcharacter">Paths.get( "../0x" ).toAbsolutePath()</samp>
+                     doesn’t result in an error.</p>
+                
+                </div>
+                
+                <div class="listing " id="l_none_19118"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">nio</span><span class="">.</span><span class="">file</span><span class="">.</span>
+                    <span class="bold">Path</span><br/><span class="">extends</span><span class=""> Comparable&lt;Path&gt;, Iterable&lt;Path&gt;, Watchable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path normalize()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path toAbsolutePath()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Path toRealPath(LinkOption… options)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Two other 
+                    <samp class="listingcharacter listingcharacter">register(...)</samp> methods are available in 
+                    <samp class="listingcharacter listingcharacter">Path</samp>
+                , but these methods relate to registering a listener that reacts to changes in the file system.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h19.2.2">19.2.2    The Files Utility Class</h3>
+            
+            <p class="standard">Since the 
+                <samp class="listingcharacter listingcharacter">Path</samp> class represents only paths (and not file information such as length or modification time) and since 
+                <samp class="listingcharacter listingcharacter">Path</samp> also doesn’t provide a way to create and delete files, the 
+                <samp class="listingcharacter listingcharacter">Files</samp>
+             class takes over these tasks.</p>
+            
+            <p class="standard">A simple method is 
+                <samp class="listingcharacter listingcharacter">size(...)</samp>, which returns the length of the file. Unlike 
+                <samp class="listingcharacter listingcharacter">java.io.File</samp>, almost all 
+                <samp class="listingcharacter listingcharacter">Files</samp> methods result in an 
+                <samp class="listingcharacter listingcharacter">IOException</samp>
+             if problems occur with the input/output operations.</p>
+            
+            <div class="listing " id="l_none_19137"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">nio</span><span class="">.</span><span class="">file</span><span class="">.</span>
+                <span class="bold">Files</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">static long size(Path path) throws IOException</samp><br/>Returns the size of the file.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h19.2.2.1">Easy Reading and Writing of Files</h4>
+                
+                <p class="standard">Through the methods 
+                    <samp class="listingcharacter listingcharacter">readAllBytes(...)</samp>, 
+                    <samp class="listingcharacter listingcharacter">readAllLines(...)</samp>, 
+                    <samp class="listingcharacter listingcharacter">readString(...)</samp>, 
+                    <samp class="listingcharacter listingcharacter">lines(...)</samp>, 
+                    <samp class="listingcharacter listingcharacter">write(...)</samp>, and 
+                    <samp class="listingcharacter listingcharacter">writeString(...)</samp>, 
+                    <samp class="listingcharacter listingcharacter">Files</samp>
+                 can simply read a file’s content or write strings or a byte field. Consider the following example:</p>
+                
+                <div class="listing " id="l19.4"><pre>URI uri <span class="">=</span><span class=""> ListAllLines</span><span class="">.</span><span class="">class</span><span class="">.</span><span class="">getResource</span><span class="">(</span><span class=""> </span><span class="">"/lyrics.txt"</span><span class=""> </span><span class="">).</span><span class="">toURI</span><span class="">();</span><span class=""><br/></span>Path p <span class="">=</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> uri </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"File '%s' with size of %d byte(s) with lines:%n"</span><span class="">,</span><br/>                   p.<span class="">getFileName</span><span class="">(), </span>
+                    <span class="bold">Files.<span class="">size</span><span class="">( p )</span></span> );<br/><span class="">int</span><span class=""> lineCnt = </span><span class="">1</span><span class="">;</span><br/><span class="">
+                        <a id="p978"/>
+                    for</span><span class=""> ( </span><span class="">String</span><span class=""> line : </span>
+                    <span class="bold">Files.<span class="">readAllLines</span><span class="">( p )</span></span> )<br/>  System.out.<span class="">println</span><span class="">( lineCnt++ + </span><span class="">": "</span><span class=""> + line ); </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 19.4</b>    
+            src/main/java/com/tutego/insel/nio2/ListAllLines.java, main()</p>
+                
+                <div class="listing " id="l_none_19162"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">nio</span><span class="">.</span><span class="">file</span><span class="">.</span>
+                    <span class="bold">Files</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static byte[] readAllBytes(Path path) throws IOException</samp><br/>Reads the file completely into a byte field.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static List&lt;String&gt; readAllLines(Path path) throws IOException</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static List&lt;String&gt; readAllLines(Path path, Charset cs) throws IOException</samp><br/>Reads the file line by line and provides a list of these lines. The specification of an encoding is optional; by default, the encoding is 
+                            <samp class="listingcharacter listingcharacter">StandardCharsets.UTF_8</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String readString(Path path) throws IOException</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static String readString(Path path, Charset cs) throws IOException</samp><br/>Reads a file completely and returns the contents as a string. Without encoding, UTF-8 applies by default.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static Path write(Path path, byte[] bytes, OpenOption… options) throws IOException</samp><br/>Writes a byte array to a file.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static Path write(Path path, Iterable&lt;? extends CharSequence&gt; lines, OpenOption… <br/>options) throws IOException</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static Path write(Path path, Iterable&lt;? extends CharSequence&gt; lines, Charset cs, <br/>OpenOption… options) throws IOException</samp><br/>Writes all lines from the 
+                            <samp class="listingcharacter listingcharacter">Iterable</samp> to a file. The encoding is optional but is 
+                            <samp class="listingcharacter listingcharacter">StandardCharsets.UTF_8</samp>
+                         unless otherwise specified.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static Path writeString(Path path, CharSequence csq, OpenOption… options) throws IOException</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static Path writeString(Path path, CharSequence csq, Charset cs, OpenOption… options) throws IOException</samp><br/>Writes a string to the named file. The passed 
+                            <samp class="listingcharacter listingcharacter">path</samp>
+                         is returned. Without encoding, UTF-8 applies by default.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">OpenOption</samp> enumeration is a vararg, and therefore, arguments aren’t mandatory. 
+                    <samp class="listingcharacter listingcharacter">StandardOpenOption</samp> is an enumeration of type 
+                    <samp class="listingcharacter listingcharacter">OpenOption</samp> with constants like 
+                    <samp class="listingcharacter listingcharacter">APPEND</samp>, 
+                    <samp class="listingcharacter listingcharacter">CREATE</samp>
+                , and so on.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example reads a UTF-8 encoded file:</p>
+                    
+                    <div class="listing  last_item" id="l_none_19169"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> Files</span><span class="">.</span><span class="">readString</span><span class="">(</span><span class=""> path </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                </div>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p979"/>
+                    Note</h6>
+                    
+                    <p class="standard first">Even though an obvious choice might be to feed the 
+                        <samp class="listingcharacter listingcharacter">Files</samp> method with a 
+                        <samp class="listingcharacter listingcharacter">Path</samp> object representing an HTTP URI, this approach won’t work. Thus, already the first line of the program returns an exception of the type “java.nio.file.FileSystemNotFoundException: Provider 'http' not installed.” You can not treat a HTTP-URI as a 
+                        <samp class="listingcharacter listingcharacter">Path</samp>
+                     object.</p>
+                    
+                    <div class="listing  last_item" id="l_none_19181"><pre>URI uri <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">URI</span><span class="">(</span><span class=""> </span><span class="">"http://tutego.de/javabuch/aufgaben/bond.txt"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">Path path = Paths.</span><span class="">get</span><span class="">( uri );     </span><span class="">//</span><span class=""> 
+                            <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                        </span><br/>List&lt;<span class="">String</span><span class="">&gt; content = Files.</span><span class="">readAllLines</span><span class="">( path );</span><br/>System.out.<span class="">println</span><span class="">( content ); </span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h19.2.2.2">A Stream of Lines</h4>
+                
+                <p class="standard">The previous 
+                    <samp class="listingcharacter listingcharacter">Files</samp> methods read and write the complete content, which can become a memory problem. If the reading should be done line by line, 
+                    <samp class="listingcharacter listingcharacter">Stream&lt;String&gt;</samp> is a good alternative instead of 
+                    <samp class="listingcharacter listingcharacter">readAllLines()</samp>, in which each line is a 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 object, thus all lines are kept in the memory. Two methods provide a stream of lines:</p>
+                
+                <div class="listing " id="l_none_19193"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">nio</span><span class="">.</span><span class="">file</span><span class="">.</span>
+                    <span class="bold">Files</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static Stream&lt;String&gt; lines(Path path)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Stream&lt;String&gt; lines(Path path, Charset cs)</samp><br/>Returns a stream of lines from a file. The specification of the encoding is optional, which is 
+                            <samp class="listingcharacter listingcharacter">StandardCharsets.UTF_8</samp>
+                         by default.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h19.2.2.3">Copying Data Streams</h4>
+                
+                <p class="standard">In some cases, the data should not go directly from a file into a byte array or string list (or from a byte array or string collection into a file). Instead, you want data to move from a file into a data stream. In this case, two 
+                    <samp class="listingcharacter listingcharacter">copy(...)</samp>
+                 methods are useful:</p>
+                
+                <div class="listing " id="l_none_19194"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">nio</span><span class="">.</span><span class="">file</span><span class="">.</span>
+                    <span class="bold">Files</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long copy(InputStream in, Path target, CopyOption… options)</samp><br/>Empties the input stream and copies the data to the file. The number of bytes copied is the return value.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">static long copy(Path source, OutputStream out)</samp><br/>Copies all data from the file to the output stream. The number of bytes copied is the return value.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

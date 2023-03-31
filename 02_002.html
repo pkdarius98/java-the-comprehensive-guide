@@ -1,0 +1,657 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Imperative Language Concepts" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Imperative Language Concepts" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Imperative Language Concepts</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h2.2">2.2    From Classes to Statements</h2>
+        
+        <p class="standard">Programs are sequences of operations that consist of 
+            <span class="italic">statements</span> at their core. These statements are assembled into larger building blocks, the 
+            <span class="italic">methods</span>, which in turn form 
+            <span class="italic">classes</span>. Classes themselves are collected in 
+            <span class="italic">packages</span>, and a collection of packages is delivered as a 
+            <span class="italic">Java archive</span>
+        .</p>
+        
+        
+            
+            <h3 class="t3" id="h2.2.1">2.2.1    What Are Statements?</h3>
+            
+            <p class="standard">Java belongs to the imperative programming languages
+                <a class="indexanchor" id="i02_21"/>
+                <a class="indexanchor" id="i02_22"/>, in which the programmer specifies the processing steps of algorithms by means of 
+                <span class="italic">statements</span>
+                <a class="indexanchor" id="i02_23"/>
+            . Statements may include the following elements:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Expression statements, for example, for assignments or method calls</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Case distinctions, for example, via 
+                        <samp class="listingcharacter listingcharacter">if</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Loops for repetitions, for example, using 
+                        <samp class="listingcharacter listingcharacter">for</samp> or 
+                        <samp class="listingcharacter listingcharacter">do</samp>-
+                        <samp class="listingcharacter listingcharacter">while</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The imperative command form is not at all natural for programming languages, and certainly other programming paradigms exist. Declarative programming languages follow an opposite philosophy, where the logic is in the foreground and no program flow is formulated. Well-known representatives of declarative programming include SQL, regular expressions, and (in general) functional and logical programming languages. A representative of the latter genre is the 
+                    <span class="italic">Prolog</span> language in which the system 
+                    <a id="p92"/>
+                independently finds a solution to a problem description. The challenge is to describe the task precisely enough for the system to find a solution. In the SQL database language, you must describe what the result should look like. Then, the database management system (DBMS) can start working, but you don’t control its internal processes.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.2.2">2.2.2    Class Declaration</h3>
+            
+            <p class="standard">Programs
+                <a class="indexanchor" id="i02_24"/> are composed of statements. In Java, however, statements can’t simply be written to a file and passed to the compiler. They must first be packed into a frame. This frame is referred to as a 
+                <span class="italic">compilation unit</span>
+                <a class="indexanchor" id="i02_25"/>
+                <a class="indexanchor" id="i02_26"/> and declares a class
+                <a class="indexanchor" id="i02_27"/>
+             with its methods and variables.</p>
+            
+            <p class="standard">The following lines of program code may seem a bit strange at first (we’ll explain its elements in more detail later). The following file gets the (freely selectable) name 
+                <span class="italic">Application.java</span>
+            :</p>
+            
+            <div class="listing " id="l2.1"><pre><span class="">public</span><span class=""> </span>
+                <span class="bold"><span class="">class</span><span class=""> Application {</span><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">// This is the beginning of our programs</span><span class=""/><br/>    <span class="">// Here we have space for our own statements</span><span class=""/><br/>    <span class="">// This is where our programs end</span><span class=""/><br/>  }<br/>
+                <span class="bold">}</span> <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 2.1</b>    
+            src/main/java/Application.java</p>
+            
+            <p class="standard">The two slashes 
+                <samp class="listingcharacter listingcharacter">//</samp>
+                <a class="indexanchor" id="i02_28"/>
+                <a class="indexanchor" id="i02_29"/> are followed by a line comment
+                <a class="indexanchor" id="i02_30"/>
+            . This comment applies to a complete line up to its end and is used to add explanations to the source code lines to make the code more understandable.</p>
+            
+            <p class="standard">Modern integrated development environments (IDEs) display keywords, literals, and comments in color. This color scheme can always be changed; in IntelliJ for example, you can change these settings via 
+                <span class="screenelement">File • Settings • Appearance &amp; Behavior • Appearance • Theme</span>
+            .</p>
+            
+            <p class="standard">Java is an OOP language that doesn’t permit program statements outside of classes. For this reason, the 
+                <span class="italic">Application.java</span> file declares an 
+                <samp class="listingcharacter listingcharacter">Application</samp> class with the 
+                <samp class="listingcharacter listingcharacter">class</samp> keyword to later specify a method with the program logic. The class name is an identifier and can basically be any name you like. However, one limitation exists: For a class declared with 
+                <samp class="listingcharacter listingcharacter">public</samp>
+            , the class name must be the same as the file name.</p>
+            
+            <p class="standard">The curly brackets of the class are followed by declarations of the methods (i.e., subroutines) that the class offers. A method is a collection of statements under one method name.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p93"/>
+                Naming Conventions</h6>
+                
+                <p class="standard first last">All keywords in Java start with lowercase letters, and class names usually start with uppercase letters. Methods (like 
+                    <samp class="listingcharacter listingcharacter">main</samp>
+                ) are lowercase, unlike in C# where they are capitalized.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.2.3">2.2.3    The Journey Begins with main(String[])</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">public static void main(String[] args)</samp> method is special for the runtime environment because, when the Java interpreter is called with a class name, this method is executed first.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_06" id="fn02_06">[ 38 ]</a></span> Accordingly, exactly those statements inside the curly brackets are executed. If you mistakenly don’t adhere to the syntax for the starting point, the interpreter can’t start the program execution, and we’ve produced a semantic error although the method itself is correctly formed. Inside 
+                <samp class="listingcharacter listingcharacter">main(String[])</samp>, the parameter is named 
+                <samp class="listingcharacter listingcharacter">args</samp>. The name was chosen arbitrarily, but we’ll always use 
+                <samp class="listingcharacter listingcharacter">args</samp>. We must comply with the keywords 
+                <samp class="listingcharacter listingcharacter">public</samp> and 
+                <samp class="listingcharacter listingcharacter">static</samp>
+            .</p>
+            
+            <p class="standard">The fact that errors are underlined with a curly line has become accepted in development environments as a visualization similar to spelling errors in word processors. IDEs provide a lot of hints in case of an error. An error in the source code is indicated with a curly red line, while warnings are underlined with a curly yellow line. In IntelliJ, pressing 
+                <span class="keyboard">(F2)</span> jumps to the error, while pressing 
+                <span class="keyboard">(Shift)</span>+
+                <span class="keyboard">(F2)</span>
+             goes backwards to the previous error.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.2.4">2.2.4    The First Method Call: println(...)</h3>
+            
+            <p class="standard">Java has a large class library that allows developers to create files, open windows, access databases, call web services, and much more. At the bottom of the class library, methods will perform a desired operation.</p>
+            
+            <p class="standard">A simple method is 
+                <samp class="listingcharacter listingcharacter">println(...)</samp>. This method outputs messages on the screen (the console). Inside the parentheses of 
+                <samp class="listingcharacter listingcharacter">println(...)</samp>, you can specify arguments
+                <a class="indexanchor" id="i02_31"/>
+            .</p>
+            
+            <p class="standard">For example, the 
+                <samp class="listingcharacter listingcharacter">println(...)</samp> method allows you to use 
+                <span class="italic">strings</span>
+                <a class="indexanchor" id="i02_32"/> as arguments, which then appear on the console. A string is a sequence of letters, digits, or special characters enclosed in double quotes. Let’s implement
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_07" id="fn02_07">[ 39 ]</a></span> a complete Java class with a method call
+                <a class="indexanchor" id="i02_33"/> that outputs something to the screen via 
+                <samp class="listingcharacter listingcharacter">println(...)</samp>
+            , with the following code:</p>
+            
+            <div class="listing " id="l2.2"><pre><span class="">
+                    <a id="p94"/>
+                class</span><span class=""> Application2 </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>   <span class=""> // Start of program</span><span class=""><br/></span><br/>    
+                <span class="bold"><span class="">System.out.</span><span class="">println</span><span class="">( </span><span class="">"Hello Javanese"</span><span class=""> );</span><br/><br/></span>   <span class=""> // End of program</span><span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 2.2</b>    
+            src/main/java/Application2.java</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Why Isn’t It Just Called println(...) for a Console Output?</h6>
+                
+                <p class="standard first last">Unlike many scripting languages, Java has no built-in methods that are just “there.” Each method always “belongs” to a type. In this case, 
+                    <samp class="listingcharacter listingcharacter">println(...)</samp> belongs to 
+                    <samp class="listingcharacter listingcharacter">out</samp>, while 
+                    <samp class="listingcharacter listingcharacter">out</samp> also belongs to something, namely, to the 
+                    <samp class="listingcharacter listingcharacter">System</samp>
+                 class. Only through the complete notation does it become clear to the Java compiler and the runtime environment who or what is responsible for the output.</p>
+            
+            </div>
+            
+            <p class="standard">A string can contain escape sequences to represent special characters:</p>
+            
+            <div class="listing " id="l_none_2102"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> "</span><span class="">'Hello'</span><span class=""> \</span><span class="">"Javanese\"</span><span class="">" </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The escape sequence 
+                <samp class="listingcharacter listingcharacter">\"</samp> places a double quote in a string. Single quotes don’t need to be masked out in a string when enclosed in double quotes for a string. The statement results in the following screen output: 
+                <samp class="listingcharacter listingcharacter">'Hello' "Javanese"</samp>
+            .</p>
+            
+            <p class="standard">A line break can be inserted using 
+                <samp class="listingcharacter listingcharacter">\n</samp>
+            :</p>
+            
+            <div class="listing " id="l_none_2106"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Hello\nJavanese"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The output is the following:</p>
+            
+            <div class="listing " id="l_none_2119"><pre>Hello<br/>Javanese </pre></div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">The term 
+                    <span class="italic">method</span> is the correct term for a subroutine in Java—the 
+                    <span class="italic">Java Language Specification (JLS)</span> doesn’t use the term 
+                    <span class="italic">function</span>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.2.5">2.2.5    
+                <a id="p95"/>
+            Atomic Statements and Statement Sequences</h3>
+            
+            <p class="standard">Method calls like the following are referred to as 
+                <span class="italic">atomic</span> (also 
+                <span class="italic">elementary</span>) 
+                <span class="italic">statements</span>
+            :</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">System.out.println()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The 
+                        <span class="italic">empty statement</span>
+                        <a class="indexanchor" id="i02_34"/>
+                    , which consists only of a semicolon</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Variable declarations (which will be introduced later in 
+                        <span class="crossreference "><a href="02_003.html#h2.3.2">Section 2.3.2</a></span>
+                    )</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i02_35"/>
+                <a class="indexanchor" id="i02_36"/>These indivisible statements are assembled into 
+                <span class="italic">statement sequences</span>
+                <a class="indexanchor" id="i02_37"/>
+            , which in turn form programs.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">Let’s look at the following statement sequence:</p>
+                
+                <div class="listing " id="l_none_2120"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Those who get up all wrinkled in the morning, "</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"have the best opportunities to unfold during the day."</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">();</span><span class=""><br/></span>;</pre></div>
+                
+                <p class="standard last">Empty statements (i.e., the lines with semicolons) generally exist only in the body of infinite loops.</p>
+            
+            </div>
+            
+            <p class="standard">The JVM executes each statement in the sequence one after the other in the specified order. However, statements can’t just be placed anywhere, only in specific places, for example, within a method body.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.2.6">2.2.6    More about print(...), println(...), and printf(...) for Screen Output</h3>
+            
+            <p class="standard">Most methods reveal what they do by their names, and for your own programs, using meaningful names makes sense. If Java’s developers had simply called the output method 
+                <samp class="listingcharacter listingcharacter">glubschi()</samp> instead of 
+                <samp class="listingcharacter listingcharacter">println()</samp>, the meaning of the method would remain hidden. However, 
+                <samp class="listingcharacter listingcharacter">println()</samp>, by the root word “print,” indicates that something is being “printed,” that is, written to the screen. The suffix 
+                <samp class="listingcharacter listingcharacter">ln</samp> (short for 
+                <span class="italic">line</span>) means that a line feed character is output as well. In colloquial language, a new output starts in the next line. Besides 
+                <samp class="listingcharacter listingcharacter">println(...)</samp>
+                <a class="indexanchor" id="i02_38"/>
+                <a class="indexanchor" id="i02_39"/>, the library method 
+                <samp class="listingcharacter listingcharacter">print(...)</samp>
+             doesn’t append a line feed.</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">print*(...)</samp> methods
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_08" id="fn02_08">[ 40 ]</a></span>
+             can receive different arguments in parentheses. An argument is a value you are passing to the method when calling it. Even if you don’t pass arguments to a method, a pair of parentheses must follow the method name when it’s called. This inclusion must be absolutely consistent so you can clearly see that it’s a method call and nothing else. Otherwise, it might be confused with variables.</p>
+            
+            
+                
+                <h4 class="t4" id="h2.2.6.1">
+                    <a id="p96"/>
+                Overloaded Methods</h4>
+                
+                <p class="standard">Java allows methods that have the same name but can be passed different things; we call these methods 
+                    <span class="italic">overloaded</span>
+                    <a class="indexanchor" id="i02_40"/>
+                    <a class="indexanchor" id="i02_41"/>. The 
+                    <samp class="listingcharacter listingcharacter">print*(...)</samp> methods, for example, are overloaded and accept types such as single characters, truth values, or numbers—or nothing at all—in addition to the 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                 argument type.</p>
+                
+                <div class="listing " id="l2.3"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> OverloadedPrintln </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">"Arrest the usual suspects!"</span></span><span class=""> );</span><br/>    System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">true</span> );<br/>    System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">-<span class="">273</span></span><span class=""> );</span><br/>    System.out.<span class="">println</span><span class="">();               </span><span class=""> // Outputs an empty line</span><span class=""><br/></span>    System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold"><span class="">1.6180339887498948</span></span><span class=""> );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 2.3</b>    
+            src/main/java/OverloadedPrintln.java</p>
+                
+                <p class="standard">The output is the following:</p>
+                
+                <div class="listing " id="l_none_2152"><pre>Arrest the usual suspects!<br/>true<br/>–273<br/><br/>1.618033988749895 </pre></div>
+                
+                <p class="standard">In the last line, you can easily see some problems with accuracy—we’ll look at this phenomenon in more detail in 
+                    <span class="crossreference "><a href="21_001.html#h21">Chapter 21</a></span>, 
+                    <span class="crossreference "><a href="21_002.html#h21.2">Section 21.2</a></span>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.2.6.2">Variable Argument Lists</h4>
+                
+                <p class="standard">Java supports variable argument lists, which means that you can pass any number of arguments (or no argument at all) to certain methods. For example, the 
+                    <a class="indexanchor" id="i02_42"/>
+                    <samp class="listingcharacter listingcharacter">printf(...)</samp>
+                 method allows variable argument lists to prepare and output subsequent method arguments according to a formatting instruction—a string that must always be passed as the first argument, as in the following example:</p>
+                
+                <div class="listing " id="l2.4"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> VarArgs </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"The curfew episode in season 10:%n"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%d channels, and nothing but %s.%n"</span><span class="">,</span><span class=""> </span><span class="">200</span><span class="">,</span><span class=""> </span><span class="">"cats"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 2.4</b>    
+            src/main/java/VarArgs.java</p>
+                
+                <p class="standard">
+                    <a id="p97"/>
+                The output of the program is the following:</p>
+                
+                <div class="listing " id="l_none_2171"><pre>The curfew episode in season 10:<br/>200 channels, and nothing but cats. </pre></div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">%n</samp> format specifiers sets a newline, 
+                    <samp class="listingcharacter listingcharacter">%d</samp> is a format specifiers for an integer (
+                    <samp class="listingcharacter listingcharacter">%f</samp> would be the placeholder for a float), and 
+                    <samp class="listingcharacter listingcharacter">%s</samp> is a placeholder for a string or something to be converted to a string. Other format specifiers will be introduced in 
+                    <span class="crossreference "><a href="05_001.html#h5">Chapter 5</a></span>, 
+                    <span class="crossreference "><a href="05_005.html#h5.5">Section 5.5</a></span>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.2.7">2.2.7    Application Programming Interface Documentation</h3>
+            
+            <p class="standard">The most important source of information for programmers is Oracle’s official API documentation, where you’ll learn, for example, that the 
+                <samp class="listingcharacter listingcharacter">println(...)</samp> method belongs to the 
+                <samp class="listingcharacter listingcharacter">PrintStream</samp>
+             class. Several methods with the same name can be passed an integer, a float, a truth value, a character, or else a string as an argument. </p>
+            
+            <p class="standard">The documentation is neither part of the JRE nor the JDK because the help is just too big for inclusion. Instead, you can read the documentation online at <span class="url"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/">https://docs.oracle.com/en/java/javase/17/docs/api/</a></span> or download it from the Oracle site at <span class="url"><a href="https://www.oracle.com/java/technologies/downloads">https://www.oracle.com/java/technologies/downloads</a></span> and unpack it as a collection of HTML documents, as shown in 
+                <span class="crossreference "><a href="02_002.html#f2.1">Figure 2.1</a></span>
+            .</p>
+            
+            <div class="imagebox figure-type"><a href="img-f2.1.html" id="f2.1"><img alt="Online Documentation at Oracle" id="img-f2.1" src="bilderklein/klein02_001.png"/></a></div>
+            
+            <p class="caption "><b>Figure 2.1</b>    
+            Online Documentation at Oracle</p>
+            
+            <p class="standard">You can also access the API documentation from development environments, so searching the website isn’t necessary.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f2.2.html" id="f2.2"><img alt="&#10;                &#10;            IntelliJ Displaying API Documentation in a Small Dialog Box via the Shortcut Ctrl+Q" id="img-f2.2" src="bilderklein/klein02_002.png"/></a></div>
+            
+            <p class="caption "><b>Figure 2.2</b>    
+            
+                <a id="p98"/>
+            IntelliJ Displaying API Documentation in a Small Dialog Box via the Shortcut Ctrl+Q</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.2.8">2.2.8    Expressions</h3>
+            
+            <p class="standard">An
+                <a class="indexanchor" id="i02_43"/>
+                <span class="italic"> expression</span>
+                <a class="indexanchor" id="i02_44"/> produces a result when evaluated. In the example 
+                <span class="italic">OverloadedPrintln.java</span>
+            , shown in </p>
+            
+            <p class="standard">Listing 2.3, the 
+                <samp class="listingcharacter listingcharacter">main(...)</samp>
+             method contains the following:</p>
+            
+            <div class="listing " id="l_none_2180"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">"Arrest the usual suspects!"</span></span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">true</span> );<br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold">-<span class="">273</span></span><span class=""> );</span><br/>System.out.<span class="">println</span><span class="">( </span>
+                <span class="bold"><span class="">1.6180339887498948</span></span><span class=""> ); </span><span class=""/></pre></div>
+            
+            <p class="standard">The arguments for 
+                <samp class="listingcharacter listingcharacter">println(...)</samp> such as the string, the truth value, or the numbers, are expressions. In this example, the expression comes from a literal, but operators can be used to form more complex expressions such as 
+                <samp class="listingcharacter listingcharacter">(1 + 2) * 1.19</samp>
+            , as in the following example:</p>
+            
+            <div class="listing " id="l_none_2199"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                <span class="bold"><span class="">(</span><span class="">1</span><span class=""> + </span><span class="">2</span><span class="">) * </span><span class="">1.19</span></span><span class=""> ); </span><span class=""/></pre></div>
+            
+            <p class="standard">The value of an expression is also referred to as its 
+                <a class="indexanchor" id="i02_45"/>
+                <span class="italic">result</span>. Expressions always have a value, which isn’t true for statements (such as a loop). For this reason, an expression can exist in all places where a value is needed, for example, as an argument of 
+                <samp class="listingcharacter listingcharacter">println(...)</samp>. This value is either a
+                <a class="indexanchor" id="i02_46"/> numeric value (from arithmetic expressions), a truth value (
+                <samp class="listingcharacter listingcharacter">boolean</samp>), or a
+                <a class="indexanchor" id="i02_47"/>
+             reference (such as from an object creation).</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.2.9">2.2.9    Expression Statements</h3>
+            
+            <p class="standard">A program is made out of statements. Certain expressions and method calls can also be used as statements if they are terminated with a semicolon, which is called an 
+                <span class="italic">expres
+                    <a id="p99"/>
+                sion statement</span>
+                <a class="indexanchor" id="i02_48"/>
+            . For example, each method call with a semicolon forms an expression statement. Whether the method itself returns a return value or not doesn’t matter.</p>
+            
+            <div class="listing " id="l_none_2204"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">();</span><span class="">       </span><span class=""> // println() has no return value (void)</span><span class=""><br/></span>Math<span class="">.</span><span class="">random</span><span class="">();</span><span class="">              </span><span class=""> // random() returns a float</span><span class=""> </span></pre></div>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Math.random()</samp>
+             method returns, as its result, a random value between 0 (inclusively so 0 is included) and 1 (exclusively, so 1 is never a selected value). Since nothing is done with the result of the expression, the return value is simply discarded. In the case of the random method, discarding the return value doesn’t make sense because the method itself doesn’t do anything else except for the calculation.</p>
+            
+            <p class="standard">Besides method calls with terminating semicolons, other types of expression statements include assignments, for example. What all expression statements have in common is the final semicolon.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn02_09" id="fn02_09">[ 41 ]</a></span>
+            </p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Not every expression can be an expression statement. For example, 
+                    <samp class="listingcharacter listingcharacter">1+2</samp> is an expression, but 
+                    <samp class="listingcharacter listingcharacter">1+2;</samp>
+                 (with the expression terminated with a semicolon) isn’t a valid statement. In JavaScript, these things are allowed, but not in Java.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.2.10">2.2.10    First Insights into Object Orientation</h3>
+            
+            <p class="standard">
+                <a class="indexanchor" id="i02_49"/>In an OOP language, all methods are bound to specific objects (hence the term 
+                <span class="italic">object-oriented</span>). For example, let’s consider the object 
+                <samp class="listingcharacter listingcharacter">radio</samp>: A radio plays music when the power switch is turned on and a station and volume are set. Thus, a radio provides certain services (operations), like 
+                <samp class="listingcharacter listingcharacter">music on</samp>/
+                <samp class="listingcharacter listingcharacter">off</samp>, 
+                <samp class="listingcharacter listingcharacter">louder</samp>/
+                <samp class="listingcharacter listingcharacter">softer</samp>. In addition, an object has a state, for example, the 
+                <samp class="listingcharacter listingcharacter">volume</samp> or the 
+                <samp class="listingcharacter listingcharacter">year of construction</samp>
+            .</p>
+            
+            <p class="standard">Note that, in OO languages, without exception, operations and states are always bound to objects or classes (more on this distinction follows in 
+                <span class="crossreference "><a href="03_001.html#h3">Chapter 3</a></span> and in 
+                <span class="crossreference "><a href="06_001.html#h6">Chapter 6</a></span>). Calling a method on an object directs the request exactly to that particular object. If only the call 
+                <samp class="listingcharacter listingcharacter">louder</samp> exists in a Java program, the compiler doesn’t know who to ask if there are, say, three 
+                <samp class="listingcharacter listingcharacter">radio</samp> objects. What if there’s also a TV with the same operation? For this reason, you associate the object that can do something with an operation. A dot separates the object from its operation or state. Thus, 
+                <samp class="listingcharacter listingcharacter">println(...)</samp> belongs to an 
+                <samp class="listingcharacter listingcharacter">out</samp> object, which takes care of the screen output. The 
+                <samp class="listingcharacter listingcharacter">out</samp> object in turn belongs to the 
+                <samp class="listingcharacter listingcharacter">System</samp>
+             class.</p>
+            
+            <p class="standard">The runtime system provides two output channels: one for normal output and one to which you can direct errors. One advantage of this subdivision is that it enables you to separate errors from conventional outputs. The standard output goes to 
+                <samp class="listingcharacter listingcharacter">System.out</samp>
+                <a class="indexanchor" id="i02_50"/>, 
+                <a id="p100"/>while the error output is directed to 
+                <samp class="listingcharacter listingcharacter">System.err</samp>
+                <a class="indexanchor" id="i02_51"/>. The 
+                <samp class="listingcharacter listingcharacter">print*(...)</samp> methods are the same for both 
+                <samp class="listingcharacter listingcharacter">out</samp> and 
+                <samp class="listingcharacter listingcharacter">err</samp>
+            , which are of the same data type, as in the following example:</p>
+            
+            <div class="listing " id="l2.5"><pre>System<span class="">.</span>
+                <span class="bold">out</span>.<span class="">println</span><span class="">( </span><span class="">"This is a normal output"</span><span class=""> );</span><br/>System.
+                <span class="bold">err</span>.<span class="">println</span><span class="">( </span><span class="">"This is an error output"</span><span class=""> ); </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 2.5</b>    
+            src/main/java/SystemOutErr.java, main()</p>
+            
+            <p class="standard">In this case, the object orientation becomes particularly clear once again. The 
+                <samp class="listingcharacter listingcharacter">out</samp> and 
+                <samp class="listingcharacter listingcharacter">err</samp> objects are two objects that can do the same thing, namely, output something via 
+                <samp class="listingcharacter listingcharacter">print*(...)</samp>. But you cannot call the 
+                <samp class="listingcharacter listingcharacter">println()</samp> method without an explicit object referenced and expect the runtime environment to know whether the request goes to 
+                <samp class="listingcharacter listingcharacter">System.out</samp> or to 
+                <samp class="listingcharacter listingcharacter">System.err</samp>
+            .</p>
+            
+            <div class="imagebox figure-type"><a href="img-f2.3.html" id="f2.3"><img alt="IntelliJ Displays Normal Outputs and Error Outputs in Different Colors to Easily Distinguish Each Channel. The System.err Object Shouldn’t Be Used to Turn Everything Red on the Screen!" id="img-f2.3" src="bilderklein/klein02_003.png"/></a></div>
+            
+            <p class="caption "><b>Figure 2.3</b>    
+            IntelliJ Displays Normal Outputs and Error Outputs in Different Colors to Easily Distinguish Each Channel. The System.err Object Shouldn’t Be Used to Turn Everything Red on the Screen!</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.2.11">2.2.11    Modifiers</h3>
+            
+            <p class="standard">The declaration of a class or method can contain one or several 
+                <span class="italic">modifiers</span>
+                <a class="indexanchor" id="i02_52"/>
+             that may, for example, restrict its usage or synchronize parallel access.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">In the following program, two different modifiers occur in three places, which are set in bold:</p>
+                
+                <div class="listing  last_item" id="l_none_2224"><pre>
+                    <span class="bold"><span class="">public</span></span><span class=""> </span><span class="">class</span><span class=""> Application {</span><br/>  
+                    <span class="bold"><span class="">public</span><span class=""> </span><span class="">static</span></span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Hello World"</span><span class=""> );</span><br/>  }<br/>}<span class=""/></pre></div>
+            
+            </div>
+            
+            <p class="standard">The keyword
+                <samp class="listingcharacter listingcharacter"> public</samp> is a 
+                <span class="italic">visibility modifier</span>
+             that determines whether or not the class or method is visible to the program code of other classes.</p>
+            
+            <p class="standard">The keyword
+                <samp class="listingcharacter listingcharacter"> static</samp>
+                <a class="indexanchor" id="i02_53"/> allows you to call the method without forming an object of the class. In other words, without 
+                <samp class="listingcharacter listingcharacter">static</samp>, an object must be formed, and the method must 
+                <a id="p101"/>be called via the concrete object. We’ll only use static methods in the first two chapters of this book before introducing you to non-static methods starting in 
+                <span class="crossreference "><a href="03_001.html#h3">Chapter 3</a></span>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h2.2.12">2.2.12    Grouping Statements with Blocks</h3>
+            
+            <p class="standard">A 
+                <span class="italic">block</span>
+                <a class="indexanchor" id="i02_54"/> summarizes a group of statements that are executed one after the other. Thus, a block is 
+                <span class="italic">a statement</span> that combines a sequence of statements into a new statement within curly brackets 
+                <samp class="listingcharacter listingcharacter">{ }</samp>
+            . In other words, the sequence of statements becomes a new statement when placed within curly brackets, thus combining multiple statements into a single block, as the following:</p>
+            
+            <div class="listing " id="l_none_2242"><pre><span class="">{</span><span class=""><br/></span>  
+                <span class="italic"><span class="">Statement1</span></span>;<br/>  
+                <span class="italic">Statement2</span>;<br/>  …<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">A block can be used wherever a single statement can be located. However, the new block has a special feature with regard to variables since it forms a local area for the statements located within it, including its (local) variables.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Code with Style</h6>
+                
+                <p class="standard first last">Lines enclosed in curly brackets are usually indented with whitespace. Usually, two whitespaces are used (as in this book) or four spaces. Many authors place the curly brackets on separate lines. A wealth of other code style advice focuses on ease of reading and understanding for humans. For instance, lines shouldn’t be too long (80 to 100 characters is a good size), deep nesting should be avoided, and individual thematical units should be created using blank lines. The “Google Java Style Guide” at <span class="url"><a href="https://google.github.io/styleguide/javaguide.html">https://google.github.io/styleguide/javaguide.html</a></span> provides some useful suggestions.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h2.2.12.1">Empty Blocks</h4>
+                
+                <p class="standard">A block 
+                    <samp class="listingcharacter listingcharacter">{}</samp> without a statement is referred to as an 
+                    <span class="italic">empty block</span>
+                    <a class="indexanchor" id="i02_55"/>
+                . It behaves like an empty statement, that is, like a semicolon. In some cases, the empty block is indeed interchangeable with the semicolon, whereas in other cases the Java language forces a block to be empty if there are no instructions, instead of allowing a semicolon there as well.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h2.2.12.2">Nested Blocks</h4>
+                
+                <p class="standard">Blocks can be as nested as you like, which results in inner blocks and outer blocks, as in the following example:</p>
+                
+                <div class="listing " id="l_none_2236"><pre><span class="">
+                        <a id="p102"/>
+                    {</span><span class="">            </span><span class=""> // Start outer block</span><span class=""><br/></span>  <span class="">{</span><span class="">          </span><span class=""> // Start inner block</span><span class=""><br/></span>  <span class="">}</span><span class="">          </span><span class=""> // End inner block</span><span class=""><br/></span><span class="">}</span><span class="">            </span><span class=""> // End outer block</span><span class=""> </span></pre></div>
+                
+                <p class="standard">With empty blocks, the following code is fine in the static method 
+                    <samp class="listingcharacter listingcharacter">main(...)</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_2250"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">{</span></span> System.out.<span class="">println</span><span class="">( </span><span class="">"Hello Javanese"</span><span class=""> ); </span>
+                    <span class="bold">{{}}{{}{}}}</span><br/>} <span class=""/></pre></div>
+                
+                <p class="standard">Blocks play an important role in grouping statements that are executed once or several times depending on conditions. In 
+                    <span class="crossreference "><a href="02_005.html#h2.5">Section 2.5</a></span> and in 
+                    <span class="crossreference "><a href="02_006.html#h2.6">Section 2.6</a></span>
+                , we’ll come back to this topic in practice.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

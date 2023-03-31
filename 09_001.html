@@ -1,0 +1,518 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    There Must Be Exceptions" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    There Must Be Exceptions" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    There Must Be Exceptions</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h9">9    
+        <a id="p539"/>
+    There Must Be Exceptions</h1><p class="introductorynote indent_chapter_single">“Why not make exceptions the rule when exceptions prove the rule?”<br/>—Georg-Wilhelm Exler</p><p class="standard">Program errors are inevitable: Inputs could be wrong, files could disappear, and network connections could collapse. A special challenge is presented by unexpected errors, but Java offers the elegant technique to catch exceptions, so that programs can rescue themselves from almost any situation.</p><p class="standard">In early programming languages, no way existed for routines to indicate a failure except via a return value—in the C programming language, this limitation is still the case today. Two problems arise with this reliance on return values:</p><ul>
+        
+        <li>
+            
+            <p class="standard first-item last-item">The error code
+                <a class="indexanchor" id="i09_00"/> is often a “magic” value like 
+                <samp class="listingcharacter listingcharacter">-1</samp>, 
+                <samp class="listingcharacter listingcharacter">NULL</samp>
+                <a class="indexanchor" id="i09_01"/>, or 
+                <samp class="listingcharacter listingcharacter">0</samp>
+            . However, a zero can also indicate correctness, which is arbitrary. Querying these values is mandatory, and an assumption might creep in like, “This will always succeed, an error is impossible.” If the program then fails to recognize this error and continues, nasty surprises can arise.</p>
+        
+        </li>
+        
+        <li>
+            
+            <p class="standard first-item last-item">Queries of return values interrupt the program flow, which isn’t pleasant, especially since the return value, if it doesn’t indicate an error, may further be used. The return value is thus overloaded in the broadest sense since it indicates two states. Often, cascaded 
+                <samp class="listingcharacter listingcharacter">if</samp>
+             queries arise along with the error queries, making the source code difficult to read. Then, the actual algorithm in the code moves further and further to the right.</p>
+        
+        </li>
+    
+    </ul><div class="box box_standard">
+        
+        <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+        
+        <p class="standard first last">The Java library doesn’t set a good example for the 
+            <samp class="listingcharacter listingcharacter">delete()</samp>, 
+            <samp class="listingcharacter listingcharacter">mkdir()</samp>, 
+            <samp class="listingcharacter listingcharacter">mkdirs()</samp>, and 
+            <samp class="listingcharacter listingcharacter">renameTo(...)</samp> methods of the 
+            <samp class="listingcharacter listingcharacter">File</samp> class. Instead of using an exception to indicate that the operation failed, these methods return 
+            <samp class="listingcharacter listingcharacter">false</samp>
+        , which is unfortunate because many developers forgo testing, resulting in bugs that are difficult to find later.</p>
+    
+    </div>
+        
+        <h2 class="t2" id="h9.1">9.1    Fencing In Problem Areas</h2>
+        
+        <p class="standard">When using exceptions, the program code isn’t interrupted by querying the return status. A specially distinguished program piece monitors proper execution and calls special program code for handling in case of an error.</p>
+        
+        
+            
+            <h3 class="t3" id="h9.1.1">9.1.1    
+                <a id="p540"/>
+            Exceptions in Java with try and catch</h3>
+            
+            <p class="standard">The monitored program area (block) is introduced by the 
+                <samp class="listingcharacter listingcharacter">try</samp>
+                <a class="indexanchor" id="i09_02"/> keyword. The 
+                <samp class="listingcharacter listingcharacter">try block</samp> is usually
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn09_01" id="fn09_01">[ 160 ]</a></span> followed by a 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+                <a class="indexanchor" id="i09_03"/>
+             block containing the program code that handles the exception, as briefly outlined in the following way:</p>
+            
+            <div class="listing " id="l_none_919"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span> <span class=""> // Program code that can execute an exception</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class="">… </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span> <span class=""> // Program code to handle the exception</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span>// It continues as normal because the exception was handled<span class=""> </span></pre></div>
+            
+            <p class="standard">Errors lead to exceptions, and these exceptions are handled by a 
+                <samp class="listingcharacter listingcharacter">catch</samp> block. The 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             is followed by the program block that is executed when an exception occurs to catch the error. The error can be handled, reported on the command line, or written to a logger, for example. Whether an error really occurs at runtime isn’t actually known, but if it does occur, handling is in place.</p>
+            
+            <p class="standard">After error handling, the program may struggle to continue after the point where the error occurred. Also, you cannot really determine in retrospect exactly where the error occurred if multiple exception-triggering locations exist within a single, large 
+                <samp class="listingcharacter listingcharacter">try</samp>
+             block in Java. Other programming languages certainly allow multiple exception triggering, however.</p>
+            
+            <div class="imagebox figure-type"><a href="img-f9.1.html" id="f9.1"><img alt="Playing Field for the Error Gremlin: catch Blocks" id="img-f9.1" src="bilderklein/klein09_001.png"/></a></div>
+            
+            <p class="caption "><b>Figure 9.1</b>    
+            Playing Field for the Error Gremlin: catch Blocks</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.1.2">9.1.2    Checked and Unchecked Exceptions</h3>
+            
+            <p class="standard">Java distinguishes between two groups of exceptions: checked and unchecked exceptions.</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">
+                            <a id="p541"/>
+                        Checked exceptions</span>
+                     must be handled by either catching or redirecting them. They can be triggered by methods or constructors in case of an error and are usually found in input/output operations.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="italic">Unchecked exceptions</span>
+                     don’t necessarily need to be caught. However, if the exceptions occur and aren’t caught, the executing thread will end.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h9.1.2.1">Occurrence of Unchecked Exceptions (RuntimeException) in the Java Library</h4>
+                
+                <p class="standard">Some types of exceptions can potentially occur in many program locations, such as an integer division by zero
+                    <span class="footnote_anchor"><a href="footnotes.html#ftn-fn09_02" id="fn09_02">[ 161 ]</a></span> or invalid index values when accessing array elements. If such exceptions occur while the program is running, they’re usually based on a reasoning error by the programmer, and the program shouldn’t normally attempt to catch and handle the thrown exception thrown. Therefore, in the Java application programming interface (API), a subclass of 
+                    <samp class="listingcharacter listingcharacter">Exception</samp>, the 
+                    <samp class="listingcharacter listingcharacter">RuntimeException</samp> class
+                    <a class="indexanchor" id="i09_04"/>
+                , identifies programming errors that need to be fixed. The name “RuntimeException” is oddly chosen, however, since all exceptions are always generated, thrown, and handled at runtime. But this name expresses that the compiler isn’t interested in these exceptions, but rather the Java virtual machine (JVM) at runtime is.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">A useful approach might be to consider a 
+                        <samp class="listingcharacter listingcharacter">RuntimeException</samp> as a self-blame error. With proper checking of value ranges, for example, many 
+                        <samp class="listingcharacter listingcharacter">RuntimeExceptions</samp>
+                     wouldn’t arise.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.1.3">9.1.3    A NumberFormatException (Unchecked Exception)</h3>
+            
+            <p class="standard">You learned about the 
+                <samp class="listingcharacter listingcharacter">Integer.parseInt(...)</samp> method earlier in 
+                <span class="crossreference "><a href="03_001.html#h3">Chapter 3</a></span>, 
+                <span class="crossreference "><a href="03_006.html#h3.6.9">Section 3.6.9</a></span>, and 
+                <span class="crossreference "><a href="05_001.html#h5">Chapter 5</a></span>, 
+                <span class="crossreference "><a href="05_008.html#h5.8">Section 5.8</a></span>
+            . This method converts a number given as a string into a decimal number. Consider the following example:</p>
+            
+            <div class="listing " id="l_none_924"><pre><span class="">int</span><span class=""> vatRate </span><span class="">=</span><span class=""> Integer</span><span class="">.</span><span class="">parseInt</span><span class="">(</span><span class=""> </span><span class="">"19"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">In this example, conversion is possible, and the method performs the conversion without exception. The situation is different if the string doesn’t represent a number, for instance, in the following example:</p>
+            
+            <div class="listing " id="l_none_940"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">exception</span><span class="">;</span><span class="">           </span><span class="">/* 1 */</span><span class=""/><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> MissNumberFormatException {      </span><span class="">/* 2 */</span><span class=""/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">int</span><span class=""> </span><span class="">getVatRate</span><span class="">() {            </span><span class="">/* 3 */</span><span class=""/><br/>    <span class="">return</span><span class=""> Integer.</span><span class="">parseInt</span><span class="">( </span>
+                <span class="bold"><span class="">"19%"</span></span><span class=""> );         </span><span class="">/* 4 */</span><span class=""/><br/>  }                                           <span class="">/* 5 */</span><span class=""/><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {  </span><span class="">/* 6 */</span><span class=""/><br/>
+                <a id="p542"/>    System.out.<span class="">println</span><span class="">( </span><span class="">getVatRate</span><span class="">() );       </span><span class="">/* 7 */</span><span class=""/><br/>  }                                           <span class="">/* 8 */</span><span class=""/><br/>}                                             <span class="">/* 9 */</span><span class=""> </span><span class=""/></pre></div>
+            
+            <p class="standard">The execution of the program terminates with an exception and the JVM automatically issues the following message:</p>
+            
+            <div class="listing " id="l9.1"><pre>Exception in thread "main" java.lang.
+                <span class="bold">NumberFormatException</span>: For input string: "19%"<br/>  at java.base/java.lang.NumberFormatException.forInputString(<br/>    NumberFormatException.java:65)<br/>  at java.base/java.lang.Integer.parseInt(Integer.java:652)<br/>  at java.base/java.lang.Integer.
+                <span class="bold">parseInt</span>(Integer.java:770)<br/>  at c.t.i.e.MissNumberFormatException.
+                <span class="bold">getVatRate</span>(MissNumberFormatException.java:4)<br/>  at e.t.i.e.MissNumberFormatException.
+                <span class="bold">main</span>
+            (MissNumberFormatException.java:7) </pre></div>
+            
+            <p class="caption "><b>Listing 9.1</b>    
+            src/main/java/com/tutego/insel/exception/MissNumberFormatException.java</p>
+            
+            <p class="standard">In the first line, notice how a 
+                <samp class="listingcharacter listingcharacter">java.lang.NumberFormatException</samp>
+                <a class="indexanchor" id="i09_05"/> has been thrown. The last line indicates the location in the program that led to the exception. (You’ve observed a similar error output, the 
+                <samp class="listingcharacter listingcharacter">NullPointerException</samp>, in 
+                <span class="crossreference "><a href="03_001.html#h3">Chapter 3</a></span>, 
+                <span class="crossreference "><a href="03_007.html#h3.7.1">Section 3.7.1</a></span>
+            .)</p>
+            
+            <div class="imagebox figure-type"><a href="img-f9.2.html" id="f9.2"><img alt="IntelliJ Displays an Exception in Red in the Output Window. Conveniently, Error Messages Behave like Hyperlinks: One Click, and the Integrated Development Environment (IDE) Shows the Line That Threw the Exception." id="img-f9.2" src="bilderklein/klein09_002.png"/></a></div>
+            
+            <p class="caption "><b>Figure 9.2</b>    
+            IntelliJ Displays an Exception in Red in the Output Window. Conveniently, Error Messages Behave like Hyperlinks: One Click, and the Integrated Development Environment (IDE) Shows the Line That Threw the Exception.</p>
+            
+            
+                
+                <h4 class="t4" id="h9.1.3.1">Catching a NumberFormatException</h4>
+                
+                <p class="standard">A poor solution to an exception would be if a program simply terminates and the JVM ends. Exceptions should rather be caught and reported. To catch exceptions, you must know exactly what kind of exception is being thrown. Our case is easy to understand because the exception has already appeared and can be clearly assigned to a reason. The Java documentation also mention this 
+                    <samp class="listingcharacter listingcharacter">NumberFormatException</samp> at the 
+                    <samp class="listingcharacter listingcharacter">parseInt(…)</samp> method. Because the caught exception isn’t handled, the program terminates, but the 
+                    <samp class="listingcharacter listingcharacter">NumberFormatException</samp>
+                 now remains to be caught.</p>
+                
+                <p class="standard">To catch this exception, we’ll revisit the 
+                    <samp class="listingcharacter listingcharacter">try</samp>-
+                    <samp class="listingcharacter listingcharacter">catch</samp>
+                 concept again.</p>
+                
+                <div class="listing " id="l9.2"><pre><span class="">
+                        <a id="p543"/>
+                    String</span><span class=""> stringToConvert </span><span class="">=</span><span class=""> </span><span class="">"19%"</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class=""> vat </span><span class="">=</span><span class=""> </span><span class="">19</span><span class="">;</span><span class=""><br/></span>
+                    <span class="bold"><span class="">try</span><span class=""> {</span></span><br/>  vat = Integer.<span class="">parseInt</span><span class="">( stringToConvert );</span><br/>}<br/>
+                    <span class="bold"><span class="">catch</span><span class=""> ( NumberFormatException e )</span></span> {<br/>  System.err.<span class="">printf</span><span class="">( "</span><span class="">'%s'</span><span class=""> cannot be converted to a number!%n</span><span class="">", </span><br/>    stringToConvert );<br/>}<br/>System.out.printf( "<span class="">Moving on to VAT=%d%n", vat ); </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 9.2</b>    
+            src/main/java/com/tutego/insel/exception/CatchNumberFormatException.java, main()</p>
+                
+                <p class="standard">The entire result is the following output:</p>
+                
+                <div class="listing " id="l_none_968"><pre>'19%' cannot be converted to a number!<br/>Moving on to VAT=19 </pre></div>
+                
+                <p class="standard">Because the string isn’t a number, 
+                    <samp class="listingcharacter listingcharacter">Integer.parseInt("19%")</samp> results in a 
+                    <samp class="listingcharacter listingcharacter">NumberFormatException</samp>
+                , which we’ll handle so that we can then continue with the console output.</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">try</samp> statement is followed by a block called a 
+                    <span class="italic">try block</span>
+                    <a class="indexanchor" id="i09_06"/>,
+                    <span class="italic"> </span>which we’ll use in combination with a 
+                    <samp class="listingcharacter listingcharacter">catch</samp> clause. The code 
+                    <samp class="listingcharacter listingcharacter">catch(NumberFormatException e)</samp> declares an 
+                    <span class="italic">exception handler</span>
+                    <a class="indexanchor" id="i09_07"/> to catch everything of exception type 
+                    <samp class="listingcharacter listingcharacter">NumberFormatException</samp>. The variable 
+                    <samp class="listingcharacter listingcharacter">e</samp> is an 
+                    <span class="italic">exception parameter</span>
+                    <a class="indexanchor" id="i09_08"/>. Since exceptions are objects, the variable 
+                    <samp class="listingcharacter listingcharacter">e</samp> references this exception object. The use of 
+                    <samp class="listingcharacter listingcharacter">var</samp> is not allowed in this context, so you cannot write 
+                    <samp class="listingcharacter listingcharacter">catch ( var e )</samp>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.1.4">9.1.4    Appending a Date/Timestamp to a Text File (Checked Exception)</h3>
+            
+            <p class="standard">Let’s write a second program with exception handling that appends the current date/timestamp as text in a text file. The 
+                <samp class="listingcharacter listingcharacter">LocalDateTime.now() </samp>expression returns such a date/timestamp. The 
+                <samp class="listingcharacter listingcharacter">Files.writeString(...)</samp>
+             method allows you to write to files. In this case, you would write the following lines:</p>
+            
+            <div class="listing " id="l_none_966"><pre><span class="">String</span><span class=""> content </span><span class="">=</span><span class=""> LocalDateTime</span><span class="">.</span><span class="">now</span><span class="">()</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">"\n"</span><span class="">;</span><span class=""><br/></span>Files<span class="">.</span><span class="">writeString</span><span class="">(</span><span class=""> Path</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"timestamps.txt"</span><span class=""> </span><span class="">),</span><span class=""><br/></span>                   content<span class="">,</span><span class=""> StandardOpenOption</span><span class="">.</span><span class="">APPEND </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="standard">These lines can’t be compiled in this way, and thus, a compiler error is thrown. The reason for the error is 
+                <samp class="listingcharacter listingcharacter">Files.writeString(...)</samp> because this method can throw an 
+                <samp class="listingcharacter listingcharacter">IOException</samp>
+            , which is a checked exception. In other words, we must face the fact that this exception might be thrown and prepare handling for this case.</p>
+            
+            
+                
+                <h4 class="t4" id="h9.1.4.1">
+                    <a id="p544"/>
+                Documented Exceptions in the Javadoc</h4>
+                
+                <p class="standard">An exception doesn’t really come as a surprise, and developers must be prepared that for negative consequences if they pass something wrong to methods or constructors. In the best case, the API documentation explains which inputs are valid and which ones are not. The “interface” of a method also includes the behavior in the event of an error. The API documentation should describe exactly what exception—or what response in the case of special return values—can be expected if the method receives invalid values. The Javadoc for 
+                    <samp class="listingcharacter listingcharacter">Files.writeString(...)</samp> provides this information, as shown in 
+                    <span class="crossreference "><a href="09_001.html#f9.3">Figure 9.3</a></span>
+                .</p>
+                
+                <div class="imagebox figure-type"><a href="img-f9.3.html" id="f9.3"><img alt="The Javadoc Documents All Possible Exceptions." id="img-f9.3" src="bilderklein/klein09_003.png"/></a></div>
+                
+                <p class="caption "><b>Figure 9.3</b>    
+            The Javadoc Documents All Possible Exceptions.</p>
+                
+                <p class="standard">The description “IOException - if an I/O error occurs writing to or creating the file, or the text cannot be encoded using the specified charset” is perhaps a bit vague, failing to explain why exactly the error occurred. But no matter, you must treat the error anyway. Note also that 
+                    <samp class="listingcharacter listingcharacter">IOException</samp> may not be the only error on our list. 
+                    <samp class="listingcharacter listingcharacter">IllegalArgumentException</samp>, 
+                    <samp class="listingcharacter listingcharacter">UnsupportedOperationException</samp>, and 
+                    <samp class="listingcharacter listingcharacter">SecurityException</samp>
+                 may arise, but nothing forces us to catch these errors, which is exactly the difference between a checked exception and an unchecked exception.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h9.1.4.2">try-catch Handling</h4>
+                
+                <p class="standard">Since 
+                    <samp class="listingcharacter listingcharacter">Files.writeString(...)</samp> might throw an 
+                    <samp class="listingcharacter listingcharacter">IOException</samp>, which is a checked exception that must be handled, two possible solutions are available: First, you could use 
+                    <samp class="listingcharacter listingcharacter">try</samp>-
+                    <samp class="listingcharacter listingcharacter">catch</samp> to handle the error; second, you could use 
+                    <samp class="listingcharacter listingcharacter">throws</samp>
+                 to pass the error to the caller.</p>
+                
+                <p class="standard">Let’s solve the problem in our program with the 
+                    <samp class="listingcharacter listingcharacter">IOException</samp> first by means of a direct 
+                    <samp class="listingcharacter listingcharacter">try</samp>-
+                    <samp class="listingcharacter listingcharacter">catch</samp>
+                 handling, in the following example:</p>
+                
+                <div class="listing " id="l9.3"><pre><span class="">
+                        <a id="p545"/>
+                    public</span><span class=""> </span><span class="">class</span><span class=""> TimestampWriter </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">writeTimestamp</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">String</span><span class=""> content </span><span class="">=</span><span class=""> LocalDateTime</span><span class="">.</span><span class="">now</span><span class="">().</span><span class="">toString</span><span class="">();</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">try</span><span class=""> {</span></span><br/>      Files.<span class="">writeString</span><span class="">( Path.</span><span class="">of</span><span class="">( </span><span class="">"timestamps.txt"</span><span class=""> ),</span><br/>                         content, StandardOpenOption.APPEND );<br/>    }<br/>    
+                    <span class="bold"><span class="">catch</span><span class=""> ( IOException e ) {</span></span><br/>      e.<span class="">printStackTrace</span><span class="">();</span><br/>    
+                    <span class="bold">}</span><br/>  }<br/> <br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">writeTimestamp</span><span class="">();</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 9.3</b>    
+            src/main/java/com/tutego/insel/exception/TimestampWriter.java (Snippet)</p>
+                
+                <p class="standard">Once we’ve caught the error, the error is gone, and everything continues as normal.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h9.1.4.3">Stack Trace</h4>
+                
+                <p class="standard">The virtual machine remembers which method called which other method in a stack, and this information is referred to as 
+                    <span class="italic">stack trace</span>
+                    <a class="indexanchor" id="i09_09"/>. Thus, if the static 
+                    <samp class="listingcharacter listingcharacter">main(...)</samp> method calls the 
+                    <samp class="listingcharacter listingcharacter">writeTimestamp()</samp> method which in turn calls 
+                    <samp class="listingcharacter listingcharacter">writeString(...)</samp>, the stack at the time of 
+                    <samp class="listingcharacter listingcharacter">writeString(...)</samp>
+                 would resemble the following list:</p>
+                
+                <div class="listing " id="l_none_994"><pre>writeString<br/>writeTimestamp<br/>main </pre></div>
+                
+                <p class="standard">A stack trace is useful in case of an error because, with one, you can read that 
+                    <samp class="listingcharacter listingcharacter">writeString(...)</samp>
+                 threw the exception and not some other method.</p>
+                
+                <p class="standard">Stack traces are often logged in the program. A method already contained in the 
+                    <samp class="listingcharacter listingcharacter">catch</samp> block is quite helpful in this context: 
+                    <samp class="listingcharacter listingcharacter">e.printStackTrace()</samp>. By default, this method sets the stack trace to the 
+                    <samp class="listingcharacter listingcharacter">System.err </samp>
+                channel.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.1.5">9.1.5    Repeating Canceled Sections*</h3>
+            
+            <p class="standard">No language-supported way in Java is present for exceptions to return to the point that threw the exception. However, this return is often desirable, for example, when an incorrect entry must be repeated.</p>
+            
+            <p class="standard">
+                <a id="p546"/>Let’s ask for a string on the console and try to convert it to a number. Of course, something can go wrong in the process. If a user enters a string that doesn’t represent a number, 
+                <samp class="listingcharacter listingcharacter">parseInt(...)</samp>
+                <a class="indexanchor" id="i09_10"/> will throw a 
+                <samp class="listingcharacter listingcharacter">NumberFormatException</samp>
+                <a class="indexanchor" id="i09_11"/>
+            . If that exception occurs, we want to repeat the input, as defined in the following code:</p>
+            
+            <div class="listing " id="l9.4"><pre><span class="">int</span><span class=""> number</span><span class="">;</span><span class=""><br/></span>
+                <span class="bold"><span class="">while</span><span class=""> ( true ) {</span></span><br/>  <span class="">try</span><span class=""> {</span><br/>    System.out.<span class="">println</span><span class="">( </span><span class="">"Please enter number:"</span><span class=""> );</span><br/>    <span class="">String</span><span class=""> input = </span><span class="">new</span><span class=""> java.util.</span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">nextLine</span><span class="">();</span><br/>    number = Integer.<span class="">parseInt</span><span class="">( input );</span><br/>    
+                <span class="bold"><span class="">break</span><span class="">;</span></span><br/>  }<br/>  <span class="">catch</span><span class=""> ( NumberFormatException e ) {</span><br/>    System.err.<span class="">println</span><span class="">( </span><span class="">"That was not a number!"</span><span class=""> );</span><br/>  }<br/>}<br/>System.out.<span class="">printf</span><span class="">( </span><span class="">"%d is a %s number%n"</span><span class="">, number,</span><br/>                   Math.<span class="">random</span><span class="">() &gt; </span><span class="">0.5</span><span class=""> ? </span><span class="">"wonderful"</span><span class=""> : </span><span class="">"boring"</span><span class=""> ); </span><span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.4</b>    
+            src/main/java/com/tutego/insel/exception/ContinueInput.java, main()</p>
+            
+            <p class="standard">The chosen solution is simple: We’ll program the entire part in an infinite loop. If the problematic passage passes without exception, we’ll end the loop via 
+                <samp class="listingcharacter listingcharacter">break</samp>. If a 
+                <samp class="listingcharacter listingcharacter">NumberFormatException</samp> occurs, then 
+                <samp class="listingcharacter listingcharacter">break</samp>
+             won’t be executed, and the program flow will return to the infinite loop.</p>
+            
+            <p class="standard">Incidentally, you could write 
+                <samp class="listingcharacter listingcharacter">new java.util.Scanner(System.in).nextInt()</samp> to read our integers, but if the method doesn’t receive a number, an 
+                <samp class="listingcharacter listingcharacter">InputMismatchException</samp>
+             will be thrown, which is also an unchecked exception.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.1.6">9.1.6    Empty catch Blocks</h3>
+            
+            <p class="standard">Java requires that exceptions be handled (or routed up) in a 
+                <samp class="listingcharacter listingcharacter">catch</samp> but doesn’t specify what has to happen in 
+                <samp class="listingcharacter listingcharacter">catch</samp> blocks. These blocks can include a useful handling or can simply be empty. An empty 
+                <samp class="listingcharacter listingcharacter">catch</samp> block is usually not particularly useful because then the exception is suppressed clandestinely. (This scenario would be comparable to ignored status return values
+                <a class="indexanchor" id="i09_12"/>
+                <a class="indexanchor" id="i09_13"/>
+             in C functions.)</p>
+            
+            <p class="standard">A minimal error output via 
+                <samp class="listingcharacter listingcharacter">System.err.println(e)</samp> is recommended, or you can use the more informative 
+                <samp class="listingcharacter listingcharacter">e.printStackTrace(...)</samp> for an 
+                <samp class="listingcharacter listingcharacter">Exception e</samp> or the logging of this exception. Even better is an active response because the output itself doesn’t handle this exception! In the 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             block, a perfectly legitimate option is to throw other exceptions in turn, thus transforming the exception and passing it upwards.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                    <a id="p547"/>
+                Note*</h6>
+                
+                <p class="standard first last">As with 
+                    <samp class="listingcharacter listingcharacter">Thread.sleep(...)</samp>, if the 
+                    <samp class="listingcharacter listingcharacter">InterruptedException</samp>
+                 really doesn’t matter, the block can of course be empty, but few useful examples of this choice exist. When the block is empty, a comment often helps to make clear that the omission is purposeful.</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.1.7">9.1.7    Catching Multiple Exceptions</h3>
+            
+            <p class="standard">In multiple places, a program block may throw an exception. For example, in the following lines, something has been written twice:</p>
+            
+            <div class="listing " id="l_none_9125"><pre><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span> Path p <span class="">=</span><span class=""> Path</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"timestamps.txt"</span><span class=""> </span><span class="">);</span><span class=""><br/></span> Files<span class="">.</span><span class="">writeString</span><span class="">(</span><span class=""> p</span><span class="">,</span><span class=""> LocalDateTime</span><span class="">.</span><span class="">now</span><span class="">()</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">"\n"</span><span class="">,</span><span class=""> StandardOpenOption</span><span class="">.</span><span class="">APPEND </span><span class="">);</span><span class=""><br/></span> Files<span class="">.</span><span class="">writeString</span><span class="">(</span><span class=""> p</span><span class="">,</span><span class=""> LocalDateTime</span><span class="">.</span><span class="">now</span><span class="">()</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">"\n"</span><span class="">,</span><span class=""> StandardOpenOption</span><span class="">.</span><span class="">APPEND </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IOException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> … </span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">If more than one place raises the 
+                <span class="italic">same</span> exception type, in exception handling later, tracing which of the two statements caused the exception can be difficult. If this information is important, two separate 
+                <samp class="listingcharacter listingcharacter">try</samp>
+             blocks should be used: either two blocks in sequence or one block nested within another.</p>
+            
+            <p class="standard">The situation is different when 
+                <span class="italic">different</span> exceptions are thrown, such as an 
+                <samp class="listingcharacter listingcharacter">IOException</samp> and, for example, a 
+                <samp class="listingcharacter listingcharacter">NumberFormatException</samp>
+            .</p>
+            
+            <p class="standard">In this context, several things might occur:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">All exceptions are caught.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Some exceptions are caught; others are redirected to the caller.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">All exceptions are passed upwards to the caller.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">In the next example, an integer should be read from the command line and the same number of date/timestamps should be written to a text file.</p>
+            
+            <div class="listing " id="l9.5"><pre>Path path <span class="">=</span><span class=""> Path</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"timestamps.txt"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> count </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">nextInt</span><span class="">();</span><span class=""><br/></span>  <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> i </span><span class="">&lt;</span><span class=""> count</span><span class="">;</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    Files<span class="">.</span><span class="">writeString</span><span class="">(</span><span class=""> path</span><span class="">,</span><span class=""> LocalDateTime</span><span class="">.</span><span class="">now</span><span class="">()</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">"\n"</span><span class="">,</span><span class=""><br/></span>                       StandardOpenOption<span class="">.</span><span class="">APPEND </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span>
+                <span class="bold"><span class="">catch</span><span class=""> ( InputMismatchException e ) {</span></span><br/>  System.err.<span class="">println</span><span class="">( </span><span class="">"Input was not an integer"</span><span class=""> );</span><br/>
+                <span class="bold">}<br/><span class="">
+                        <a id="p548"/>
+                    catch</span><span class=""> ( IOException e ) {</span></span><br/>  System.err.<span class="">println</span><span class="">( </span><span class="">"Error when writing to the file"</span><span class=""> );</span><br/>
+                <span class="bold">}</span> <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.5</b>    
+            src/main/java/com/tutego/insel/exception/UserInputTimestampWriter.java (Snippet)</p>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">IOException</samp> is a checked exception, and thus, handling is mandatory. 
+                <samp class="listingcharacter listingcharacter">InputMismatchException</samp> is an unchecked exception and wouldn’t necessarily need to be handled, but if something like 
+                <samp class="listingcharacter listingcharacter">12ABC</samp> is parsed, the program will crash with a stack trace, which should be avoided. Some exceptions may arise when writing to the file. You must anticipate these potential problems and therefore write the problem sections in a 
+                <samp class="listingcharacter listingcharacter">try</samp>
+             block.</p>
+            
+            <p class="standard">If an exception then occurs in the 
+                <samp class="listingcharacter listingcharacter">try</samp> block, the 
+                <samp class="listingcharacter listingcharacter">catch</samp> part will catch it. In our code, notice how a 
+                <samp class="listingcharacter listingcharacter">try</samp> block can have several 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             clauses associated with it that each catch different types of exceptions.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.1.8">9.1.8    Combining Identical catch Blocks with Multi-Catch</h3>
+            
+            <p class="standard">If a program draws on sections that can fail, situations quickly arise in more complex processes in which different exceptions can occur. We recommend writing the program code in one big 
+                <samp class="listingcharacter listingcharacter">try</samp> block, and then responding via 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             blocks to all the possible exceptions that kept the block from running completely through.</p>
+            
+            <p class="standard">Often, a phenomenon occurs that the called program parts raise different exception types, but the exception handling looks the same. To avoid source code duplication, the program code should be summarized. In Java, multiple exceptions can be handled in the same way; this notation is called 
+                <span class="italic">multi-catch</span>
+                <a class="indexanchor" id="i09_14"/>. In this modified variant of 
+                <samp class="listingcharacter listingcharacter">catch</samp>, no longer are you anticipating just one exception, but rather a collection of exceptions separated by 
+                <samp class="listingcharacter listingcharacter">|</samp>
+            . (The vertical line is an OR operator and is therefore also used in this case because exceptions can also be understood as in an OR connection.) The exception variable is implicitly final.</p>
+            
+            <div class="listing " id="l9.6"><pre>Path path <span class="">=</span><span class=""> Path</span><span class="">.</span><span class="">of</span><span class="">(</span><span class=""> </span><span class="">"timestamps.txt"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">try</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">int</span><span class=""> count </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">nextInt</span><span class="">();</span><span class=""><br/></span>  <span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">int</span><span class=""> i </span><span class="">=</span><span class=""> </span><span class="">0</span><span class="">;</span><span class=""> i </span><span class="">&lt;</span><span class=""> count</span><span class="">;</span><span class=""> i</span><span class="">++</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    Files<span class="">.</span><span class="">writeString</span><span class="">(</span><span class=""> path</span><span class="">,</span><span class=""> LocalDateTime</span><span class="">.</span><span class="">now</span><span class="">()</span><span class=""> </span><span class="">+</span><span class=""> </span><span class="">"\n"</span><span class="">,</span><span class=""><br/></span>                       StandardOpenOption<span class="">.</span><span class="">APPEND </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span>
+                <span class="bold"><span class="">catch</span><span class=""> ( InputMismatchException | IOException e ) {</span><br/>  System.err.<span class="">println</span><span class="">( </span><span class="">"Program error"</span><span class=""> );</span><br/>  e.<span class="">printStackTrace</span><span class="">();</span><br/>}</span> <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.6</b>    
+            src/main/java/com/tutego/insel/exception/UserInputTimestampWriterMultiCatch.java (Snippet)</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

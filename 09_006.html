@@ -1,0 +1,823 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    There Must Be Exceptions" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    There Must Be Exceptions" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    There Must Be Exceptions</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h9.6">9.6    try with Resources (Automatic Resource Management)</h2>
+        
+        <p class="standard">Java has an automatic garbage collection capability that detects objects that are no longer referenced and automatically frees their memory. Now, the garbage collector refers exclusively to the memory, but many other resources exist, such as the following:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <a id="p580"/>
+                File system resources like files</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Network resources like socket connections</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Database connections</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Natively bound resources of the graphics subsystem</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Synchronization objects</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">In these contexts, after the work has been done, so that resources can be released, cleanup is vital, such as closing files and database connections.</p>
+        
+        <p class="standard">With the 
+            <samp class="listingcharacter listingcharacter">try</samp>-
+            <samp class="listingcharacter listingcharacter">catch</samp>-
+            <samp class="listingcharacter listingcharacter">finally</samp> construct, you’ve seen how to release resources. A relatively large amount of source code must be written, and three aspects of 
+            <samp class="listingcharacter listingcharacter">try</samp>-
+            <samp class="listingcharacter listingcharacter">catch</samp>-
+            <samp class="listingcharacter listingcharacter">finally</samp>
+         must be considered:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">If a variable is to be accessible in 
+                    <samp class="listingcharacter listingcharacter">finally</samp>, it must be declared outside the 
+                    <samp class="listingcharacter listingcharacter">try</samp>
+                 block, which provides it with greater visibility than necessary.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Closing a resource often entails an additional 
+                    <samp class="listingcharacter listingcharacter">try</samp>-
+                    <samp class="listingcharacter listingcharacter">catch</samp>
+                .</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">An exception thrown in 
+                    <samp class="listingcharacter listingcharacter">finally</samp> (for example, on 
+                    <samp class="listingcharacter listingcharacter">close()</samp>) overrides the exception thrown in the 
+                    <samp class="listingcharacter listingcharacter">try</samp>
+                 block.</p>
+            
+            </li>
+        
+        </ul>
+        
+        
+            
+            <h3 class="t3" id="h9.6.1">9.6.1    try with Resources</h3>
+            
+            <p class="standard">To simplify the closing of resources, a special variant of the 
+                <samp class="listingcharacter listingcharacter">try</samp> statement can be used: 
+                <span class="italic">try with resources</span>
+                <a class="indexanchor" id="i09_57"/>. This language construct can be used to automatically close 
+                <span class="italic">resource types</span> that implement the 
+                <samp class="listingcharacter listingcharacter">java.lang.AutoCloseable</samp> interface. Input/output classes like 
+                <samp class="listingcharacter listingcharacter">Scanner</samp>, 
+                <samp class="listingcharacter listingcharacter">InputStream</samp>, 
+                <samp class="listingcharacter listingcharacter">Writer</samp>, and 
+                <samp class="listingcharacter listingcharacter">RandomAccessFile</samp> implement this interface and can be used directly. Because 
+                <samp class="listingcharacter listingcharacter">try</samp> with resources serves the 
+                <span class="italic">Automatic Resource Management (ARM)</span>
+                <a class="indexanchor" id="i09_58"/>
+                <a class="indexanchor" id="i09_59"/> functionality, this special 
+                <samp class="listingcharacter listingcharacter">try</samp> block is also called 
+                <span class="italic">ARM block</span>
+                <a class="indexanchor" id="i09_60"/>
+            .</p>
+            
+            <p class="standard">Let’s put this idea into practice: In our previous program 
+                <samp class="listingcharacter listingcharacter">ReadGifSizeWithTryFinally</samp>, we had to close the 
+                <samp class="listingcharacter listingcharacter">RandomAccessFile</samp> with a lot of code. Using 
+                <samp class="listingcharacter listingcharacter">try</samp>
+             with resources makes this closing step much easier.</p>
+            
+            <div class="listing " id="l9.21"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span> 
+                <span class="bold"><span class=""> </span><span class="">try</span><span class=""> ( RandomAccessFile raf = </span><span class="">new</span><span class=""> </span><span class="">RandomAccessFile</span><span class="">( </span><span class="">"duke.gif"</span><span class="">, </span><span class="">"r"</span><span class=""> ) ) {</span></span><br/>    raf.<span class="">seek</span><span class="">( </span><span class="">6</span><span class=""> );</span><br/>    System.out.<span class="">printf</span><span class="">( </span><span class="">"%s x %s Pixel%n"</span><span class="">, raf.</span><span class="">read</span><span class="">() + raf.</span><span class="">read</span><span class="">() * </span><span class="">256</span><span class="">,</span><br/>                                          raf.<span class="">read</span><span class="">() + raf.</span><span class="">read</span><span class="">() * </span><span class="">256</span><span class=""> );</span><br/>  
+                <span class="bold">}<br/>  <span class="">catch</span><span class=""> ( IOException e ) {</span><br/>    System.err.<span class="">println</span><span class="">( </span><span class="">"Input/output error!"</span><span class=""> );</span><br/>  }</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.21</b>    
+            src/main/java/com/tutego/insel/exception/ReadGifSizeTryWithResources.java</p>
+            
+            <p class="standard">
+                <a id="p581"/>Previously, we set a block directly after the 
+                <samp class="listingcharacter listingcharacter">try</samp> keyword, but 
+                <samp class="listingcharacter listingcharacter">try</samp> with resources uses its own extended syntax: 
+                <samp class="listingcharacter listingcharacter">try</samp> is followed by a resource specification in parentheses instead of the direct 
+                <samp class="listingcharacter listingcharacter">{}</samp> block, and only then does the 
+                <samp class="listingcharacter listingcharacter">{}</samp> block follow—so, in this case, 
+                <samp class="listingcharacter listingcharacter">try (</samp>…
+                <samp class="listingcharacter listingcharacter">) {</samp>…
+                <samp class="listingcharacter listingcharacter">}</samp> instead of 
+                <samp class="listingcharacter listingcharacter">try {</samp>…
+                <samp class="listingcharacter listingcharacter">}</samp>
+            .</p>
+            
+            <p class="standard">The resource specification consists of a set of parentheses and a list of resources. The resources are final variables of the 
+                <samp class="listingcharacter listingcharacter">AutoCloseable</samp> type, and these final variables will be automatically closed later. The variables can be initialized with an equal sign directly with an expression, such as with a constructor or method call. Using 
+                <samp class="listingcharacter listingcharacter">var</samp>
+             is permitted.</p>
+            
+            <p class="standard">The local variable declared in 
+                <samp class="listingcharacter listingcharacter">try</samp>
+             is only valid in the block and is automatically released, regardless of whether the ARM block was processed correctly or whether an exception occurred during processing. The compiler inserts all necessary checks.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">If 
+                    <samp class="listingcharacter listingcharacter">close()</samp> isn’t called on a variable of type 
+                    <samp class="listingcharacter listingcharacter">AutoCloseable</samp>, or if 
+                    <samp class="listingcharacter listingcharacter">close()</samp> isn’t used in a 
+                    <samp class="listingcharacter listingcharacter">try</samp> with resources scenario, the Java compiler will issue a warning. The warning disappears with the annotation 
+                    <samp class="listingcharacter listingcharacter">@SuppressWarnings("resource")</samp>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.6.2">9.6.2    The AutoCloseable Interface</h3>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">try</samp> with resources closes resources that “match” the 
+                <samp class="listingcharacter listingcharacter">AutoCloseable</samp>
+             type. For this reason, let’s take a closer look at the following interface:</p>
+            
+            <div class="listing " id="l9.22"><pre><span class="">package</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">interface</span><span class=""> AutoCloseable </span><span class="">{</span><span class=""><br/></span>  
+                <span class="bold"><span class="">void</span><span class=""> </span><span class="">close</span><span class="">() </span><span class="">throws</span><span class=""> Exception</span></span>;<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.22</b>    
+            java/lang/AutoCloseable.java</p>
+            
+            
+                
+                <h4 class="t4" id="h9.6.2.1">Exceptions</h4>
+                
+                <p class="standard">What is noticeable about 
+                    <samp class="listingcharacter listingcharacter">close()</samp> is that this method can throw a general 
+                    <samp class="listingcharacter listingcharacter">Exception</samp>. To compare, the input/output classes throw an 
+                    <samp class="listingcharacter listingcharacter">IOException</samp> when they fail, but different classes can throw different exceptions on 
+                    <samp class="listingcharacter listingcharacter">close()</samp>
+                 or not throw anything at all.</p>
+                
+                <table class="standardtable" id="t9.3">
+                    
+                    <thead>
+                        
+                        <tr>
+                            
+                            <th class="tablehead tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">Type</p>
+                            
+                            </th>
+                            
+                            <th class="tablehead tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">Signature</p>
+                            
+                            </th>
+                        
+                        </tr>
+                    
+                    </thead>
+                    
+                    <tbody>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">java.io.Scanner</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last top_border_cell">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">close()</samp>
+                                 // without exception</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">javax.sound.sampled.Line</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">close()</samp>
+                                 // without exception</p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr>
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">java.io.RandomAccessFile</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">close() throws IOException</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                        
+                        <tr class="light">
+                            
+                            <td class="tablecell tablecell_first">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">java.sql.Connection</samp>
+                                </p>
+                            
+                            </td>
+                            
+                            <td class="tablecell tablecell_last">
+                                
+                                <p class="standard first-item last-item">
+                                    <samp class="listingcharacter listingcharacter">close() throws SQLException</samp>
+                                </p>
+                            
+                            </td>
+                        
+                        </tr>
+                    
+                    </tbody>
+                
+                </table>
+                
+                <p class="caption "><b>Table 9.3</b>    
+            Some Types That Implement or Extend AutoCloseable</p>
+                
+                <p class="standard">
+                    <a id="p582"/>If a class implements the interface, the exception on 
+                    <samp class="listingcharacter listingcharacter">throws</samp> can be omitted. Take the 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp> class for example: the 
+                    <samp class="listingcharacter listingcharacter">close()</samp> method and no other 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp> method doesn’t throw any IO exception but instead 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp> catches exceptions internally, stores the last exception and makes the last exception accessible later via the 
+                    <samp class="listingcharacter listingcharacter">ioException()</samp>
+                 method.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.6.3">9.6.3    Exceptions to close()</h3>
+            
+            <p class="standard">When 
+                <samp class="listingcharacter listingcharacter">try</samp> is used with resources, the one exception declared on 
+                <samp class="listingcharacter listingcharacter">close()</samp> persists. The method doesn’t spirit away possible thrown exceptions, and either a catching 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             is needed, or the exception must be passed upwards.</p>
+            
+            <p class="standard">Of course, it’s a bit strange that the compiler reports an error in the code but that error isn’t visible at all. However, you should get used to this behavior because the closing instruction is always present in the bytecode. If 
+                <samp class="listingcharacter listingcharacter">close()</samp> raises a checked exception that isn’t handled, a compiler error will occur regardless of whether the compiler generates the 
+                <samp class="listingcharacter listingcharacter">close()</samp> statement or you explicitly put the 
+                <samp class="listingcharacter listingcharacter">close()</samp>
+             in.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The 
+                    <samp class="listingcharacter listingcharacter">close()</samp> method of 
+                    <samp class="listingcharacter listingcharacter">BufferedReader</samp> throws an 
+                    <samp class="listingcharacter listingcharacter">IOException</samp>
+                , so the following method can’t be interpreted:</p>
+                
+                <div class="listing " id="l_none_9657"><pre><span class="">void</span><span class=""> </span><span class="">no</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">try</span><span class=""> </span><span class="">(</span><span class=""> Reader r </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">BufferedReader</span><span class="">(</span><span class="">null</span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class="">   </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""><br/></span>}</pre></div>
+                
+                <p class="standard last">The expression 
+                    <samp class="listingcharacter listingcharacter">new BufferedReader(null)</samp> needs 
+                    <span class="italic">no</span> handling because the constructor doesn’t throw an exception. Only the unhandled exception of 
+                    <samp class="listingcharacter listingcharacter">close()</samp>
+                 results in “exception thrown from implicit call to close() on resource variable 'r'.”</p>
+            
+            </div>
+            
+            <p class="standard">The advantage of 
+                <samp class="listingcharacter listingcharacter">try</samp> with resources is that the associated 
+                <samp class="listingcharacter listingcharacter">catch</samp> can catch the exception from 
+                <samp class="listingcharacter listingcharacter">close()</samp>
+            . Consider the following example:</p>
+            
+            <div class="listing " id="l_none_9660"><pre><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> RandomAccessFile raf </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">RandomAccessFile</span><span class="">(</span><span class=""> </span><span class="">"duke.gif"</span><span class="">,</span><span class=""> </span><span class="">"r"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  raf<span class="">.</span><span class="">seek</span><span class="">(</span><span class=""> </span><span class="">6</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span><span class="">catch</span><span class=""> </span><span class="">(</span><span class=""> IOException e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  System<span class="">.</span><span class="">err</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Input/output error!"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="standard">With 
+                <samp class="listingcharacter listingcharacter">try</samp> with resources, the compiler independently places a 
+                <samp class="listingcharacter listingcharacter">close()</samp> in the bytecode, which throws an 
+                <samp class="listingcharacter listingcharacter">IOException</samp> in the example—
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             catches that too.</p>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">Scanner</samp>, for example, doesn’t throw an exception on 
+                <samp class="listingcharacter listingcharacter">close()</samp>, so no 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+             block needs to follow.</p>
+            
+            <div class="listing " id="l9.23"><pre>
+                <a id="p583"/>InputStream in <span class="">=</span><span class=""> ClassLoader</span><span class="">.</span><span class="">getSystemResourceAsStream</span><span class="">(</span><span class=""> </span><span class="">"EastOfJava.txt"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> Scanner res </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""> in </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> res</span><span class="">.</span><span class="">nextLine</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 9.23</b>    
+            src/main/java/com/tutego/insel/exception/ScannerTryWithResources.java (Snippet)</p>
+            
+            <p class="standard">A 
+                <samp class="listingcharacter listingcharacter">catch</samp> block isn’t mandatory because none of the methods throws a checked exception—neither 
+                <samp class="listingcharacter listingcharacter">getSystemResourceAsStream(...)</samp>, 
+                <samp class="listingcharacter listingcharacter">new Scanner(InputStream)</samp>, 
+                <samp class="listingcharacter listingcharacter">nextLine()</samp>, nor the 
+                <samp class="listingcharacter listingcharacter">close()</samp> that calls 
+                <samp class="listingcharacter listingcharacter">try</samp> with resources automatically. The situation is different if the resource is a 
+                <samp class="listingcharacter listingcharacter">RandomAccessFile</samp> or classic data stream (
+                <samp class="listingcharacter listingcharacter">InputStream</samp>/
+                <samp class="listingcharacter listingcharacter">OutputStream</samp>/
+                <samp class="listingcharacter listingcharacter">Reader</samp>/
+                <samp class="listingcharacter listingcharacter">Writer</samp>) because, in these cases, the 
+                <samp class="listingcharacter listingcharacter">close()</samp> method declares an 
+                <samp class="listingcharacter listingcharacter">IOException</samp>
+            .</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.6.4">9.6.4    Types That Are AutoCloseable and Closeable</h3>
+            
+            <p class="standard">In the Java library, there is a second interface named 
+                <samp class="listingcharacter listingcharacter">Closeable</samp>. But the 
+                <samp class="listingcharacter listingcharacter">close()</samp> method declares a 
+                <samp class="listingcharacter listingcharacter">throws IOException</samp>, so this 
+                <samp class="listingcharacter listingcharacter">Closeable</samp> is only used with IO-resources and 
+                <samp class="listingcharacter listingcharacter">Closable</samp> with every resource that can be released, such as a graphics object. 
+                <samp class="listingcharacter listingcharacter">Closeable</samp> extends 
+                <samp class="listingcharacter listingcharacter">AutoCloseable</samp>
+             because closing input/output resources is a special way to close general resources.</p>
+            
+            
+                
+                <h4 class="t4" id="h9.6.4.1">Who Is AutoCloseable?</h4>
+                
+                <p class="standard">Since all classes that implement 
+                    <samp class="listingcharacter listingcharacter">Closeable</samp> are also automatically of type 
+                    <samp class="listingcharacter listingcharacter">AutoCloseable</samp>, a number of types are eligible in this context. But basically these classes are from the 
+                    <samp class="listingcharacter listingcharacter">java.io</samp> package, like 
+                    <samp class="listingcharacter listingcharacter">RandomAccessFile</samp>, 
+                    <samp class="listingcharacter listingcharacter">Channel</samp>, 
+                    <samp class="listingcharacter listingcharacter">Reader</samp>, and 
+                    <samp class="listingcharacter listingcharacter">Writer</samp> implementations; 
+                    <samp class="listingcharacter listingcharacter">FileLock</samp> and 
+                    <samp class="listingcharacter listingcharacter">XMLDecoder</samp>; and a few more exotics like 
+                    <samp class="listingcharacter listingcharacter">URLClassLoader</samp> or 
+                    <samp class="listingcharacter listingcharacter">ImageOutputStream</samp>. Types from the 
+                    <samp class="listingcharacter listingcharacter">java.sql</samp> package are also among the beneficiaries. Classes from the threading area, where for example a lock could be released again, or graphics applications, where the graphics context must be released again, do not implement 
+                    <samp class="listingcharacter listingcharacter">AutoCloseable</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">Some streams must remain open. This rule applies, for example, to 
+                        <samp class="listingcharacter listingcharacter">System.in</samp>, an 
+                        <samp class="listingcharacter listingcharacter">InputStream</samp> provided by the 
+                        <samp class="listingcharacter listingcharacter">system</samp>. Even wrapped in a 
+                        <samp class="listingcharacter listingcharacter">Scanner</samp>, a 
+                        <samp class="listingcharacter listingcharacter">close()</samp> on the 
+                        <samp class="listingcharacter listingcharacter">Scanner</samp> will become a 
+                        <samp class="listingcharacter listingcharacter">close()</samp> on the 
+                        <samp class="listingcharacter listingcharacter">InputStream</samp>, and a re-read from 
+                        <samp class="listingcharacter listingcharacter">System.in</samp> will be acknowledged with a “java.io.IOException: Stream closed.” So, a 
+                        <samp class="listingcharacter listingcharacter">try ( Scanner in = new Scanner(System.in) ) { ... }</samp>
+                     isn’t a good idea.</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.6.5">9.6.5    Using Multiple Resources</h3>
+            
+            <p class="standard">The previous examples demonstrate the use of exactly one resource. However, multiple types are also possible, separated by semicolons:</p>
+            
+            <div class="listing " id="l_none_9690"><pre><span class="">
+                    <a id="p584"/>
+                try</span><span class=""> </span><span class="">(</span><span class=""> InputStream  in  </span><span class="">=</span><span class=""> Files</span><span class="">.</span><span class="">newInputStream</span><span class="">(</span><span class=""> srcPath </span><span class="">)</span>
+                <span class="bold">;</span><br/>      OutputStream out = Files.<span class="">newOutputStream</span><span class="">( destPath ) ) {</span><br/>  …<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">Furthermore, nested streams are possible because a resource can reference a previous resource, as in the following example:</p>
+            
+            <div class="listing " id="l_none_9704"><pre><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> InputStream </span>
+                <span class="bold"><span class="">fis</span></span> = Files.<span class="">newInputStream</span><span class="">( srcPath )</span>
+                <span class="bold">;</span><br/>      InputStream bis = <span class="">new</span><span class=""> </span><span class="">BufferedInputStream</span><span class="">( </span>
+                <span class="bold">fis</span> ) ) {<br/>  …<br/>} <span class=""/></pre></div>
+            
+            <p class="standard">This model is often used for decorators in a decorator design pattern.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">The separation is created with a semicolon, and each segment can declare a different type, such as 
+                    <samp class="listingcharacter listingcharacter">InputStream</samp>/
+                    <samp class="listingcharacter listingcharacter">OutputStream</samp>
+                . Consequently, the resource types don’t need to be the same, and even if they are, the type must always be rewritten, so for example:</p>
+                
+                <div class="listing " id="l_none_9707"><pre><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> InputStream in1 </span><span class="">=</span><span class=""> …</span><span class="">;</span><span class=""> InputStream in2 </span><span class="">=</span><span class=""> … )</span></pre></div>
+                
+                <p class="standard">The following code is invalid:</p>
+                
+                <div class="listing " id="l_none_9710"><pre><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> InputStream in1 </span><span class="">=</span><span class=""> …</span><span class="">,</span><span class=""> in2 </span><span class="">=</span><span class=""> … </span><span class="">)</span><span class="">   </span><span class=""> // 
+                        <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                     Compiler error</span><span class=""/></pre></div>
+                
+                <p class="standard">At the end of the resource collection, you may—but don’t need to—place a semicolon, just as array initializations may have commas at the end:</p>
+                
+                <div class="listing " id="l_none_9717"><pre><span class="">int</span><span class="">[]</span><span class=""> array </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">2</span>
+                    <span class="bold"><span class="">,</span></span> };<span class=""><br/></span>//                  ^ comma optional<span class=""><br/></span><span class="">try</span><span class=""> ( InputStream in = Files.</span><span class="">newInputStream</span><span class="">( path ); ) { … }</span><span class=""><br/></span>//                                                 ^ semicolon optional<span class=""><br/></span><span class="">try</span><span class=""> ( InputStream  in  = Files.</span><span class="">newInputStream</span><span class="">( src );</span><br/>      OutputStream out = Files.<span class="">newOutputStream</span><span class="">( dest )</span>
+                    <span class="bold">;</span> ) { … }<span class=""><br/></span>//                                                    ^ semicolon optional<span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard last">Whether this style is acceptable everyone must decide for themselves—there’s no useless sign in Java.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h9.6.5.1">Closing Order</h4>
+                
+                <p class="standard">Resources are closed in the reverse order of how they were opened.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">First 
+                        <samp class="listingcharacter listingcharacter">in</samp>, then 
+                        <samp class="listingcharacter listingcharacter">out</samp> is initialized. Finally, 
+                        <samp class="listingcharacter listingcharacter">out</samp> is closed, then 
+                        <samp class="listingcharacter listingcharacter">in</samp>
+                     in the following example:</p>
+                    
+                    <div class="listing  last_item" id="l_none_9741"><pre><span class="">
+                            <a id="p585"/>
+                        try</span><span class=""> </span><span class="">(</span><span class=""> InputStream  in  </span><span class="">=</span><span class=""> Files</span><span class="">.</span><span class="">newInputStream</span><span class="">(</span><span class=""> srcPath </span><span class="">)</span>
+                        <span class="bold">;</span><br/>      OutputStream out = Files.<span class="">newOutputStream</span><span class="">( destPath ) ) {</span><br/>  …<br/>}<span class=""/></pre></div>
+                
+                </div>
+                
+                <p class="standard">During the creation in the chain, if an exception occurs, only the resource that was opened will be closed. So, in the previous example, if an exception occurs during the first initialization of 
+                    <samp class="listingcharacter listingcharacter">in</samp>, the assignment of 
+                    <samp class="listingcharacter listingcharacter">out</samp> won’t start at all and therefore it won’t be closed either. (Internally, the compiler implements this scenario as nested 
+                    <samp class="listingcharacter listingcharacter">try</samp>-
+                    <samp class="listingcharacter listingcharacter">catch</samp>-
+                    <samp class="listingcharacter listingcharacter">finally</samp>
+                 blocks).</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h9.6.5.2">try with Resources on null Resources</h4>
+                
+                <p class="standard">A 
+                    <samp class="listingcharacter listingcharacter">close()</samp> is not always called at the end of a 
+                    <samp class="listingcharacter listingcharacter">try</samp>-with-resources block. A close attempt may only occur if the resource is not 
+                    <samp class="listingcharacter listingcharacter">null</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following code block compiles the code and prints its results as an output in the console:</p>
+                    
+                    <div class="listing  last_item" id="l_none_9737"><pre><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> Scanner scanner1 </span><span class="">=</span><span class=""> null</span><span class="">;</span><span class=""> Scanner scanner2 </span><span class="">=</span><span class=""> null </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Ok"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>}</pre></div>
+                
+                </div>
+                
+                <p class="standard">With constructors, an object is always given, but some factory calls may return 
+                    <samp class="listingcharacter listingcharacter">null</samp>. For those cases, it’s quite convenient that 
+                    <samp class="listingcharacter listingcharacter">try</samp>-with-resources then does nothing to avoid a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp> on 
+                    <samp class="listingcharacter listingcharacter">close()</samp>
+                .</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h9.6.6">9.6.6    Suppressed Exceptions*</h3>
+            
+            <p class="standard">Although the compiler automatically places a call of 
+                <samp class="listingcharacter listingcharacter">close()</samp> in a 
+                <samp class="listingcharacter listingcharacter">finally</samp> block in the case of 
+                <samp class="listingcharacter listingcharacter">try</samp>
+             with resources, its use isn’t quite that simple. Two exceptions may arise that require some special attention:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Only an exception in the 
+                        <samp class="listingcharacter listingcharacter">try block</samp>
+                    , basically unproblematic</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Exception with 
+                        <samp class="listingcharacter listingcharacter">close()</samp>, also rather unproblematic. But there will be multiple 
+                        <samp class="listingcharacter listingcharacter">close()</samp>
+                     calls if not only one resource was used, which is inconvenient.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Even worse: Exception in the 
+                        <samp class="listingcharacter listingcharacter">try</samp> block and then also exception(s) on 
+                        <samp class="listingcharacter listingcharacter">close()</samp>
+                    . That’s a big problem!</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">One exception alone is not a problem, but two exceptions at once pose a big problem because a program block can only report exactly one exception and not a sequence of exceptions. For this reason, several issues must be addressed if both the 
+                <samp class="listingcharacter listingcharacter">try</samp> block and 
+                <samp class="listingcharacter listingcharacter">close()</samp>
+             throw an exception:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <a id="p586"/>Which exception is more important? The exception in the 
+                        <samp class="listingcharacter listingcharacter">try</samp> block or the one from the 
+                        <samp class="listingcharacter listingcharacter">close()</samp>
+                    ?</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Should the exception from 
+                        <samp class="listingcharacter listingcharacter">close()</samp> perhaps always be hidden and only the one from the 
+                        <samp class="listingcharacter listingcharacter">try</samp>
+                     block ever get to the user?</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">If both exceptions are equally important, how should they be reported?</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">How did Java engineers decide? An exception on 
+                <samp class="listingcharacter listingcharacter">close()</samp> must not disappear in case of a concurrent occurrence of an exception in the 
+                <samp class="listingcharacter listingcharacter">try</samp> block under any circumstances.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn09_10" id="fn09_10">[ 169 ]</a></span> So how do you report both exceptions? Here’s a trick: Because the exception in the 
+                <samp class="listingcharacter listingcharacter">try</samp> block is more important, it represents the “main” exception, and the 
+                <samp class="listingcharacter listingcharacter">close()</samp>
+             exception piggybacks on top as extra information.</p>
+            
+            <p class="standard">This behavior will be shown in the next example. To better control exceptions, a custom 
+                <samp class="listingcharacter listingcharacter">AutoCloseable</samp> implementation should throw an exception in 
+                <samp class="listingcharacter listingcharacter">close()</samp>
+            .</p>
+            
+            <div class="listing " id="l9.24"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> NotCloseable </span><span class="">implements</span><span class=""> AutoCloseable </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">close</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                <span class="bold"><span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">UnsupportedOperationException</span><span class="">( </span><span class="">"I do not like close()"</span><span class=""> )</span></span>;<span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                </span><br/>  }<span class=""><br/></span>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.24</b>    
+            src/main/java/com/tutego/insel/exception/NotCloseable.java (Snippet)</p>
+            
+            <p class="standard">Now, let’s use the 
+                <samp class="listingcharacter listingcharacter">NotCloseable</samp>
+             class as a resource:</p>
+            
+            <div class="listing " id="l9.25"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> SuppressedClosed </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">[]</span><span class=""> args </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">try</span><span class=""> </span><span class="">(</span><span class=""> NotCloseable res </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">NotCloseable</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>      
+                <span class="bold"><span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">NullPointerException</span><span class="">()</span></span>;           <span class=""> // 
+                    <img alt="inline image" class="inline_image" src="bilder/totenkopf.png"/>
+                </span><br/>    }<span class=""><br/></span>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.25</b>    
+            src/main/java/com/tutego/insel/exception/SuppressedClosed.java (Snippet)</p>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">NotCloseable</samp> throws an exception in the 
+                <samp class="listingcharacter listingcharacter">close()</samp> that arrives at the 
+                <samp class="listingcharacter listingcharacter">try</samp> with resources. Without 
+                <samp class="listingcharacter listingcharacter">catch</samp>
+            , the JVM aborts the thread, and the result on the console is:</p>
+            
+            <div class="listing " id="l_none_9774"><pre>Exception in thread "main" java.lang.NullPointerException<br/> at com.tutego.insel.exception.SuppressedClosed.main(SuppressedClosed.java:6)<br/>
+                <span class="bold"> Suppressed: java.lang.UnsupportedOperationException: I do not like close()</span><br/>  at com.tutego.insel.exception.NotCloseable.close(NotCloseable.java:4)<br/>  at com.tutego.insel.exception.SuppressedClosed.main(SuppressedClosed.java:7) </pre></div>
+            
+            <p class="standard">
+                <a id="p587"/>The main exception is the 
+                <samp class="listingcharacter listingcharacter">NullPointerException</samp>. The interesting line starts with 
+                <samp class="listingcharacter listingcharacter">Suppressed:</samp> because the 
+                <samp class="listingcharacter listingcharacter">close()</samp> exception is referenced there. However, for the caller, the exception of the failed 
+                <samp class="listingcharacter listingcharacter">try</samp> block doesn’t come directly from 
+                <samp class="listingcharacter listingcharacter">close()</samp>
+             but is wrapped in the main exception and must be requested separately.</p>
+            
+            <p class="standard">For comparison, if we comment out 
+                <samp class="listingcharacter listingcharacter">throw new NullPointerException()</samp>, only the 
+                <samp class="listingcharacter listingcharacter">close()</samp>
+             exception will remain, and the console will show the following message:</p>
+            
+            <div class="listing " id="l_none_9783"><pre>Exception in thread "main" java.lang.UnsupportedOperationException: I do not like close()<br/> at com.tutego.insel.exception.NotCloseable.close(NotCloseable.java:4)<br/> at com.tutego.insel.exception.SuppressedClosed.main(SuppressedClosed.java:7) </pre></div>
+            
+            <p class="standard">So, the exception isn’t placed somewhere else; it’s the “main exception.” The important thing is that more than one exception may arise when closing. Let’s simulate this again by adding one line to our example:</p>
+            
+            <div class="listing " id="l9.26"><pre><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> NotCloseable res1 </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">NotCloseable</span><span class="">()</span>
+                <span class="bold">;<br/>      NotCloseable res2 = <span class="">new</span><span class=""> </span><span class="">NotCloseable</span><span class="">()</span></span> ) {<br/>    <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">NullPointerException</span><span class="">();</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 9.26</b>    
+            src/main/java/com/tutego/insel/exception/SuppressedClosed2.java (Snippet)</p>
+            
+            <p class="standard">When called, the result is the following output:</p>
+            
+            <div class="listing " id="l_none_9819"><pre>Exception in thread "main" java.lang.NullPointerException<br/> at com.tutego.insel.exception.SuppressedClosed2.main(SuppressedClosed2.java:7)<br/>
+                <span class="bold"> Suppressed: java.lang.UnsupportedOperationException: I do not like close()</span><br/>  at com.tutego.insel.exception.NotCloseable.close(NotCloseable.java:4)<br/>  at com.tutego.insel.exception.SuppressedClosed2.main(SuppressedClosed2.java:8)<br/>
+                <span class="bold"> Suppressed: java.lang.UnsupportedOperationException: I do not like close()</span><br/>  at com.tutego.insel.exception.NotCloseable.close(NotCloseable.java:4)<br/>  at com.tutego.insel.exception.SuppressedClosed2.main(SuppressedClosed2.java:8) </pre></div>
+            
+            <p class="standard">Any suppressed 
+                <samp class="listingcharacter listingcharacter">close()</samp>
+             exception will show up.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Implementation</h6>
+                
+                <p class="standard first last">In 
+                    <span class="crossreference "><a href="09_004.html#h9.4">Section 9.4</a></span>, the behavior that an exception in 
+                    <samp class="listingcharacter listingcharacter">finally</samp> suppresses an exception in the 
+                    <samp class="listingcharacter listingcharacter">try</samp> block was introduced. The compiler places 
+                    <samp class="listingcharacter listingcharacter">close()</samp> in a 
+                    <samp class="listingcharacter listingcharacter">finally</samp> block when implementing 
+                    <samp class="listingcharacter listingcharacter">try</samp> with resources. However, exceptions in the 
+                    <samp class="listingcharacter listingcharacter">finally</samp> block shouldn’t conceal a potential main exception. Therefore, the implementation from the compiler catches every possible exception in the 
+                    <samp class="listingcharacter listingcharacter">try</samp> block as well as the 
+                    <samp class="listingcharacter listingcharacter">close()</samp>
+                 exception and appends this close exception, if any, to the main exception.</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h9.6.6.1">
+                    <a id="p588"/>
+                Special Methods in Throwable*</h4>
+                
+                <p class="standard">To allow a normal exception to piggyback on the suppressed 
+                    <samp class="listingcharacter listingcharacter">close()</samp> exceptions, two special methods exist in the base class 
+                    <samp class="listingcharacter listingcharacter">Throwable</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_9828"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">Throwable</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">final Throwable[] getSuppressed()</samp><br/>Returns all suppressed exceptions. The 
+                            <samp class="listingcharacter listingcharacter">printStackTrace(...)</samp> method shows all suppressed exceptions and accesses 
+                            <samp class="listingcharacter listingcharacter">getSuppressed()</samp>
+                        . For users, rarely will use cases exist for this method.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">final void addSuppressed(Throwable exception)</samp><br/>Adds a new suppressed exception. Usually, the 
+                            <samp class="listingcharacter listingcharacter">finally</samp> block from the 
+                            <samp class="listingcharacter listingcharacter">try</samp>
+                         with resources calls the method, but you can also use the method itself to report on more than one exception. The Java library itself uses this feature in only few places currently.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">In addition to the two methods, a 
+                    <samp class="listingcharacter listingcharacter">protected</samp> constructor can determine whether suppressed exceptions should exist at all or whether they could swallowed completely. If so, then even 
+                    <samp class="listingcharacter listingcharacter">printStackTrace(...)</samp>
+                 won’t show them anymore.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>A Glance beyond the Horizon</h6>
+                    
+                    <p class="standard first last">In C++, destructors are available to execute arbitrary statements when an object is released. The closing of resources can also be implemented in this case. C# uses the special keyword 
+                        <samp class="listingcharacter listingcharacter">using</samp> instead of 
+                        <samp class="listingcharacter listingcharacter">try</samp>, uses types implementing the 
+                        <samp class="listingcharacter listingcharacter">IDisposable</samp> interface, and uses a 
+                        <samp class="listingcharacter listingcharacter">Dispose()</samp> method instead of 
+                        <samp class="listingcharacter listingcharacter">close()</samp>. (In Java, the interface was originally also supposed to be called 
+                        <samp class="listingcharacter listingcharacter">Disposable</samp> instead of 
+                        <samp class="listingcharacter listingcharacter">AutoCloseable</samp>.) In Python, 2.5, a 
+                        <span class="italic">context management protocol</span> was implemented via the keyword 
+                        <samp class="listingcharacter listingcharacter">with</samp> so that Python automatically calls 
+                        <samp class="listingcharacter listingcharacter">__enter__()</samp> when entering a block and the 
+                        <samp class="listingcharacter listingcharacter">__exit__()</samp> method when exiting. This feature is interesting in that two methods are available. With Java, you only have 
+                        <samp class="listingcharacter listingcharacter">close()</samp>
+                     when exiting the block, but no method exists for entering a block.</p>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

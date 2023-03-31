@@ -1,0 +1,467 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Lambda Expressions and Functional Programming" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Lambda Expressions and Functional Programming" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Lambda Expressions and Functional Programming</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h13.2">13.2    Method References
+            <a class="indexanchor" id="i13_09"/>
+        </h2>
+        
+        <p class="standard">Lambda expressions are already quite short, but for certain calls, even more concise constructions are possible.</p>
+        
+        
+            
+            <h3 class="t3" id="h13.2.1">13.2.1    Motivation</h3>
+            
+            <p class="standard">The larger software systems become, the more important things like clarity, reusability, and documentation are. Earlier, we wrote an implementation for our string comparator, initially via an inner class, later via a lambda expression. In any case, we have written code. But what if a utility class already came with an implementation? Then, of course, the lambda expression could delegate to the existing implementation, and we’d save on code. Let’s look at this topic through an example:</p>
+            
+            <div class="listing " id="l13.9"><pre><span class="">class</span><span class=""> StringUtils </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span>
+                <span class="bold"><span class="">int</span><span class=""> </span><span class="">trimCompare</span><span class="">( </span><span class="">String</span><span class=""> s1, </span><span class="">String</span><span class=""> s2 )</span></span> {<br/>    <span class="">return</span><span class=""> s1.</span><span class="">trim</span><span class="">().</span><span class="">compareTo</span><span class="">( s2.</span><span class="">trim</span><span class="">() );</span><br/>  } <br/>}<br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> TrimCompareWithDelegation {</span><br/>  <span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">main</span><span class="">( </span><span class="">String</span><span class="">[] args ) {</span><br/>    <span class="">String</span><span class="">[] words = { “A”, “B”, “a” };</span><br/>    Arrays.<span class="">sort</span><span class="">( words,</span><br/>                 
+                <span class="bold">(<span class="">String</span><span class=""> s1, </span><span class="">String</span><span class=""> s2) -&gt; StringUtils.</span><span class="">trimCompare</span><span class="">(s1, s2)</span></span> );<br/>    System.out.<span class="">println</span><span class="">( Arrays.</span><span class="">toString</span><span class="">( words ) );</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 13.9</b>    
+            src/main/java/com/tutego/insel/lambda/TrimCompareWithDelegation.java (Snippet)</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.2.2">13.2.2    
+                <a id="p756"/>Method References with ::
+                <a class="indexanchor" id="i13_10"/>
+            </h3>
+            
+            <p class="standard">What is striking in the example is that the referenced method 
+                <samp class="listingcharacter listingcharacter">int trimCompare(String, String)</samp> is the same as 
+                <samp class="listingcharacter listingcharacter">int compare(String, String)</samp> from the parameter types and from the return type. Even if you omit the method name, it works like the method in 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>
+            . For exactly such cases, another syntactic shortening is thus available.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Definition</h6>
+                
+                <p class="standard first last">A 
+                    <span class="italic">method reference</span>
+                    <a class="indexanchor" id="i13_11"/>
+                 is a reference to a method, but the reference is made without a call. Syntactically, two colons separate the type name or reference on the left from the method name on the right.</p>
+            
+            </div>
+            
+            <p class="standard">Consider the following line:</p>
+            
+            <div class="listing " id="l_none_13639"><pre>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> words</span><span class="">,</span><span class=""> </span>
+                <span class="bold"><span class="">(</span><span class="">String</span><span class=""> s1, </span><span class="">String</span><span class=""> s2) -&gt; StringUtils.</span><span class="">trimCompare</span><span class="">(s1, s2)</span></span> ); <span class=""/></pre></div>
+            
+            <p class="standard">This line can be shortened with a method reference in the following way:</p>
+            
+            <div class="listing " id="l_none_13658"><pre>Arrays<span class="">.</span><span class="">sort</span><span class="">(</span><span class=""> words</span><span class="">,</span><span class=""> </span>
+                <span class="bold"><span class="">StringUtils::trimCompare</span></span> ); <span class=""/></pre></div>
+            
+            <p class="standard">Now, we no longer have a lambda expression in the code, only a method reference. The sort method expects a method from the 
+                <samp class="listingcharacter listingcharacter">Comparator</samp>
+             that takes two strings and returns an integer. The name of the class and the name of the method are irrelevant, so a method reference can be used at this point.</p>
+            
+            <p class="standard">A method reference, like a lambda expression, is like in instance of a functional interface, but for an existing method of a known class. As usual, the context determines exactly what type the expression is.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">The same code for a method reference can result in completely different types—the context makes the difference. Consider the following examples:</p>
+                
+                <div class="listing  last_item" id="l_none_13655"><pre>Comparator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class="">                c1 </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">StringUtils::trimCompare</span></span>;<br/>BiFunction&lt;<span class="">String</span><span class="">,</span><span class="">String</span><span class="">,Integer&gt; c2 = </span>
+                    <span class="bold">StringUtils::trimCompare</span>;<span class=""/></pre></div>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h13.2.3">13.2.3    Variations of Method References
+                <a class="indexanchor" id="i13_12"/>
+                <a class="indexanchor" id="i13_13"/>
+            </h3>
+            
+            <p class="standard">In the example, the 
+                <samp class="listingcharacter listingcharacter">trimCompare(...)</samp>
+             method is static, and to the left of the colon is the name of a type. However, this use of method references is not the only use case—in total, three variants of method references exist.</p>
+            
+            <table class="standardtable" id="t13.6">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <a id="p757"/>
+                            Method Reference to a ...</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Syntax for a Method Reference</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Lambda Expression</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">Class method</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Type::classmethod</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">() -&gt; Type.classmethod()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first"/>
+                        
+                        <td class="tablecell tablecell_middle"/>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(p1) -&gt; Type.classmethod(p1)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first"/>
+                        
+                        <td class="tablecell tablecell_middle"/>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(p1[, p2[, …]]) -&gt; Type.classmethod([p1[, p2[, …]])</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Object method</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ref::objectmethod</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">() -&gt; ref.objectmethod()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first"/>
+                        
+                        <td class="tablecell tablecell_middle"/>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(p1) -&gt; ref.objectmethod(p1)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first"/>
+                        
+                        <td class="tablecell tablecell_middle"/>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">([p1[, p2[, …]]) -&gt; ref.objectmethod([p1[, p2[, …]])</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first">
+                            
+                            <p class="standard first-item last-item">Object method of a type</p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">ObjectType::objectMethod</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(obj) -&gt; obj.objectmethod()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr class="light">
+                        
+                        <td class="tablecell tablecell_first"/>
+                        
+                        <td class="tablecell tablecell_middle"/>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(obj, p1) -&gt; obj.objectmethod(p1)</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first"/>
+                        
+                        <td class="tablecell tablecell_middle"/>
+                        
+                        <td class="tablecell tablecell_last">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">(obj, p1, p2[, …]]) -&gt; obj.objectmethod([p1[, p2[, …]])</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 13.6</b>    
+            Different Method References</p>
+            
+            <p class="standard">
+                <span class="crossreference "><a href="13_002.html#t13.6">Table 13.6</a></span>
+             makes it clear that multiple parameters are permitted. Parameters don’t appear in the notation for the method reference.</p>
+            
+            
+                
+                <h4 class="t4" id="h13.2.3.1">Method Reference to a Static Method</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">System.currentTimeMillis()</samp> returns a 
+                    <samp class="listingcharacter listingcharacter">long</samp> with the milliseconds that have elapsed since 1/1/1970, 0 o’clock. The method can be used as a 
+                    <samp class="listingcharacter listingcharacter">Supplier</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_13680"><pre>Supplier<span class="">&lt;</span><span class="">Long</span><span class="">&gt;</span><span class=""> time </span><span class="">=</span><span class=""> System</span><span class="">::</span><span class="">currentTimeMillis</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">Math.max(...)</samp> is a static method that reduces two elements to the maximum, which is also what a 
+                    <samp class="listingcharacter listingcharacter">BiFunction</samp>
+                 does. For this reason, the following code applies:</p>
+                
+                <div class="listing " id="l_none_13689"><pre>BiFunction<span class="">&lt;</span><span class="">Integer</span><span class="">,</span><span class=""> Integer</span><span class="">,</span><span class=""> Integer</span><span class="">&gt;</span><span class=""> max </span><span class="">=</span><span class=""> Math</span><span class="">::</span><span class="">max</span><span class="">;</span><span class=""> </span></pre></div>
+                
+                <p class="standard">If a main method in the 
+                    <samp class="listingcharacter listingcharacter">JavaApplication</samp> class is declared with 
+                    <samp class="listingcharacter listingcharacter">main(String... args)</samp>, the method does match as a 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp>
+                :</p>
+                
+                <div class="listing " id="l_none_13696"><pre>Runnable r <span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">JavaApplication::main</span></span>; <span class=""/></pre></div>
+                
+                <p class="standard">The scenario would be different for 
+                    <samp class="listingcharacter listingcharacter">main(String[])</samp>
+                , in which case a parameter is mandatory, but a vararg can also be empty.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.2.3.2">
+                    <a id="p758"/>
+                Method Reference to an Object Method</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">System.out</samp> is a reference, and a method like 
+                    <samp class="listingcharacter listingcharacter">println(...)</samp> can be bound to a 
+                    <samp class="listingcharacter listingcharacter">Consumer</samp>. But 
+                    <samp class="listingcharacter listingcharacter">println(...)</samp> also match to a 
+                    <samp class="listingcharacter listingcharacter">Runnable</samp> because 
+                    <samp class="listingcharacter listingcharacter">println()</samp>
+                 exists without a parameter list. Consider the following example:</p>
+                
+                <div class="listing " id="l_none_13698"><pre>Consumer<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> out </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">System.out::println</span></span>; <span class=""> // s -&gt; System.out.println(s) </span><span class=""><br/></span>out.<span class="">accept</span><span class="">( </span><span class="">"My cousin in Trinidad ..."</span><span class=""> );</span><br/>Runnable out = 
+                    <span class="bold">System.out::println</span>;         <span class=""> // () -&gt; System.out.println()</span><span class=""><br/></span>out.<span class="">run</span><span class="">(); </span><span class=""/></pre></div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.2.3.3">Method Reference to an Object Method of a Type</h4>
+                
+                <p class="standard">The string method 
+                    <samp class="listingcharacter listingcharacter">isEmpty()</samp> returns 
+                    <samp class="listingcharacter listingcharacter">true</samp> if the string is empty; otherwise, 
+                    <samp class="listingcharacter listingcharacter">false</samp>. It’s like a 
+                    <samp class="listingcharacter listingcharacter">Predicate</samp>. Thus, you can use 
+                    <samp class="listingcharacter listingcharacter">String::isEmpty</samp> instead of 
+                    <samp class="listingcharacter listingcharacter">s -&gt; s.isEmpty()</samp>
+                .</p>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">String::length</samp> is another example. This function maps a 
+                    <samp class="listingcharacter listingcharacter">String</samp> to an 
+                    <samp class="listingcharacter listingcharacter">int</samp>. In code, the function is 
+                    <samp class="listingcharacter listingcharacter">Function&lt;String,Integer&gt; len = String::length</samp>
+                .</p>
+                
+                <p class="standard">To easily build a 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> object, we can use 
+                    <span class="italic">key extractors</span>
+                , which require a function. Consider the following example in which the generics are abbreviated:</p>
+                
+                <div class="listing " id="l_none_13717"><pre><span class="">static</span><span class=""> </span><span class="">&lt;</span><span class="">…</span><span class="">&gt;</span><span class=""> Comparator</span><span class="">&lt;</span><span class="">…</span><span class="">&gt;</span><span class=""> comparing</span><span class="">*(*</span><span class="">Function</span><span class="">&lt;</span><span class="">…</span><span class="">&gt;</span><span class=""> keyExtractor</span><span class="">)</span><span class=""> </span></pre></div>
+                
+                <p class="standard">Suppose you have a 
+                    <samp class="listingcharacter listingcharacter">Candy </samp>class and a 
+                    <samp class="listingcharacter listingcharacter">calories()</samp> method. To access the data, you can use the method reference 
+                    <samp class="listingcharacter listingcharacter">Candy::calories</samp> instead of 
+                    <samp class="listingcharacter listingcharacter">c -&gt; c.calories()</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.2.3.4">this and super Are Possible</h4>
+                
+                <p class="standard">Instead of choosing the name of a reference variable, 
+                    <samp class="listingcharacter listingcharacter">this</samp> can also describe the object, and 
+                    <samp class="listingcharacter listingcharacter">super</samp> is also possible. 
+                    <samp class="listingcharacter listingcharacter">this</samp> is useful when you want to delegate the implementation of a functional interface to a method of your own class. For example, if a local 
+                    <samp class="listingcharacter listingcharacter">trimCompare(...)</samp> method existed in the class where the lambda expression is also located, and if this method was to be used as a 
+                    <samp class="listingcharacter listingcharacter">Comparator</samp> in 
+                    <samp class="listingcharacter listingcharacter">Arrays.sort(...)</samp>, you might write 
+                    <samp class="listingcharacter listingcharacter">Arrays.sort(words, this::trimCompare)</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.2.3.5">Limitations</h4>
+                
+                <p class="standard">You cannot select a special (overloaded) method via the method reference. A specification like 
+                    <samp class="listingcharacter listingcharacter">String::valueOf</samp> or 
+                    <samp class="listingcharacter listingcharacter">Arrays::sort</samp> is relatively broad. For the latter, the compiler can select any one of the 18 matching overloaded methods, and thus, the compiler might select the wrong method. In this case, an explicit lambda expression must resolve any ambiguity. For generic types, for example, 
+                    <samp class="listingcharacter listingcharacter">List&lt;String&gt;::length</samp> or also 
+                    <samp class="listingcharacter listingcharacter">List::length</samp>
+                 can be used. Again, the compiler recognizes everything itself.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h13.2.3.6">What’s This All About?</h4>
+                
+                <p class="standard">For newcomers to the Java language, this language feature will seem like the greatest magic on earth, and even Java professionals will get shaky fingers here, either from fear 
+                    <a id="p759"/>
+                or excitement. In the past, a lot of code had to be written explicitly in Java, but with these new method references, the compiler can do a lot by itself.</p>
+                
+                <p class="standard">This feature is useful with the functional libraries at the Stream API (we’ll cover this later in 
+                    <span class="crossreference "><a href="18_001.html#h18">Chapter 18</a></span>, 
+                    <span class="crossreference "><a href="18_005.html#h18.5">Section 18.5</a></span>
+                ). A brief glance is provided by the following example:</p>
+                
+                <div class="listing " id="l_none_13729"><pre>Object<span class="">[]</span><span class=""> words </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">" "</span><span class="">,</span><span class=""> </span><span class="">'3'</span><span class="">,</span><span class=""> null</span><span class="">,</span><span class=""> </span><span class="">"2"</span><span class="">,</span><span class=""> </span><span class="">1</span><span class="">,</span><span class=""> </span><span class="">""</span><span class=""> </span><span class="">};</span><span class=""/><br/>Arrays<span class="">.</span><span class="">stream</span><span class="">(</span><span class=""> words </span><span class="">)</span><span class="">                  </span><span class=""> // “ “, ’3’, null, “2”, 1, “”</span><span class=""/><br/>      <span class="">.</span><span class="">filter</span><span class="">(</span><span class=""> Objects</span><span class="">::</span><span class="">nonNull </span><span class="">)</span><span class="">       </span><span class=""> // “ “, ’3’, “2”, 1, “”</span><span class=""/><br/>      <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> Objects</span><span class="">::</span><span class="">toString </span><span class="">)</span><span class="">         </span><span class=""> // “ “, “3”, “2”, “1”, “”</span><span class=""/><br/>      <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">::</span><span class="">trim </span><span class="">)</span><span class="">              </span><span class=""> // “”, “3”, “2”, “1”, “”</span><span class=""/><br/>      <span class="">.</span><span class="">filter</span><span class="">(</span><span class=""> s </span><span class="">-&gt;</span><span class=""> </span><span class="">!</span><span class=""> s</span><span class="">.</span><span class="">isEmpty</span><span class="">()</span><span class=""> </span><span class="">)</span><span class="">     </span><span class=""> // “3”, “2”, “1”</span><span class=""/><br/>      <span class="">.</span><span class="">map</span><span class="">(</span><span class=""> Integer</span><span class="">::</span><span class="">parseInt </span><span class="">)</span><span class="">         </span><span class=""> // 3, 2, 1</span><span class=""/><br/>      <span class="">.</span><span class="">sorted</span><span class="">()</span><span class="">                         </span><span class=""> // 1, 2, 3</span><span class=""/><br/>      <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">);</span><span class="">  </span><span class=""> // 1 2 3</span><span class=""> </span></pre></div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,568 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Special Types of Java SE" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Special Types of Java SE" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Special Types of Java SE</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h11.6">11.6    Iterator, Iterable*</h2>
+        
+        <p class="standard">In many programs, not only does the individual data play a role, but also collections of this data are meaningful. For example, arrays are collections as are standard data structures like 
+            <samp class="listingcharacter listingcharacter">ArrayList</samp>, 
+            <samp class="listingcharacter listingcharacter">HashSet</samp>
+        , or files. A collection is mainly characterized by methods that add and remove data and check for the presence of elements. Of course, each of these mutable data structures has a specific API, but in the spirit of good object-oriented (OO) modeling, describing this behavior in interfaces is desirable. </p>
+        
+        <p class="standard">Two interfaces stand out in particular:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">Iterator</samp>
+                : Provides a way to run through collections step by step.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">Iterable</samp>: Provides such an 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp>, so it’s an 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp>
+                 producer.</p>
+            
+            </li>
+        
+        </ul>
+        
+        
+            
+            <h3 class="t3" id="h11.6.1">11.6.1    The Iterator Interface</h3>
+            
+            <p class="standard">An 
+                <span class="italic">iterator</span> is a data provider that must have a method to return the subsequent element. Then, a second method is required to provide information about whether the data provider provides any other elements. For this purpose, the Java API declares an 
+                <samp class="listingcharacter listingcharacter">Iterator</samp>
+                <a class="indexanchor" id="i11_88"/>
+             interface with two operations.</p>
+            
+            <table class="standardtable" id="t11.8">
+                
+                <thead>
+                    
+                    <tr>
+                        
+                        <th class="tablehead tablecell_first top_border_cell"/>
+                        
+                        <th class="tablehead tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">Do You Have More?</p>
+                        
+                        </th>
+                        
+                        <th class="tablehead tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">Give Me the Next One!</p>
+                        
+                        </th>
+                    
+                    </tr>
+                
+                </thead>
+                
+                <tbody>
+                    
+                    <tr>
+                        
+                        <td class="tablecell tablecell_first top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">Iterator</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_middle top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">hasNext()</samp>
+                            </p>
+                        
+                        </td>
+                        
+                        <td class="tablecell tablecell_last top_border_cell">
+                            
+                            <p class="standard first-item last-item">
+                                <samp class="listingcharacter listingcharacter">next()</samp>
+                            </p>
+                        
+                        </td>
+                    
+                    </tr>
+                
+                </tbody>
+            
+            </table>
+            
+            <p class="caption "><b>Table 11.8</b>    
+            Two Central Methods of the Iterator</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The process of 
+                    <span class="italic">iteration</span>
+                 always uses the following syntax:</p>
+                
+                <div class="listing  last_item" id="l_none_111016"><pre><span class="">while</span><span class=""> </span><span class="">(</span><span class=""> iterator</span><span class="">.</span><span class="">hasNext</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  <span class="">process</span><span class="">(</span><span class=""> iterator</span><span class="">.</span><span class="">next</span><span class="">()</span><span class=""> </span><span class="">)</span><span class="">;</span></pre></div>
+            
+            </div>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">hasNext()</samp> method determines whether a next element exists at all and, if so, whether 
+                <samp class="listingcharacter listingcharacter">next()</samp> may ask for the next element. Each time you call 
+                <samp class="listingcharacter listingcharacter">next()</samp>, you’ll get 
+                <a id="p671"/>another element of the data structure. This process allows the iterator to run through a data provider (usually a data structure) element by element. Random access is not possible. If 
+                <samp class="listingcharacter listingcharacter">hasNext()</samp> returns 
+                <samp class="listingcharacter listingcharacter">false</samp> but we’re still asking for an element with 
+                <samp class="listingcharacter listingcharacter">next()</samp>, we’ll get a 
+                <samp class="listingcharacter listingcharacter">NoSuchElementException</samp>
+                <a class="indexanchor" id="i11_89"/>
+            .</p>
+            
+            <div class="listing " id="l_none_111024"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Iterator</span>&lt;E&gt; <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">boolean hasNext()</samp><br/>Returns 
+                        <samp class="listingcharacter listingcharacter">true</samp>
+                     if the iteration provides more elements.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">E next()</samp><br/>Returns the next element in the enumeration and moves the position. A 
+                        <samp class="listingcharacter listingcharacter">NoSuchElementException</samp>
+                     is through if no more elements exist.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="imagebox figure-type"><a href="img-f_none_11_07.html" id="f_none_11_07"><img alt="" id="img-f_none_11_07" src="bilderklein/klein11_007_01.png"/></a></div>
+            
+            <p class="standard">Basically, the method that returns the next element could also return 
+                <samp class="listingcharacter listingcharacter">null</samp> by definition, indicating that no more elements are left, and 
+                <samp class="listingcharacter listingcharacter">hasNext()</samp> could be omitted. However, then, 
+                <samp class="listingcharacter listingcharacter">null</samp>
+             can’t be a valid iterator value, which would be awkward.</p>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Iterator</samp> interface doesn’t itself extend another interface.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn11_08" id="fn11_08">[ 179 ]</a></span>
+             The declaration is generic since what the iterator returns is always of a known type.</p>
+            
+            
+                
+                <h4 class="t4" id="h11.6.1.1">For the Iterator, the Only Way is Forward</h4>
+                
+                <p class="standard">Unlike the index of an array, the iterator doesn’t permit you to read an object again (
+                    <samp class="listingcharacter listingcharacter">next()</samp> automatically proceeds to the next element), nor can you jump ahead or go back and forth. An iterator can be illustrated by a data stream: To visit an element twice, 
+                    <a id="p672"/>for example, to traverse a data structure from right to left again, you must create a new 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp>
+                 object again or memorize the elements in between. Only with lists and sorted data structures is the order of the elements predictable. Basically, the implementation of the data structure and the iterator decides in which order the elements are issued. If the data is sorted, the iterator will also respect the order. (The documentation describes the details.)</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first last">In Java, an iterator isn’t placed on an element but between elements instead. The 
+                        <samp class="listingcharacter listingcharacter">hasNext()</samp> method tells you whether a next element exists, and 
+                        <samp class="listingcharacter listingcharacter">next()</samp> returns it and continues setting the internal position. No concept of the current element can be queried again and again; 
+                        <samp class="listingcharacter listingcharacter">next()</samp>
+                     is stateful. At the beginning of the iteration, the iterator is located before the first element.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.6.1.2">Executing Code on Remaining Elements of an Iterator</h4>
+                
+                <p class="standard">In the 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp> interface, a default method 
+                    <samp class="listingcharacter listingcharacter">forEachRemaining(Consumer&lt;? super E&gt; action)</samp> can execute an arbitrary code snippet—transported via a 
+                    <samp class="listingcharacter listingcharacter">Consumer</samp>
+                —on each element. The implementation of the default method can be written in three lines:</p>
+                
+                <div class="listing " id="l11.30"><pre><span class="">default</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">forEachRemaining</span><span class="">(</span><span class=""> Consumer</span><span class="">&lt;?</span><span class=""> </span><span class="">super</span><span class=""> E</span><span class="">&gt;</span><span class=""> action </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  Objects<span class="">.</span><span class="">requireNonNull</span><span class="">(</span><span class=""> action </span><span class="">);</span><span class=""><br/></span>  <span class="">while</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">hasNext</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    action<span class="">.</span><span class="">accept</span><span class="">(</span><span class=""> </span><span class="">next</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 11.30</b>    
+            java.util.Iterator.java, forEachRemaining()</p>
+                
+                <p class="standard">Using this method, an external iteration can be converted to an internal iteration via a custom loop, and lambda expressions can shorten the interface implementation (as described in 
+                    <span class="crossreference "><a href="13_001.html#h13">Chapter 13</a></span>
+                ).</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first last">The following example outputs each argument of the console input:</p>
+                
+                </div>
+                
+                <div class="listing " id="l_none_111050"><pre><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">).</span><span class="">forEachRemaining</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">::</span><span class="">println </span><span class="">);</span><span class=""><br/></span><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Iterator</span>&lt;E&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default void forEachRemaining(Consumer&lt;? super E&gt; action)</samp><br/>Executes 
+                            <samp class="listingcharacter listingcharacter">action</samp>
+                         on each upcoming element of the iterator up to the last element.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p673"/>
+                    Note</h6>
+                    
+                    <p class="standard first last">Each 
+                        <samp class="listingcharacter listingcharacter">Collection</samp> data structure provides an 
+                        <samp class="listingcharacter listingcharacter">Iterator</samp> with 
+                        <samp class="listingcharacter listingcharacter">iterator()</samp>, on which in turn a call of 
+                        <samp class="listingcharacter listingcharacter">forEachRemaining(...)</samp>
+                     is possible. However, the Stream API provides a more flexible alternative for processing program code, which is also useful when the stream comes from other sources, such as arrays.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.6.1.3">Optional: Deleting Elements via Iterator</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp> method 
+                    <samp class="listingcharacter listingcharacter">next()</samp> is a read-only method and doesn’t change the underlying data structure. But the 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp> interface also provides a 
+                    <samp class="listingcharacter listingcharacter">remove()</samp> method that can remove the last object supplied by 
+                    <samp class="listingcharacter listingcharacter">next()</samp>
+                 from the data collection. </p>
+                
+                <p class="standard">Since this operation doesn’t always make sense (for example, with immutable data structures or when an iterator reads files line by line), this operation is marked as optional in the API documentation. Thus, a concrete iterator doesn’t have to support an erase operation and might simply do nothing or throw an 
+                    <samp class="listingcharacter listingcharacter">UnsupportedOperationException</samp>
+                    <a class="indexanchor" id="i11_90"/>
+                .</p>
+                
+                <div class="listing " id="l_none_111056"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Iterator</span>&lt;E&gt; <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">default void remove()</samp><br/>Deletes the last object supplied by 
+                            <samp class="listingcharacter listingcharacter">next()</samp> from the underlying collection. The operation doesn’t have to be provided by iterators and throws an 
+                            <samp class="listingcharacter listingcharacter">UnsupportedOperationException("remove")</samp>
+                         if not otherwise overridden.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.6.2">11.6.2    The Supplier of the Iterator</h3>
+            
+            <p class="standard">Iterators play an especially important role in Java and occur thousands of times in the JDK. The only question is: Where does an iterator come from so that a collection can be run? Data providers must offer a method to supply iterators.</p>
+            
+            
+                
+                <h4 class="t4" id="h11.6.2.1">First Example</h4>
+                
+                <p class="standard">The
+                    <samp class="listingcharacter listingcharacter"> iterator()</samp> method of 
+                    <samp class="listingcharacter listingcharacter">Path</samp> returns an 
+                    <samp class="listingcharacter listingcharacter">Iterator&lt;Path&gt;</samp>
+                 via the path elements. Consider the following example: </p>
+                
+                <div class="listing " id="l_none_111083"><pre>Iterator<span class="">&lt;</span><span class="">Path</span><span class="">&gt;</span><span class=""> iterator </span><span class="">=</span><span class=""> Paths</span><span class="">.</span><span class="">get</span><span class="">(</span><span class=""> </span><span class="">"/chris/brain/java/20"</span><span class=""> </span><span class="">).</span><span class="">iterator</span><span class="">();</span><span class=""><br/></span><span class="">while</span><span class=""> </span><span class="">(</span><span class=""> iterator</span><span class="">.</span><span class="">hasNext</span><span class="">()</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> iterator</span><span class="">.</span><span class="">next</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">This expression returns four lines with “chris,” “brain,” “java,” and “20.”</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.6.2.2">
+                    <a id="p674"/>
+                Second Example</h4>
+                
+                <p class="standard">Data structures such as lists and sets also declare an 
+                    <samp class="listingcharacter listingcharacter">iterator()</samp>
+                 method:</p>
+                
+                <div class="listing " id="l_none_111081"><pre>Iterator<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> iter </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> TreeSet</span><span class="">&lt;&gt;(</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">4</span><span class="">,</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">9</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">).</span><span class="">iterator</span><span class="">();</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The output would be sorted as 2, 4 ,and 9 with the 
+                    <samp class="listingcharacter listingcharacter">while</samp>
+                 loop from earlier.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h11.6.2.3">Third Example</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp> class implements 
+                    <samp class="listingcharacter listingcharacter">Iterator&lt;String&gt;</samp> so that the familiar pair of 
+                    <samp class="listingcharacter listingcharacter">hasNext()</samp>/
+                    <samp class="listingcharacter listingcharacter">next()</samp>
+                 can run over the tokens, as in the following example:</p>
+                
+                <div class="listing " id="l_none_111085"><pre>Iterator<span class="">&lt;</span><span class="">String</span><span class="">&gt;</span><span class=""> iterator </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""> </span><span class="">"Dog Cat Mouse"</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="standard">The output consists of three lines with the loop shown earlier.</p>
+                
+                <p class="standard">So, in the first and second case, it’s the call of 
+                    <samp class="listingcharacter listingcharacter">iterator()</samp> that gets us an 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp>, while in the third case it’s a class that is itself an 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp>
+                 with a constructor.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.6.3">11.6.3    The Iterable Interface
+                <a class="indexanchor" id="i11_91"/>
+            </h3>
+            
+            <p class="standard">An 
+                <samp class="listingcharacter listingcharacter">iterator()</samp> method that returns an 
+                <samp class="listingcharacter listingcharacter">Iterator</samp> can often be found in data structures. There’s a reason for that: The classes with 
+                <samp class="listingcharacter listingcharacter">iterator()</samp> method implement a 
+                <samp class="listingcharacter listingcharacter">java.lang.Iterable</samp> interface that prescribes the 
+                <samp class="listingcharacter listingcharacter">iterator()</samp>
+                <a class="indexanchor" id="i11_92"/> operation. The 
+                <samp class="listingcharacter listingcharacter">TreeSet</samp> we used in the example implements 
+                <samp class="listingcharacter listingcharacter">Iterable</samp> in the same way that 
+                <samp class="listingcharacter listingcharacter">Path</samp>
+             implements it.</p>
+            
+            <div class="listing " id="l_none_111100"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">Iterable&lt;T&gt;</span> <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Iterator&lt;T&gt; iterator()</samp><br/>Returns a 
+                        <samp class="listingcharacter listingcharacter">java.util.iterator</samp> which iterates over all elements of type 
+                        <samp class="listingcharacter listingcharacter">T</samp>
+                    .</p>
+                
+                </li>
+            
+            </ul>
+            
+            <div class="imagebox figure-type"><a href="img-f11.8.html" id="f11.8"><img alt="UML Diagram of Iterable and Iterator" id="img-f11.8" src="bilderklein/klein11_008.png"/></a></div>
+            
+            <p class="caption "><b>Figure 11.8</b>    
+            UML Diagram of Iterable and Iterator</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.6.4">11.6.4    Extended for and Iterable</h3>
+            
+            <p class="standard">So far, we’ve used the extended 
+                <samp class="listingcharacter listingcharacter">for</samp>
+             in small examples where the goal was to run an array of elements.</p>
+            
+            <div class="listing " id="l11.31"><pre><span class="">
+                    <a id="p675"/>
+                for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> s </span><span class="">:</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">String</span><span class="">[]{</span><span class=""> </span><span class="">"T. Noah"</span><span class="">,</span><span class=""> </span><span class="">"S. Colbert"</span><span class="">,</span><span class=""> </span><span class="">"J. Oliver"</span><span class=""> </span><span class="">}</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%s is great.%n"</span><span class="">,</span><span class=""> s </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 11.31</b>    
+            src/main/java/com/tutego/insel/iterable/SimpleIterable.java, main()</p>
+            
+            <p class="standard">Not only does the extended 
+                <samp class="listingcharacter listingcharacter">for</samp> loop traverse arrays but everything of type 
+                <samp class="listingcharacter listingcharacter">Iterable</samp>
+                <a class="indexanchor" id="i11_93"/>. Since many data structure classes in particular implement this interface, the extended 
+                <samp class="listingcharacter listingcharacter">for</samp>
+             can be used to virtually iterate through result sets, as in the following example:</p>
+            
+            <div class="listing " id="l_none_111133"><pre><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> s </span><span class="">:</span><span class=""> Arrays</span><span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">"T. Noah"</span><span class="">,</span><span class=""> </span><span class="">"S. Colbert"</span><span class="">,</span><span class=""> </span><span class="">"J. Oliver"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"%s is great.%n"</span><span class="">,</span><span class=""> s </span><span class="">);</span><span class=""> </span></pre></div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.6.5">11.6.5    Internal Iteration</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">Iterable</samp> interface provides two methods with default implementation. The interesting method is 
+                <samp class="listingcharacter listingcharacter">forEach(...)</samp>, while the 
+                <samp class="listingcharacter listingcharacter">spliterator()</samp>
+             method is not that interesting at this point.</p>
+            
+            <div class="listing " id="l_none_111145"><pre><span class="">interface</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                <span class="bold">Iterable</span>&lt;T&gt; <span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">default void forEach(Consumer&lt;? super T&gt; action)</samp><br/>Fetches the iterator, runs over all elements, and then calls the consumer to which the element gets passed.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">forEach(...)</samp> method implements what’s called 
+                <span class="italic">internal iteration</span>
+                <a class="indexanchor" id="i11_94"/>
+                <a class="indexanchor" id="i11_95"/>. With this feature, you don’t need to formulate a loop with the pair 
+                <samp class="listingcharacter listingcharacter">hasNext()</samp>/
+                <samp class="listingcharacter listingcharacter">next()</samp>, but 
+                <samp class="listingcharacter listingcharacter">forEach(...)</samp>
+             can accomplish the same goal.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example runs over the first prime numbers and outputs them:</p>
+                
+                <div class="listing " id="l_none_111153"><pre>Consumer<span class="">&lt;</span><span class="">Integer</span><span class="">&gt;</span><span class=""> consumer </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> Consumer</span><span class="">&lt;</span><span class="">Integer</span><span class="">&gt;()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">accept</span><span class="">(</span><span class=""> Integer e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"Prime: %d%n"</span><span class="">,</span><span class=""> e </span><span class="">);</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">};</span><span class=""><br/></span>Arrays<span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">5</span><span class="">,</span><span class=""> </span><span class="">7</span><span class="">,</span><span class=""> </span><span class="">11</span><span class="">,</span><span class=""> </span><span class="">13</span><span class="">,</span><span class=""> </span><span class="">17</span><span class="">,</span><span class=""> </span><span class="">19</span><span class="">,</span><span class=""> </span><span class="">23</span><span class="">,</span><span class=""> </span><span class="">29</span><span class="">,</span><span class=""> </span><span class="">31</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span><span class="">forEach</span><span class="">(</span><span class=""> consumer </span><span class="">)</span><span class="">;</span></pre></div>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Arrays.asList(...)</samp> call returns a 
+                    <samp class="listingcharacter listingcharacter">java.util.List</samp> and is 
+                    <samp class="listingcharacter listingcharacter">Iterable</samp>
+                .</p>
+                
+                <p class="standard">What looks like a lot of code written can be drastically shortened using lambda expressions, as in the following example:</p>
+                
+                <div class="listing " id="l_none_111154"><pre>Arrays<span class="">.</span><span class="">asList</span><span class="">(</span><span class=""> </span><span class="">2</span><span class="">,</span><span class=""> </span><span class="">3</span><span class="">,</span><span class=""> </span><span class="">5</span><span class="">,</span><span class=""> </span><span class="">7</span><span class="">,</span><span class=""> </span><span class="">11</span><span class="">,</span><span class=""> </span><span class="">13</span><span class="">,</span><span class=""> </span><span class="">17</span><span class="">,</span><span class=""> </span><span class="">19</span><span class="">,</span><span class=""> </span><span class="">23</span><span class="">,</span><span class=""> </span><span class="">29</span><span class="">,</span><span class=""> </span><span class="">31</span><span class=""> </span><span class="">)</span><span class=""><br/></span>      <span class="">.</span>
+                    <span class="bold"><span class="">forEach</span><span class="">( e -&gt; System.out.</span><span class="">printf</span><span class="">( </span><span class="">"Prime: %d%n"</span><span class="">, e ) )</span></span>;<span class=""/></pre></div>
+                
+                <p class="standard last">This compact notation is the subject of 
+                    <span class="crossreference "><a href="13_001.html#h13">Chapter 13</a></span>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h11.6.6">11.6.6    
+                <a id="p676"/>
+            Implementing a Custom Iterable*</h3>
+            
+            <p class="standard">For our own objects to be placed right after the colon from the extended 
+                <samp class="listingcharacter listingcharacter">for</samp>, the corresponding class must implement the 
+                <samp class="listingcharacter listingcharacter">Iterable</samp> interface and thus provide an 
+                <samp class="listingcharacter listingcharacter">iterator()</samp> method. 
+                <samp class="listingcharacter listingcharacter">iterator()</samp> must return a matching 
+                <samp class="listingcharacter listingcharacter">Iterator</samp>, which in turn must implement the 
+                <samp class="listingcharacter listingcharacter">hasNext()</samp> and 
+                <samp class="listingcharacter listingcharacter">next()</samp>
+             methods (to specify the next element in the enumeration and indicate the end).</p>
+            
+            <p class="standard">Our next example consists of a class that implements 
+                <samp class="listingcharacter listingcharacter">Iterable</samp> and can decompose the words in a sentence. The basic implementation is 
+                <samp class="listingcharacter listingcharacter">StringTokenizer</samp>, which returns the next subsequences via 
+                <samp class="listingcharacter listingcharacter">nextToken()</samp> and reports via 
+                <samp class="listingcharacter listingcharacter">hasMoreTokens()</samp>
+             whether further tokens can be read.</p>
+            
+            <p class="standard">Let’s start with the first part, the 
+                <samp class="listingcharacter listingcharacter">WordIterable</samp> class, which must first implement 
+                <samp class="listingcharacter listingcharacter">Iterable</samp> to be positioned on the right side of the dot. Then, this instance must return an 
+                <samp class="listingcharacter listingcharacter">Iterator</samp> via 
+                <samp class="listingcharacter listingcharacter">iterator()</samp> that runs over all words. This iterator can be implemented as its own class, but we’ll implement the 
+                <samp class="listingcharacter listingcharacter">WordIterable</samp> class to embody both 
+                <samp class="listingcharacter listingcharacter">Iterable</samp> and 
+                <samp class="listingcharacter listingcharacter">Iterator</samp> at the same time; therefore, only one instance is needed. One drawback of this approach is that you can’t have multiple different 
+                <samp class="listingcharacter listingcharacter">Iterator</samp> instances for one 
+                <samp class="listingcharacter listingcharacter">WordIterable</samp>
+            .</p>
+            
+            <div class="listing " id="l11.32"><pre><span class="">class</span><span class=""> WordIterable </span><span class="">implements</span><span class=""> </span>
+                <span class="bold"><span class="">Iterable&lt;</span><span class="">String</span><span class="">&gt;</span></span>, Iterator&lt;<span class="">String</span><span class="">&gt; {</span><br/><br/>  <span class="">private</span><span class=""> StringTokenizer tokenizer;</span><br/><br/>  <span class="">public</span><span class=""> </span><span class="">WordIterable</span><span class="">( </span><span class="">String</span><span class=""> s ) {</span><br/>    tokenizer = <span class="">new</span><span class=""> </span><span class="">StringTokenizer</span><span class="">( s );</span><br/>  }<br/><br/> <span class=""> // Method from interface Iterable</span><span class=""><br/></span><br/>  
+                <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> Iterator&lt;</span><span class="">String</span><span class="">&gt; </span><span class="">iterator</span><span class="">()</span></span> {<br/>    <span class="">return</span><span class=""> </span><span class="">this</span><span class="">;</span><br/>  }<br/><br/> <span class=""> // Methods from interface Iterator</span><span class=""><br/></span><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">boolean</span><span class=""> </span><span class="">hasNext</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> tokenizer.</span><span class="">hasMoreTokens</span><span class="">();</span><br/>  }<br/><br/>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">next</span><span class="">() {</span><br/>    <span class="">if</span><span class=""> ( </span><span class="">hasNext</span><span class="">() )</span><br/>      <span class="">return</span><span class=""> tokenizer.</span><span class="">nextToken</span><span class="">();</span><br/>    <span class="">throw</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">NoSuchElementException</span><span class="">();</span><br/>  }<br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 11.32</b>    
+            src/main/java/com/tutego/insel/iterable/WordIterable.java (Snippet)</p>
+            
+            <p class="standard">
+                <a id="p677"/>
+            Consider the following example:</p>
+            
+            <div class="listing " id="l11.33"><pre><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> </span><span class="">"Even miracles take a little time."</span><span class="">;</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> word </span><span class="">:</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">WordIterable</span><span class="">(</span><span class="">s</span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""><br/></span>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> word </span><span class="">);</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 11.33</b>    
+            src/main/java/com/tutego/insel/iterable/WordIterableDemo.java, main()</p>
+            
+            <p class="standard">The extended 
+                <samp class="listingcharacter listingcharacter">for</samp>
+             loop is rebuilt internally by the Java compiler in the following way:</p>
+            
+            <div class="listing " id="l_none_111197"><pre><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> word</span><span class="">;</span><span class=""> </span>
+                <span class="bold"><span class="">Iterator&lt;</span><span class="">String</span><span class="">&gt; iterator =</span></span> <span class="">new</span><span class=""> </span><span class="">WordIterable</span><span class="">(s )</span>
+                <span class="bold">.<span class="">iterator</span><span class="">()</span></span>;<br/>  <span class="">while</span><span class=""> (</span>
+                <span class="bold"> iterator.<span class="">hasNext</span><span class="">() )</span></span> {<br/>    
+                <span class="bold">word = iterator.<span class="">next</span><span class="">();</span></span><br/>    System.out.<span class="">println</span><span class="">( word );</span><br/>    }<br/>  word = null;<br/>  iterator = null;<br/>} <span class=""/></pre></div>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

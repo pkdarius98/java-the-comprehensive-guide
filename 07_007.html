@@ -1,0 +1,497 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Object-Oriented Relationship" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Object-Oriented Relationship" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Object-Oriented Relationship</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h7.7">7.7    
+            <a id="p468"/>
+        Abstract Classes and Abstract Methods</h2>
+        
+        <p class="standard">A class shouldn’t always be programmed out immediately, for example, if the superclass wants to specify methods for the subclasses but doesn’t know how to implement them. In Java, two concepts enable this scenario:
+            <a class="indexanchor" id="i07_57"/>
+            <a class="indexanchor" id="i07_58"/>
+            <span class="italic"> abstract classes</span> and 
+            <span class="italic">interfaces</span>
+            <a class="indexanchor" id="i07_59"/>. While 
+            <samp class="listingcharacter listingcharacter">final</samp>
+         basically closes the class and makes subclasses impossible, abstract classes are the opposite: Without subclasses, abstract classes are useless.</p>
+        
+        <p class="standard">Consequently, the following three scenarios are possible:</p>
+        
+        <table class="standardtable" id="t7.3">
+            
+            <thead>
+                
+                <tr>
+                    
+                    <th class="tablehead tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">Class Type</p>
+                    
+                    </th>
+                    
+                    <th class="tablehead tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">Meaning</p>
+                    
+                    </th>
+                
+                </tr>
+            
+            </thead>
+            
+            <tbody>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first top_border_cell">
+                        
+                        <p class="standard first-item last-item">Normal non-abstract and non-final class</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last top_border_cell">
+                        
+                        <p class="standard first-item last-item">A subclass can be created but doesn’t have to be.</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr class="light">
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">Final class</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">A subclass can’t be created.</p>
+                    
+                    </td>
+                
+                </tr>
+                
+                <tr>
+                    
+                    <td class="tablecell tablecell_first">
+                        
+                        <p class="standard first-item last-item">Abstract class</p>
+                    
+                    </td>
+                    
+                    <td class="tablecell tablecell_last">
+                        
+                        <p class="standard first-item last-item">A subclass must be created.</p>
+                    
+                    </td>
+                
+                </tr>
+            
+            </tbody>
+        
+        </table>
+        
+        <p class="caption "><b>Table 7.3</b>    
+            Class Types Compared</p>
+        
+        
+            
+            <h3 class="t3" id="h7.7.1">7.7.1    Abstract Classes</h3>
+            
+            <p class="standard">So far, you could form an object from each class via 
+                <samp class="listingcharacter listingcharacter">new</samp>
+            . However, making instances isn’t always useful; for example, an instance should be prohibited if a class should exist only as a superclass in an inheritance hierarchy. </p>
+            
+            <p class="standard">This superclass can then express is-a-kind-of relationships to serve as a modeling class
+                <a class="indexanchor" id="i07_60"/>
+             and thus specify signatures for its subclasses. A superclass has specifications for the subclass. In other words, all subclasses inherit the methods of the superclass. An instance of the superclass itself doesn’t need to exist at all.</p>
+            
+            <p class="standard">To express this scenario in Java, let’s place the 
+                <samp class="listingcharacter listingcharacter">abstract</samp>
+                <a class="indexanchor" id="i07_61"/> modifier before the type declaration of the superclass. No instances of this class can then be formed, and any attempt to create an object would result in a compiler error. Apart from this limitation, abstract classes behave just like normal classes, contain the same members, and can also inherit from other classes themselves. Abstract classes are the opposite of 
+                <span class="italic">concrete classes</span>
+                <a class="indexanchor" id="i07_62"/>
+                <a class="indexanchor" id="i07_63"/>
+            .</p>
+            
+            <p class="standard">Now, let’s make the 
+                <samp class="listingcharacter listingcharacter">Event</samp> class abstract to act as a superclass for all events since direct instances of the 
+                <samp class="listingcharacter listingcharacter">Event</samp>
+             class aren’t necessary.</p>
+            
+            <div class="listing " id="l7.38"><pre>
+                <span class="bold"><span class="">abstract</span></span><span class=""> </span><span class="">class</span><span class=""> Event {</span><br/>  <span class="">String</span><span class=""> about;</span><br/>  <span class="">int</span><span class="">    duration;</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 7.38</b>    
+            src/main/java/com/tutego/insel/game/c/vp/Event.java, Event</p>
+            
+            <p class="standard">
+                <a id="p469"/>With the now abstract class 
+                <samp class="listingcharacter listingcharacter">Event</samp>
+            , you can express that it is a general class for which no concrete objects exist or could be formed. An attempt results in the following compiler error:</p>
+            
+            <div class="listing " id="l_none_7815"><pre>Event flight = new Event(); // 'Event' is abstract; cannot be instantiated </pre></div>
+            
+            <p class="standard">The meaning behind this error is simple: No general and unspecified events occur in the real world, only specific subtypes of events, such as a nap, a soccer game, or eating candy. Thus, making an instance of the 
+                <samp class="listingcharacter listingcharacter">Event</samp>
+             class makes no sense. The class should only appear in the hierarchy and categorize events, so to speak, and give them properties.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">You can also use abstract classes to prevent an instance of a class from being formed. However, the 
+                    <samp class="listingcharacter listingcharacter">abstract</samp> modifier shouldn’t be used for this purpose. A better approach is to set the visibility of the constructor to 
+                    <samp class="listingcharacter listingcharacter">private</samp> or 
+                    <samp class="listingcharacter listingcharacter">protected</samp>
+                .</p>
+            
+            </div>
+            
+            
+                
+                <h4 class="t4" id="h7.7.1.1">Base Type Abstract Class</h4>
+                
+                <p class="standard">Abstract classes are always used in conjunction with inheritance. Abstract superclasses are general, and subclasses must further specialize the base type. A class will extend the abstract class, and from this class—if the subclass isn’t abstract itself—an instance can be created.</p>
+                
+                <p class="standard">Also, with abstract classes, the is-a-kind-of relationship still applies, so that 
+                    <samp class="listingcharacter listingcharacter">Nap</samp> and 
+                    <samp class="listingcharacter listingcharacter">Workout</samp> can be written for the 
+                    <samp class="listingcharacter listingcharacter">Event</samp>
+                 subclasses in the following way:</p>
+                
+                <div class="listing " id="l7.39"><pre>Event   sleep   <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">();</span><span class=""><br/></span>Event   running <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">();</span><span class=""><br/></span>Event<span class="">[]</span><span class=""> events  </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">(),</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">(),</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Workout</span><span class="">(),</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Nap</span><span class="">()</span><span class=""> </span><span class="">};</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.39</b>    
+            src/main/java/com/tutego/insel/game/c/vp/Application.java (Snippet)</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Event[] events</samp> declaration only identifies the type of the array regardless of whether the 
+                    <samp class="listingcharacter listingcharacter">Event</samp> class is abstract or not. The array contains references to subclasses of 
+                    <samp class="listingcharacter listingcharacter">Event</samp>
+                .</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                    
+                    <p class="standard first">Abstract classes can, of course, in turn have abstract subclasses. Consider the following examples:</p>
+                    
+                    <div class="listing " id="l_none_7849"><pre><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> Event </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">abstract</span><span class=""> </span><span class="">class</span><span class=""> Hackathon </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""> }</span></pre></div>
+                    
+                    <p class="standard last">Note that no instance can be created from 
+                        <samp class="listingcharacter listingcharacter">Hackathon</samp> via 
+                        <samp class="listingcharacter listingcharacter">new</samp>
+                    .</p>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h7.7.2">7.7.2    
+                <a id="p470"/>
+            Abstract Methods</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">abstract</samp> modifier before the 
+                <samp class="listingcharacter listingcharacter">class</samp>
+                <a class="indexanchor" id="i07_64"/> keyword introduces the declaration of an abstract class. But a method can also be abstract. In this context, an abstract method simply specifies its signature, and a subclass implements that method at some point. The abstract class is thus responsible for the method head, while the implementation is done elsewhere—clear separation between “What can I do?” and “How do I do it?” While the superclass expresses that it 
+                <span class="italic">can do</span> something via the declaration of the abstract method, the subclasses realize 
+                <span class="italic">what</span>
+             the code for that behavior looks like. Put simply, abstract methods express that they have no idea about the implementation and that the subclasses must take care of the behavior. Of course, the whole thing must be written within the scope of the specification.</p>
+            
+            <p class="standard">Since an abstract class can contain abstract methods, but need not, we can distinguish among the following kinds of classes and methods:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Pure (pure) abstract classes</span>
+                        <a class="indexanchor" id="i07_65"/>
+                        <a class="indexanchor" id="i07_66"/>
+                        <a class="indexanchor" id="i07_67"/>
+                        <a class="indexanchor" id="i07_68"/>
+                    : The abstract class contains only abstract methods.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <span class="bold">Partially abstract classes</span>
+                        <a class="indexanchor" id="i07_69"/>
+                        <a class="indexanchor" id="i07_70"/>
+                    : The class is abstract but also contains concrete implementations (i.e., non-abstract methods). This approach provides a framework for subclasses to use.</p>
+                
+                </li>
+            
+            </ul>
+            
+            
+                
+                <h4 class="t4" id="h7.7.2.1">An Event May Occur on the Journey</h4>
+                
+                <p class="standard">In our little game, let’s say we want the player to be able to change cities. During the journey, unfortunately, various events may occur, for instance:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The player could be mugged and have his candy stolen.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">The player might get hungry, and then he eats some sweets.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">By some lucky coincidence, the player can be given more candy.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">These events are all random, and maybe nothing happens at all during the trip.</p>
+                
+                <p class="standard">For one event, we’ve already declared a class. Now, an abstract method for program code should be declared in the 
+                    <samp class="listingcharacter listingcharacter">Event</samp> superclass, which can be then executed when the event occurs. For the individual events to have access to the player, the current player is passed to the method. This approach allows the event methods to fall back on the player. In this sense, the player is considered a 
+                    <span class="italic">context object</span>
+                .</p>
+                
+                <p class="standard">Let’s consider our abstract method for these events:</p>
+                
+                <div class="listing " id="l7.40"><pre>
+                    <span class="bold"><span class="">abstract</span></span><span class=""> </span><span class="">class</span><span class=""> Event {</span><br/>  <span class="">String</span><span class=""> about;</span><br/>  <span class="">int</span><span class="">    duration;</span><br/> <br/>  
+                    <span class="bold"><span class="">abstract</span></span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">process</span><span class="">( Player player )</span>
+                    <span class="bold">;</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.40</b>    
+            src/main/java/com/tutego/insel/game/c/vq/Event.java, Event</p>
+                
+                <p class="standard">
+                    <a id="p471"/>Since abstract methods are always without implementation, we used a semicolon in curly brackets instead of specifying the method body. If at least one method is abstract, then automatically the whole class is. Therefore, you must explicitly write the 
+                    <samp class="listingcharacter listingcharacter">abstract</samp> keyword before the class name. If you forget the 
+                    <samp class="listingcharacter listingcharacter">abstract</samp> keyword for such a class, you’ll trigger a compiler error. A class with an abstract method must be abstract; otherwise, anyone could construct an instance and call that method. If you try to create an instance of an abstract class, you’ll also get a compiler error. Of course, an abstract class can have non-abstract members, as 
+                    <samp class="listingcharacter listingcharacter">Event</samp> shows with the object variables 
+                    <samp class="listingcharacter listingcharacter">about</samp> and 
+                    <samp class="listingcharacter listingcharacter">duration</samp>. Concrete methods are also allowed, but we don’t need them in this case. (Recall that we programmed a 
+                    <samp class="listingcharacter listingcharacter">toString()</samp> method earlier in 
+                    <span class="crossreference "><a href="07_005.html#h7.5.1">Section 7.5.1</a></span>
+                .)</p>
+                
+                <p class="standard">Basically, you could also have an empty body and then hope that the subclasses override the method. But making a method abstract should be a deliberate design decision because, after all, it’s unclear what exactly is supposed to happen in any particular event. Each event is a little different, and you cannot provide a certain implementation now. Abstract methods express that this implementation must be mandatory.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.7.2.2">Transmitting Abstract Methods</h4>
+                
+                <p class="standard">When you inherit abstract methods from a class, two options become available:</p>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">You can override all abstract methods and implement them. Then, the subclass no longer needs to be abstract (although it can still be). Normal instances of the subclass can still be made.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">You don’t override the abstract method, so it will be inherited normally. In other words, an abstract method remains in our class, and the class must again be abstract.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">Let’s return to the example: The abstract method from the superclass should be implemented (differently) by each subclass because each event does something different to the players. Let’s start with the mugging event. In this process, the player loses all the candy.</p>
+                
+                <div class="listing " id="l7.41"><pre><span class="">class</span><span class=""> Mugging </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">process</span><span class="">( Player player ) {</span><br/>    player.candy.quantity = <span class="">0</span><span class="">;</span><br/>  }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.41</b>    
+            src/main/java/com/tutego/insel/game/c/vqi/Mugging.java (Snippet)</p>
+                
+                <p class="standard">The gift event would be much nicer: The player is given a random number of new candies:</p>
+                
+                <div class="listing " id="l7.42"><pre><span class="">class</span><span class=""> Gift </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  
+                    <span class="bold"><span class="">@Override</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">process</span><span class="">( Player player ) {</span><br/>    player.candy.quantity += ThreadLocalRandom.<span class="">current</span><span class="">().</span><span class="">nextInt</span><span class="">( </span><span class="">1</span><span class="">, </span><span class="">10</span><span class=""> );</span><br/>  }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.42</b>    
+            src/main/java/com/tutego/insel/game/c/vq/Gift.java (Snippet)</p>
+                
+                <div class="imagebox figure-type"><a href="img-f7.12.html" id="f7.12"><img alt="&#10;                    &#10;                UML Diagram Showing the Names of Abstract Classes as Italicized. Subclasses Override the Abstract Method of the Superclass." id="img-f7.12" src="bilderklein/klein07_012.png"/></a></div>
+                
+                <p class="caption "><b>Figure 7.12</b>    
+            
+                    <a id="p472"/>
+                UML Diagram Showing the Names of Abstract Classes as Italicized. Subclasses Override the Abstract Method of the Superclass.</p>
+                
+                <p class="standard">In our test program, we’ll initialize the player, give them a candy, then mug them, and then give them a gift.</p>
+                
+                <div class="listing " id="l7.43"><pre>Candy liquorice <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><span class=""><br/></span>liquorice<span class="">.</span><span class="">quantity </span><span class="">=</span><span class=""> </span><span class="">10</span><span class="">;</span><span class=""><br/></span>liquorice<span class="">.</span><span class="">name </span><span class="">=</span><span class=""> </span><span class="">"Salty candy shell"</span><span class="">;</span><span class=""><br/></span>Player peter <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">();</span><span class=""><br/></span>peter<span class="">.</span><span class="">candy </span><span class="">=</span><span class=""> liquorice</span><span class="">;</span><span class=""><br/></span> <br/>Event mugging <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Mugging</span><span class="">();</span><span class=""><br/></span>Event gift    <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Gift</span><span class="">();</span><span class=""><br/></span> <br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> peter</span><span class="">.</span><span class="">candy</span><span class="">.</span><span class="">quantity </span><span class="">);</span><span class=""> // 10</span><span class=""><br/></span>mugging<span class="">.</span><span class="">process</span><span class="">(</span><span class=""> peter </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> peter</span><span class="">.</span><span class="">candy</span><span class="">.</span><span class="">quantity </span><span class="">);</span><span class=""> // 0</span><span class=""><br/></span>gift<span class="">.</span><span class="">process</span><span class="">(</span><span class=""> peter </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> peter</span><span class="">.</span><span class="">candy</span><span class="">.</span><span class="">quantity </span><span class="">);</span><span class=""> // 7</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.43</b>    
+            src/main/java/com/tutego/insel/game/c/vq/Playground.java, main</p>
+                
+                <p class="standard">From the output, you can easily see how event handling affects the player 
+                    <samp class="listingcharacter listingcharacter">peter</samp>
+                 and changes the number of candies.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[»]  </span>
+                        <a id="p473"/>
+                    Note</h6>
+                    
+                    <p class="standard first last">Once methods exist with a body in a class, they can’t be abstractly overridden later. Once an implementation is in place, a method implementation cannot be “required” again. For example, 
+                        <samp class="listingcharacter listingcharacter">toString()</samp> exists in 
+                        <samp class="listingcharacter listingcharacter">Object</samp> and can’t be overridden abstractly in 
+                        <samp class="listingcharacter listingcharacter">Event</samp>, for instance, to dictate to the 
+                        <samp class="listingcharacter listingcharacter">Gift</samp> or 
+                        <samp class="listingcharacter listingcharacter">Mugging</samp> subclasses that they must override 
+                        <samp class="listingcharacter listingcharacter">toString()</samp>
+                    .</p>
+                
+                </div>
+                
+                <p class="standard">If a class doesn’t implement all inherited abstract methods, the class itself must be abstract again. If our subclass of an abstract base class isn’t abstract, IntelliJ provides the shortcut 
+                    <span class="keyboard">(Alt)</span>+
+                    <span class="keyboard">(Enter)</span>
+                , which either makes the current class abstract or implements all inherited abstract methods with a dummy body.</p>
+                
+                <p class="standard">The beauty of abstract methods is that they can be implemented by concrete classes in any case. So, polymorphic method calls can always take place.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h7.7.2.3">Played to the End</h4>
+                
+                <p class="standard">So far, we haven’t implemented the change in the cities behavior, and the previous example was only intended to clarify type relationships. Now, let’s expand our game in such a way that the player can change cities and then some random things can happen.</p>
+                
+                <p class="standard">First, once again, the three 
+                    <samp class="listingcharacter listingcharacter">Event</samp>
+                 subclasses that now receive a console output.</p>
+                
+                <div class="listing " id="l7.44"><pre><span class="">class</span><span class=""> Mugging </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">process</span><span class="">(</span><span class=""> Player player </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">System.out.</span><span class="">println</span><span class="">( </span><span class="">"Damn it! Someone steals all your sweets."</span><span class=""> );</span></span><br/>    player.candy.quantity = <span class="">0</span><span class="">;</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.44</b>    
+            src/main/java/com/tutego/insel/game/c/vq/Mugging.java, Mugging</p>
+                
+                <div class="listing " id="l7.45"><pre><span class="">class</span><span class=""> Gift </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">process</span><span class="">(</span><span class=""> Player player </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">System.out.</span><span class="">println</span><span class="">( </span><span class="">"Lucky you! Someone gives you sweets."</span><span class=""> );</span></span><br/>    player.candy.quantity += ThreadLocalRandom.<span class="">current</span><span class="">().</span><span class="">nextInt</span><span class="">( </span><span class="">1</span><span class="">, </span><span class="">10</span><span class=""> );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.45</b>    
+            src/main/java/com/tutego/insel/game/c/vq/Gift.java, Gift</p>
+                
+                <div class="listing " id="l7.46"><pre><span class="">class</span><span class=""> Eating </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">process</span><span class="">(</span><span class=""> Player player </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    
+                    <span class="bold"><span class="">System.out.</span><span class="">println</span><span class="">( </span><span class="">"You’re hungry and you eat some of your sweets."</span><span class=""> );</span></span><br/>
+                    <a id="p474"/>    player.candy.quantity *= Math.<span class="">random</span><span class="">();</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.46</b>    
+            src/main/java/com/tutego/insel/game/c/vq/Eating.java, Eating</p>
+                
+                <p class="standard">What’s new is an 
+                    <samp class="listingcharacter listingcharacter">Event</samp> subclass that does nothing. We refer to such objects as 
+                    <span class="italic">null objects</span>
+                    <a class="indexanchor" id="i07_71"/>
+                .</p>
+                
+                <div class="listing " id="l7.47"><pre><span class="">class</span><span class=""> NoopEvent </span><span class="">extends</span><span class=""> Event </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">process</span><span class="">(</span><span class=""> Player player </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.47</b>    
+            src/main/java/com/tutego/insel/game/c/vq/NoopEvent.java, NoopEvent</p>
+                
+                <p class="standard">Since the events can occur randomly, a static 
+                    <samp class="listingcharacter listingcharacter">random()</samp>
+                 method is supposed to return a random event.</p>
+                
+                <div class="listing " id="l7.48"><pre><span class="">class</span><span class=""> RandomGameEvents </span><span class="">{</span><span class=""><br/></span>  <span class="">private</span><span class=""> </span><span class="">RandomGameEvents</span><span class="">()</span><span class=""> </span><span class="">{}</span><span class=""><br/></span>  <span class="">static</span><span class=""> Event </span><span class="">next</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    <span class="">double</span><span class=""> random </span><span class="">=</span><span class=""> Math</span><span class="">.</span><span class="">random</span><span class="">();</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> random </span><span class="">&lt;</span><span class=""> </span><span class="">0.5</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">NoopEvent</span><span class="">();</span><span class="">   </span><span class=""> // 0.0 &lt;= random &lt; 0.5</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> random </span><span class="">&lt;</span><span class=""> </span><span class="">0.8</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Gift</span><span class="">();</span><span class="">        </span><span class=""> // 0.5 &lt;= random &lt; 0.8</span><span class=""><br/></span>    <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> random </span><span class="">&lt;</span><span class=""> </span><span class="">0.9</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Eating</span><span class="">();</span><span class="">      </span><span class=""> // 0.8 &lt;= random &lt; 0.9</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Mugging</span><span class="">();</span><span class="">                         </span><span class=""> // 0.9 &lt;= random &lt; 1.0</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.48</b>    
+            src/main/java/com/tutego/insel/game/c/vq/RandomGameEvents.java, RandomGameEvents</p>
+                
+                <p class="standard">In this method, notice how the events aren’t equally probable. Nothing should happen while traveling 50% of the time, 30% of the time the player should receive a gift, 10% of the time the player is hungry, and 10% of the time the player is mugged.</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">Candy</samp>
+                 class is thus simplified and contains only a name and a quantity, as in the following example:</p>
+                
+                <div class="listing " id="l7.49"><pre><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Candy </span><span class="">{</span><span class=""><br/></span>  <span class="">String</span><span class=""> name</span><span class="">;</span><span class=""><br/></span>  <span class="">int</span><span class="">    quantity</span><span class="">;</span><span class=""><br/></span><span class="">}</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 7.49</b>    
+            src/main/java/com/tutego/insel/game/c/vq/Candy.java, Candy</p>
+                
+                <p class="standard">Things get interesting when the player travel to a new destination, as in the following example:</p>
+                
+                <div class="listing " id="l7.50"><pre><span class="">
+                        <a id="p475"/>
+                    class</span><span class=""> Player </span><span class="">{</span><span class=""><br/></span>  Candy  candy<span class="">;</span><span class=""><br/></span>  <span class="">String</span><span class=""> location</span><span class="">;</span><span class=""><br/></span> <br/>  
+                    <span class="bold"><span class="">void</span><span class=""> </span><span class="">moveTo</span><span class="">( </span><span class="">String</span><span class=""> cityName ) {</span><br/>    <span class="">if</span><span class=""> ( location.</span><span class="">equalsIgnoreCase</span><span class="">( cityName ) ) {</span><br/>      System.out.<span class="">println</span><span class="">( </span><span class="">"You’re already there! (
+                            <img alt="inline image" class="inline_image" src="bilder/uhrsymbol.png"/>
+                        _)"</span><span class=""> );</span><br/>      <span class="">return</span><span class="">;</span><br/>    }<br/>    RandomGameEvents.<span class="">next</span><span class="">().</span><span class="">process</span><span class="">( </span><span class="">this</span><span class=""> );</span><br/>    location = cityName;<br/>  }</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.50</b>    
+            src/main/java/com/tutego/insel/game/c/vq/Player.java, Player</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">moveTo(String)</samp> method is passed an arbitrary city name, and if the player is already in that city, the journey is unnecessary. The interesting part follows when the journey begins: A random event is determined, and the player is passed to the 
+                    <samp class="listingcharacter listingcharacter">process(Player)</samp>
+                 method.</p>
+                
+                <div class="listing " id="l7.51"><pre>Candy liquorice <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Candy</span><span class="">();</span><span class=""/><br/>liquorice<span class="">.</span><span class="">quantity </span><span class="">=</span><span class=""> </span><span class="">10</span><span class="">;</span><span class=""/><br/>liquorice<span class="">.</span><span class="">name </span><span class="">=</span><span class=""> </span><span class="">"Salty candy shell"</span><span class="">;</span><span class=""/><br/>Player peter <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Player</span><span class="">();</span><span class=""/><br/>peter<span class="">.</span><span class="">candy </span><span class="">=</span><span class=""> liquorice</span><span class="">;</span><span class=""/><br/>peter<span class="">.</span><span class="">location </span><span class="">=</span><span class=""> </span><span class="">"Dallas"</span><span class="">;</span><span class=""/><br/> <br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Enter the destination where you want to travel. "</span><span class=""/><br/>                  <span class="">+</span><span class=""> </span><span class="">"An empty input will end the game."</span><span class=""> </span><span class="">);</span><span class=""/><br/><span class="">while</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">true</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""/><br/>  System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">printf</span><span class="">(</span><span class=""> </span><span class="">"You’re currently in %s and hold %d '%s'%n"</span><span class="">,</span><span class=""/><br/><span class="">                     peter.location, peter.candy.quantity, peter.candy.name );</span><span class=""/><br/><span class="">  System.out.</span><span class="">print</span><span class="">( </span><span class="">"Destination: "</span><span class=""> );</span><span class=""/><br/><span class="">  </span><span class="">String</span><span class=""> input = </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">( System.in ).</span><span class="">nextLine</span><span class="">();</span><span class=""/><br/><span class="">  </span><span class="">if</span><span class=""> ( input.</span><span class="">trim</span><span class="">().</span><span class="">isEmpty</span><span class="">() ) </span><span class="">break</span><span class="">;</span><span class=""/><br/><span class="">  peter.</span><span class="">moveTo</span><span class="">( input );</span><span class=""/><br/><span class="">} </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 7.51</b>    
+            src/main/java/com/tutego/insel/game/c/vq/Application.java, main</p>
+                
+                <p class="standard">The actual main program is not big now. A candy is built like the player, and the infinite loop is entered. The program asks for input, and if no input exists, the loop ends, and the program is over. If the input wasn’t empty, this input is a destination, and Peter travels to this place, with all the surprises that follow.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>
+                        <a id="p476"/>
+                    Why?</h6>
+                    
+                    <p class="standard first last">Abstract methods are a particularly important language feature because they promise that an implementation will exist later. This ability is often used by frameworks: A library declares an abstract class with an abstract method, and you implement that method, create an instance of that implementation, and pass the object back to the framework. The framework now knows that the method must have been implemented and can call it. Without dynamic binding, nothing like this would work at all.</p>
+                
+                </div>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

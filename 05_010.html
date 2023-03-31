@@ -1,0 +1,724 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Handling Characters and Strings" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Handling Characters and Strings" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Handling Characters and Strings</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h5.10">5.10    Decomposing Strings</h2>
+        
+        <p class="standard">The Java library provides some classes and methods that allow us to break large strings into smaller ones according to certain patterns. In this context, the terms 
+            <span class="italic">token</span> and 
+            <span class="italic">delimiter</span> are worth mentioning: A token is a part of a string which is separated from other tokens by certain 
+            <span class="italic">delimiters</span>
+            <a class="indexanchor" id="i05_119"/>
+        . Let’s take the sentence “Modern music is playing instruments according to notes” (Peter Sellers) as an example. If we choose spaces as separators, the individual tokens will be “Modern,” “Music,” etc.</p>
+        
+        <p class="standard">The Java library provides a number of options for string decomposition. The first two from this list are presented in the following sections:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">split(…)</samp> of 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                : Splits using a delimiter described by a regular expression.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">lines()</samp> of 
+                    <samp class="listingcharacter listingcharacter">String</samp>: Returns a 
+                    <samp class="listingcharacter listingcharacter">Stream&lt;String&gt;</samp>
+                 of lines.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">Scanner</samp>
+                : nice class to traverse an input, also line by line.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">StringTokenizer</samp>
+                : Delimiters are only single characters.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">BreakIterator</samp>
+                : Finds character, word, line, or sentence boundaries.</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">
+                    <samp class="listingcharacter listingcharacter">Matcher</samp>: In connection with the 
+                    <samp class="listingcharacter listingcharacter">Pattern</samp> class, 
+                    <samp class="listingcharacter listingcharacter">Matcher</samp>
+                 decomposes strings using regular expressions.</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">The methods and classes are, generally speaking, the counterparts of the concatenation options. For instance, 
+            <samp class="listingcharacter listingcharacter">split(...)</samp> is opposed to 
+            <samp class="listingcharacter listingcharacter">join(...)</samp>, and 
+            <samp class="listingcharacter listingcharacter">StringTokenizer</samp> is opposed to 
+            <samp class="listingcharacter listingcharacter">StringJoiner</samp>
+        .</p>
+        
+        
+            
+            <h3 class="t3" id="h5.10.1">5.10.1    
+                <a id="p356"/>
+            Splitting Strings via split(...)</h3>
+            
+            <p class="standard">The object method split 
+                <samp class="listingcharacter listingcharacter">(...)</samp>
+                <a class="indexanchor" id="i05_120"/> of a 
+                <samp class="listingcharacter listingcharacter">String</samp> object splits its own string into substrings. The separators are completely arbitrary and described as a regular expression. The return is an array or an 
+                <samp class="listingcharacter listingcharacter">iterable</samp>
+             with substrings.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example decomposes a domain name into its component parts:</p>
+                
+                <div class="listing " id="l_none_51469"><pre><span class="">String</span><span class=""> path </span><span class="">=</span><span class=""> </span><span class="">"www.tutego.com"</span><span class="">;</span><span class=""><br/></span><span class="">String</span><span class="">[]</span><span class=""> segs </span><span class="">=</span><span class=""> </span>
+                    <span class="bold"><span class="">path.</span><span class="">split</span></span><span class="">( Pattern.</span><span class="">quote</span><span class="">( </span><span class="">"."</span><span class=""> ) );</span><br/>System.out.<span class="">println</span><span class="">( Arrays.</span><span class="">toString</span><span class="">(segs) );</span><span class=""> // [www, tutego, com]</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard last">Since the dot as a separator is a special character for regular expressions, it must be appropriately commented out with the backslash. This is done by the static method 
+                    <samp class="listingcharacter listingcharacter">Pattern.quote(String)</samp>, which returns a “disarmed” regex string. Otherwise, 
+                    <samp class="listingcharacter listingcharacter">split(".")</samp>
+                 returns an array of length 0 on each string.</p>
+            
+            </div>
+            
+            <p class="standard">A common separator is 
+                <samp class="listingcharacter listingcharacter">\s</samp>
+            , which is whitespace.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <p class="standard first">The following example counts the number of words in a sentence:</p>
+                
+                <div class="listing " id="l_none_51476"><pre><span class="">String</span><span class=""> </span><span class="">=</span><span class=""> </span><span class="">"So just listen now to my musical doodle."</span><span class="">;</span><span class=""><br/></span><span class="">int</span><span class=""> wordCount </span><span class="">=</span><span class=""> string</span><span class="">.</span><span class="">split</span><span class="">(</span><span class=""> </span><span class="">"(\\s|\\p{Punct})+"</span><span class=""> </span><span class="">).</span><span class="">length</span><span class="">;</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> wordCount </span><span class="">);</span><span class="">      </span><span class=""> // 8</span><span class=""/></pre></div>
+                
+                <p class="standard last">The separator is either whitespace or a punctuation mark. Alternatively, the expression 
+                    <samp class="listingcharacter listingcharacter">"[\\s\\p{Punct}]+"</samp>
+                 can be used.</p>
+            
+            </div>
+            
+            <div class="listing " id="l_none_51481"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold"><span class="">String</span></span><span class=""><br/></span><span class="">implements</span><span class=""> CharSequence, Comparable&lt;</span><span class="">String</span><span class="">&gt;, Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">String[] split(String regex)</samp><br/>Splits the current string with the regular expression.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">String[] split(String regex, int limit)</samp><br/>Splits the current string with the regular expression but returns a maximum limited number of substrings.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.10.2">5.10.2    Yes We Can, Yes We Scan: The Scanner Class</h3>
+            
+            <p class="standard">The 
+                <samp class="listingcharacter listingcharacter">java.util.Scanner</samp> class
+                <a class="indexanchor" id="i05_121"/> can split a string into tokens and read simple files line by line. In the decomposition, a regular expression can describe the delimiter. This feature 
+                <a id="p357"/>makes 
+                <samp class="listingcharacter listingcharacter">Scanner</samp> more flexible than a 
+                <samp class="listingcharacter listingcharacter">StringTokenizer</samp>
+            , which only allows single characters as separators.</p>
+            
+            
+                
+                <h4 class="t4" id="h5.10.2.1">Building a Scanner</h4>
+                
+                <p class="standard">To build a 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp> object, the class provides several constructors that take the strings to be parsed from various sources, such as a 
+                    <samp class="listingcharacter listingcharacter">String</samp>, a data stream (when reading from the command line, this data stream is 
+                    <samp class="listingcharacter listingcharacter">System.in</samp>), a 
+                    <samp class="listingcharacter listingcharacter">Path</samp> object, or various other input sources. If the source is of type 
+                    <samp class="listingcharacter listingcharacter">Closeable</samp>, like a 
+                    <samp class="listingcharacter listingcharacter">Writer</samp>, the 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp> should be closed via 
+                    <samp class="listingcharacter listingcharacter">close()</samp>, which forwards the 
+                    <samp class="listingcharacter listingcharacter">close()</samp> to the 
+                    <samp class="listingcharacter listingcharacter">Closeable</samp> object. You do not need to call 
+                    <samp class="listingcharacter listingcharacter">close()</samp> when the source is a 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                .</p>
+                
+                <div class="listing " id="l_none_51503"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Scanner</span><br/><span class="">implements</span><span class=""> Iterator&lt;</span><span class="">String</span><span class="">&gt;, Closeable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(String source)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(Path source) throws IOException</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(Path source, String charsetName) throws IOException</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(Path source, Charset charset) throws IOException</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(File source) throws FileNotFoundException</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(File source, String charsetName) throws FileNotFoundException</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(File source, Charset charset) throws IOException</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(InputStream source)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(InputStream source, String charsetName)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(InputStream source, Charset charset)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(Readable source)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(ReadableByteChannel source)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(ReadableByteChannel source, String charsetName)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Scanner(ReadableByteChannel source, Charset charset)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.10.2.2">Reading a File Line by Line</h4>
+                
+                <p class="standard">Once the 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp> object has been created, the pair 
+                    <samp class="listingcharacter listingcharacter">hasNextLine()</samp>
+                    <a class="indexanchor" id="i05_122"/> and 
+                    <samp class="listingcharacter listingcharacter">nextLine()</samp>
+                    <a class="indexanchor" id="i05_123"/>
+                 can be used to easily read a file line by line.</p>
+                
+                <p class="standard">A program is supposed to read a file and reverse the lines in such a way that the last line of the file is at the top and the first line of the file is at the bottom. The result on the console should be a string with no whitespace at the beginning and end.</p>
+                
+                <div class="listing " id="l5.11"><pre>InputStream resource <span class="">=</span><span class=""> ReverseFile</span><span class="">.</span><span class="">class</span><span class="">.</span><span class="">getResourceAsStream</span><span class="">(</span><span class=""> </span><span class="">"EastOfJava.txt"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">try</span><span class=""> </span><span class="">(</span><span class=""> Scanner input </span><span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""> resource </span><span class="">)</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>
+                    <a id="p358"/>  
+                    <span class="bold"><span class="">StringBuilder result = </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">();</span></span><br/>  <span class="">while</span><span class=""> ( input.</span><span class="">hasNextLine</span><span class="">() )</span><br/>    
+                    <span class="bold">result.<span class="">insert</span><span class="">( </span><span class="">0</span><span class="">, input.</span><span class="">nextLine</span><span class="">() + System.</span><span class="">lineSeparator</span><span class="">() )</span></span>;<br/>  System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">result.<span class="">toString</span><span class="">()</span></span>.<span class="">trim</span><span class="">() );</span><br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 5.11</b>    
+            src/main/java/com/tutego/insel/string/ReverseFile.java (Snippet)</p>
+                
+                <p class="standard">The construction with 
+                    <samp class="listingcharacter listingcharacter">try (...) { ... }</samp> is called 
+                    <span class="italic">try with resources</span>
+                    <a class="indexanchor" id="i05_124"/> and automatically closes the file after its use. The handling of exceptions and the special use of 
+                    <samp class="listingcharacter listingcharacter">try</samp> are both explained in more detail in 
+                    <span class="crossreference "><a href="09_001.html#h9">Chapter 9</a></span>, 
+                    <span class="crossreference "><a href="09_006.html#h9.6">Section 9.6</a></span>. Also, the encoding should always be specified, which in our case is ISO 8859-1 (i.e., Latin-1). The encoding string necessary for the 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp> constructor comes from a constant from 
+                    <samp class="listingcharacter listingcharacter">StandardCharsets</samp>
+                .</p>
+                
+                <div class="listing " id="l_none_51507"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Scanner</span><br/><span class="">implements</span><span class=""> Iterator&lt;</span><span class="">String</span><span class="">&gt;, Closeable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextLine()</samp><br/>Returns 
+                            <samp class="listingcharacter listingcharacter">true</samp>
+                         if a next line can be read.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String nextLine()</samp><br/>Returns the next line.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                    
+                    <p class="standard first last">If we initialize a 
+                        <samp class="listingcharacter listingcharacter">Scanner</samp> with a string, this string can be decomposed line by line by the scanner. The string method 
+                        <samp class="listingcharacter listingcharacter">lines()</samp> is an alternative; the result is a stream of lines. We’ll discuss streams in more detail in 
+                        <span class="crossreference "><a href="16_001.html#h16">Chapter 16</a></span>
+                    .</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.10.2.3">Next, Please</h4>
+                
+                <p class="standard">After creating the 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp> object, the 
+                    <samp class="listingcharacter listingcharacter">next()</samp> method returns the next string if a 
+                    <samp class="listingcharacter listingcharacter">hasNext()</samp> returns 
+                    <samp class="listingcharacter listingcharacter">true</samp>. (These methods are then also methods of the 
+                    <samp class="listingcharacter listingcharacter">Iterator</samp> interface, where 
+                    <samp class="listingcharacter listingcharacter">remove()</samp>
+                 isn’t implemented.)</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">In the following example, a 
+                        <samp class="listingcharacter listingcharacter">String s</samp>
+                     will be read from the standard input:</p>
+                    
+                    <div class="listing " id="l_none_51521"><pre>Scanner scanner <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""> System</span><span class="">.</span><span class="">in </span><span class="">);</span><span class=""><br/></span><span class="">String</span><span class=""> s </span><span class="">=</span><span class=""> scanner</span><span class="">.</span><span class="">next</span><span class="">()</span><span class="">;</span></pre></div>
+                    
+                    <p class="standard last">Important: The 
+                        <samp class="listingcharacter listingcharacter">Scanner</samp>
+                     shouldn’t be closed in this case!</p>
+                
+                </div>
+                
+                <p class="standard">In addition to the 
+                    <samp class="listingcharacter listingcharacter">next()</samp> method, which returns only a string, 
+                    <samp class="listingcharacter listingcharacter">Scanner</samp> provides various 
+                    <samp class="listingcharacter listingcharacter">next&lt;type&gt;()</samp> methods, which read the next token and convert it into a desired format, 
+                    <a id="p359"/>for example, into a 
+                    <samp class="listingcharacter listingcharacter">double</samp> with 
+                    <samp class="listingcharacter listingcharacter">nextDouble()</samp>. With the same number of 
+                    <samp class="listingcharacter listingcharacter">hasNext&lt;type&gt;()</samp>
+                 methods, you can query whether another token of this type follows.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">Let’s look at the individual 
+                        <samp class="listingcharacter listingcharacter">next*()</samp> and 
+                        <samp class="listingcharacter listingcharacter">hasNext*()</samp>
+                     methods with the following example:</p>
+                    
+                    <div class="listing " id="l5.12"><pre>Scanner scanner <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Scanner</span><span class="">(</span><span class=""> </span><span class="">"tutego 12 1973 12,03 True 123456789000"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> scanner</span><span class="">.</span>
+                        <span class="bold"><span class="">hasNext</span><span class="">()</span></span> );       <span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">next</span><span class="">()</span></span> );          <span class=""> // tutego</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">hasNextByte</span><span class="">()</span></span> );   <span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">nextByte</span><span class="">()</span></span> );      <span class=""> // 12</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">hasNextInt</span><span class="">()</span></span> );    <span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">nextInt</span><span class="">()</span></span> );       <span class=""> // 1973</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">hasNextDouble</span><span class="">()</span></span> ); <span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">nextDouble</span><span class="">()</span></span> );    <span class=""> // 12.03</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">hasNextBoolean</span><span class="">()</span></span> );<span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">nextBoolean</span><span class="">()</span></span> );   <span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">hasNextLong</span><span class="">()</span></span> );   <span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">nextLong</span><span class="">()</span></span> );      <span class=""> // 123456789000</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( scanner.</span>
+                        <span class="bold"><span class="">hasNext</span><span class="">()</span></span> );       <span class=""> // false</span><span class=""> </span><span class=""/></pre></div>
+                    
+                    <p class="caption last"><b>Listing 5.12</b>    
+            src/main/java/com/tutego/insel/string/ScannerDemo.java, main()</p>
+                
+                </div>
+                
+                <p class="standard">If not all tokens are interesting, they’ll be skipped by 
+                    <samp class="listingcharacter listingcharacter">Scanner skip(Pattern pattern)</samp> or 
+                    <samp class="listingcharacter listingcharacter">Scanner skip(String pattern)</samp>
+                , while separators will be ignored.</p>
+                
+                <div class="listing " id="l_none_51538"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span>
+                    <span class="bold">Scanner</span><br/><span class="">implements</span><span class=""> Iterator&lt;</span><span class="">String</span><span class="">&gt;, Closeable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNext()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextBigDecimal()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextBigInteger()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextBigInteger(int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextBoolean()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextByte()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextByte(int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextDouble()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextFloat()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextInt()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextInt(int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">
+                                <a id="p360"/>
+                            boolean hasNextLong()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextLong(int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextShort()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean hasNextShort(int radix)</samp><br/>Returns 
+                            <samp class="listingcharacter listingcharacter">true</samp>
+                         if a token of the requested type can be read.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">String next()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigDecimal nextBigDecimal()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger nextBigInteger()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">BigInteger nextBigInteger(int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">boolean nextBoolean()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">byte nextByte()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">byte nextByte(int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">double nextDouble()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">float nextFloat()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int nextInt()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int nextInt(int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">long nextLong()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">long nextLong(int radix)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">short nextShort()</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">short nextShort(int radix)</samp><br/>Returns the next token.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">useRadix(int)</samp> method changes the base for numbers, and 
+                    <samp class="listingcharacter listingcharacter">radix()</samp>
+                 queries it.</p>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

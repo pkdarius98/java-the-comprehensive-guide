@@ -1,0 +1,142 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Classes and Objects" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Classes and Objects" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Classes and Objects</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main"><h1 class="t1" id="h3">3    
+        <a id="p201"/>
+    Classes and Objects</h1><p class="introductorynote indent_chapter_single">“Nothing is more fairly distributed than common sense: no one thinks he needs more of it than he already has.”<br/>—René Descartes (1596–1650)</p><p class="standard">Java is an object-oriented programming language and this chapter focuses on objects that are created by a blueprint (the class). Objects are addressed via references and through references objects can be passed on to other places and can be compared.</p>
+        
+        <h2 class="t2" id="h3.1">3.1    Object-Oriented Programming</h2>
+        
+        <p class="standard">A book about Java programming must unite several parts:</p>
+        
+        <ul>
+            
+            <li>
+                
+                <p class="standard first-item last-item">First, basic programming according to the imperative principle (variables, operators, case distinction, loops, and simple static methods) in a new grammar for Java</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Then, the object orientation (objects, classes, inheritance, interfaces) and extended possibilities of the Java language (exceptions, generics, lambda expressions)</p>
+            
+            </li>
+            
+            <li>
+                
+                <p class="standard first-item last-item">Finally, the libraries (string processing, input/output, etc.)</p>
+            
+            </li>
+        
+        </ul>
+        
+        <p class="standard">This chapter focuses on the paradigm of object orientation and demonstrates the syntax, such as how classes are implemented in Java and how class/object variables and methods are used.</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+            
+            <p class="standard first last">Java, of course, is not the first object-oriented (OO) language, nor was C++. Classically, Smalltalk
+                <a class="indexanchor" id="i03_00"/> and especially Simula-67
+                <a class="indexanchor" id="i03_01"/> from 1967 are considered the progenitors of all OO languages. The concepts they introduced are still relevant today, including the four generally accepted principles of object-oriented programming (OOP): 
+                <span class="italic">abstraction, encapsulation, inheritance,</span> and 
+                <span class="italic">polymorphism</span>.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_01" id="fn03_01">[ 88 ]</a></span>
+            </p>
+        
+        </div>
+        
+        
+            
+            <h3 class="t3" id="h3.1.1">3.1.1    
+                <a id="p202"/>
+            Why Object-Oriented Programming at All?</h3>
+            
+            <p class="standard">Since people perceive the world in objects, the analysis of systems is also often already modeled in an OO way. But with procedural systems that have only subroutines as a means of expression, mapping OO design into a programming language becomes difficult, and inevitably, a break will occur. Over time, documentation and implementation will diverge; the software then becomes difficult to maintain and extend. A better approach, therefore, is to think in an OO way and then use an OOP language to map these ideas.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Bad code can be written in any language.</p>
+            
+            </div>
+            
+            <p class="standard">The objects mapped in the software have three important characteristics:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Every object has an identity.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Every object has a state.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Every object has a behavior.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">These three properties have important consequences: First, the identity of the object remains the same during its lifetime until its death and cannot change. Second, the data and the program code to manipulate that data are treated as belonging together. In procedural systems, you’ll often find scenarios like a large memory area that can be accessed by all its subroutines in some way or other. For objects, this statement is not true since objects logically manage their own data and monitor the manipulation of that data.</p>
+            
+            <p class="standard">So, OO software development is about modeling in objects and then programming. Design takes a central position in this process; large systems are decomposed and described in ever finer detail. The statement of the French writer François Duc de La Rochefoucauld (1613–1680) fits well here:</p>
+            
+            <blockquote><p>“Those who spend too much time on small things become incapable of great things.”</p></blockquote>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h3.1.2">3.1.2    When I Think of Java, I Think of Reusability</h3>
+            
+            <p class="standard">With each new project, you may notice similar problems have already been solved in previous projects. Of course, problems that have already been solved shouldn’t be reimplemented; instead, repetitive parts should be reused as best as possible in different contexts. The goal is the best possible reuse of components.</p>
+            
+            <p class="standard">The reusability of program parts has existed since before OOP languages came into being; however, OOP languages facilitate the programming of reusable software components. Thus, the many thousands of classes in the library are examples of how 
+                <a id="p203"/>
+            developers won’t be constantly bothered about the implementation of data structures, for example, or the buffering of data streams.</p>
+            
+            <p class="standard">Even though Java is an OOP language, being OO doesn’t guarantee fancy design and ideal reusability. An OO language facilitates OOP, but OOP can also be achieved in a simple programming language such as C. In Java, programs are also possible that consist of only one class and accommodate 5,000 lines of program code with static methods. Bjarne Stroustrup
+                <a class="indexanchor" id="i03_02"/> (the creator of C++
+                <a class="indexanchor" id="i03_03"/>
+            , also called Stumpy by his friends) aptly said this about comparing C and C++:</p>
+            
+            <blockquote><p>“C makes it easy to shoot yourself in the foot, C++ makes it harder, but when you do, it blows away your whole leg.”
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn03_02" id="fn03_02">[ 89 ]</a></span>
+            </p></blockquote>
+            
+            <p class="standard">In the spirit of our didactic approach, this chapter will first use some classes from the standard library. We’ll start with the 
+                <samp class="listingcharacter listingcharacter">Point</samp>
+             class, which represents two-dimensional points. In a second step, we’ll then program our own classes. Next, we’ll focus on the concept of abstraction in Java, namely, how groups of related classes are designed.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

@@ -1,0 +1,453 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Architecture, Design, and Applied Object Orientation" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Architecture, Design, and Applied Object Orientation" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Architecture, Design, and Applied Object Orientation</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h14.3">14.3    Design Patterns</h2>
+        
+        <p class="standard">In OO design, you’ve learned that classes should not be tightly coupled, but instead loosely coupled. This suggestion means classes shouldn’t know too much about other classes, and interactions should be through well-defined interfaces so that classes can still be modified subsequently. Loose coupling has many advantages, including increasing reusability and making the program more change friendly. </p>
+        
+        <p class="standard">Let’s use an example to explain these features: Customer data must be stored in a data structure. For this data source, a graphical user interface (GUI), such as an input screen, 
+            <a id="p804"/>
+        displays and manages the data. When data is entered, deleted, and changed, these changes should be transferred to the data structure. (We’ll describe the other way, from the data structure into the visualization, momentarily.) Although we already have a link between the input screen and the data structure, we must be careful not to get bogged down in the design because presumably the programming boils down to the two being tightly linked. Most likely, the GUI will somehow know about the data structure, and any change in the input screen will directly call methods of the concrete data structure, which is what we want to avoid. Moreover, we haven’t considered what will happen if, as a result of further program versions, a graphical representation of the data is now drawn, for example, in the form of a bar chart. What happens if the content of the data structure is changed via another program location and then forces a rebuild of the screen display? In this scenario, we’ll be caught in a tangle of method calls, and our program is no longer change-friendly. What happens if we now want to replace our homemade data structure with an SQL database?</p>
+        
+        
+            
+            <h3 class="t3" id="h14.3.1">14.3.1    Motivation for Design Patterns</h3>
+            
+            <p class="standard">Considerations about basic design criteria go way back. Prior to object-oriented programming (OOP), with structured programming, developers were happy to use various tools to build software more quickly and more easily. Assembler programmers were also happy to use structured programming to increase efficiency—after all, they only used subroutines because they could save a few bytes again. But after Assembler and structured programming, we’ve now arrived at object orientation, and no revolutionary programming paradigm has since emerged to replace object orientation. The software crisis has led to new concepts. Almost every development team realizes that OO isn’t everything, but might be rather surprised after years of development work and say, “Uh-oh, it’s all crap.” As beautiful as OO can be, having 10,000 classes cavort in a class diagram is just as confusing as a Fortran program with 10,000 lines. Since good design was often sacrificed for a few milliseconds of runtime in the past, unsurprisingly, some programs are no longer readable. However, as illustrated by the typesetting program TeX (circa 1985), code lives longer than hardware, and the next generation of multi-core processors will soon be yearning for work in our desktop PCs.</p>
+            
+            <p class="standard">Accordingly, a level above the individual classes and objects is missing because the objects themselves are not the problem, rather the coupling causes issues. The coupling is where rules that have become known as 
+                <span class="italic">design patterns</span>
+                <a class="indexanchor" id="i14_19"/> come in handy. These are tips from software designers who had noticed that many problems can be solved in a similar way. For this reason, they’ve established sets of rules with solution patterns that show an optimal reuse of components and ease of change. Design patterns run throughout the Java class library, and the best known are the observer, singleton, factory
+                <a class="indexanchor" id="i14_20"/>
+            , and composite patterns.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h14.3.2">14.3.2    
+                <a id="p805"/>
+            Singleton</h3>
+            
+            <p class="standard">A 
+                <span class="italic">singleton</span>
+                <a class="indexanchor" id="i14_21"/> is a class of which there’s only one instance in an application.
+                <span class="footnote_anchor"><a href="footnotes.html#ftn-fn14_02" id="fn14_02">[ 200 ]</a></span>
+             This limitation is useful for things that should only exist exactly once in an application, for instance, in the following examples:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A graphical application has only one window.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A console application has only one input/output stream each.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">All print jobs go into a printer maintenance queue.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Indisputably, unique objects must exist, but the way to achieve them is full of variation. Basically, a distinction can be made between the following two approaches:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A framework takes care of the one-time construction of the object and then returns the object on request.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">You implement a singleton in Java code yourself.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The better solution is to use a framework, for instance, 
+                <span class="italic">CDI</span>, 
+                <span class="italic">Spring</span>, 
+                <span class="italic">Guice</span>, or 
+                <span class="italic">Jakarta EE</span>
+             (formerly Java EE). But Java SE doesn’t contain any of these frameworks, which is why we want to explicitly highlight them for demonstration.</p>
+            
+            <p class="standard">The technical implementations are versatile; in Java, enumerations (
+                <samp class="listingcharacter listingcharacter">enum</samp>
+            ) and normal classes are suitable for the implementation of singletons. In the following sections, we’ll assume a scenario where an application wants to access configuration data centrally.</p>
+            
+            
+                
+                <h4 class="t4" id="h14.3.2.1">Singletons over Enumerations</h4>
+                
+                <p class="standard">A good way to use singletons are as enumerations—at first sight, an enumeration type doesn’t seem to designed for singletons because an enumeration somehow implies more than one element. But the properties of 
+                    <samp class="listingcharacter listingcharacter">enum</samp> are perfect for a singleton, and the library implements some tricks to also create the object only once if possible, such as when the enumeration is serialized over the wire and then deserialized and reconstructed. The idea is to provide exactly one element (often referred to as an 
+                    <samp class="listingcharacter listingcharacter">INSTANCE</samp>
+                ) that will eventually become the only instance of the enumeration class, as well as the accompanying methods.</p>
+                
+                <div class="listing " id="l14.1"><pre><span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">enum</span><span class=""> Configuration</span></span> {<br/>  
+                    <span class="bold">INSTANCE</span>;<br/>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> Properties props = </span><span class="">new</span><span class=""> </span><span class="">Properties</span><span class="">( System.</span><span class="">getProperties</span><span class="">() );</span><br/>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">getVersion</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> </span><span class="">"1.2"</span><span class="">;</span><br/>  }<br/> <br/>
+                    <a id="p806"/>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">getUserDir</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> props.</span><span class="">getProperty</span><span class="">( </span><span class="">"user.dir"</span><span class=""> );</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 14.1</b>    
+            com/tutego/insel/pattern/singleton/Configuration.java, Configuration</p>
+                
+                <p class="standard">In addition to the later public static 
+                    <samp class="listingcharacter listingcharacter">INSTANCE</samp> variable, the 
+                    <samp class="listingcharacter listingcharacter">Configuration</samp> type declares also an internal 
+                    <samp class="listingcharacter listingcharacter">props</samp> variable, which can be used by the enumeration to store or request states there. We do this read only in the example via 
+                    <samp class="listingcharacter listingcharacter">getUserDir()</samp>
+                .</p>
+                
+                <p class="standard">A user accesses the 
+                    <samp class="listingcharacter listingcharacter">enum</samp>
+                 members as usual in the following example:</p>
+                
+                <div class="listing " id="l14.2"><pre>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                    <span class="bold"><span class="">Configuration.INSTANCE.</span><span class="">getVersion</span><span class="">()</span></span> ); <span class=""> // 1.2</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                    <span class="bold">Configuration.INSTANCE.<span class="">getUserDir</span><span class="">()</span></span> ); <span class=""> // C:\Users\…</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 14.2</b>    
+            com/tutego/insel/pattern/singleton/ConfigurationDemo.java, main()</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h14.3.3">14.3.3    Factory Methods</h3>
+            
+            <p class="standard">A 
+                <span class="italic">factory method</span>
+                <a class="indexanchor" id="i14_22"/>
+             goes one step further than a singleton. This method doesn’t generate exactly one instance but may generate several. However, the basic idea is that the user doesn’t create a instance via a constructor, but generally via a static method. This approach has an advantage in that a static factory method can do the following things:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Can return old objects from a cache</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Can move the creation process to subclasses</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">Can return 
+                        <samp class="listingcharacter listingcharacter">null</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">A constructor always creates an instance of its own class. A constructor can’t return something like 
+                <samp class="listingcharacter listingcharacter">null</samp> because, with 
+                <samp class="listingcharacter listingcharacter">new</samp>
+            , a new object is always created. Errors could only be displayed via an exception.</p>
+            
+            <p class="standard">Many examples of factory methods exist in the Java library. A naming convention makes them easy to recognize: They’re called 
+                <samp class="listingcharacter listingcharacter">getInstance()</samp> most of the time. A search in the API documentation reveals 90 such methods. Many of these methods are parameterized to specify exactly what objects the factory should produce. For example, let’s consider some static factory methods of 
+                <samp class="listingcharacter listingcharacter">java.util.Calendar</samp>
+            , such as the following:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Calendar.getInstance()</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Calendar.getInstance( java.util.Locale )</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">Calendar.getInstance( java.util.TimeZone )</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The non-parameterized method returns a default 
+                <samp class="listingcharacter listingcharacter">Calendar</samp> object. However, 
+                <samp class="listingcharacter listingcharacter">Calendar</samp> is itself an abstract base class. Inside the 
+                <samp class="listingcharacter listingcharacter">getInstance(...)</samp>
+             method, you’ll find the following source code:</p>
+            
+            <div class="listing " id="l14.3"><pre><span class="">
+                    <a id="p807"/>
+                static</span><span class=""> Calendar </span><span class="">getInstance</span><span class="">()</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  …<br/>  <span class="">return</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">GregorianCalendar</span><span class="">();</span><span class=""><br/></span>  …<br/><span class="">}</span><span class=""> </span></pre></div>
+            
+            <p class="caption "><b>Listing 14.3</b>    
+            java.util.Calender, getInstance()</p>
+            
+            <p class="standard">In the body of the 
+                <samp class="listingcharacter listingcharacter">getInstance(...)</samp> factory method, the 
+                <samp class="listingcharacter listingcharacter">GregorianCalendar</samp> subclass is deliberately selected. This subclass extends 
+                <samp class="listingcharacter listingcharacter">Calendar</samp> and is possible because, by inheritance, the subclass 
+                <samp class="listingcharacter listingcharacter">GregorianCalendar</samp> is a 
+                <samp class="listingcharacter listingcharacter">Calendar</samp>. The caller of 
+                <samp class="listingcharacter listingcharacter">getInstance(...)</samp> doesn’t see this precise type and receives a 
+                <samp class="listingcharacter listingcharacter">Calendar</samp> object as desired. This option enables 
+                <samp class="listingcharacter listingcharacter">getInstance(...)</samp> to test in which country the Java virtual machine (JVM) is running and, depending on that country, select the appropriate 
+                <samp class="listingcharacter listingcharacter">Calendar</samp>
+             implementation.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h14.3.4">14.3.4    Implementing the
+                <a class="indexanchor" id="i14_23"/>
+             Observer Pattern with Listeners</h3>
+            
+            <p class="standard">Let’s now explore the observer pattern
+                <a class="indexanchor" id="i14_24"/>. This pattern, with its origins in Smalltalk-80, is also known under the name 
+                <span class="italic">Model View Controller (MVC)</span>
+                <a class="indexanchor" id="i14_25"/>
+            . Let’s take a closer look at this pattern, which is an essential concept when programming GUIs with Swing.</p>
+            
+            <p class="standard">
+                <span class="italic">Listeners</span> allow for an implementation of the observer pattern
+                <a class="indexanchor" id="i14_26"/>. Event triggers send out special event objects, and interested parties log in and out of the triggers. The classes and interfaces involved follow a specific naming convention; 
+                <samp class="listingcharacter listingcharacter">*</samp> is used to represent an event name, such as 
+                <samp class="listingcharacter listingcharacter">Window</samp>, 
+                <samp class="listingcharacter listingcharacter">Click</samp>
+            , etc. </p>
+            
+            <p class="standard">Working with this pattern, you should keep in mind the following considerations:</p>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">A class for the event objects is called 
+                        <samp class="listingcharacter listingcharacter">*Event</samp>
+                    . The event objects can store information such as triggers, timestamps, and other data.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The interested parties implement a Java interface called 
+                        <samp class="listingcharacter listingcharacter">*Listener</samp> as a listener. You are free to choose any method name, but usually the 
+                        <samp class="listingcharacter listingcharacter">*Event</samp>
+                     is passed to it. This interface can also prescribe multiple operations.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">The event trigger provides the 
+                        <samp class="listingcharacter listingcharacter">add*Listener(*Listener)</samp> and 
+                        <samp class="listingcharacter listingcharacter">remove*Listener(*Listener)</samp> methods to subscribe and unsubscribe interested parties. Whenever an event occurs, the trigger creates the event object 
+                        <samp class="listingcharacter listingcharacter">*Event</samp>
+                     and informs each listener entered in the list about a call of the method from the listener.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">An example will illustrate the types involved.</p>
+            
+            
+                
+                <h4 class="t4" id="h14.3.4.1">Radio Advertisements</h4>
+                
+                <p class="standard">Let’s say a radio must broadcast 
+                    <samp class="listingcharacter listingcharacter">AdEvent</samp>
+                 objects for advertising. The event objects will store the advertising slogan. Consider the following example:</p>
+                
+                <div class="listing " id="l14.4"><pre><span class="">
+                        <a id="p808"/>
+                    package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">pattern</span><span class="">.</span><span class="">listener</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">EventObject</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> </span>
+                    <span class="bold"><span class="">AdEvent </span><span class="">extends</span><span class=""> EventObject</span></span> {<br/><br/>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> </span><span class="">String</span><span class=""> slogan;</span><br/><br/>  <span class="">public</span><span class=""> </span><span class="">AdEvent</span><span class="">( Object source, </span><span class="">String</span><span class=""> slogan ) {</span><br/>    <span class="">super</span><span class="">( source );</span><br/>    <span class="">this</span><span class="">.slogan = slogan;</span><br/>  }<br/>  <span class="">public</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">getSlogan</span><span class="">() {</span><br/>    <span class="">return</span><span class=""> slogan;</span><br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 14.4</b>    
+            com/tutego/insel/pattern/listener/AdEvent.java</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">AdEvent</samp> class extends the Java base class 
+                    <samp class="listingcharacter listingcharacter">EventObject</samp>
+                    <a class="indexanchor" id="i14_27"/>, a class that traditionally extends all event classes. The parameterized constructor of 
+                    <samp class="listingcharacter listingcharacter">AdEvent</samp> takes the event trigger in the first parameter and passes it to the superclass constructor with 
+                    <samp class="listingcharacter listingcharacter">super(source)</samp>, which stores it and makes it available again with 
+                    <samp class="listingcharacter listingcharacter">getSource()</samp>. The use of the base class isn’t necessarily mandatory and has not been generically adapted over the years, so 
+                    <samp class="listingcharacter listingcharacter">source</samp> is merely 
+                    <samp class="listingcharacter listingcharacter">Object.</samp> The second parameter of the 
+                    <samp class="listingcharacter listingcharacter">AdEvent</samp>
+                 constructor is our advertising.</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">AdListener</samp>
+                 is the interface that interested parties implement, as shown in the following:</p>
+                
+                <div class="listing " id="l14.5"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">pattern</span><span class="">.</span><span class="">listener</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.</span><span class="">EventListener</span><span class="">;</span><span class=""><br/></span><br/><span class="">interface</span><span class=""> </span>
+                    <span class="bold"><span class="">AdListener </span><span class="">extends</span><span class=""> EventListener</span></span> {<br/>  <span class="">void</span><span class=""> </span>
+                    <span class="bold"><span class="">advertisement</span><span class="">( AdEvent e )</span></span>;<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 14.5</b>    
+            com/tutego/insel/pattern/listener/AdListener.java</p>
+                
+                <p class="standard">Our 
+                    <samp class="listingcharacter listingcharacter">AdListener</samp> implements the 
+                    <samp class="listingcharacter listingcharacter">EventListener</samp>
+                    <a class="indexanchor" id="i14_28"/> interface (a marker interface), which all Java listeners are supposed to implement. We’ll specify only one 
+                    <samp class="listingcharacter listingcharacter">advertisement(AdEvent)</samp> operation for concrete listeners. You must carefully consider whether the interface should carry 
+                    <samp class="listingcharacter listingcharacter">@FunctionalInterface</samp>
+                 because, in the future, the event trigger might want to call another method to report something else, for example.</p>
+                
+                <div class="imagebox figure-type"><a href="img-f14.2.html" id="f14.2"><img alt="&#10;                    &#10;                UML Class Diagram of AdListener Referencing AdEvent" id="img-f14.2" src="bilderklein/klein14_002.png"/></a></div>
+                
+                <p class="caption "><b>Figure 14.2</b>    
+            
+                    <a id="p809"/>
+                UML Class Diagram of AdListener Referencing AdEvent</p>
+                
+                <p class="standard">The radio can now register and deregister interested parties and can send advertising messages via a timer. The exciting thing about this implementation is that the listeners aren’t managed in their own data structure, but instead, a special listener class from the Swing package is used.</p>
+                
+                <div class="listing " id="l14.6"><pre><span class="">package</span><span class=""> com</span><span class="">.</span><span class="">tutego</span><span class="">.</span><span class="">insel</span><span class="">.</span><span class="">pattern</span><span class="">.</span><span class="">listener</span><span class="">;</span><span class=""><br/></span><br/><span class="">import</span><span class=""> java</span><span class="">.</span><span class="">util</span><span class="">.*;</span><span class=""><br/></span><span class="">import</span><span class=""> javax</span><span class="">.</span><span class="">swing</span><span class="">.</span><span class="">event</span><span class="">.</span><span class="">EventListenerList</span><span class="">;</span><span class=""><br/></span><br/><span class="">public</span><span class=""> </span><span class="">class</span><span class=""> Radio </span><span class="">{</span><span class=""><br/></span><br/>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> </span>
+                    <span class="bold"><span class="">EventListenerList listeners = </span><span class="">new</span><span class=""> </span><span class="">EventListenerList</span><span class="">()</span></span>;<br/><br/>  <span class="">private</span><span class=""> </span><span class="">final</span><span class=""> List&lt;</span><span class="">String</span><span class="">&gt; ads = List.</span><span class="">of</span><span class="">( </span><span class="">"A Bite of Heaven."</span><span class="">,</span><br/>                                            <span class="">"Bag the sweets and run."</span><span class="">,</span><br/>                                            <span class="">"Chew on this, for a while."</span><span class="">,</span><br/>                                            <span class="">"Taste the explosion."</span><span class=""> );</span><br/><br/>  <span class="">public</span><span class=""> </span><span class="">Radio</span><span class="">() {</span><br/>    <span class="">new</span><span class=""> </span><span class="">Timer</span><span class="">().</span><span class="">schedule</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">TimerTask</span><span class="">() {</span><br/>      <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">run</span><span class="">() {</span><br/>        Collections.<span class="">shuffle</span><span class="">( ads );</span><br/>        
+                    <span class="bold"><span class="">notifyAdvertisement</span><span class="">( </span><span class="">new</span><span class=""> </span><span class="">AdEvent</span><span class="">( </span><span class="">this</span><span class="">, ads.</span><span class="">get</span><span class="">(</span><span class="">0</span><span class="">) ) );</span></span><br/>      }<br/>    }, <span class="">0</span><span class="">, </span><span class="">500</span><span class=""> );</span><br/>  }<br/><br/>  <span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span>
+                    <span class="bold"><span class="">addAdListener</span><span class="">( AdListener listener )</span></span> {<br/>    
+                    <span class="bold">listeners.<span class="">add</span><span class="">( AdListener.</span><span class="">class</span><span class="">, listener );</span></span><br/>  }<br/><br/>  <span class="">public</span><span class=""> </span>
+                    <span class="bold"><span class="">void</span><span class=""> </span><span class="">removeAdListener</span><span class="">( AdListener listener )</span></span> {<br/>    
+                    <span class="bold">listeners.<span class="">remove</span><span class="">( AdListener.</span><span class="">class</span><span class="">, listener );</span></span><br/>  }<br/><br/>
+                    <a id="p810"/>  <span class="">protected</span><span class=""> </span><span class="">synchronized</span><span class=""> </span><span class="">void</span><span class=""> </span>
+                    <span class="bold"><span class="">notifyAdvertisement</span><span class="">( AdEvent event )</span></span> {<br/>    <span class="">for</span><span class=""> ( </span>
+                    <span class="bold">AdListener l : listeners.<span class="">getListeners</span><span class="">( AdListener.</span><span class="">class</span><span class=""> )</span></span> )<br/>      
+                    <span class="bold">l.<span class="">advertisement</span><span class="">( event )</span></span>;<br/>  }<br/>} <span class=""/></pre></div>
+                
+                <p class="caption "><b>Listing 14.6</b>    
+            com/tutego/insel/pattern/listener/Radio.java</p>
+                
+                <p class="standard">This demo application uses the 
+                    <samp class="listingcharacter listingcharacter">Radio</samp>
+                 object and implements a concrete listener, once via an inner anonymous class and once via a lambda expression.</p>
+                
+                <div class="listing " id="l14.7"><pre>Radio r <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">Radio</span><span class="">();</span><span class=""><br/></span><span class="">class</span><span class=""> ComplainingAdListener </span><span class="">implements</span><span class=""> AdListener </span><span class="">{</span><span class=""><br/></span>  <span class="">@Override</span><span class=""> </span><span class="">public</span><span class=""> </span><span class="">void</span><span class=""> </span><span class="">advertisement</span><span class="">(</span><span class=""> AdEvent e </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>    System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"Oh no, advertising again: "</span><span class=""> </span><span class="">+</span><span class=""> e</span><span class="">.</span><span class="">getSlogan</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>  <span class="">}</span><span class=""><br/></span><span class="">}</span><span class=""><br/></span>r<span class="">.</span><span class="">addAdListener</span><span class="">(</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">ComplainingAdListener</span><span class="">()</span><span class=""> </span><span class="">);</span><span class=""><br/></span>r<span class="">.</span><span class="">addAdListener</span><span class="">(</span><span class=""> e </span><span class="">-&gt;</span><span class=""> System</span><span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span><span class="">"I hear nothing"</span><span class=""> </span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""> </span></pre></div>
+                
+                <p class="caption "><b>Listing 14.7</b>    
+            com/tutego/insel/pattern/listener/RadioDemo.java, main()</p>
+                
+                <p class="standard">The Java API documentation contains some generic types:</p>
+                
+                <div class="listing " id="l_none_1474"><pre><span class="">class</span><span class=""> javax</span><span class="">.</span><span class="">swing</span><span class="">.</span><span class="">event</span><span class="">.</span>
+                    <span class="bold">EventListenerList</span> <span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">EventListenerList()</samp><br/>Creates a container for listeners.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">&lt;T extends EventListener&gt; void add(Class&lt;T&gt; t, T l)</samp><br/>Adds a listener 
+                            <samp class="listingcharacter listingcharacter">l</samp> of type 
+                            <samp class="listingcharacter listingcharacter">T</samp>
+                        . </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">Object[] getListenerList()</samp><br/>Returns an array of all listeners.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">&lt;T extends EventListener&gt; T[] getListeners(Class&lt;T&gt; t)</samp><br/>Returns an array of all listeners of type 
+                            <samp class="listingcharacter listingcharacter">t</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int getListenerCount()</samp><br/>Specifies the number of all listeners.</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">int getListenerCount(Class&lt;?&gt; t)</samp><br/>Specifies the number of listeners of type 
+                            <samp class="listingcharacter listingcharacter">t</samp>
+                        .</p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">&lt;T extends EventListener&gt; void remove(Class&lt;T&gt; t, T l)</samp><br/>Removes the listener 
+                            <samp class="listingcharacter listingcharacter">l</samp>
+                         from the list.</p>
+                    
+                    </li>
+                
+                </ul>
+            
+            
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>

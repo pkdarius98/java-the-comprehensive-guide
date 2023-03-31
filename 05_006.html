@@ -1,0 +1,889 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+                    
+        <head><meta content="application/xhtml+xml; charset=utf-8" http-equiv="Content-Type"/>
+            <meta content="application/xhtml+xml; charset=utf-8" name="content-type"/>
+            <meta content="&#10;        &#10;    Handling Characters and Strings" name="title"/>
+            <meta content="Christian Ullenboom" name="author"/>
+            <meta content="Rheinwerk Publishing" name="publisher"/>
+            <meta content="© 2023 by Rheinwerk Publishing Inc., Boston (MA)" name="copyright"/>
+            <meta content="Java - The Comprehensive Guide - &#10;        &#10;    Handling Characters and Strings" name="description"/>
+            <meta content="en" name="language"/>
+            <title>
+        
+    Handling Characters and Strings</title>
+            <link href="common/main.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:e0000000-0000-0000-0000-000030211834" name="Adept.expected.resource"/>
+        </head>
+    
+
+
+                    <body class="office_us type_">
+                        <div id="main">
+        
+        <h2 class="t2" id="h5.6">5.6    Mutable Strings
+            <a class="indexanchor" id="i05_90"/>
+         with StringBuilder and StringBuffer</h2>
+        
+        <p class="standard">Strings stored in 
+            <samp class="listingcharacter listingcharacter">String</samp> objects in the Java virtual machine share a property in that their contents can’t be modified. The object of the classes
+            <a class="indexanchor" id="i05_91"/>
+            <samp class="listingcharacter listingcharacter"> StringBuilder</samp> and 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp>
+            <a class="indexanchor" id="i05_92"/>, to which changes can be made, behave differently. The changes subsequently affect the 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>/
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> object itself, and no newly created object is returned as a result, as for example with the plus operator and the 
+            <samp class="listingcharacter listingcharacter">concat(String)</samp> method for conventional 
+            <samp class="listingcharacter listingcharacter">String</samp> objects. But apart from that difference, the implementation of 
+            <samp class="listingcharacter listingcharacter">String</samp> objects and 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp>/
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp>
+         objects is similar. In both cases, the classes use an internal character array.</p>
+        
+        <p class="standard">The 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp> class provides the same methods as 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> but isn’t synchronized. In concurrent programs, the internal data structure of the 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp> object can therefore become inconsistent. 
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp> works a bit more quickly because the implementation doesn’t need to take care of concurrent access. Nowadays, however, 
+            <a id="p334"/>the difference is no longer significant; that is, non-parallel access to a 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp>
+         is equally fast.</p>
+        
+        <p class="standard">
+            <samp class="listingcharacter listingcharacter">StringBuilder</samp> and 
+            <samp class="listingcharacter listingcharacter">StringBuffer</samp> can be quickly explained: A constructor builds the objects and modification methods like 
+            <samp class="listingcharacter listingcharacter">append(...)</samp>, and the 
+            <samp class="listingcharacter listingcharacter">toString()</samp>
+         method returns the result as a string.</p>
+        
+        <div class="box box_standard">
+            
+            <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+            
+            <p class="standard first last">Because of the symmetrical API of 
+                <samp class="listingcharacter listingcharacter">StringBuffer</samp> and 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>, we’ll only refer to the methods of 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+             in the following sections.</p>
+        
+        </div>
+        
+        
+            
+            <h3 class="t3" id="h5.6.1">5.6.1    Creating StringBuilder Objects</h3>
+            
+            <p class="standard">You can use various constructors to build 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+             objects:</p>
+            
+            <div class="listing " id="l_none_5978"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">StringBuilder</span><br/><span class="">implements</span><span class=""> Appendable, CharSequence, Comparable&lt;StringBuilder&gt;, Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder()</samp><br/>Creates a new object that contains the empty character line and has space for (initially) up to 16 characters. Subsequent insert operations fill in the buffer and automatically increase it further.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder(int length)</samp><br/>Similar to the previous constructor, but the initial capacity of the object is sufficient for the specified number of characters. Ideally, you should set the size so that it’s close to the final size of the dynamic string.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder(String str)</samp><br/>Builds an object that contains a copy of the characters from 
+                        <samp class="listingcharacter listingcharacter">str</samp>
+                    . In addition, the constructor already plans space for 16 more characters.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder(CharSequence seq)</samp><br/>Creates a new object from a 
+                        <samp class="listingcharacter listingcharacter">CharSequence</samp>. Thus, the strings of other 
+                        <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                     objects can also become the basis of this object.</p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">Since only 
+                <samp class="listingcharacter listingcharacter">String</samp> objects are supported directly by the language, you can only use the explicit call of a constructor to create 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> objects. All string literals in quotes are already instances of the 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             class.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first last">Neither in the 
+                    <samp class="listingcharacter listingcharacter">String</samp> class nor in 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> does a constructor exist that explicitly allows a 
+                    <samp class="listingcharacter listingcharacter">char</samp> as a parameter to build a string from the given character. Nevertheless, 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> has a constructor that accepts an 
+                    <samp class="listingcharacter listingcharacter">int</samp>, where the passed integer speci
+                    <a id="p335"/>fies the internal starting size of the buffer. If we call the constructor with a 
+                    <samp class="listingcharacter listingcharacter">char</samp>—for example, a 
+                    <samp class="listingcharacter listingcharacter">'*'</samp>—the compiler automatically converts the character to an 
+                    <samp class="listingcharacter listingcharacter">int</samp>. The resulting object doesn’t contain any character but has only an initial capacity of 42 characters, since 42 is the ASCII code of the asterisk. Consequently, the only correct way to build a mutable string filled with the starting character 
+                    <samp class="listingcharacter listingcharacter">c</samp> is 
+                    <samp class="listingcharacter listingcharacter">new StringBuilder(Character.toString(c))</samp> or 
+                    <samp class="listingcharacter listingcharacter">new StringBuilder().append(c)</samp>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.6.2">5.6.2    Converting StringBuilder to Other String Formats</h3>
+            
+            <p class="standard">
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> is usually used internally in methods but rarely appears as a parameter or return type. From the constructors of the classes, notice how a 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> is built for a 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             parameter type, for example, but the way back is missing.</p>
+            
+            <div class="listing " id="l_none_5968"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">StringBuilder</span><br/><span class="">implements</span><span class=""> Appendable, CharSequence, Comparable&lt;StringBuilder&gt;, Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">String toString()</samp><br/>Creates a 
+                        <samp class="listingcharacter listingcharacter">String</samp>
+                     object from the current string.</p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin)</samp><br/>Copies a desired section into a 
+                        <samp class="listingcharacter listingcharacter">char</samp>
+                     array.</p>
+                
+                </li>
+            
+            </ul>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.6.3">5.6.3    Requesting Characters or Strings</h3>
+            
+            <p class="standard">The familiar request methods from 
+                <samp class="listingcharacter listingcharacter">String</samp> can also be found in 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>. Thus, 
+                <samp class="listingcharacter listingcharacter">charAt(int)</samp> and 
+                <samp class="listingcharacter listingcharacter">getChars(...)</samp> behave identically for instances of both classes. Also, 
+                <samp class="listingcharacter listingcharacter">substring(int start)</samp> and 
+                <samp class="listingcharacter listingcharacter">substring(int start, int end)</samp> are known from the 
+                <samp class="listingcharacter listingcharacter">String</samp> class as well. If only these methods are necessary, a 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> is also unnecessary, and a 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             object is sufficient.</p>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.6.4">5.6.4    Appending Data</h3>
+            
+            <p class="standard">The most common use of 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> objects is to join texts from data of different types. For this purpose, the classes declare a number of 
+                <samp class="listingcharacter listingcharacter">append(...)</samp>
+                <a class="indexanchor" id="i05_93"/> methods that are overloaded with different data types. The 
+                <samp class="listingcharacter listingcharacter">append(...)</samp> methods of 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> return a 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>. The 
+                <samp class="listingcharacter listingcharacter">append(...)</samp> methods always append data to the end and increase the internal space—an internal array—if necessary. They don’t create a new 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> object. Let’s use this information for a custom 
+                <samp class="listingcharacter listingcharacter">enumerate(...)</samp>
+             method that traverses a string array and generates a screen enumeration.</p>
+            
+            <div class="listing " id="l5.8"><pre><span class="">public</span><span class=""> </span><span class="">static</span><span class=""> </span><span class="">String</span><span class=""> </span><span class="">enumerate</span><span class="">(</span><span class=""> </span><span class="">String</span><span class="">...</span><span class=""> lines </span><span class="">)</span><span class=""> </span><span class="">{</span><span class=""><br/></span>  <span class="">if</span><span class=""> </span><span class="">(</span><span class=""> lines </span><span class="">==</span><span class=""> null </span><span class="">||</span><span class=""> lines</span><span class="">.</span><span class="">length </span><span class="">==</span><span class=""> </span><span class="">0</span><span class=""> </span><span class="">)</span><span class=""><br/></span>    <span class="">return</span><span class=""> </span><span class="">""</span><span class="">;</span><span class=""><br/></span><br/>
+                <a id="p336"/>  
+                <span class="bold"><span class="">StringBuilder sb = </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">();</span><br/> </span><br/> <span class="">for</span><span class=""> ( </span><span class="">int</span><span class=""> i = </span><span class="">0</span><span class="">; i &lt; lines.length; i++ ) {</span><br/>    
+                <span class="bold">sb.<span class="">append</span><span class="">(</span></span> i + <span class="">1</span><span class=""> </span>
+                <span class="bold">);<br/>    sb.<span class="">append</span><span class="">(</span></span> <span class="">". "</span><span class=""> </span>
+                <span class="bold">);<br/>    sb.<span class="">append</span><span class="">(</span></span> lines[i] 
+                <span class="bold">).<span class="">append</span><span class="">(</span></span> System.<span class="">lineSeparator</span><span class="">() </span>
+                <span class="bold">);</span><br/>  }<br/><br/>  <span class="">return</span><span class=""> </span>
+                <span class="bold">sb.<span class="">toString</span><span class="">()</span></span>.<span class="">trim</span><span class="">();</span><br/>} <span class=""/></pre></div>
+            
+            <p class="caption "><b>Listing 5.8</b>    
+            src/main/java/com/tutego/insel/string/Enumerator.java, enumerate(…)</p>
+            
+            <p class="standard">A call of 
+                <samp class="listingcharacter listingcharacter">enumerate("It's your choice to take this personally.", "Life is effort. I'll stop when I die!")</samp>
+             returns a string that looks like the following output:</p>
+            
+            <div class="listing " id="l_none_51003"><pre>1. It’s your choice to take this personally.<br/>2. Life is effort. I'll stop when I die! </pre></div>
+            
+            <p class="standard">The summary lists all 
+                <samp class="listingcharacter listingcharacter">append(...)</samp>
+             methods:</p>
+            
+            <div class="listing " id="l_none_51019"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                <span class="bold">StringBuilder</span><br/><span class="">implements</span><span class=""> Appendable, CharSequence, Comparable&lt;StringBuilder&gt;, Serializable </span><span class=""/></pre></div>
+            
+            <ul>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(boolean b)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(char c)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(char[] str)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(char[] str, int offset, int len)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(CharSequence s)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(CharSequence s, int start, int end)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(double d)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(float f)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(int i)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(long lng)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(Object obj)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(String str)</samp>
+                    </p>
+                
+                </li>
+                
+                <li>
+                    
+                    <p class="standard first-item last-item">
+                        <samp class="listingcharacter listingcharacter">StringBuilder append(StringBuilder sb)</samp>
+                    </p>
+                
+                </li>
+            
+            </ul>
+            
+            <p class="standard">The methods 
+                <samp class="listingcharacter listingcharacter">append(char)</samp>, 
+                <samp class="listingcharacter listingcharacter">append(CharSequence)</samp>, and 
+                <samp class="listingcharacter listingcharacter">append(CharSequence, int, int)</samp> are required by the interface 
+                <samp class="listingcharacter listingcharacter">Appendable</samp>
+                <a class="indexanchor" id="i05_94"/>
+            .</p>
+            
+            <p class="standard">
+                <a id="p337"/>Particularly useful in practice is 
+                <samp class="listingcharacter listingcharacter">append(CharSequence, int, int)</samp>, which allows you to append parts of 
+                <samp class="listingcharacter listingcharacter">String</samp>, 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>, and 
+                <samp class="listingcharacter listingcharacter">StringBuffer</samp>
+             objects.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[»]  </span>Note</h6>
+                
+                <p class="standard first">Each 
+                    <samp class="listingcharacter listingcharacter">append(...)</samp> method modifies the 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> and returns a reference to it. This scenario has a great advantage in that calls of the 
+                    <samp class="listingcharacter listingcharacter">append(...)</samp>
+                 methods can be easily cascaded, as in the following example:</p>
+                
+                <div class="listing " id="l_none_51015"><pre>StringBuilder sb <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"George Peppard"</span><span class=""> </span><span class="">)</span>
+                    <span class="bold">.<span class="">append</span><span class="">(</span></span><span class="">'</span>
+                    <span class="bold">,</span>'
+                    <span class="bold"><span class="">);</span><br/>sb.<span class="">append</span><span class="">(</span><span class="">" Mr. T, "</span><span class="">).</span><span class="">append</span><span class="">(</span><span class="">"Dirk Benedict, "</span><span class="">).</span><span class="">append</span><span class="">(</span><span class="">"Dwight Schultz"</span><span class="">);</span></span><span class=""/></pre></div>
+                
+                <p class="standard last">The evaluation is from left to right, so the result is “George Peppard, Mr. T, Dirk Benedict, Dwight Schultz”.</p>
+            
+            </div>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[+]  </span>Tip</h6>
+                
+                <p class="standard first last">Using the plus operator inside 
+                    <samp class="listingcharacter listingcharacter">append(...)</samp> strings is counterproductive. For example, 
+                    <samp class="listingcharacter listingcharacter">sb.append(", " + value)</samp> would be better written as 
+                    <samp class="listingcharacter listingcharacter">sb.append(", ").append(value)</samp>
+                .</p>
+            
+            </div>
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.6.5">5.6.5    Setting, Deleting, and Reversing Characters and Strings</h3>
+            
+            <p class="standard">Since characters can be modified in a 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>, other modification methods besides the 
+                <samp class="listingcharacter listingcharacter">append(...)</samp> methods can be used that are missing in the 
+                <samp class="listingcharacter listingcharacter">String</samp>
+             class.</p>
+            
+            
+                
+                <h4 class="t4" id="h5.6.5.1">Setting Individual Characters</h4>
+                
+                <div class="listing " id="l_none_51022"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">StringBuilder</span><br/><span class="">implements</span><span class=""> Appendable, CharSequence, Comparable&lt;StringBuilder&gt;, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">void setCharAt(int index, char ch)</samp><br/>Replaces 
+                            <samp class="listingcharacter listingcharacter">index</samp> with the 
+                            <samp class="listingcharacter listingcharacter">ch</samp>
+                         character and overrides the old character.</p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example changes the first character in the 
+                        <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                     to an uppercase letter:</p>
+                    
+                    <div class="listing " id="l_none_51031"><pre>StringBuilder sb <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"save water, shower together"</span><span class=""> </span><span class="">);</span><span class=""><br/></span><span class="">char</span><span class=""> upperCharacter </span><span class="">=</span><span class=""> Character</span><span class="">.</span><span class="">toUpperCase</span><span class="">(</span><span class=""> sb</span><span class="">.</span><span class="">charAt</span><span class="">(</span><span class="">0</span><span class="">)</span><span class=""> </span><span class="">);</span><span class=""><br/></span>sb<span class="">.</span>
+                        <span class="bold"><span class="">setCharAt</span></span><span class="">( </span><span class="">0</span><span class="">, upperCharacter );</span><span class=""/></pre></div>
+                    
+                    <p class="standard last">The first argument 
+                        <samp class="listingcharacter listingcharacter">0</samp> in 
+                        <samp class="listingcharacter listingcharacter">setCharAt(int, char)</samp>
+                     represents the position of the character to be set.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.6.5.2">
+                    <a id="p338"/>
+                Inserting Strings</h4>
+                
+                <p class="standard">Various 
+                    <samp class="listingcharacter listingcharacter">insert (...)</samp> methods insert the string representation of a value in a specific position, which is similar to the overloaded 
+                    <samp class="listingcharacter listingcharacter">append(...)</samp>
+                 method:</p>
+                
+                <div class="listing " id="l_none_51048"><pre><span class="">final</span><span class=""> </span><span class="">class</span><span class=""> java</span><span class="">.</span><span class="">lang</span><span class="">.</span>
+                    <span class="bold">StringBuilder</span><br/><span class="">implements</span><span class=""> Appendable, CharSequence, Comparable&lt;StringBuilder&gt;, Serializable </span><span class=""/></pre></div>
+                
+                <ul>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int offset, boolean b)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int offset, char c)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int offset, char[] str)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int index, char[] str, int offset, int len)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int dstOffset, CharSequence s)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int dstOffset, CharSequence s, int start, int end)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int offset, double d)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int offset, float f)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int offset, int i)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int offset, long l)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int offset, Object obj)</samp>
+                        </p>
+                    
+                    </li>
+                    
+                    <li>
+                        
+                        <p class="standard first-item last-item">
+                            <samp class="listingcharacter listingcharacter">StringBuilder insert(int offset, String str)</samp>
+                        </p>
+                    
+                    </li>
+                
+                </ul>
+                
+                <p class="standard">For 
+                    <samp class="listingcharacter listingcharacter">char</samp> arrays, 
+                    <samp class="listingcharacter listingcharacter">insert(...)</samp> is available in a modified way: 
+                    <samp class="listingcharacter listingcharacter">insert(int index, char[] str, int offset, int len)</samp>. In this case, the method doesn’t transfer the complete array into the 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                , only a section.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.6.5.3">Deleting Single Characters and Character Ranges</h4>
+                
+                <p class="standard">A sequence of characters can be deleted via
+                    <a class="indexanchor" id="i05_95"/>
+                    <samp class="listingcharacter listingcharacter"> delete(int start, int end)</samp>. Similarly, 
+                    <samp class="listingcharacter listingcharacter">deleteCharAt(int index)</samp> deletes only one character. In both cases, an incorrect index is penalized by a 
+                    <samp class="listingcharacter listingcharacter">StringIndexOutOfBoundsException</samp>
+                .</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.6.5.4">Replacing Character Ranges</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">replace(int start, int end, String str)</samp> method first deletes the characters between 
+                    <samp class="listingcharacter listingcharacter">start</samp> and 
+                    <samp class="listingcharacter listingcharacter">end</samp> and then inserts the new string 
+                    <samp class="listingcharacter listingcharacter">str</samp> starting from 
+                    <samp class="listingcharacter listingcharacter">start</samp>
+                . As always, the end positions are exclusive; that is, they specify the first character after the section to be changed.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example replaces the substring at positions 4 and 5 (that is, up to and excluding 6):</p>
+                    
+                    <div class="listing  last_item" id="l_none_51071"><pre>
+                        <a id="p339"/>StringBuilder sb <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"Sub-XX-Sens-O-Matic"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>//                                     0123456<span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> sb</span><span class="">.</span>
+                        <span class="bold"><span class="">replace</span></span><span class="">( </span><span class="">4</span><span class="">, </span><span class="">6</span><span class="">, </span><span class="">"Etha"</span><span class=""> ) ) ; </span><span class=""> // Sub-Etha-Sens-O-Matic</span><span class=""> </span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.6.5.5">Reversing Strings</h4>
+                
+                <p class="standard">Another method, 
+                    <samp class="listingcharacter listingcharacter">reverse()</samp>
+                , reverses the string.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example tests whether 
+                        <samp class="listingcharacter listingcharacter">s</samp>
+                     string is a palindrome, regardless of case. Palindromes read the same from the beginning as from the end, such as “racecar”:</p>
+                    
+                    <div class="listing  last_item" id="l_none_51075"><pre><span class="">boolean</span><span class=""> isPalindrome </span><span class="">=</span><span class=""><br/></span>  <span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> s </span><span class="">).</span>
+                        <span class="bold"><span class="">reverse</span><span class="">()</span></span>.<span class="">toString</span><span class="">().</span><span class="">equalsIgnoreCase</span><span class="">( s );</span><span class=""/></pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.6.6">5.6.6    Length and Capacity of a StringBuilder Object*</h3>
+            
+            <p class="standard">As with a string, the length and the number of characters contained can be queried via the 
+                <samp class="listingcharacter listingcharacter">length ()</samp> method. However, 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> objects also have an internal buffer size, which can be queried via 
+                <samp class="listingcharacter listingcharacter">capacity()</samp> and is set in the constructor as described. In this buffer, which is rather an array of type 
+                <samp class="listingcharacter listingcharacter">char</samp>, changes, such as cutting or appending characters,
+                <a class="indexanchor" id="i05_96"/> are made. While 
+                <samp class="listingcharacter listingcharacter">length()</samp> specifies the number of characters, 
+                <samp class="listingcharacter listingcharacter">capacity()</samp> is always greater than or equal to 
+                <samp class="listingcharacter listingcharacter">length()</samp>
+             and tells us something about how many more characters the buffer can store without needing a new, larger internal array.</p>
+            
+            <div class="box box_standard">
+                
+                <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                
+                <div class="listing " id="l_none_51072"><pre>StringBuilder sb <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"www.tutego.de"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> sb</span><span class="">.</span>
+                    <span class="bold"><span class="">length</span><span class="">() )</span></span>;                     <span class=""> // 13</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( sb.</span>
+                    <span class="bold"><span class="">capacity</span><span class="">() )</span></span>;                   <span class=""> // 29</span><span class=""> </span><span class=""/></pre></div>
+                
+                <p class="standard last">For the length query, 
+                    <samp class="listingcharacter listingcharacter">sb.length()</samp> returns 13, but 
+                    <samp class="listingcharacter listingcharacter">sb.capacity()</samp>
+                 returns 13 + 16 = 29.</p>
+            
+            </div>
+            
+            <p class="standard">The start size should be initialized with the expected size to avoid internal zooming later, which costs more computing time. If the 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> has a large internal buffer, but is short on characters in the long run, it can be shrunk to a smaller size with 
+                <samp class="listingcharacter listingcharacter">trimToSize()</samp>
+            .</p>
+            
+            
+                
+                <h4 class="t4" id="h5.6.6.1">Changing the Length</h4>
+                
+                <p class="standard">If the 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> is supposed to store more data, 
+                    <samp class="listingcharacter listingcharacter">setLength(int)</samp> changes the length to a specified number of characters. The parameter is the new length. If it’s smaller than 
+                    <samp class="listingcharacter listingcharacter">
+                        <a id="p340"/>
+                    length()</samp>
+                , the rest of the string will simply be truncated, but this approach doesn’t change the size of the internal buffer.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">The following example concatenates all strings in an array with a separator and truncates the last separator at the end:</p>
+                    
+                    <div class="listing  last_item" id="l_none_51084"><pre><span class="">String</span><span class="">[]</span><span class=""> elements </span><span class="">=</span><span class=""> </span><span class="">{</span><span class=""> </span><span class="">"Manila"</span><span class="">,</span><span class=""> </span><span class="">"Cebu"</span><span class="">,</span><span class=""> </span><span class="">"Ipil"</span><span class=""> </span><span class="">};</span><span class=""><br/></span><span class="">String</span><span class=""> separator </span><span class="">=</span><span class=""> </span><span class="">", "</span><span class="">;</span><span class=""><br/></span>StringBuilder sb <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">();</span><span class=""><br/></span><span class="">for</span><span class=""> </span><span class="">(</span><span class=""> </span><span class="">String</span><span class=""> elem </span><span class="">:</span><span class=""> elements </span><span class="">)</span><span class=""><br/></span>  sb<span class="">.</span><span class="">append</span><span class="">(</span><span class=""> elem </span><span class="">).</span><span class="">append</span><span class="">(</span><span class=""> separator </span><span class="">);</span><span class=""><br/></span>
+                        <span class="bold"><span class="">sb.</span><span class="">setLength</span><span class="">( sb.</span><span class="">length</span><span class="">() - separator.</span><span class="">length</span><span class="">() )</span></span>;<br/>System.out.<span class="">println</span><span class="">( sb );         </span><span class=""> // Manila, Cebu, Ipil</span><span class=""> </span><span class=""/></pre></div>
+                
+                </div>
+                
+                <p class="standard">If 
+                    <samp class="listingcharacter listingcharacter">setLength(int)</samp> is greater, the buffer increases, and the method fills the remaining characters with null characters 
+                    <samp class="listingcharacter listingcharacter">\0000</samp>. The 
+                    <samp class="listingcharacter listingcharacter">ensureCapacity(int)</samp> method requires that the internal buffer is sufficient for a certain number of characters. If necessary, the method creates a new, enlarged 
+                    <samp class="listingcharacter listingcharacter">char</samp> array but doesn’t change the string represented by the 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                 object.</p>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.6.7">5.6.7    Comparison of StringBuilder Instances and Strings with StringBuilder</h3>
+            
+            <p class="standard">The well-known 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> method can be used to compare 
+                <samp class="listingcharacter listingcharacter">String</samp>s. However, this method is not implemented in 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+             as expected. In addition, other methods can make comparisons without regard to case.</p>
+            
+            
+                
+                <h4 class="t4" id="h5.6.7.1">equals(...) for the String Class</h4>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">String</samp> class implements the 
+                    <samp class="listingcharacter listingcharacter">equals(Object)</samp>
+                    <a class="indexanchor" id="i05_97"/> method so that a 
+                    <samp class="listingcharacter listingcharacter">string</samp> can be compared to another 
+                    <samp class="listingcharacter listingcharacter">string</samp>. However, 
+                    <samp class="listingcharacter listingcharacter">equals(Object)</samp> of 
+                    <samp class="listingcharacter listingcharacter">String</samp> compares only 
+                    <samp class="listingcharacter listingcharacter">String</samp>/
+                    <samp class="listingcharacter listingcharacter">String</samp> pairs. The method doesn’t start the comparison until the argument is also of type 
+                    <samp class="listingcharacter listingcharacter">String</samp>. Thus, the compiler allows all passes also of type 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> at 
+                    <samp class="listingcharacter listingcharacter">equals(Object)</samp>, but at runtime the result is always 
+                    <samp class="listingcharacter listingcharacter">false</samp>, because a 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> simply isn’t of type 
+                    <samp class="listingcharacter listingcharacter">String</samp>
+                . Whether the strings are the same or not is irrelevant.</p>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.6.7.2">contentEquals(...) for the String</h4>
+                
+                <p class="standard">A common method for comparing one string with either another string or with 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> is
+                    <a class="indexanchor" id="i05_98"/>
+                    <samp class="listingcharacter listingcharacter"> contentEquals(CharSequence)</samp>. This method returns 
+                    <samp class="listingcharacter listingcharacter">true</samp> if the 
+                    <samp class="listingcharacter listingcharacter">string</samp> and the 
+                    <samp class="listingcharacter listingcharacter">CharSequence</samp> have the same character content. (Recall that 
+                    <samp class="listingcharacter listingcharacter">String</samp>, 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp>, and 
+                    <samp class="listingcharacter listingcharacter">StringBuffer</samp> are classes of type 
+                    <samp class="listingcharacter listingcharacter">CharSequence</samp>.) The internal length of the buffer doesn’t matter. If the argument is 
+                    <samp class="listingcharacter listingcharacter">null</samp>, a 
+                    <samp class="listingcharacter listingcharacter">NullPointerException</samp>
+                 gets thrown.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p341"/>
+                    Example</h6>
+                    
+                    <p class="standard first">The following example compares a 
+                        <samp class="listingcharacter listingcharacter">string</samp> with a 
+                        <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                    :</p>
+                    
+                    <div class="listing  last_item" id="l_none_51094"><pre><span class="">String</span><span class="">        s  </span><span class="">=</span><span class=""> </span><span class="">"Cognition Amplifier"</span><span class="">;</span><span class=""><br/></span>StringBuilder sb <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"Cognition Amplifier"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> s</span><span class="">.</span>
+                        <span class="bold"><span class="">equals</span></span><span class="">(sb) );                  </span><span class=""> // false</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( s.</span>
+                        <span class="bold"><span class="">equals</span></span><span class="">(sb.</span><span class="">toString</span><span class="">()) );       </span><span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( s.</span>
+                        <span class="bold"><span class="">contentEquals</span></span><span class="">(sb) );           </span><span class=""> // true</span><span class=""/><span class=""/> </pre></div>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.6.7.3">No Own equals(...) for StringBuilder</h4>
+                
+                <p class="standard">To compare two 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> objects with each other, you 
+                    <span class="italic">cannot</span> use the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method. For the usual method inherited from 
+                    <samp class="listingcharacter listingcharacter">Object</samp>, only object references are compared. In other words, 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> doesn’t override the 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp> method. Thus, if two different 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> objects with the same content are compared with 
+                    <samp class="listingcharacter listingcharacter">equals(...)</samp>, the result is always 
+                    <samp class="listingcharacter listingcharacter">false.</samp>
+                 </p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>Example</h6>
+                    
+                    <p class="standard first">To implement the content comparison of two 
+                        <samp class="listingcharacter listingcharacter">StringBuilder</samp> objects, you can first convert them to strings with 
+                        <samp class="listingcharacter listingcharacter">toString()</samp> and then compare them using 
+                        <samp class="listingcharacter listingcharacter">String</samp>
+                     methods, as in the following example:</p>
+                    
+                    <div class="listing " id="l_none_51122"><pre>StringBuilder sb1 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"The Ocean Cleanup"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>StringBuilder sb2 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"The Ocean Cleanup"</span><span class=""> </span><span class="">);</span><span class=""> </span><br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                        <span class="bold"><span class="">sb1.</span><span class="">equals</span><span class="">( sb2 )</span></span> );                       <span class=""> // false</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                        <span class="bold">sb1.<span class="">toString</span><span class="">().</span><span class="">equals</span><span class="">( sb2.</span><span class="">toString</span><span class="">() )</span></span> ); <span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                        <span class="bold">sb1.<span class="">toString</span><span class="">().</span><span class="">contentEquals</span><span class="">( sb2 )</span></span> );     <span class=""> // true</span><span class=""/><span class=""/> </pre></div>
+                    
+                    <p class="standard last">You’ll learn about another option in the following section.</p>
+                
+                </div>
+            
+            
+            
+            
+                
+                <h4 class="t4" id="h5.6.7.4">Lexicographic Comparisons (StringBuilder is Comparable)</h4>
+                
+                <p class="standard">
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> allows lexicographic comparisons via the 
+                    <samp class="listingcharacter listingcharacter">int compareTo(StringBuilder another)</samp> method. (
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> implements the interface 
+                    <samp class="listingcharacter listingcharacter">Comparable&lt;StringBuilder&gt;</samp>.) Thus, 
+                    <samp class="listingcharacter listingcharacter">String</samp> and 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> both realize an ordering (see the section on lexicographic comparisons in 
+                    <span class="crossreference "><a href="05_005.html#h5.5.8">Section 5.5.8</a></span>
+                ).</p>
+                
+                <p class="standard">One side effect is that, for equal strings, the return of 
+                    <samp class="listingcharacter listingcharacter">compareTo(...)</samp> is 0. This approach, however, is much better than converting the 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                 to a string first.</p>
+                
+                <p class="standard">The 
+                    <samp class="listingcharacter listingcharacter">compareTo(...)</samp> method of 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> performs the comparison only with other 
+                    <samp class="listingcharacter listingcharacter">StringBuilder</samp> objects. The static method 
+                    <samp class="listingcharacter listingcharacter">compare(CharSequence, CharSequence)</samp> in 
+                    <samp class="listingcharacter listingcharacter">CharSequence</samp> is more flexible in this respect. With this method, a lexicographic comparison of all conceivable 
+                    <samp class="listingcharacter listingcharacter">CharSequence</samp>
+                 instances is possible.</p>
+                
+                <div class="box box_standard">
+                    
+                    <h6 class="boxheading"><span class="box_icon">[eg]  </span>
+                        <a id="p342"/>
+                    Example</h6>
+                    
+                    <p class="standard first">These are proper ways to compare two 
+                        <samp class="listingcharacter listingcharacter">StringBuilder</samp>
+                     instances:</p>
+                    
+                    <div class="listing  last_item" id="l_none_511228959515"><pre>StringBuilder sb1 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"The Ocean Cleanup"</span><span class=""> </span><span class="">);</span><span class=""><br/></span>StringBuilder sb2 <span class="">=</span><span class=""> </span><span class="">new</span><span class=""> </span><span class="">StringBuilder</span><span class="">(</span><span class=""> </span><span class="">"The Ocean Cleanup"</span><span class=""> </span><span class="">);</span><span class=""> </span><br/>System<span class="">.</span><span class="">out</span><span class="">.</span><span class="">println</span><span class="">(</span><span class=""> </span>
+                        <span class="bold"><span class="">sb1.</span><span class="">compareTo</span><span class="">( sb2 ) == </span><span class="">0</span></span><span class=""> );               </span><span class=""> // true</span><span class=""><br/></span>System.out.<span class="">println</span><span class="">( </span>
+                        <span class="bold">CharSequence.<span class="">compare</span><span class="">( sb1, sb2 ) == </span><span class="">0</span></span><span class=""> );   </span><span class=""> // true</span><span class=""/><span class=""/> </pre></div>
+                
+                </div>
+            
+            
+        
+        
+        
+        
+            
+            <h3 class="t3" id="h5.6.8">5.6.8    hashCode() with StringBuilder*</h3>
+            
+            <p class="standard">Our previous discussion shows that an 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> method that compares the content of 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> objects wouldn’t be bad. Nevertheless, a problem exists regarding when exactly 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> objects should be considered equal. This question is interesting because 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> objects are not only determined by their content, but also by the sizes of their internal buffers, that is, by their capacities. Should 
+                <samp class="listingcharacter listingcharacter">equals(...)</samp> return 
+                <samp class="listingcharacter listingcharacter">true</samp> if the contents are equal, or only if the contents and buffer size are equal? Since every developer has different views on equivalence, the default test for identical object references remains the only one. A similar reasoning applies to the 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp> method, which returns the same, ideally unique, numeric value for all objects with the same content. The 
+                <samp class="listingcharacter listingcharacter">String</samp> class has a 
+                <samp class="listingcharacter listingcharacter">hashCode()</samp> method, but 
+                <samp class="listingcharacter listingcharacter">StringBuilder</samp> inherits the implementation from the 
+                <samp class="listingcharacter listingcharacter">Object</samp>
+             class unchanged. In other words, the classes themselves don’t provide an implementation.</p>
+        
+        
+    
+    </div><p class="signatur"/>
+                    </body>
+                </html>
